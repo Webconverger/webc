@@ -1,0 +1,84 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Debian::DictionariesCommon q(:all);
+use Debconf::Client::ConfModule q(:all);
+
+dico_checkroot ();
+
+version ('2.0');
+
+my $class    = "wordlist";
+my $question = "dictionaries-common/default-$class";
+my $script   = "/usr/share/dictionaries-common/dc-debconf-select.pl";
+
+sub dico_force_question (){
+  # Force asking question for given \%languages, or for all if not given
+  my $class     = shift;
+  my $languages = shift;
+  my $question  = "dictionaries-common/default-$class";
+  my %title     = ('ispell'   => "Dictionaries-common: Ispell dictionary",
+		   'wordlist' => "Dictionaries-common: Wordlist dictionary"
+		   );
+
+  # If no explict $languages is given, ask for all, and return if none present
+  $languages    = &dico_parse_languages($class,"languages") unless $languages;
+  return unless %$languages;
+
+  my ($choices, $echoices ) = &dico_get_all_choices($class,$languages);
+  fset  ($question, "seen", "false");
+  subst ($question, "choices", $choices);
+  subst ($question, "echoices", $echoices);
+  input ("critical", $question);
+  title ($title{$class});
+  go ();
+}
+
+updatedb ($class);
+my $dictionaries = loaddb ($class);
+
+if ( %$dictionaries ) {
+  if (get $question) {
+    require $script;
+    &dico_force_question($class);
+  }
+}
+
+system "update-default-$class";
+
+# Local Variables:
+#  perl-indent-level: 2
+# End:
+
+__END__
+
+=head1 NAME
+
+    select-default-wordlist - select default wordlist
+
+=head1 SYNOPSIS
+
+ select-default-wordlist
+
+=head1 DESCRIPTION
+
+This program will make debconf always ask the shared question about
+the default wordlist to be used in your
+system according to the installed ones, and will do the appropriate
+settings.
+
+Calls internally B<update-default-wordlist>.
+
+=head1 SEE ALSO
+
+The dictionaries-common policy document
+
+=head1 AUTHORS
+
+Rafael Laboissiere
+
+=cut
+
+
+
+#  LocalWords:  ispell wordlist

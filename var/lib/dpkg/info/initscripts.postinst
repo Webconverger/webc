@@ -1,0 +1,277 @@
+#! /bin/sh
+#
+# initscripts postinst
+#
+
+set -e
+
+case "$1" in
+  configure)
+	PREV_VER=$2
+	;;
+  abort-upgrade|abort-remove|abort-deconfigure)
+	exit 0
+	;;
+esac
+
+umask 022
+
+chrooted() {
+  if [ -r /proc/1/root ]; then
+    return 1
+  fi
+  return 0
+}
+
+#
+# Initialize rcS default file.
+#
+if [ ! -f /etc/default/rcS ]
+then
+	cp -p /usr/share/initscripts/default.rcS /etc/default/rcS
+fi
+
+#
+# In 2.86.ds1-7 the "single" script was moved.
+# We have to remove the old links _before_ we install new ones.
+#
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-7"
+then
+	update-rc.d -f single remove >/dev/null
+fi
+
+# In 2.86.ds1-16, the mtab.sh and hostname.sh scripts were moved.
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-16"
+then
+	update-rc.d -f mtab.sh remove >/dev/null
+	update-rc.d -f hostname.sh remove >/dev/null
+fi
+
+# In 2.86.ds1-21, the sendsigs script were moved, and in 2.86.ds1-35
+# it was moved back.
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-35"
+then
+	update-rc.d -f sendsigs remove >/dev/null
+fi
+
+#
+# In 2.87dsf-2 the "mountoverflowtmp" script was dropped
+# from runlevels 0 and 6.
+# We have to remove the old links _before_ we install new ones.
+#
+if dpkg --compare-versions "$PREV_VER" lt "2.87dsf-2" ; then
+	update-rc.d -f mountoverflowtmp remove >/dev/null
+fi
+
+#
+# Okay, we could do this with update-rc.d, but that would probably
+# be pretty slow. This way we win some speed.
+# DO NOT FOLLOW THIS EXAMPLE IN OTHER PACKAGES.
+#
+# Links in runlevel S
+#
+update-rc.d mountkernfs.sh         start 02 S . >/dev/null || exit $?
+update-rc.d hostname.sh            start 02 S . >/dev/null || exit $?
+update-rc.d mountdevsubfs.sh       start 04 S . >/dev/null || exit $?
+update-rc.d bootlogd               start 05 S . >/dev/null || exit $?
+update-rc.d checkroot.sh           start 10 S . >/dev/null || exit $?
+update-rc.d mtab.sh                start 12 S . >/dev/null || exit $?
+update-rc.d checkfs.sh             start 30 S . >/dev/null || exit $?
+update-rc.d mountall.sh            start 35 S . >/dev/null || exit $?
+update-rc.d mountall-bootclean.sh  start 36 S . >/dev/null || exit $?
+update-rc.d mountoverflowtmp       start 37 S . >/dev/null || exit $?
+update-rc.d mountnfs.sh            start 45 S . >/dev/null || exit $?
+update-rc.d mountnfs-bootclean.sh  start 46 S . >/dev/null || exit $?
+update-rc.d bootmisc.sh            start 55 S . >/dev/null || exit $?
+update-rc.d urandom                start 55 S . start 30 0 6 . >/dev/null || exit $?
+#
+# Links in runlevels other than S
+#
+update-rc.d halt                   start 90 0 . >/dev/null || exit $?
+update-rc.d reboot                 start 90 6 . >/dev/null || exit $?
+update-rc.d umountroot             start 60 0 6 . >/dev/null || exit $?
+update-rc.d umountfs               start 40 0 6 . >/dev/null || exit $?
+update-rc.d umountnfs.sh           start 31 0 6 . >/dev/null || exit $?
+update-rc.d sendsigs               start 20 0 6 . >/dev/null || exit $?
+
+update-rc.d killprocs              start 30 1 . >/dev/null || exit $?
+update-rc.d single                 start 90 1 . >/dev/null || exit $?
+update-rc.d bootlogs               start 70 1 2 3 4 5 . >/dev/null || exit $?
+update-rc.d rc.local               start 99 2 3 4 5 . >/dev/null || exit $?
+update-rc.d rmnologin              start 99 2 3 4 5 . >/dev/null || exit $?
+update-rc.d stop-bootlogd-single   start 99 S . >/dev/null || exit $?
+update-rc.d stop-bootlogd          start 99 2 3 4 5 . >/dev/null || exit $?
+
+#
+# Remove scripts that were left behind by older glibc (<< 2.3.2.ds1-12)
+# versions. We have the same functionality in mount{kern,devsub}fs.sh 
+#
+#
+# In 2.86.ds1-10 the "mountvirtfs" script was replaced by
+# mountkernfs.sh and mountdevsubfs.sh.  It was removed completely in
+# 2.86.ds1-16.
+#
+for F in mountkernfs devpts.sh mountvirtfs
+do
+	rm -f /etc/init.d/$F
+	update-rc.d $F remove >/dev/null
+done
+
+#
+# Create /var/run and /var/lock on the root partition to make sure
+# they are available when RAMRUN or RAMLOCK is enabled.
+# If mount fail (like in a vserver environment), just clean up and ignore
+# it.  The admins enabling RAMRUN and RAMLOCK will have to create the
+# directories themselves in this case.
+#
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-22" && ! chrooted
+then
+	# We need to quickly bind / to another location so we can make them
+	# just in case /var is a mountpoint or a symlink to one.
+	mkdir -p /.root
+	if mount -n --bind / /.root ; then
+		if [ -L /.root/var ] && [ ! -d /.root/var ] ; then
+			# No use trying if /var is a relative symlink.  It is not
+			# going to work.
+			:
+		else
+			mkdir -p /.root/var/run /.root/var/lock
+		fi
+		umount /.root
+	fi
+	rmdir /.root
+fi
+
+#
+# When installing for the first time or upgrading from version before
+# 2.86.ds1-27, a reboot is needed to make the /lib/init/rw/ tmpfs
+# available.  Flag this using notify-reboot-required.  Not mounting it
+# here as it creates problem for debootstrap, vservers, pbuilder and
+# cowbuilder.
+#
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-27" \
+ && [ -x /usr/share/update-notifier/notify-reboot-required ]; then
+	/usr/share/update-notifier/notify-reboot-required
+fi
+
+#
+# Create initial log files
+#
+[ "$PREV_VER" ] || chmod 755 /var/log/fsck || :
+for F in /var/log/dmesg /var/log/boot /var/log/fsck/checkroot /var/log/fsck/checkfs
+do
+	if [ ! -f "$F" ] && touch "$F" >/dev/null 2>&1
+	then
+		echo "(Nothing has been logged yet.)" >| "$F"
+		chown root:adm "$F"
+		chmod 640 "$F"
+	fi
+done
+
+#
+# Set up nologin symlink so that dynamic-login-disabling will work
+# (when DELAYLOGIN is set to "yes")
+#
+if [ ! -L /etc/nologin ] && [ ! -e /etc/nologin ]
+then
+	rm -f /var/lib/initscripts/nologin
+	ln -s /var/lib/initscripts/nologin /etc/nologin
+fi
+
+#
+# Set up motd stuff, putting variable file in /var/run/
+#
+if [ ! -f /etc/motd.tail ]
+then
+	if [ -f /etc/motd ]
+	then
+		sed 1d /etc/motd > /etc/motd.tail
+		[ -s /etc/motd.tail ] || rm -f /etc/motd.tail
+	fi
+fi
+if [ ! -f /var/run/motd ]
+then
+	if [ -f /etc/motd ]
+	then
+		cat /etc/motd > /var/run/motd
+	else
+		:>/var/run/motd
+	fi
+fi
+if [ ! -L /etc/motd ]
+then
+	[ -f /etc/default/rcS ] && . /etc/default/rcS
+	if [ "$EDITMOTD" = no ]
+	then
+		cat /var/run/motd > /etc/motd.static
+		ln -sf motd.static /etc/motd
+	else
+		ln -sf /var/run/motd /etc/motd
+	fi
+fi
+
+#
+# Mount kernel virtual filesystems...not.
+# This causes problems in pbuilder.
+#
+#
+#if [ -x /etc/init.d/mountkernfs.sh ]
+#then
+#	if which invoke-rc.d >/dev/null 2>&1
+#	then
+#		invoke-rc.d mountkernfs.sh start || :
+#	else
+#		/etc/init.d/mountkernfs.sh start
+#	fi
+#fi
+
+#
+# Create /dev/pts, /dev/shm directories
+#
+if [ "$(uname -s)" = Linux ]
+then
+	#
+	# Only create /dev/{pts,shm} if /dev is on the
+	# root file system. If some package has mounted a
+	# seperate /dev (ramfs from udev, devfs) it is
+	# responsible for the presence of those subdirs.
+	# (it is OK for these to fail under fakechroot)
+	#
+	if ! mountpoint -q /dev
+	then
+		[ -d /dev/pts ] || { mkdir --mode=755 /dev/pts ; chown root:root /dev/pts || [ "$FAKECHROOT" = true ]; }
+		[ -d /dev/shm ] || { mkdir --mode=755 /dev/shm ; chown root:root /dev/shm || [ "$FAKECHROOT" = true ]; }
+	fi
+fi
+
+#
+# Create /etc/rc.local on first time install and when upgrading from
+# versions before "2.86.ds1-16"
+#
+if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-16"
+then
+	if [ ! -e /etc/rc.local ]; then
+		cat << EOF > /etc/rc.local
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+exit 0
+EOF
+		# make sure it's enabled by default.
+		chmod 755 /etc/rc.local
+	fi
+fi
+
+
+
+:

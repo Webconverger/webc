@@ -1,0 +1,30 @@
+#!/bin/sh
+# postrm script for libutempter
+
+set -e
+
+case "$1" in
+    purge)
+        if [ -x /usr/sbin/delgroup ]; then
+            echo "Deleting utempter group..."
+            delgroup --quiet --system utempter > /dev/null || true
+        fi
+    ;;
+
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "remove" ]; then
+	ldconfig
+fi
+# End automatically added section
+
+
+exit 0

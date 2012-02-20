@@ -1,0 +1,35 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Sysvinit ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/sysvinit.list ] || \
+	   [ -e /var/lib/live/config/sysvinit ]
+	then
+		return
+	fi
+
+	echo -n " sysvinit"
+
+	Configure_sysvinit
+}
+
+Configure_sysvinit ()
+{
+	sed -i -e "s|^\([^:]*:[^:]*:[^:]*\):.*getty.*\<\(tty[0-9]*\).*$|\1:/bin/login -f ${LIVE_USERNAME} </dev/\2 >/dev/\2 2>\&1|" /etc/inittab
+
+	init q
+
+	# Creating state file
+	touch /var/lib/live/config/sysvinit
+}
+
+Sysvinit

@@ -1,0 +1,69 @@
+- fix this: set indexdir='' in daemon.conf, now strigidaemon crashes on an exception
+
+- maintain the version number and check in kdelibs for the right version number
+
+- convert 'char' to 'signed char' everywhere for maemo compiler
+
+- documentation ( complete apidox )
+- clean up the old tutorials (they're a little confusing at the mo)
+- write new tutorials for the new analyzer types
+
+- make per-analyzer unit tests
+- write though unit tests for indexers
+
+- implement a qdbm+sqlite backend
+- implement an rdf backend
+
+- implement xesam
+- add a dbus call to disable periodic indexing for e.g. when running on battery
+- add support for numeric < and > in the queries
+- finish the ontologies
+
+- add mechanism for i18n of ontology
+- allow for i18n of (finite) enums? [as part of i18n of ontology]
+	-- see doc/fieldproperties.txt for a possible implementation
+
+- fix strigiapplet
+- fix diff line analyzer stability
+- make sure the applet displays fine if kicker is on the top of the screen
+- monitor the free disk space and make sure the indexer does not fill up the drive. this might be done with Solid or a call to a monitor with dbus. best is probably to let the client tell the server how much space is left
+- add the option to not refresh status automatically
+
+- finish kfilemetainfo and kfile in kdelibs
+- port KFilePlugin implementations to strigi analyzers:
+  http://lxr.kde.org/ident?i=KFilePlugin
+- add support for extended headers in tar files
+  see e.g. http://www.ussg.iu.edu/hypermail/linux/kernel/0506.2/0417.html
+- use locate for search systemwide for filenames
+- <fosterfeld_> vandenoever: i would suggest to add IndexReader::query() version based on iterators
+- support for more archive types like http://www.kde-apps.org/content/show.php/PeaZip?content=52805
+- add support for IPTC, see http://nets.ii.uam.es/neptuno/iptc/
+- think about supporting very large files with nested files, such as 1 gb mailbox files
+- only index volumes if they are mounted and do not remove the files from the index if they are not mounted
+- mailinputstream: split To: and From: email accounts into different email.to/email.from lines?
+
+- set the lib version numbers to 0.0.0 until we stabilize the api
+- delete deprecated headers (those that currently cause #errors)
+
+quick way to parse desktop files according to dfaure:
+[17:57] <dfaure> vandenoever: if you want to populate strigi with the list of installed apps, I suggest KService::allServices()
+[17:57] <dfaure> this will get the list of services (parts and app) out of ksycoca quite fast
+[17:57] <dfaure> much faster than parsing .desktop files.
+
+Graceful Failure Handling
+=========================
+
+The strigidaemon needs to handle gracefully problems occurring in buggy analyzers which 
+cause problems on either normal or possibly malformed data.
+
+    - Crashes when indexing files
+    - Analyzers getting stuck infinite loops when indexing a file
+    - Analyzers using large amounts of CPU time when indexing a file
+    - Analyzers using large amounts of memory when indexing a file
+
+- Remember file and modification time of last file that was being indexed and skip that
+  file in future if it causes the daemon to crash, to prevent the daemon from getting hung up on a particular file.
+
+- Log details of failures in indexing:  File being indexed, indexer being used etc.  Note that strigi may be running with multiple threads, in that case it might not be known exactly which file was being indexed at the time. 
+
+

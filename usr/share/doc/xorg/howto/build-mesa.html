@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.5.2" />
+<title>How to build mesa</title>
+<link rel="stylesheet" href="../xsf.css" type="text/css" />
+<link rel="stylesheet" href="../xsf.css" type="text/css" />
+<script type="text/javascript">
+/*<![CDATA[*/
+window.onload = function(){asciidoc.footnotes(); asciidoc.toc(2);}
+/*]]>*/
+</script>
+<script type="text/javascript" src="../asciidoc-xhtml11.js"></script>
+</head>
+<body>
+<div id="header">
+<h1><a href="../index.html">XSF</a> / How to build mesa</h1>
+<span id="author">Cyril Brulebois</span><br />
+<span id="email"><tt>&lt;<a href="mailto:kibi@debian.org">kibi@debian.org</a>&gt;</tt></span><br />
+</div>
+<div id="content">
+<h2 id="_foreword">Foreword</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Mesa is a special package since many flavours are built, which means
+it takes quite some time to get all packages ready, as well as some
+disc space (over 2GB for the <tt>build/</tt> directory alone).</p></div>
+<div class="paragraph"><p>Also, trying to figure out whether latest <tt>master</tt> is also affected,
+or backporting some bug fixes might lead to some painful I/O while
+generating the <tt>.deb</tt> files, and then installing/unpacking them. This
+is why this document was written: Helping users test other mesa
+releases, branches, bug fixes without having to build full packages,
+and without having to mess with their systems (<em>i.e.</em> no root access
+is needed once the build dependencies are installed).</p></div>
+<div class="paragraph"><p>We’ll focus on the DRI (Direct Rendering Infrastructure) flavour
+(<tt>libgl1-mesa-dri</tt>), which is the most common.</p></div>
+<div class="paragraph"><p>It might be possible to adapt the following steps to another flavour,
+in which case the appropriate options to be passed to <tt>./configure</tt>
+should be looked up in the <tt>debian/rules</tt> file of the Debian source
+package.</p></div>
+<div class="sidebarblock">
+<div class="sidebar-content">
+<div class="paragraph"><div class="title">Note</div><p>Before reading further, be aware that <tt>nouveau</tt> is a bit special:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+It’s considered experimental, and shipped in the
+   <tt>libgl1-mesa-dri-experimental</tt> package accordingly.
+</p>
+</li>
+<li>
+<p>
+It may fail to build (both API and ABI are still changing).
+</p>
+</li>
+<li>
+<p>
+We’re not shipping <tt>nouveau_vieux_dri.so</tt> yet (for cards from NV04
+   to NV2X; <tt>nouveau_dri.so</tt> is for NV30 and later). See the upstream
+   <a href="http://nouveau.freedesktop.org/wiki/FeatureMatrix">FeatureMatrix</a>
+   page to determine a card’s series.
+</p>
+</li>
+</ul></div>
+</div></div>
+<div style="page-break-after:always"></div>
+</div>
+<h2 id="_gathering_information">Gathering information</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Get started by installing <tt>mesa-utils</tt>, which contains <tt>glxinfo</tt>.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<em>Is direct rendering enabled?</em>
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ glxinfo | grep ^direct
+direct rendering: Yes</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ Yes.</p></div>
+</li>
+<li>
+<p>
+<em>Is this the classic or <a href="http://en.wikipedia.org/wiki/Gallium3D">Gallium</a> driver?</em>
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ glxinfo | grep 'renderer string'
+OpenGL renderer string: Mesa DRI Intel(R) 945GM GEM 20100330 DEVELOPMENT</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ No “Gallium” here, therefore: “classic”.</p></div>
+</li>
+<li>
+<p>
+<em>Which driver is this, and where is it located?</em>
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ LIBGL_DEBUG=verbose glxinfo 2&gt;&amp;1 &gt;/dev/null | grep so$
+libGL: OpenDriver: trying /usr/lib/dri/tls/i915_dri.so
+libGL: OpenDriver: trying /usr/lib/dri/i915_dri.so</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ <tt>i915</tt>, from the system directory: <tt>/usr/lib/dri</tt> (likely installed through a Debian package).</p></div>
+</li>
+<li>
+<p>
+<em>How can I get more debugging information?</em>
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>export LIBGL_DEBUG=verbose
+export MESA_DEBUG=1
+export EGL_LOG_LEVEL=debug</tt></pre>
+</div></div>
+</li>
+</ul></div>
+<div style="page-break-after:always"></div>
+</div>
+<h2 id="_preparing_mesa_sources">Preparing mesa sources</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>To get started, installing all build dependencies of the <tt>mesa</tt> source
+package should be sufficient, along with the essential build tools,
+and <tt>git</tt>:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ sudo apt-get install build-essential git
+$ sudo apt-get build-dep mesa</tt></pre>
+</div></div>
+<div class="paragraph"><p>If you’re on <tt>squeeze</tt> you may need to install a few more packages:
+newer <tt>libdrm-dev</tt> (<strong>FIXME:</strong> talk about picking it from <tt>wheezy</tt>? or
+about a local installation?), as well as <tt>libxmu-dev</tt>, <tt>libxi-dev</tt>.</p></div>
+<div class="paragraph"><p>Make sure you have some disc space available, since the git repository
+is over 120MB, and since the mesa directory is over 500MB after a
+build. Once you’re ready, grab the upstream mesa sources:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ git clone git://anongit.freedesktop.org/mesa/mesa mesa.git
+$ cd mesa.git
+$ autoreconf -vfi</tt></pre>
+</div></div>
+<div class="paragraph"><p>Here’s what the <tt>./configure</tt> call will look like:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ ./configure --prefix=/usr \
+              --enable-driglx-direct \
+              --enable-gallium \
+              --enable-gles-overlay \
+              --enable-gles1 \
+              --enable-gles2 \
+              --enable-glx-tls \
+              --with-driver=dri \
+              --with-dri-driverdir=/usr/lib/dri \
+              --with-egl-platforms='drm x11' \
+              --with-state-trackers=egl,glx,dri,vega \
+              …</tt></pre>
+</div></div>
+<div class="paragraph"><p>Now, what are the parameters to replace “<tt>…</tt>” with? Basically, if
+you determined an Intel driver (<tt>i915</tt> or <tt>i965</tt>), you want to use the
+classic drivers and to disable the Gallium drivers. If you saw a
+Radeon driver (<tt>r300</tt> or <tt>r600</tt>), you should prefer the Gallium
+drivers. If you’re using <tt>nouveau</tt>, make sure you read the note in the
+<em>Foreword</em>. The following assumes you’re using <tt>nouveau_dri.so</tt>.</p></div>
+<div class="paragraph"><p>Examples for common drivers:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+For <tt>i915</tt>, you need:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--with-dri-drivers=i915</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+For <tt>i965</tt>, you need:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--with-dri-drivers=i965</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+For <tt>nouveau</tt>, you may want to try:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--with-dri-drivers=nouveau --enable-gallium-nouveau</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+For <tt>r300</tt> (the options are named <tt>radeon</tt>), you need:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--with-dri-drivers=radeon --enable-gallium-radeon</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+For <tt>r600</tt>, you need:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--with-dri-drivers=r600 --enable-gallium-r600</tt></pre>
+</div></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>Now, once you’ve run <tt>./configure</tt>, time for your favorite beverage:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ make</tt></pre>
+</div></div>
+<div style="page-break-after:always"></div>
+</div>
+<h2 id="_running_the_newly_built_mesa_libraries">Running the newly-built mesa libraries</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Shared libraries end up in the <tt>lib/</tt> directory. It contains the
+classic drivers, while Gallium drivers end up under <tt>lib/gallium</tt>. If
+you’re not an Intel user, overwrite the classic drivers with the
+Gallium ones:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ mv lib/gallium/* lib/</tt></pre>
+</div></div>
+<div class="paragraph"><p>Now, 3 variables need to be set, so that the locally-built libraries
+are used.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+To begin with, libGL itself and its drivers:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ export LIBGL_DRIVERS_PATH=lib</tt></pre>
+</div></div>
+<div class="paragraph"><p><em>Did this work?</em></p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ LIBGL_DEBUG=verbose glxinfo 2&gt;&amp;1 &gt;/dev/null | grep so$
+libGL: OpenDriver: trying lib/tls/i915_dri.so
+libGL: OpenDriver: trying lib/i915_dri.so</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ Yes: No system directory, paths are relative to <tt>lib/</tt>.</p></div>
+</li>
+<li>
+<p>
+Set <tt>LD_LIBRARY_PATH</tt> to make sure the locally-built libraries
+   (including those pulled through library dependencies) are used,
+   instead of system ones:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ export LD_LIBRARY_PATH=lib</tt></pre>
+</div></div>
+<div class="paragraph"><p><em>Did this work?</em></p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ ldd lib/libGLESv2.so | grep glapi
+    libglapi.so.0 =&gt; lib/libglapi.so.0 (0x00007fee3192e000)</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ Yes: Path is relative to <tt>lib</tt>.</p></div>
+</li>
+<li>
+<p>
+Set the EGL search path:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ export EGL_DRIVERS_PATH=lib/egl</tt></pre>
+</div></div>
+<div class="paragraph"><p><em>Did this work?</em></p></div>
+<div class="paragraph"><p><strong>FIXME: We should be shipping EGL-aware applications through <tt>mesa-utils</tt>.</strong></p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>$ EGL_LOG_LEVEL=debug test_application 2&gt;&amp;1 &gt;/dev/null | grep '\.so'
+libEGL debug: added lib/egl/egl_gallium.so to module array
+libEGL debug: dlopen(lib/egl/egl_gallium.so)
+libEGL debug: DRI2: dlopen(lib/i915_dri.so)</tt></pre>
+</div></div>
+<div class="paragraph"><p>↪ Yes: No system directory, paths are relative to <tt>lib/</tt>.</p></div>
+</li>
+</ul></div>
+<h3 id="_the_end" class="float">The end.</h3>
+<div class="paragraph"><p>Now you should be ready to test upstream’s suggestions!</p></div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2011-07-19 20:29:00 UTC
+</div>
+</div>
+</body>
+</html>

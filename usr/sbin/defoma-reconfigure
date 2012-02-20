@@ -1,0 +1,58 @@
+#! /bin/sh
+# Error handling greatly improved by Peter Moulder
+# <pmoulder@mail.csse.monash.edu.au> 2003-03-02, in an attempt to
+# avoid trashing his system again..
+
+set -e
+
+OPTION="$1"
+
+if [ "X$OPTION" = "X-f" ]; then
+  rm -fr /var/lib/defoma/locked
+fi
+
+if ! ln -s locknow /var/lib/defoma/locked > /dev/null 2>&1; then
+  echo "Error: /var/lib/defoma/locked exists." >&2
+  echo "Another defoma process seems running, or you aren't root." >&2
+  echo "If you are root and defoma process isn't running undoubtedly," >&2
+  echo "it is possible that defoma might have aborted." >&2
+  echo "Please run defoma-reconfigure -f to fix its broken status." >&2
+  exit 1
+else
+  rm -fr /var/lib/defoma/locked
+fi
+
+DELETES="postscript pspreview psprint x-postscript xfont"
+
+if ! cd /var/lib/defoma ; then
+  echo "failed to chdir /var/lib/defoma."
+  exit 1
+fi
+
+DIRS=""
+for i in *.d; do
+  test "X$i" = "X*.d" && exit 0
+  if cd "$i"; then
+    DIRS="$DIRS $i"
+    find \( -type f -o -type l \) -print0 | xargs -0r rm -f
+    cd /var/lib/defoma
+  fi
+done
+
+for i in $DELETES; do
+  [ -f $i.font-cache ] && rm -f $i.font-cache
+  [ -f $i.failed-font-cache ] && rm -f $i.failed-font-cache
+done
+
+rm -fr *.subst-cache
+
+rc=0
+for i in $DIRS; do
+  APP=${i%%.d}
+  if ! defoma-app update $APP; then
+    echo "$0: \`defoma-app update $APP' failed ($?)." >&2
+    rc=1
+  fi
+done
+
+exit $rc

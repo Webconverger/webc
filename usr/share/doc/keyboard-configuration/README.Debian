@@ -1,0 +1,7 @@
+After modifying /etc/default/keyboard, you can apply the changes to the Linux
+console by running setupcon. If X is configured to use that file too, then the
+changes will become visible to X only if
+
+udevadm trigger --subsystem-match=input --action=change
+
+is called, or the system is rebooted.

@@ -1,0 +1,125 @@
+                             Nápověda Aptitude
+
+  Pro procházení nápovědou použijte kurzorové šipky a klávesy PageUp,
+PageDown. Nápovědu opustíte klávesou „q“.
+
+  V Aptitude jsou standardně k dispozici následující klávesy. Seznam
+všech kláves naleznete v souboru README.
+
+  „q“:          Ukončí program.
+  „?“:          Zobrazí tuto obrazovku.
+
+  „f“:          Vyčistí seznam „nových“ balíků.
+
+  Nahoru, „k“:  Posune kurzor o řádek nahoru.
+  Dolů, „j“:    Posune kurzor o řádek dolů.
+  Page-Up,
+  Control-b:    Posune kurzor o obrazovku nahoru.
+  Page-Down,
+  Control-f:    Posune kurzor o obrazovku dolů.
+  Home,
+  Control-a:    Posune kurzor na první balík v seznamu.
+  End,
+  Control-e:    Posune kurzor na poslední balík v seznamu.
+  „^“:          Posune kurzor na rodiče aktuální položky.
+  Enter:        Rozbalí nebo sbalí skupinu balíků.
+  „[“:          Rozbalí skupinu balíků a všechny její podskupiny.
+  „]“:          Sbalí skupinu balíků a všechny její podskupiny.
+
+  Control-t:    Aktivuje/deaktivuje menu.
+  „F6“:         Přejde na další pohled (panel).
+  „F7“:         Přejde na předchozí pohled (panel).
+
+  Enter:        Zobrazí informace o balíku.
+  „C“:          Zobrazí seznam změn balíku (changelog).
+  „+“:          Instaluje nebo aktualizuje balík, také zruší podržení.
+  „-“:          Odstraní balík.
+  „=“:          Podrží balík v aktuální verzi (zabrání aktualizaci).
+  „:“:          Ponechá balík v aktuální verzi. Na rozdíl od podržení
+                nezabrání budoucím aktualizacím.
+  „_“:          Odstraní balík i s jeho konfiguračními soubory.
+  „L“:          Vyžádá, aby byl balík přeinstalován.
+  „M“:          Označí balík jako instalovaný automaticky.
+                Pokud je jiný balík nevyžaduje, jsou automaticky
+                instalované balíky odstraněny.
+  „m“:          Označí balík jako instalovaný ručně.
+  „F“:          Zamezí automatické aktualizaci balíku na konkrétní
+                verzi; novější verze balíku budou opět instalovány
+                automaticky.
+
+  „u“:          Aktualizuje seznamy dostupných balíků.
+  „U“:          Označí všechny aktualizovatelné balíky pro aktualizaci.
+  „g“:          Provede všechny naplánované (od)instalace a aktualizace.
+
+  Control-u:    Vrátí zpět poslední akci (nebo množinu akcí).
+  „/“:          Spustí hledání. (Standardně podle jmen balíků. Více
+                informací naleznete v README/uživatelském manuálu).
+  „\“:          Spustí hledání směrem vzad.
+  „n“:          Zopakuje poslední hledání.
+  „N“:          Zopakuje poslední hledání, ovšem v opačném směru.
+  „b“:          Hledá další porušený balík.
+
+  „v“:          Zobrazí dostupné verze balíku
+  „d“:          Zobrazí závislosti balíku
+  „r“:          Zobrazí balíky závisející na daném balíku
+
+  „D“:          Zobrazí nebo skryje rozšířenou oblast s popisem
+  „a“:          Posune popis v rozšířené oblasti nahoru
+  „z“:          Posune popis v rozšířené oblasti dolů
+  „i“:          Cykluje různými informacemi o balíku
+
+  „,“:          Zobrazí předchozí řešení závislostí.
+  „.“:          Zobrazí další řešení závislostí, v případě potřeby
+                vytvoří nové.
+  „<“:          Zobrazí první řešení závislostí.
+  „>“:          Zobrazí poslední řešení závislostí.
+
+    V interaktivním řešiteli:
+  „a“:          Schválí akci, což znamená, že tato akce bude
+                preferovaná před ostatními / zruší schválení.
+  „r“:          Zamítne akci, což znamená, že tato akce nebude
+                nikdy použita / zruší zamítnutí.
+
+
+  Balíky se v seznamu balíků standardně zobrazují takto:
+
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  Tři znaky na levé straně řádku zobrazují aktuální stav balíku. První
+písmeno je „stavový“ příznak, druhé písmeno je „akční“ příznak a třetí
+písmeno je „automatický“ příznak. Následuje název balíku, očekávaná
+změna obsazeného místa na disku po provedení naplánované akce a úplně
+vlevo pak aktuální a dostupná verze balíku.
+
+
+  „Stavový“ příznak balíku může nabývat následujících hodnot:
+
+   v - virtuální
+   B - poškozený
+   u - rozbalený
+   C - napůl zkonfigurovaný
+   H - napůl instalovaný
+   c - odstraněný, ale konfigurační soubory jsou stále přítomny
+   i - instalovaný
+   E - interní chyba (nemělo by se stávat)
+
+  „Akční“ příznak balíku může nabývat následujících hodnot:
+
+   h - podržet
+   p - odstranit i s konfiguračními soubory
+   d - odstranit
+   B - poškozený
+   i - instalovat
+   r - reinstalovat
+   u - aktualizovat
+   F - možná aktualizace byla zakázána klávesou „F“
+
+  „Automatický“ příznak balíku může nabývat dvou hodnot. Pokud se nic
+nezobrazuje, byl balík nainstalován ručně. Pokud se zobrazuje „A“,
+znamená to, že byl balík nainstalován automaticky; tj. pokud na něm
+nic nezávisí, bude automaticky odstraněn.
+
+
+  V příkladu výše byl balík libsmbclient nainstalován automaticky,
+mohl by být aktualizován z verze 3.0.25a-1 na verzi 3.0.25a-2, ale
+místo toho bude smazán, což na disku uvolní 2220 kilobajtů.

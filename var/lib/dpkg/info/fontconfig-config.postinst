@@ -1,0 +1,101 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+# Remove old ucf stuff
+rm -rf /var/lib/fontconfig
+
+CONFAVAIL=/etc/fonts/conf.avail
+CONFDIR=/etc/fonts/conf.d
+
+# Add the defoma configuration
+defoma_link="30-defoma.conf"
+ln -sf /var/lib/defoma/fontconfig.d/fonts.conf $CONFDIR/$defoma_link
+
+db_get fontconfig/hinting_type
+hinting_type="$RET"
+
+unhinted="10-unhinted.conf"
+autohint="10-autohint.conf"
+
+if [ -h $CONFDIR/$unhinted ]; then
+	rm $CONFDIR/$unhinted
+fi
+if [ -h $CONFDIR/$autohint ]; then
+	rm $CONFDIR/$autohint
+fi
+	
+case "$hinting_type" in
+"Native")
+	;;
+"Autohinter")
+	ln -s $CONFAVAIL/$autohint $CONFDIR/$autohint
+	;;
+"None")
+	ln -s $CONFAVAIL/$unhinted $CONFDIR/$unhinted
+	;;
+esac
+
+
+db_get fontconfig/subpixel_rendering
+subpixel_rendering="$RET"
+
+subpixel="10-sub-pixel-rgb.conf"
+no_subpixel="10-no-sub-pixel.conf"
+
+if [ -h $CONFDIR/$subpixel ]; then
+	rm $CONFDIR/$subpixel
+fi
+
+if [ -h $CONFDIR/$no_subpixel ]; then
+	rm $CONFDIR/$no_subpixel
+fi
+
+case "$subpixel_rendering" in
+"Automatic")
+	;;
+"Always")
+	ln -s $CONFAVAIL/$subpixel $CONFDIR/$subpixel
+	;;
+"Never")
+	ln -s $CONFAVAIL/$no_subpixel $CONFDIR/$no_subpixel
+	;;
+esac
+
+
+db_get fontconfig/enable_bitmaps
+enable_bitmaps="$RET"
+
+yes_bitmaps="70-yes-bitmaps.conf"
+no_bitmaps="70-no-bitmaps.conf"
+
+if [ -h $CONFDIR/$yes_bitmaps ]; then
+	rm $CONFDIR/$yes_bitmaps
+fi
+
+if [ -h $CONFDIR/$no_bitmaps ]; then
+	rm $CONFDIR/$no_bitmaps
+fi
+
+case "$enable_bitmaps" in
+"true")
+	ln -s $CONFAVAIL/$yes_bitmaps $CONFDIR/$yes_bitmaps
+	;;
+*)
+	ln -s $CONFAVAIL/$no_bitmaps $CONFDIR/$no_bitmaps
+	;;
+esac
+
+
+# Create /usr/local/share/fonts
+LOCALDIR=/usr/local/share/fonts
+if [ ! -d $LOCALDIR ]; then
+  if mkdir $LOCALDIR 2>/dev/null ; then
+    chmod 2775 $LOCALDIR
+    chown root:staff $LOCALDIR
+  fi
+fi
+
+

@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for fi.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Ryhmättömät paketit\n Näille paketeille ei ole määritelty ryhmää.  Packages-tiedosto voi olla virheellinen.";
+    Virtual	"Näennäispaketit\n Näitä paketteja ei ole olemassa; ne ovat vain nimiä, jotka kertovat pakettien vaatimasta tai tarjoamasta toiminnallisuudesta.z";
+    Tasks	"Paketit, jotka valmistavat tietokoneesi tiettyä tehtävää varten\n Tehtävät-ryhmään kuuluvat paketit eivät sisällä tiedostoja, vaan ainoastaan riippuvat toisista paketeista.  Tämä helpottaa valitsemaan joukon ennalta määriteltyjä paketteja, jotka liittyvät tiettyyn käyttötarkoitukseen.";
+
+    admin	"Järjestelmätyökalut (ohjelmien asennus, käyttäjien hallinta yms.)\n Admin-ryhmän paketit mahdollistavat erilaisia hallinnollisia tehtäviä kuten ohjelmien asennuksen, käyttäjähallinnon, asetuksien muokkaamisen, järjestelmän valvonnan, verkkoliikenteen tarkastelun jne.";
+    alien	"Toisista muodoista (rpm, tgz, yms.) muunnetut paketit\n Alien-ryhmän paketit ovat alien-ohjelman luomia jostain muusta kuin Debianin käyttämästä pakettimuodosta (esim. RPM).";
+    base	"Debianin perusta\n Base-ryhmän paketit ovat osa alkuperäistä asennusta.";
+    comm	"Faksimodeemien ja muiden tiedonsiirtolaitteiden tarvitsemat ohjelmat\n Comm-ryhmän paketit soveltuvat modeemien ja muiden tiedonsiirtolaitteiden hallintaan.  Tämä käsittää faksimodeemien hallintaohjelmistot (esimerkiksi PPP:n käyttö Internet-yhteyteen puhelinlinjan välityksellä) sekä myös matkapuhelinten hallintaohjelmia, FidoNet-liittymän ja BBS-ohjelmistoja.";
+    devel	"Työkalut ja ohjelmat ohjelmistokehitykseen\n Devel-ryhmän paketteja käytetään uusien ohjelmien kirjoittamiseen ja vanhojen ohjelmien kanssa työskentelyyn.  Tämän ryhmän paketeista ei luultavasti suurin osa ole tarpeen, jos ohjelmia ei tarvitse kääntää.\n .\n Tämä ryhmä käsittää kääntäjiä, ohjelmointieditoreita, lähdekoodin käsittelytyökaluja ja muita ohjelmistokehitykseen liittyviä ohjelmia.";
+    doc		"Käyttöohjeet ja niiden katseluun tarkoitetut ohjelmat\n Doc-ryhmän paketit sisältävät ohjeita Debian-järjestelmään tai sen osiin, tai ovat ohjetiedostojen katseluun tarkoitettuja ohjelmia.";
+    editors	"Tekstieditorit ja tekstinkäsittelyohjelmat\n Editors-ryhmän paketit mahdollistavat paljaan tekstin muokkaamisen. Tällaiset ohjelmat eivät välttämättä ole tekstinkäsittelyohjelmia, vaikka sellaisiakin tässä ryhmässä saattaa olla.";
+    electronics	"Piiri- ja elektroniikkaohjelmat\n Electronics-ryhmä sisältää piirisuunnittelutyökaluja, mikro-ohjaimien simulaattoreita ja assemblereita ynnä muita elektroniikkaohjelmistoja.";
+    embedded	"Ohjelmat sulautetuille järjestelmille\n Embedded-ryhmä sisältää sulautettuihin järjestelmiin suunniteltuja ohjelmia. Tällaiset järjestelmät ovat erikoistuneita laitteita, joiden teho on paljon pienempi kuin tavallisen pöytäkoneen. Esimerkkejä ovat kämmentietokoneet ja matkapuhelimet.";
+    gnome	"GNOME-työpöytäympäristö\n GNOME on helppokäyttöisen Linux-työpöytäympäristön tarjoava kokoelma ohjelmistoja. Gnome-ryhmän paketit ovat joko osa GNOME-ympäristöä tai liittyvät siihen kiinteästi.";
+    games	"Pelit ja muut hupiohjelmat\n Games-ryhmän paketit soveltuvat pääasiassa viihdekäyttöön.";
+    graphics	"Grafiikan luomis-, katselu- ja käsittelyohjelmat\n Graphics-ryhmän paketit sisältävät kuvien katseluohjelmia, käsittelyohjelmia, grafiikkalaitteiston (näyttökorttien, kuvanlukijoiden, digitaalikameroiden, yms.) käyttöön tarkoitettuja ohjelmia sekä ohjelmointityökaluja grafiikan käsittelyyn.";
+    hamradio	"Radioamatööriohjelmat\n Hamradio-ryhmän paketit on tarkoitettu lähinnä radioamatööreille.";
+    interpreters "Tulkattavien kielten tulkit\n Interpreters-ryhmän paketit käsittävät tulkkeja eri ohjelmointikielille (esim. Python, Perl, Ruby) ja kirjastoja näille kielille.";
+    kde		"KDE-työpöytäympäristö\n KDE on helppokäyttöisen Linux-työpöytäympäristön tarjoava kokoelma ohjelmistoja. Kde-ryhmän paketit ovat joko osa KDE-ympäristöä tai liittyvät siihen kiinteästi.";
+    libdevel	"Kirjastojen kehityskäyttö\n Libdevel-ryhmän paketit sisältävät tiedostoja, joita tarvitaan kehitettäessä Libs-ryhmän kirjastoja käyttäviä ohjelmia. Tarvitset tämän ryhmän paketteja vain, jos aiot itse kääntää ohjelmia.";
+    libs	"Aliohjelmakirjastot\n Libs-ryhmän paketit tarjoavat toiminnallisuutta muille ohjelmistoille. Tästä ryhmästä ei yleensä ole tarpeen asentaa paketteja käsin, sillä paketointijärjestelmä asentaa ne automaattisesti riippuvuuksien tyydyttämiseksi.";
+    perl	"Perl-tulkki ja kirjastot\n Perl-ryhmän paketit sisältävät Perl-ohjelmointikielen ja useita lisäkirjastoja sille. Vain Perl-ohjelmoijien tarvitsee asentaa tämän ryhmän paketteja käsin, sillä muissa tapauksissa paketointijärjestelmä asentaa ne automaattisesti tarvittaessa.";
+    python	"Python-tulkki ja kirjastot\n Python-ryhmän paketit sisältävät Python-ohjelmointikielen ja useita lisäkirjastoja sille. Vain Python-ohjelmoijien tarvitsee asentaa tämän ryhmän paketteja käsin, sillä muissa tapauksissa paketointijärjestelmä asentaa ne automaattisesti tarvittaessa.";
+    mail	"Sähköpostin kirjoitus-, lähetys- ja reititysohjelmistot\n Mail-ryhmän paketteja käytetään postin lukemiseen ja välitykseen, postilistojen pitoon, roskapostin suodatukseen sekä muuhunkin sähköpostiin liittyvään.";
+    math	"Matemaattiset ohjelmistot\n Math-ryhmän paketit käsittävät laskimia, matemaattiseen työskentelyyn tarkoitettuja kieliä, symbolisen laskennan ohjelmistoja ja ohjelmia matemaattisten olioiden hahmottamiseen.";
+    misc	"Sekalaiset ohjelmistot\n Misc-ryhmä sisältää epätavallisen käyttötarkoituksen vuoksi luokittelemattomat paketit.";
+    net		"Verkkoyhteysohjelmat ja sekalaiset palvelinohjelmat\n Net-ryhmän paketit käsittävät asiakkaita ja palvelimia monille protokollille, työkaluja alhaisen tason verkkoprotokollien käsittelyyn ja vianpaikannukseen, pikaviestijärjestelmiä ja muita verkko-ohjelmistoja.";
+    news	"Usenet News -järjestelmän asiakas- ja palvelinohjelmat\n News-ryhmän paketit liittyvät Usenet News -järjestelmään.  Ryhmään kuuluu sekä lukimia että palvelimia.";
+    oldlibs	"Vanhentuneet aliohjelmakirjastot\n Oldlibs-ryhmän paketit ovat vanhentuneita eikä uusien ohjelmistojen tulisi käyttää niitä.  Ne ovat saatavilla vain yhteensopivuuden vuoksi tai koska jokin Debianin levittämä ohjelmisto vielä tarvitsee niitä.\n .\n Tästä ryhmästä ei yleensä ole tarpeen asentaa paketteja käsin, sillä paketointijärjestelmä asentaa ne automaattisesti riippuvuuksien tyydyttämiseksi.";
+    otherosfs	"Emulaattorit ja eri tiedostojärjestelmien käsittelyohjelmat\n Otherosfs-ryhmän paketit emuloivat laitteistoja ja käyttöjärjestelmiä sekä tarjoavat työkaluja tiedonsiirtoon eri käyttöjärjestelmien ja laitteistojen välillä (esimerkiksi DOS-levykkeiden lukuun tai Palm Pilot -laitteiden käsittelyyn)\n .\n Tämä ryhmä käsittää myös CD:iden poltto-ohjelmat.";
+    science	"Tietelliset ohjelmistot\n Science-ryhmän paketit käsittävät työkaluja astronomiaan, biologiaan, kemiaan sekä muuhunkiin tieteisiin liittyvään.";
+    shells	"Komentotulkit ja pääteympäristöt\n Shells-ryhmän paketit sisältävät komentoriviympäristön tarjoavia ohjelmia.";
+    sound	"Äänentoisto- ja äänitystyökalut\n Sound-ryhmässä on paketteja äänentoistoon ja -nauhoitukseen, koodausohjelmia eri tiedostomuodoille, nuottien kirjoitusohjelmia, äänilaitteiston hallintaohjelmia, sekä muita äänen- ja musiikinkäsittelyohjelmia.";
+    tex		"TeX-ladontajärjestelmä\n Tex-ryhmän paketit liittyvät kaikki TeX:iin, joka on korkealaatuista jälkeä tuottava ladontajärjestelmä.  Tämä sisältää TeX:in, TeX-paketteja, TeX:lle suunniteltuja editoreita, TeX:n käyttämien tiedostotyyppien muuntimia, kirjasimia TeX:lle sekä muita TeX:iin liittyviä ohjelmistoja.";
+    text	"Ohjelmat tekstin kaikenlaiseen käsittelyyn\n Text-ryhmän paketit käsittävät tekstin suodattimia ja käsittelimiä, oikeinkirjoitustarkistimia, sanakirjaohjelmia, eri merkkikoodausten ja tekstitiedostomuotojen välisiä muuntimia, tekstin muotoilimia ja muita paljaan tekstin käsittelyyn tarkoitettuja ohjelmistoja.";
+    utils	"Sekalaiset järjestelmätyökalut\n Utils-ryhmän paketeilla on liian kapea käyttötarkoitus, jotta niitä voisi luokitella.";
+    web		"Seittiselaimet, -palvelimet, -välittimet yms. ohjelmat\n Web-ryhmän paketit ovat seittiselaimia, -palvelimia ja -välittimiä, CGI-toimintojen kirjoittamiseen tarkoitettuja ohjelmia, seittipohjaisia ohjelmia ja muita WWW:hen liittyviä ohjelmia.";
+    x11		"X-ikkunointijärjestelmä ja siihen liittyvät ohjelmistot\n X11-ryhmän paketit sisältävät X-ikkunointijärjestelmän ytimen, ikkunanhallintaohjelmia, X-hyötyohjelmia ja sekalaisia X-liittymää käyttäviä ohjelmia, jotka eivät sopineet muihin ryhmiin.";
+
+    main	"Debianin varsinainen arkisto\n Debian-järjestelmä koostuu paketeista main-ryhmässä.  Jokainen main-ryhmän paketti sisältää ainoastaan vapaaohjelmistoja.\n .\n Saadaksesi lisätietoa, miten Debian ratkaisee ohjelmien vapauden, katso http://www.debian.org/social_contract#guidelines";
+    contrib	"Debianin ulkopuolisia ohjelmistoja tarvitsevat ohjelmat\n Contrib-ryhmän paketit eivät kuulu Debianiin.\n .\n Nämä paketit sisältävät vain vapaaohjelmia, mutta ne riippuvat Debianin ulkopuolisista ohjelmistoista.  Tämä ulkopuolisuus voi johtua siitä, että ohjelma ei ole vapaa ja sisältyy non-free-ryhmään tai siitä, että Debian ei saa levittää ohjelmaa lainkaan, tai (joskus harvoin) siitä, että kukaan ei ole vielä paketoinut ohjelmaa.\n .\n Saadaksesi lisätietoa, miten Debian ratkaisee ohjelmien vapauden, katso http://www.debian.org/social_contract#guidelines";
+    non-free	"Epävapaat ohjelmat\n Non-free-ryhmän paketit eivät kuulu Debianiin.\n .\n Nämä ohjelmat eivät täytä Debianin vapaaohjelmistoille asettamia ehtoja.  Ennen kuin käytät näitä ohjelmia, lue lisenssiehdot varmistaaksesi, että haluamasi käyttötapa on sallittu.\n .\n Saadaksesi lisätietoa, miten Debian ratkaisee ohjelmien vapauden, katso http://www.debian.org/social_contract#guidelines";
+    non-US	"Vientirajoitusten vuoksi USA:n ulkopuolella säilytettävät ohjelmat\n Non-US-ryhmän paketit tyypillisesti sisältävät salausohjelmistoja, mutta jotkut sisältävät patentoituja algoritmeja.  Näitä paketteja ei tästä syystä voi viedä ulos Yhdysvalloista, joten ne sijaitsevat ''vapaassa maailmassa'' olevalla palvelimella.\n .\n Huom: Debian on parhaillaan siirtämässä salausohjelmistoja Yhdysvalloissa sijaitsevaan pääarkistoon saatuaan lainopillisia neuvoja taannoisten vientirajoitusten höllentämisten jälkeen.  Useimmat ennen tässä ryhmässä olleet paketit ovat siis nykyään main-ryhmässä.";
+  };
+};
+

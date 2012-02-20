@@ -1,0 +1,2975 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+ *****************************************************************************
+ * Copyright 1997-2009,2010 by Thomas E. Dickey                              *
+ * All Rights Reserved.                                                      *
+ *                                                                           *
+ * Permission to use, copy, modify, and distribute this software and its     *
+ * documentation for any purpose and without fee is hereby granted, provided *
+ * that the above copyright notice appear in all copies and that both that   *
+ * copyright notice and this permission notice appear in supporting          *
+ * documentation, and that the name of the above listed copyright holder(s)  *
+ * not be used in advertising or publicity pertaining to distribution of the *
+ * software without specific, written prior permission.                      *
+ *                                                                           *
+ * THE ABOVE LISTED COPYRIGHT HOLDER(S) DISCLAIM ALL WARRANTIES WITH REGARD  *
+ * TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND *
+ * FITNESS, IN NO EVENT SHALL THE ABOVE LISTED COPYRIGHT HOLDER(S) BE LIABLE *
+ * FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES         *
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     *
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   *
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            *
+ *****************************************************************************
+  $XTermId: xterm.faq.html,v 1.138 2010/05/15 20:46:49 tom Exp $
+  -->
+<HTML>
+<HEAD>
+<TITLE>XTERM &ndash; Frequently Asked Questions (FAQ)</TITLE>
+<LINK REV=MADE HREF="mailto:dickey@invisible-island.net">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+<HR>
+Copyright 1997-2009,2010 by Thomas E. Dickey
+<HR>
+<h2>Contents</h2>
+<UL>
+<LI><A HREF="#what_is_it">What is XTERM?</A>
+<LI><A HREF="#who_did_it">Who wrote XTERM?</A>
+<LI><A HREF="#what_platforms">What platforms does it run on?</A>
+<LI><A HREF="#latest_version">What is the latest version?</A>
+<LI><A HREF="#other_versions">What versions are available?</A>
+<LI><A HREF="#how_do_i">How do I ...</A>
+<LI><A HREF="#frequent_problems">Frequent problems</A>
+<LI><A HREF="#known_bugs">Known Bugs in XTERM</A>
+<LI><A HREF="#building_it">How do I build XTERM?</A>
+<LI><A HREF="#report_bugs">How do I report bugs?</A>
+<LI><A HREF="#more_info">Additional Information</A>
+<LI><A HREF="#future_work">Ongoing/future work</A>
+</UL>
+
+<HR>
+<h2><A NAME="what_is_it">What is XTERM?</A></h2>
+From the manual page:
+<blockquote>
+The xterm program is a terminal emulator for the X Window System.  It provides
+DEC VT102 and Tektronix 4014 compatible terminals for programs that can't use
+the window system directly.  If the underlying operating system supports
+terminal resizing capabilities (for example, the SIGWINCH signal in systems
+derived from 4.3bsd), xterm will use the facilities to notify programs running
+in the window whenever it is resized.
+</blockquote>
+
+<h2><A NAME="who_did_it">Who wrote XTERM?</A></h2>
+I've been working on xterm since early 1996
+(see my <a href="xterm.log.html">changelog</a> for details).
+<P>
+But the program is much older than that.
+<p>
+A lot of people, cited at the bottom of the manual page wrote
+the original xterm program, maintained by the X Consortium
+(later part of the Open Group &ndash; I'm well aware of the distinction,
+but am citing when the work was done, not who the current owner may be).
+There is no changelog, and it is not clear who did what.
+Email from Jim Gettys provides some background:
+<blockquote>
+Cast of thousands...
+<p>
+To give a bit of history, xterm predates X!
+<p>
+It was originally written as a stand-alone terminal emulator for the
+VS100 by Mark Vandevoorde, as my coop student the summer that
+X started.
+<p>
+Part way through the summer, it became clear that X was more useful
+than trying to do a stand alone program, so I had him retarget it to X.
+Part of why xterm's internals are so horrifying is that it was originally
+intended that a single process be able to drive multiple VS100 displays.
+Don't hold this against Mark; it isn't his fault.
+<p>
+I then did a lot of hacking on it, and merged several improved versions
+from others back in.
+<p>
+Notable improvements include the proper ANSI parser, that Bob McNamara
+did.
+<p>
+The Tek 4010 support came from a guy at Smithsonian Astrophysical Observatory
+whose name slips my mind at the moment.
+<p>
+Ported to X11 by Loretta Guarino.
+<p>
+Then hacked on at the X Consortium by uncounted people.
+</blockquote>
+Email from Doug Mink provides more background:
+<blockquote>
+I was checking out the newly revised AltaVista search
+engine to see what was on the net about xterm, and I
+found your pages.  I can add to the FAQ in that I was the
+"guy at the Smithsonian Astrophysical Observatory" Jim
+Gettys refers to.  I am listed at the end of the man page
+under authors.  What happened was that I was hired by SAO
+(after leaving the research staff at MIT) in October 1985
+to write analysis software for the Spacelab 2 Infrared
+Telescope which was to fly on the Space Shuttle in 1985
+less than six months after I was hired.  I came with a tar
+tape full of software I had written for Unix and Tektronix
+terminals, but I was presented with a VS100 terminal which
+had an early version (X6 or so) of xterm, with no graphics
+capabilities.  SAO is at Harvard, across Cambridge from MIT,
+where Jim Gettys was detailed from DEC to the X project,
+and Jim had connections with SAO, having worked here after
+college (MIT, where we had both worked at the observatory
+at various times); he was still sharing an apartment with
+an SAO colleague of mine, too. Anyway, everyone decided
+that since I knew Tektronix commands pretty well, and our
+group desparately needed the graphics capabilities, it
+would be a good use of my time to implement a Tektronix
+terminal emulator under X.  So I set to work learning
+more C--I had only written a couple of wrappers to C I/O
+routines so I could use them with my Fortran software--and
+wrote a Tektronix emulator.  The only X documentation at
+the time was the code itself.  While I was at it, I wrote
+an improved Tektronix emulator for our Imagen laser printer
+which used the full resolution of that 300 dpi printer instead
+of the effective 100 dpi (i.e. jaggy) emultator distributed
+with the printer.  The original xterm Tek emulator shared a
+window with the VT100 emulator, much like on the VT240 terminals
+which I had been using at MIT before I came to Harvard.  With
+a VAX 750 running several VS100's, window creation was sloowww,
+so sharing a window was the quickest way to do things, and all
+of my software was written for that mode of operation, anyway.
+While I wrote the emulator so that my software would work on
+it, it was tested by the X group against a BBN graphics package,
+the name of which slips my mind right now.
+<p>
+Anyway, 15 years later, I am still using xterm and some of the
+same mapping software I wrote the emulator for.  And I am still
+at the Smithsonian Astrophysical Observatory.
+</blockquote>
+<P>
+This FAQ is oriented toward the version of xterm originally distributed
+with XFree86 (also known as "new xterm",
+with a corresponding terminal description "xterm-new"),
+which was based on the X11R6.3 xterm, with the addition of ANSI color and
+VT220 controls.
+
+<h2><A NAME="what_platforms">What platforms does it run on?</A></h2>
+<code>Xterm</code> runs in all of the implementations of X11.
+I've built and run these since I started working on xterm:
+
+<UL>
+<LI>AIX 3.2.5, 4.1, 4.3 (cc)
+<LI>Digital Unix 3.2, 4.0, 5.0 (cc)
+<LI>FreeBSD 2.2.6 to 6.0 (gcc 2.8)
+<LI>HP-UX 9.05 to 11.23 (gcc 2.7.2 to 3.4)
+<LI>IRIX 5.2, 6.2 (cc, gcc 2.7.2, gcc 2.8)
+<LI>Linux 2.0.0 to 2.6.26 (gcc 2.7.2 to 4.3)
+<LI>SCO OpenServer 5 (cc, gcc).
+<LI>Solaris 2.4, 2.5, 2.5.1, 2.6, 7, 8 (cc, gcc 2.7.2)
+<LI>SunOS 4.1.1, 4.1.3 (gcc 2.7.2)
+</UL>
+<P>
+The older configurations have X11R5 libraries.  Only minor changes
+are needed to make xterm work on those systems.  However, with X11R6
+you can obtain better locale support, as well as new features such as the
+active icon.
+X11R7... not much to say there.
+
+<h2><A NAME="latest_version">What is the latest version?</A></h2>
+The most recent (and well supported) version of xterm is the one that I maintain:
+<ul>
+<li><A HREF="ftp://invisible-island.net/xterm/xterm.tar.gz">current source (ftp)</A>
+<li><A HREF="http://invisible-island.net/datafiles/release/xterm.tar.gz">current source (http)</A>
+</ul>
+
+<h2><A NAME="other_versions">What versions are available?</A></h2>
+There are several other versions of xterm, based on xterm's source.
+These include
+<UL>
+<LI><A HREF="#bug_ansi_xterm">ansi_xterm</A>
+<LI><A HREF="#bug_color_xterm">color_xterm</A>
+<LI><A HREF="#bug_cxterm">cxterm</A> (Chinese)
+<LI><A HREF="#bug_hanterm">hanterm</A> (Korean)
+<LI><A HREF="#bug_mxterm">mxterm</A>
+<LI><A HREF="#bug_nxterm">nxterm</A>
+<LI><A HREF="#bug_kterm">kterm</A> (Japanese)
+<LI><A HREF="#bug_xterm_r6">xterm</A> (from X Consortium)
+</UL>
+There are similar programs not based on xterm's source,
+which are compatible to different degrees.
+These include
+<ul>
+<LI><A HREF="#bug_dtterm">dtterm</A>
+<LI><A HREF="#bug_emu">emu</A> (from X Consortium)
+<LI><A HREF="#bug_eterm">Eterm</A>
+<LI><A HREF="#bug_gnometerm">GNOME Terminal</A>
+<LI><A HREF="#bug_multignome">Multi GNOME Terminal (MGT)</A>
+<LI><A HREF="#bug_mterm">mterm</A>
+<LI><A HREF="#bug_konsole">konsole</A>
+<LI><A HREF="#bug_mlterm">mlterm</A> (Multi Lingual)
+<LI><A HREF="#bug_osso_xterm">osso-xterm</A>
+<LI><A HREF="#bug_roxterm">roxterm</A>
+<LI><A HREF="#bug_rxvt">rxvt</A>
+<LI><A HREF="#bug_xfce_term">xfce-term</A>
+<LI><A HREF="#bug_xgterm">xgterm</A>
+<LI><A HREF="#bug_xiterm">xiterm</A>
+</ul>
+Some of these use the <a href="#vte_widget">VTE widget</a>.
+Since that supplies most of the terminal emulation,
+the remaining differences between programs using VTE tend to be
+at the level of the window manager (menus, borders, etc.).
+Other (older) programs which are based on reusable widgets
+include 
+<A HREF="#bug_dtterm">dtterm</A> and
+<A HREF="#bug_emu">emu</A>.
+<p>
+(I am aware of a few others, such as
+<STRONG>xcterm</STRONG>, but have not seen
+a working version of these).
+<p>
+There were for some time two versions of XFree86 xterm.  Starting with my
+<a href="xterm.log.html#xterm_88">patch 88</a>,
+there were the stable (beta) and unstable (alpha) versions, which currently
+are XFree86 3.3.6 and XFree86 4.x, respectively.
+I made only critical changes to the stable version since
+patch 88;
+ongoing development (including all non-critical fixes)
+was focused on the "unstable".
+<p>
+XFree86 4.0 should have incorporated my
+<a href="xterm.log.html#xterm_131">patch 131</a>,
+but it was overlooked at the last moment
+(though it was listed in the ChangeLog, the patch itself was not applied).
+Unfortunately, the patch 130 version which was released
+renders colors incorrectly on most platforms, in particular FreeBSD.
+Ironically, the change in
+<a href="xterm.log.html#xterm_129">patch 129</a>
+which introduced this bug
+was designed to work around a bug which I have seen only running with FreeBSD.
+To compound the irony,
+there was some resistance at the time
+(2000/4/5) by that organization to incorporating the fix
+because it might be confused with the 4.0 release version.
+
+<h2><A NAME="how_do_i">How do I ...</A></h2>
+Not really problems, but frequently asked questions (the point of this,
+after all):
+<UL>
+<LI><A HREF="#how2_fsize">How do I change the font size?</A>
+<LI><A HREF="#how2_print">How do I print the screen?</A>
+<LI><A HREF="#how2_fkeys">How do I set up function keys?</A>
+<LI><A HREF="#how2_title">How do I set the title?</A>
+<LI><A HREF="#how2_blink">How do I make the cursor blink?</A>
+</UL>
+
+<h3><A NAME="how2_fsize">How do I change the font size?</A></h3>
+xterm uses fonts given as resource settings.
+You can switch between these fonts at runtime, using a menu.
+This is documented in the manpage, in the
+<a href="manpage/xterm.html#MENUS">MENUS</a> section.
+<p>
+X Consortium xterm provides popup menus, by pressing the control key
+together with the mouse button.
+Control right mouse button pops up the <em>VT FONTS</em> menu,
+from which you can select fonts that are specified in xterm's resources.
+Usually these are in increasing order of size.
+<p>
+XFree86 xterm provides the menu, plus a feature adapted from rxvt: pressing
+the shifted keypad plus or minus keys steps through the font menu selections,
+in order of their size.
+<p>
+xterm's manpage does not document the syntax for X resources;
+it is done in the X documentation.
+If you are instead asking about a
+<a href="#utf8_fonts">problem displaying a given font</a>,
+it may be due to a problem with your resource settings.
+
+<h3><A NAME="how2_print">How do I print the screen?</A></h3>
+That depends on why you want to print it.
+<p>
+If you want a trace of an interactive session, you should use the
+<em>script</em> program.  It records every character sent to the
+screen, recording them in a file <code>typescript</code>.
+There are two drawbacks to this approach:
+<ul>
+<li>Every character is recorded.
+Even cursor movement, if you run an editor.
+<li>You must start a new shell to capture the <code>typescript</code> file.
+</ul>
+Well, what about logging?
+Some versions of xterm support logging to a file.
+In fact XFree86 xterm does.  Logging was dropped from X Consortium xterm
+during X11R5 due to security concerns.  Those were addressed, but logging
+was not reinstated
+(in fact there is a related <a href="#bug_xterm_r6">bug</a> in xterm).
+Some people prefer this, because it is convenient:
+you can start and stop logging a popup menu entry.
+However
+<ul>
+<li>Every character is recorded.
+Even cursor movement, if you run an editor.
+<li>Line drawing characters are translated to control characters,
+i.e., codes 0-31
+(this may be fixed sometime,
+it is a problem inherited from X Consortium xterm).
+</ul>
+Both <em>script</em> and logging are useful for recording, but they
+require interpretation to make sense of the trace.  You probably
+would not send that trace to a printer (not twice, anyway).
+<p>
+If you want to print the contents of the screen, XFree86 xterm
+implements, as part of the VT100 emulation, an "attached" printer.
+<ul>
+<li>The printer is really a pipe command, to which xterm writes.
+<li>You can print the current line, page, or continuously with
+the corresponding control sequences.  That takes an application
+program which knows how to print the screen.
+<li>If you do not have an application, xterm has a popup menu
+entry to print the window.
+</ul>
+There are limitations and tradeoffs using the "attached" printer,
+because it is an emulation:
+<ul>
+<li>The emulation is based on detailed documentation for a VT320.
+This states that control sequences are sent in each line to
+reset bold, underlining and other printable attributes, and
+to set them as needed.
+Your printer probably does not understand this sort of input.
+Use the xterm resource <code>printAttributes</code> to get
+more easily printed output.
+<li>The printer may hang.
+Not really, but it seems that way.
+If you use the "attached" printer from an application designed
+for the VT100 terminal, it is written with the assumption that
+the printer is a dedicated piece of hardware,
+printing onto a continuous form.
+Use the <code>printerAutoClose</code> resource to change
+xterm's behavior to close the printer pipe whenever the terminal
+is told to switch the printer offline.
+</ul>
+If you use the popup menu to print the screen, this will close the
+printer pipe unless it was already opened by the application running in xterm.
+
+<h3><A NAME="how2_fkeys">How do I set up function keys?</A></h3>
+With XFree86 xterm, this is relatively simple.  So I'll answer that first.
+<P>
+With X Consortium xterm, you have partial support for DEC VTxxx function keys.
+Function keys F1 to F12 correspond to DEC's F1 to F12 (sort of).
+Actually, DEC's VT220 terminals do not have codes for F1 through F5.
+They are reserved for local functions.
+And the VT220 (and up) terminals have 20 function keys.
+So you cannot do anything with the F13 through F20 (i.e., DO, HELP and SELECT).
+Finally, though xterm is reputed to be VT100-compatible, it has no support
+for the VT100 keypad (PF1 to PF4, and the "," key).
+<P>
+XFree86 xterm changes the X Consortium codes for F1 to F4 to match the
+VT100 PF1 to PF4, except when the emulation level is VT220 and up.
+In this case, it generates the same F1 to F4 codes as X Consortium xterm.
+Moreover, it adds a new resource <code>sunKeyboard</code>, which
+tells the program whether it has only 12 function keys (i.e., a Sun or PC
+keyboard).
+If so (this is selectable from the popup menu), you can use the control key
+with F1 to F12 to get F13 to F24, and use the "+" key on the keypad as an
+alias for "," (comma).
+<P>
+The emulation level for XFree86 xterm is set via the resource
+<code>decTerminalID</code>, e.g., to 220 for a VT220.
+Once set, applications can set the emulation level up or down within that
+limit.  DEC's terminals are configured in much the same way by a setup
+option.
+<P>
+That is the simple way, using a couple of new resources.
+The traditional way to get function keys involves translations.
+I have seen a few postings on the newsgroups that do this.
+Here is one from Bruce Momjian &lt;root@candle.pha.pa.us&gt;
+for a VT220:
+<PRE><code>
+	xterm $XTERMFLAGS +rw +sb +ls $@ -tm 'erase ^? intr ^c' \
+		-name vt220 -title vt220 -tn xterm-220 "$@" &amp;
+</code></PRE>
+<P>
+with the corresponding resources:
+<PRE><code>
+	XTerm*VT100.translations: #override \n\
+		&lt;Key&gt;Home: string(0x1b) string("[3~") \n \
+		&lt;Key&gt;End: string(0x1b) string("[4~") \n
+	vt220*VT100.translations: #override \n\
+	~Shift	&lt;Key&gt;F1: string(0x1b) string("OP") \n \
+	~Shift	&lt;Key&gt;F2: string(0x1b) string("OQ") \n \
+	~Shift	&lt;Key&gt;F3: string(0x1b) string("OR") \n \
+	~Shift	&lt;Key&gt;F4: string(0x1b) string("OS") \n \
+	~Shift	&lt;Key&gt;F5: string(0x1b) string("[16~") \n \
+	~Shift	&lt;Key&gt;F6: string(0x1b) string("[17~") \n \
+	~Shift	&lt;Key&gt;F7: string(0x1b) string("[18~") \n \
+	~Shift	&lt;Key&gt;F8: string(0x1b) string("[19~") \n \
+	~Shift	&lt;Key&gt;F9: string(0x1b) string("[20~") \n \
+	~Shift	&lt;Key&gt;F10: string(0x1b) string("[21~") \n \
+	~Shift	&lt;Key&gt;F11: string(0x1b) string("[28~") \n \
+	~Shift	&lt;Key&gt;F12: string(0x1b) string("[29~") \n \
+	Shift	&lt;Key&gt;F1: string(0x1b) string("[23~") \n \
+	Shift	&lt;Key&gt;F2: string(0x1b) string("[24~") \n \
+	Shift	&lt;Key&gt;F3: string(0x1b) string("[25~") \n \
+	Shift	&lt;Key&gt;F4: string(0x1b) string("[26~") \n \
+	Shift	&lt;Key&gt;F5: string(0x1b) string("[K~") \n \
+	Shift	&lt;Key&gt;F6: string(0x1b) string("[31~") \n \
+	Shift	&lt;Key&gt;F7: string(0x1b) string("[31~") \n \
+	Shift	&lt;Key&gt;F8: string(0x1b) string("[32~") \n \
+	Shift	&lt;Key&gt;F9: string(0x1b) string("[33~") \n \
+	Shift	&lt;Key&gt;F10: string(0x1b) string("[34~") \n \
+	Shift	&lt;Key&gt;F11: string(0x1b) string("[28~") \n \
+	Shift	&lt;Key&gt;F12: string(0x1b) string("[29~") \n \
+		&lt;Key&gt;Print: string(0x1b) string("[32~") \n\
+		&lt;Key&gt;Cancel: string(0x1b) string("[33~") \n\
+		&lt;Key&gt;Pause: string(0x1b) string("[34~") \n\
+		&lt;Key&gt;Insert: string(0x1b) string("[2~") \n\
+		&lt;Key&gt;Delete: string(0x1b) string("[3~") \n\
+		&lt;Key&gt;Home: string(0x1b) string("[1~") \n\
+		&lt;Key&gt;End: string(0x1b) string("[4~") \n\
+		&lt;Key&gt;Prior: string(0x1b) string("[5~") \n\
+		&lt;Key&gt;Next: string(0x1b) string("[6~") \n\
+		&lt;Key&gt;BackSpace: string(0x7f) \n\
+		&lt;Key&gt;Num_Lock: string(0x1b) string("OP") \n\
+		&lt;Key&gt;KP_Divide: string(0x1b) string("Ol") \n\
+		&lt;Key&gt;KP_Multiply: string(0x1b) string("Om") \n\
+		&lt;Key&gt;KP_Subtract: string(0x1b) string("OS") \n\
+		&lt;Key&gt;KP_Add: string(0x1b) string("OM") \n\
+		&lt;Key&gt;KP_Enter: string(0x1b) string("OM") \n\
+		&lt;Key&gt;KP_Decimal: string(0x1b) string("On") \n\
+		&lt;Key&gt;KP_0: string(0x1b) string("Op") \n\
+		&lt;Key&gt;KP_1: string(0x1b) string("Oq") \n\
+		&lt;Key&gt;KP_2: string(0x1b) string("Or") \n\
+		&lt;Key&gt;KP_3: string(0x1b) string("Os") \n\
+		&lt;Key&gt;KP_4: string(0x1b) string("Ot") \n\
+		&lt;Key&gt;KP_5: string(0x1b) string("Ou") \n\
+		&lt;Key&gt;KP_6: string(0x1b) string("Ov") \n\
+		&lt;Key&gt;KP_7: string(0x1b) string("Ow") \n\
+		&lt;Key&gt;KP_8: string(0x1b) string("Ox") \n\
+		&lt;Key&gt;KP_9: string(0x1b) string("Oy") \n
+
+	!	&lt;Key&gt;Up: string(0x1b) string("[A") \n\
+	!	&lt;Key&gt;Down: string(0x1b) string("[B") \n\
+	!	&lt;Key&gt;Right: string(0x1b) string("[C") \n\
+	!	&lt;Key&gt;Left: string(0x1b) string("[D") \n\
+
+	*visualBell:	true
+	*saveLines:    1000
+	*cursesemul:	true
+	*scrollKey: true
+	*scrollBar: true
+</code></PRE>
+Note that real VT220 terminals use shifted function keys to mean something
+different: the user-programmable keys (i.e., DECUDK).  XFree86 xterm
+supports this, but the translations do not (they're using shift to select
+F13 to F20).
+<P>
+Here's another one, from
+Robert Ess &lt;ress@spd.dsccc.com&gt;:
+<PRE><code>
+	#!/bin/sh
+
+	#		vax
+	# 09-17-96	Bob Ess      - initial creation
+	# 09-26-96	Shig Katada  - Additional keybindings
+	#
+	#		Script file to incorporate keybindings and command line
+	#		options for connecting to a VAX node
+
+	# Usage statement
+	Usage(){
+		echo
+		echo " Usage  : vax -options"
+		echo
+		echo " Options: -80   for 80 column terminal"
+		echo "          -132  for 132 column terminal"
+		echo "          -fg colorname"
+		echo "          -bg colorname"
+		echo "          -fn fontname"
+		echo "          -fb bold fontname"
+		echo "          -host [altair] [devel] [leonis] [castor]"
+		echo ""
+		echo " Example: \"vax -80 -fg white -bg black -fn 9x15 -fb 9x15b -host castor\""
+		echo "          Starts a VAX session with an 80 column terminal"
+		echo "          with a black background, white foreground, a normal"
+		echo "          font of 9x15 and a bold font of 9x15b, and connects"
+		echo "          to the node 'castor'"
+		echo
+		echo "          If you need additional help, please call Workstation"
+		echo "          Services at x92396."
+		echo
+		exit 1
+	}
+
+
+	# Default to a black foreground with a white background.
+	# Use the 9x15 and 9x15bold fonts. Connect to castor by default.
+	#
+	FG=black
+	BG=white
+	HOST=castor
+	FONT=9x15
+	BFONT=9x15bold
+	COLS=80
+
+
+	# Parse the command line arguments
+	#
+	while [ $# != 0 ];
+	do
+		case $1 in
+			-80)	COLS=80
+				FONT=spc12x24c
+				BFONT=spc12x24b
+				shift
+				;;
+			-132)	COLS=132
+				FONT=9x15
+				BFONT=9x15b
+				shift
+				;;
+			-fg)	shift
+				FG=$1
+				shift;;
+			-bg)	shift
+				BG=$1
+				shift;;
+			-fn)	shift
+				FONT=$1
+				shift;;
+			-fb)	shift
+				BFONT=$1
+				shift;;
+			-host)	shift
+				HOST=$1
+				shift;;
+			-help)	Usage;;
+			*)	Usage;;
+		esac
+	done
+
+
+	xterm  -title "VAX" -sb -sl 1200 -geo ${COLS}x24 -fg ${FG} -bg ${BG} \
+		-cr red -fn ${FONT} -fb ${BFONT} -xrm \
+		'XTerm*VT100.translations:     #override \n\
+		&lt;Key&gt;Insert:            string(\001) \n\
+		Shift &lt;Key&gt;Up:          scroll-back(1,lines) \n\
+		Shift &lt;Key&gt;Down:        scroll-forw(1,lines) \n\
+		Shift &lt;Key&gt;Right:       string(0x1b) string("f") \n\
+		Shift &lt;Key&gt;Left:        string(0x1b) string("b") \n\
+		Shift &lt;Key&gt;Delete:      string(0x1b) string(0x08) \n\
+		Shift &lt;Key&gt;Tab:         string(0x1b) string("*") \n\
+		&lt;Key&gt;0x1000FF0D:        scroll-back(1,page) \n\
+		&lt;Key&gt;0x1000FF0E:        scroll-forw(1,page) \n\
+		&lt;Key&gt;0x1000FF09:        string(\010) \n\
+		&lt;Key&gt;0x1000FF0A:        string(\005) \n\
+		&lt;Key&gt;BackSpace:         string(0xff) \n\
+		&lt;Key&gt;Select:            select-start() \n\
+		&lt;Key&gt;0x1000FF02:        select-end(PRIMARY,CUT_BUFFER0) \n\
+		Meta &lt;Key&gt;0x1000FF02:   select-end(CLIPBOARD) \n\
+		&lt;Key&gt;0x1000FF04:        insert-selection(PRIMARY,CUT_BUFFER0) \n\
+		Meta &lt;Key&gt;0x1000FF04:   insert-selection(CLIPBOARD) \n\
+		&lt;Key&gt;F1:                string(0x1b) string("OP") \n\
+		&lt;Key&gt;F2:                string(0x1b) string("OQ") \n\
+		&lt;Key&gt;F3:                string(0x1b) string("OR") \n\
+		&lt;Key&gt;F4:                string(0x1b) string("OS") \n\
+		&lt;Key&gt;F5:                string(0x1b) string("OA") \n\
+		&lt;Key&gt;F11:               string(0x1b) string("[23~") \n\
+		&lt;Key&gt;F12:               string(0x1b) string("[24~") \n\
+		&lt;Key&gt;KP_0:              string(0x1b) string("Op") \n\
+		&lt;Key&gt;KP_1:              string(0x1b) string("Oq") \n\
+		&lt;Key&gt;KP_2:              string(0x1b) string("Or") \n\
+		&lt;Key&gt;KP_3:              string(0x1b) string("Os") \n\
+		&lt;Key&gt;KP_4:              string(0x1b) string("Ot") \n\
+		&lt;Key&gt;KP_5:              string(0x1b) string("Ou") \n\
+		&lt;Key&gt;KP_Divide:         string(0x1b) string("OP") \n\
+		&lt;Key&gt;KP_Multiply:       string(0x1b) string("[29~") \n\
+		&lt;Key&gt;KP_Enter:          string(0x1b) string("OM") \n\
+		&lt;Key&gt;KP_Subtract:       string(0x1b) string("Om") \n\
+		&lt;Key&gt;KP_Add:            string(0x1b) string("Ol") \n\
+		&lt;Key&gt;KP_Decimal:        string(0x1b) string("On") \n\
+		&lt;Btn1Down&gt;:             select-start() \n\
+		&lt;Btn1Motion&gt;:           select-extend() \n\
+		&lt;Btn1Up&gt;:               select-end(PRIMARY,CUT_BUFFER0) \n\
+		Button1&lt;Btn2Down&gt;:      select-end(CLIPBOARD) \n\
+		Button1&lt;Btn2Up&gt;:        ignore()' \
+		-e telnet $HOST &amp;
+</code></PRE>
+Finally (for the moment) is a further modification of Robert Ess's script
+by <a href="http://www-personal.une.edu.au/~oahlefel/">Erik Ahlefeldt</a>,
+&lt;oahlefel@metz.une.edu.au&gt;.
+From his readme file, for vmsterm:
+
+<blockquote>
+ This script is for people who wish to connect from a Linux or Unix computer
+ to a VMS computer using telnet and get a good VT100 or VT220 emulation.
+ The key mappings have been specifically designed to emulate the VT terminal
+ auxiliary numeric keypad, so that you can use VMS EDT and TPU editors, as well
+ as the many VMS applications use keys PF1 to PF4. The script should work with
+ any recent version of Xterm using a standard extended IBM PC keyboard or
+ a Sun keyboard.
+<p>
+ About the keymappings. First the auxiliary numeric keypad.
+ My prime objective with these mappings was to produce a setup that
+ I could use with the EDT and TPU editors which make extensive use of the
+ numeric keypad. The top row of keys PC numeric keypad (Num Lock, Divide,
+ Multiply, Subtract) are where you find PF1, PF2, PF3, PF4 on a VT keyboard,
+ so I have mapped them to PF1 thru PF4. The PC numeric keypad Add key (+) takes
+ up the space of two keys which are Minus and Comma on the VT keyboard &ndash; I have
+ mapped it to Comma (Delete Character in the EDT editor). I have then used the
+ PC Pause key to map to VT key Minus (Delete Word in the EDT editor). The
+ remaining keys on the auxiliary numeric keypad are the same for PC and VT.
+<p>
+ The six keys between the main and numeric keypads on the PC (Insert, Home,
+ Page Up, Delete End, Page Down) are usually mapped to the VT keys by either
+ position or by (approximate) function. As I rarely use these keys I have
+ mapped them by function as follows: PC key Insert to VT Insert Here,
+ PC Home to VT Find, PC Page Up to VT Prev, PC Delete to VT Remove, PC
+ End to VT Select, PC Page Down to VT Next.
+<dl>
+<dt>Function keys.
+<dd>There are 12 function keys on the PC keyboard and 20 on the
+ VT keyboard, so I map PC F1 thru F12 to VT F1 thru F12 (except for F1 thru F5
+ as noted below) and PC Shift F1 thru Shift F10 to VT F11 thru F20.
+<p>
+ The VT keys F1 thru F5 are local hardware function keys so there is nothing
+ to emulate, however some PC to VT emulations in the past have mapped PF1 thru
+ PF4 here, so I have done that too, even though they are already mapped on the
+ auxiliary numeric keypad.
+<dt>Xterm functionality.
+<dd>You lose some xterm functions when you remap the
+ keyboard, however this script implements a scroll back buffer of 1000 lines
+ which you scroll through using Shift and Up (a.k.a. Up Arrow or Cursor Up key)
+ or Shift and Down.
+</dl>
+</blockquote>
+a summary of the keyboard mapping:
+<pre>
+		PC Key     maps to   VT Key.
+		------               ------
+		F1                   PF1
+		F2                   PF2
+		F3                   PF3
+		F4                   PF4
+		F5                   unused
+		F6                   F6
+		F7                   F7
+		F8                   F8
+		F9                   F9
+		F10                  F10
+		F11                  F11
+		F12                  F12
+		Shift F1             F11
+		Shift F2             F12
+		Shift F3             F13
+		Shift F4             F14
+		Shift F5             F15 (Help)
+		Shift F6             F16 (Do)
+		Shift F7             F17
+		Shift F8             F18
+		Shift F9             F19
+		Shift F10            F20
+		Shift F11            F11
+		Shift F12            F12
+		Print                Help (F15)
+		Cancel               Do   (F16)
+		Pause                Keypad Minus
+
+		Insert               Insert Here
+		Delete               Remove
+		Home                 Find
+		End                  Select
+		Prior                Prev
+		Next                 Next
+		BackSpace            BackSpace (sends DEL - ascii 127)
+
+		Num_Lock             PF1
+		KP_Divide            PF2
+		KP_Multiply          PF3
+		KP_Subtract          PF4
+		KP_Add               Keypad Comma
+		KP_Enter             Enter
+		KP_Decimal           Period
+		KP_0                 Keypad 0
+		KP_1                 Keypad 1
+		KP_2                 Keypad 2
+		KP_3                 Keypad 3
+		KP_4                 Keypad 4
+		KP_5                 Keypad 5
+		KP_6                 Keypad 6
+		KP_7                 Keypad 7
+		KP_8                 Keypad 8
+		KP_9                 Keypad 9
+		Up                   Up
+		Shift Up             Scroll Back
+		Down                 Down
+		Shift Down           Scroll Forward
+		Right                Right
+		Left                 Left
+</pre>
+and the script:
+<pre><code>
+	#!/bin/sh
+	#               vmsterm
+	#               from an original script by Bob Ess
+	#               key translations by Erik Ahlefeldt
+	#
+	#               Script file using Xterm and telnet to connect to a VMS host
+	#               and give a decent vt220 emulation.
+	#
+	# Usage statement
+	Usage(){
+		echo
+		echo " Usage  : vmsterm -options"
+		echo
+		echo " Options: -80   for 80 column terminal"
+		echo "          -132  for 132 column terminal"
+		echo "          -bg colorname"
+		echo "          -fg colorname"
+		echo "          -fn fontname"
+		echo "          -fb bold fontname"
+		echo "          -host [crusher.saltmine.com] [earth] [192.168.7.7]"
+		echo ""
+		echo " Example: \"vmsterm -80 -fg white -bg black -fn 9x15 -fb 9x15b -host earth\""
+		echo "          Starts a VMS session with an 80 column terminal"
+		echo "          with a black background, white foreground, a normal"
+		echo "          font of 9x15 and a bold font of 9x15b, and connects"
+		echo "          to the node 'earth'"
+		echo ""
+		echo " Example: \"vmsterm -host earth\""
+		echo "          Starts a VMS session with default terminal settings "
+		echo ""
+		echo " Example: \"vmsterm -help\""
+		echo "          Displays vmsterm options "
+		echo
+		exit 1
+	}
+
+	# Default to a black foreground with a white background.
+	# Use the 9x15 and 9x15bold fonts. Connect to 192.168.3.3 by default.
+	#
+	FG=black
+	BG=white
+	HOST=192.168.3.3
+	FONT=9x15
+	BFONT=9x15bold
+	COLS=80
+
+	# Parse the command line arguments
+	#
+	while [ $# != 0 ];
+	do
+		case $1 in
+			-80)    COLS=80
+				FONT=spc12x24c
+				BFONT=spc12x24b
+				shift
+				;;
+			-132)   COLS=132
+				FONT=9x15
+				BFONT=9x15b
+				shift
+				;;
+			-fg)    shift
+				FG=$1
+				shift;;
+			-bg)    shift
+				BG=$1
+				shift;;
+			-fn)    shift
+				FONT=$1
+				shift;;
+			-fb)    shift
+				BFONT=$1
+				shift;;
+			-host)  shift
+				HOST=$1
+				shift;;
+			-help)  Usage;;
+			*)      Usage;;
+		esac
+	done
+
+	xterm	-title "VMSTERM" -sb -sl 1000 -geo ${COLS}x24 -fg ${FG} -bg ${BG} \
+		-cr blue -fn ${FONT} -fb ${BFONT} -xrm \
+		'XTerm*VT100.translations: #override \n \
+		~Shift	&lt;Key&gt;F1:	string(0x1b)	string("OP") \n \
+		~Shift	&lt;Key&gt;F2:	string(0x1b)	string("OQ") \n \
+		~Shift	&lt;Key&gt;F3:	string(0x1b)	string("OR") \n \
+		~Shift	&lt;Key&gt;F4:	string(0x1b)	string("OS") \n \
+		~Shift	&lt;Key&gt;F5:	string("Break") \n \
+		~Shift	&lt;Key&gt;F6:	string(0x1b)	string("[17~") \n \
+		~Shift	&lt;Key&gt;F7:	string(0x1b)	string("[18~") \n \
+		~Shift	&lt;Key&gt;F8:	string(0x1b)	string("[19~") \n \
+		~Shift	&lt;Key&gt;F9:	string(0x1b)	string("[20~") \n \
+		~Shift	&lt;Key&gt;F10:	string(0x1b)	string("[21~") \n \
+		~Shift	&lt;Key&gt;F11:	string(0x1b)	string("[23~") \n \
+		~Shift	&lt;Key&gt;F12:	string(0x1b)	string("[24~") \n \
+		Shift   &lt;Key&gt;F1:	string(0x1b)	string("[23~") \n \
+		Shift   &lt;Key&gt;F2:	string(0x1b)	string("[24~") \n \
+		Shift   &lt;Key&gt;F3:	string(0x1b)	string("[25~") \n \
+		Shift   &lt;Key&gt;F4:	string(0x1b)	string("[26~") \n \
+		Shift   &lt;Key&gt;F5:	string(0x1b)	string("[28~") \n \
+		Shift   &lt;Key&gt;F6:	string(0x1b)	string("[29~") \n \
+		Shift   &lt;Key&gt;F7:	string(0x1b)	string("[31~") \n \
+		Shift   &lt;Key&gt;F8:	string(0x1b)	string("[32~") \n \
+		Shift   &lt;Key&gt;F9:	string(0x1b)	string("[33~") \n \
+		Shift   &lt;Key&gt;F10:	string(0x1b)	string("[34~") \n \
+		Shift   &lt;Key&gt;F11:	string(0x1b)	string("[28~") \n \
+		Shift   &lt;Key&gt;F12:	string(0x1b)	string("[29~") \n \
+			&lt;Key&gt;Print:	string(0x1b)	string("[28~") \n \
+			&lt;Key&gt;Cancel:	string(0x1b)	string("[29~") \n \
+			&lt;Key&gt;Pause:	string(0x1b)	string("Om") \n \
+			&lt;Key&gt;Insert:	string(0x1b)	string("[2~") \n \
+			&lt;Key&gt;Delete:	string(0x1b)	string("[3~") \n \
+			&lt;Key&gt;Home:	string(0x1b)	string("[1~") \n \
+			&lt;Key&gt;End:		string(0x1b)	string("[4~") \n \
+			&lt;Key&gt;Prior:	string(0x1b)	string("[5~") \n \
+			&lt;Key&gt;Next:	string(0x1b)	string("[6~") \n \
+			&lt;Key&gt;BackSpace:	string(0x7f)	\n \
+			&lt;Key&gt;Num_Lock:	string(0x1b)	string("OP") \n \
+			&lt;Key&gt;KP_Divide:	string(0x1b)	string("OQ") \n \
+			&lt;Key&gt;KP_Multiply: string(0x1b)	string("OR") \n \
+			&lt;Key&gt;KP_Subtract: string(0x1b)	string("OS") \n \
+			&lt;Key&gt;KP_Add:	string(0x1b)	string("Ol") \n \
+			&lt;Key&gt;KP_Enter:	string(0x1b)	string("OM") \n \
+			&lt;Key&gt;KP_Decimal: string(0x1b)	string("On") \n \
+			&lt;Key&gt;KP_0:	string(0x1b)	string("Op") \n \
+			&lt;Key&gt;KP_1:	string(0x1b)	string("Oq") \n \
+			&lt;Key&gt;KP_2:	string(0x1b)	string("Or") \n \
+			&lt;Key&gt;KP_3:	string(0x1b)	string("Os") \n \
+			&lt;Key&gt;KP_4:	string(0x1b)	string("Ot") \n \
+			&lt;Key&gt;KP_5:	string(0x1b)	string("Ou") \n \
+			&lt;Key&gt;KP_6:	string(0x1b)	string("Ov") \n \
+			&lt;Key&gt;KP_7:	string(0x1b)	string("Ow") \n \
+			&lt;Key&gt;KP_8:	string(0x1b)	string("Ox") \n \
+			&lt;Key&gt;KP_9:	string(0x1b)	string("Oy") \n \
+		~Shift	&lt;Key&gt;Up:		string(0x1b)	string("[A") \n \
+		Shift	&lt;Key&gt;Up:		scroll-back(1,lines) \n \
+		~Shift	&lt;Key&gt;Down:	string(0x1b)	string("[B") \n \
+		Shift	&lt;Key&gt;Down:	scroll-forw(1,lines) \n \
+			&lt;Key&gt;Right:	string(0x1b)	string("[C") \n \
+			&lt;Key&gt;Left:	string(0x1b)	string("[D")' \
+		-e telnet $HOST
+</code></pre>
+
+<h3><A NAME="how2_title">How do I set the title?</A></h3>
+The control sequences for doing this
+are documented in <a href="#ctlseqs_ms">ctlseqs.ms</a>.
+<P>
+The usual context for this question is setting the title according to
+the current working directory.
+People post answers to this periodically on the newsgroups.
+Here is one that I have seen,
+from Roy Wright &lt;nobody@roystoy.dseg.ti.com&gt;.
+In your /etc/profile after:
+<PRE><code>
+	if [ "$SHELL" = "/bin/pdksh" -o "$SHELL" = "/bin/ksh" ]; then
+		PS1="! $ "
+	elif [ "$SHELL" = "/bin/zsh" ]; then
+		PS1="%m:%~%# "
+	elif [ "$SHELL" = "/bin/ash" ]; then
+		PS1="$ "
+	else
+		PS1='\u@\h:\w\$ '
+	fi
+</code></PRE>
+<P>
+add:
+<PRE><code>
+	if [ "$TERM" = "xterm" ]; then
+		PS1="\033]2;\u@\h:\w\007bash$ "
+	fi
+</code></PRE>
+<P>
+The terminator "\007" is a problem area.  Xterm historically uses this
+character, though it is non-ANSI.  The "correct" character should be
+a "\233" string terminator, or "\033\\", which is the 7-bit equivalent.
+XFree86 xterm recognizes either (the "\007" or string terminator);
+waiting for the first of these.
+<P>
+You may have resource or environment problems that prevent you from
+setting the title at all.  Newer xterms (starting somewhere in X11R5)
+use the $LANG variable.  If your locale is incorrectly installed, you
+will be unable to set the xterm's title.
+As noted by Mikhail Teterin &lt;mi@rtfm.ziplink.net&gt;:
+Make sure that the locale (LANG and/or LOCALE environment variable)
+is known to X Window System.
+Check ${X11ROOT}/lib/X11/locale.* for it.
+If it is not listed in either one of the files, find
+the nearest match and add an alias to it.
+Restart X if you have made changes.
+<P>
+On a related note, some people want to know how to read the title
+from an xterm.
+This works for XFree86 xterm and dtterm, but not for other variations:
+<PRE><code>
+	#!/bin/ksh
+	# Echo the current X term title bar to standard output.
+	# Written by Icarus Sparry &lt;icarus@bath.ac.uk&gt; 11 Apr 1997
+	#
+	exec &lt;/dev/tty
+	old=$(stty -g)
+	stty raw -echo min 0  time ${1-10}
+	print "\033[21t\c" &gt; /dev/tty
+	IFS='' read -r a
+	stty $old
+	b=${a#???}
+	print -R "${b%??}"
+</code></PRE>
+But it is possible to avoid escape sequences altogether (from
+Hemant Shah &lt;shah@typhoon.xnet.com&gt;):
+<PRE><code>
+	$ xprop -id $WINDOWID | grep WM_NAME
+	WM_NAME(STRING) = "this is my title"
+	current_title=$(xprop -id $WINDOWID | grep WM_NAME | cut -d= -f2)
+</code></PRE>
+Here's another source of information:
+<a href="http://cns.georgetown.edu/~ric/howto/Xterm-Title/">Xterm-Title HowTo</a>
+
+<h3><A NAME="how2_blink">How do I make the cursor blink?</A></h3>
+Standard xterm does not implement a blinking cursor.
+Some of the variations do:
+dtterm,
+GNOME Terminal,
+and XFree86 xterm
+(from mid 1999, <a href="xterm.log.html#xterm_107">patch 107</a>).
+
+<h2><A NAME="frequent_problems">Frequent problems</A></h2>
+<UL>
+<li>Starting xterm, or not
+<ul>
+<LI><A HREF="#no_ptys">Xterm does not run (no available pty's)</A>
+<LI><A HREF="#no_termcap">I need /etc/termcap</A>
+<LI><A HREF="#no_libpath">Why does $LD_LIBRARY_PATH get reset?</A>
+<LI><A HREF="#no_ls_and_e">Why do the -e and -ls options not work together?</A>
+<LI><A HREF="#setup_resize">Why is my screen size not set?</A>
+<LI><A HREF="#tiny_menus">Why are the menus tiny?</A>
+</ul>
+<LI>Font problems
+<ul>
+<LI><A HREF="#no_altchar">My terminal doesn't show box characters</A>
+<LI><A HREF="#scaled_font">The bold font is ugly</A>
+<LI><A HREF="#little_dot">I see little dots on the screen</A>
+<LI><A HREF="#no_russian">My terminal doesn't display Cyrillic characters</A>
+<LI><A HREF="#utf8_fonts">I see boxes instead of characters in uxterm</A>
+<LI><A HREF="#slow_menus">The first popup menu is very slow</A>
+</ul>
+<li>Keyboard problems
+<ul>
+<LI><A HREF="#xterm_8bits">Why can't I input 8-bit characters?</A>
+<LI><A HREF="#xterm_erase">Why doesn't my delete key work?</A>
+<LI><A HREF="#xterm_erased">Why did my delete key stop working?</A>
+<LI><A HREF="#xterm_xmodmap">Well, how can I set my delete key?</A>
+<LI><A HREF="#xterm_keypad">Why doesn't my keypad work?</A>
+<LI><A HREF="#xterm_pageup">Why can't I use the pageup/pagedown keys?</A>
+<LI><A HREF="#xterm_pc_style">Why can't I use the home/end keys?</A>
+<LI><A HREF="#xterm_arrows">Why can't I use the cursor keys in (whatever) shell?</A>
+<LI><a HREF="../ncurses/ncurses.faq.html#bash_meta_mode">Alt-keys do not work in bash</a>
+</ul>
+<li>Colors and other graphic rendition
+<ul>
+<LI><A HREF="#no_color">My terminal doesn't recognize color</A>
+<LI><A HREF="#xterm_terminfo">What $TERM should I use?</A>
+<LI><A HREF="#xterm_hilite">Reverse video is not reset</A>
+<LI><A HREF="#vim_16colors">My colors changed in vim</A>
+<LI><A HREF="#grep_colors">"grep --color" does not show the right output</A>
+</ul>
+<li>Odd behavior
+<ul>
+<LI><A HREF="#xterm_paste">Why can't I cut/paste in xterm?</A>
+<LI><A HREF="#xterm_tabs">Why can't I select tab-characters in xterm?</A>
+<LI><A HREF="#xterm_resize">FVWM does weird things when I try to resize xterm</A>
+<LI><A HREF="#xterm_tite">Why doesn't the screen clear when running vi?</A>
+<LI><A HREF="#xterm_vite">Why is the cursor misplaced after running vi?</A>
+<LI><A HREF="#narrowproto">Why doesn't the scrollbar work?</A>
+<LI><A HREF="#window_ops">Why can't my program read the window title?</A>
+<LI><A HREF="#window_ops2">Why can't my program set the window size?</A>
+</ul>
+<LI><A HREF="#warning_msg">What is this warning message?</A>
+</UL>
+
+<h3><A NAME="no_altchar">My terminal doesn't show box characters</A></h3>
+Xterm displays the 7-bit ASCII and VT100 graphic characters (including
+box corners) using specially arranged fixed-pitch fonts.  The first
+32 glyph positions (which would correspond to nonprinting control
+characters) are used to hold the VT100 graphic characters.  Some
+fonts that otherwise look fine (such as courier) do not have glyphs
+defined for these positions.  So they display as blanks.
+Use <em>xfd</em> to display the font.
+<p>
+XFree86 xterm can form its own line-drawing characters
+(see <a href="xterm.log.html#xterm_90">patch 90</a>, for example).
+It does not draw all of the graphic characters, only those that
+may be done with straight lines.  But those are the most used,
+making most of the fixed-pitch fonts useful for xterm.
+<p>
+You may also have a problem with the terminfo description.
+As distributed, the X11R6 terminfo for xterm does not have the
+<em>acsc</em> string defined, so most implementations of curses
+do not try to use the alternate character set.
+<p>
+Finally, some people confuse the VT100 graphic characters with the VT220
+support for DEC technical character set.
+These are distinct (7-bit) character sets.
+Xterm currently does not support this.
+
+<h3><A NAME="scaled_font">The bold font is ugly</A></h3>
+Xterm lets you directly specify one bold font, which is assumed to
+correspond to the default font.
+Older versions of xterm make a fake bold font for the other choices
+via the fonts menu by drawing the characters offset by one pixel.
+I modified xterm to ask the font server for a bold font that corresponds
+to each font (other than the default one).
+Usually that works well.
+However, sometimes the font server gives a poor match.
+Xterm checks for differences in the alignment and size,
+but the font server may give incorrect information about the font size.
+The scaled bitmap font feature gives poor results for the smaller fonts.
+In your X server configuration file, that can be fixed by disabling
+the feature, e.g.,
+by appending ":unscaled" to the path:
+<pre><code>
+	FontPath	"/usr/lib/X11/fonts/100dpi/:unscaled"
+	FontPath	"/usr/lib/X11/fonts/75dpi/:unscaled"
+	FontPath	"/usr/lib/X11/fonts/misc/:unscaled"
+</code></pre>
+
+<h3><A NAME="little_dot">I see little dots on the screen</A></h3>
+Well, I do.
+Perhaps you do not.
+It depends on the fonts you choose, and how you use them.
+<p>
+Standard xterm has a "normal" font for which a bold font can be chosen,
+and several alternative fonts, useful for changing the font size.
+The alternative fonts do not have corresponding bold fonts.
+Xterm simulates bold fonts in this case by overstriking the character
+one pixel offset.  That can make an bold character extend into the
+area that another character occupies. When erasing a bold character from
+the screen, xterm does not erase the extra pixel.
+
+This is corrected in XFree86 xterm,
+subject to the available fonts
+(from late 1998, <a href="xterm.log.html#xterm_85">patch 85</a>).
+For each font, it asks the font server for a corresponding bold font.
+Your font server may not have the bold font (or it may incorrectly
+report that it does).  But it usually works.
+
+<h3><A NAME="no_russian">My terminal doesn't display Cyrillic characters</A></h3>
+Cyrillic encodings typically use characters in the range 128-159.
+For a VT220 (or any terminal that follows ISO 6429), those are treated
+as control characters.
+Still, some people want to use KOI8-R, etc.
+I modified xterm in
+<a href="xterm.log.html#xterm_175">patch 175</a>
+to add an option (<code>-k8</code>)
+and corresponding resource settings to allow them to customize their
+environment.
+Here is a
+<a href="ftp://invisible-island.net/xterm/koi8-term">sample script</a> and
+<a href="ftp://invisible-island.net/xterm/KOI8Term">resource file</a> which
+I use for testing this configuration.
+
+<h3><A NAME="utf8_fonts">I see boxes instead of characters in uxterm</A></h3>
+xterm may show boxes instead of characters if the font that you have
+selected does not contain those characters.
+Normally you can fix most of that using the UTF-8 feature, with <code>uxterm</code>.
+However, your X resource settings may be the source of the problem.
+<p>
+One pitfall to setting X resources is that they allow you to specify wildcards,
+e.g., the "*" character.
+When you give a wildcard, the X resource matches any number of levels in
+the widget hierarchy.
+<p>
+xterm has more than one widget matching "font" at different levels of the
+hierarchy.
+There are the popup menus, and there are the fonts used for <code>uxterm</code>.
+The latter is where an overbroad pattern can cause xterm to use a different
+font than you expect.
+<p>
+Suppose your resource setting includes this pattern
+<pre>
+*VT100*font: fixed
+</pre>
+It could be interpreted as this:
+<pre>
+*VT100.font: fixed
+*VT100.utf8Fonts.font: fixed
+</pre>
+xterm uses the <code>utf8Fonts</code> subresources to provide
+runtime-switchable fonts between IS0-8859-1 (Latin-1) and ISO-10646 (Unicode).
+Modifying the Unicode font to "fixed" will make most of the characters
+unavailable (i.e., shown as boxes).
+If instead your resource looks like
+<pre>
+*VT100.font: fixed
+</pre>
+it would be unambiguous, and not modify the <code>utf8Fonts</code> value.
+
+<h3><A NAME="slow_menus">The first popup menu is very slow</A></h3>
+Some users report that when starting xterm,
+it is very slow,
+that their computer's CPU time increases, etc.
+<p>
+This is a longstanding bug in the X libraries.
+There is a workaround using a resource setting for xterm.
+
+<h4>Details</h4>
+xterm uses the Athena (Xaw) widgets to display popup menus.
+In the normal case, those are initialized one-by-one as they are first used.
+If you have configured xterm to use its toolbar configuration,
+they are all initialized on startup.
+In the latter, performance problems are more noticeable.
+<p>
+The Athena widgets <code>XawInitializeWidgetSet</code> function goes
+through several levels down to
+the X library <code>_XlcAddUtf8LocaleConverters</code> function
+to call <code>create_tocs_conv</code> and related functions to make a list of
+character sets from the locale,
+which is used in menus to get all possible fonts needed for a fontset.
+<p>
+If your current locale uses <em>UTF-8</em> encoding,
+this will read a long list of bitmap fonts&mdash;everything whose
+<em>encoding</em> might be useful for displaying the menus.
+For example, this list (from <code>lcUTF8.c</code>)
+which dates from around 2000 is the core of the problem:
+<blockquote>
+ISO10646-1,
+ISO8859-1,
+ISO8859-2,
+ISO8859-3,
+ISO8859-4,
+ISO8859-5,
+ISO8859-6,
+ISO8859-7,
+ISO8859-8,
+ISO8859-9,
+ISO8859-10,
+ISO8859-11,
+ISO8859-13,
+ISO8859-14,
+ISO8859-15,
+ISO8859-16,
+JISX0201.1976-0,
+TIS620-0,
+GB2312.1980-0,
+JISX0208.1983-0,
+JISX0208.1990-0,
+JISX0212.1990-0,
+KSC5601.1987-0,
+KOI8-R,
+KOI8-U,
+KOI8-C,
+TATAR-CYR,
+ARMSCII-8,
+IBM-CP1133,
+MULELAO-1,
+VISCII1.1-1,
+TCVN-5712,
+GEORGIAN-ACADEMY,
+GEORGIAN-PS,
+ISO8859-9E,
+MICROSOFT-CP1251,
+MICROSOFT-CP1255,
+MICROSOFT-CP1256,
+BIG5-0,
+BIG5-E0,
+BIG5-E1,
+ISO10646-1,
+ISO10646-1
+</blockquote>
+<p>
+However, xterm is going to use only the characters shown in the popup menus.
+It is unlikely that you need Chinese fonts for that.
+
+<h4>Solution</h4>
+xterm's <code>menuLocale</code> resource can be set to an explicit
+value, e.g., "C" to override the current locale as seen by this
+initialization debacle.
+
+<h4>Limitations</h4>
+The workaround does not prevent some hacker from "improving" the X libraries
+still further.
+
+<h3><A NAME="no_color">My terminal doesn't recognize color</A></h3>
+First, ensure that you have set up xterm to render color.
+The XFree86 xterm renders color only if you have set resources
+to do this; the default behavior is monochrome to maintain compatibility
+with older applications.
+The manual page describes these resources.
+I set them in my <A HREF="#my_xdefaults">.Xdefaults</A> file.
+<p>
+Even if you set the resources properly, there may be another application
+running which prevents xterm from allocating the colors you have specified.
+But you should see a <a href="#alloc_color">warning message</a> for this.
+<P>
+Check the terminal description, to see if it is installed properly,
+e.g., for
+<A HREF="../ncurses/ncurses.faq.html#no_color">ncurses</A>, which uses terminfo.
+<P>
+Finally, some applications (that do not interface properly with terminfo
+or termcap) may need the environment variable
+<a href="../ncurses/ncurses.faq.html#no_colorterm">$COLORTERM</a> to be set.
+
+<h3><A NAME="setup_resize">Why is my screen size not set?</A></h3>
+Well, it may be set, but not correctly. You may notice these symptoms:
+<ul>
+<li>When editing with vi, you cannot see the beginning of the file, or
+<li>Running
+<pre><code>
+	stty -a
+</code></pre>
+shows the rows and/or columns values as 0, or some other value (such as 65)
+which has nothing to do with the actual window size.
+</ul>
+Xterm knows how big the screen is (of course), and tries to tell your
+applications (e.g., by invoking ioctl's and sending SIGWINCH).  But sometimes
+it cannot:
+<ul>
+<li>Xterm itself may have been built incorrectly
+(the #ifdef's that make the logic work are inactive).
+<li>You may be running xterm via a remote connection which refuses to pass
+that information.  This can happen even on "modern" networks where the connection
+crosses domain boundaries.
+<li>You may be running su'd to another account.
+SIGWINCH is just another signal; signals do not propagate for security reasons.
+</ul>
+Most full-screen applications such as vi are designed to use the ioctl
+calls that return the screen size.  When they fail, the applications
+use the size defined in the terminal's terminfo or termcap description.
+<p>
+You may be able to use the <em>resize</em> program to issue the ioctl's
+that will notify your application of the actual screen size. This does not
+always work for the reasons just mentioned.
+Newer versions of stty let you specify the screen size, though it will not
+be updated if you resize the xterm window:
+<pre><code>
+	stty rows 24 columns 80
+</code></pre>
+Most full-screen applications also
+check if the $LINES and $COLUMNS variables are set, using those values to
+override the terminal description:
+<pre><code>
+	setenv LINES 24
+	setenv COLUMNS 80
+</code></pre>
+Why 65 lines?  The standard xterm terminfo description specifies 65 lines,
+perhaps because someone liked it that way.  Real VT100's are 24 lines.
+I once used (and wrote applications for) a Bitgraph terminal, which
+emulated VT100, but displayed 65 lines.
+
+<h3><A NAME="xterm_pageup">Why can't I use the pageup/pagedown keys?</A></h3>
+Some vendors, e.g,. Sun, have added key translations which make the
+pageup and pagedown keys talk to the xterm's scrollbar instead of your
+application.
+They did the same thing for the home and end keys, thereby obscuring
+a bug in <A HREF="#bug_xterm_r6">xterm</A>.
+<p>
+You can override this by specifying your own translations in your resource
+file.
+Use the translations in
+<pre><code>
+	/usr/lib/X11/app-defaults/XTerm
+</code></pre>
+as a guide.
+The relevant section of the app-default file looks like
+<pre><code>
+	*VT100.translations:    #override \
+		@Num_Lock&lt;Key&gt;KP_0: string(0)\n\
+		@Num_Lock&lt;Key&gt;KP_1: string(1)\n\
+		@Num_Lock&lt;Key&gt;KP_2: string(2)\n\
+		@Num_Lock&lt;Key&gt;KP_3: string(3)\n\
+		@Num_Lock&lt;Key&gt;KP_4: string(4)\n\
+		@Num_Lock&lt;Key&gt;KP_5: string(5)\n\
+		@Num_Lock&lt;Key&gt;KP_6: string(6)\n\
+		@Num_Lock&lt;Key&gt;KP_7: string(7)\n\
+		@Num_Lock&lt;Key&gt;KP_8: string(8)\n\
+		@Num_Lock&lt;Key&gt;KP_9: string(9)\n\
+		@Num_Lock&lt;Key&gt;KP_Add: string(+)\n\
+		@Num_Lock&lt;Key&gt;KP_Decimal: string(.)\n\
+		@Num_Lock&lt;Key&gt;KP_Divide: string(/)\n\
+		@Num_Lock&lt;Key&gt;KP_Enter: string(\015)\n\
+		@Num_Lock&lt;Key&gt;KP_Equal: string(=)\n\
+		@Num_Lock&lt;Key&gt;KP_Multiply: string(*)\n\
+		@Num_Lock&lt;Key&gt;KP_Subtract: string(-)\n\
+		&lt;Key&gt;Prior:scroll-back(1,page)\n\
+		&lt;Key&gt;Next:scroll-forw(1,page)\n\
+		&lt;Key&gt;F16: start-extend() select-end(PRIMARY, CUT_BUFFER0, CLIPBOARD) \n\
+		&lt;Key&gt;F18: insert-selection(PRIMARY, CLIPBOARD) \n\
+		&lt;Key&gt;F27: scroll-back(100,page) \n\
+		&lt;Key&gt;R13: scroll-forw(100,page) \n\
+		&lt;Key&gt;Home: scroll-back(100,page) \n\
+		&lt;Key&gt;End: scroll-forw(100,page) \n
+</code></pre>
+For example, a more-specific pattern for the resource name lets you override:
+<pre><code>
+	XTerm*VT100.translations:       #override \n\
+		~Shift&lt;Key&gt;Home:  string(\033[1~)\n\
+		~Shift&lt;Key&gt;End:   string(\033[4~)\n\
+		~Shift&lt;Key&gt;Prior: string(\033[5~)\n\
+		~Shift&lt;Key&gt;Next:  string(\033[6~)\n\
+		Shift&lt;Key&gt;Prior:  scroll-back(1,page) \n\
+		Shift&lt;Key&gt;Next:   scroll-forw(1,page) \n\
+		Shift&lt;Key&gt;Home:   scroll-back(100,page) \n\
+		Shift&lt;Key&gt;End:    scroll-forw(100,page) \n
+</code></pre>
+makes the home/end and pageup/pagedown keys usable by your editor,
+while leaving their shifted equivalents available for the scrollbar.
+
+<h3><A NAME="xterm_pc_style">Why can't I use the home/end keys?</A></h3>
+This is a long story,
+unless you are referring to X Consortium <A HREF="#bug_xterm_r6">xterm</A>.
+That program is simply broken in this respect.
+<p>
+At the beginning, when the home/end keys were fixed for XFree86 xterm
+(in early 1996), there was some discussion regarding what the escape
+sequences should be for those keys (for the 6-key editing keypad).
+Those were chosen as "PC-style" codes (like SCO "ansi"), i.e.,
+<pre>
+	ESC [ H
+	ESC [ F
+</pre>
+for normal mode, and
+<pre>
+	ESC O H
+	ESC O F
+</pre>
+for cursor application mode.
+<p>
+That style of coding fit easily into the existing logic of xterm.
+It was not my change, and (because xterm should be based upon standards),
+I did question this, and asked the opinion of the person who was at that
+time developing rxvt.
+He had chosen a layout based on DEC's VT220 terminals,
+though the key labels on the typical PC keyboard did not
+<A HREF="#xterm_keypad">match</A>.
+At that point, neither of us knew enough to make a good case for this.
+<p>
+Somewhat later I could see that xterm had a number of undocumented
+extensions to support the VT220-style (pre-ISO 2022) character sets.
+I decided to complete the functionality by making xterm a VT220 emulator.
+This would require that it provide the same escape sequences for the
+editing and numeric keypads.
+I could not simply change the escape sequences from "PC-style" to "VT220-style",
+since a number of users "knew" that the keypad "ought to" send home, end,
+cursor keys, etc., because they had labels indicating that use.
+To retain compatibility (but allow easy reconfiguration to make a VT220
+emulator), I added popup-menu items to switch between the modes.
+With minor refinements, this was the approach for about two years,
+culminating with the <a HREF="xterm.log.html#xterm_88">"stable" patch #88</a>,
+which is essentially the version distributed with XFree86 3.3.x.
+<dl>
+<dt><em>NOTE</em>:
+<dd>the terminfo distributed with xterm patch #88 is incorrect:
+the escape sequences given for home/end keys are
+the VT220-style, rather than the default PC-style.
+Too accustomed to switching modes on the fly, I overlooked a line in
+my .Xdefaults file:
+<pre><code>
+		*sunKeyboard: true
+</code></pre>
+Downstream packagers (when they noticed this)
+accommodated the bug by modifying the VT100 translations
+resource which is not a good technical solution since it interferes with
+the users' ability to modify that resource.
+See <A HREF="#xterm_xmodmap">this</A> for more discussion.
+</dl>
+
+But xterm continues to evolve past the stable patch #88.
+The keyboard support was still unsatisfactory for two reasons:
+<ul>
+  <li>some users wanted to be able to use applications that detected whether
+    the control key was pressed (e.g., control/F1).
+  <li>the compromises made for <code>xkb</code> with X11R6 interfered with
+    xterm's use of the NumLock key for the numeric keypad.
+</ul>
+The former could be addressed by expanding the escape sequences sent by the
+PC-style function keys,
+while the latter was a VT100/VT220 design issue.
+I decided to redesign function-key support to separate the two styles of
+function keys better, but leaving the choice still controlled by the
+<code>sunKeyboard</code> resource.
+Partway through that, I was asked to do similar cleanup and redesign of
+the backspace and delete key handling, e.g.,
+the <A HREF="#xterm_erased">ptyInitialErase</A> resource.
+Because it is a redesign, I chose to not make the keyboard differences
+between the old and new xterms completely compatible.
+If you were to run both on the same system, one or the other would have
+some problems with the editing keypad or the backspace/delete keys
+which would be addressed by the popup-menu selections.
+<p>
+For example, at this time (2001/9/4):
+<ul>
+<li>Debian stable is xterm-88c, which should be identical to the XFree86 3.3.6
+version, but is not (there are some label differences in the resource-file, but
+nothing interesting relative to home/end keys).
+And of course, Debian changes
+the terminfo <code>kbs</code> from <code>^H</code> to <code>^?</code>.
+As noted, the terminfo I wrote for XFree86 3.3.x has an error.
+Setting 
+<pre><code>
+		*sunKeyboard: true
+</code></pre>
+in the app-defaults file fixes the problem with xterm-88, which was that I
+documented in the terminfo the behavior <em>with</em> that resource set.
+Similarly, setting
+<pre><code>
+		*backarrowKey: false
+</code></pre>
+is one way to address Debian's change to <code>kbs</code>.
+
+<li>Debian unstable is xterm-149.
+Other than omitting the color resources from
+the app-defaults file, I see that it sets
+	*backarrowKeyIsErase: true
+which would not affect the home/end keys.
+(The color resources are redundant, so that is not a problem either).
+</ul>
+<a href="http://invisible-island.net/xterm/XTerm-debian-88c">Here is a resource file</a>
+which I tested with xterm-88c, xterm-149 and xterm-158,
+using $TERM set to xterm-debian.
+
+<h3><A NAME="xterm_arrows">Why can't I use the cursor keys in (whatever) shell?</A></h3>
+VTxxx (VT100 and up) terminals may send different escape sequences for
+the cursor (arrow) keys depending on how they are set up.
+The choices are referred to as the normal and application modes.
+Initially, the terminal is in normal mode.
+<p>
+VTxxx terminals are usually set up so that
+full-screen applications will use
+the cursor application mode strings.
+This is good for full-screen
+applications, including legacy applications which may have hard-coded
+behavior, but bad for interactive shells (e.g., ksh, tcsh, bash)
+which use arrow keys to scroll through a history of command strings.
+<p>
+To see the difference between normal/application modes, consider this example:
+<ul>
+      <li>In normal (non-application) mode, the terminal transmits a down-arrow
+        as \E[C, which happens to echo as a down-arrow.
+
+      <li>In application mode the terminal transmits \EOC, which echoes as C.
+        That is because the \EO is the SS3 control, which says to use the
+        character from the G3 character set for the next cell.
+</ul>
+Since termcaps and terminfo descriptions are written for
+full-screen applications, shells and similar programs often
+rely on built-in tables of escape sequences which they use instead.
+Defining keys in terms of the termcap/terminfo entry (e.g., by capturing
+the string sent by tputs) is apt to confuse the shell.
+<p>
+Depending on the terminal type,
+the keypad(s) on the keyboard may switch modes along with the
+cursor keys, or have their own independent modes.
+The control sequences for these are independent of the ones used for
+cursor-addressing, but are grouped together, e.g., as the
+terminfo <code>smkx</code> and <code>rmkx</code> capabilities.
+Terminfo entries are written assuming that the application has initialized
+the terminal using the <code>smkx</code> string before it is able to
+match the codes given for the cursor or keypad keys.
+
+<h3><A NAME="xterm_paste">Why can't I cut/paste in xterm?</A></h3>
+When an application sets xterm to any of its mouse tracking modes, it reserves
+the unshifted mouse button clicks for the application's use.
+Unless you have modified the treatment of the shifted mouse button events
+(e.g., with your window manager), you can always do cut/paste by pressing
+the shift key while clicking with the mouse.
+
+<h3><A NAME="xterm_tabs">Why can't I select tabs in xterm?</A></h3>
+This issue was noted early on, <a href="#known_bugs">here</a> in 1997.
+<p>
+xterm is copying from the screen, which stores only printable characters.
+That includes spaces and line-drawing characters.
+But tabs are special; they are used for more than one purpose.
+<p>
+If the screen is cleared in some part, that stores nulls.
+Cursor addressing does not fill in nulls as it jumps around,
+though xterm does supply blanks for the most useful cases,
+especially when getting data for a selection.
+<p>
+Full-screen programs such as text-editors tend to write in random fashion,
+and generally do not print nulls to the screen.
+Curses on the other hand, may supply tabs where you thought there were none.
+Also, the terminal driver can expand tabs (and often is set to do this by default).
+<p>
+So the whole thing is unreliable:
+unless you make special arrangements for
+each of the programs running inside xterm,
+you would often get a tab when you expect, and vice versa.
+<p>
+For the special case where your expectations would match the available
+data, it is solvable.
+There are basically two ways it could be done:
+<ul>
+<li>set a bit in each cell's data which says it was skipped
+over via a tab.
+The complication is that xterm is using all of the flag bits in each cell.
+<li>store literal tabs and nulls to be interpreted later &ndash; both by the
+display and the selection logic.
+</ul>
+As of 2010, a few other terminals do implement this feature.
+But the reason that it's been low-priority is that it's
+of very limited usefulness when copying between terminal sessions
+(and for that matter, from other clients).
+
+<h3><A NAME="no_libpath">Why does $LD_LIBRARY_PATH get reset?</A></h3>
+If xterm is running setuid (which is needed on some systems which have
+no wrappers for opening pty's and updating utmp), newer systems automatically
+set or reset environment variables which are considered security problems.
+These include <code>$PATH</code> and <code>$LD_LIBRARY_PATH</code>, since
+they affect the choice of which programs are run if not specified via a
+full pathname.
+<p>
+This means, for example, that if you attempt to run
+<pre><code>
+	xterm -e foo
+</code></pre>
+where <code>foo</code> is a program that uses shared libraries in
+<code>/usr/local/lib</code>, then the command will fail, because
+<code>/usr/local/lib</code> is not considered part of <code>root</code>'s
+environment.
+<p>
+Modern Unix systems (such as recent Solaris and HPUX versions) do not require
+you to run xterm setuid.  Some will result in odd malfunctions if you do this.
+
+<h3><A NAME="no_ls_and_e">Why do the -e and -ls options not work together?</A></h3>
+Xterm has two useful options for controlling the shell that is run:
+<dl>
+<dt>-e
+<dd>tells xterm to execute a command using the remaining parameters after
+this option.
+<dt>-ls
+<dd>tells xterm to invoke a login shell, making it read your <code>.login</code>
+file, for instance.
+</dl>
+The two are not compatible.
+If you specify both, xterm uses <code>-e</code>, and if that fails for
+whatever reason will fall through to the <code>-ls</code> option. 
+It cannot (in general) combine the two, since some shells permit this
+(e.g., bash), and others do not (e.g., tcsh).
+
+<h3><A NAME="no_termcap">I need /etc/termcap</A></h3>
+If you have a termcap version of xterm on a system with no termcap libraries,
+you may also be missing /etc/termcap.
+<P>
+A workaround is to copy /usr/X11R6/lib/X11/etc/xterm.termcap to
+/etc/termcap.
+<P>
+This is fixed another way starting with XFree86 3.3.1.
+If xterm cannot find the terminal description, it will accept that,
+though it will print a warning.  If xterm does not find the termcap
+entry, it will not set the $TERMCAP variable.
+
+<h3><A NAME="no_ptys">Xterm does not run (no available pty's)</A></h3>
+Your copy of xterm may not have enough permissions to use existing pty's:
+<ul>
+<li>you may have to make xterm run setuid to root
+(though newer systems have wrappers that make this unnecessary).
+<li>the pty's permissions may be restrictive (that is ok, but you have
+to make xterm agree with it).
+Usually this is done by making the group ownership of the pty's "tty",
+and requiring that xterm run setgid to "tty".
+This is done rather than make xterm run setuid to root, since that
+presents problems with security.
+<li>newer systems (with Unix98 pty's) have a single entry under /dev
+which has to have the right permissions.
+For example:
+<pre><code>
+	# ls -l /dev/ptmx
+	crw-rw----    1 root     tty        5,   2 Aug 21 20:19 /dev/ptmx
+</code></pre>
+</ul>
+<p>
+Perhaps your system does not have enough pty's, or (problems
+reported with newer Linux kernels supporting Unix98 pty's,
+beginning with RedHat 6.0) the major device
+numbers of the pty's may have changed during a kernel upgrade.
+(This is described in <code>/usr/src/linux/Documentation</code>).
+<p>
+See also the MAKEDEV script, which usually exists under /dev.
+
+<h3><A NAME="xterm_hilite">Reverse video is not reset</A></h3>
+When running <em>less</em> or other programs that do highlighting,
+you see the highlighting not turned off properly.
+<P>
+This may be due to incompatible terminal descriptions for xterm.
+With XFree86 3.2, I modified the terminal description for XFree86
+xterm to use the VT220 (aka ISO 6429) controls that allow an application
+to turn off highlighting (or bold, underline) without modifying the
+other attributes.  The X Consortium xterm does not recognize these
+controls.
+<P>
+If, for example, you are running an older xterm and rlogin to a system
+where the newer xterm has been installed, you will have this problem,
+because both programs default to $TERM set to xterm.
+The solution for mixed systems is to install the newer terminal description as
+as a different name (e.g., <code>xterm-color</code>)
+and set the <code>termName</code>
+resource accordingly in the app-defaults file for the system which has the
+newer xterm.
+<p>
+However &ndash; see <a href="#xterm_terminfo">below</a>.
+
+<h3><A NAME="vim_16colors">My colors changed in vim</A></h3>
+Some <code>vim</code> users may notice their colors change after
+updating to <a href="xterm.log.html#xterm_238">patch 238</a>.
+Before, some text would display in a dark color using a bold font.
+Now, it displays in a bright color and normal font.
+<p>
+This is not a bug, but the result of a feature <em>tcap-query</em>
+which was added for vim in 2000.
+Several vim users requested that it be enabled by default
+in the configure script.
+It allows vim to ask what characters the different function keys actually
+send, eliminating the chance that the termcap does not match.
+<p>
+Vim also asks how many colors the terminal supports.
+Since <a href="xterm.log.html#xterm_148">patch 148</a>,
+xterm has responded with the number of distinct colors that it can display.
+By default, that is 16 (8 ANSI colors with bright counterparts for displaying
+PC-style "bold" text).
+<p>
+The interpretation of this depends on the application:
+termcaps do not tell how to display more than 8 colors.
+But vim understands how to tell xterm to display using 16 colors.
+It makes a difference when displaying bright colors.
+Vim has a table of 16 color names ("dos-colors"), which one can use to
+define parts of the color scheme.
+If the terminal supports only 8 colors (colors 0-7),
+vim uses the bold attribute to simulate colors 8-15.
+<p>
+Changing the color scheme to use bold where it is wanted will make the
+colors work as before &ndash; and work consistently with other terminals.
+
+<h3><A NAME="grep_colors">"grep --color" does not show the right output</A></h3>
+GNU grep (version 2.5) introduced a <code>--color</code> option.
+<p>
+It does this for each highlighted match:
+<ol>
+<li>it writes the text up to (not including the match)
+<li>it writes an ANSI color control control sequence
+<li>it writes the matched text
+<li>it writes a control sequence to clear to the end of the line
+<li>it writes an ANSI control sequence to reset graphic rendition.
+<li>repeat this process until the entire line is written.
+</ol>
+<p>
+One problem is in the second and fourth steps.
+If the preceding text brought us up to the last column,
+then xterm (and any VT100-compatible terminal) is waiting for
+graphic text to wrap to the next line.
+Any controls would take effect on the current column position.
+Newlines are ignored while in this state.
+<p>
+However, if xterm gets a control sequence while waiting to wrap to the
+next line, it will update the screen according to that control.
+Then it is ready to accept more data.
+But at this point, it is no longer waiting to wrap;
+the special case is for newline versus graphic characters.
+For instance, backspacing clears the state
+(<A HREF="../vttest/vttest.html">vttest</A> illustrates this).
+So the data starts to write at the current column (the last one on the line),
+rather than at the beginning of the next line.
+In that case, grep's output will not look right.
+
+<h3><A NAME="xterm_terminfo">What $TERM should I use?</A></h3>
+<p>
+The <code>xterm-color</code> value for $TERM
+is a bad choice for XFree86 xterm because it is
+commonly used for a terminfo entry which happens to not support <code>bce</code>.
+Complicating matters, FreeBSD (after dithering for a few years on the matter)
+introduced a bastardized version which implies the opposite sense of <code>bce</code>,
+(because it uses SGR 39 and 49), but does not set it.
+After lengthy discussion,
+FreeBSD began using the terminal descriptions which I've written.
+<p>
+The most recent XFree86 version's terminal description corresponds to
+<code>xterm-xfree86</code> (also distributed with ncurses).
+I have continued to make changes;
+the most recent version is simply named
+<code>xterm-new</code> (also distributed with ncurses).
+<p>
+The term "<code>bce</code>" stands for "back color erase".
+Terminals such as XFree86 xterm
+and rxvt implement back color erase, others such as dtterm do not.
+(Roughly half of the emulators that I know about implement bce).
+When an application clears the screen, a terminal that implements back
+color erase will retain the last-set background color.  A terminal
+that does not implement back color erase will reset the background color
+to the default or initial colors.  Applications that paint most of the
+screen in a single color are more efficient on terminals that support
+back color erase.
+<p>
+Curses libraries that support color know about <code>bce</code> and do the
+right thing &ndash; provided that you tell them what the terminal does.
+That is the whole point of setting $TERM.
+The "xterm-color" description distributed with ncurses does not list
+<code>bce</code>, because it was applied originally to a terminal type
+which does
+not implement back color erase.
+It will "work" for XFree86 xterm,
+though less efficient.  Some other applications such as the slang library
+have hardcoded support for terminals that implement back color erase.
+Given the "xterm-color" description, those will be efficient &ndash; and
+fortuitously work.  However, slang (through version 1.4.0) did not
+work properly for the terminals that xterm-color was designed for.
+See this <a href="../lynx/lynx-ncurses.html">page</a> for an example
+of (n)curses and slang running on dtterm.
+That bug in slang is reported to be fixed for succeeding versions, though
+your application may require changes to use this fix.
+(The demo which comes with slang to illustrate the use of <code>bce</code>
+does not work properly, for instance).
+<p>
+The <code>xterm-color</code> value for $TERM
+is also (for the same reason) a bad choice for rxvt, but
+"works" due to the large number of hard-coded applications that override
+this.
+<p>
+Some people recommend using <code>xtermc</code>.
+That is installed on Solaris.
+However, it does not match any xterm in current use.
+(Apparently it was written for an obsolete version on Unixware).
+The colors work, true, but the mouse will not, nor will the function keys.
+
+<h3><A NAME="xterm_resize">FVWM does weird things when I try to resize xterm</A></h3>
+I have an old (3.1.2G) bug report for xterm which may be related to the
+second (3.9s) problem:
+<ul>
+<li>Steven Lang &lt;tiger@ecis.com&gt; reports a problem with extra resize
+events for xterm.
+<P>
+When I change font size often I will get the double-refresh, and when that
+happens the text program gets 2 resize events..  Running a quick test, I
+got this: Going to a bigger font, it got a 53x20 resize, then a 80x24
+resize.  Going to a smaller font, it got a 120x27 resize, then a 80x24
+resize.
+<P>
+Earlier I made a mention of changing font size in rxvt (And xterm does it
+to) causing 2 resize events.  Well I just happened to do it in fvwm
+(Instead of fvwm 95) and found it seems to be a 'feature' of fvwm95, not
+XFree86 as I'd initially assumed.
+<li>Stephen Marley &lt;stephen@memex.com&gt; reports a problem with the active
+icon (from X11R6.3 xterm):
+<p>
+Using the XFree86 xterm-53 with the active icon feature on, I get
+some problems resizing where the xterm window shrinks as small
+as possible and won't stay at whatever size you set it thereafter.
+<p>
+Comment out the PixmapPath and IconPath from your .fvwmrc file to
+disable the fvwm icons and restart the WM.
+Start an xterm.
+Iconify xterm and maximize it again.
+Use resize button or corners to resize the xterm.
+<p>
+The xterm now shrinks to a tiny size and attempts to resize it
+result in it shrinking again.
+<p>
+I've tried this with fvwm 1.23 and fvwm 2.0.46 with the same results.
+Olvm, olvwm and twm all behave correctly so it may be a fvwm problem.
+</ul>
+I have not observed the first, but have reproduced the second.
+
+<h3><A NAME="xterm_tite">Why doesn't the screen clear when running vi?</A></h3>
+This refers to the "alternate screen" feature,
+which has been used in its termcap file since 1988.
+On various systems, this feature may have been removed,
+although it has always been in the xterm sources.
+<p>
+The feature is controllable (it can be enabled or disabled).
+However, as it was originally conceived, that ability to control
+it applies only to programs using termcap.
+<p>
+Under SunOS 4.x, the termcap description for xterm embeds in the
+<code>ti</code> and <code>te</code> capabilities a command to switch to
+xterm's alternate screen (e.g., while running <code>vi</code>), and return
+to the normal screen on exit.
+This has the effect of clearing the screen.
+Under Solaris 2.x, the terminfo description does not use the alternate
+screen (it is a matter of preference after all), so that the text from
+vi remains on the screen after exit.
+There are corresponding terminfo symbols for
+<code>ti</code> and <code>te</code>:
+<code>smcup</code> and <code>rmcup</code>, respectively.
+<P>
+This is configurable...
+<p>
+For example (from Bjorn Helgaas &lt;helgaas@dhc.net&gt;)
+this procedure adds these capabilities to the "xterm"
+terminfo definition on HP-UX 10.20:
+<pre><code>
+	cp /usr/lib/terminfo/x/xterm /usr/lib/terminfo/x/xterm.orig
+	untic xterm &gt; /tmp/xterm.src
+	echo " smcup=\E7\E[?47h, rmcup=\E[2J\E[?47l\E8," &gt;&gt; /tmp/xterm.src
+	tic /tmp/xterm.src
+</code></pre>
+In this example, the terminfo strings are a series of operations:
+<dl>
+<dt><code>smcup</code>
+<dd><code>\E7</code> saves the cursor's position
+<dd><code>\E[?47h</code> switches to the alternate screen
+<dt><code>rmcup</code>
+<dd><code>\E[2J</code> clears the screen (assumed to be the alternate screen)
+<dd><code>\E[?47l</code> switches back to the normal screen
+<dd><code>\E8</code> restores the cursor's position.
+</dl>
+<p>
+However, xterms that are linked with termcap are more flexible in this area
+than those linked with terminfo libraries.
+The xterm program supports a resource <code>titeInhibit</code> which
+manipulates the $TERMCAP variable to accomplish this.  It sets the $TERMCAP
+variable for the client with the <code>ti</code> and <code>te</code> capabilities
+suppressed.
+Systems that use terminfo cannot do this.  If you are running terminfo
+with the alternate screen controls in the terminal description, then
+you can suppress the switching to the alternate screen by the
+<code>titeInhibit</code>, but not the associated cursor save/restore
+and clear-screen operations.
+<P>
+XFree86 3.9s xterm implements a different set of controls
+(private setmodes 1047, 1048 and 1049) which address
+this (in addition to the older set of controls, for compatibility).
+The new set of controls implements the entire <code>ti</code> sequence
+(save cursor, switch to alternate screen, clear screen)
+and <code>te</code>
+(switch to normal screen, restore cursor)
+as two control sequences that can be disabled by <code>titeInhibit</code>.
+<p>
+The 1049 code is a refinement of 1047 and 1048, clearing the alternate
+screen before switching to it rather than after switching back to the
+normal screen.
+Since <a href="xterm.log.html#xterm_90">patch #90 in 1998</a>
+xterm allows you (with a popup menu entry designed to exploit this behavior) to
+switch the display back to the alternate screen to select text from it,
+to paste into the normal screen.
+You can also set or clear the <code>titeInhibit</code> resource using another
+popup menu entry (<code>Enable Alternate Screen Switching</code>).
+<p>
+Most other terminal emulators implement only half of the feature.
+They recognize the control sequence, but do not provide the ability to
+change it at runtime, e.g., using a menu entry.
+Like any other half-done implementation, that is a bug which should be
+reported to the developers of those programs.
+
+<h3><A NAME="xterm_vite">Why is the cursor misplaced after running vi?</A></h3>
+Vi and other full-screen applications use the termcap <code>ti/te</code> (terminfo
+<code>smcup/rmcup</code>) strings to initiate and end cursor addressing mode.
+As mentioned in the discussion of <A HREF="#xterm_tite">titeInhibit</A>,
+full-screen applications can expect the initialization string to save
+the cursor's position, and the end-string to restore it.
+<P>
+A few applications (reportedly IRIX 5.x and 6.x <code>vi</code>
+incorrectly move the cursor before initializing cursor-addressing.
+This will cause the end-string to restore the cursor to its position
+when it was saved by the initialization string (typically at the
+upper left corner of the screen).
+<p>
+The usual reason is due to the cursor save/restore controls in
+the <code>ti/te</code> strings.  If your application runs a subprocess
+which in turn runs another full-screen application (or when reinitializing
+the screen after the shell process), it will save the
+cursor position again, so the position which is restored when finally
+exiting your program is the last one saved, not the first.
+XFree86 xterm
+(from late 1998, <a href="xterm.log.html#xterm_90">patch 90</a>)
+changes the behavior of the cursor save/restore
+operations so they apply only to the current screen.
+That makes it less likely to misplace your cursor.
+
+<h3><A NAME="narrowproto">Why doesn't the scrollbar work?</A></h3>
+Originally xterm was built using imake rather than a configure script. 
+One feature of imake that is not possible to guess within the
+configure script is the wide-prototype compile-time definition
+NARROWPROTO.  When this is not set properly, the Athena widget
+scrollbars do not work properly.  xterm's configure script has a
+fallback case which allows disabling imake.  However, this is moot
+with the Xorg "modular" build, whose compiler options are unrelated to
+imake or older versions of any libraries that it may distribute.  In
+this case, the configure script needs some help.  Use this option to
+enable or disable NARROW proto (and disable imake with the
+--disable-imake option) to match the whims of Xorg hackers.
+<p>
+For instance
+<pre><code>
+	configure --disable-imake --disable-narrowproto
+</code></pre>
+
+<h3><A NAME="window_ops">Why can't my program read the window title?</A></h3>
+The longstanding control sequence for reading the window title is something
+that can be abused in special conditions.
+For novice (unknowledgable) users, this can be a problem.
+<p>
+xterm provides resource-settings and menu entries to allow this and related
+features to be enabled or disabled.
+See for example <code>allowWindowOps</code>
+The default resource settings in xterm can be overridden by a packager.
+However, a knowledgable user can override those default settings.
+<p>
+It is also possible that an overzealous packager may have crippled
+xterm by removing the functionality altogether.
+(That should be reported as a bug, to me).
+<p>
+For instance, one of those sent me a "security fix" some years ago,
+which deleted most of the control sequences which return data to the host.
+It broke the <code>resize</code> program, and selection, among other uses
+considered to be benign.  In contrast, the same features used in other
+terminal emulators are tolerated by the same people, so rather than being
+a misguided attempt at fixing security issues, patches such as
+that appear to be an attempt at harassment.
+
+<h3><A NAME="window_ops2">Why can't my program set the window size?</A></h3>
+Some overzealous packagers,
+perhaps influenced by the demonstration I provided,
+are protecting you against the possibility of your xterm becoming inaccessible.
+(That's unlikely...).
+<p>
+You should be able to override it, as noted above via resource settings
+or menu entry ("Allow Window Ops").
+
+<h3><A NAME="xterm_erase">Why doesn't my delete key work?</A></h3>
+This seems to be a problem with the older XFree86 release (3.1.2).
+I have picked up pieces of the story (xterm and the keyboard work as
+designed under XFree86 3.2 and up).
+<p>
+The underlying problem is that we've accumulated three things that are
+being equated as "Delete":
+<pre>
+	ASCII backspace (code 8)
+	ASCII delete (code 127)
+	VT220 "remove" aka "delete" (ESC [ 3 ~)
+</pre>
+<P>
+You are probably talking about the <STRONG>backarrow</STRONG> key
+(on my keyboard, at the upper right of the QWERTY block),
+or the key labeled <STRONG>delete</STRONG> which is on the 6-key "editing keypad".
+Since xterm is emulating a VT100/VT220,
+the backarrow key should generate a 127 (often displayed as <code>^?</code>).
+You would use a control/H to obtain a backspace on a real VT220.
+<P>
+Tastes differ on Unix, people expect the backarrow key to generate a backspace
+(or not).  As I understand it, at one point, XFree86 picked up the sense of the
+erase character during initialization, so that xterm would in effect use the
+same erase character as the console.  The current scheme (X11R6) uses keyboard
+mapping tables that are independent of the environment.
+<P>
+XFree86 xterm provides a resource toggle <em>backarrowKey</em>
+(and an escape sequence from VT320)
+that changes this key between the two styles (backspace or delete).
+<p>
+With XFree86 xterm
+<a href="xterm.log.html#xterm_95">patch 95</a>
+(also in the stable version as "88c"),
+you may have an xterm which can
+automatically initialize the backarrow key to backspace or delete
+depending on the pseudo terminal's sense, or based on the termcap
+setting of <em>kbs</em> (backspace key).
+This feature is controlled by the resource setting <em>ptyInitialErase</em>.
+
+<h3><A NAME="xterm_erased">Why did my delete key stop working?</A></h3>
+Well, something changed.
+You have to determine what did.
+<p>
+This may be because an upgrade introduced different X resource settings,
+or because you are using the newer xterm with the
+<em>ptyInitialErase</em> resource (or perhaps both).
+Use
+<pre><code>
+	appres XTerm
+</code></pre>
+to see the X resources that you are using, in particular the
+<code>translation</code> (or
+<code>Translation</code>)
+resource for the vt100 widget.
+<p>
+One unexpected scenario came out of hiding when I was implementing the
+<em>ptyInitialErase</em> resource.  When xterm is (by default) built
+to support this, it sets the pty's erase character to match the
+termcap entry.  Xterm also sets the $TERMCAP environment variable to match.
+So everything is consistent, and everything defined.
+The <code>stty erase</code> character is either backspace (^H) or delete (^?).
+<p>
+The problem arises because there are two things called "delete",
+which were not well-defined: ASCII delete (127) and the PC-style
+adaptation of VT220 <kbd>remove</kbd> assigned to the key Delete.
+<p>
+However, the <em>screen</em> program prefers to make the termcap
+delete (<code>kD</code>) an &lt;escape&gt;[3~, which corresponds to the VT220
+<kbd>remove</kbd> key.
+If $TERMCAP is set when starting <em>screen</em>, it will translate stty's
+erase character into the &lt;escape&gt;[3~, making most curses and
+termcap applications work.
+But stty still has the original erase character.
+So low-level applications which check stty will not work.
+I found that unsetting $TERMCAP before running would work, but this
+was not a good solution.
+Someone pointed out
+(see <a href="xterm.log.html#xterm_129">patch 129</a>),
+that the problem really was because termcap <code>kD</code> should delete
+the character at the current position.  So it cannot be the same
+as <code>stty erase</code>.
+<p>
+As a matter of fact, <code>stty erase</code> has to be a single character,
+so &lt;escape&gt;[3~ would not work anyway.
+
+<h3><A NAME="xterm_xmodmap">Well, how can I set my delete key?</A></h3>
+When people first started asking this question in 1995-1996,
+it appeared in the context of making Netscape work.
+Netscape's use of the delete key running in X did not match user's expectations
+when compared to that other platform.
+They were commonly advised to use <em>xmodmap</em>, e.g.,
+<pre><code>
+	keysym BackSpace = Delete
+</code></pre>
+or
+<pre><code>
+	keycode 22 = 0xff08
+</code></pre>
+Either way is a bad technical solution &ndash; it works for some people
+but not others (on my keyboard at work, keycode 22 is the numeric
+keypad '9').
+<p>
+Alternatively, you can set resources.
+This works reasonably well for environments where you have
+different versions of xterm, e.g.,
+<pre><code>
+	XTerm*VT100.translations: #override \n\
+		&lt;Key&gt;Delete: string(0x7f)
+</code></pre>
+I do not do that either, because it is not flexible.
+Not all programs use the same sense of
+<code>stty erase</code>;
+some use termcap or terminfo,
+and some are hardcoded.
+So I prefer to be able to switch the xterm's keyboard at runtime.
+You cannot do that with resources.
+(Or not really &ndash; xterm has a <code>keymap()</code> action which could
+support this if you provided a rather complex resource settings, but
+the X library support for that is broken in X11R6).
+Instead, I have added to XFree86 a set of resources (and popup menu entries)
+to allow simple switching between the different styles of keyboard,
+in particular for the backspace/delete issues.
+See the manual page for
+       <code>backarrowKey</code>
+       <code>backarrowKeyIsErase</code> and
+       <code>deleteIsDEL</code>
+as well as
+       <code>sunKeyboard</code>.
+
+<h3><A NAME="xterm_keypad">Why doesn't my keypad work?</A></h3>
+A few people have commented that the keypad does not work properly.
+Aside from bugs (I have fixed a few), the most common problem seems
+to be misconception.
+<p>
+Here's a picture of the VT100 numeric keypad:
+<pre>
+	+-----+-----+-----+-----+
+	| PF1 | PF2 | PF3 | PF4 |
+	+-----+-----+-----+-----+
+	|  7  |  8  |  9  |  -  |
+	+-----+-----+-----+-----+
+	|  4  |  5  |  6  |  ,  |
+	+-----+-----+-----+-----+
+	|  1  |  2  |  3  |     |
+	+-----+-----+-----+ ENT +
+	|     0     |  .  |     |
+	+-----+-----+-----+-----+
+</pre>
+and the similar Sun and PC keypads:
+<pre>
+	+-----+-----+-----+-----+
+	| NUM |  /  |  *  |  -  |
+	+-----+-----+-----+-----+
+	|  7  |  8  |  9  |     |
+	+-----+-----+-----+  +  +
+	|  4  |  5  |  6  |     |
+	+-----+-----+-----+-----+
+	|  1  |  2  |  3  |     |
+	+-----+-----+-----+ ENT +
+	|     0     |  .  |     |
+	+-----+-----+-----+-----+
+</pre>
+Working in X11, the NUM (NumLock) key has better uses than an alias
+for PF1 (and is sometimes reserved).  I use the F1 through F4 on the keyboard
+to implement PF1 through PF4, alias the keypad "+" to "," and use the existing
+"-" key.
+<p>
+VT220 emulation uses the VT100 numeric keypad as well as a 6-key editing
+keypad.
+Here's a picture of the VT220 numeric keypad:
+<pre>
+	+--------+--------+--------+
+	| Find   | Insert | Remove |
+	+--------+--------+--------+
+	| Select | Prev   | Next   |
+	+--------+--------+--------+
+</pre>
+and the similar Sun and PC keypads:
+<pre>
+	+--------+--------+--------+
+	| Insert | Home   | PageUp |
+	+--------+--------+--------+
+	| Delete | End    | PageDn |
+	+--------+--------+--------+
+</pre>
+<p>
+I chose to use keys that are mnemonic rather than in the "same" positions,
+though some emulators (e.g., Tera Term) use the same positions:
+<pre>
+	+--------+--------+--------+
+	| Insert | Find   | Prev   |
+	+--------+--------+--------+
+	| Remove | Select | Next   |
+	+--------+--------+--------+
+</pre>
+<p>
+I test the keyboard (for VT52/VT100/VT220) using
+<A HREF="../vttest/vttest.html">vttest</A>.
+If you find (or think that you have found) a problem with the keyboard
+handling of xterm, please test it with vttest first.
+<p>
+Other arrangements of the keyboard are possible of course.
+If you prefer to use the top row of the numeric keypad as PF1 through PF4,
+you should do this using xterm's X resources.
+
+<h3><A NAME="xterm_8bits">Why can't I input 8-bit characters?</A></h3>
+You must have the <code>eightBitInput</code> resource set to do this.
+
+<h3><A NAME="my_xdefaults">My .Xdefaults for XTERM</A></h3>
+<PRE><code>
+	XTerm*internalBorder:  10
+	XTerm*highlightSelection:  true
+	XTerm*VT100.colorBDMode:  on
+	XTerm*VT100.colorBD:  blue
+	XTerm*VT100.colorULMode:  on
+	XTerm*VT100.colorUL:  magenta
+	XTerm*VT100.eightBitInput:  true
+	XTerm*VT100.eightBitOutput:  true
+	XTerm*scrollBar:  true
+	XTerm*VT100.titeInhibit:  true
+
+	XTerm*VT100.colorMode:  on
+	XTerm*VT100.dynamicColors:  on
+
+	! Uncomment this to use color for underline attribute
+	XTerm*VT100.colorULMode:  on
+	XTerm*VT100.underLine:  off
+
+	! Uncomment this to use color for the bold attribute
+	XTerm*VT100.colorBDMode: on
+
+	XTerm*VT100.color0: black
+	XTerm*VT100.color1: red3
+	XTerm*VT100.color2: green3
+	XTerm*VT100.color3: yellow3
+	XTerm*VT100.color4: blue3
+	XTerm*VT100.color5: magenta3
+	XTerm*VT100.color6: cyan3
+	XTerm*VT100.color7: gray90
+	XTerm*VT100.color8: gray30
+	XTerm*VT100.color9: red
+	XTerm*VT100.color10: green
+	XTerm*VT100.color11: yellow
+	XTerm*VT100.color12: blue
+	XTerm*VT100.color13: magenta
+	XTerm*VT100.color14: cyan
+	XTerm*VT100.color15: white
+	XTerm*VT100.colorUL: yellow
+	XTerm*VT100.colorBD: white
+
+	XTerm*VT100.cursorColor: lime green
+</code>
+</PRE>
+XFree86 xterm comes with two copies of the resource file,
+one with color only (<code>XTerm-col.ad</code>,
+which is installed as <code>XTerm-color</code>),
+and the regular one (<code>XTerm.ad</code>,
+installed as <code>XTerm</code>).
+To use the <code>XTerm-color </code>file in conjunction
+with a separate <code>XTerm</code> app-defaults
+file which does not contain color,
+add the following line to your <code>.Xdefaults</code> file:
+<PRE><code>
+	*customization: -color
+</code></PRE>
+
+<h3><A NAME="tiny_menus">Why are the menus tiny?</A></h3>
+Everything seems to work, except that the
+xterm menus (VT options, fonts, etc.) do not display
+properly; the menus pop up, but only with a tiny display
+area in which none of the options are visible (and only
+part of the menu title is visible).
+<P>
+You have specified the geometry for xterm too high in the hierarchy, and that
+24x80 (or whatever the -geometry parameter happens to be) is applying to the
+menus in pixels.
+This resource makes the geometry apply to the menus as well as the VT100 widget:
+<PRE><code>
+	XTerm*geometry: 80x24
+</code></PRE>
+while this applies only to the VT100 widget
+(which is probably what you intended):
+<PRE><code>
+	XTerm.VT100.geometry: 80x24
+</code></PRE>
+or better yet (to allow for the toolbar option, which uses a level of
+widget hierarchy):
+<PRE><code>
+	XTerm*VT100.geometry: 80x24
+</code></PRE>
+
+<h3><A NAME="warning_msg">What is this warning message?</A></h3>
+<DL>
+<DT>xterm: Error 11, errno 22: permission denied
+<DD>Actually, any message like this denotes a failure which requires
+studying the xterm source to determine the exact problem.
+<p>
+You have either found a bug in xterm, or there is something wrong
+with your computer's configuration, e.g., not enough pty's,
+incorrect permissions, etc.
+<p>
+The first number is an internal code (defined in error.h in xterm's source),
+and the second is the system error number (defined in /usr/include/sys/errno.h).
+The system error number is easier to lookup, but the internal error code
+tells you where to look in the source.
+<DT>input method doesn't support my preedit type
+<DD>Ignore this if you do not know what <em>input method</em> is.
+Input methods are used to enter composite characters (e.g., umlauts,
+other types of punctuated characters, East Asian characters, etc).
+Your computer's libraries support this, but are missing configuration
+tables, and xterm is warning you.
+<p>
+If the message bothers you (e.g., if you aren't starting xterm from
+a window manager menu), you can suppress it by setting a resource:
+<pre><code>
+		XTerm*openIm:false
+</code></pre>
+
+<dt>Warning: Actions not found: ignore, "xxx"
+<dd>The action "xxx" (for example "scroll-back") is specified in a resource
+file whose translations match widgets that do not support them.
+For example, this
+<pre><code>
+		XTerm*translations:     #override\n\
+			&lt;Leave&gt;, ~Ctrl ~Meta &lt;Btn2Up&gt;: ignore()\n\
+			~Shift &lt;Key&gt;KP_8: scroll-back(1,line)\n\
+			~Shift &lt;Key&gt;KP_2: scroll-forw(1,line)\n\
+			Shift &lt;Key&gt;KP_8: scroll-back(1,halfpage)\n\
+			Shift &lt;Key&gt;KP_2: scroll-forw(1,halfpage)
+</code></pre>
+will produce warnings such as
+<pre><code>
+		Warning: Actions not found: ignore, scroll-back, scroll-forw
+		Warning: Actions not found: ignore, scroll-back, scroll-forw
+		Warning: Actions not found: ignore, scroll-back, scroll-forw
+</code></pre>
+This is a correct form, assigning the actions to the "VT100" widget.
+<pre><code>
+		XTerm*VT100.translations:     #override\n\
+			&lt;Leave&gt;, ~Ctrl ~Meta &lt;Btn2Up&gt;: ignore()\n\
+			~Shift &lt;Key&gt;KP_8: scroll-back(1,line)\n\
+			~Shift &lt;Key&gt;KP_2: scroll-forw(1,line)\n\
+			Shift &lt;Key&gt;KP_8: scroll-back(1,halfpage)\n\
+			Shift &lt;Key&gt;KP_2: scroll-forw(1,halfpage)
+</code></pre>
+
+<dt><a name="alloc_color">Warning: Cannot allocate colormap entry for "xxx"</a>
+<dd>This comes from the X library.
+XFree86 xterm uses the default color map.
+What this means is that if your X server has insufficient space to
+store color information for more than one color map, other applications
+which could use other color maps may conflict with xterm.
+In practice, that is 256 unique colors on the screen at a time -- not enough
+for a fancy background or an application such as Netscape.
+<p>
+During resource initialization, xterm attempts to allocate an entry from
+the color map for each color which it might use.
+If there are not enough free slots in the color map, you will see a
+"Cannot allocate" message for each color that xterm failed to allocate.
+Those colors will be rendered in the foreground color,
+making full-screen color applications
+such as <a href="../dialog/dialog.html">dialog</a> unreadable.
+<p>
+This problem is alleviated with
+<a href="xterm.log.html#xterm_129">patch 129</a>,
+which modified xterm to delay the most color allocation until
+the colors are first needed.  If a color is never needed
+(xterm allocates 20 colors in this manner),
+that reduces the number of slots in the color map that are needed.
+Even with this improvement, xterm must still allocate 4 colors during
+initialization to determine how to display the cursor.
+If none of those colors can be allocated, XFree86 xterm reverts to monochrome.
+</DL>
+
+<h3><A NAME="known_bugs">Known Bugs in XTERM</A></h3><P>
+These are the known bugs (or limitations) in the XFree86 xterm.
+They are also present in the other versions based on the X Consortium
+sources (color_xterm, ansi_xterm, kterm).
+<P>
+Note that of the emulators that support color, most do not support
+<code>bce</code> (back color erase).
+The bce capability is also called the
+"new color model", though it has been implemented in the IBM PC for
+quite a while.
+Technically, not implementing <code>bce</code>
+(or allowing the choice between it and its complement) is not a bug,
+since few hardware terminals (with good reason) implemented this feature.
+<UL>
+<LI>cut/paste does not <a href="#xterm_tabs">select tabs</a>;
+instead spaces are selected.
+This is because the selection works from the array of displayed
+characters, on which tab/space conversion has already been performed.
+<LI>does not implement the autorepeat feature of VTxxx terminals.
+</UL>
+
+<h4><A NAME="bug_xterm_r6">X11R6.3 XTERM</A></h4>
+The X Consortium version of xterm (and versions based on it) has
+additional bugs not in XFree86 xterm:
+<UL>
+<LI>the program must be run with fixed (nonproportional) fonts.
+<LI>the home and end keys do not generate usable escape sequences, due to
+an indexing error.
+(Note that it is possible to work around this using the VT100 translations
+resource, but usually this is not done).
+<LI>the Main Options menu is improperly constructed, due to incorrect
+indices after removing the logging toggle.
+This makes the list of signals off by one.
+<LI>very large screens (e.g., by using nil2 for a font) cause core dumps
+because the program uses a fixed array (200 lines) for adjusting pointers.
+<LI>certain types of key translations cause a core dump because the program
+does not check the event class before attempting to use events.
+</UL>
+(These bugs are also present in the X11R5 version).
+<p>
+Update 2004/04/08:
+<br>
+Complicating this discussion is the "X.Org" xterm (from 2004).
+That is the XFree86 xterm from XFree86 CVS
+with all visible "xfree86" strings changed to "X.Org" or "xorg",
+depending on the use.
+For example the "xterm-xfree86" terminfo entry becomes "xterm-xorg".
+The change history for the related CVS for X.Org shows this.
+Similarly, the release notes for X11R6.7 included my notes for XFree86 4.4.
+<p>
+As of 2009, it appears that "X.Org" xterm died a natural death,
+since none of the people who created it had any likelihood of maintaining it.
+Instead, X.Org defers to my version of xterm.
+
+<h4><A NAME="bug_color_xterm">COLOR_XTERM</A>
+<A HREF="ftp://www.x.org/contrib/applications/color_xterm-beta1.tar.gz">download</A></h4>
+This is based on the X Consortium X11R5 source, with the same bugs.
+<UL>
+<LI>implements non-bce color model
+<LI>moving the cursor is reported to leave trails of incorrect color
+<LI>clearing the screen resets colors (arguably this is a limitation).
+</UL>
+Not exactly a bug, but it does not build on Linux with X11R6.3
+
+<h4><A NAME="bug_ansi_xterm">ANSI_XTERM</A>
+<A HREF="ftp://www.x.org/contrib/applications/xterm-R6-sb_right-ansi-3d.tar.gz">download</A></h4>
+This is based on the X Consortium source, with the same bugs.
+<UL>
+<LI>implements non-bce color model
+<LI>fails
+<A HREF="../vttest/vttest.html">vttest</A>
+by not rendering reverse-video screen
+</UL>
+
+<h4><A NAME="bug_cxterm">CXTERM</A>
+<A HREF="ftp://ftp.cuhk.hk/pub/chinese/ifcss/software/x-win/cxterm/">download</A></h4>
+CXterm stands for "Chinese Xterm".
+This is based on the X Consortium source.
+
+<h4><A NAME="bug_dtterm">DTTERM</A></h4>
+This is distributed with CDE.
+It implements more of the DEC VT220 than the X Consortium xterm,
+and also adds controls to manipulate the window and icon.
+<UL>
+<LI>implements non-bce color model
+<LI>fails
+<A HREF="../vttest/vttest.html">vttest</A>
+by clearing its background to solid white rather
+than preserving its sense in response to ED.
+<LI>under some circumstances, scrolling margins are not recognized.
+For instance, running
+<A HREF="../vile/vile.html">vile</A>
+which uses scrolling margins, we see text overwriting the status line.
+</UL>
+
+<h4><A NAME="bug_emu">EMU 1.3</A>
+<A HREF="ftp://www.x.org/contrib/applications/emu-1.31.tar.gz">download</A></h4>
+This is not based on the X Consortium source.
+The authors state that it implements VT220 emulation.
+It is in need of maintenance, since it builds with some problems to produce
+an executable that (on Linux and SunOS) does not handle the carriage return
+and newline translations properly.
+So I am unable to run
+<A HREF="../vttest/vttest.html">vttest</A>
+on this emulator.
+
+<h4><A NAME="bug_eterm">ETERM</A>
+<A HREF="http://www.eterm.org/">link</A></h4>
+Eterm was based on rxvt, though the appearance differs.
+The terminal emulation capabilities appear similar, though
+I am not able to run the full suite of tests in
+<A HREF="../vttest/vttest.html">vttest</A>
+with this emulator (the core dump noted for rxvt, as well as hanging while
+awaiting response from one or more control sequences).
+Oddly, it appears that neither Eterm nor rxvt implement CPR
+(cursor position report).
+Finally, it reserves F1 (function-key) for a popup menu.
+This applies to versions of <EM>Eterm</EM> through 0.9.
+
+<h4><A NAME="bug_gnometerm">GNOME TERMINAL</A>
+<A HREF="http://www.gnome.org/">link</A></h4>
+GNOME Terminal is developed separately from both xterm and rxvt,
+and is based on the zvt (zterm) widget.
+Like
+<a href="#bug_kvt">kvt</a>),
+it appears to have been developed imitating other terminal emulators
+(Linux console and xterm) rather than strictly emulating a VT102.
+The documentation is fragmentary (with a comment suggesting that the
+author does not know where to find relevant information), and the
+program fares badly with
+<A HREF="../vttest/vttest.html">vttest</A>.
+Beginning with late 1999, reports indicate that it
+does not properly parse ANSI control
+sequences:  the vim editor is using XFree86 xterm's vt220-style
+"Send Device Attributes" (Secondary DA) control sequence to obtain the
+terminal emulator's version.
+That is, it sends
+<pre><code>
+	\E[&gt;c
+</code></pre>
+expecting a response such as
+<pre><code>
+	\E[&gt;0;138;0c
+</code></pre>
+for vt100.
+The bug report indicates that the "c" sent by vim is echoed rather than
+interpreted by the emulator.
+<p>
+But it suffices for vi.
+<p>
+A more recent GNOME Terminal (version 1.4.0.4, late 2001)
+did not implement a complete vt102: it was missing several features
+which can be demonstrated in
+<A HREF="../vttest/vttest.html">vttest</A>).
+Most of the bugs in the Device Attributes
+responses remain, but it works a little better with vim.
+However, there are problems with the alternate screen that show up with vim.
+Again, these can be demonstrated with vttest (menu 11.6.3 in the 20011130 snapshot).
+<p>
+The documentation for GNOME terminal asserts:
+<blockquote>
+GNOME Terminal emulates the xterm application developed by the X Consortium. 
+In turn, the xterm application emulates the DEC VT102 terminal and also
+supports the DEC VT220 escape sequences.  An escape sequence is a series of
+characters that starts with the Esc character.  GNOME Terminal accepts all of
+the escape sequences that the VT102 and VT220 terminals use for functions such
+as to position the cursor and to clear the screen.
+</blockquote>
+<p>
+That sounds fine, except that it is both inaccurate and misleading:
+<dl>
+<dt>inaccurate
+<dd>combining the "X Consortium" and "DEC VT220", for example, since
+that was done after the demise of said organization.
+<p>
+It emulates a <em>subset</em> of VT100,
+lacks support for most of the VT220 control sequences (including
+some used for positioning the cursor) that are not recognized by a VT100.
+<p>
+Even in the subset which it emulates, GNOME Terminal has bugs.
+Many of these are easy to demonstrate with vttest.
+<dt>misleading
+<dd>as noted in <a href="#ctlseqs_ms">Xterm Control Sequences</a>,
+xterm (mostly after "X Consortium") supports control sequences which are
+not VT100/VT220.
+GNOME Terminal implements many of these, but not all.
+</dl>
+<p>
+Perhaps that was unintentional &ndash; GNOME developers did not appear to document
+what their program <em>does</em> outside of that remark.
+However, an inspection of the changelog for libvte (VTE) does show that
+most of the borrowing from xterm is cited in an oblique manner &ndash; not
+once mentioning XFree86 for example, leaving the impression (as indicated
+by "X Consortium") that all of the work on xterm was done before development
+of GNOME Terminal commenced.
+<p>
+Most of this observation was documented between 2000 and 2007.
+Other than maintenance, development of GNOME Terminal appears to have
+paused in 2005.
+As of 2009, its maintainer is (of the development team), the least
+knowledgeable about terminal emulation.  So there is no progress on
+the large number of bug reports related to xterm-compatibility.
+<h4><a name="vte_widget">Notes on VTE</a></h4>
+<p>
+VTE's README file asserts
+<blockquote>
+VTE supports Unicode and character set conversion, as well as emulating any
+terminal known to the system's terminfo database.
+</blockquote>
+<p>
+The latter part of that ("emulating any terminal") is incorrect.
+It does have the ability to work with the standard function-key definitions
+which can be defined in a terminfo description.
+<p>
+Some of the function-key logic is adapted from xterm;
+generally refactoring the xterm source-code to make it appear different.
+In places however (naming conventions and comments),
+there is some verbatim copying.
+The same comment is true of "character set conversion".
+None of that is reflected in VTE's changelog.
+<p>
+xterm on the other hand, can be told with the <code>tcapFunctionKeys</code>
+resource setting to use a more complete subset, based on the ncurses
+extended terminal descriptions.
+Even xterm's terminfo/termcap descriptions do not cover the
+(literally) thousands of
+keyboard combinations which are available via its resource settings.
+<p>
+Outside of function-keys, VTE provides no ability to emulate "any terminal".
+A casual glance at its source code reveals the following:
+<ul>
+<li>no support for VT220-style protected areas.
+<li>inconsistent support for modifier keys
+(the subject of several bug reports misdirected toward ncurses).
+<li>only a subset of the standard terminfo/termcap properties is used
+(5/36 booleans,
+3/33 numbers,
+125/242 strings other than function-keys).
+<li>a pervasive assumption that the terminal is something like xterm,
+e.g., to provide hardcoded behavior where termcap might describe
+something different.
+<li>it uses termcap to retrieve data, rather than providing a choice
+between terminfo/termcap,
+opening up the problem of using an obsolete database.
+<li>using termcap also means that it has no guidance for following
+features which are absent or have limited-functionality compared to terminfo,
+such as setting video attributes, colors, etc.
+</ul>
+<p>
+For instance, VTE cannot emulate <a href="#bug_dtterm">dtterm</a>,
+because of differences in color behavior.
+In fact, VTE does not use any of the termcap data to support its
+interpretation of color control sequences.
+<p>
+Because of GNOME Terminal's reputation for excessive code bloat,
+developers of every other program based on VTE advertise their
+version as reduced memory usage, faster startup, etc.
+Here are a few of the available ones:
+
+<h5><A NAME="bug_osso_xterm">osso-xterm</A>
+<A HREF="https://garage.maemo.org/projects/osso-xterm/">link</A></h5>
+This is one of several GUI "skins" over the VTE widget which forms
+the functional core of GNOME Terminal.
+<p>
+Its home page refers to "at least two versions".
+I recall seeing an older version which was apparently not based on VTE.
+There does not appear to be any current page (as of 2009) for that version.
+
+<h5><A NAME="bug_roxterm">roxterm</A>
+<a href="http://roxterm.sourceforge.net/">link</a></h5>
+This is one of several GUI "skins" over the VTE widget which forms
+the functional core of GNOME Terminal.
+
+<h5><A NAME="bug_xfce_term">XFCE Terminal</A>
+<a href="http://terminal.os-cillation.com/">link</a></h5>
+This is one of several GUI "skins" over the VTE widget which forms
+the functional core of GNOME Terminal.
+
+<h4><A NAME="bug_multignome">MULTI GNOME TERMINAL (MGT)</A>
+<A HREF="http://multignometerm.sourceforge.net/">link</A></h4>
+Of particular note, MGT 1.4.0 announcement claims that it works properly
+for all of <A HREF="../vttest/vttest.html">vttest</A>)'s tests.
+On the positive side, it does do VT52 emulation, but (reading the
+source code did not help) it apparently does not really do VT220
+from vttest's perspective.
+
+<h4><A NAME="bug_hanterm">HANTERM</A>
+<A HREF="http://www.bg.debian.org/Packages/frozen/x11/hanterm.html">download</A></h4>
+HanTerm stands for "Hangul term" (Korean).
+This is based on the XFree86 source.
+
+<h4><A NAME="bug_konsole">KONSOLE</A>
+<a href="http://www.kde.org/">link</a></h4>
+More than just a rewrite of <a href="#bug_kvt">kvt</a> into C++.
+But there are several incompatibilities between konsole
+(noted with version 1.0.2 in late 2001) and xterm:
+<ul>
+  <li>none of the selections of keyboard mappings match the actual behavior
+      of xterm (a few come close, but do so by matching the terminfo
+      descriptions rather than the programs).  In particular, the application
+      keypad does not send vt100-style escapes.
+  <li><A HREF="../vttest/vttest.html">vttest</A>) demonstrates that
+      konsole does not properly ignore escape sequences
+      to switch character sets that it does not support.
+      Also, 
+      the developers of konsole did use an old version of vttest, but
+      that was to add a bogus Device Attributes response (claimed to
+      be for "vt220", but not corresponding to any that DEC produced).
+      They do not use the newer version of vttest (which was available more
+      than a year before development of konsole began).
+  <li>konsole implements several features from XFree86 xterm, but some are
+      done incorrectly.
+      In particular, the <a href="#xterm_tite">private setmode 1049</a>
+      does not save and restore the cursor,
+      causing the cursor to be in unexpected locations
+      after exiting a fullscreen application such as vi.
+</ul>
+The problems with setmode 1049 were fixed after some time;
+other issues linger on.
+<p>
+Like <a href="#bug_gnometerm">GNOME Terminal</a>,
+konsole's documentation is incomplete and inaccurate.
+This gem from its handbook illustrates the problem:
+<blockquote>
+After a decade, Konsole is the first rewrite from the ground up.  While xterm
+has definitely been hacked to death (its README begins with the words Abandon
+All Hope, Ye Who Enter Here), Konsole offers a fresh start using contemporary
+technologies and understanding of X.
+</blockquote>
+The problem:
+<ul>
+<li>the remark was apparently written in 1997.
+It was inaccurate at that time, since it disregards
+the earlier xvt/rxvt applications.
+Limiting it only to a plain statement that konsole was a rewrite of
+<a href="#bug_kvt">kvt</a> would have been more accurate.
+Lacking that context, we find nonfactual articles such as
+<a href="http://everything2.com/index.pl?node=Konsole">this</a> on the net.
+<li>for those lacking a proper education, the README was apparently intended
+to be a humorous reference to Dante's <em>Inferno</em>.
+<li>reading konsole's source code and considering "hacked to death"
+can provide some occasion for humor.  Enjoy.
+</ul>
+
+<h4><A NAME="bug_kterm">KTERM</A>
+<A HREF="ftp://www.x.org/contrib/applications/kterm-6.2.0.tar.gz">download</A></h4>
+KTerm stands for "Kanji term" (Japanese).
+This is based on the X Consortium source, with the same bugs
+(though the list of original authors has been removed; the modifications
+that comprise kterm is relatively small).
+<UL>
+<LI>implements non-bce color model
+<LI>implements status line, but uses non-DEC escape sequences for this.
+</UL>
+There is a variation of xvt (ancestor of rxvt) originally known as
+<A NAME="bug_kvt">kvt</A>
+bundled with
+<a href="http://www.kde.org/">KDE</a>
+which may be referred to as
+"kterm", but I do not find it interesting,
+other than to comment that it was a poor choice of name.
+
+<h4><A NAME="bug_mlterm" HREF="http://mlterm.sourceforge.net/">MLTERM</A></h4>
+Mlterm is not based on xterm or rxvt source,
+though it implements many of their features.
+It does fairly well with
+<A HREF="../vttest/vttest.html">vttest</A>,
+except for some odd misbehavior in
+operations that save/restore the cursor position.
+
+<h4><A NAME="bug_mterm">MTERM</A></h4>
+There are a few variants of this: the xterm bundled with some Motif clients
+is more common.
+More interesting, however is one (not Motif), attributed to "Der Mouse".
+<blockquote>
+   (mouse@Lightning.McRCIM.McGill.EDU)
+   Available: larry.mcrcim.mcgill.edu (132.206.1.1) in
+     /X/mterm.src/mterm.ball-o-wax.
+</blockquote>
+I saw only an incomplete version of this while it was advertised
+in the mid-90's.
+It is available by email from &lt;mouse@Rodents.Montreal.QC.CA&gt;.
+or via <a href="ftp://ftp.rodents.montreal.qc.ca/mouse/X/mterm.src/">ftp</a>.
+This is not a patched version of xterm,
+though it was apparently written, like rxvt, to emulate vt100's.
+While it does have some interesting features (such as blinking characters),
+overall it does not do as well with
+<A HREF="../vttest/vttest.html">vttest</A>)
+as the more widely known emulators.
+
+<h4><A NAME="bug_mxterm">MXTERM</A></h4>
+There are several variants on this: xterm adapted for Motif libraries.
+I have seen none that work properly:
+<UL>
+<LI><a href="http://www.cmbi.kun.nl/~schaft/mxterm/mxterm.html">MXTERM:
+a motif Xterm with character attributes color rendered</a>
+I've noticed this one only recently.
+It is a reworking of the earlier patches for color_xterm
+(credited to Erik Fortune at SGI)
+and the Motif widgets
+(apparently first done by Ivan M. Hajadi at SGI in 1991,
+but credited in this release to Mahesh Neelakanta, for Motif 1.2.4).
+<LI><a href="http://www.muquit.com/muquit/software/ansi_xterm/ansi_xterm.html">ANSI Xterm with Motif Scrollbar</a>
+Usually seen as the ansi-xterm-R6-motif-sb patch, I used this as the
+starting point for changes to my #82 patch of xterm in August 1998.
+<p>
+The original patch changes only the scrollbars to Motif, leaving the
+popup menus in Athena widgets.
+That was not what I wanted.
+My motivation for using Motif is not for performance or esthetics, of course,
+but to make it simpler to build on hosts that have no Athena widgets installed.
+<p>
+I set those changes aside, having found (the hard way) that the Motif library
+has hardcoded behavior regarding the control right-mouse button.
+According to the O'Reilly book on Motif programming (volume 6), it does
+a server grab when processing menus.
+Making the menus behave just as in the Athena widgets can cause the
+X server to hang.
+(I was able to do this with both Lesstif and Motif libraries).
+Given that, I decided to restructure the menus entirely, making a toolbar
+which could support at compile-time either widget set.
+<LI><a href="http://www.fh-wilhelmshaven.de/~akcaagaa/index_mxterm.html">mxterm</a>
+This is a different reworking of the Motif widget patch,
+using a 1993 version (ignoring the more recent 1994 patches noted above).
+However, it appears to have the same technical defect that I noted above.
+</UL>
+
+<h4><A NAME="bug_nxterm">NXTERM</A></h4>
+Distributed with Redhat Linux 5.2,
+it is a repackaging of <A HREF="#bug_ansi_xterm">xterm-sb_right-ansi</A>, to use the
+Xaw3d widget set.  This is based on the X Consortium X11R6 source, with the
+same bugs.
+<UL>
+<LI>implements non-bce color model
+<LI>does not implement SGR 39 and SGR 49, all attributes are reset when changing colors.
+<LI>popup menus do not appear to work.
+</UL>
+Starting with Redhat 6.0, <em>nxterm</em> is the XFree86 3.3.6 xterm.
+Unfortunately Redhat neglected to update their termcap for nxterm to match
+the program.
+
+<h4><A NAME="bug_rxvt">RXVT</A>
+<A HREF="http://www.rxvt.org/">link</A></h4>
+Rxvt's manual page states the following unqualified comment:
+<blockquote>
+       rxvt,  version  2.6.2, is a colour vt102 terminal emulator
+       intended as an xterm(1) replacement for users who  do  not
+       require  features  such  as  Tektronix  4014 emulation and
+       toolkit-style configurability.  As  a  result,  rxvt  uses
+       much  less  swap  space  --  a  significant advantage on a
+       machine serving many X sessions.
+</blockquote>
+How much is <em>much less</em>?
+Perhaps not as much as one would think from reading that.
+The Tektronix emulation in xterm
+(which has been optional since late 1997)
+accounts for about 25kb of the code.
+<p>
+The toolkit-style configurability glibly referenced is the ability to
+redefine keys on the keyboard without recompiling the program,
+i.e., the <a href="#how2_fkeys">translations</a> resource.
+It also is the way mouse events and other actions are passed to xterm.
+<p>
+The toolkit-style configurability
+accounts for about 300kb, which does add up if you happen to be
+running 50 xterm processes (i.e., about 10Mb).
+<p>
+Compared with something like GNOME Terminal, which takes 2-3 times,
+or KDE konsole, which takes 15-20 times as much memory to run,
+xterm and rxvt memory requirements are indistinguishable to the normal user.
+<p>
+These comments apply to versions of <EM>rxvt</EM> through 2.21:
+<UL>
+<LI>clearing the screen resets colors
+<LI>does not have a delete key
+<LI>the implementation of <code>ech</code> (erase characters) does not
+follow DEC VT220 (also ISO 6429), causing applications using this function to
+misbehave.
+</UL>
+A newer version
+(upgraded to an beta as of 2.6.PRE3, however, since it no longer dumps core in
+<A HREF="../vttest/vttest.html">vttest</A>)
+is reported to fix the <code>ech</code> bug.
+However, it is less VT100-compatible than the earlier versions such as 2.21b
+because it does not render reverse video (<code>DECSCNM</code>) properly.
+All versions do not update the screen frequently enough, making animation
+ineffective.
+See <A HREF="../vttest/vttest.html">vttest</A>, tests 1 and 2.
+<p>
+One longstanding issue with rxvt impacts use of xterm.
+While rxvt does not use the X Toolkit (and corresponding X resource
+matching), it does read your <code>.Xdefaults</code> and app-defaults
+files to extract resource settings.
+That in itself would not be a problem.
+However, since rxvt also looks for
+resources in the <code>XTerm</code> class (a parasitic relationship like
+setting $TERM to "xterm" based on the presumption that it is a nuisance
+to install its configuration files), there have been several occasions
+on which xterm's app-defaults files have been modified to accommodate
+rxvt's variant usage.
+<p>
+That comment applies mainly to the resource <strong>patterns</strong>.
+However, even when the pattern is reasonably unambiguous, but overbroad,
+the results can be conflicting.
+For example, some versions of rxvt may accept a <code>font</code> resource
+which does not match the XLFD pattern.
+It accepts a prefix of "xft:".
+This feature (apparently introduced by <A HREF="#bug_konsole">konsole</A>)
+tells rxvt to interpret the remainder
+of the string as a TrueType (Xft) font rather than a bitmap font.
+xterm uses the <code>faceName</code> resource for these values.
+
+<h4><A NAME="bug_xgterm">XGTERM</A>
+<A HREF="ftp://iraf.noao.edu/iraf/x11iraf/">link</A></h4>
+It has some features which are also in color_xterm:(non-bce ANSI color,
+colorBD and colorUL resources, cursor warping, etc.
+The main feature is its Tektronix graphics emulation,
+which is the main reason for this particular program.
+Neither program has a change-log, so it is not easy to say which
+influenced the other.
+<p>
+That is from reading the source code.
+However testing under Debian Linux, something is wrong with the resource
+processing (neither popup menus nor colors work).
+
+<h4><A NAME="bug_xiterm">XITERM</A>
+<A HREF="ftp://metalab.unc.edu/pub/Linux/X11/terms/">link</A></h4>
+This appears to be rxvt 2.20,
+lightly reformatted,
+with a few ifdef's changed.
+<p>
+That is, it was.
+The name was later appropriated by a different
+<a href="http://oss.software.ibm.com/linux/projects/iterm/">program</a>,
+which also uses the name <code>iterm</code>.
+Like gnome-terminal,
+iterm aims to be an xterm-emulator
+rather than a VT102- or VT220-emulator.
+<p>
+An earlier <a href="http://www.openi18n.org">attempt</a> by the same author
+(the "CSI-xterm")
+incorporates some of the changes I made for XFree86 xterm
+via cut and paste
+(but does not mention this in its README).
+It is said to be the basis for Solaris 10 xterm.
+<p>
+Both have similar problems running
+<A HREF="../vttest/vttest.html">vttest</A>.
+
+<h3><A NAME="building_it">How do I build XTERM?</A></h3>
+Building a copy of xterm is simple, provided that you have a development
+configuration for X11:
+<UL>
+<LI>Header files and libraries.
+If you do not have the header files (usually under /usr/include/X11) for
+your system, you are better off building the libraries yourself.
+Xterm can be built with either X11R5 or X11R6 libraries; however X11R6
+requires much more data to be installed before xterm will run.
+Xterm uses the <code>Xaw</code> library for popup menus.
+<LI>imake and <EM>xmkmf</EM>.
+These utilities produce a Makefile from the Imakefile.
+They are not essential, but useful, particularly on systems with
+unusual configurations.
+</UL>
+If you have a working <EM>xmkmf</EM> script (or correctly configured imake utility),
+all you need to do is type
+<PRE><code>
+	xmkmf
+	make
+</code></PRE>
+I have written a simple <EM>configure</EM> script for xterm which uses imake
+(or <EM>xmkmf</EM>) to generate a Makefile from the Makefile.in.
+I have restructured xterm to eliminate most hardcoded
+<code>#ifdef</code>'s, replacing them with definitions that can be derived
+with the configuration script.
+The <EM>configure</EM> script is more flexible than <EM>xmkmf</EM>, since it
+allows you to enable or disable a variety of features.
+Type
+<PRE>
+	configure --help
+</PRE>
+to get a list of options.
+<P>
+Though I have replaced most hardcoded ifdef's with autoconfigured values,
+it will still continue to build properly with the imake environment.
+
+<h3><A NAME="report_bugs">How do I report bugs?</A></h3>
+You should report bugs to
+<A HREF="mailto:dickey@invisible-island.net">me</A>.
+I also respond to bug reports in a number of bug-tracking systems,
+though some are less open to searches than others.
+See also
+<A HREF="../scripts/readme.html">Analyzing problems with configure scripts</A>
+
+<h2><A NAME="more_info">Additional Information</A></h2>
+There appears to be no comprehensive source of information on xterm
+better than the documentation which comes with the source code.
+
+<h3><a name="other_sites">Other Sites</a></h3>
+I have found Richard Shuford's
+<a href="http://www.cs.utk.edu/~shuford/terminal_index.html">archive</a>
+to be invaluable for notes on the DEC VT220 and related terminals.
+Though not available at the time that I was collecting most of my notes,
+<a href="http://vt100.net">VT100.net</a> is also a good source of primary
+information.
+
+<h3><a name="xterm_man">The XTerm Manual</a></h3>
+<p>
+The command-line options, X resources and similar configurable options
+of xterm are documented in the manual page.
+<p>
+Here are copies of the file in various forms:
+<a href="http://invisible-island.net/xterm/manpage/xterm.html">html</a>,
+<a href="http://invisible-island.net/xterm/manpage/xterm.pdf">pdf</a> and
+<a href="http://invisible-island.net/xterm/manpage/xterm.txt">text</a>.
+
+<h3><a name="ctlseqs_ms">Xterm Control Sequences</a></h3>
+Control sequences, i.e., programming information are in the
+<code>ctlseqs.ms</code> file which I bundle with the
+<A HREF="#latest_version">program source</a>.
+(It used to be in the same directory in the X distribution, but was moved
+to a different part of the tree long ago).
+Note that you must format
+this file with different options than a manpage, e.g.,
+<pre><code>
+	tbl ctlseqs.ms | nroff -ms &gt;ctlseqs.txt
+	tbl ctlseqs.ms | groff -ms &gt;ctlseqs.ps
+</code></pre>
+As a PostScript or PDF file,
+the individual letters of the control sequences are
+all boxed, for emphasis, but I find the text file equally readable.
+<p>
+Here are copies of the file in various forms:
+<a href="http://invisible-island.net/xterm/ctlseqs/ctlseqs.html">html</a>,
+<a href="http://invisible-island.net/xterm/ctlseqs/ctlseqs.pdf">pdf</a> and
+<a href="http://invisible-island.net/xterm/ctlseqs/ctlseqs.txt">text</a>.
+
+<h3><a name="resize_man">resize &ndash; set TERMCAP and terminal settings to current xterm window size</a></h3>
+<em>resize</em> is useful by itself, but is maintained for historical
+reasons as part of xterm.
+<a href="http://invisible-island.net/xterm/manpage/resize.html">html</a>,
+<a href="http://invisible-island.net/xterm/manpage/resize.pdf">pdf</a> and
+<a href="http://invisible-island.net/xterm/manpage/resize.txt">text</a>.
+
+<h3><a name="luit_prog">luit &ndash; Locale and ISO 2022 support for Unicode terminals</a></h3>
+<a href="../luit/luit.html">luit</a> also is maintained as part of xterm,
+since its upstream maintainer is inactive,
+and the ostensible maintainers have more than once delivered unusable versions,
+causing many bug reports to be issued against xterm.
+
+<h2><A NAME="future_work">Ongoing/future work</A></h2>
+<UL>
+<LI>soft (downloadable) fonts
+<LI>printer interface
+<P>
+Done, except for the corresponding support in the VT52 emulation.
+It would be nice to have a dialog to control this.
+<LI>allow alternate libraries for popup-menus and dialogs
+<P>
+My configure script currently provides tests for the variations of Athena
+widgets (Xaw3D, neXtaw).
+I intend to make additional changes to support
+<A href="#bug_mxterm">Motif scrollbars and menus</A>.
+Motif requires a different style of interface for the menus:
+binding a popup menu to control right mouse may cause the server to hang.
+As an intermediate step, I implemented a toolbar for the Athena widgets.
+In turn, that works well enough except with XFree86 4.x:
+the Xaw library geometry management is broken.
+(Other implementations of the Athena widgets work well enough).
+<LI>popup window that shows hex code for content of a character cell
+and hexadecimal keyboard entry for all Unicode characters (ISO 14755)
+<LI>correct cut&amp;paste of TAB character
+</UL>
+
+</BODY>
+</HTML>

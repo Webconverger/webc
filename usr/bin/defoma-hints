@@ -1,0 +1,104 @@
+#! /usr/bin/perl -w
+# Defoma - Debian Font Manager
+# Copyright (C) 2000 Yasuhiro Take <take@debian.org>
+# This program is free software. You can freely use, copy, modify, and
+# redistribute it under the terms of the GNU General Public License, Version 2.
+
+use Debian::Defoma::Font;
+import Debian::Defoma::Font;
+use Debian::Defoma::Common;
+import Debian::Defoma::Common qw(&DEFOMA_TEST_DIR);
+
+$LIBDIR = DEFOMA_TEST_DIR . "/usr/share/defoma";
+
+@EXITREMOVE = ();
+
+$SIG{'HUP'} = \&signalexit;
+$SIG{'INT'} = \&signalexit;
+$SIG{'QUIT'} = \&signalexit;
+$SIG{'TERM'} = \&signalexit;
+$SIG{'__DIE__'} = \&emes;
+
+require("$LIBDIR/libperl-hint.pl");
+
+sub exitfunc {
+    my $e = (@_ > 0) ? shift(@_) : 0;
+    my $msg = (@_ > 0) ? shift(@_) : undef;
+
+    unlink @EXITREMOVE if (@EXITREMOVE);
+
+    print STDERR $msg, "\n" if (defined($msg));
+    
+    exit $e;
+}
+
+sub signalexit {
+    exitfunc(255);
+}
+
+sub emes {
+    print 'defoma-hints ', @_, '\n';
+    exitfunc 1;
+}
+
+sub usage_and_exit {
+    print "defoma-hints [-c] [--no-question] <category> <font>...\n";
+    exitfunc 1;
+}
+
+### main()
+
+usage_and_exit if (@ARGV == 0);
+
+my $MODE = 'g';
+my $NOQ = 0;
+
+while ($ARGV[0] =~ /^-/) {
+    if ($ARGV[0] eq '-c') {
+	$MODE = 'c';
+    } elsif ($ARGV[0] eq '--no-question') {
+	$NOQ = 1;
+    }
+    shift(@ARGV);
+}
+
+usage_and_exit if (@ARGV < 2);
+
+$CATEGORY = shift;
+$LIBFILE = "$LIBDIR/libhint-$CATEGORY.pl";
+
+my $sufpath = "";
+if ($ARGV[0] =~ /^[^\/]/) {
+    $sufpath = "/path/to/";
+}
+
+print STDERR "Wait for second...\n";
+
+defoma_font_init();
+hint_beginlib('HintsGenerator', 70, $MODE, $sufpath, $NOQ);
+
+if (-e $LIBFILE) {
+    require($LIBFILE);
+    my $funcptr;
+    eval("\$funcptr = \\&sethint_$CATEGORY");
+
+    print "category $CATEGORY\n";
+
+    foreach $FONTPATH (@ARGV) {
+	my $lhints = &{$funcptr}($FONTPATH);
+	next unless (defined($lhints));
+	
+	print "begin $sufpath$FONTPATH\n";
+	my @hints = lhints2hints($lhints);
+	print join("\n", @hints);
+	print "\nend\n";
+    }
+
+    exitfunc(0);
+}
+
+exitfunc(1, "HintGenerator Library for $CATEGORY not found.");
+
+
+
+

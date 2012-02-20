@@ -1,0 +1,6 @@
+FILE='/etc/defoma/hints/#PACKAGE#.hints'
+if [ "$1" = configure ]; then
+	if [ -x "`which defoma-font 2>/dev/null`" ]; then
+		defoma-font reregister-all $FILE
+	fi
+fi

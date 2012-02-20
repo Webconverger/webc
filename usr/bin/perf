@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Execute the right version of perf for the current kernel.
+# Remove flavour or custom suffix and fix number of version components:
+# - For 2.6.x, use 3 components
+# - For 3.0 or 3.0.x, use 3.0.0
+# - Otherwise, use 2 components
+version="$(uname -r)"
+version="${version%%-*}"
+case "$version" in
+    2.6.*.*)
+	version="${version%.*}"
+	;;
+    2.6.*)
+	;;
+    3.0 | 3.0.*)
+	version=3.0.0
+	;;
+    *.*.*)
+	version="${version%.*}"
+	;;
+esac
+shopt -s execfail
+exec "perf_$version" "$@"
+
+# Not found? Tell the user which package to install.
+echo >&2 "E: linux-tools-$version is not installed."
+exit 1

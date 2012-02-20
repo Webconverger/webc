@@ -1,0 +1,43 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Debian::DictionariesCommon q(:all);
+
+dico_checkroot ();
+
+my $cachedir   = "/var/cache/dictionaries-common";
+my $class      = "hunspell";
+my %locales    = ();
+
+updatedb ($class);
+build_emacsen_support ();
+build_squirrelmail_support ();
+
+
+__END__
+
+=head1 NAME
+
+update-dictcommon-hunspell - rebuild hunspell database and emacsen stuff
+
+=head1 SYNOPSIS
+
+ update-dictcommon-hunspell
+
+=head1 DESCRIPTION
+
+WARNING: Not to be used from the command line unless you know very well what you are doing.
+
+This script, when called from hunspell dict package postinst or postrm will
+rebuild hunspell database as well as squirrelmail and emacsen stuff.
+
+=head1 SEE ALSO
+
+The dictionaries-common policy
+
+=head1 AUTHORS
+
+Rafael Laboissiere,
+Agustin Martin
+
+=cut

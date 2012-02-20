@@ -1,0 +1,11 @@
+case "$1" in
+	upgrade)
+		if [ -x "`which defoma-app 2>/dev/null`" ]; then
+			defoma-app clean #PACKAGE#
+		fi
+		;;
+	remove)
+		if [ -x "`which defoma-app 2>/dev/null`" ]; then
+			defoma-app purge #PACKAGE#
+		fi
+esac

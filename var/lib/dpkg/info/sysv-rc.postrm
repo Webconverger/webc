@@ -1,0 +1,40 @@
+#! /bin/sh
+#
+# sysv-rc postrm
+#
+
+set -e
+
+case "$1" in
+	remove) : ;;
+	purge)
+	    if [ -e /usr/share/debconf/confmodule ]; then
+		. /usr/share/debconf/confmodule
+		db_purge
+	    fi
+	    exit 0
+	    ;;
+	*) exit 0 ;;
+esac
+
+umask 022
+
+# If an alternative update-rc.d and invoke-rc.d implementation is
+# unpacked before this postrm script is executed, we do not want to
+# replace their programs with the symlink.
+if [ ! -e /usr/sbin/update-rc.d ] ; then
+    ln -sf /usr/share/sysvinit/update-rc.d /usr/sbin/update-rc.d
+fi
+if [ ! -e /usr/sbin/invoke-rc.d ] ; then
+    ln -sf /usr/share/sysvinit/update-rc.d /usr/sbin/invoke-rc.d
+fi
+
+# Do not remove /etc/init.d/.legacy-bootordering, to allow those
+# taking over to know where to continue.
+
+
+
+# Remove the recorded update-rc.d
+rm -f /var/lib/update-rc.d/*
+
+exit 0

@@ -1,0 +1,18 @@
+# Udev rules for device-mapper devices.
+# See /usr/share/doc/dmsetup/README.udev for further information.
+
+ENV{DM_UDEV_RULES}=="", GOTO="persistent_storage_dm_end"
+
+OPTIONS="link_priority=-100"
+ENV{DM_UUID}=="DMRAID-*", OPTIONS="link_priority=100"
+
+SYMLINK+="disk/by-id/dm-name-$env{DM_NAME}"
+ENV{DM_UUID}=="?*", SYMLINK+="disk/by-id/dm-uuid-$env{DM_UUID}"
+
+ENV{DM_UDEV_DISABLE_DISK_RULES_FLAG}!="", GOTO="persistent_storage_dm_end"
+
+IMPORT{program}="/sbin/blkid -o udev -p $tempnode"
+ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
+ENV{ID_FS_USAGE}=="filesystem|other", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
+
+LABEL="persistent_storage_dm_end"

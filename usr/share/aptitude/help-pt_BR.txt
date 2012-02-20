@@ -1,0 +1,130 @@
+			   Ajuda On-Line do Aptitude
+
+  Use as teclas direcionais (setas) e as teclas PageUp/PageDown para
+visualizar esta ajuda; digite "q" para sair dela.
+
+  As seguintes teclas estão disponíveis por padrão nas telas de informação
+do aptitude. Outras teclas estão disponíveis; consulte o arquivo README
+para obter uma lista delas.
+
+  "q":          Sair.
+  "?":          Exibe esta tela.
+
+  "f":          Limpa a lista de "novos" pacotes ('f' de "forget" -- esquecer
+  		em inglês).
+
+  Up ou "k":    Move a seleção para cima.
+  Down ou "j":  Move a seleção para baixo.
+  Page-Up ou
+  Control-b:    Move a seleção uma tela de pacotes para cima.
+  Page-Down ou
+  Control-f:    Move a seleção uma tela de pacotes para baixo.
+  Home ou
+  Control-a:    Move a seleção para o primeiro pacote na lista.
+  End ou
+  Control-e:    Move a seleção para o último pacote na lista.
+  "^":          Move a seleção para o pai do item atual.
+  Enter:        Expande ou contrai um grupo de pacotes.
+  "[":          Expande um grupo de pacotes e todos os seus subgrupos.
+  "]":          Contrai um grupo de pacotes e todos os seus subgrupos.
+
+  Control-t:    Ativa ou desativa o menu.
+  "F6":         Move para a próxima aba da tela principal.
+  "F7":         Move para a aba anterior da tela principal.
+
+  Enter:        Visualiza informações sobre um pacote.
+  "C":          Visualiza o changelog de um pacote.
+  "+":          Instala ou atualiza um pacote, ou remove seu estado de
+                "retido".
+  "-":          Remove um pacote.
+  "=":          Retém um pacote em sua versão atual para evitar atualizações.
+  ":":          Mantém um pacote em sua versão atual. Ao contrário do "hold",
+                isto não evitará futuras atualizações.
+  "_":          Solicita que um pacote e todos os seus arquivos de
+                configuração sejam removidos.
+  "L":          Solicita que um pacote seja reinstalado.
+  "M":		Marca um pacote como tendo sido automaticamente instalado.
+		Pacotes automaticamente instalados são removidos se não há
+                pacote instalado manualmente que dependa deles.
+  "m":          Marca um pacote como tendo sido manualmente instalado.
+  "F":          Proíbe que um pacote seja automaticamente atualizado para uma
+                determinada versão; novas versões serão automaticamente
+		instaladas.
+
+  "u":          Atualiza as listas de pacotes disponíveis.
+  "U":          Marca para serem atualizados todos os pacotes passíveis de
+                atualização.
+  "g":          Executa todas as instalações, remoções e atualizações
+                pendentes.
+
+  Control-u:    Desfaz a última ação ou conjunto de ações.
+  "/":          Realiza uma pesquisa. (pelo nome de pacote por padrão;
+                consulte o README/Manual do Usuário para maiores informações).
+  "\":          Realiza a pesquisa na direção contrária.
+  "n":          Repete a última pesquisa.
+  "N":          Repete a última pesquisa, mas na direção oposta.
+  "b":          Pesquisa o próximo pacote quebrado.
+
+  "v":          Mostra as versões disponíveis de um pacote.
+  "d":          Mostra as dependências de um pacote.
+  "r":          Mostra os pacotes que dependem de um dado pacote.
+
+  "D":          Exibe ou oculta a área de informações do pacote.
+  "a":          Rola a área de informações do pacote para cima.
+  "z":          Rola a área de informações do pacote para baixo.
+  "i":          Alterna entre as visualizações de informação do pacote.
+
+  ",":          Visualiza a solução de dependência anterior.
+  ".":          Visualiza a próxima solução de dependência, gerando uma nova
+                solução se necessário.
+  "<":          Visualiza a primeira solução de dependência.
+  ">":          Visualiza a última solução de dependência.
+
+    No resolvedor interativo:
+  "a":          Aprova uma ação, fazendo com que ela sempre seja escolhida
+                dentre as alternativas, ou cancela uma aprovação.
+  "r":          Rejeita uma ação, fazendo com que ela nunca seja escolhida,
+                ou cancela uma rejeição.
+
+
+  Pacotes na lista de pacotes são exibidos, por padrão, desta forma:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  Os três caracteres do lado esquerdo da tela determinam o estado atual do
+pacote. A primeira letra é a flag de "estado", a segunda letra é a flag de
+"ação" e a terceira letra é a flag "automática". Elas são seguidas pelo nome
+do pacote, a mudança no espaço em disco atribuída a ele e finalmente a versão
+atual e a versão disponível do pacote.
+
+
+  A flag de "estado" pode ser uma das seguintes opções:
+
+   v - virtual
+   B - quebrado
+   u - "desempacotado"
+   C - parcialmente-configurado
+   H - parcialmente-instalado
+   c - removido, mas arquivos de configuração ainda presentes (ou seja,
+       não expurgado)
+   i - instalado
+   E - erro interno (não deveria acontecer)
+
+  A flag de "ação" pode ser uma das seguintes opções:
+
+   h - reter
+   p - expurgar
+   d - excluir (remover)
+   B - quebrado
+   i - instalar
+   r - reinstalar
+   u - atualizar
+   F - a atualização disponível foi proibida via "F"
+
+  Se estiver presente, a flag "automática" é "A", indicando que o pacote
+foi automaticamente instalado e será removido quando nada depender dele.
+
+
+  Então, no exemplo acima, libsmbclient é um pacote automaticamente
+instalado. Ele poderia ser atualizado da versão 3.0.25a-1 para a versão
+3.0.25a-2, mas ao invés disso ele será excluído, liberando 2220 kilobytes
+de espaço em disco.

@@ -1,0 +1,344 @@
+@ACCEPT_CATEGORIES = qw(xfont);
+
+# vim:syntax=perl
+
+package pango;
+
+use strict;
+use POSIX;
+use Debian::Defoma::Common;
+use Debian::Defoma::Font;
+use Debian::Defoma::Id;
+use vars qw($ROOTDIR %UNSUPPORTED_XLFD);
+
+import Debian::Defoma::Common;
+import Debian::Defoma::Font;
+import Debian::Defoma::Id;
+
+my @Families = qw(sans serif monospace);
+my @Encodings = qw(iso8859_X iso10646 other);
+
+my %Ids;
+my $PkgDir = $ROOTDIR . '/pango.d';
+my $PangoAlias = $PkgDir . '/pangox.aliases';
+my $PangoAliases = '/etc/pango/pangox.aliases';
+my $ConfFile = '/etc/defoma/config/pango.conf';
+my $term = 0;
+my $init = 0;
+
+## This function generates each element of XLFD from hashed hints, and
+## returns in a hashed XLFD.
+
+sub get_xlfd_element {
+	my @xlfd = split (/-/, shift);
+	my $ret = {};
+
+	$ret->{Foundry} = $xlfd[1];
+	$ret->{Family} = $xlfd[2];
+	$ret->{Weight} = $xlfd[3];
+	$ret->{Slant} = $xlfd[4];
+	$ret->{SetWidth} = $xlfd[5];
+	$ret->{Style} = $xlfd[6];
+	$ret->{Pixel} = $xlfd[7];
+	$ret->{Point} = $xlfd[8];
+	$ret->{ResX} = $xlfd[9];
+	$ret->{ResY} = $xlfd[10];
+	$ret->{Spacing} = $xlfd[11];
+	$ret->{AvgWidth} = $xlfd[12];
+	$ret->{Encoding} = "$xlfd[13]-$xlfd[14]";
+
+	return $ret;
+}
+
+## Returns a string XLFD from hashed XLFD.
+sub generate_xlfd {
+	my $xe = shift;
+	my $enc = $xe->{Encoding};
+
+	$enc = '*-*' if ($xe->{Encoding} =~ /iso8859-[0-9]+/);
+	return join ('-', '', $xe->{Foundry}, $xe->{Family}, $xe->{Weight},
+		     $xe->{Slant}, $xe->{SetWidth}, $xe->{Style}, '*', '*',
+		     '*', '*', '*', '*', $enc);
+}
+
+# store XLFD
+sub store_xlfd {
+	my $Id = shift;
+	my @cache = defoma_id_grep_cache ($Id, 'installed', sorttype => 'p');
+	my @nnnn_xlfd = ();
+	my @innn_xlfd = ();
+	my @nnbn_xlfd = ();
+	my @inbn_xlfd = ();
+	my $xe;
+	my $xlfd;
+
+	foreach my $i (@cache) {
+		my $font = $Id->{1}->[$i];
+		$font =~ s/_/ /g;
+		$xe = get_xlfd_element ($font);
+		my $enc = "$xe->{Foundry}-$xe->{Family}-$xe->{Encoding}";
+		$xlfd = generate_xlfd ($xe);
+
+		if ($xe->{Weight} =~ /bold/ && ($xe->{Slant} eq 'o' || $xe->{Slant} eq 'i')) {
+			push (@inbn_xlfd, $xlfd) if (!grep (/\Q$enc/, @inbn_xlfd));
+			next;
+		}
+		if ($xe->{Weight} !~ /bold/ && ($xe->{Slant} eq 'o' || $xe->{Slant} eq 'i')) {
+			push (@innn_xlfd, $xlfd) if (!grep (/\Q$enc/, @innn_xlfd));
+			next;
+		}
+		if ($xe->{Weight} =~ /bold/ && $xe->{Slant} =~ /r/) {
+			push (@nnbn_xlfd, $xlfd) if (!grep (/\Q$enc/, @nnbn_xlfd));
+			next;
+		}
+		push (@nnnn_xlfd, $xlfd) if (!grep (/\Q$enc/, @nnnn_xlfd));
+	}
+	return \(@nnnn_xlfd, @innn_xlfd, @nnbn_xlfd, @inbn_xlfd);
+}
+
+# write section
+sub write_section {
+	my $file = shift;
+	my $family = shift;
+
+	my @nnnn_iso8859_X = ();
+	my @innn_iso8859_X = ();
+	my @nnbn_iso8859_X = ();
+	my @inbn_iso8859_X = ();
+	my @nnnn_iso10646 = ();
+	my @innn_iso10646 = ();
+	my @nnbn_iso10646 = ();
+	my @inbn_iso10646 = ();
+	my @nnnn_other = ();
+	my @innn_other = ();
+	my @nnbn_other = ();
+	my @inbn_other = ();
+	my $id_iso8859_X = $family . '_iso8859_X';
+	my $id_iso10646 = $family . '_iso10646';
+	my $id_other = $family . '_other';
+	my $hash;
+	my ($nnnn, $innn, $nnbn, $inbn);
+
+	open (F, ">> $file");
+	($nnnn, $innn, $nnbn, $inbn) = store_xlfd ($Ids{$id_other});
+	@nnnn_other = @{$nnnn};
+	@innn_other = @{$innn};
+	@nnbn_other = @{$nnbn};
+	@inbn_other = @{$inbn};
+	($nnnn, $innn, $nnbn, $inbn) = store_xlfd ($Ids{$id_iso10646});
+	@nnnn_iso10646 = @{$nnnn};
+	@innn_iso10646 = @{$innn};
+	@nnbn_iso10646 = @{$nnbn};
+	@inbn_iso10646 = @{$inbn};
+	($nnnn, $innn, $nnbn, $inbn) = store_xlfd ($Ids{$id_iso8859_X});
+	@nnnn_iso8859_X = @{$nnnn};
+	@innn_iso8859_X = @{$innn};
+	@nnbn_iso8859_X = @{$nnbn};
+	@inbn_iso8859_X = @{$inbn};
+
+	print F "$family normal normal normal normal \\\n\t\"";
+	if (scalar (@nnnn_other) > 0) {
+		print F join (",\\\n\t", @nnnn_other);
+		print F ",\\\n\t";
+	}
+	if (scalar (@nnnn_iso10646) > 0) {
+		print F join (",\\\n\t", @nnnn_iso10646);
+		print F ",\\\n\t";
+	}
+	if (exists ($UNSUPPORTED_XLFD {"$family-normal-normal-normal-normal"})) {
+		print F $UNSUPPORTED_XLFD {"$family-normal-normal-normal-normal"};
+		print F ",\\\n\t";
+	}
+	if (scalar (@nnnn_iso8859_X) > 0) {
+		print F join (",\\\n\t", @nnnn_iso8859_X);
+		print F ",\\\n\t";
+	}
+	print F "-*-fixed-medium-r-normal--*-*-*-*-*-*-*-*\"\n\n";
+
+	print F "$family italic normal normal normal \\\n\t\"";
+	if (scalar (@innn_other) > 0) {
+		print F join (",\\\n\t", @innn_other);
+		print F ",\\\n\t";
+	}
+	if (scalar (@innn_iso10646) > 0) {
+		print F join (",\\\n\t", @innn_iso10646);
+		print F ",\\\n\t";
+	}
+	if (exists ($UNSUPPORTED_XLFD {"$family-italic-normal-normal-normal"})) {
+		print F $UNSUPPORTED_XLFD {"$family-italic-normal-normal-normal"};
+		print F ",\\\n\t";
+	}
+	if (scalar (@innn_iso8859_X) > 0) {
+		print F join (",\\\n\t", @innn_iso8859_X);
+		print F ",\\\n\t";
+	}
+	print F "-*-fixed-medium-i-normal--*-*-*-*-*-*-*-*\"\n\n";
+
+	print F "$family normal normal bold normal \\\n\t\"";
+	if (scalar (@nnbn_other) > 0) {
+		print F join (",\\\n\t", @nnbn_other);
+		print F ",\\\n\t";
+	}
+	if (scalar (@nnbn_iso10646) > 0) {
+		print F join (",\\\n\t", @nnbn_iso10646);
+		print F ",\\\n\t";
+	}
+	if (exists ($UNSUPPORTED_XLFD {"$family-normal-normal-bold-normal"})) {
+		print F $UNSUPPORTED_XLFD {"$family-normal-normal-bold-normal"};
+		print F ",\\\n\t";
+	}
+	if (scalar (@nnbn_iso8859_X) > 0) {
+		print F join (",\\\n\t", @nnbn_iso8859_X);
+		print F ",\\\n\t";
+	}
+	print F "-*-fixed-bold-r-normal--*-*-*-*-*-*-*-*\"\n\n";
+
+	print F "$family italic normal bold normal \\\n\t\"";
+	if (scalar (@inbn_other) > 0) {
+		print F join (",\\\n\t", @inbn_other);
+		print F ",\\\n\t";
+	}
+	if (scalar (@inbn_iso10646) > 0) {
+		print F join (",\\\n\t", @inbn_iso10646);
+		print F ",\\\n\t";
+	}
+	if (exists ($UNSUPPORTED_XLFD {"$family-italic-normal-bold-normal"})) {
+		print F $UNSUPPORTED_XLFD {"$family-italic-normal-bold-normal"};
+		print F ",\\\n\t";
+	}
+	if (scalar (@inbn_iso8859_X) > 0) {
+		print F join (",\\\n\t", @inbn_iso8859_X);
+		print F ",\\\n\t";
+	}
+	print F "-*-fixed-bold-i-normal--*-*-*-*-*-*-*-*\"\n\n";
+	close F;
+}
+
+sub do_init {
+	return if ($init);
+
+	$init = 1;
+	foreach my $i (@Families) {
+		foreach my $j (@Encodings) {
+			my $id = $i . '_' . $j;
+			$Ids{$id} = defoma_id_open_cache ($id);
+		}
+	}
+	if ( -f $ConfFile ) {
+		do "$ConfFile" or die ("$@\n");
+	}
+	return 0;
+}
+
+sub do_term {
+	unless ($term) {
+		$term = 1;
+
+		my $xe;
+		my $xlfd;
+
+		open (F, "> $PangoAlias.bak") or die "$PangoAlias.bak: $!";
+		print F "## THIS FILE IS GENERATED BY DEFOMA, DO NOT EDIT\n\n";
+		close F;
+
+		## Sans
+		write_section ("$PangoAlias.bak", "sans");
+
+		## Serif
+		write_section ("$PangoAlias.bak", "serif");
+
+		## Monospace
+		write_section ("$PangoAlias.bak", "monospace");
+
+		rename ("$PangoAlias.bak", "$PangoAlias");
+		foreach my $i (@Families) {
+			foreach my $j (@Encodings) {
+				my $id = $i . '_' . $j;
+				defoma_id_close_cache ($Ids{$id});
+				$Ids{$id} = undef;
+			}
+		}
+	}
+	return 0;
+}
+
+sub actual_register {
+	my ($font, $h, $cache) = @_;
+	my $id_iso8859_X;
+	my $id_iso10646;
+	my $id_other;
+	my $xe;
+
+	$id_iso8859_X = $cache . "_iso8859_X";
+	$id_iso10646 = $cache . "_iso10646";
+	$id_other = $cache . "_other";
+	$xe = get_xlfd_element ($font);
+	if ($xe->{Encoding} =~ /iso8859-[0-9]+/) {
+		defoma_id_register ($Ids{$id_iso8859_X},
+				    type => 'real',
+				    font => $font,
+				    id => $font,
+				    priority => $h->{Priority});
+	} elsif ($xe->{Encoding} =~ /iso10646/) {
+		defoma_id_register ($Ids{$id_iso10646},
+				    type => 'real',
+				    font => $font,
+				    id => $font,
+				    priority => $h->{Priority});
+	} else {
+		defoma_id_register ($Ids{$id_other},
+				    type => 'real',
+				    font => $font,
+				    id => $font,
+				    priority => $h->{Priority});
+	}
+}
+
+sub do_register {
+	my $font = shift;
+	my @hints = defoma_font_get_hints ('xfont', $font);
+	my $h = parse_hints_start ('', @hints);
+	my $cache = "monospace";
+	my $registered = 0;
+
+	if (exists ($h->{'Shape'}) && $h->{'Shape'} =~ /\bNoSerif\b/) {
+		$cache = "sans";
+		actual_register ($font, $h, $cache);
+		$registered = 1;
+	}
+	if (exists ($h->{'Shape'}) && $h->{'Shape'} =~ /\bSerif\b/) {
+		$cache = "serif";
+		actual_register ($font, $h, $cache);
+		$registered = 1;
+	}
+	if ((exists ($h->{'Width'}) && $h->{'Width'} =~ /\bFixed\b/) || !$registered) {
+		$cache = "monospace";
+		actual_register ($font, $h, $cache);
+	}
+	
+	return 0;
+}
+
+sub do_unregister {
+	my $font = shift;
+
+	foreach my $i (@Families) {
+		foreach my $j (@Encodings) {
+			my $id = $i . '_' . $j;
+			defoma_id_unregister ($Ids{$id}, type => 'real', font => $font);
+		}
+	}
+}
+
+sub xfont {
+	my $arg = shift;
+
+	if ($arg eq 'init') { return do_init (); }
+	elsif ($arg eq 'term') { return do_term (); }
+	elsif ($arg eq 'register') { return do_register (@_); }
+	elsif ($arg eq 'unregister') { return do_unregister (@_); }
+	return 0;
+}
+
+1;
+

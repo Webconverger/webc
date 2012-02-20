@@ -1,0 +1,52 @@
+#!/bin/sh
+
+set -e
+
+tmp=`mktemp -q -d`
+
+# check kernel version
+if dpkg --compare-versions 2.6.25 gt `uname -r | cut -d- -f1`; then
+	echo "Kernel too old. This firmware needs >= 2.6.25!."
+	echo "Aborting!"
+	exit 1
+fi
+
+# check chip
+pci=`lspci -n | grep -o "14e4:[1234567890]\+"` || true
+if [ -n "$pci" ]; then
+	if [ "`echo $pci | cut -d: -f2`" = "4301" ] && \
+           [ "`echo $pci | cut -d: -f2`" = "4306" ]; then
+		echo "Not supported card here (PCI id $pci)!"
+		echo "Use b43legacy firmware."
+		echo "Aborting."
+		exit 1
+	elif [ "`echo $pci | cut -d: -f2`" = "4315" ]; then
+		echo "Not supported low-power chip with PCI id $pci!"
+		echo "Aborting."
+		exit 1
+	elif [ "`echo $pci | cut -d: -f2`" = "4321" ] && \
+             [ "`echo $pci | cut -d: -f2`" = "4324" ] && \
+             [ "`echo $pci | cut -d: -f2`" = "4325" ] && \
+             [ "`echo $pci | cut -d: -f2`" = "4328" ] && \
+             [ "`echo $pci | cut -d: -f2`" = "4329" ] && \
+             [ "`echo $pci | cut -d: -f2`" = "43b5" ]; then
+		echo "Not supported chip: PCI id $pci!"
+		echo "Aborting!"
+		exit 1
+	fi
+fi
+
+cd $tmp
+export FIRMWARE_INSTALL_DIR="/lib/firmware"
+
+if [ ! -d "$FIRMWARE_INSTALL_DIR" ]; then
+	mkdir -p $FIRMWARE_INSTALL_DIR
+fi
+
+wget http://mirror2.openwrt.org/sources/broadcom-wl-4.150.10.5.tar.bz2
+tar xjf broadcom-wl-4.150.10.5.tar.bz2
+cd broadcom-wl-4.150.10.5/driver
+b43-fwcutter -w "$FIRMWARE_INSTALL_DIR" wl_apsta_mimo.o
+
+
+

@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+case "${1}" in
+	configure)
+		update-alternatives --install \
+			/usr/bin/traceroute traceroute /usr/bin/traceroute.db 100 \
+			--slave /usr/sbin/traceroute traceroute.sbin \
+				/usr/bin/traceroute.db \
+			--slave /usr/share/man/man1/traceroute.1.gz traceroute.1.gz \
+				/usr/share/man/man1/traceroute.db.1.gz
+
+		for ALTERNATIVE in traceroute6 lft traceproto
+		do
+			update-alternatives --install \
+				/usr/bin/${ALTERNATIVE} ${ALTERNATIVE} /usr/bin/${ALTERNATIVE}.db 100 \
+				--slave /usr/share/man/man1/${ALTERNATIVE}.1.gz ${ALTERNATIVE}.1.gz \
+					/usr/share/man/man1/${ALTERNATIVE}.db.1.gz
+		done
+
+		for ALTERNATIVE in tcptraceroute
+		do
+			update-alternatives --install \
+				/usr/sbin/${ALTERNATIVE} ${ALTERNATIVE} /usr/sbin/${ALTERNATIVE}.db 100 \
+				--slave /usr/share/man/man8/${ALTERNATIVE}.8.gz ${ALTERNATIVE}.8.gz \
+					/usr/share/man/man8/${ALTERNATIVE}.db.8.gz
+		done
+		;;
+
+	abort-upgrade|abort-remove|abort-deconfigure)
+
+		;;
+
+	*)
+		echo "postinst called with unknown argument \`${1}'" >&2
+		exit 1
+		;;
+esac
+
+
+
+exit 0

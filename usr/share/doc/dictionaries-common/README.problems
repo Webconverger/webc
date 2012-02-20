@@ -1,0 +1,111 @@
+# -*- readme-debian -*-
+
+Debugging hints (Known problems below)
+======================================
+
+Enable debugging
+----------------
+
+To enable debug messages from dictionaries-common,
+
+  export DICT_COMMON_DEBUG=1
+
+To enable debug messages from debconf,
+
+  export DEBCONF_DEBUG=developer
+
+This last is very noisy, enable only if really needed. See
+debconf-devel(7) for more info about debconf debugging.
+
+Debugging dictionaries-common first configuration from debian-installer
+-----------------------------------------------------------------------
+If you want to debug dictionaries-common behavior during its first
+pre-configuration when running debian-installer, you need to run
+debian-installer in expert mode. Open a shell and near the top of
+
+   /var/lib/dpkg/info/pkgsel.postinst
+
+add
+
+   export DICT_COMMON_DEBUG=1
+
+This way, you should get debugging info in the syslog for the
+installation.
+
+Some known problems
+===================
+
+debconf question asked on every upgrade
+---------------------------------------
+If every time you upgrade any wordlist or ispell dictionary are asked
+about preferred language (and not only at most the first time you
+installed it) there is a problem, because that is not what current
+code should do.
+
+This has been noticed to happen due to debconf database corruption
+(e,g, #335612). Please read below section "Debconf database
+corruption".
+
+Problems installing or removing a wordlist/ispell dictionary
+----------------------------------------------
+Something like
+---
+# dpkg --purge wbritish
+(Reading database ... 111027 files and directories currently installed.)
+Removing wbritish ...
+Can't call method "choices" on an undefined value at /usr/share/perl5/Debconf/Question.pm line 85, <GEN0> line 4.
+dpkg: error processing wbritish (--purge):
+ subprocess post-removal script returned error exit status 29
+Errors were encountered while processing:
+ wbritish
+---
+may also be related to debconf type 1 db corruption (see
+#198297). Please read below section "Debconf database corruption".
+
+Debconf database corruption
+---------------------------
+Some of the problems listed above are caused by some sort of debconf
+database corruption.
+
+In most old cases (See #198297, #224400, #247849, #255193,
+#282587, #284287, #297534 and #335612) that corruption has been
+related to a nearly full /var partition. This most frequent cause
+for this should have been fixed in debconf 1.5.0 (See #198297). From
+its changelog,
+
+ * Notice and error out on write errors (such as ENOSPC) when saving
+   databases. Should help with a lot of database corruption bugs.
+
+but seems that other still unknown reasons may be flying around.
+
+Please take a look at those bug reports to check whether your problem is
+actually the same, and see if you can provide more information about
+the problem before proceeding further.
+
+If your problem seems related to debconf database corruption, be it of
+above kind or not, the suggested fix is, quoting Joey Hess message in
+#198297 bug page
+
+> By purging and reinstalling the package, you only fixed the entries for
+> that package. I suggest you run /usr/share/debconf/fix_db.pl as root,
+> which will delete all the orphaned questions. You may end up having to
+> repeat your answers to some debconf questions during future upgrades,
+> but that's a small price to pay for a consistent debconf database.
+
+After running /usr/share/debconf/fix_db.pl as root, please look which
+templates were affected,
+
+$ diff -u /var/cache/debconf/config.dat{-old,}    | grep ^[+-]Name
+$ diff -u /var/cache/debconf/templates.dat{-old,} | grep ^[+-]Name
+
+Your debconf database should be now in a consistent state and packages
+configuration should succeed.
+
+Regarding ispell dictionaries and wordlists, you may still need to run
+'dpkg-reconfigure dictionaries-common' as root to make sure defaults
+are correct.
+
+ -- Agustin Martin Domingo <agmartin@debian.org>, Tue, 26 Apr 2011 12:51:13 +0200
+
+ LocalWords:  debian debconf usr alioth org wordlists wordlist debhelper http
+ LocalWords:  iamerican wspanish miscfiles xemacs wbritish var html dpkg ispell

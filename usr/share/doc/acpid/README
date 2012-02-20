@@ -1,0 +1,52 @@
+acpid for netlink
+
+This is Ted Felix's <http://www.tedfelix.com> branch of the acpid project 
+which includes support for netlink and the input layer.
+
+/proc/acpi/event is a deprecated kernel interface for ACPI events.  Newer
+kernels rely on netlink and the input layer to send ACPI-related events.
+This branch of acpid uses these new interfaces.
+
+Any comments or patches for this branch should be sent to Ted Felix:
+http://www.tedfelix.com
+
+***********************************************************
+*                      README for acpid                   *
+*                                                         *
+*  Daemon for Advanced Configuration and Power Interface  *
+*  Tim Hockin                                             *
+*      <thockin@hockin.org>                               *
+*                                                         *
+***********************************************************
+
+Feb 13, 2004
+
+Overview
+--------
+
+  ACPID used to try to handle events internally.  Rather than try to climb
+  an ever-growing mountain, ACPID now lets YOU define what events to handle.
+  Any event that publishes itself to /proc/acpi/event can be handled.
+
+  ACPID reads a set of configuration files which define event->action pairs.
+  This is how you make it do stuff. See the man page for details.
+
+Implementation status
+---------------------
+
+  This version should have complete support for generic handling of events.
+
+Requirements
+------------
+
+  For 2.6 and newer 2.4 kernels, ACPI seems to be fully integrated.  That
+  should be all you need.
+
+  The ACPI kernel driver should be working on your system before trying
+  ACPID.  Verify ACPI is loaded by verifying the existence of
+  /proc/acpi/event.
+
+Compiling ACPID
+---------------
+
+  type "make"

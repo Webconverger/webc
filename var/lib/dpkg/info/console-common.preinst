@@ -1,0 +1,92 @@
+#! /bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+# Ensure we don't step on a hand-edited /etc/console/boottime.kmap.gz
+BOOT_MAP=/etc/console/boottime.kmap.gz
+MD="none"
+[ -r $BOOT_MAP ] && MD=`md5sum $BOOT_MAP |  cut -d' ' -f1 `
+if  db_get console-data/bootmap-md5sum && [ "$RET" != "$MD" ] ; then
+   db_set console-data/keymap/policy "Don't touch keymap"
+fi
+
+db_get console-data/keymap/family
+CFAMILY=`echo $RET | perl -pe '$_ = lc; s/[^a-z0-9+\-\.\/\n]/_/g';`
+LAYOUT=console-data/keymap/$CFAMILY/layout
+
+# Is there a chance that a user-provided keymap has to imported ?
+# Let's cross our fingers... it should never break, but...
+if db_get $LAYOUT && [ -x /usr/share/console/getkmapchoice.pl ];
+then
+   # Protect against failure of getkmapchoice.pl by locally turning
+   # off set -e.
+   set +e
+   choice="$(PERL_BADLANG=0 /usr/share/console/getkmapchoice.pl 2>&1)"
+   if [ $? != 0 ]; then
+      # See comment below
+      choice="useless"
+   fi
+   set -e
+else
+    # if getkmapchoice is not there, assume the user never had the
+    # oportunity to select no keymap to be installed using the
+    # console-common framework
+    choice="useless"
+fi
+
+
+# Maybe import boottime keymap
+
+if [ "$choice" != KERNEL -a "$choice" != NONE -a ! -r /etc/console/boottime.kmap.gz ]
+then
+    # if we have to move a file, we need this dir
+    mkdir -p /etc/console
+
+    if dpkg --status console-tools 2>/dev/null | grep -q '^Status: .* installed$'; then
+	# take it from console-tools
+
+	if [ -r /etc/console-tools/default.kmap.gz ]
+	then
+	    mv /etc/console-tools/default.kmap.gz /etc/console/boottime.kmap.gz
+	elif [ -r /etc/console-tools/default.kmap ]
+	then
+	    gzip -9f /etc/console-tools/default.kmap
+	    mv /etc/console-tools/default.kmap.gz /etc/console/boottime.kmap.gz
+	fi
+
+	if [ -r /etc/console/boottime.kmap.gz ]
+	then
+	    echo >&2 "Imported boot-time keymap from old console-tools settings"
+	fi
+
+    elif dpkg --status kbd 2>/dev/null | grep -q '^Status: .* installed$'; then
+	# take it from kbd
+
+	if [ -r /etc/kbd/default.kmap.gz ]
+	then
+	    mv /etc/kbd/default.kmap.gz /etc/console/boottime.kmap.gz
+	elif [ -r /etc/kbd/default.kmap ]
+	then
+	    gzip -9f /etc/kbd/default.kmap
+	    mv /etc/kbd/default.kmap.gz /etc/console/boottime.kmap.gz
+	elif [ -r /etc/kbd/default.map.gz ]
+	then
+	    mv /etc/kbd/default.map.gz /etc/console/boottime.kmap.gz
+	elif [ -r /etc/kbd/default.map ]
+	then
+	    gzip -9f /etc/kbd/default.map
+	    mv /etc/kbd/default.map.gz /etc/console/boottime.kmap.gz
+	fi
+
+	if [ -r /etc/console/boottime.kmap.gz ]
+	then
+	    echo >&2 "Imported boot-time keymap from old kbd settings"
+	fi
+
+    fi
+fi
+
+
+

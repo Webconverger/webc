@@ -1,0 +1,55 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          mountoverflowtmp
+# Required-Start:    mountall-bootclean
+# Required-Stop:     umountfs
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: mount emergency /tmp.
+# Description:       Mount a tmpfs on /tmp if there would
+#                    otherwise be too little space to log in.
+### END INIT INFO
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+set -e
+
+defs=/etc/default/mountoverflowtmp
+test ! -f "$defs" || . "$defs"
+
+: ${MINTMPKB:=1024}
+if test "$MINTMPKB" = "0"; then exit 0; fi
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_action_begin_msg "Checking minimum space in /tmp"
+	df="`LC_ALL=C df -kP /tmp | grep -v Filesystem`"
+	set -- $df
+	avail="$4"
+	[ "$VERBOSE" != no ] && log_action_end_msg 0
+	if test $avail -lt "$MINTMPKB"; then
+		log_action_begin_msg "Mounting emergency tmpfs on /tmp"
+		mount -t tmpfs -o size=1048576,mode=1777 overflow /tmp
+		log_action_end_msg 0
+	fi
+	;;
+  restart|reload|force-reload)
+	echo "Error: argument '$1' not supported" >&2
+	exit 3
+	;;
+  stop)
+	if LC_ALL=C mount | \
+		grep '^overflow on /tmp type tmpfs' >/dev/null; then
+		log_action_begin_msg "Unmounting any overflow tmpfs from /tmp"
+		umount overflow
+		log_action_end_msg 0
+	fi
+	;;
+  *)
+	echo "Usage: mountoverflowtmp [start|stop]" >&2
+	exit 3
+	;;
+esac
+
+:

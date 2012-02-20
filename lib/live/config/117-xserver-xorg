@@ -1,0 +1,88 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Xserver_xorg ()
+{
+	# Checking if package is installed
+	if [ ! -e /var/lib/dpkg/info/xserver-xorg.list ] || \
+	   [ -e /var/lib/live/config/xserver-xorg ]
+	then
+		return
+	fi
+
+	echo -n " xserver-xorg"
+
+	Configure_xserver_xorg
+}
+
+Configure_xserver_xorg ()
+{
+	if [ -n "${LIVE_KEYBOARD_MODEL}" ]
+	then
+		echo "xserver-xorg xserver-xorg/config/inputdevice/keyboard/model select ${LIVE_KEYBOARD_MODEL}" >> /tmp/debconf.live
+	fi
+
+	if [ -n "${LIVE_KEYBOARD_LAYOUTS}" ]
+	then
+		echo "xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout select ${LIVE_KEYBOARD_LAYOUTS}" >> /tmp/debconf.live
+	fi
+
+	if [ -n "${LIVE_KEYBOARD_VARIANT}" ]
+	then
+		echo "xserver-xorg xserver-xorg/config/inputdevice/keyboard/variant select ${LIVE_KEYBOARD_VARIANT}" >> /tmp/debconf.live
+	fi
+
+	if [ -n "${LIVE_KEYBOARD_OPTIONS}" ]
+	then
+		echo "xserver-xorg xserver-xorg/config/inputdevice/keyboard/options string ${LIVE_KEYBOARD_OPTIONS}" >> /tmp/debconf.live
+	fi
+
+	if [ -n "${LIVE_X_SESSION_MANAGER}" ]
+	then
+		case "${LIVE_X_SESSION_MANAGER}" in
+			none)
+				rm -f /etc/X11/default-display-manager
+				;;
+
+			*)
+				update-alternatives --quiet --set x-session-manager "${LIVE_X_SESSION_MANAGER}"
+				;;
+		esac
+	fi
+
+	if [ -n "${LIVE_XORG_DRIVER}" ]
+	then
+		echo "xserver-xorg xserver-xorg/autodetect_video_card" >> /tmp/debconf.live
+		echo "xserver-xorg xserver-xorg/config/device/driver ${LIVE_XORG_DRIVER}" >> /tmp/debconf.live
+	fi
+
+	if [ -n "${LIVE_XORG_RESOLUTION}" ]
+	then
+		echo "xrandr -s ${LIVE_XORG_RESOLUTION} || /bin/true" >> /root/etc/X11/Xsession.d/21xvidemode
+	else
+		rm -f /etc/X11/Xsession.d/21xvidemode
+	fi
+
+	if [ -e /tmp/debconf.live ]
+	then
+		debconf-set-selections < /tmp/debconf.live
+		rm -f /tmp/debconf.live
+
+		dpkg-reconfigure -f noninteractive -p critical \
+			xserver-xorg 2>&1 \
+			| grep -v "overwriting possibly-customised configuration" \
+			| grep -v "file; backup in /etc/X11/xorg.conf" || true
+
+		# Creating state file
+		touch /var/lib/live/config/xserver-xorg
+	fi
+}
+
+Xserver_xorg

@@ -1,0 +1,79 @@
+Requirements for using Nouveau
+==============================
+
+You need a Linux kernel that contains a nouveau.ko module which works
+with the libdrm-nouveau package in Debian.  Unfortunately,
+libdrm-nouveau and the kernel module are coupled very tightly, and you
+may not be able to upgrade one without the other.  As of this writing,
+supported kernels are 2.6.34-rc1 and newer, earlier versions lack the
+nouveau module altogether or contain an incompatible version.  If you
+build your own kernel, you have to enable the module under Drivers ->
+Staging drivers.
+
+Fermi cards (GeForce 4xx/5xx series, NVC0 in Nouveau terminology)
+currently need non-free and not readily available firmware to provide
+any acceleration. At http://nouveau.freedesktop.org/wiki/NVC0_Firmware
+you can find intructions how to extract it from the blob.
+
+
+Incompatibilities with other drivers
+====================================
+
+The nouveau kernel module includes a framebuffer driver for the
+virtual console, giving you a nice high resolution text console.
+Unfortunately, this is incompatible with other display drivers,
+including the Nvidia proprietary driver.  Among others, the following
+kernel modules must not be loaded before nouveau: nvidiafb, rivafb and
+nvidia.  Note that vesafb should not be a problem.
+
+If you decide to switch to the proprietary driver, it is highly
+recommended to reboot because it is incompatible with nouveau, and
+unloading the latter is not easy and may lead to a blank console.
+
+
+Interferences of the Nvidia OpenGL implementation
+=================================================
+
+The proprietary Nvidia driver comes with its own OpenGL implementation
+that is incompatible with free drivers.  To be able to use OpenGL
+programs with nouveau, you need to uninstall the Nvidia files.  If you
+have used the nvidia-glx package or any of its legacy variants, it
+suffices to remove the libgl1-nvidia-alternatives and
+libglx-nvidia-alternatives packages.  If you ran the Nvidia installer,
+you need to reinstall the xserver-xorg-core and libgl1-mesa-glx
+packages.  In either case, restarting X is also necessary.
+
+A simple OpenGL test program is glxgears, contained in the mesa-utils
+package.  Note that OpenGL with nouveau will not be much fun, see the
+next section.
+
+
+(Lack of) DRI and 3D support
+============================
+
+DRI and 3D support is immature and not enabled, you will likely see
+messages like these in /var/log/Xorg.log:
+
+(EE) AIGLX error: dlopen of /usr/lib/dri/nouveau_dri.so failed
+(/usr/lib/dri/nouveau_dri.so: cannot open shared object file: No such
+file or directory)
+(EE) AIGLX: reverting to software rendering
+
+Software rendering means that OpenGL applications and games will run
+very slowly and often be unusable.  In particular, you probably need
+to deactivate Compiz.  Some programs may be configured to use XRender
+instead of OpenGL which should drastically improve their performance.
+
+
+Further information
+===================
+
+Please see the nouveau Wiki for more information and possible
+problems.
+
+http://nouveau.freedesktop.org/wiki/
+http://nouveau.freedesktop.org/wiki/FAQ
+http://nouveau.freedesktop.org/wiki/TroubleShooting
+http://nouveau.freedesktop.org/wiki/KernelModeSetting
+
+ -- Sven Joachim <svenjoac@gmx.de>, Sat,  5 Mar 2011 11:13:05 +0100

@@ -1,0 +1,82 @@
+                     alsa-utils README.Debian
+                     ------------------------
+
+Contents
+--------
+News
+Restoring mixer levels
+Storing mixer levels
+Error messages
+
+
+News
+----
+Last updated 12 April 2009
+
+
+Restoring mixer levels
+----------------------
+ALSA drivers initialize hardware mixer levels to zero.  It is usually
+desirable to set things up so that the mixer levels for basic sound
+output are automatically raised to reasonable levels after the drivers
+have completed their initialization.
+
+Currently, alsa-utils accomplishes this by having its initscript's
+"start" method restore mixer levels to what they were the last time
+they were saved (see below).  The levels are stored in the file
+/var/lib/alsa/asound.state.  If either the latter file or the alsactl
+program is not available then amixer is used to set mixer levels to
+"reasonable" default values.
+
+To set mixer levels to "reasonable" default values from the command
+line (i.e., without trying first to restore saved values), run
+"/etc/init.d/alsa-utils reset".
+
+For modular drivers on a udev system, the /lib/alsa/udev script runs
+the initscript "start" method after a driver has initialized and its
+associated control device has been created.
+
+For integral drivers and modular ones loaded very early in the boot
+process, the initscript is configured to be run as part of runlevel
+initialization.  Restoration of mixer levels on bootup can be disabled
+by configuring the alsa-utils "service" as stopped in runlevel S. On a
+system that uses sysv-rc this means that you should RENAME
+/etc/rcS.d/S50alsa-utils to /etc/rcS.d/K50alsa-utils.  The symlink
+should not be deleted---only renamed.
+
+
+Storing mixer levels
+-------------------------
+By default mixer levels are stored before shutdown by the initscript's
+"stop" method.  The initscript is run with "stop" in runleves 0 and 6.
+
+To disable this behavior, if you are using sysv-rc, REMOVE the
+"K50alsa-utils" symbolic links from /etc/rc0.d/ and /etc/rc6.d/.
+The symlinks should be removed, not just renamed.
+
+Note that this scheme is different from and simpler than the scheme
+that was used by the "alsa" initscript when it contained the code
+that implemented mixer level storing and restoring. The runlevels_save
+environment variable is no longer used---indeed, there is no
+/etc/default/ file for alsa-utils at all---and there is no longer a
+choice of values for "alsactl_store_on_shutdown".  Now "alsactl store"
+is run on shutdown unconditionally; however, this can be disabled by
+configuring the alsa-utils "service" as floating in runlevels 0 and 6,
+as described above.
+
+
+Error messages
+--------------
+If the initscript "start" method is run early in the boot process,
+before /usr/ is mounted, then it may print an error message.  The
+message can be ignored because the initscript gets run again later in
+the boot process.
+
+    /etc/init.d/alsa-utils: Warning: No alsactl program available.
+
+If you use the snd-cs46xx module then you may see messages like this:
+
+    Jan 26 14:32:50 foo kernel: ALSA ../../alsa-kernel/pci/cs46xx/cs46xx_lib.c:427: cs46xx: failure waiting for FIFO command to complete
+
+This arises from a bug in the driver, but so far I have yet to
+observe any consequent malfunction in the sound card.

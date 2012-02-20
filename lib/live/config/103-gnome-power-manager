@@ -1,0 +1,35 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Gnome_power_manager ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-power-manager.list ] || \
+	   [ -e /var/lib/live/config/gnome-power-manager ]
+	then
+		return
+	fi
+
+	echo -n " gnome-screensaver"
+
+	Configure_gnome_power_manager
+}
+
+Configure_gnome_power_manager ()
+{
+	# Not authorizing the user to hibernate the computer
+	# (might damage existing swap partitions).
+	sudo -u "${LIVE_USERNAME}" gconftool-2 -s -t bool /apps/gnome-power-manager/general/can_hibernate false
+
+	# Creating state file
+	touch /var/lib/live/config/gnome-power-manager
+}
+
+Gnome_power_manager

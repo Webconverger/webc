@@ -1,0 +1,98 @@
+Handling multiple server versions thanks to experimental
+========================================================
+Cyril Brulebois <kibi@debian.org>
+
+
+Context
+-------
+
+A quick overview of how things work upstream for the server:
+
+ * Patches get reviewed and merged into the `master` branch.
+ * After a few release candidates, `master` gets tagged (say: `1.10`
+   or `1.10.0`), and a stable branch (`server-1.10-branch` in this
+   case) is created to receive bug fixes.
+ * Those bug fixes usually are cherry-picks from commits in the
+   `master` branch.
+ * This leads to stable bugfix releases: `1.10.1`, `1.10.2`, and
+   so on.
+
+It doesn’t make much sense to try and package `master` on a continuous
+fashion, since the ABI can be broken multiple times, without a bump
+for the ABI version numbers every time. It’s usually done once a bunch
+of major changes landed, and when things are supposed to be stable
+for a while. On the packaging side, as explained on the
+link:dependencies.html[dependencies between server and drivers] page,
+a bump means the need for a rebuild of the relevant drivers (input
+and/or video).
+
+That’s why the idea is to concentrate on upstream release candidates
+and official releases. Depending on available developer time (both
+upstream and in Debian), several branches can be developed/maintained
+in parallel, so it can be worth having several versions available in
+parallel, which is where `experimental` is handy.
+
+Keeping on with this example, with `1.9` in `unstable`, release
+candidates for `1.10` can be uploaded to `experimental`, along with a
+few drivers so that it’s actually useful.
+
+
+Selecting drivers
+-----------------
+
+To avoid repetitive and sometimes pointless work, it’s probably a good
+idea to upload (to `experimental` as well) only a few drivers built
+against the server in `experimental`. ABI might be bumped between
+release candidates (that happened between `1.10rc3` and `1.10` for
+example), so drivers would need to be rebuilt (even though binNMUs
+might help).
+
+The proposed drivers can be seen on the
+link:squeeze-backports.html[backports policy for squeeze] page, along
+with a tiny description for each.
+
+
+Building drivers in experimental
+--------------------------------
+
+Having a driver in `experimental` doesn’t change much: It is sufficient
+to declare a build-dependency against `xserver-xorg-dev (>=
+$serverminver)`, where `$serverminver` can be seen in:
+
+ * `debian/serverminver` in the `xorg-server` source package: see its
+   first line.
+ * `/usr/share/xserver-xorg/inputdrvdep`: see the needed version of
+   `xserver-xorg-core`.
+ * `/usr/share/xserver-xorg/videodrvdep`: ditto.
+
+So, for a given version of a driver in `unstable`, bumping the
+build-dep version and uploading to `experimental` should be enough,
+providing it doesn’t require further changes (source code changes are
+sometimes needed to support building against a newer server). When
+that happens, the revision number can be constructed by appending
+`+exp1`. The idea here is to avoid things like:
+
+ * `1.42-1` to `unstable`.
+ * `1.42-2` to `experimental`: bump the build-dep.
+ * `1.42-3` to `unstable`: revert the build-dep bump, add a bugfix.
+ * `1.42-4` to `experimental`: build the build-dep again, keep the bugfix.
+ * etc.
+
+Instead, that seems more natural:
+
+ * `1.42-1` to `unstable`.
+ * `1.42-1+exp1` to `experimental`: bump the build-dep.
+ * `1.42-2` to `unstable`: add a bugfix to ++unstable++’s version.
+ * `1.42-2+exp1` to `experimental`: rebuild against experimental
+   (merging or rebasing the build-dep bump).
+
+****
+.Note
+
+Remember `experimental` is special. With the above sequence of
+uploads, if the `1.42-2+exp1` version isn’t uploaded, the
+`1.42-1+exp1` upload might disappear from `experimental` after some
+time, since the version in `unstable` is more recent: the “obsolete”
+package goes away. That’s why it’s important to remember uploading to
+`experimental` as well when uploading a new driver to `unstable`.
+****

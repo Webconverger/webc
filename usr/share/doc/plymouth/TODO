@@ -1,0 +1,12 @@
+- fix the tests so that they work better with "make check"
+- allow longer than 255 byte replies from server to client
+- make server send immediate ACK for password request and then ANSWER later with a link back to original request in ANSWER
+- Make --ask-for-password take a prompt message
+- add expose handler for plugins to draw from.  We need to reset some state every frame of the animation, so better to hide that.
+- rotate boot.log per boot cycle (might be easiest to just fork/exec out to logrotate directly)
+- fix error handling.  In particular, ply_open_module gets it completely wrong (replies on errno instead of dlerror())
+- consider moving text code from ply-window to a ply-text-buffer analog of ply-frame-buffer
+- maybe watch for VT switches and do things like restoring text color palette and stopping drawing the framebuffer
+- clean up the event loop watch api to always be in terms of watch objects instead of function/user_data pairs.
+- Fix --hide-splash to properly unredirect console until next --show-splash or event better make attach-to-session
+  a client command, with detach-from-session a separate one

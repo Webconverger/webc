@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for nn.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Pakkar utan nokon tildelt sekjson\n Desse pakkane er ikkje under nokon seksjon. Kanskje det er ein feil i pakkefila?";
+    Virtual	"Virituelle pakkar\n Desse pakkane er ikkje verkelege programpakkar. Dei er namna andre pakkar brukar for å skaffa seg eller gje nokon eigenskapar.";
+    Tasks	"Pakkar som set opp maskina di til å utføra ei bestemt oppgåve\n Pakkar i seksjonen «Oppgåvepakkar» inneheld ingen filer, dei har berre ei liste med pakkekrav. Desse pakkane gjev ein enkel måte å velja ut førehandsdefinerte sett med pakkar for spesielle oppgåve.";
+
+    admin	"Administrative verktøy (programvareinstallering, handtering av brukarar osv.)\n Pakkar i «admin»-seksjonen let deg utføra administrative oppgåver, slik som installering av programvare, handtering av brukarar, oppsett og monitorering av systemet ditt, overvake nettverktrafikk og så vidare.";
+    alien	"Pakkar som er omgjort frå andre format (rpm, tgz osv.)\n Pakkar i seksjonen for framande pakkar er laga med eit framand program frå eit pakkeformat som ikkje er i Debian, til dømes RPM.";
+    base	"Grunnsystemet til Debian\n Pakkar i «grunn»-seksjonen er del av den opphavelege systeminstallasjonen.";
+    comm	"Programs for faxmodems and other communication devices\n Packages in the 'comm' section are used to control modems and other hardware communications devices. This includes software to control faxmodems (for instance, PPP for dial-up internet connections and programs originally written for that purpose, such as zmodem/kermit), as well as software to control cellular phones, interface with FidoNet, and run a BBS.";
+    devel	"Verktøy og program for programvareutvikling\n Pakkar i «utvikling»-seksjonen blir brukt til å skriva ny programbare og jobba med eksisterande programvare. Vanlege brukarar som ikkje kompilerer sin eigen programvare treng truleg ikkje så mykje programvare frå denne seksjonen.\n .\n Seksjonen inneheld kompilatorar, avlusingsverktøy, skriveprogram for programmerarar, verktøy for handtering av kjeldekode og andre ting som er relatert til programvareutvikling.";
+    doc		"Dokumentasjon og spesialiserte program for vising av dokumentasjon\n Pakkar i «dok»-seksjonen dokumenterer deler av Debian-systemet eller er framvisarar av ulike dokumentasjonsformat.";
+    editors	"Skriveprogram og teksthandsamarar\n Pakkar i seksjonen «skriveprogram» let deg redigera rein ASCII-tekst. Dette er nødvendigvis ikkje teksthandsamarar, sjølv om nokre teksthandsamarar kan finnast i denne seksjonen.";
+    electronics	"Program for å jobba med elektronikk og elektriske kretsar\n Pakkar i «elektronikk»-seksjonen inneheld verktøy for design av elektriske kretsar, simulatorar og assembler for mikrokontrollarar og anna relatert programvare.";
+    embedded	"Program for innebygde system\nPakkar i bolken «innebygd» er meint til å køyre på innebygde system. Dette er spesialisert maskinvare med mykje mindre datakraft enn eit typisk skrivebordsystem, til dømes ein PDA, ein mobiltelefon eller en Tivo.";
+    gnome	"Skrivebordsystemet GNOME\n GNOME er ei samling programvare som dannar eit lettbrukt skrivbordsmiljø for Linux.  Pakkar i «gnome»-bolken er anten delar av GNOME-miljøet eller tett samanvevd med det.";
+    games	"Spel, leiketøy og moroprogram\n Pakkar i «spel»-seksjonen er i hovudsak meint for underhaldning.";
+    graphics	"Verktøy for å laga, visa og redigera grafikkfiler\n Pakkar i «grafikk»-seksjonen inneheld program for vising av biletfiler, bilethandsaming og biletmanipulering, program for å samhandla med grafikkmaskinvare (slik som videokort, skanner og digitalt kamera) og programmeringsverktøy for å handtera grafikk.";
+    hamradio	"Programvare for hamradio-operatør\n Pakkar i «hamradio»-seksjonen er hovudsakleg meint for hamradio-operatørar.";
+    interpreters "Tolkeprogram for skriptspråk\n Pakkar i «tolkeprogram»-seksjonen inneheld tolkarar for språk som Python, Perl og Ruby, og bibliotek for desse språka.";
+    kde		"Skrivebordsystemet KDE\n KDE er ei samling programvare som danner eit lettbrukt skrivbordsmiljø for Linux. Pakker i «kde»-bolken er anten delar av KDE-miljøet eller tett samanvevd med det.";
+    libdevel	"Utviklingsfiler for bibliotek\n Pakker i «libdevel»-bolken inneheld filer som trengst for å lage program som brukar bibliotek i «libs»-bolken. Du treng ikkje pakkar frå denne bolken viss du ikkje har tenkt å lage program sjølv.";
+    libs	"Samling av programvarerutiner\n Pakkar i «libs»-seksjonen gjev nødvendig funksjonalitet anna programvare på maskina. Med svært få unntak, skal det ikkje vera nødvendig å installera programvare frå denne seksjonen eksplisitt. Pakkesystemet vil installera dei ettersom dei er pakkekrav for andre pakkar.";
+    perl	"Perl-tolkar og bibliotek\n Pakkar i «perl»-bolken sørgjer for programmeringsspråket Perl og mange tredjeparts-bibbliotek til Perl. Viss du ikkje er Perl-programmerar sjølv, så treng du ikkje uttrykkeleg installere pakkar frå denne bolken, pakkesystemet installerer dei sjølv viss det er naudsynt.";
+    python	"Python-tolkar og bibliotek\n Pakkar i «python»-bolken sørgjer for programmeringsspråket Python og mange tredjeparts-bibbliotek til Python. Viss du ikkje er Python-programmerar sjølv, så treng du ikkje uttrykkeleg installere pakkar frå denne bolken, pakkesystemet installerer dei sjølv viss det er naudsynt.";
+    mail	"Program for å skriva, senda og omdirigera e-postmeldingar\n Pakkar i «e-post»-seksjonen inneheld e-postlesarar, nissar for e-posttransport, programvare for e-postlister og filter for søppelpost. I tillegg diverse andre program som er relatert til elektronisk post.";
+    math	"Nummerisk analyse og annna matematikkrelatert programvare\n Pakkar i «matte»-seksjonen inneheld kalkulatorar, språk for matematiske utrekningar, symbolsk algebra og program for å visualisera matematiske objekt.";
+    misc	"Ymse programvare\n Pakkar i «ymse»-seksjonen har ein funksjonalitet som er vanskeleg å klassifisere.";
+    net		"Program for å kopla til og tilby ulike tenester\n Pakkar i «nett»-seksjonen inneheld klientar og tenarar for mange protokollar, verktøy for å manipulere og avlusa lågnivå nettverksprotokollar, system for direkte meldingsteneste og anna nettverksrelatert programvare.";
+    news	"Klientar og tenarar for Usenet\n Pakkar i «nyhende»-seksjonen er relatert til det distribuerande nyhendesystemet Usenet. Seksjonen inneheld nyhendelesarar og nyhendetenarar.";
+    oldlibs	"Forelda programbibliotek\n Pakkar i seksjonen «gamle bibliotek» er forelda og bør ikkje brukast av ny programvare. Dei er tilbydd på grunn av kompabilitet med eldre programvare, eller fordi programvare som er distribuert med Debian framleis treng dei.\n .\n Med svært få unntak skal det ikkje vera nødvendig å installera pakkar frå denne seksjonen eksplisitt. Pakkesystemet vil ta med desse pakkane ved hjelp av pakkekrav frå andre pakkar.";
+    otherosfs	"Etterliknarar og programvare for å lesa framande filsystem\n Pakkar i seksjonen «andreosfs» etterliknar maskinvare og operativsystem og tilbyr verktøy for å overføra data mellom ulike operativsystem og maskinvareplattformar. (Til dømes verktøy for å lesa DOS-diskettar, og verktøy til å kommunisera med Palm Pilots)\n .\n Det er verdt å merkja seg at programvare for CD-brenning er inkludert i denne seksjonen.";
+    science	"Programvare for vitskapleg arbeid\n Pakkar i «vitskap»-seksjonen inneheld verktøy for astronomi, bilologi og kjemi. I tillegg er det anna vitskapsrelatert programvare.";
+    shells	"Kommandoskal og alternative konsollmiljø\n Pakkar i «skal»-seksjonen inneheld program som tilbyr grensesnitt med kommandolinje.";
+    sound	"Verktøy for å spela av og ta opp lyd\n Pakkar i «lyd»-seksjonen inneheld lydavspelarar, opptakarar, lydkomprimeringsprogram for mange format, miksarar og lydstyring, program for MIDI-sekvensar og program for å laga notar. Han inneheld også drivarar for lydkort og programvare for lydprosessering.";
+    tex		"TeX typografi-systemet\n Pakkar i «tex»-seksjonen er relatert til TeX, eit system for å produsera utdata med høg typografisk kvalitet. Det omfattar sjølve TeX, TeX-pakkar, skriveprogram laga for TeX, verktøy for å omgjera TeX og TeX utdatafiler til ulike andre format, TeX-skrifttypar og anna programvare relatert til TeX.";
+    text	"Teksthandsamingsverktøy\n Pakkar i «tekst»-seksjonen inneheld tekstfilter og -handsamarar, program for stavekontroll, ordbøker, verktøy for å gjera om mellom teiknkodingar og tekstfilformat (t.d. Unix og DOS), tekstformaterarar og fin-utskrift i tillegg til anna programvare som opererer med rein tekst.";
+    utils	"Ulike systemverktøy\n Pakkar i «verktøy»-seksjonen er verktøy der føremålet er for unikt til at det kan klassifiserast.";
+    web		"Nettlesarar, tenarar, mellomtenarar og andre verktøy\n Pakkar i «vev»-seksjonen inneheld nettlesarar, vevtenarar og mellomtenarar, programvare for å skriva CGI-skript eller vev-baserte program, ferdigskrivne vev-baserte program og anna programvare som er relatert til verdsveven.";
+    x11		"Vindaugsystemet X og relatert programvare\n Pakkar i «x11»-seksjonen inneheld kjernepakkane for vindaugsystemet X, vindaugshandterarar, programverktøy for X og ymse program med ein X-GUI som er plassert her fordi dei ikkje passa noko anna stad.";
+
+    main	"Hovudarkivet til Debian\n Debian-distribusjonen består a pakkar frå «hovud»-seksjonen. Alle pakkar i «hovud»-seksjonen er fri programvare.\n .\n For meir informasjon om kva Debian ser på som fri programvare, sjå http://www.debian.org/social_contract#guidelines";
+    contrib	"Program som krev programvare som ikkje er i Debian\n Pakkar i «bidrag»-seksjonen er ikkje ein del av Debian.\n .\n Desse pakkane er fri programvare, men dei krev programvare som ikkje er ein del av Debian. Dette kan vera fordi det ikkje er fri programvare, men er pakka i seksjonen «ikkje-fri» i arkivet, fordi Debian ikkje kan distribuere det i det heile, eller (i sjeldne tilfelle) fordi ingen har pakka det enno.\n .\n For meir informasjon om kva Debian ser på som fri programvare, sjå http://www.debian.org/social_contract#guidelines";
+    non-free	"Program som ikkje er fri programvare\n Pakkar i «ikkje-fri»-seksjonen er ikkje ein del av Debian.\n .\n Desse pakkane møter ikkje ein eller fleire av krava til Debian sine retningslinjer for fri programvare (sjå nedanfor). Du bør lesa lisensen til program i denne seksjonen for å vera sikker på at du har lov til å bruka dei på den måten du har tenkt.\n .\n For meir informasjon om kva Debian ser på som fri programvare, sjå http://www.debian.org/social_contract#guidelines";
+    non-US	"Program som er lagra utanfor USA på grunn av eksportkontroll\n Pakkar i «utanfor USA» inneheld truleg kryptografisk programvare, nokre få implementerte patenterte algoritmar. På grunn av dette, kan dei ikkje eksporterast frå USA, og er difor lagra på ein tenar i den «frie verda».\n .\n Merk: Debianprosjektet er no i ferd med å flytta den kryptografiske programvaren tilbake i dei USA-baserte arkiva etter å ha konsultert med jusekspertar om nylege endringar i eksportpolitikken. Dei fleste pakkane som tidlegare var i denne seksjonen er derfor no i «hovud».";
+  };
+};
+

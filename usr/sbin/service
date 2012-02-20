@@ -1,0 +1,138 @@
+#!/bin/sh
+
+###########################################################################
+# /usr/bin/service
+#
+# A convenient wrapper for the /etc/init.d init scripts.
+#
+# This script is a modified version of the /sbin/service utility found on
+# Red Hat/Fedora systems (licensed GPLv2+).
+#
+# Copyright (C) 2006 Red Hat, Inc. All rights reserved.
+# Copyright (C) 2008 Canonical Ltd.
+#   * August 2008 - Dustin Kirkland <kirkland@canonical.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# On Debian GNU/Linux systems, the complete text of the GNU General
+# Public License can be found in `/usr/share/common-licenses/GPL-2'.
+###########################################################################
+
+
+is_ignored_file() {
+	case "$1" in
+		skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
+			return 0
+		;;
+	esac
+	return 1
+}
+
+VERSION="`basename $0` ver. 0.91-ubuntu1"
+USAGE="Usage: `basename $0` < option > | --status-all | \
+[ service_name [ command | --full-restart ] ]"
+SERVICE=
+ACTION=
+SERVICEDIR="/etc/init.d"
+OPTIONS=
+
+if [ $# -eq 0 ]; then
+   echo "${USAGE}" >&2
+   exit 1
+fi
+
+cd /
+while [ $# -gt 0 ]; do
+  case "${1}" in
+    --help | -h | --h* )
+       echo "${USAGE}" >&2
+       exit 0
+       ;;
+    --version | -V )
+       echo "${VERSION}" >&2
+       exit 0
+       ;;
+    *)
+       if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
+          cd ${SERVICEDIR}
+          for SERVICE in * ; do
+            case "${SERVICE}" in
+              functions | halt | killall | single| linuxconf| kudzu)
+                  ;;
+              *)
+                if ! is_ignored_file "${SERVICE}" \
+		    && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+                        if ! grep -qs "\Wstatus)" "$SERVICE"; then
+                          #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+                          echo " [ ? ]  $SERVICE" 1>&2
+                          continue
+                        else
+                          out=$(env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+                          if [ "$?" = "0" -a -n "$out" ]; then
+                            #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+                            echo " [ + ]  $SERVICE"
+                            continue
+                          else
+                            #printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+                            echo " [ - ]  $SERVICE"
+                            continue
+                          fi
+                        fi
+                  #env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+                fi
+                ;;
+            esac
+          done
+          exit 0
+       elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
+          SERVICE="${1}"
+          if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+            env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" stop
+            env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" start
+            exit $?
+          fi
+       elif [ -z "${SERVICE}" ]; then
+         SERVICE="${1}"
+       elif [ -z "${ACTION}" ]; then
+         ACTION="${1}"
+       else
+         OPTIONS="${OPTIONS} ${1}"
+       fi
+       shift
+       ;;
+   esac
+done
+
+if [ -r "/etc/init/${SERVICE}.conf" ]; then
+   # Upstart configuration exists for this job
+   case "${ACTION}" in
+      start|stop|restart|status|reload)
+         # Action is a valid upstart action
+         exec ${ACTION} ${SERVICE} ${OPTIONS}
+      ;;
+      force-reload)
+         # Upstart just uses reload for force-reload
+         exec reload ${SERVICE} ${OPTIONS}
+      ;;
+   esac
+fi
+
+# Otherwise, use the traditional sysvinit
+if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+   exec env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" ${ACTION} ${OPTIONS}
+else
+   echo "${SERVICE}: unrecognized service" >&2
+   exit 1
+fi

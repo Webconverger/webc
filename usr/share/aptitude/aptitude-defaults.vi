@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for vi.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Gói không thuộc về phần riêng.\n Chưa đặt phần cho những gói này. Có lẽ gặp lỗi trong tập tin « Packages » Gói) không?";
+    Virtual	"Gói ảo\n Gói trong phần này không tồn tại: nó chỉ là tên được dùng bởi gói khác để yêu cầu hay cung cấp chức năng nào.";
+    Tasks	"Gói mà thiết lập máy tính của bạn để thực hiện một tác vụ riêng.\n Gói trong phần « Tác vụ » (Tasks) không chứa tập tin, chỉ phụ thuộc vào gói khác. Những gói này cung cấp cách dễ dàng để lựa chọn một bộ gói định sẵn cho một tác vụ đặc biệt.";
+
+    admin	"Bộ tiện ích quản trị (cài đặt phần mềm, quản lý người dùng v.v.).\n Gói trong phần « quản trị » (admin.) cho bạn có khả năng thực hiện tác vụ quản trị, v.d. cài đặt phần mềm, quản lý người dùng, cấu hình và theo dõi hệ thống, kiểm tra tải cho mạng.";
+    alien	"Gói được chuyển đổi từ định dạng khác (rpm, tgz v.v.).\n Gói trong phần « lạ » (alien) đã được tạo bởi chương trình « alien » từ định dạng gói không phải là Debian, như RPM.";
+    base	"Hệ thống cơ bản Debian.\n Gói trong phần « cơ bản » (base) là phần của tiến trình cài đặt hệ thống ban đầu.";
+    comm	"Chương trình cho bộ điều giải điện thư (fax modem) và thiết bị giao thông khác.\n Gói trong phần « liên lạc » (comm.) được dùng để điều khiển bộ điều giải và những thiết bị giao thông phần cứng khác. Các gói kiểu này bao gồm phần mềm điều khiển bộ điều giải điện thư (v.d. phần mềm PPP để kết nối bằng quay số, chương trình được tạo gốc dành cho sự kết nối [zmodem, kermit v.v.]), và phần mềm điều khiển điện thoại di động, giáo diện với FidoNet, và chạy hệ thống bảng công báo (BBS).";
+    devel	"Bộ tiện ích và chương trình để phát triển phần mềm.\n Gói trong phần « phat triển » (devel.) được dùng để tạo phần mềm mới và sửa đổi phần mềm đã có. Người dùng không phải là lập trình viên và không biên dịch phần mềm rất có thể là không cần lấy phần mềm nhiều từ phần này.\n\nPhần này bao gồm bộ biên dịch, công cu gỡ lỗi, bộ chỉnh sửa của lập trình viên, công cụ xử lý mã nguồn, và trình khác liên quan đến sự phát triển phần mềm.";
+    doc		"Tài liệu hướng dẫn, và chương trình dành cho việc xem tài liệu.\n Gói trong phần « tài liệu » (doc.) chứa thông tin về các phần hệ thống Debian, hay là bộ xem định dạng tài liệu.";
+    editors	"Trình chỉnh sửa văn bản và trình xử lý từ\n Gói trong phần « bộ chỉnh sửa » (editors) cho phép bạn sửa đổi văn bản ASCII (« nhập thô »). Chỉ một số gói này là trình xử lý từ.";
+    electronics	"Chương trình cho người thao tác phần cứng\n Gói trong phần « điện tử » (electronics) bao gồm công cụ thiết kế mạch điện, trình mô phỏng và trình dịch mã số cho bộ vi điều khiển, và phần mềm liên quan khác.";
+    embedded	"Chương trình cho hệ thống nhúng\n Gói trong phần « nhúng » (embedded) nên chạy trên thiết bị nhúng. Thiết bị nhúng là thiết bị phần cứng đặc biệt có ít sức mạnh hơn máy vi tính bình thường: v.d. máy trên tay, điện thoại di động, và Tivo.";
+    gnome	"Hệ thống để bàn GNOME\n GNOME là bộ phần mềm cung cấp một môi trường dễ dùng cho hệ điều hành Linux. Gói trong phần « gnome » thuộc về môi trường GNOME hoặc hợp nhất chặt chẽ với nó.";
+    games	"Trò chơi, đồ chơi và chương trình vui thú\n Gói trong phần « trò chơi » (games) được cấu tạo chính cho giải trí.";
+    graphics	"Tiện ích để tạo, xem và chỉnh sửa tập tin đồ họa\n Gói trong phần « đồ họa » (graphics) bao gồm bộ xem tập tin ảnh, phần mềm xử lý và thao tác ảnh, phần mềm tương tác với phần cứng đồ họa (v.d. thẻ ảnh động, máy quét và máy ảnh số), và công cụ lập trình để quản lý đồ họa.";
+    hamradio	"Phần mềm cho người thao tác rađiô nghiệp dư\n Gói trong phần « rađiô nghiệp dư » (ham radio) được cấu tạo chính cho người thao tác rađiô nghiệp dư.";
+    interpreters "Bộ phiên dịch ngôn ngữ lập trình bậc cao\n Gói trong phần « bộ dịch » (interpreters) bao gồm trình dịch cho ngôn ngữ như Python, Perl va Ruby, cũng có thư viện cho những ngôn ngữ này.";
+    kde		"Hệ thống để bàn KDE\n KDE là một bộ phần mềm cung cấp một môi tường dễ dùng cho hệ điều hành Linux. Gói trong phần « kde » thuộc về môi trường KDE hoặc hợp nhất chặt chẽ với nó.";
+    libdevel	"Tập tin phát triển cho thư viện\nGói trong phần « phát triển thư viện » (libdevel.) chứa những tập tin cần thiết đề xây dựng chương trình mà dùng thư viện trong phần « thư viện » (libs). Bạn không cần gói nào từ phần này, trừ bạn muốn tự biên dịch phần mềm.";
+    libs	"Bộ hàm phần mềm\n Gói trong phần « thư viện » (libs.) cung cấp khả năng cần thiết cho phần mềm khác trên máy vi tính này. Rất ít có trường hợp nên cài đặt gói nào từ phần này; hệ thống quản lý gói sẽ cài đặt gói nào cần thiết như yêu cầu để thỏa điều kiện phụ thuộc.";
+    perl	"Trình phiên dịch và các thư viện Perl\n Gói trong phần « perl » cung cấp ngôn ngữ lập trình Perl, và nhiều thư viện nhóm ba cho nó. Chỉ lập trình viên Perl cần cài đặt riêng rẽ gói nào; trình quản lý gói sẽ cài đặt gói nào như yêu cầu.";
+    python	"Trình phiên dịch và các thư viện Python\n Gói trong phần « python » cung cấp ngôn ngữ lập trình Python, và nhiều thư viện nhóm ba cho nó. Chỉ lập trình viên Python cần cài đặt riêng rẽ gói nào; trình quản lý gói sẽ cài đặt gói nào như yêu cầu.";
+    mail	"Chương trình ghi, gởi và định tuyến các thư điện tử\n Gói trong phần « thư » ( mail) bao gồm trình đọc thư, trình nền truyền tải thư, phần mềm hộp thư chung, bộ lọc thư rác, và phần mềm khác liên quan đến thư điện tử.";
+    math	"Phần mềm phân tích số và phần mềm khác liên quan đến toán học\n Gói trong phần « toán » (math.) bao gồm trình tính, ngôn ngữ tính toán (như Mathematica), gói đại số tượng trưng, và chương trình hiển thị đối tượng toán.";
+    misc	"Phần mềm khác\n Gói trong phần « lặt vặt » (misc.) có chức năng bất thường, không khớp với nhóm khác.";
+    net		"Chương trình kết nối đến dịch vụ, và cung cấp dịch vụ\n Gói trong phần « mạng » (net.) bao gồm ứng dụng khách và trình phục vụ cho nhiều giao thức khác nhau, công cụ để thao tác và gỡ lỗi giao thức mạng bậc thấp, hệ thống tin nhắn tức khắc, và phần mềm khác liên quan đến mạng.";
+    news	"Ứng dụng khách và trình phục vụ Usenet\n Gói trong phần « tin tức »  (news) liên quan đến hệ thống tin tức đã phân phối Usenet. Bao gồm trình đọc tin tức và trình phục vụ tin tức.";
+    oldlibs	"Thư viện cũ\n Gói trong phần « thư viện cũ » (oldlibs.) là cũ : không nên sử dụng nó với phần mềm mới. Gói kiểu này được cung cấp vì lý do tương thích, hoặc vì phần mềm khác được phân phát bởi Debian vẫn còn phụ thuộc vào nó.\n\nRất ít có trường hợp cần cài đặt gói nào từ phần này; trinh quản lý gói sẽ cài đặt gói nào như yêu cầu để thỏa điều kiện phụ thuộc.";
+    otherosfs	"Bộ mô phỏng và phần mềm khác để đọc hệ thống tập tin lạ\n Gói trong phần « Hệ têp khác » (hệ thống tập tin của hệ điều hành khác: otherosfs.) mô phỏng phần cứng và hệ điều hành, và cung cấp công cụ có thể truyền dữ liệu giữa những hệ điều hành khác nhau và nền tảng phần cứng khác nhau (v.d. tiện ích để đọc đĩa mềm dạng DOS, và tiện ích để liên lạc với máy Palm Pilot).\n\nGhi chú : phần mềm chép ra đĩa CD nằm trong phần này.";
+    science	"Phần mềm để làm việc khoa học\n Gói trong phần « khoa học » (science) bao gồm công cụ cho thiên văn học, sinh học và hoá học, cũng như phần mềm khác liên quan đến khoa học.";
+    shells	"Trình bao lệnh và môi trương bàn giao tiếp xen kẽ\n Gói trong phần « trình bao » (shells) bao gồm chương trình cung cấp giao diện dòng lệnh.";
+    sound	"Tiện ích để phát và thu âm thanh\n Gói trong phần « âm thanh » (sound) bao gồm trình phát, thu và mã hoá âm thanh cho nhiều định dạng khác nhau, trình hoà tiếng và điều khiển âm lượng, trình dàn xếp dãy MIDI và chương trình tạo ra cách viết âm nhạc, trình điều khiển phần cứng âm thanh, và phần mềm xử lý âm thanh.";
+    tex		"Hệ thống sắp chữ TeX\n Gói trong phần « tex » liên quan đến TeX, một hệ thống xuất dữ liệu sắp chữ có chất lượng cao. Bao gồm TeX chính nó, gói TeX, trình chỉnh sửa được thiết kế dành cho TeX, tiện ích có thể chuyển đổi TeX và tập tin xuất TeX sang nhiều định dạng khác nhau, phông TeX, và phần mềm khác liên quan đến TeX.";
+    text	"Tiện ích xử lý văn ban\n Gói trong phần « văn bản » (text) bao gồm bộ lọc văn bản và trình xử lý văn bản, trình kiểm tra chính tả, trình từ điển, tiện ích chuyển đổi giữa nhiều bảng mã ký tự khác nhau và định dạng tập tin khác nhau (v.d. Unix và DOS), trình định dạng văn bản và trình sửa đổi văn bản sang « in xinh »;  và phần mềm khác thao tác « nhập thô ». ";
+    utils	"Nhiều tiện ích hệ thống khác nhau\n Gói trong phần « tiện ích » (utils.) là tiện ích có mục đích duy nhất, không khớp với nhóm khác.";
+    web		"Trình duyệt Mạng, trình phục vụ, trình ủy nhiệm, và công cụ khác\n Gói trong phần « WWW » (web) bao gồm trình duyệt Mạng, trình phục vụ và ủy nhiệm Mạng, phần mềm để ghi văn lệnh CGI hoặc tạo chương trình dựa vào Mạng, chương trình tạo sẵn dựa vào Mạng, và phần mềm khác liên quan đến Mạng.";
+    x11		"Hệ thống cửa sổ X, và phần mềm liên quan\n Gói trong phần « x11 » bao gồm các gói lõi cho hệ thống cửa sổ X, trình quản lý cửa sổ, tiện ích cho X, và chương trình khác có giao diện đồ họa X mà nằm trong nhóm này vì không khớp với nhóm khác nào.";
+
+    main	"Kho Debian chính\n Bản phân phối Debian chứa các gói từ phần « chính » (main). Mọi gói trong phần chính là Phần Mềm Tự Do.\n\nĐể tìm thông tin thêm về ý kiến Debian về Phần Mềm Tự Do, xem « http://www.debian.org/social_contract#guidelines ».";
+    contrib	"Chương trình phụ thuộc vào phần mềm không phải trong Debian\n Gói trong phần « đóng góp » (contrib.) không phải thuộc về Debian.\n\nNhưng gói này là Phần Mềm Tự Do, nhưng mà chúng phụ thuộc vào phần mềm không phải thuộc về Debian. Có lẽ vì phần mềm này không phải là Phần Mềm Tự Do, và được đóng gói trong phần không tự do của kho, vì Debian không thể phân phát nó bằng cách nào cả, hoặc (rất ít trường hợp) vì chưa có ai đóng gói nó.\n\nĐể tìm thông tin thêm về ý kiến Debian về Phần Mềm Tự Do, xem « http://www.debian.org/social_contract#guidelines ».";
+    non-free	"Chương trình không phải là phần mềm tự do\n Gói trong phần « khác tự do » (non-free) không phải thuộc về Debian.\n\n Những gói này không thỏa một hay nhiều điều kiện của Những Hướng Dẫn Phần Mềm Tự Do Debian (Debian Free Software Guidelines: xem liên kết bên dưới). Bạn hãy đọc giấy phép của mỗi chương trình trong phần này, để chắc là nó cho phép bạn sử dụng trình đó bằng cách định.\n\nĐể tìm thông tin thêm về ý kiến Debian về Phần Mềm Tự Do, xem « http://www.debian.org/social_contract#guidelines ».";
+    non-US	"Chương trình được cất giữ bên ngoại Mỹ do điều khiển xuất khẩu\n Gói trong phần « khác Mỹ » (non-U.S.) rất có thể chứa mật mã thuật; một vài gói thực hiện thuật toán có bằng sáng chế. Do đó, không thể xuất khẩu những gói này ra Mỹ, nên chúng được cất giữ vào một máy phục vụ trong « thế giới tự do ».\n\n Ghi chú : Dự án Debian hiện thời đang hợp nhất phần mềm mật mã vào kho dựa vào Mỹ, sau khi hỏi ý kiến luật sư chuyên môn về nhưng thay đổi chính thức xuất khẩu vừa có. Như thế thì gần tắt cả gói đã có trong phần này vào lúc trước, lúc này nằm trong phần « chính » (main).";
+  };
+};
+

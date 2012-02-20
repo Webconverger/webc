@@ -1,0 +1,52 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          module-init-tools
+# Required-Start:    
+# Required-Stop:     
+# Should-Start:      checkroot
+# Should-Stop:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Process /etc/modules.
+# Description:       Load the modules listed in /etc/modules.
+### END INIT INFO
+
+# Silently exit if the kernel does not support modules.
+[ -f /proc/modules ] || exit 0
+[ -x /sbin/modprobe  ] || exit 0
+
+[ -f /etc/default/rcS ] && . /etc/default/rcS
+. /lib/lsb/init-functions
+
+PATH="/sbin:/bin"
+
+load_module() {
+  local module args
+  module="$1"
+  args="$2"
+
+  if [ "$VERBOSE" != no ]; then
+    log_action_msg "Loading kernel module $module"
+    modprobe $module $args || true
+  else
+    modprobe $module $args > /dev/null 2>&1 || true
+  fi
+}
+
+if [ "$VERBOSE" = no ]; then
+  log_action_begin_msg 'Loading kernel modules'
+fi
+
+# Loop over every line in /etc/modules.
+grep '^[^#]' /etc/modules | \
+while read module args; do
+  [ "$module" ] || continue
+  load_module "$module" "$args"
+done
+
+if [ "$VERBOSE" = no ]; then
+  log_action_end_msg 0
+fi
+
+exit 0
+

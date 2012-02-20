@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# A simple script to facilitate the use of the OSS compatibility library.
+# Usage:
+#	aoss <command> <command options and arguments>
+
+if [ -d /proc/asound ]; then
+  prefix=/usr
+  exec_prefix=${prefix}
+  LD_PRELOAD=${exec_prefix}/lib/libaoss.so${LD_PRELOAD:+:$LD_PRELOAD} exec "$@"
+else
+  echo "Warning: /proc/asound not found. Running without ALSA wrapper."
+  exec "$@"
+fi
+exit 1

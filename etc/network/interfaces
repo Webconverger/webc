@@ -1,0 +1,24 @@
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+allow-hotplug eth0 eth1 usb0
+
+iface eth0 inet dhcp
+	pre-up iptables-restore < /etc/iptables.conf
+
+# USB tethering & dongle support
+iface usb0 inet dhcp
+	pre-up iptables-restore < /etc/iptables.conf
+
+# Can be either fixed or wireless
+iface eth1 inet dhcp
+	pre-up iptables-restore < /etc/iptables.conf
+	wpa-driver wext
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+# The wireless network interface
+iface wlan0 inet dhcp
+	pre-up iptables-restore < /etc/iptables.conf
+	wpa-driver wext
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf

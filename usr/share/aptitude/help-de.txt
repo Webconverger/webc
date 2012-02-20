@@ -1,0 +1,127 @@
+                            Aptitude-Online-Hilfe
+
+Benutzen Sie die Pfeiltasten oder BildAuf/BildAb, um diese Hilfe zu lesen;
+drücken Sie die Eingabetaste bzw. Enter, um sie zu verlassen.
+
+Die folgenden Tasten sind in den Aptitude-Bildschirmen belegt. Weitere Tasten
+sind verfügbar und in der README-Datei dokumentiert. (Siehe "Benutzer-
+anleitung" im Aptitude-Hilfemenü.)
+
+   q            Beenden.
+   ?            Diese Hilfe anzeigen.
+
+   f            Vergessen, welche Pakete »neu« sind ('f' für »forget«).
+
+   Hoch oder k  Bewegen der Auswahl nach oben.
+   Runter oder j Bewegen der Auswahl nach unten.
+   BildAuf oder
+   Strg+b       Bewegen der Auswahl um eine Seite nach oben.
+   BildAb oder
+   Strg+f       Bewegen der Auswahl um eine Seite nach unten.
+   Pos1 oder
+   Strg+a       Bewegen der Auswahl an den Anfang der Liste.
+   Ende oder
+   Strg+e       Bewegen der Auswahl an das Ende der Liste.
+   ^            Die Auswahl eine Ebene höher bewegen.
+   Enter        Eine Gruppe von Paketen aus-/einklappen.
+   [            Eine Gruppe von Paketen und alle Untergruppen ausklappen.
+   ]            Eine Gruppe von Paketen und alle Untergruppen einklappen.
+
+   Strg+t       Aktivieren oder deaktivieren des Menüs.
+   F6           Zum nächsten Reiter des Hauptfensters wechseln.
+   F7           Zum vorherigen Reiter des Hauptfensters wechseln.
+
+   Enter        Informationen über ein Paket anzeigen.
+   C            Das Änderungsprotokoll (Changelog) eines Pakets anzeigen.
+   +            Ein Paket installieren oder aktualisieren bzw. nicht mehr
+                zurückhalten.
+   -            Ein Paket entfernen.
+   =            Ein Paket auf der inst. Version halten, nicht aktualisieren.
+   :            Ein Paket auf der inst. Version halten. Anders als '='
+                verhindert dies zukünftige Upgrades nicht.
+   _            Ein Paket und seine Konfigurationsdateien entfernen.
+   L            Ein Paket neuinstallieren.
+   M            Ein Paket als automatisch installiert markieren.
+                Solche Pakete werden gelöscht, sobald kein manuell
+                installiertes Paket mehr von ihnen abhängt.
+   m            Ein Paket als manuell installiert markieren.
+   F            Verbieten, ein Paket automatisch auf eine bestimmte Version
+                zu aktualisieren; neuere Versionen werden jedoch weiterhin
+                automatisch installiert. ('F' für »forbid«.)
+
+   u            Die Liste der verfügbaren Pakete aktualisieren.
+   U            Alle veralteten Pakete zum Aktualisieren markieren.
+   g            Alle ausstehenden (De-)Installationen und Aktualsierungen
+                durchführen.
+
+   Strg-u       Die letzte Aktion oder Aktionen rückgängig machen (Undo).
+   /            Suchen. (Normalerweise nach dem Namen eines Pakets;
+                siehe README bzw. Benutzeranleitung).
+   \            Sucht rückwärts.
+   n            Die letzte Suche wiederholen.
+   N            Die letzte Suche in die andere Richtung wiederholen.
+   b            Das nächste kaputte Paket suchen (»broken«).
+
+   v            Die verfügbaren Versionen eines Pakets anzeigen.
+   d            Die Abhängigkeiten eines Pakets anzeigen.
+   r            Die von diesem Paket abhängenden Pakete anzeigen.
+
+   D            Den Informationsbereich anzeigen/verstecken.
+   a            Im Infobereich eines Pakets nach oben scrollen.
+   z            Im Infobereich eines Pakets nach unten scrollen.
+   i            Durch die verschiedenen Informationsseiten schalten.
+
+   ,            Die vorherige Abhängigkeitslösung anzeigen.
+   .            Die nächste Abhängigkeitslösung anzeigen und falls nötig
+                erzeugen.
+   <            Die erste Abhängigkeitslösung zeigen.
+   >            Die letzte Abhängigkeitslösung zeigen.
+
+    Im interaktiven Auflöser:
+   a            Bestätigen einer Aktion, was bewirkt, dass es immer vor
+                Alternativen gewählt wird, oder diese abbrechen.
+   r            Eine Aktion abbrechen, was bewirkt, dass sie niemals gewählt
+                wird, oder eine Rücknahme abbrechen.
+
+
+  Pakete in der Paketliste werden standardmäßig wie folgt angezeigt:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+Die drei Zeichen auf der linken Seite der Ansicht bestimmen den aktuellen
+Zustand des Pakets. Der erste Buchstabe kennzeichnet den Status, der zweite
+die Aktion und der dritte kennzeichnet die »automatisch«-Markierung.
+Ihnen folgt der Paketname, die zugehörige Änderung im Plattenplatz und
+schließlich die aktuelle und verfügbare Version des Pakets.
+
+
+Die Zustandsspalte eines Pakets hat die folgenden möglichen Werte:
+
+   v - virtuell
+   B - kaputt (broken)
+   u - entpackt (unpacked)
+   C - halb konfiguriert
+   H - halb installiert
+   c - entfernt, aber Konfigurationsdateien sind noch vorhanden (nicht
+       restlos entfernt, d.h. nicht »purged«)
+   i - installiert
+   E - interner Fehler (sollte nicht vorkommen)
+
+Die Aktionsspalte eines Pakets hat die folgenden möglichen Werte:
+
+   h - zurückhalten
+   p - restlos entfernen (purge)
+   d - löschen
+   B - kaputt (broken)
+   i - installieren
+   r - neuinstallieren
+   u - aktualisieren (upgrade)
+   F - das verfügbare Upgrade wurde mit 'F' untersagt
+
+Falls vorhanden, ist die »automatisch«-Markierung auf »A« gesetzt, was
+ausdrückt, dass das Paket automatisch installiert wurde und entfernt wird,
+wenn nichts mehr von ihm abhängt.
+
+
+Im obigen Beispiel ist libsmbclient ein automatisch installiertes Paket. Es
+kann von Version 3.0.25a-1 auf Version 3.0.25a-2 aktualisiert werden, wird aber
+stattdessen gelöscht, was 2220 Kilobyte freigeben wird.

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Ureadahead ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/ureadahead.list ] || \
+	   [ -e /var/lib/live/config/ureadahead ]
+	then
+		return
+	fi
+
+	echo -n " ureadahead"
+
+	Configure_ureadahead
+}
+
+Configure_ureadahead ()
+{
+	# Disabling ureadahead
+	rm -f /etc/init/ureadahead*.conf
+
+	# Creating state file
+	touch /var/lib/live/config/ureadahead
+}
+
+Ureadahead

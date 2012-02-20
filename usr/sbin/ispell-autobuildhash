@@ -1,0 +1,357 @@
+#!/usr/bin/perl -w
+#
+#  script for ispell hash autorebuild in Debian systems
+#
+# Copyright 2003-2011 Agustin Martin Domingo <agmartin@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------
+
+use strict;
+use Debian::DictionariesCommon qw(dico_checkroot dico_activate_trigger);
+use Debconf::Client::ConfModule q(:all);
+use Getopt::Long;
+
+my $debug;
+my $dry_run;
+my $force;
+my $triggered;
+my $compatdir    = "/var/lib/ispell";
+
+# Set tmpdir base, honouring TMPDIR. Real tmpdir is set after options parsing.
+my $tmpdir_base  = $ENV{'TMPDIR'} || '/tmp';
+my $tmpdir;
+
+# ---------------------------------------------------------------------
+sub usage {
+# ---------------------------------------------------------------------
+  print STDERR "\nUsage:\tispell-autobuildhash [options]\n"
+    . "\n"
+    . "Options:\n"
+    . "\t--debug         Show ispell-autobuildhash debugging information.\n"
+    . "\t--dry-run       Show what would be done, but do nothing real.\n"
+    . "\t--force         Do the job regardless of versions comparisons.\n"
+    . "\t--triggered     Tell the script that is run in the triggers stage.\n";
+}
+
+# ---------------------------------------------------------------------
+sub debugprint {
+# ---------------------------------------------------------------------
+  print STDERR "@_\n" if $debug;
+}
+
+# ---------------------------------------------------------------------
+sub mymessage{
+# ---------------------------------------------------------------------
+  my $dict     = shift;
+  my $message  = join(" ",@_);
+  my $question = "dictionaries-common/ispell-autobuildhash-message";
+
+  subst($question,"xxpell","ispell");
+  subst($question,"XXpell","Ispell");
+  subst($question,"hashfile",$dict);
+  subst($question,"errormsg",$message);
+  fset ($question,"seen","false");
+  title("dictionaries-common: Running ispell-autobuildhash");
+  input("critical",$question);
+  go ();
+}
+
+sub old_myerror {
+  my $dict = shift;
+  print "
+** Error: @_
+
+This error was caused by package providing hash $dict, although it
+can be made evident during other package postinst. Please complain
+to the maintainer of package providing hash $dict. In the meantime
+you might need to remove package providing $dict.hash\n";
+  &auto_clean;
+  exit 1;
+}
+
+# ---------------------------------------------------------------------
+sub myerror {
+# ---------------------------------------------------------------------
+  my $dict = shift;
+  mymessage $dict,@_;
+}
+
+# ---------------------------------------------------------------------
+sub auto_clean {
+# ---------------------------------------------------------------------
+  if ( -d $tmpdir ){
+    unlink <$tmpdir/*>;
+    rmdir $tmpdir;
+  }
+}
+
+# ---------------------------------------------------------------------
+#      Handle autorebuilding
+# ---------------------------------------------------------------------
+
+sub autorebuild {
+  my $dict = shift;                            # The dictionary name
+  my $zmwl = "/usr/share/ispell/$dict.mwl.gz"; # the compressed munched wordlist
+  my $aff  = "/usr/lib/ispell/$dict.aff";      # the aff file
+  my $hash = "/var/lib/ispell/$dict.hash";     # the hash file
+  my $desc = "/usr/share/ispell/$dict.desc";   # the .desc file
+
+  die "ispell-autobuildhash: No argument passed to function autorebuild.\n" unless $dict;
+
+  print STDERR "ispell-autobuildhash: Processing \'$dict\' dict.\n";
+
+  my $tempfile = "$tmpdir/$dict.mwl";
+  if ( -e $aff ){
+    if ( -e $zmwl ){
+      my $gzip_cmd  = "gzip -dc $zmwl > $tempfile";
+      my $build_cmd = "buildhash -s $tempfile $aff $hash";
+      if ( $dry_run ) {
+	print STDERR "$gzip_cmd\n";
+	print STDERR "$build_cmd\n";
+      } else {
+	print STDERR "$gzip_cmd\n" if $debug;
+	system ("$gzip_cmd") == 0
+	  or myerror($dict,"Could not gunzip the munched wordlist for $dict");
+	print STDERR "$build_cmd\n" if $debug;
+	system ("$build_cmd") == 0
+	  or myerror($dict,"Could not build the hash file for $dict") ;
+      }
+    } elsif ( -e $desc ) {
+      if ( -x "/usr/sbin/update-ispell-hash" ) {
+	my $cmd = "update-ispell-hash -d $dict > /dev/null";
+	if ( $dry_run ) {
+	  print STDERR "$cmd\n";
+	} else {
+	  print STDERR "$cmd\n" if $debug;
+	  system ("$cmd") == 0
+	    or myerror($dict,"Problems running update-ispell-hash for $dict");
+	}
+	debugprint "Found and run update-ispell-hash";
+      } elsif ( -x "/usr/sbin/update-ipolish-hash" ) {
+	my $cmd = "update-ipolish-hash -d $dict > /dev/null";
+	if ( $dry_run ) {
+	  print STDERR "$cmd\n";
+	} else {
+	  print STDERR "$cmd\n" if $debug;
+	  system ("$cmd") == 0
+	    or myerror($dict,"Problems running update-ipolish-hash for $dict");
+	}
+	debugprint "Found and run update-ipolish-hash";
+      } else {
+	myerror($dict,"Could not find any of update-ispell-hash, update-ipolish-hash");
+      }
+    } else {
+      myerror($dict,"Could not find $zmwl");
+    }
+  } else {
+    myerror $dict,"Could not find affix file $aff";
+  }
+  return "ok";
+}
+
+# ---------------------------------------------------------------------
+#                   Get ispell compat version
+# ---------------------------------------------------------------------
+
+sub get_ispell_compat {
+  my $ispell_compat;
+  my $ispellcompatfile = "/usr/share/ispell/ispell.compat";
+
+  if ( -e $ispellcompatfile ){
+    open (COMPAT,"$ispellcompatfile");
+    chomp ( $ispell_compat = <COMPAT> );
+    close COMPAT;
+  } elsif ( system("which ispell > /dev/null 2>&1") == 0 ){
+    $ispell_compat = (split(" ",`ispell -v | head -n 1`))[4];
+  }
+
+  return $ispell_compat;
+}
+
+# ---------------------------------------------------------------------
+#                        The main program
+# ---------------------------------------------------------------------
+
+dico_checkroot();
+
+# Options processing
+GetOptions ('debug'     => \$debug,
+	    'dry-run'   => \$dry_run,
+	    'force'     => \$force,
+	    'triggered' => \$triggered
+  ) or usage();
+
+unless ( $triggered or $force ){
+  exit if dico_activate_trigger("ispell-autobuildhash");
+}
+
+# Prepare temporary directory
+$tmpdir = `mktemp -d "$tmpdir_base/ispell-auto.XXXXXXXXXX"`
+      or die "ispell-autobuildhash: Cannot make temporary directory under \"$tmpdir_base\". Aborting ...\n";
+chomp $tmpdir;
+
+$SIG{INT}     = \&auto_clean;
+$SIG{KILL}    = \&auto_clean;
+$SIG{TERM}    = \&auto_clean;
+$SIG{__DIE__} = \&auto_clean;
+
+print STDERR "ispell-autobuildhash: Using temporary directory \"$tmpdir\"\n"
+  if $debug;
+
+if ( my $ispell_compat = get_ispell_compat() ){
+  foreach my $dict ( <$compatdir/*.compat> ){
+    my $dict_compat = "forced";
+    $dict =~ s/\.compat$//;
+    $dict =~ s/.*\///;
+
+    unless ( $force ) {
+      open (COMPAT,"$compatdir/$dict.compat");
+      $dict_compat = <COMPAT>;
+      close COMPAT;
+      chomp $dict_compat if $dict_compat;
+      $dict_compat = 0 unless $dict_compat;
+    }
+
+    if ($force || $ispell_compat ne $dict_compat) {
+      print STDERR "--\n" if ( $debug or $dry_run );
+      debugprint "$dict => ispell_compat: [$ispell_compat]; dict_compat: [$dict_compat]";
+      if ( autorebuild $dict ) {
+	if ( $dry_run ){
+	  print STDERR "$ispell_compat > $compatdir/$dict.compat\n";
+	} else {
+	  open (COMPAT,">","$compatdir/$dict.compat");
+	  print COMPAT "$ispell_compat\n";
+	  close COMPAT;
+	  debugprint "Updated $compatdir/$dict.compat to $ispell_compat";
+	}
+      } else {
+	debugprint " --- ispell-autobuildhash: $compatdir/$dict.compat not updated because of an error";
+      }
+    }
+  }
+} else {
+  debugprint "ispell-autobuildhash: no ispell compat info. ispell may not be installed. Aborting ...\n";
+}
+
+&auto_clean unless $debug;
+
+__END__
+
+=head1 NAME
+
+B<ispell-autobuildhash> - Autobuilding the ispell hash file for some dicts
+
+=head1 SYNOPSIS
+
+ ispell-autobuildhash [--force]
+
+   Options:
+    --debug      Show some extra ispell-autobuildhash information.
+    --dry-run    Show what would be done, but do nothing real.
+    --force      Rebuild the hash file for all dicts providing a
+                 compat file skipping the test.
+    --triggered  Tell the script that is run in the triggers stage.
+
+=head1 DESCRIPTION
+
+B<ispell-autobuildhash> is a script that will manage ispell hash files
+autobuild, intended to be called from the dictionaries-common tools.
+Depending on the ispell
+compatibility level and on the compatibility level used for the hash file
+if present, will decide whether it must be rebuilt or not. This script will
+only work on ispell packages prepared to use it, it will do nothing for other
+ispell dict packages.
+
+=head1 OPTIONS
+
+ --debug      Show some extra ispell-autobuildhash information.
+ --dry-run    Show what would be done, but do nothing real.
+ --force      Rebuild the hash file for all dicts providing a compat
+              file regardless of the compatibility levels found.
+ --triggered  Tell the script that is run in the triggers stage. When
+              run under dpkg control, do not try to set the
+              'ispell-autobuildhash' trigger, but run real
+              B<ispell-autobuildhash> code. When not run under dpkg
+              control, real code will always be run and '--triggered'
+              option has no real effect.
+
+=head1 PACKAGE MAINTAINERS
+
+To use this system, B<ispell-autobuildhash> expects a F<$dict.compat> file
+in F</var/lib/ispell> (I<$dict> stands for the hash or affix file basename)
+containing ispell major or compatibility version for last successful build
+or "0" or en empty file if hash is to be rebuild, as is for dictionary
+instalation and upgrades.
+
+When upgrading B<ispell>, script will check if version in I<$dict.compat>
+is different from I<ispell.compat> and rebuild if so, updating
+I<$dict.compat> with the new value. The particular way things are done depends
+on whether your dict has a single source or a multiple source like ipolish has.
+
+The most common case is having a single source. In this case you must put
+the F<$dict.aff> file at F</usr/lib/ispell/$dict.aff> as usual and the munched
+wordlist compressed with gzip at F</usr/share/ispell/$dict.mwl.gz>.
+
+This script supports the way ipolish allows selection of subdictionaries
+to be put in the hash file. It will detect the presence of  the main
+language .desc file and call update-ipolish-hash as appropriate.
+
+Although this script looks for the existence of a update-ispell-hash script
+with supposedly similar functionality to update-ipolish-hash, this latter
+does not really exists, although it might be added at some time to ispell or
+to the dictionaries-common system, if enough demand is found.
+
+If your package provides more than one ispell dictionary you will need to
+do the steps above for each dictionary.
+
+Dictionaries-common scripts will call internally this script and create a
+hash file at F</var/lib/ispell/$dict.hash>. You must set a symlink to that
+file from F</usr/lib/ispell/$dict.hash>.
+
+Ispell dictionary packages using this script must make sure that
+I<$dict.compat> is reset on every new install/upgrade, so hash is rebuilt.
+They must also make sure that I<$dict.compat> and F</var/lib/ispell/$dict.hash>
+are removed on package removal
+
+As of version C<1.10>, B<installdeb-ispell> script will understand
+C<'auto-compat'> field in F<$dict.info-ispell> file to help with this by
+adding needed debhelper snippets. Put in that entry the base name(s) of
+your compat file(s) and check resulting maintainer scripts after build.
+
+Note that you are no longer suggested to ship empty files at
+F</var/lib/ispell/$dict.compat> and F</var/lib/ispell/$dict.hash> to help
+with reset/removal of those files, but explicitly create/update them on
+install and explicitly remove them on removal.
+
+B<ispell> maintainer should also call this script from package postinst.
+When comparing versions it will get the ispell version from file
+F</usr/share/ispell/ispell.compat>, or if it does not exists, from the
+upstream version as given in the first line of 'B<ispell -vv> output.
+
+=head1 AUTHOR
+
+Agustin Martin <agmartin@debian.org>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2011 Agustin Martin <agmartin@debian.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+=cut
+

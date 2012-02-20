@@ -1,0 +1,52 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Tzdata ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/tzdata.list ] || \
+	   [ -e /var/lib/live/config/tzdata ]
+	then
+		return
+	fi
+
+	echo -n " tzdata"
+
+	Configure_tzdata
+}
+
+Configure_tzdata ()
+{
+	if [ -n "${LIVE_TIMEZONE}" ]
+	then
+		_AREA="$(echo ${LIVE_TIMEZONE} | cut -f1 -d '/')"
+		_ZONE="$(echo ${LIVE_TIMEZONE} | cut -f2 -d '/')"
+	else
+		_AREA="Etc"
+		_ZONE="UTC"
+	fi
+
+debconf-communicate -fnoninteractive live-config > /dev/null << EOF
+set tzdata/Areas ${_AREA}
+set tzdata/Zones/${_AREA} ${_ZONE}
+EOF
+
+	cp -f /usr/share/zoneinfo/${_AREA}/${_ZONE} /etc/localtime
+
+	if [ -n "${LIVE_UTC}" ]
+	then
+		sed -i -e "s|UTC=.*|UTC=${LIVE_UTC}|" /etc/default/rcS
+	fi
+
+	# Creating state file
+	touch /var/lib/live/config/tzdata
+}
+
+Tzdata

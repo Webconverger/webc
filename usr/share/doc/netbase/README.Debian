@@ -1,0 +1,22 @@
+README for netbase
+==================
+
+ * ifup(8), ifdown(8), and interfaces(5)
+
+The ifup and ifdown commands configure network interfaces as specified
+in the /etc/network/interfaces configuration file.
+
+ifup -a is called from /etc/init.d/networking as part of the bootup
+process, or for specific interfaces by the hotplug subsystem.
+
+ * /etc/network/options
+
+This file is deprecated, and if present should be replaced by values
+in /etc/sysctl.conf or equivalent custom scripts.
+The relevant sysctl values are:
+
+ip_forward=yes:	  net.ipv4.ip_forward = 1 
+spoofprotect=yes: net.ipv4.conf.default.rp_filter = 1
+                  net.ipv4.conf.all.rp_filter = 1
+syncookies=yes:   net.ipv4.tcp_syncookies = 1
+

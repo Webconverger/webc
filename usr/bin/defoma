@@ -1,0 +1,119 @@
+#! /usr/bin/perl -w
+package main;
+
+use strict;
+use POSIX;
+use vars qw($COMNAME %SIG $ARG0);
+use File::Copy;
+use Debian::Defoma::Common;
+use Debian::Defoma::Font;
+use Debian::Defoma::Id;
+use Debian::Defoma::Subst;
+use Debian::Defoma::User;
+import Debian::Defoma::Common qw(&mylock &arg_check &arg_check_category
+				 &get_files &SUBSTRULEDIR &ERROR &readfile);
+import Debian::Defoma::User qw(&defoma_user_init &defoma_user_update_font);
+
+$ARG0 = $0;
+$ARG0 =~ /(.*)\/(.*)/;
+$COMNAME = $2;
+my $Type;
+
+printv(join(' ', $ARG0, ARGS));
+
+$SIG{'HUP'} = \&exitfunc;
+$SIG{'INT'} = \&exitfunc;
+$SIG{'QUIT'} = \&exitfunc;
+$SIG{'TERM'} = \&exitfunc;
+
+sub exitfunc {
+    printw('Teminate Signal!');
+    term_all();
+    mylock(0);
+
+    exit ERROR;
+}
+
+sub usage {
+    if ($COMNAME eq 'defoma-font' || $COMNAME eq 'defoma') {
+	printm("defoma-font [option..] register <category> <font> <hints>..");
+	printm("defoma-font [option..] unregister <category> <font>");
+	printm("defoma-font [option..] reregister <category> <font> <hints>..");
+	printm("defoma-font [option..] purge <category> <font>");
+	printm("defoma-font [option..] register-all <hintfile>");
+	printm("defoma-font [option..] unregister-all <hintfile>");
+	printm("defoma-font [option..] reregister-all <hintfile>");
+	printm("defoma-font [option..] purge-all <hintfile>");
+	printm("defoma-font [option..] register-one <hintfile> <font>");
+	printm("defoma-font [option..] unregister-one <hintfile> <font>");
+	printm("defoma-font [option..] reregister-one <hintfile> <font>");
+	printm("defoma-font [option..] purge-one <hintfile> <font>");
+    }
+    if ($COMNAME eq 'defoma-app' || $COMNAME eq 'defoma') {
+	printm("defoma-app [option..] clean|update|ignore <app> [<category>..]");
+	printm("defoma-app [option..] purge <app>");
+    }
+    if ($COMNAME eq 'defoma-subst' || $COMNAME eq 'defoma') {
+	printm("defoma-subst [option..] new-rule <rulename> <extra lines>..");
+	printm("defoma-subst [option..] add-rule <rulename> <rules>..");
+	printm("defoma-subst [option..] remove-rule <rulename> <rules>..");
+	printm("defoma-subst [option..] edit-rule <rulename>");
+	printm("defoma-subst check-rule <rulename>");
+    }
+    if ($COMNAME eq 'defoma-id' || $COMNAME eq 'defoma') {
+	printm("defoma-id [option..] list-cache <app>");
+	printm("defoma-id [option..] install <app>[/<id-cache>] <id> <font>");
+	printm("defoma-id [option..] exclude <app>[/<id-cache>] <id> <font>");
+	printm("defoma-id [option..] unset <app>[/<id-cache>] <id> <font>");
+	printm("defoma-id [option..] add-alias <app>[/<id-cache>] <id> <font> <alias>");
+	printm("defoma-id [option..] remove-alias <app>[/<id-cache>] <alias> <font>");
+    }
+    if ($COMNAME eq 'defoma-user' || $COMNAME eq 'defoma') {
+	printm("defoma-user [options..] update");
+	printm("defoma-user [options..] reconfigure");
+    }
+}
+
+sub usage_and_exit {
+    usage();
+    exit ERROR;
+}
+
+sub init_all {
+    defoma_font_init();
+    defoma_user_init() if (USERSPACE);
+    &Debian::Defoma::Configure::init();
+    &Debian::Defoma::Configure::init2(@_);
+    defoma_user_update_font() if (USERSPACE);
+}
+
+sub term_all {
+    &Debian::Defoma::Configure::term();
+    defoma_font_term();
+}
+
+usage_and_exit() if (@ARGV == 0);
+
+if ($COMNAME eq 'defoma') {
+    $Type = shift(@ARGV);
+    unless (defined($Type)) {
+	usage_and_exit;
+    }
+} else {
+    $COMNAME =~ /^defoma-(.*)$/;
+    $Type = $1;
+}
+
+my $command = shift(@ARGV) || usage_and_exit;
+
+if ($command =~ /^-/) {
+    printe("Unknown option: $command.");
+    exit ERROR;
+}
+
+if ($Type =~ /^(font|app|subst|id|user)$/) {
+    require("/usr/share/defoma/libdefoma-$Type.pl");
+    main($command);
+}
+
+usage_and_exit();

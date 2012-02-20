@@ -1,0 +1,127 @@
+                             Pomoc do aptitude
+
+  Do przeglądania pomocy można używać klawiszy strzałek oraz PageUp/PageDown.
+Wciśnięcie klawisza "q" pozwala ją opuścić.
+
+  Następujące klawisze są dostępne domyślnie na ekranach informacyjnych
+aptitude. Ta lista nie jest kompletna. Informacje o innych dostępnych
+klawiszach znajdują się w pliku README.
+
+  "q":           Kończy program.
+  "?":           Wyświetla ten tekst.
+
+  "f":	 	 Czyści listę "nowych" pakietów.
+  
+  Góra lub "k":  Przesuwa zaznaczenie w górę.
+  Dół lub "j":   Przesuwa zaznaczenie w dół.
+  Page-Up lub
+  Control-b:     Przesuwa zaznaczenie o stronę w górę.
+  Page-Down lub
+  Control-f:     Przesuwa zaznaczenie o stronę w dół.
+  Home lub
+  Control-a:     Przesuwa zaznaczenie do pierwszego pakietu w liście.
+  End lub
+  Control-e:     Przesuwa zaznaczenie do ostatniego pakietu w liście.
+  "^":           Przesuwa zaznaczenie do elementu nadrzędnego.
+  Enter:         Zwija lub rozwija grupę pakietów.
+  "[":           Rozwija grupę pakietów i wszystkie jej podgrupy.
+  "]":           Zwija grupę pakietów i wszystkie jej podgrupy.
+
+  Control-t:     Otwiera lub zamyka menu.
+  "F6":          Przechodzi do następnej zakładki na ekranie głównym.
+  "F7":          Przechodzi do poprzedniej zakładki na ekranie głównym.
+
+  Enter:         Wyświetla informacje o pakiecie.
+  "C":           Wyświetla dziennik zmian dla pakietu.
+  "+":           Zaznacza pakiet do instalacji lub uaktualnienia,
+                 albo przywraca możliwość uaktualnienia zatrzymanego pakietu.
+  "-":           Zaznacza pakiet do usunięcia.
+  "=":           Zatrzymuje pakiet w bieżącej wersji i zapobiega jego
+                 uaktualnieniom.
+  ":":           Pozostawia pakiet w bieżącej wersji. W przeciwieństwie do
+                 zatrzymania nie zapobiega jego przyszłym uaktualnieniom.
+  "_":           Zaznacza pakiet do usunięcia wraz z plikami konfiguracyjnymi.
+  "L":           Zaznacza pakiet do przeinstalowania.
+  "M":           Zaznacza pakiet jako zainstalowany automatycznie.
+                 Pakiety automatycznie zainstalowane są usuwane, gdy nie zależą
+                 od nich żadne inne ręcznie zainstalowane pakiety.
+  "m":           Zaznacza pakiet jako zainstalowany ręcznie.
+  "F":           Zabronienie aktualizacji pakietu do konkretnej wersji.
+                 Nowe wersje będą instalowane automatycznie.
+
+  "u":           Uaktualnia listę dostępnych pakietów.
+  "U":           Zaznacza do aktualizacji wszystkie pakiety, które posiadają
+                 uaktualnienia.
+  "g":           Wykonuje wszystkie zaplanowane instalacje, aktualizacje oraz
+                 usunięcia pakietów.
+
+  Control-u:     Cofa ostatnią akcję lub grupę akcji.
+  "/":           Wyszukuje pakiety (domyślnie według nazwy; więcej informacji
+                 w pliku README/podręczniku użytkownika).
+  "\":           Wyszukuje pakiety wstecz.
+  "n":           Powtarza ostatnie wyszukiwanie.
+  "N":           Powtarza ostatnie wyszukiwanie w przeciwnym kierunku.
+  "b":           Wyszukuje następny pakiet z niespełnionymi zależnościami.
+
+  "v":           Wyświetla dostępne wersje pakietu.
+  "d":           Wyświetla zależności pakietu.
+  "r":           Wyświetla pakiety zależące od danego pakietu.
+
+  "D":           Wyświetla/ukrywa dodatkowy obszar informacji o pakietach.
+  "a":           Przewija obszar informacji o pakietach w górę.
+  "z":           Przewija obszar informacji o pakietach w dół.
+  "i":           Przełącza cyklicznie widoki informacji o pakietach.
+
+  ",":           Wyświetla poprzednie rozwiązanie problemu z zależnościami.
+  ".":           Wyświetla następne rozwiązanie problemu z zależnościami,
+                 znajdując nowe rozwiązanie jeśli potrzeba.
+  "<":           Wyświetla pierwsze rozwiązanie problemu z zależnościami.
+  ">":           Wyświetla ostatnie rozwiązanie problemu z zależnościami.
+
+  W mechanizmie rozwiązywania zależności:
+  "a":           Zatwierdza akcję, powodując że będzie zawsze wybierana
+                 zamiast innych, lub wycofuje zatwierdzenie.
+  "r":           Odrzuca akcję, powodując że nigdy nie będzie wybierana,
+                 lub wycofuje odrzucenie.
+
+
+  Pakiety w liście pakietów są domyślnie wyświetlane jak poniżej:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  Trzy pierwsze znaki w widoku pakietów określają bieżący stan pakietu.
+Pierwsza litera jest flagą "stanu", druga litera jest flagą "akcji",
+zaś trzecia litera jest flagą określającą, że pakiet jest (za)instalowany
+"automatycznie". Następna jest nazwa pakietu, związana z nim zmiana
+zajętego miejsca na dysku, a na końcu bieżąca i dostępne wersje pakietu.
+
+
+  Możliwe wartości flagi stanu pakietu:
+
+   v - wirtualny
+   B - niespełnione zależności
+   u - rozpakowany
+   C - niedokonfigurowany
+   H - niedoinstalowany
+   c - usunięty, nie wyczyszczony (pozostały pliki konfiguracyjne)
+   i - zainstalowany
+   E - błąd wewnętrzny (nie powinno wystąpić)
+
+  Możliwe wartości flagi akcji dla pakietu:
+
+   h - zatrzymanie
+   p - wyczyszczenie
+   d - usunięcie (skasowanie)
+   B - niespełnione zależności
+   i - instalacja
+   r - ponowna instalacja
+   u - aktualizacja
+
+  Jeśli występuje, flaga "automatycznie" ma wartość "A" i oznacza,
+że pakiet był zainstalowany automatycznie i zostanie usunięty, gdy
+nie będzie żadnych zależących od niego pakietów.
+
+
+  W powyższym przykładzie libsmbclient jest pakietem zainstalowanym
+automatycznie. Mógłby być uaktualniony z wersji 3.0.25a-1 do wersji
+3.0.25a-2, ale w zamian będzie usunięty, zwalniając 2200kB miejsca
+na dysku.

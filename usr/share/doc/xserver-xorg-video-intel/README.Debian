@@ -1,0 +1,13 @@
+xserver-xorg-video-intel (2:2.13.0-2) unstable; urgency=low
+
+  * Starting from 2.10, the Intel X driver depends on a kernel driver for
+    mode setting (that's called KMS). The corresponding kernel option is
+    CONFIG_DRM_I915, and is enabled in Debian kernels.
+  * To enable KMS, either of those should be sufficient:
+     + /etc/modprobe.d/i915-kms.conf should contain:
+         options i915 modeset=1
+     + CONFIG_DRM_I915_KMS=y should be set in the kernel config.
+  * If you have issues with this driver, the "vesa" or "fbdev" drivers
+    may be useful fallbacks.
+
+ -- Cyril Brulebois <kibi@debian.org>  Sun, 07 Nov 2010 19:51:56 +0100

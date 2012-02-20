@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for hu.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Szakaszba nem sorolt csomagok\n E csomagok nincsenek szakaszhoz rendelve. Hiba lehet a Packages fájlban?";
+    Virtual	"Virtuális csomagok\n E csomagok nem léteznek; más csomagokat neveznek meg általános feladatok ellátásához.";
+    Tasks	"A gépet egyes feladatokra beállító csomagok\n A 'Tasks' szakasz csomagjaiban nincsenek fájlok; ezek pusztán függőségi csomagok. E csomagok adott feladatra megadott készletek könnyű kijelölését nyújtják.";
+
+    admin	"Felügyeleti eszközök (szoftverek telepítése, felhasználók kezelése, stb.)\n Az 'admin' szakasz csomagjai segítségével szoftverek telepítése, felhasználók kezelése, a rendszer beállítása és figyelése, a hálózati forgalom vizsgálata és hasonló felügyeleti feladatok végezhetők.";
+    alien	"Más formátumokból átalakított csomagok (tgz, rpm, stb.)\n Az 'alien' szakaszban lévő csomagokat az 'alien' program készítette nem-Debian csomag formátumokból.";
+    base	"A Debian alaprendszer\n Az 'alap' szakaszban lévő csomagok a telepítő részei.";
+    comm	"Faxmodemek és más kommunikációs eszközök programjai\n A 'comm' szakasz csomagjaival modemek és más kommunikációs hardvereszközök vezérelhetők. Ide tartozik a faxmodemek vezérlése (pl. a PPP betárcsázó internet kapcsolathoz és az eredetileg ehhez készült programok, pl. a zmodem/kermit), vagy a mobilok vezérléséhez, FidoNet felülethez vagy BBS futtatáshoz írt szoftverek.";
+    devel	"Szoftverfejlesztő eszközök\n A 'devel' szakasz csomagjai új szoftverek írásához és meglévők továbbfejlesztéséhez készültek. A szoftvereiket nem maguk fordító felhasználóknak nem lesz túl sok szoftverre szükségük e szakaszból.";
+    doc		"Dokumentációk és ezek olvasásához készült programok\n A 'doc' szakasz csomagjai a Debian rendszer részeinek dokumentációi vagy ezeket megtekintő programok.";
+    editors	"Szövegszerkesztők és feldolgozók\n Az 'editors' szakasz csomagjai főleg sima ASCII szerkesztők. Ezek nem feltétlenül szövegfeldolgozók, bár néhány ilyen is található e szakaszban.";
+    electronics	"Áramkör és elektronikai programok\n Az 'electronics' szakasz áramkörtervezőket, szimulátorokat és mikrokontoller asszemblereket tartalmaz és ehhez hasonló szoftvereket.";
+    embedded	"Beágyazott rendszerek programjai\n Az 'embedded' szakasz csomagjai beágyazott eszközökhöz készültek. A beágyazott eszközök spéci hardver eszközök egy mai asztali rendszernél jóval kisebb teljesítménnyel, mint például: PDA, mobil, vagy egy tivo.";
+    gnome	"A GNOME asztali rendszer\n A GNOME egy könnyen-kezelhető linuxos munkakörnyezetet adó szoftvergyűjtemény.  A 'gnome' szakasz csomagjai vagy a GNOME környezet részei vagy erősen integráltak e környezettel.";
+    games	"Játékok és vicces programok\n A 'games' szakaszban elsősorban szórakoztató programok vannak.";
+    graphics	"Képeket létrehozó, néző és szerkesztő eszközök\n A 'graphics' szakasz csomagjai képeket néző, feldolgozó és kezelő szoftvereket, grafikus hardvereket (pl. videókártyák, szkennerek, digitális kamerák) kezelő szoftvereket és képkezelő programozási eszközöket tartalmaznak.";
+    hamradio	"Amatőr rádiós szoftverek\n A 'hamradio' szakasz csomagjai amatőr rádiósoknak készültek.";
+    interpreters "Értelmezők értelmezett nyelvekhez\n Az 'interpreters' szakasz csomagjai tartalmazzák a Python, Perl, Ruby és más nyelvek értelmezőit és függvénytárait.";
+    kde		"A KDE asztali rendszer\n A KDE egy könnyen kezelhető linuxos munkakörnyezetet adó szoftvergyűjtemény.  A 'kde' szakasz csomagjai vagy a KDE környezet részei vagy erősen integráltak e környezettel.";
+    libdevel	"Fejlesztő fájlok függvénytárakhoz\n A 'libdevel' szakasz csomagjai a 'libs' szakaszban lévő függvénytárakat használó programok építéséhez szükséges fájlokat tartalmazzák. Csak akkor van rájuk szükséged, ha magad akarsz szoftvereket fordítani.";
+    libs	"Szoftverrutinok gyűjteménye\n A 'libs' szakasz csomagjai más programok számára szükséges szolgáltatásokat biztosítanak.  Nagyon kevés kivételtől eltekintve, ezen szakasz csomagjait nem kell telepítésre kijelölni, a csomagkezelő rendszer telepíti őket, ha a függőségek szükségessé teszik.";
+    perl	"Perl értelmező és függvénytárai\n A 'perl' szakasz csomagjai adják a Perl nyelvet és számos 3.-fél függvénytárat hozzá. Ha nem írsz Perl programokat, nem kell közvetlenül telepítened csomagok innen; a csomagkezelő felteszi, amelyek kellenek.";
+    python	"Python értelmező és függvénytárai\n A 'python' szakasz csomagjai adják a Python nyelvet és számos 3.-fél függvénytárat hozzá. Ha nem írsz Python programokat, nem kell közvetlenül telepítened csomagok innen; a csomagkezelő felteszi, amelyek kellenek.";
+    mail	"Email író, küldő és irányító programok\n A 'mail' szakasz programjai levélolvasókat, levélküldő démonokat, levelező lista szoftvereket, levél-szemét szűrőket és más email szoftvereket tartalmaznak.";
+    math	"Numerikus analízis és más matematika szoftverek\n A 'math' szakasz programjai számológépeket, matematikai nyelveket (például Mathematica-jellegűeket), szimbolikus algebra csomagokat és matematikai objektumokat megjelenítő  programokat tartalmaznak.";
+    misc	"Más szoftverek\n A 'misc' szakasz csomagjai még egyik osztályba sem sorolhatók.";
+    net		"Különböző hálózati szolgáltató és kapcsolódó programok\n A 'net' szakasz csomagjai számos protokollhoz klienseket és kiszolgálókat, alacsony-szintű protokollok hibakeresését és kezelését végző eszközöket, IM rendszereket és más hálózati szoftvereket adnak.";
+    news	"Usenet kliensek és kiszolgálók\n A 'news' szakasz csomagjai a Usenet elosztott hír rendszerhez kapcsolódnak. Hírolvasókat és kiszolgálókat tartalmaznak.";
+    oldlibs	"Elavult függvénytárak\n Az 'oldlibs' szakasz csomagjai elavultak és nem használtak új szoftverekben, Kompatibilitási okokból szerepelnek itt.\n .\n Pár kivétellel sosem kell innen magadnak telepítened; a csomagkezelő felteszi, ha kell valamelyik.";
+    otherosfs	"Emulátorok és más fájlrendszereket kezelő szoftverek\n Az 'otherosfs' szakasz csomagjai hardvereket és oprendszereket emulálnak és eszközöket adnak különféle oprendszerek és hardverek közti adatcserére. (például DOS flopik, Palm-ok stb.)\n  .\n Több CD-író és hasonló szoftver is ITT található.";
+    science	"Tudományos szoftverek\n A 'science' szakasz csomagjai csillagászati, biológiai, kémiai és más tudományos eszközöket tartalmaznak.";
+    shells	"Parancshéjak és különféle konzolkörnyezetek\n A 'shells' szakasz csomagjai parancssoros felületeket adnak.";
+    sound	"Hangok lejátszására szolgáló programok és hangrögzítők\n A 'sound' szakasz csomagjai hanglejátszókat, rögzítőket, kódolókat, keverőket, hangerő-szabályzókat, MIDI szekvencereket, kottagrafikai programokat, hang-meghajtókat és különböző hangfeldolgozó szoftvereket tartalmaznak.";
+    tex		"A TeX szedőrendszer\n A 'tex' szakasz csomagjai a TeX-hel, a minőségi szedőrendszerrel kapcsolatos programokat adják. Ebben van a TeX maga, a TeX csomagok, a TeX rendszerre szabott szerkesztők, a TeX forrás és TeX kimeneti fájlokat más formátumra alakító eszközök, a TeX betűk és más TeX-hel kapcsolatos szoftverek.";
+    text	"Szövegfeldolgozó eszközök\n A 'text' szakasz csomagjai szövegszűrőket és feldolgozókat, helyesírás-ellenőrzőket, szótár programokat, karakter és szöveges fájl formátum váltókat (pl.: Unix, DOS), szövegformázókat és más sima szövegeket kezelő szoftvereket tartalmaznak.";
+    utils	"Különféle rendszereszközök\n A 'utils' szakasz csomagjai egyedi segédeszközöket tartalmaznak.";
+    web		"Web böngészők, kiszolgálók, proxik és más eszközök\n A 'web' szakasz csomagjai Web böngészőket, Web kiszolgálókat és proxikat, CGI szkript és Web-alapú programok írásához készült eszközöket, előre megírt Web-alapú programokat és a World Wide Web-bel kapcsolatos más szoftvereket tartalmaznak.";
+    x11		"Az X ablakozó rendszer és kapcsolódó szoftverek\n Az 'x11' csomagok tartalmazzák az X ablakozó rendszer alap magját biztosító csomagokat, ablakkezelőket és a gyorsabb munkakörnyezeteket, segédprogramokat az X rendszerhez és más programokat, melyek az X felhasználói felületét használják és nem illenek máshova.";
+
+    main	"A fő Debian archívum\n A Debian terjesztés a 'main' felső szintű szakaszban lévő csomagok összességéből áll. Minden csomag a 'main' szakaszban Szabad Szoftver.\n .\n Amennyiben még nem tudod teljesen pontosan, a Debian milyen szoftvereket minősít Szabad Szoftvernek, keresd fel ezt az oldalt:\nhttp://www.debian.org/social_contract#guidelines";
+    contrib	"A Debian-rendszerbe nem illő szoftverektől függő programok\n A 'contrib' szakaszban lévő csomagok NEM részei a Debian rendszernek!!\n .\n E csomagok Szabad Szoftverek, de olyan csomagoktól függenek, melyek nem részei a Debiannak. Ennek oka, hogy vagy nem Szabad Szoftverek, de nem-szabad - non-free archívumban létezik belőle becsomagolt példány, vagy a Debian egyáltalán nem terjesztheti őket, vagy (ritka esetben) még senki nem csomagolta be őket.\n .\n Amennyiben még nem tudod teljesen pontosan, a Debian milyen szoftvereket minősít Szabad Szoftvernek, keresd fel ezt az oldalt:\nhttp://www.debian.org/social_contract#guidelines";
+    non-free	"Nem szabad szoftverek\n A 'non-free' szakasz NEM része a Debiannak ! \n .\n E csomagok nem felelnek meg a Debian Szabad Szoftver Irányelvek (lásd alább) által meghatározott követelmény-rendszernek. Kizárólag akkor használhatod e programokat, ha elolvasod azok licencét, a rád vonatkozó törvények értelmében elfogadhatod a licencben megadott feltételeket és minden egyes korlátozását betartod.\n .\n Ha jelen pillanatban nem tudod teljesen pontosan, a Debian milyen szoftvereket minősít Szabad Szoftvernek, keresd fel ezt az oldalt:\nhttp://www.debian.org/social_contract#guidelines";
+    non-US	"Az USA-ban nem tárolt programok\n A 'non-US' csomagok általában titkosítások tartalmaznak; néhány az USA-ban szabadalmaztatott algoritmust valósít meg. Ezért ezek nem exportálhatók az USA-ból, ennélfogva ezeket olyan szervereken tároljuk, melyek a Szabad Világban vannak.\n .\n Hasznos tudni: a Debian Projekt jelenleg befésüli a titkosító szoftvereket az USA-beli archívumokba, miután tárgyalt jogi szakértőkkel a kiviteli szabályok jelenlegi változásairól. Ezért a legtöbb csomag, ami korábban itt volt, már sikeresen átkerült a 'main' szakaszba.";
+  };
+};
+

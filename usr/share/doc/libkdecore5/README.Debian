@@ -1,0 +1,23 @@
+Upgrading from Debian Lenny to Debian Squeeze
+---------------------------------------------
+
+KDE 4 applications on Debian Lenny use ~/.kde4 directory to store user settings
+and data. However, this has changed in Debian Squeeze. Once kdelibs5 package is
+upgraded (or multiple new lib* packages repace it), all newly started KDE 4
+applications will switch to using ~/.kde directory for this purpose.
+
+In order to avoid data loss, you should make sure there are no KDE 4
+applications running when upgrading. It is also recommended to terminate all
+running KDE sessions first.
+
+You may use Kaboom, the Debian KDE Settings Migration Wizard, to migrate your
+old KDE 4 settings to a new location. The wizard also features backing up of
+exising KDE settings to protect your data if something goes wrong with upgrade.
+Please refer to http://pkg-kde.alioth.debian.org/kaboom.html for more
+information.
+
+Kaboom will start automatically when you start a KDE 4 session for the first
+time after upgrade from KDE 3.5 desktop shipped with Debian Lenny. However, if
+you only use individual KDE 4 applications, you will need to run Kaboom
+manually. Executable is named 'kaboom' and it is included in the kaboom
+package.

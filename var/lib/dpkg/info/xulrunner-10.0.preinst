@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
+    [ ! -d /usr/lib/mozilla ] || chmod -f 755 /usr/lib/mozilla
+    [ ! -d /usr/lib/mozilla/extensions ] || chmod -f 755 /usr/lib/mozilla/extensions
+fi
+
+

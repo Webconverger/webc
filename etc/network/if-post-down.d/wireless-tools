@@ -1,0 +1,64 @@
+#!/bin/sh
+
+IWCONFIG=/sbin/iwconfig
+
+if [ ! -x $IWCONFIG ]; then
+	exit 0
+fi
+
+apply_settings()
+{
+	if [ -n "$IF_WIRELESS_MODE" ]; then
+		$IWCONFIG "$IFACE" mode auto
+	fi
+
+	if [ -n "$IF_WIRELESS_AP" ]; then
+		$IWCONFIG "$IFACE" ap off
+	fi
+
+	if [ -n "$IF_WIRELESS_RATE" ]; then
+		$IWCONFIG "$IFACE" rate auto
+	fi
+
+	if [ -n "$IF_WIRELESS_RTS" ]; then
+		$IWCONFIG "$IFACE" rts auto
+	fi
+
+	if [ -n "$IF_WIRELESS_FRAG" ]; then
+		$IWCONFIG "$IFACE" frag auto
+	fi
+
+	if [ -n "$IF_WIRELESS_POWER" ]; then
+		$IWCONFIG "$IFACE" power off
+	fi
+
+	if [ -n "$IF_WIRELESS_TXPOWER" ]; then
+		$IWCONFIG "$IFACE" txpower auto
+	fi
+
+	if [ -n "$IF_WIRELESS_ENC" ]; then
+		$IWCONFIG "$IFACE" enc off
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY" ]; then
+		$IWCONFIG "$IFACE" key off
+	fi
+
+	if [ -n "$IF_WIRELESS_DEFAULTKEY" ]; then
+		$IWCONFIG "$IFACE" key off
+	fi
+
+	if [ -n "$IF_WIRELESS_NWID" ]; then
+		$IWCONFIG "$IFACE" nwid off
+	fi
+
+	if [ -n "$IF_WIRELESS_ESSID" ]; then
+		$IWCONFIG "$IFACE" essid any
+	fi
+
+	if [ -n "$IF_WIRELESS_COMMIT" ]; then
+		$IWCONFIG "$IFACE" commit
+	fi
+}
+
+apply_settings 2>/dev/null

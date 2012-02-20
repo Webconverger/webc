@@ -1,0 +1,101 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Locales ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/locales.list ] || \
+	   [ -e /var/lib/live/config/locales ]
+	then
+		return
+	fi
+
+	echo -n " locales"
+
+	Configure_locales
+}
+
+Configure_locales ()
+{
+	if [ -e /etc/default/locale ]
+	then
+		# use rootfs configured locale
+		_LOCALE="$(grep -s 'LANG=' /etc/default/locale | sed s/'LANG='// | tr -d '"' )"
+	fi
+
+	if [ -n "${LIVE_LOCALES}" ]
+	then
+		_LOCALE="${LIVE_LOCALES}"
+		_SET_LOCALE="true"
+	fi
+
+	if [ -z "${_LOCALE}" ]
+	then
+		# Set a default one
+		_LOCALE="en_US.UTF-8"
+		_SET_LOCALE="true"
+	fi
+
+	_LANGUAGE="$(echo $locale | cut -d. -f1)"
+	export _LANGUAGE
+
+	if [ -z "${_SET_LOCALE}" ]
+	then
+		# Actually, we should check here if the locale is generated
+		return
+	fi
+
+	if echo "${_LOCALE}" | grep -sqE '^[[:lower:]]{2}$'
+	then
+		# input is like "locale=ch", so we will convert and setup also the keyboard if not already set
+		if [ -z "${_KEYBOARD}" ]
+		then
+			_KEYBOARD="${_LOCALE}"
+			export _KEYBOARD
+		fi
+
+		_LOCALE_UP=$(echo "${_LOCALE}" | tr '[a-z]' '[A-Z]')
+		_LOCALE="${_LOCALE}_${_LOCALE_UP}.UTF-8"
+	fi
+
+	LANG=
+	_LANGUAGE="$(echo ${_LOCALE} | cut -d. -f1)"
+	eval $(awk '/^'"${_LOCALE}"'/ { print "LANG=" $1 " codepage=" $2; exit; }' /usr/share/i18n/SUPPORTED)
+
+	if [ -z "${LANG}" ]
+	then
+		# Try and fallback to another codepage for this language.
+		eval $(awk '/^'"${_LANGUAGE}"'/ { print "LANG=" $1 " codepage=" $2; exit; }' /usr/share/i18n/SUPPORTED)
+
+		if [ -n "${LANG}" ]
+		then
+			echo "Choosing locale '${LANG}' as '${_LOCALE}' is unsupported."
+		fi
+	fi
+
+	if [ -z "${LANG}" ]
+	then
+		echo "Locale '${_LOCALE}' is unsupported."
+		_CODEPAGE="UTF-8"
+		_LANGUAGE="en_US"
+		_LOCALE="${_LANGUAGE}.${_CODEPAGE}"
+		LANG="${_LANGUAGE}.${_CODEPAGE}"
+	fi
+
+	printf 'LANG="%s"\n' "${LANG}" > /etc/default/locale
+	sed -i -e "s|# ${LANG} ${_CODEPAGE}|${LANG} ${_CODEPAGE}|" /etc/locale.gen
+
+	locale-gen --keep-existing > /dev/null 2>&1
+
+	# Creating state file
+	touch /var/lib/live/config/locales
+}
+
+Locales

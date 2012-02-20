@@ -1,0 +1,24 @@
+# File: ispell-init    -*- muttrc -*-
+# Description: Mutt initialization for dictionaries-common support
+# Author: Rafael Laboissière <rafael@debian.org>
+# Created on: Fri Nov 16 18:24:36 CET 2001
+# Copyright (C) 2001-2009  Rafael Laboissiere
+# ------------------------------------------------------------------
+# This file is part of the Debian dictionaries-common package.
+# Released under the terms of the GNU GPL (version 2 or later).
+# No warranty.
+
+# Usage:
+#  Just put 'source /path/to/this/file/mutt-ispell-init' in ~/.muttrc.
+#  The `I' key will call the ispell-select script, which uses
+#  iselect to interectively choose the ispell dictionary for
+#  subsequent spell checkings.  If iselect is not intalled in the system,
+#  a fallback rudimentary interface is used.
+#
+#  Unsetting the wait_key configuration variable is recommended, since
+#  a shell-escape function is called.
+
+macro generic I "<shell-escape>/usr/bin/select-default-iwrap\n" \
+      "Select the default ispell dictionary for use with ispell-wrapper"
+
+set ispell = "/usr/bin/ispell-wrapper"

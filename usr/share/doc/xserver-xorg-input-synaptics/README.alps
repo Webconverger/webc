@@ -1,0 +1,77 @@
+It is possible to use this driver with an ALPS Glidepoint device. If
+you use an older 2.6 linux kernel which has no ALPS input driver, you
+need to apply the ALPS kernel patch in the alps.patch file. See
+http://www.kernelnewbies.org/faq/ for information about how to apply
+kernel patches and compile kernels.
+
+Note! If you use kernel 2.6.11 or later, the alps patch is already
+included, so you don't have to patch your kernel.
+
+Since ALPS touchpads don't have the same resolution as Synaptics
+touchpads, you probably have to change some parameter values. Here is
+an example InputDevice section for the X configuration file.
+
+Section "InputDevice"
+  Driver	"synaptics"
+  Identifier	"Mouse[1]"
+  Option	"Device"		"/dev/psaux"
+  Option	"Protocol"		"auto-dev"
+# enable SHMConfig if you want to enable synclient
+# NB: enabling SHMConfig is insecure, since any user can invoke it
+#  Option	 "SHMConfig"		 "on"
+  Option	"LeftEdge"		"120"
+  Option	"RightEdge"		"830"
+  Option	"TopEdge"		"120"
+  Option	"BottomEdge"		"650"
+  Option	"FingerLow"		"14"
+  Option	"FingerHigh"		"15"
+  Option	"MaxTapTime"		"180"
+  Option	"MaxTapMove"		"110"
+  Option	"EmulateMidButtonTime"	"75"
+  Option	"VertScrollDelta"	"20"
+  Option	"HorizScrollDelta"	"20"
+  Option	"CornerCoasting"	"1"
+  Option	"CoastingSpeed"		"3"
+  Option	"MinSpeed"		"0.3"
+  Option	"MaxSpeed"		"0.75"
+  Option	"AccelFactor"		"0.015"
+  Option	"EdgeMotionMinSpeed"	"200"
+  Option	"EdgeMotionMaxSpeed"	"200"
+  Option	"UpDownScrolling"	"1"
+  Option	"CircularScrolling"	"1"
+  Option	"CircScrollDelta"	"0.1"
+  Option	"CircScrollTrigger"	"2"
+EndSection
+
+If you use a 2.4 linux kernel, you don't need to patch the kernel, but
+you should instead set "Protocol" like this:
+
+  Option	"Protocol"		"alps"
+
+
+On some (all?) ALPS hardware, it is not possible to disable tapping
+unless you apply the patch below. However, some users have reported
+that this patch breaks tap-and-drag operations, which is why the patch
+is not included in the main alps.patch file.
+
+--- linux/drivers/input/mouse/alps.c~alps-test3	2004-02-28 20:46:34.000000000 +0100
++++ linux-petero/drivers/input/mouse/alps.c	2004-02-28 20:49:12.000000000 +0100
+@@ -87,6 +87,10 @@ static void ALPS_process_packet(struct p
+ 	y = (packet[4] & 0x7f) | ((packet[3] & 0x70)<<(7-4));
+ 	z = packet[5];
+ 
++	if (packet[2] & 1) {
++		z = 35;
++	}
++
+ 	if (z > 0) {
+ 		input_report_abs(dev, ABS_X, x);
+ 		input_report_abs(dev, ABS_Y, y);
+@@ -97,7 +101,6 @@ static void ALPS_process_packet(struct p
+ 	if (z > 30) input_report_key(dev, BTN_TOUCH, 1);
+ 	if (z < 25) input_report_key(dev, BTN_TOUCH, 0);
+ 
+-	left  |= (packet[2]     ) & 1;
+ 	left  |= (packet[3]     ) & 1;
+ 	right |= (packet[3] >> 1) & 1;
+ 	if (packet[0] == 0xff) {

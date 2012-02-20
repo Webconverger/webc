@@ -1,0 +1,61 @@
+		Advanced Linux Sound Architecture - Driver
+		==========================================
+	             FAQ - Frequently Asked Questions
+
+Q: My card is not detected at all and is ISA based - non Plug & Play.
+   Can I try something?
+A: If you have compiled driver with the ISA PnP support, you must force
+   the detection of non-PnP version of your card with some drivers (use
+   snd_isapnp=0 parameter - check the INSTALL file). This problem may
+   occur mostly in portable computers where vendors suppressed the ISA PnP
+   extension of sound chips.
+
+Q: When I play something and I try to play something other the second attempt
+   will not fail but instead it hangs waiting for the completion of the first
+   sound.
+A: This is definitely the standard behaviour as described in many official
+   documents that now ALSA follows. There is no reasons to complain about that
+   for the following reasons:
+   - it's the right (standard) way
+   - the application that want a different behaviour can open the device in 
+     O_NONBLOCK mode
+   - all modern OSS drivers in mainstream kernel (cmpci, es1370, es1371,
+     esssolo1, maestro, sonicvibes, vwsnd) works in the same ways and the 
+     others have to be intended buggy
+   - we want you ask to broken applications author to fix them ;-)
+
+Q: The driver is installed and successfully loaded in the runtime kernel,
+   but it does not produce any sound. What's wrong?
+A: You should raise the volume for mixer channels and/or unmute mixer channels.
+   Look for the alsa-utils package at http://www.alsa-project.org. There are
+   native mixers.
+
+Q: How can I store and restore mixer settings?
+A: Use the native alsactl program (strongly preferred) or an another ALSA mixer
+   program.
+
+Q: The driver is loaded, but OSS programs say: Can't open /dev/mixer.
+   What is wrong?
+A: The OSS compatible mixer emulation comes as an add-on module which is not
+   loaded by default. If you have got modified /etc/conf.module as suggested
+   in the INSTALL file, it should be loaded with kerneld or kmod. Check it -
+   if this method for some reason doesn't work - you need to insert
+   the 'snd-mixer-oss' module manually.
+
+Q: The driver is loaded, but OSS programs say: Can't open /dev/dsp.
+   What is wrong?
+A: The OSS compatible PCM (digital audio) emulation comes as an add-on module
+   which is not loaded by default. If you have got modified /etc/conf.module
+   as suggested in the INSTALL file, it should be loaded with kerneld or kmod.
+   Check it - if this method for some reason doesn't work - you need to insert
+   the 'snd-pcm-oss' module manually.
+
+Q: Can I specify which DMA channel will be used for a specific direction with
+   Sound Blaster 16/AWE soundcards?
+A: Yes, you may change the default settings (which is auto) through alsactl
+   utility. Look for "DMA 16-bit" switch in the alsactl.conf file.
+
+Q: Noises in X-win?
+A: Try comment out line in your XF86Config file:
+   #Option "pci_retry"    # faster, but problematic for ISA/PCI soundcards
+   More information: http://www.xfree86.org/3.3.3.1/S39.html

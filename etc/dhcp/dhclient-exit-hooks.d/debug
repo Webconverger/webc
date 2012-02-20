@@ -1,0 +1,26 @@
+#
+# The purpose of this script is just to show the variables that are
+# available to all the scripts in this directory. All these scripts
+# are called from /etc/dhcp3/dhclient-script, which exports all the
+# variables shown before. If you want to debug a problem with your DHCP
+# setup you can enable this script and take a look at
+# /tmp/dhclient-script.debug.
+
+# To enable this script set the following variable to "yes"
+RUN="no"
+
+if [ "$RUN" = "yes" ]; then
+	echo `date`: entering dhclient-exit-hooks.d, dumping variables. \
+		>> /tmp/dhclient-script.debug
+
+	for i in reason interface medium alias_ip_address new_ip_address \
+			new_subnet_mask new_domain_name new_domain_search \
+			new_domain_name_servers new_routers new_static_routes \
+			old_ip_address old_subnet_mask old_domain_name \
+			old_domain_search old_domain_name_servers old_routers \
+			old_static_routes; do
+		echo $i=\'${!i}\' >> /tmp/dhclient-script.debug
+	done
+
+	echo '--------------------------' >> /tmp/dhclient-script.debug
+fi

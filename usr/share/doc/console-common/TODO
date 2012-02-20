@@ -1,0 +1,32 @@
+- add a note taking about the move to /etc/console/
+
+- debconf stuff in rough priority order:
+ + handle removal of keymaps
+ + handle package removal
+
+ + support local templates.in and config.in files.  Need to think hard
+   about how to merge config files
+
+ + fix "defaults" problem if any
+ + put "missing default" warnings in debconf questions - maybe use different template ?
+
+ + factorize declare_*
+
+ + switch to M4 for file generation
+
+ + abstract some more the configure() proc to allow reuse.
+ + handle fonts, fallbacks, maybe ACMs.
+ + add per-keymap priority, to ease choice for newcommers.
+ + fine-grained analysis to decide whether going through config again
+   when keymaps are added or changed.
+ + detect serial-console machines and do nothing then ?
+ + propose several policies for whether to reconfigure when new data
+   files are introduced: always, never, new-choices - add note when
+   going through reconfig because of new keymaps.
+
+- other:
+ + cleanup of old cruft in kbd and console-tools
+ + remove the Conflicts: console-data (<< 1999.08.29-20) when enough
+   time will have passed.
+
+ + i18n of install-keymap

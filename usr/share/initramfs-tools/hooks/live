@@ -1,0 +1,261 @@
+#!/bin/sh
+
+# initramfs hook for live-boot (Debian Live)
+
+set -e
+
+# initramfs-tools header
+
+PREREQ=""
+
+prereqs()
+{
+	echo "${PREREQ}"
+}
+
+case "${1}" in
+	prereqs)
+		prereqs
+		exit 0
+		;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+# live-boot hook
+
+# Reading configuration file from filesystem
+if [ -e /etc/live/boot.conf ]
+then
+	. /etc/live/boot.conf
+fi
+
+if ls /etc/live/boot.d/* > /dev/null 2>&1
+then
+	for _FILE in /etc/live/boot.d/*
+	do
+		. ${_FILE}
+	done
+fi
+
+# Handling live-boot
+
+# Configuration
+if [ -e /usr/share/live-boot/languagelist ]
+then
+	mkdir -p "${DESTDIR}"/usr/share/live-boot
+	cp /usr/share/live-boot/languagelist "${DESTDIR}"/usr/share/live-boot
+fi
+
+# Directories
+mkdir -p "${DESTDIR}"/lib/live-boot
+
+# Executables
+copy_exec /usr/share/live-boot/live-reconfigure /bin
+copy_exec /usr/share/live-boot/live-preseed /bin
+
+# Scripts
+cp /usr/share/initramfs-tools/scripts/live-functions "${DESTDIR}"/scripts
+cp /usr/share/initramfs-tools/scripts/live-helpers "${DESTDIR}"/scripts
+
+# klibc dependencies
+for FILE in /lib/libacl* /lib/libblkid* /lib/libuuid* /lib/libdevmapper* /lib/libattr*
+do
+	if [ ! -e "${DESTDIR}"/"${FILE}" ] && ls ${FILE} > /dev/null 2>&1
+	then
+		cp -a "${FILE}" "${DESTDIR}"/"${FILE}"
+	fi
+done
+
+# udev dependencies (squeeze and newer)
+for FILE in /lib/udev/*_id
+do
+	if [ ! -e "${DESTDIR}/${FILE}" ]
+	then
+		mkdir -p "${DESTDIR}/lib/udev"
+		copy_exec "${FILE}" /lib/udev
+	fi
+done
+
+if [ -e /lib/udev/rules.d/60-cdrom_id.rules ]
+then
+	mkdir -p ${DESTDIR}/lib/udev/rules.d
+	cp -p /lib/udev/rules.d/60-cdrom_id.rules ${DESTDIR}/lib/udev/rules.d
+fi
+
+# Handling other stuff
+
+# Configuration: keymap (usefull when using encryption)
+if [ -x /bin/loadkeys ] && [ -r /etc/console/boottime.kmap.gz ]
+then
+	copy_exec /bin/loadkeys /bin
+
+	mkdir -p "${DESTDIR}"/etc
+	cp /etc/console/boottime.kmap.gz "${DESTDIR}"/etc
+fi
+
+# Configuration: Unique ID
+if [ -n "${LIVE_GENERATE_UUID}" ]
+then
+	mkdir -p "${DESTDIR}"/conf
+	uuidgen -r > "${DESTDIR}"/conf/uuid.conf
+fi
+
+# Filesystem: btrfs
+manual_add_modules btrfs
+
+# Filesystem: cifs
+if [ -x /sbin/mount.cifs ]
+then
+	copy_exec /sbin/mount.cifs /sbin
+        manual_add_modules cifs
+fi
+
+# Filesystem: ext3/ext4
+manual_add_modules ext3
+manual_add_modules ext4
+
+# Filesystem: jffs2
+manual_add_modules jffs2
+
+if [ -x /usr/bin/rsync ]
+then
+	copy_exec /usr/bin/rsync /bin
+fi
+
+# Filesystem: squashfs
+copy_exec /sbin/losetup /sbin
+manual_add_modules loop
+manual_add_modules squashfs
+manual_add_modules sqlzma
+manual_add_modules unlzma
+
+# Filesystem: aufs/unionfs
+manual_add_modules aufs
+manual_add_modules unionfs
+
+# Filesystem: unionfs-fuse
+if [ -x /usr/bin/unionfs-fuse ]
+then
+	copy_exec /usr/bin/unionfs-fuse /bin
+fi
+
+# Filesystem: vfat
+manual_add_modules nls_cp437
+manual_add_modules nls_iso8859-1
+manual_add_modules nls_utf8
+manual_add_modules vfat
+
+# Filesystem: ntfs
+manual_add_modules ntfs
+
+# Hardware: cdrom
+manual_add_modules ide-cd
+manual_add_modules ide-generic
+manual_add_modules ohci1394
+manual_add_modules sbp2
+manual_add_modules sr_mod
+
+# Hardware: usb
+manual_add_modules sd_mod
+
+# Hardware: network
+auto_add_modules net
+
+# Program: eject
+if [ -x /usr/bin/eject ]
+then
+	copy_exec /usr/bin/eject /bin
+fi
+
+# Program: md5sum
+copy_exec /usr/bin/md5sum /bin
+
+# Program: memdisk
+if [ -x /usr/bin/memdiskfind ]
+then
+	copy_exec /usr/bin/memdiskfind
+	manual_add_modules phram
+	manual_add_modules mtdblock
+fi
+
+# Program: cpio
+# busybox and klibc lacks --no-absolute-filenames and --sparse, needed for snapshots
+if [ -e "${DESTDIR}/bin/cpio" ]
+then
+	# Override already present cpio's, mostly klibc's
+	rm "${DESTDIR}/bin/cpio"
+fi
+copy_exec /bin/cpio /bin
+
+# Program: udev
+if [ -x /sbin/udevadm ]
+then
+	# lenny
+	copy_exec /sbin/udevadm /sbin
+else
+	# etch
+	copy_exec /sbin/udevtrigger /sbin
+	copy_exec /sbin/udevsettle /sbin
+fi
+if [ -x /usr/bin/udevinfo ]
+then
+	copy_exec /usr/bin/udevinfo /bin
+fi
+
+# Program: wget
+if [ -x /usr/bin/wget ]
+then
+	copy_exec /usr/bin/wget /bin
+fi
+
+# Program: blockdev
+if [ -x /sbin/blockdev ]
+then
+	copy_exec /sbin/blockdev /sbin
+fi
+
+# FUSE kernel module
+manual_add_modules fuse
+
+# FUSE filesystem: httpfs2
+if [ -x /usr/bin/httpfs2_ssl ]
+then
+	copy_exec /usr/bin/httpfs2_ssl /bin/httpfs
+elif [ -x /usr/bin/httpfs2 ]
+then
+	copy_exec /usr/bin/httpfs2 /bin/httpfs
+fi
+
+# FUSE filesystem: curlftpfs
+if [ -x /usr/bin/curlftpfs ]
+then
+	copy_exec /usr/bin/curlftpfs /bin
+fi
+
+# iSCSI
+if [ -x /usr/sbin/iscsistart ]
+then
+    copy_exec /usr/sbin/iscsistart /bin
+    #manual_add_modules ib_iser
+    manual_add_modules iscsi_tcp
+    manual_add_modules crc32c
+fi
+
+if [ "${LIVE_DNS}" = "true" ]
+then
+	#copy_exec /lib/libnss_files.so.*      /lib  # /etc/hosts and /etc/passwd
+	copy_exec /lib/libnss_dns.so.*      /lib  # DNS server
+	#copy_exec /lib/libnss_compat.so.*      /lib  # /etc/passwd
+
+	# Configuration file - may be needed if /etc/hosts is used.
+	#mkdir -p $DESTDIR/etc
+	#cp -p /etc/nsswitch.conf $DESTDIR/etc
+fi
+
+if [ "${LIVE_UNIONMOUNT}" = "true" ]
+then
+	# UnionMount
+	# only mount from patched util-linux can do this currently
+	copy_exec /bin/mount /bin/mount_full
+fi

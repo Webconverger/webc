@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Maintainer documentation for initramfs-tools</title>
+<style type="text/css">
+/*<![CDATA[*/
+a { color: black; }
+a:hover { text-decoration: none; }
+a:visited { color: gray; }
+acronym { cursor: help; }
+body { font-family: "DejaVu Sans", "Bitstream Vera Sans", sans-serif; }
+pre { background-color: #EEEEEE; border: 1px dashed black; padding: 1em; }
+div.right { text-align: right; }
+/*]]>*/
+</style>
+</head>
+
+<body>
+
+<div>
+<hr />
+
+<h1>Maintainer documentation for initramfs-tools</h1>
+
+<hr />
+
+<h2><a name="toc">Table of Contents</a></h2>
+
+<ul>
+
+<li><a href="#definitions">1. Definitions</a></li>
+<li><a href="#preparations">2. Preparations</a></li>
+
+<li><a href="#workflow">3. Workflow for daily work</a>
+<ul>
+<li><a href="#newfeature">3.1 Implement new features</a></li>
+<li><a href="#merge">3.2 Merge branches</a></li>
+<li><a href="#test">3.3 Test specific branch</a></li>
+<li><a href="#snapshot">3.4 Build snapshot version</a></li>
+</ul>
+</li>
+
+<li><a href="#contribute">4. Contribute</a></li>
+<li><a href="#release">5. Release new version</a></li>
+<li><a href="#resources">6. Resources</a></li>
+<li><a href="#credits">7. Credits</a></li>
+<li><a href="#license">8. License</a></li>
+
+</ul>
+
+<hr />
+
+<p><b>NOTE:</b> The most recent version of this document is available at
+docs/maintainer-notes.html in the <a href="#checkout">the git repository</a>
+or online at <a
+  href="http://git.debian.org/?p=kernel/initramfs-tools.git;a=blob_plain;f=docs/maintainer-notes.html;hb=HEAD">git.debian.org</a>.</p>
+
+<hr />
+
+<h2><a name="definitions">1. Definitions</a></h2>
+
+<table>
+	<tr><td><code><b>$mailaddress:</b></code></td><td>mailaddress of the user</td></tr>
+	<tr><td><code><b>$username:</b></code></td><td>name of the alioth account</td></tr>
+	<tr><td><code><b>$version:</b></code></td><td>version string</td></tr>
+	<tr><td><code><b>$yourname:</b></code></td><td>your fullname</td></tr>
+</table>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="preparations">2. Preparations</a></h2>
+
+<ol>
+
+<li>Install required software (notice: git is named git-core on Debian/oldstable):
+<pre>
+<b># apt-get install git git-buildpackage dpkg-dev</b>
+</pre>
+</li>
+
+<li>Set environment variables (e.g. through your ~/.bashrc or ~/.zshrc) for devscripts (git dch):
+<pre>
+<b>export DEBEMAIL=$mailaddress
+export DEBFULLNAME=$yourname</b>
+</pre>
+</li>
+
+<li>Set user name and email address for git (drop the --global option to use configuration per-repo basis):
+<pre>
+<b>% git config --global user.name  "$yourname"
+% git config --global user.email "$mailaddress"</b>
+</pre>
+</li>
+
+<li><a name="checkout">Checkout</a> repository (anonymous):
+<pre>
+<b>% git clone git://git.debian.org/git/kernel/initramfs-tools.git
+% cd initramfs-tools</b>
+</pre>
+</li>
+
+<li>Checkout repository (with developer access):
+<pre>
+<b>% git clone ssh://<code><i>$username</i></code>@git.debian.org/git/kernel/initramfs-tools.git
+% cd initramfs-tools</b>
+</pre>
+</li>
+
+</ol>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="workflow">3. Workflow for daily work</a></h2>
+
+<h3><a name="newfeature">3.1 Implement new features</a></h3>
+
+<ol>
+
+<li>Checkout new branch and switch to it:
+<pre>
+<b>% git checkout -b <code><i>$username</i></code>/short-descr-of-new-feature</b>
+</pre>
+</li>
+
+<li>Hack and commit work:
+<pre>
+<b>% $EDITOR $somefile
+% git add $somefile
+% git commit -s</b>
+</pre>
+
+<b>NOTE:</b> Use 'Closes: #BUGID' for closing a bugreport and 'Thanks: Fullname
+&lt;<code><i>mailaddress</i></code>&gt;' for giving credits in your commit message. git dch will use
+this information for generating the changelog using the --meta option later
+on.
+
+</li>
+
+<li>Finally push your branch to alioth:
+<pre>
+<b>% git push origin <code><i>$username</i></code>/short-descr-of-new-feature</b>
+</pre>
+</li>
+
+</ol>
+
+<h3><a name="merge">3.2 Merge branches</a></h3>
+
+<ol>
+
+<li>Switch to the branch you want to merge:
+<pre>
+<b>% git checkout <code><i>$username</i></code>/new-feature</b>
+</pre>
+</li>
+
+<li>Rebase to master:
+<pre>
+<b>% git rebase master</b>
+</pre>
+</li>
+
+<li>Switch to master branch and merge:
+<pre>
+<b>% git checkout master
+% git merge <code><i>$username</i></code>/new-feature</b>
+</pre>
+</li>
+
+<li>Push:
+<pre>
+<b>% git push</b>
+</pre>
+</li>
+
+<li>After branch is merged delete branch on server and locally:
+<pre>
+<b>% git push origin :<code><i>$username</i></code>/short-descr-of-new-feature
+% git branch -d <code><i>$username</i></code>/short-descr-of-new-feature</b>
+</pre>
+</li>
+
+<li>If a branch is removed from the server it will stay locally. You can get of
+any stale remote branches locally by executing:
+<pre>
+<b>% git remote prune origin</b>
+</pre>
+</li>
+
+</ol>
+
+<h3><a name="test">3.3 Test specific branch</a></h3>
+
+<ol>
+
+<li>Checkout a specific branch iff branch is not already present locally:
+<pre>
+<b>% git checkout -b somename/short-descr-of-new-feature origin/somename/short-descr-of-new-feature</b>
+</pre>
+</li>
+
+<li>Checkout a specific branch iff branch is already present locally:
+<pre>
+<b>% git checkout -b somename/short-descr-of-new-feature</b>
+</pre>
+</li>
+
+<li>Adjust debian/changelog accordingly:
+<pre>
+<b>% git dch --debian-branch=&quot;$(git branch | awk -F\*\&nbsp;&nbsp; '/^* / { print $2}' )&quot; \
+  --since=&quot;v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')&quot; -S --id-length=7 --meta --multimaint-merge</b>
+</pre>
+</li>
+
+<li>Build package:
+<pre>
+<b>% git buildpackage --git-ignore-new --git-debian-branch=&quot;$(git branch | awk -F\*\&nbsp;&nbsp;'/^* / { print $2}' )&quot; -tc</b>
+</pre>
+</li>
+
+</ol>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h3><a name="snapshot">3.4 Build snapshot version</a></h3>
+
+<ol>
+
+<li>Adjust debian/changelog accordingly:
+<pre>
+<b>% git dch --debian-branch=&quot;$(git branch | awk -F\*\&nbsp;&nbsp; '/^* / { print $2}' )&quot; \
+  --since=&quot;v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')&quot; -S --id-length=7 --meta --multimaint-merge</b>
+</pre>
+</li>
+
+<li>Build package:
+<pre>
+<b>% git buildpackage --git-debian-branch=&quot;$(git branch | awk -F\*\&nbsp;&nbsp;'/^* / { print $2}' )&quot; -tc [-us -uc]</b>
+</pre>
+</li>
+
+</ol>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="contribute">4. Contribute</a></h2>
+
+<ol>
+<li>Create patch:
+<pre>
+<b>% git format-patch -s -p origin/master</b>
+</pre>
+</li>
+
+<li>Send patch file(s) to maintainers via mail (requires Debian package git-email):
+<pre>
+<b>% git send-email --to=initramfs-tools@packages.debian.org $PATCHFILE[S]</b>
+</pre>
+</li>
+
+<li>The development mailinglists are <a
+  href="mailto:debian-kernel@lists.debian.org">debian-kernel@lists.debian.org</a>
+and <a href="mailto:initramfs@vger.kernel.org">initramfs@vger.kernel.org</a>.
+Discussion of features, bugs and patches are more than welcome on one
+of these lists.</li>
+
+</ol>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="release">5. Release new version</a></h2>
+
+<ol>
+
+<li>Creating changelog:
+
+<pre>
+<b>% git dch --debian-branch master --release --since <code><i>HASH</i></code></b>
+</pre>
+
+or more dynamically:
+
+<pre>
+<b>% git dch --meta --release --since v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}') --debian-branch=&quot;$(git branch | awk -F\*\  '/^* / { print $2}' )&quot; --id-length=7 --meta --multimaint-merge</b>
+</pre>
+
+<b>NOTE:</b> we do not use history based sorting for the changelog entries but
+sort them by author.
+
+</li>
+
+<li>Releasing:
+<pre>
+<b>% git commit -a -s -m &quot;Releasing version <code><i>$version</i></code>.&quot;</b>
+</pre>
+</li>
+
+<li>Tagging:
+<pre>
+<b>% git tag -s v&quot;<code><i>$version</i></code>&quot; -m &quot;release <code><i>$version</i></code>&quot;</b>
+</pre>
+</li>
+
+<li>Pushing:
+<pre>
+<b>% git push
+% git push --tags</b>
+</pre>
+</li>
+
+<li>Build in chroot and upload to ftp-master.</li>
+
+<li>Send mail announcing the new initramfs-tools version with subject
+&quot;initramfs-tools $VERSION release&quot; to initramfs@vger.kernel.org,
+debian-kernel@lists.debian.org + kernel-team@lists.ubuntu.com - including a
+shortlog (generated through &quot;git shortlog $TAG..&quot;).</li>
+
+</ol>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="resources">6. Resources</a></h2>
+
+<ul>
+  <li><a href="http://git.debian.org/?p=kernel/initramfs-tools.git">initramfs-tools git web interface</a></li>
+  <li><a href="http://wiki.debian.org/initramfs">initramfs @ debian-wiki</a></li>
+  <li><a href="http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=initramfs-tools;dist=unstable">bugreports</a></li>
+  <li><a href="http://packages.qa.debian.org/i/initramfs-tools.html">initramfs-tools @ PTS</a></li>
+  <li><a href="http://qa.debian.org/popcon.php?package=initramfs-tools">popcon graph</a></li>
+  <li><a href="http://people.debian.org/~glandium/bts/i/initramfs-tools.png">bugcount for initramfs-tools</a></li>
+  <li><a href="https://launchpad.net/ubuntu/+source/initramfs-tools">bugreports @ ubuntu</a></li>
+  <li><a href="http://status.qa.ubuntu.com/qapkgstatus/initramfs-tools">qa page @ ubuntu</a></li>
+</ul>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="credits">7. Credits</a></h2>
+
+<ul>
+  <li>Thanks to Daniel Baumann for his &quot;<a href="http://documentation.debian-projects.org/other/debian-packaging-git/">Debian Packaging with Git</a>&quot; which inspired this document.</li>
+</ul>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<h2><a name="license">8. License</a></h2>
+
+<ul>
+  <li>This document is licensed under GPL v2 or any later version.</li>
+</ul>
+
+<div class="right"><a href="#toc">^</a></div>
+<hr />
+
+<p>
+<i>--  Michael Prokop &lt;<a href="mailto:mika@debian.org" title="Send mail to the author of this document">mika@debian.org</a>&gt;</i>
+</p>
+
+<hr />
+
+</div>
+</body>
+</html>

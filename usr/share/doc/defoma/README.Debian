@@ -1,0 +1,40 @@
+defoma for Debian
+----------------------
+
+DEFOMA stands for DEbian FOnt MAnager.
+
+Whenever a font is installed or removed, every application that
+depends on or makes use of or anyway has something to do with the font
+has to be configured about the font. Such a process should be
+automated,  but in fact only a few applications automate it. It means
+that each user or a system administrator needs to configure most of
+applications manually about fonts, to make use of fonts from the
+applications. This is really waste of time and requires knowledge to
+some degree. 
+
+Defoma can do configuration about fonts automatically in place of
+a system administrator. In fact Defoma just provides a framework
+of automatic configuration about fonts. Its rough flow is, a font gets
+registered to Defoma with its category and hints, then a configuration
+script of each application gets called. The script is needed to be
+provided for each category by an application.
+
+PostScript fonts are more problematic, because what PS fonts are
+available for printing are completely unknown to applications.
+Applications that output PostScript file (like tgif and abiword) may
+provide a menu for choosing PS fonts. Ideally such a menu contains
+all of the printable PS fonts, but actually only well-known and
+general PS fonts are included. For PS Printer users, Defoma provides
+a nice interface to register PS printer fonts 
+(called defoma-psfont-installer), and for users who print PS files by 
+using a PS renderer (like ghostscript), the renderer registers PS fonts 
+as printable. These mechanisms cause such applications to have enough 
+information for the menu. 
+In addition, these PS fonts are registered with their hints, which is 
+very useful for font substitution. If a PS previewer cannot provide
+all the printable PS fonts, previewable PS fonts should substitute for
+lacking printable PS fonts. Hints help to decide which font is the best
+(that is, the most similar) to substitute for each of the lacking fonts.
+This substituting mechanism is another feature of Defoma.
+
+ -- Yasuhiro Take <take@debian.org>, Sat,  2 Dec 2000 00:14:21 +0900

@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+if [ ! -d /etc/network ]; then
+  mkdir -p /etc/network
+fi
+
+if [ -f /etc/network/interfaces ] && ! grep -q '^[^#]' /etc/network/interfaces
+then
+  f=/etc/network/interfaces
+  if [ `md5sum < $f | cut -f1 -d ' '` = "4ed352919f69a77ad302ad1593204405" ]; then
+    if [ `wc -c < /etc/network/interfaces` -eq 2466 ]; then
+      echo -n "Removing old dummy /etc/network/interfaces: "
+      rm /etc/network/interfaces
+      echo "done."
+    fi
+  fi
+fi
+
+if [ ! -f /etc/network/interfaces ]; then
+  cat <<EOF >/etc/network/interfaces
+# Used by ifup(8) and ifdown(8). See the interfaces(5) manpage or
+# /usr/share/doc/ifupdown/examples for more information.
+EOF
+fi
+
+

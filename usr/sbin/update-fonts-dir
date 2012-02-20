@@ -1,0 +1,136 @@
+#!/bin/sh
+
+# $Id: update-fonts-dir 189 2005-06-11 00:04:27Z branden $
+
+# This program compiles fonts.dir files for X font directories; see
+# mkfontdir(1x) for a description of the format of fonts.dir files.
+
+# Copyright 1999, 2001, 2002, 2004 Branden Robinson.
+# Licensed under the GNU General Public License, version 2.  See the file
+# /usr/share/common-licenses/GPL or <http://www.gnu.org/copyleft/gpl.txt>.
+
+PROGNAME=${0##*/}
+ENCDIR=/usr/share/fonts/X11/encodings
+
+# Query the terminal to establish a default number of columns to use for
+# displaying messages to the user.  This is used only as a fallback in the event
+# the COLUMNS variable is not set.  ($COLUMNS can react to SIGWINCH while the
+# script is running, and this cannot, only being calculated once.)
+DEFCOLUMNS=$(stty size 2>/dev/null | awk '{print $2}') || true
+if ! expr "$DEFCOLUMNS" : "[[:digit:]]\+$" >/dev/null 2>&1; then
+    DEFCOLUMNS=80
+fi
+
+# Display a message, wrapping lines at the terminal width.
+message () {
+    echo "$*" | fmt -t -w ${COLUMNS:-$DEFCOLUMNS}
+}
+
+# Display a warning message.
+warn () {
+    message "warning: $*" >&2
+}
+
+# Display an error message and exit.
+die () {
+    message "fatal error: $*" >&2
+    exit 1
+}
+
+# Display a usage message.
+usage () {
+    if [ -n "$*" ]; then
+        message "usage error: $*"
+    fi
+    cat <<EOF
+Usage: $PROGNAME DIRECTORY ...
+       $PROGNAME { -7 | --x11r7-layout } DIRECTORY ...
+       $PROGNAME { -h | --help }
+This program combines X font alias information from several packages into a
+single file that is placed in each specified X font directory DIRECTORY.  This
+utility is primarily useful to Debian package maintainer scripts.  See
+update-fonts-dir(8) for more information.
+Options:
+    -h, --help                        display this usage message and exit
+    -7, --x11r7-layout                use new font layout introduced with X11R7
+EOF
+}
+
+X11R7_LAYOUT=
+
+# Validate arguments.
+case "$1" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    -7|--x11r7-layout)
+        X11R7_LAYOUT=true
+        shift
+        ;;
+esac
+
+case "$1" in
+    -*)
+        usage "unrecognized option" >&2
+        exit 2
+        ;;
+esac
+
+
+if [ $# -eq 0 ]; then
+    usage "one or more font directories must be specified" >&2
+    exit 2
+fi
+
+while [ -n "$1" ]; do
+    # Try to be clever about the argument; were we given an absolute path?
+    if expr "$1" : "/.*" >/dev/null 2>&1; then
+        # Yes; an absolute path to an X font directory was provided.
+        XDIRS=$1
+        if [ -n "$X11R7_LAYOUT" ]; then
+            ETCDIR=/etc/X11/fonts/X11R7/${XDIRS##*/}
+        else
+            ETCDIR=/etc/X11/fonts/${XDIRS##*/}
+        fi
+        if [ "$XDIRS" = "$ETCDIR" ]; then
+            # We were given an /etc directory as an argument.
+            die "path to X font directory must be used"
+        else
+            warn "absolute path $XDIRS was provided"
+        fi
+    else
+        # No; a relative path was provided -- assume we were given just the
+        # basename.
+	XDIRS="/usr/share/fonts/X11/$1"
+    fi
+    # Confirm that the directories to be operated on exist.
+    for XDIR in $XDIRS; do
+        VALID=yes
+        if ! [ -d "$XDIR" ]; then
+            warn "$XDIR does not exist or is not a directory"
+            VALID=
+        fi
+        if [ -n "$VALID" ]; then
+            # Use encoding directories if they are available.
+            if [ -d "$ENCDIR" ] && [ -d "$ENCDIR/large" ]; then
+                mkfontdir -e "$ENCDIR" -e "$ENCDIR/large" "$XDIR"
+            else
+                mkfontdir "$XDIR"
+            fi
+            # Are there any fonts in the font directory?
+            if [ "$(head -n 1 "$XDIR/fonts.dir")" = "0" ]; then
+                # There are no files to process; remove any generated files already
+                # in the font directory.
+                rm -f "$XDIR/fonts.dir" "$XDIR/encodings.dir"
+                # Remove the font dirextory if it is empty.
+                rmdir "$XDIR" >/dev/null 2>&1 || true
+            fi
+        fi
+    done
+    shift
+done
+
+exit 0
+
+# vim:set ai et sts=4 sw=4 tw=80:

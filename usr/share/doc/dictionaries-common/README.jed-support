@@ -1,0 +1,31 @@
+JED Support in dictionaries-common
+----------------------------------
+
+***** NEWS *****
+A new improved jed interface to ispell has been included in package
+jed-extra (not officially released yet), which is compatible with
+dictionaries-common.  For those reasons the jed support in
+dictionaries-common has been removed.  The text below is not completely
+accurate and must be changed in the future.
+****************
+
+The JED support provided by the dictionaries-common package improves
+the native Ispell support in the jed package by adding a new
+interactive S-Lang command `ispell_change_dictionary'.  This function
+allows the user to change the Ispell dictionary that will be used in
+subsequent calls to the `ispell' command (normally bound to `M-$') and
+will do completion using the list of Ispell dictionaries that are
+currently installed in the system.
+
+To set the default dictionary for all JED sessions put the line
+
+    Ispell_Dictionary = "language";
+
+in the ~/.jedrc file.  The available list of dictionaries is obtained
+by launching jed and typing:
+
+    [M-x] ispell_change_dictionary [ENTER] [TAB]
+
+The default value of the Ispell_Dictionary variable is "default".
+
+ -- Rafael Laboissiere <rafael@debian.org>, Mon,  Sun Apr 28 15:19:20 CEST 2002

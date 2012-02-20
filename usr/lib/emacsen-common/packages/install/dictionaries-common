@@ -1,0 +1,71 @@
+#!/bin/sh
+#
+# emacsen install script for the Debian GNU/Linux
+# dictionaries-common package
+#
+# Written by Rafael Laboissiere <rafael@debian.org> and
+# Agustin Martin <agmartin@debian.org>
+#
+# Some things taken from Dirk Eddelbuettel script for the octave package.
+# lpath.el trick is stolen from Davide Salvetti's auctex package
+# --------------------------------------------------------------
+
+set -e
+
+# Canadian spelling ;-)
+flavour=$1
+
+package=dictionaries-common
+files="debian-ispell.el ispell.el flyspell.el"
+source=/usr/share/emacs/site-lisp/${package}
+destination=/usr/share/${flavour}/site-lisp/${package}
+
+case "$flavour" in
+    emacs)
+	# Dummy emacs flavour. Do nothing and exit
+	exit 0
+	;;
+    xemacs*)
+	flags="-no-site-file"
+	;;
+    emacs19|emacs20|emacs21|emacs22|emacs-snapshot*)
+	# Do not byte-compile anything for above emacsen flavours
+	echo "install/${package}: Skipping byte-compilation for $flavour"
+	exit 0
+	;;
+    emacs*)
+	flags="--no-site-file"
+	;;
+    *)
+	echo install/${package}: Ignoring emacsen flavour [${flavour}]
+	exit 0
+	;;
+esac
+
+if [ -e "${destination}/done" ]; then
+    echo "install/${package}: Already byte-compiled for ${flavour}. Skipping ..."
+else
+    echo install/${package}: Byte-compiling for emacsen flavour ${flavour}
+
+    # Make sure destination directory is available
+    install -m 0755 -d ${destination}
+
+    # Make sure current dir is in the load path
+    cat << EOF > ${destination}/path.el
+(setq load-path (cons "." load-path) byte-compile-warnings nil)
+EOF
+
+    flags="${flags} -q -batch -l path.el -f batch-byte-compile"
+    ( # Go to the .elc dir, set sources symlinks, byte compile files and remove temp .el files from the .elc dir
+	cd ${destination}
+	for i in $files; do
+	    ln -sf $source/$i
+	done
+	${flavour} ${flags} ${files}
+	rm path.el
+	touch done
+    )
+fi
+
+exit 0;
+

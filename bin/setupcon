@@ -1,0 +1,427 @@
+#!/bin/sh
+
+#     setupcon -- setup the font and keyboard on the Linux console
+#     Copyright © 1999,2000,2001,2002,2003,2006 Anton Zinoviev
+
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     If you have not received a copy of the GNU General Public License
+#     along with this program, write to the Free Software Foundation, Inc.,
+#     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+###########################################################################
+
+
+# The same as /usr/bin/which - in order to make "which" available before
+# /usr is mounted
+which () {
+    local IFS
+    IFS=:
+    for i in $PATH; do
+	if [ -x "$i/$1" ]; then
+	    echo "$i/$1"
+	    return 0
+	fi
+    done
+    return 1
+}
+
+while [ "$1" ]; do
+    case "$1" in
+	-k|--keyboard-only)
+	    keyboard_only=yes
+	    ;;
+	-f|--font-only)
+	    font_only=yes
+	    ;;
+	-v|--verbose)
+	    verbose_option=yes
+	    ;;
+	--force)
+	    force=yes
+	    ;;
+	--save)
+	    save=yes
+	    ;;
+	--save-only)
+	    force=yes
+	    save=yes
+	    save_only=yes
+	    ;;
+	-h|--help)
+	    cat >&2 <<EOF
+Usage: setupcon [OPTION] [VARIANT]
+Sets up the font and the keyboard on Linux console.
+
+  -k, --keyboard-only  setup the keyboard only, do not setup the font
+  -f, --font-only      setup the font only, do not setup the keyboard
+      --force          do not check whether we are on the console
+  -v, --verbose        explain what is being doing, try it if s.t. goes wrong
+      --save           copy the font and the console map in /etc/console-setup,
+                         update /etc/console-setup/cached.kmap.gz
+      --save-only      only save; don't setup keyboard/font immediately
+                         (implies --force)
+  -h, --help           display this help and exit
+
+If VARIANT is not specified setupcon looks for the configuration files
+(in this order) ~/.console-setup and if this doesn't exist then the
+combination/etc/default/keyboard + /etc/default/console-setup.  When
+a VARIANT is specified then setupcon looks for the configuration files
+~/.console-setup.VARIANT and /etc/default/console-setup.VARIANT.
+EOF
+	    exit 0
+	    ;;
+	-*)
+	    echo "setupcon: Unrecognised option $1" >&2
+	    exit 1
+	    ;;
+	*)
+	    if [ -z "$VARIANT" ]; then
+		VARIANT="$1"
+	    else
+		echo "setupcon: Two variants specified: $VARIANT and $1" >&2
+		exit 1
+	    fi
+	    ;;
+    esac
+    shift
+done
+
+if [ "$VARIANT" ]; then
+    USER_CONFIG=${HOME}/.console-setup."$VARIANT"
+    MAIN_CONFIG=/etc/default/keyboard."$VARIANT"
+    MAIN_CONFIG2=/etc/default/console-setup."$VARIANT"
+else
+    USER_CONFIG=${HOME}/.console-setup
+    MAIN_CONFIG=/etc/default/keyboard
+    MAIN_CONFIG2=/etc/default/console-setup
+fi
+
+if [ -f "$USER_CONFIG" ]; then
+    CONFIG="$USER_CONFIG"
+    CONFIG2=''
+    save=
+elif [ -f "$MAIN_CONFIG" ]; then
+    CONFIG="$MAIN_CONFIG"
+    CONFIG2="$MAIN_CONFIG2"
+else
+    echo "setupcon: None of $MAIN_CONFIG nor $USER_CONFIG exists." >&2
+    exit 1
+fi
+
+if [ "$CONFIG2" -a -f "$CONFIG2" ]; then
+    . "$CONFIG2"
+fi
+. "$CONFIG"
+
+if [ "$verbose_option" = yes ]; then
+    VERBOSE_OUTPUT=yes
+fi
+if [ "$VERBOSE_OUTPUT" = yes ]; then
+    verbose=''
+else
+    verbose='>/dev/null 2>&1'
+fi
+
+if which ckbcomp-mini >/dev/null; then
+    CHARMAP=UTF-8
+    if [ "$VERBOSE_OUTPUT" = yes -a "$CHARMAP" != UTF-8 ]; then
+	echo Only UTF-8 is supported by console-setup-mini
+    fi
+fi
+
+if [ "$force" != yes ]; then
+    case `readlink /proc/self/fd/2` in
+	/dev/tty[0-9]*|/dev/vc/[0-9]*|/dev/console)
+	    ;;
+	*)
+	    echo We are not on the Linux console, the console is left unconfigured.
+	    exit 0 
+	    ;;
+    esac
+fi
+
+ACTIVE_CONSOLES=${ACTIVE_CONSOLES:-/dev/tty[1-6]}
+CHARMAP=${CHARMAP:-UTF-8}
+CODESET=${CODESET:-Uni2}
+CONSOLE_MAP=${CONSOLE_MAP:-$ACM}
+
+#-----------------------#
+#       OUTPUT          #
+#-----------------------#
+
+if [ "$keyboard_only" != yes ] && [ "$ACTIVE_CONSOLES" ]; then
+    # Setup unicode/non-unicode mode
+    if [ "$save_only" != yes ]; then
+	for console in $ACTIVE_CONSOLES; do
+	    [ -w $console ] || continue
+	    if \
+		[ "$CHARMAP" = UTF-8 ] || [ -z "$CONSOLE_MAP$CHARMAP" ]
+	    then
+		printf '\033%%G' >$console
+	    else
+		printf '\033%%@' >$console
+	    fi
+	done
+    fi
+    
+    # Load the font
+    if [ -z "$FONT" ]; then
+	FONT_MAP=''
+	if which ckbcomp-mini >/dev/null; then
+	    FONT=$(echo `ls /usr/share/consolefonts/$CODESET-*.psf* \
+		            /etc/console-setup/$CODESET-*.psf* 2>/dev/null`)
+	    FONT=${FONT%% *}
+	    if [ "$FONTFACE" ] || [ "$FONTSIZE" ]; then
+		eval echo setupcon: Warning: ignoring the FONTFACE and FONTSIZE specifications! $verbose
+	    fi
+	elif [ "$FONTFACE" ] && [ "$FONTSIZE" ]; then
+	    FONT="$CODESET-$FONTFACE$FONTSIZE.psf.gz"
+	    case "$FONTSIZE" in
+		*x*)
+		    bigfont=yes
+		    ;;
+		*)
+		    bigfont=no
+		    ;;
+	    esac
+	fi
+    fi
+    LOADFONTS=''
+    for f in $FONT; do
+	if [ -f "$f" ]; then
+	    LOADFONTS="$LOADFONTS $f"
+	else
+	    for dir in \
+		/usr/local/share/consolefonts \
+		/usr/share/consolefonts \
+		/etc/console-setup \
+		FONT_IS_MISSING
+	    do
+		if [ -f "$dir/${f##*/}" ]; then
+		    LOADFONTS="$LOADFONTS $dir/${f##*/}"
+		    break
+		fi
+		if [ "$dir" = FONT_IS_MISSING ]; then
+		    echo setupcon: Warning: the font ${f##*/} does not exist! >&2
+		fi
+	    done
+	fi
+    done
+    LOADFONT_MAP=''
+    for f in $FONT_MAP; do
+	[ -z "$LOADFONT_MAP" ] || break # only one unicode map
+	if [ -f "$f" ]; then
+	    LOADFONT_MAP="$LOADFONT_MAP $f"
+	else
+	    for dir in \
+		/usr/local/share/consoletrans \
+		/usr/share/consoletrans \
+		/etc/console-setup \
+		FONT_MAP_IS_MISSING
+	    do
+		if [ -f "$dir/${f##*/}" ]; then
+		    LOADFONT_MAP="$LOADFONT_MAP $dir/${f##*/}"
+		    break
+		fi
+		if [ "$dir" = FONT_MAP_IS_MISSING ]; then
+		    echo setupcon: Warning: the unicode map ${f##*/} does not exist! >&2
+		fi
+	    done
+	fi
+    done
+    
+    for f in $LOADFONTS; do
+	if \
+	    [ "$save" = yes ] \
+	    && [ "${f%/*}" != /etc/console-setup ]
+	then
+	    cp "$f" /etc/console-setup/
+	fi
+    done
+    for f in $LOADFONT_MAP; do
+	if \
+	    [ "$save" = yes ] \
+	    && [ "${f%/*}" != /etc/console-setup ]
+	then
+	    cp "$f" /etc/console-setup/
+	fi
+    done
+    
+    # Due to bug in splashy and usplash: do not load fonts (#540314)
+    if \
+	pidof splashy > /dev/null \
+	|| pidof usplash > /dev/null
+    then
+	LOADFONTS=''
+    fi
+
+    if [ "$save_only" != yes ] && [ "$LOADFONTS" ]; then
+	for console in $ACTIVE_CONSOLES; do
+	    [ -w $console ] || continue
+	    if which consolechars >/dev/null; then
+		if [ "$bigfont" = yes ]; then
+		    echo "setupcon: The consolechars utility from the console-setup font can load only fonts with 8 pixel width matrix.  Please install the setfont utility from the kbd package." >&2
+		fi
+		if [ "$LOADFONT_MAP" ]; then
+		    eval consolechars -v --tty=$console -f $LOADFONTS -u "$LOADFONT_MAP" $verbose
+		else
+		    eval consolechars -v --tty=$console -f $LOADFONTS $verbose
+		fi
+	    elif which setfont >/dev/null; then
+		if [ "$LOADFONT_MAP" ]; then
+		    eval setfont -v -C $console $LOADFONTS -u "$LOADFONT_MAP" $verbose
+		else
+		    eval setfont -v -C $console $LOADFONTS $verbose
+		fi
+	    fi
+	done
+    fi
+    
+    # Load the ACM
+    if [ ! -f "$CONSOLE_MAP" ]; then
+	for dir in \
+	    /usr/local/share/consoletrans \
+	    /usr/share/consoletrans \
+	    /etc/console-setup 
+	do
+	    if [ -f "$dir/$CHARMAP.acm.gz" ]; then
+		CONSOLE_MAP="$dir/$CHARMAP.acm.gz"
+		break
+	    fi
+	done
+    fi
+    if [ -f "$CONSOLE_MAP" ]; then
+	if \
+	    [ "$save" = yes ] \
+	    && [ "${CONSOLE_MAP%/*}" != /etc/console-setup ]
+	then
+	    cp "$CONSOLE_MAP" /etc/console-setup/
+	fi
+    else
+	CONSOLE_MAP="$CHARMAP.acm.gz"
+    fi
+    if \
+	[ "$save_only" != yes ] && [ "$CHARMAP" != UTF-8 ] && [ "$LOADFONTS" ]
+    then
+	for console in $ACTIVE_CONSOLES; do
+	    [ -w $console ] || continue
+	    if which consolechars >/dev/null; then
+		eval consolechars -v --tty=$console --acm "$CONSOLE_MAP" $verbose
+	    elif which setfont >/dev/null; then
+		eval setfont -v -C $console -m "$CONSOLE_MAP" $verbose
+	    fi	    
+	done
+    fi
+
+    STTY=""
+    [ -z "$SCREEN_WIDTH"  ] || STTY="$STTY cols $SCREEN_WIDTH"
+    [ -z "$SCREEN_HEIGHT" ] || STTY="$STTY rows $SCREEN_HEIGHT"
+
+    if [ -n "$STTY" ]
+    then
+	for console in $ACTIVE_CONSOLES; do
+	    [ -r $console ] || continue
+	    stty $STTY < $console
+	done
+    fi
+fi
+
+#-----------------------#
+#        INPUT          #
+#-----------------------#
+
+if [ "$font_only" != yes -a "$XKBMODEL" != unknown ]; then
+    # On Mac PPC machines, we may need to set kernel vars first.  We need
+    # to mount /proc to do that, but we need it set up before sulogin may
+    # be run in checkroot, which will need the keyboard to log in...
+    # This code was borrowed from the keymap.sh script of console-common
+    # Copyright © 2001 Yann Dirson
+    # Copyright © 2001 Alcove http://www.alcove.fr/
+    if [ "$save_only" != yes ] && \
+       [ -x /sbin/sysctl ] && [ -r /etc/sysctl.conf ]; then
+	if grep -v '^\#' /etc/sysctl.conf | grep -q keycodes ; then
+	    grep keycodes /etc/sysctl.conf | grep -v "^#" \
+		| while read d ; do
+		      /sbin/sysctl -w $d 2> /dev/null || true
+	          done
+	fi
+    fi
+    
+    if [ "$save_only" != yes ]; then
+	for console in $ACTIVE_CONSOLES; do
+	    [ -w $console ] || continue
+	    if which kbd_mode >/dev/null; then
+		if [ "$CHARMAP" = UTF-8 ] || [ -z "$CONSOLE_MAP" ]; then
+		    kbd_mode -u <$console
+		else
+		    kbd_mode -a <$console
+		fi
+	    fi
+	done
+    fi
+    
+    if which loadkeys >/dev/null; then
+	if [ "$CHARMAP" != UTF-8 ]; then
+	    acm_option="-charmap $CHARMAP"
+	else
+	    acm_option=''
+	fi
+	
+	if [ "$XKBRULES" ]; then
+	    rules_option="-rules $XKBRULES"
+	else
+	    rules_option=''
+	fi
+	
+	if \
+	    [ "$VARIANT" = '' ] \
+	    && which gzip >/dev/null \
+	    && [ -d /usr/share ] # /usr is mounted
+	then
+	    if \
+		[ ! -f /etc/console-setup/cached.kmap.gz ] \
+		|| [ /etc/console-setup/cached.kmap.gz \
+		     -ot /etc/default/keyboard ] \
+		|| [ "$save" = yes ]
+	    then
+		ckbcomp $acm_option $rules_option -model "$XKBMODEL" \
+		    "$XKBLAYOUT" "$XKBVARIANT" "$XKBOPTIONS" \
+		    | gzip -9 2>/dev/null >/etc/console-setup/cached.kmap.gz
+		    # avoid warnings when /etc is mounted read-only
+	    fi
+	fi
+	
+	if [ "$save_only" != yes ]; then
+	    if [ "$KMAP" -a -f "$KMAP" ]; then
+		eval loadkeys "$KMAP" $verbose
+	    else		    
+		if \
+		    [ "$VARIANT" = '' ] && [ "$CONFIG" != "$USER_CONFIG" ] \
+		    && [ -f /etc/console-setup/cached.kmap.gz ] \
+		    && [ ! /etc/console-setup/cached.kmap.gz \
+		           -ot /etc/default/keyboard ]
+		then
+		    eval loadkeys /etc/console-setup/cached.kmap.gz $verbose
+		else
+		    if [ -d /usr/share/X11/xkb ]; then
+			ckbcomp $acm_option $rules_option \
+			    -model "$XKBMODEL" \
+			    "$XKBLAYOUT" "$XKBVARIANT" "$XKBOPTIONS" \
+			    | eval loadkeys $verbose
+		    elif [ -f /etc/console-setup/cached.kmap.gz ]; then
+			eval loadkeys /etc/console-setup/cached.kmap.gz $verbose
+		    fi
+		fi
+	    fi
+	fi
+    fi
+fi

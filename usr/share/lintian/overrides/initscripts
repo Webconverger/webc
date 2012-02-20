@@ -1,0 +1,12 @@
+initscripts: file-in-etc-not-marked-as-conffile /etc/init.d/skeleton
+initscripts: non-standard-toplevel-dir sys/
+initscripts: package-contains-empty-directory lib/init/rw/
+initscripts: package-contains-empty-directory sys/
+initscripts: script-not-executable ./etc/init.d/skeleton
+initscripts: script-not-executable ./lib/init/bootclean.sh
+initscripts: maintainer-script-calls-init-script-directly postrm:14
+initscripts: script-calls-init-script-directly ./etc/init.d/stop-bootlogd:19
+initscripts: script-calls-init-script-directly ./etc/init.d/stop-bootlogd-single:36
+initscripts: script-calls-init-script-directly ./etc/network/if-up.d/mountnfs:102
+initscripts: depends-on-essential-package-without-using-version recommends: e2fsprogs
+initscripts: no-upstream-changelog

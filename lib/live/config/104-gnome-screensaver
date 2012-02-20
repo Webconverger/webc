@@ -1,0 +1,34 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Gnome_screensaver ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-screensaver.list ] || \
+	   [ -e /var/lib/live/config/gnome-screensaver ]
+	then
+		return
+	fi
+
+	echo -n " gnome-screesnaver"
+
+	Configure_gnome_screensaver
+}
+
+Configure_gnome_screensaver ()
+{
+	# Disabling to lock the screen when the screensaver goes active.
+	sudo -u "${LIVE_USERNAME}" gconftool-2 -t bool -s /apps/gnome-screensaver/lock_enabled false
+
+	# Creating state file
+	touch /var/lib/live/config/gnome-screensaver
+}
+
+Gnome_screensaver

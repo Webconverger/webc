@@ -1,0 +1,143 @@
+// This file defines some default values for aptitude, including themes.
+//
+// It is sourced before /etc/apt/apt.conf and ~/.aptitude/config.  This is
+// not meant to be a user configuration file; instead, it is an internal
+// data file.  (which is why it is not stored in /etc)  To override settings
+// in this file, use /etc/apt/apt.conf.
+
+Aptitude::Themes
+{
+  Vertical-Split {
+    Aptitude::UI::Package-Display-Format "%c%a%M %p %Z";
+
+    Aptitude::UI::Default-Package-View {
+
+      Header Static {
+        Row 0;
+        Column 0;
+        Width 3;
+        Height 1;
+
+        ColExpand yes;
+        ColAlign Center;
+
+        RowAlign Center;
+
+        Color ScreenHeaderColor;
+
+        ColumnsCfg HEADER;
+      };
+
+      Center MainWidget {
+        Row 1;
+        Column 0;
+        Width 1;
+        Height 1;
+
+        RowExpand yes;
+        RowShrink yes;
+
+        ColExpand yes;
+        ColShrink yes;
+      };
+
+      Bottom Static {
+        Row 2;
+        Column 0;
+        Width 3;
+        Height 1;
+
+        ColExpand yes;
+        ColAlign center;
+
+        RowAlign center;
+
+        Color ScreenStatusColor;
+
+        ColumnsCfg STATUS;
+      };
+
+      sep Static {
+        Row 1;
+        Column 1;
+        Width 1;
+        Height 1;
+
+        ColExpand no;
+
+        RowExpand yes;
+        RowShrink yes;
+
+        PopupdownLinked desc;
+
+        Columns "";
+        Color ScreenStatusColor;
+      };
+
+      desc Description {
+        Row 1;
+        Column 2;
+        Width 1;
+        Height 1;
+
+        ColExpand yes;
+
+        RowShrink yes;
+        RowExpand yes;
+
+        Popupdownkey ShowHideDescription;
+      };
+    };
+  };
+
+  Dselect {
+    Aptitude::UI::Package-Display-Format "c%a %R %8s %12p %11v %11V %d#";
+    Aptitude::UI::Package-Status-Format "%12p %10C; %7A #%P";
+    Aptitude::UI::Default-Grouping "filter(missing),status,priority,section";
+    Aptitude::UI::Advance-On-Action yes;
+
+    Aptitude::UI::Default-Package-View {
+      Center MainWidget {
+        Row 0;
+	Column 0;
+	Width 1;
+	Height 1;
+
+	RowExpand yes;
+	RowShrink yes;
+
+	ColExpand yes;
+	ColShrink yes;
+      }
+
+      Bar Static {
+        Row 1;
+	Column 0;
+	Width 1;
+	Height 1;
+	ColExpand yes;
+	ColAlign center;
+
+	RowAlign center;
+
+	Color ScreenStatusColor;
+	ColumnsCfg STATUS;
+      };
+
+      desc Description {
+        Row 2;
+	Column 0;
+	Width 1;
+	Height 1;
+
+	ColExpand yes;
+
+	RowExpand yes;
+	RowShrink yes;
+
+	Popupdownkey ShowHideDescription;
+      };
+    };
+  };
+};
+

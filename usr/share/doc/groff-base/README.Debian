@@ -1,0 +1,57 @@
+groff for Debian
+----------------
+
+As of version 1.17-1, Debian groff was split into three packages:
+groff-base, groff, and groff-x11. At version 1.18-1 the groff-x11 package
+was merged back into groff. The current organization is as follows:
+
+  groff-base - a stripped-down groff package containing the components
+               required to read man pages in ASCII, Latin-1, UTF-8, and
+               PostScript
+  groff      - all other components
+
+If you only need groff in order to read man pages in common formats, you can
+remove the main groff package and save some disk space. For more
+information, please see 'dpkg --print-avail <package>' or 'apt-cache show
+<package>'.
+
+If you see error messages like "groff: can't find `DESC' file", make sure
+that you have the groff package installed as well as groff-base, as this
+message indicates that the requested output device is not installed.
+
+Where is the groff documentation? It's not easy to find when you're
+unfamiliar with the system (as I well remember). The 'SEE ALSO' section of
+the roff(7) man page has a good index.
+
+The macro path in Debian groff is as follows:
+
+  /usr/lib/groff/site-tmac
+    - old directory for compatibility purposes
+  /usr/share/groff/site-tmac (symlink to /etc/groff)
+    - local macro configuration, such as man.local
+  /usr/share/groff/<version>/tmac
+    - macros installed as part of groff
+  /usr/share/groff/tmac
+    - macros installed by other Debian packages
+
+If you're using a UTF-8 locale and are having problems searching for dashes
+in man pages such as those in command-line options, this may be because the
+man page uses "-" rather than "\-" to represent them, so they get rendered
+as a Unicode hyphen which isn't the one you can type conveniently on your
+keyboard. These man pages should be fixed. However, you can make groff use a
+plain ASCII dash in this case by editing both /etc/groff/man.local and
+/etc/groff/mdoc.local and uncommenting the final request, so that it looks
+like this:
+
+.  \" Debian: Many UTF-8 man pages use "-" instead of "\-" for dashes such
+.  \" as those in command-line options. This is a bug in those pages, but
+.  \" too many fonts are missing the Unicode HYPHEN character, so we render
+.  \" this as the ASCII-compatible HYPHEN-MINUS instead.
+.  if '\*[.T]'utf8' \
+.    char - \N'45'
+
+As of groff 1.18.1.1-7, this defaults to being uncommented. You can comment
+it out again if you want to make sure that man pages you're writing are
+clear of this problem.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 15 Nov 2003 17:42:38 +0000

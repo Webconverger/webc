@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for lt.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Paketai, kurie nepriklauso jokiai sekcijai\n Šie paketai nepriskirti jokiai sekcijai. Gal yra klaida Paketų byloje?";
+    Virtual	"Virtualūs paketai\n Šių paketų iš tikro nėra. Tai tik pavadinimai, kurių reikia kitiems paketams, kad pateiktų tam tikras galimybes.";
+    Tasks	"Paketai, reikalingi atlikti tam tikras užduotis\n Paketai sekcijoje „Užduotys“ savyje neturi jokių bylų, jiems tik reikia kitų paketų. Šie paketai padeda pažymėti grupes paketų, reikalingų tam tikroms užduotims atlikti.";
+
+    admin	"Administravimo priemonės (programų diegimui, naudotojų tvarkymas ir pan.)\n Paketai „admin“ sekcijoje leidžia atlinki administravimo darbus, tokius kaip programų diegimas, naudotojų paskyrų tvarkymas, sistemos valdymas, priežiūra, tinklo tikrinimas ir pan.";
+    alien	"Paketai, kurie buvo konvertuoti iš svetimų paketų (rpm, tgz ir pan.)\n Paketai „alien“ sekcijoje sukurti iš ne Debian paketų programos „alien“ pagalba.";
+    base	"Bazinė Debian sistema\n Sekcijos „base“ paketai - tai dalis pradinės sistemos.";
+    comm	"Programs for faxmodems and other communication devices\n Packages in the 'comm' section are used to control modems and other hardware communications devices. This includes software to control faxmodems (for instance, PPP for dial-up internet connections and programs originally written for that purpose, such as zmodem/kermit), as well as software to control cellular phones, interface with FidoNet, and run a BBS.";
+    devel	"Programos skirtos programinės įrangos kūrimui\n Paketai „devel“ sekcijoje naudojamos programoms rašyti ir sukurtų programų modifikavimui. Beveik nei vienas šios sekcijos paketas nėra reikalingas ne programuotojams, kurie nesiruošia kompiliuoti savo programų.\n .\n Šioje sekcijoje yra kompiliatoriai, testavimo priemonės, programuotojų tekstų redaktoriai, išeities tekstų apdorojimo priemonės ir kiti su programavimų susiję dalykai.";
+    doc		"Dokumentacija ir programos skirtos jos skaitymui\n Paketai „doc“ sekcijoje - tai Debian sistemos dokumentų dalys, arba programos skirtos jų peržiūrai.";
+    editors	"Tekstų ir dokumentų ruošimo programos\n Paketai „editors“ sekcijoje suteikia galimybę redaguoti gryno ASCII teksto bylas. Šioje sekcijoje yra ir sudėtingų tekstų redaktorių, taip pat kai kurie word procesoriai.";
+    electronics	"Programos darbui su elektros grandinėmis ir elektronika\n Paketai „electonics“ sekcijoje - tai elektros grandinių projektavimo įrankiai, simuliatoriai ir mikrokontrolerių asembleriai. Taip pat kitos panašios programos.";
+    embedded	"Programos integruotoms sistemoms\n Paketai „embedded“ sekcijoje pritaikyti veikti integruotose įrenginiuose. Tai yra specializuoti įrenginiai, kurie naudoja daug mažiau energijos, nei įprasti „desktop“ tipo kompiuteriai, pavyzdžiui PDA įrenginiai, mobilūs telefonai arba Tivo.";
+    gnome	"GNOME darbastalio sistema\n GNOME - tai programų rinkinys, kuris pateikia lengvą naudoti darbastalio aplinką Linux sistemoje. Paketai „gnome“ sekcijoje yra GNOME aplinkos dalis arba giliai į ją integruoti.";
+    games	"Žaidimai ir kitos linksmos programos\n Paketai „games“ sekcijoje skirti pramogai.";
+    graphics	"Programos skirtos grafinių bylų peržiūrai ir redagavimui\n Paketai „graphics“ sekcijoje - tai programos vaizdų peržiūrai, vaizdų apdirbimo ir redagavimo programos, programos darbui su grafine įranga (video plokštėm, skeneriais, skaitmeninėmis kameromis ir pan.).";
+    hamradio	"Programinė įranga ham radijo operatoriams\n Paketai „hamradio“ sekcijoje reikalingi pagrinde mėgėjiško radijo gerbėjams.";
+    interpreters "Interpretatoriai interpretuojančioms kalboms\n Paketai „interpreters“ sekcijoje, tai interpretatoriai Python, Perl, Ruby ir kt. kalboms, taip pat, jų naudojamos bibliotekos.";
+    kde		"KDE darbastalio sistema\n KDE - tai programų rinkinys, kuris pateikia lengvą naudoti darbastalio aplinką Linux sistemoje. Paketai „kde“ sekcijoje yra KDE aplinkos dalis arba giliai į ją integruoti.";
+    libdevel	"Programavimui naudojamos bylos ir bibliotekos\n Paketai „libdevel“ sekcijoje - tai bylos reikalingos programų kūrimui/kompiliavimui, kurios naudoja bibliotekas iš sekcijos „libs“.  Jei nesiruošiate patys kompiliuoti programas, jums šių paketų neprireiks.";
+    libs	"Bibliotekų kolekcijos\n Paketai sekcijoje „libs“ tai bibliotekos, reikalingos kitiems paketams. Jums beveik niekada nereikės paketų iš šios sekcijos. Pažymėjus paketą, jam reikalingos bibliotekos pažymimos automatiškai.";
+    perl	"Perl interpretatorius ir bibliotekos\n Paketai sekcijoje „perl“ pateikia Perl programavimo kalbą ir papildomas jos bibliotekas. Jei neplanuojate programuoti su Perl, tuomet Jums neprireiks nei vieno iš šių paketų. Jei Jūsų naudojamoms programoms bus reikalingi šie paketai, jie bus įdiegti automatiškai.";
+    python	"Python interpretatorius ir bibliotekos\n Paketai sekcijoje „python“ pateikia Python programavimo kalbą ir papildomas jos bibliotekas. Jei neplanuojate programuoti su Python, tuomet Jums neprireiks nei vieno iš šių paketų. Jei Jūsų naudojamoms programoms bus reikalingi šie paketai, jie bus įdiegti automatiškai.";
+    mail	"El. pašto valdymo programos\n Paketai „mail“ sekcijoje - tai programos paštui skaityti, transportuoti, filtruoti. Taip pat pašto grupių programinė įranga, naujienų skaitymo programos ir kitos programos susijusios su el. paštu.";
+    math	"Skaičių analizės ir kitos su matematika susijusios programos\n Paketai „math“ sekcijoje tai - skaičiuotuvai, matematinių skaičiavimų kalbos (panašios į Mathematica), simbolių algebros paketai, ir programos matematinių objektų vaizdavimui.";
+    misc	"Kitos programos\n Paketai „misc“ sekcijoje atlieka nestandartines funkcijas ir nėra priskirtos jokiai kitai sekcijai.";
+    net		"Programos skirtos prisijungti prie tinklo ir tinklo tarnybos\n Paketai „net“ sekcijoje - tai tinklo serveriai ir klientai daugeliui protokolų, įrankiai skirti tinklo protokolų analizei, interneto pokalbių sistemos, ir kita su kompiuterių tinklais susijusi programinė įranga.";
+    news	"Usenet klientai ir serveriai\n Paketai sekcijoje „news“ susiję su Usenet naujienų sistemomis. Tai naujienų skaitymo programos ir naujienų serveriai.";
+    oldlibs	"Nebenaudojamos bibliotekos\n Paketai sekcijoje „oldlibs“ yra pasenusios bibliotekos ir naujose programose turėtu būti nebenaudojamos.  Jie yra dėl suderinamumo, arba todėl, kad programos Debian sistemoje vis dar naudoja jas.\n .\n Greičiausiai jums neprireiks nei vieno paketo iš šios sekcijos. Diegiant paketą kuriam reikia šių bibliotekų, jos bus įdiegtos automatiškai.";
+    otherosfs	"Emuliatoriai ir programos svetimų bylų sistemų skaitymui\n Paketai „otherosft“ sekcijoje emuliuoja techniką ir operacines sistemas, padeda keistis informacija tarp skirtingų operacinių sistemų ir platformų (pvz.: DOS diskelių nuskaitymo programos, arba priemonės keistis duomenimis su Palm Pilot'ais)\n .\nŠioje sekcijoje taip pat yra programos, skirtos kompaktiniams diskams įrašyti.";
+    science	"Programos moksliniam darbui\n Paketai „science“ sekcijoje, tai priemonės studijuoti astronomiją, biologiją ir chemiją, taip pat kita su mokslu susijusi programinė įranga.";
+    shells	"Komandinės aplinkos ir alternatyvios konsolės aplinkos\n Paketai „shell“ sekcijoje, tai programos suteikiančios komandinės eilutės sąsają.";
+    sound	"Programos garso ir atkūrimui ir įrašimui\n Paketai „sound“ sekcijoje, tai programos, skirtos garsui atkurti, įrašyti, užkoduoti įvairiais formatais, mikšeriai, garso valdymas, programos darbui su MIDI, tvarkyklės darbui su garso technika ir garso apdirbimo programinė įranga.";
+    tex		"TeX tekstų apdorojimo sistema\n Paketai „tex“ sekcijoje susiję su TeX sistema, kuri skirta aukštos kokybės tekstų ruošimui.  Tai pats TeX, TeX paketai, TeX redaktoriai, konverteriai, skirti konvertuoti TeX į daugelį kitų formatų, TeX šriftai, ir kita su TeX susijusi programinė įranga.";
+    text	"Teksto apdorojimo programos\n Paketai „text“ sekcijoje, tai teksto filtrai, procesoriai, rašybos tikrinimo programos, žodynai, konverteriai, skirti konvertuoti koduotes ir tekstinių bylų formatus (pvz.: iš Unix į DOS), tekstu formavimo ir spausdinimo sistemos, ir kitos programos, skirtos dirbti su grynu tekstu.";
+    utils	"Kitos sistemos priemonės\n Paketai „utils“ sekcijoje, tai priemonės kurių negalima priskirti jokiai kitai kategorijai.";
+    web		"Interneto naršyklės, serveriai, proxy serveriai, ir kiti įrankiai\n Paketai „web“ sekcijoje, tai interneto naršyklės, interneto serveriai, programos, skirtos rašyti CGI scenarijus ir internetui skirtas programas, paruoštos interneto programos, ir kita su internetu susijusi programinė įranga.";
+    x11		"„X“ langų sistema ir su ja susijusios programos\n Paketai „x11“ sekcijoje, tai bazinė „X“ langų sistema, langų tvarkyklės, pagalbinės X programos Įvairios programos, naudojančios grafinę naudotojo aplinką yra čia, nes jos netiko jokiai kitai sekcijai.";
+
+    main	"Pagrindinis Debian archyvas\n Debian distributyvas, tai paketai iš „main“ sekcijos. Visi „main“ sekcijos paketai yra laisva programinė įranga.\n .\n Norėdami rasti daugiau informacijos apie Debian, kaip laisvą programinę įrangą žiūrėkite: http://www.debian.org/social_contract#guidelines";
+    contrib	"Programos, kurioms reikia programų neesančių Debian sistemoje\n Paketai „contrib“ sekcijoje nėra Debian dalis.\n .\n Šie paketai, tai laisvos programos, tačiau joms reikia kitų programų, kurios nepriklauso Debian sistemai. Tai gali būti ne laisvos programos „non-free“ sekcijoje. Taip pat tai gali būti programos kurių Debian negali platinti, arba (retas atvejas) programa, kurios paketo dar niekas neparuošė.\n .\n Norėdami rasti daugiau informacijos apie Debian, kaip laisvą programinę įrangą žiūrėkite: http://www.debian.org/social_contract#guidelines";
+    non-free	"Ne laisvos programos\n Paketai „non-free“ sekcijoje nėra Debian dalis.\n .\n Šie paketai netenkina Debian laisvos programinės įrangos rekomendacijų. Prieš diegdami šiuos paketus perskaitykite jos licenciją, kad įsitikintumėt, jog turite teisę juos naudoti taip kaip planuojate.\n .\n Norėdami rasti daugiau informacijos apie Debian, kaip laisvą programinę įrangą žiūrėkite: http://www.debian.org/social_contract#guidelines";
+    non-US	"Programos, laikomos už JAV ribų dėl eksportavimo apribojimų\n Paketai „non-US“ sekcijoje, tai daugiausiai kriptografiniai algoritmai, kai kurie iš jų patentuoti. Dėl šių priežasčių jie negali būti eksportuojami iš Jungtinių Amerikos Valstijų. ir laikomi serveryje, kuris yra „laisvame pasaulyje“.\n .\n Pastaba: Debian projektas šiuo metu mėgina šiuos paketus prijungti prie kitų archyvų, besikonsultuodami su teisės ekspertais. Daugelis paketų, šioje sekcijoje, gali būti rasti ir „main“ sekcijoje.";
+  };
+};
+

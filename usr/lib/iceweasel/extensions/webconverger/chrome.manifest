@@ -1,0 +1,21 @@
+content webconverger                                               content/
+overlay chrome://browser/content/browser.xul    chrome://webconverger/content/wc.xul
+style chrome://browser/content/browser.xul chrome://webconverger/content/wc.css
+style chrome://global/content/config.xul chrome://webconverger/content/blank.css
+style about:config chrome://webconverger/content/blank.css
+override chrome://mozapps/content/downloads/downloads.xul chrome://webconverger/content/downloads.xul
+override chrome://mozapps/content/downloads/unknownContentType.xul chrome://webconverger/content/unknownContentType.xul
+override chrome://mozapps/content/xpinstall/xpinstallConfirm.xul about:blank
+override chrome://mozapps/content/xpinstall/xpistatus.xul about:blank
+override chrome://global/content/filepicker.xul about:blank
+override chrome://mozapps/content/downloads/editAction.xul about:blank
+override chrome://global/content/nsHelperAppDlg.xul about:blank
+override chrome://mozapps/content/extensions/finalize.xul about:blank
+override chrome://mozapps/content/update/update.xul about:blank
+component {be1472ad-6f60-4dc1-bc62-9145fe220879} components/noHelperAppDlg.js
+contract @mozilla.org/helperapplauncherdialog;1 {be1472ad-6f60-4dc1-bc62-9145fe220879}
+override chrome://global/content/netError.xhtml chrome://webconverger/content/netError.xhtml
+
+component {607c1749-dc0a-463c-96cf-8ec6c3901319} components/fileBlockService.js
+contract @webconverger.com/fileblock-service;1 {607c1749-dc0a-463c-96cf-8ec6c3901319}
+category content-policy policy @webconverger.com/fileblock-service;1

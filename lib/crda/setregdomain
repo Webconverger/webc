@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+REGDOMAIN=
+CRDA_CONF=/etc/default/crda
+
+[ -r "$CRDA_CONF" ] && . "$CRDA_CONF"
+[ -z "$REGDOMAIN" ] && exit 0
+
+# In the future, iw may be moved to / filesystem
+[ -x /sbin/iw ] && exec /sbin/iw reg set "$REGDOMAIN"
+
+# Wait for /usr, it may not be mounted yet
+(
+	. /lib/udev/hotplug.functions
+	wait_for_file /usr/sbin/iw
+	exec /usr/sbin/iw reg set "$REGDOMAIN"
+) &

@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for de.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Pakete, die keinem Bereich zugeordnet sind\n Diesen Paketen wurde kein Bereich zugeordnet. Möglicherweise ist dies ein Fehler in der »Packages«-Datei.";
+    Virtual	"Virtuelle Pakete\n Diese Pakete gibt es nicht wirklich; sie sind Namen, die andere Pakete verwenden, um eine bestimmte Funktionalität bereitzustellen oder anzufordern.";
+    Tasks	"Pakete, die Ihren Rechner für eine bestimmte Aufgabe vorbereiten\n Pakete im Abschnitt »Tasks« enthalten keine Dateien; sie hängen nur von anderen Paketen ab. Die »Task«-Pakete sind ein einfacher Weg, sinnvolle Pakete für ein bestimmtes Einsatzgebiet auszuwählen.";
+
+    admin	"Administrator-Werkzeuge\n Pakete im Bereich »admin« ermöglichen es Ihnen, Administrator-Aufgaben wie die Installation von Software, die Verwaltung von Benutzerkonten, die Konfiguration und Überwachung des Systems, die Analyse des Netzwerkverkehrs und so weiter zu erfüllen.";
+    alien	"Pakete, die aus Fremdformaten (rpm, tgz, etc) ins deb-Format konvertiert wurden\n Pakete im Bereich »alien« sind vom Programm »alien« aus einem Nicht-Debian-Paket erstellt worden.";
+    base	"Das Debian-Grundsystem\n Pakete im Bereich »base« sind Teil der Erstinstallation von Debian.";
+    comm	"Programme für Faxmodems und andere Kommunikationsgeräte\n Pakete im Bereich »comm« werden verwendet, um Modems und andere Kommunikationshardware zu steuern. Hier finden Sie Software für Faxmodems (zum Beispiel PPP für Einwahlverbindungen ins Internet und Programme, die ursprünglich dafür geschrieben wurden, wie zmodem/kermit), ebenso wie Software für Mobiltelefone, zum Datenaustausch mit dem Fido-Netz und zum Betreiben einer BBS.";
+    devel	"Software-Entwicklung\n Pakete im Bereich »devel« werden verwendet, um neue Software zu schreiben oder bestehende Software zu verbessern. Nicht-Programmierer, die keine eigene Software kompilieren möchten, brauchen wahrscheinlich wenig aus diesem Bereich.\n .\n Hier finden Sie Compiler, Debugger, Quellcode-Editoren und Ähnliches.";
+    doc		"Dokumentation\n Pakete im Bereich »doc« dokumentieren Teile des Debian-Systems oder enthalten Anzeigeprogramme für diverse Doku-Formate.";
+    editors	"Editoren und Textverarbeitungen\n Pakete im Bereich »editors« ermöglichen das Bearbeiten von ASCII-Texten oder formatierten Dokumenten.";
+    electronics	"Programme für Schaltkreise und Elektronik\n Pakete im Bereich »electronics« sind z.B. Entwurfswerkzeuge für Schaltkreise, Simulatoren und Assembler für Mikrocontroller und verwandte Software.";
+    embedded	"Programme für eingebettete Systeme\n Pakete im Bereich »embedded« sind für eingebettete Systeme gedacht. Dabei handelt es sich um spezialisierte Rechner mit viel weniger Leistung als ein übliches Bürosystem, zum Beispiel einen PDA, ein Mobiltelefon oder einen Videorekorder.";
+    gnome	"Der GNOME-Desktop\n GNOME ist eine Sammlung von Software, die eine benutzerfreundliche Oberfläche für Linux bereitstellen. Pakete im Bereich »gnome« sind entweder Teil von GNOME oder für GNOME geschrieben.";
+    games	"Spiel & Spaß\n Pakete im Bereich »games« dienen hauptsächlich der Unterhaltung.";
+    graphics	"Anzeigen und Bearbeiten von Bildern und Grafiken\n Pakete im Bereich »graphics« sind zum Beispiel Bildbetrachter, Bildver- und -bearbeitungssoftware, Programme zum Ansteuern von Grafikhardware (Videokarten, Scanner, Digitalkameras) usw.";
+    hamradio	"Amateurfunk-Software\n Pakete im Bereich »hamradio« sind für Amateurfunker gedacht.";
+    interpreters "Interpretersprachen\n Pakete im Abschnitt »interpreters« sind Interpreter für Sprachen wie Tcl, Ruby und Guile, sowie Bibliotheken für solche Sprachen.\n .\n Hinweis: Die Sprachen Perl und Python haben jetzt eigene Bereiche.";
+    kde		"Der KDE-Desktop\n KDE ist eine Sammlung von Software, die eine benutzerfreundliche Oberfläche für Linux bereitstellen. Pakete im Bereich »kde« sind entweder Teil von KDE oder für KDE geschrieben.";
+    libdevel	"Entwicklerdateien für Bibliotheken\n Pakete im Bereich »libdevel« enthalten Dateien, die zum Kompilieren von Programmen, die Bibliotheken aus dem »libs«-Bereich verwenden, nötig sind. Sie brauchen keine Pakete aus diesem Bereich, wenn Sie nicht selbst Software kompilieren wollen.";
+    libs	"Bibliotheken\n Pakete im Bereich »libs« stellen notwendige Programmroutinen für andere Software auf dem Rechner zur Verfügung. Bis auf wenige Ausnahmefälle sollten Sie nichts aus diesem Bereich manuell installieren müssen. Das Paketsystem wird diese Pakete nach Bedarf installieren.";
+    perl	"Perl-Interpreter und -Bibliotheken\n Pakete im Bereich »perl« erlauben das Ausführen von Perl-Programmen. Wenn Sie kein Perl-Programmierer sind, müssen Sie kein Paket aus diesem Bereich selbst installieren; das Paketsystem wird sie nach Bedarf installieren.";
+    python	"Python-Interpreter und -Bibliotheken\n Pakete im Bereich »python« erlauben das Ausführen von Python-Programmen. Wenn Sie kein Python-Programmierer sind, müssen Sie kein Paket aus diesem Bereich selbst installieren; das Paketsystem wird sie nach Bedarf installieren.";
+    mail	"Programme zum Schreiben, Verschicken, Routen von E-Mail-Nachrichten\n Pakete im Bereich »mail« sind E-Mail-Leseprogramme, E-Mail-Transportsoftware, Programme für Mailing-Listen, Spamfilter und ähnliches.";
+    math	"Numerik- und andere Mathematik-Software\n Pakete im Bereich »math« sind zum Beispiel Taschenrechner, Sprachen zum numerischen oder symbolischen Rechnen (ähnlich wie Mathematica) und Programme zum Visualisieren mathematischer Objekte.";
+    misc	"Sonstige Software\n Pakete im Bereich »misc« sind zu speziell, als dass sie besser eingeordnet werden könnten.";
+    net		"Programme zum Nutzen und Anbieten von (Netzwerk-)Diensten\n Pakete im Bereich »net« sind Clients und Server für viele Protokolle, Werkzeuge zum Verändern und zur Fehlerbehebung von Netzwerkprotokollen, Instant Messenger (etwa für ICQ, AIM) und andere Netzwerksoftware.";
+    news	"Usenet-Software\n Pakete im Bereich »news« sind für das Usenet (News) relevant. Es handelt sich zum Beispiel um Newsreader oder NNTP-Server.";
+    oldlibs	"Veraltete Bibliotheken\n Pakete im Bereich »oldlibs« sind veraltet und sollten nicht für neue Programme verwendet werden. Sie werden angeboten, um die Kompatibilität zu wahren oder weil andere Debian-Pakete noch von ihnen abhängen.\n .\n Bis auf wenige Ausnahmefälle sollten Sie nichts aus diesem Bereich manuell installieren müssen. Das Paketsystem wird diese Pakete nach Bedarf installieren.";
+    otherosfs	"Emulatoren und Software zum Lesen fremder Dateisysteme\n Pakete im Bereich »otherosfs« emulieren Hardware oder Betriebssysteme und erlauben den Datenaustausch zwischen verschiedenen Betriebssystem- und Hardwareplattformen. Beispiele sind Programme zum Lesen von DOS-Disketten, für Palm Pilots und zum Brennen von CDs.";
+    science	"Wissenschaftliche Software\n Pakete im Bereich »science« sind Programme für Astronomie, Biologie, Chemie und andere Wissenschaften.";
+    shells	"Shells und alternative Konsolenumgebungen\n Pakete im Bereich »shells« sind für die Kommandozeilenschnittstelle verantwortlich.";
+    sound	"Audio-Software\n Pakete im Bereich »sound« spielen Sounddateien ab, nehmen sie auf und kodieren sie in vielen Dateiformaten. Außerdem finden Sie hier Mixer und Lautstärkeregler, MIDI-Software, Programme für den Notensatz, Audioeditoren und Treiber für Sound-Hardware.";
+    tex		"Das Textsatzsystem TeX\n Pakete im Bereich »tex« stehen im Zusammenhang zu TeX, einem System für hochwertigen Textsatz. Hier finden Sie TeX selbst, TeX-Pakete, Editoren für TeX, Konvertierungsprogramme, TeX-Schriften und so weiter.";
+    text	"Textwerkzeuge\n Pakete im Bereich »text« sind zum Beispiel Textfilter, überprüfen die Rechtschreibung, sind Wörterbücher, wandeln zwischen Zeichenkodierungen und Textdateiformaten (etwa Unix/DOS) um, formatieren Text und so weiter.\n .\n Hinweis: Textverarbeitungen stehen unter »editors«.";
+    utils	"Verschiedene Hilfsprogramme\n Pakete im Bereich »utils« sind kleine Hilfsprogramme mit sehr verschiedenen Zwecken.";
+    web		"Browser, Server, Proxies, ... für das WWW\n Pakete im Bereich »web« sind Web-Browser, -Server und -Proxies, Software zum Schreiben von CGI-Skripten oder Web-basierten Programmen, fertige Web-basierte Programme und andere Software rund um das World Wide Web.";
+    x11		"Das X11-Fenstersystem\n Pakete im Bereich »x11« sind Kernpakete für die graphische Oberfläche X11, Fenstermanager, Hilfsprogramme für X und andere Programme mit grafischer Oberfläche, die nirgendwo sonst eingeordnet werden konnten.";
+
+    main	"Die Debian-Distribution\n Die Debian-Distribution besteht aus den Paketen des »main«-Abschnitts. Jedes Paket in »main« ist Freie Software.\n .\n Für weitere Informationen darüber, was Debian als Freie Software ansieht: siehe http://www.debian.org/social_contract#guidelines";
+    contrib	"Programme, die von Nicht-Debian-Software abhängen\n Pakete im Abschnitt »contrib« sind nicht Teil von Debian.\n .\n Diese Pakete sind Freie Software, hängen aber von Software ab, die nicht in Debian enthalten ist. Das kann deswegen der Fall sein, weil diese Abhängigkeiten keine Freie Software sind (Abschnitt »non-free«), aus rechtlichen Gründen überhaupt nicht von Debian verteilt werden dürfen oder (seltener) weil noch niemand sie paketiert hat.\n .\n Für weitere Informationen darüber, was Debian als Freie Software ansieht: siehe http://www.debian.org/social_contract#guidelines";
+    non-free	"Programme, die Nicht-freie Software sind\n Pakete im Abschnitt »non-free« sind nicht Teil von Debian.\n .\n Diese Pakete erfüllen nicht eine oder mehrere Anforderungen der Debian-Richtlinien für Freie Software (siehe unten). Sie sollten die Lizenz der Programme in diesem Abschnitt lesen, um sicherzugehen, dass Sie sie verwenden dürfen, wie Sie es beabsichtigen.\n .\n Für weitere Informationen darüber, was Debian als Freie Software ansieht, lesen Sie http://www.debian.org/social_contract#guidelines";
+    non-US	"Programme, die US-Exportbeschränkungen unterliegen\n Pakete im Abschnitt »non-us« enthalten oft Verschlüsselungstechnik; einige implementieren patentierte Algorithmen. Deswegen können diese Pakete nicht aus den Vereinigten Staaten exportiert werden und werden auf Servern in der »freien Welt« vorgehalten.\n .\n Hinweis: Nach der Lockerung der Exportbeschränkungen übernimmt das Debian-Projekt derzeit Kryptographie-Software in den »main«-Baum. Viele Pakete, die früher in »non-us« beheimatet waren, sind jetzt »main«.";
+  };
+};
+

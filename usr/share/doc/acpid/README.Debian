@@ -1,0 +1,34 @@
+acpid for Debian
+================
+
+The acpid daemon can handle user defined events. Place event files under
+/etc/acpi/events.
+
+If an event occurs, acpid recurses through the event files in order to
+see if the regex defined after "event" matches. If they do, action is
+executed.
+
+An example with /etc/acpi/events/powerbtn to handle presses on the power
+button.
+
+new style:
+    event=button/power .*
+    action=/etc/acpi/powerbtn.sh
+
+old style:
+    event=button power.*
+    action=/etc/acpi/powerbtn.sh
+
+to handle both styles:
+    event=button[ /]power
+    action=/etc/acpi/powerbtn.sh
+
+Your script will get the complete event string (as reported by
+/proc/acpid/events), if you use %e as a parameter of your script.
+You may want to split this by calling set $*. $1 then holds the
+event group, $2 takes the event and $3 and $4 take the values as
+reported by the kernel.
+
+When using acpid with modules, you can use /etc/default/acpid in order
+to specify Linux kernel modules to be loaded at startup.
+

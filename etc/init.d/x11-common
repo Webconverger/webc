@@ -1,0 +1,90 @@
+#!/bin/sh
+# /etc/init.d/x11-common: set up the X server and ICE socket directories
+### BEGIN INIT INFO
+# Provides:          x11-common
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     S
+# Default-Stop:
+### END INIT INFO
+
+set -e
+
+PATH=/bin:/sbin
+SOCKET_DIR=/tmp/.X11-unix
+ICE_DIR=/tmp/.ICE-unix
+
+. /lib/lsb/init-functions
+if [ -f /etc/default/rcS ]; then
+  . /etc/default/rcS
+fi
+
+do_restorecon () {
+  # Restore file security context (SELinux).
+  if which restorecon >/dev/null 2>&1; then
+    restorecon "$1"
+  fi
+}
+
+set_up_socket_dir () {
+  if [ "$VERBOSE" != no ]; then
+    log_begin_msg "Setting up X server socket directory $SOCKET_DIR..."
+  fi
+  if [ -e $SOCKET_DIR ] && [ ! -d $SOCKET_DIR ]; then
+    mv $SOCKET_DIR $SOCKET_DIR.$$
+  fi
+  mkdir -p $SOCKET_DIR
+  chown root:root $SOCKET_DIR
+  chmod 1777 $SOCKET_DIR
+  do_restorecon $SOCKET_DIR
+  [ "$VERBOSE" != no ] && log_end_msg 0 || return 0
+}
+
+set_up_ice_dir () {
+  if [ "$VERBOSE" != no ]; then
+    log_begin_msg "Setting up ICE socket directory $ICE_DIR..."
+  fi
+  if [ -e $ICE_DIR ] && [ ! -d $ICE_DIR ]; then
+    mv $ICE_DIR $ICE_DIR.$$
+  fi
+  mkdir -p $ICE_DIR
+  chown root:root $ICE_DIR
+  chmod 1777 $ICE_DIR
+  do_restorecon $ICE_DIR
+  [ "$VERBOSE" != no ] && log_end_msg 0 || return 0
+}
+
+do_status () {
+    if [ -d $ICE_DIR ] && [ -d $SOCKET_DIR ]; then
+      return 0
+    else
+      return 4
+    fi
+}
+
+case "$1" in
+  start)
+    set_up_socket_dir
+    set_up_ice_dir
+  ;;
+
+  restart|reload|force-reload)
+    /etc/init.d/x11-common start
+  ;;
+
+  stop)
+   :
+  ;;
+
+  status)
+    do_status
+  ;;
+  *)
+    log_success_msg "Usage: /etc/init.d/x11-common {start|stop|status|restart|reload|force-reload}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
+# vim:set ai et sts=2 sw=2 tw=0:

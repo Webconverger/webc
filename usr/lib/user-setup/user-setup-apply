@@ -1,0 +1,188 @@
+#! /bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" ]; then
+	export LANG=C # avoid locale errors from perl
+	ROOT="$1"
+	chroot=chroot
+	log='log-output -t user-setup'
+else
+	ROOT=
+	chroot=
+	log=
+fi
+
+. /usr/lib/user-setup/functions.sh
+
+# Set a password, via chpasswd.
+# Use a heredoc rather than echo, to avoid the password
+# showing in the process table. (However, this is normally
+# only called when first installing the system, when root has no
+# password at all, so that should be an unnecessary precaution).
+#
+# Pass in three arguments: the user, the password, and 'true' if the
+# password has been pre-crypted (by preseeding).
+setpassword () {
+	local USER PASSWD
+	USER="$1"
+	PASSWD="$2"
+
+	local VERSION=$($chroot $ROOT dpkg-query -W -f '${Version}\n' passwd)
+	if $chroot $ROOT dpkg --compare-versions "$VERSION" ge "1:4.1.4-1"; then
+		# support for versions with PAM support (Squeeze)
+		if [ "$3" = true ]; then
+			$chroot $ROOT usermod --password=$PASSWD $USER
+		else
+			$chroot $ROOT chpasswd <<EOF
+$USER:$PASSWD
+EOF
+		fi
+	else
+		# compatibility support for versions without PAM support (Lenny)
+		local OPTS
+		if [ "$3" = true ]; then
+			OPTS=-e
+		else
+			OPTS=-m
+		fi
+		$chroot $ROOT chpasswd $OPTS <<EOF
+$USER:$PASSWD
+EOF
+	fi
+}
+
+# Enable/disable shadow passwords.
+db_get passwd/shadow
+if [ "$RET" = true ]; then
+	$log $chroot $ROOT shadowconfig on
+else
+	$log $chroot $ROOT shadowconfig off
+fi
+
+if ! root_password; then
+	# Was the root password preseeded encrypted?
+	if db_get passwd/root-password-crypted && [ "$RET" ]; then
+		# The root password was preseeded encrypted.
+		ROOT_PW="$RET"
+		PRECRYPTED=true
+	else
+		db_get passwd/root-password
+		ROOT_PW="$RET"
+		PRECRYPTED=false
+	fi
+	# Clear the root password from the database, and set the password.
+	db_set passwd/root-password-crypted ''
+	db_set passwd/root-password ''
+	db_set passwd/root-password-again ''
+	if [ "$ROOT_PW" ]; then
+		setpassword root "$ROOT_PW" "$PRECRYPTED"
+	fi
+	ROOT_PW=
+else
+	# Just in case, clear any preseeded root password from the database
+	# anyway.
+	db_set passwd/root-password-crypted ''
+	db_set passwd/root-password ''
+	db_set passwd/root-password-again ''
+fi
+
+db_get passwd/make-user
+if [ "$RET" = true ] && ! is_system_user; then
+	if db_get passwd/user-password-crypted && [ "$RET" ]; then
+		USER_PW="$RET"
+		USER_PW_CRYPTED=true
+	else
+		db_get passwd/user-password
+		USER_PW="$RET"
+		USER_PW_CRYPTED=false
+	fi
+
+	if db_get passwd/user-uid && [ "$RET" ]; then
+		if [ -x $ROOT/usr/sbin/adduser ]; then
+			UIDOPT="--uid $RET"
+		else
+			UIDOPT="-u $RET"
+		fi
+	else
+		UIDOPT=
+	fi
+
+	# Add the user to the database, using adduser in noninteractive
+	# mode.
+	db_get passwd/username
+	USER="$RET"
+	db_get passwd/user-fullname
+
+	HOME_EXISTED=
+	if [ -d "$ROOT/home/$USER" ]; then
+		HOME_EXISTED=1
+	fi
+
+	if [ -x $ROOT/usr/sbin/adduser ]; then
+		$log $chroot $ROOT adduser --disabled-password --gecos "$RET" $UIDOPT "$USER" >/dev/null || true
+	else
+		$log $chroot $ROOT useradd -c "$RET" -m "$USER" $UIDOPT >/dev/null || true
+	fi
+
+	# Clear the user password from the database.
+	db_set passwd/user-password-crypted ''
+	db_set passwd/user-password ''
+	db_set passwd/user-password-again ''
+	setpassword "$USER" "$USER_PW" "$USER_PW_CRYPTED"
+
+	if [ "$HOME_EXISTED" ]; then
+		# The user's home directory already existed before we called
+		# adduser. This often means that a mount point under
+		# /home/$USER was selected in (and thus created by) partman,
+		# and the home directory may have ended up owned by root.
+		$log $chroot $ROOT chown "$USER:$USER" "/home/$USER" >/dev/null || true
+	fi
+
+	if [ -n "$USER" ]; then
+		db_get passwd/user-default-groups
+		for group in $RET; do
+			$log $chroot $ROOT adduser "$USER" $group >/dev/null 2>&1 || true
+		done
+	fi
+
+	db_get passwd/root-login
+	if [ "$RET" = false ] && [ -n "$USER" ]; then
+		# Ensure sudo is installed, and set up the user to be able
+		# to use it.
+		if [ ! -e $ROOT/etc/sudoers ]; then
+			# try to work in d-i and out; it's better to
+			# use apt-install in d-i
+			apt-install sudo 2>/dev/null || $log $chroot $ROOT apt-get -q -y install sudo || true
+		fi
+		if [ -e $ROOT/etc/sudoers ]; then
+			# Test if we can add the user to the sudo group
+			# (possible if sudo >= 1.7.2-2 is installed on the target system)
+			# If we can, do it this way, otherwise add the user to sudoers
+			# See #597239
+			if ! $log $chroot $ROOT adduser "$USER" sudo >/dev/null 2>&1; then
+				echo "$USER ALL=(ALL) ALL" >> $ROOT/etc/sudoers
+			fi
+		else
+			# sudo failed to install, system won't be usable
+			exit 1
+		fi
+		# Configure gksu to use sudo, via an alternative, if it's
+		# installed and the alternative is registered.
+		if $chroot $ROOT update-alternatives --display libgksu-gconf-defaults >/dev/null 2>&1; then
+			$log $chroot $ROOT update-alternatives --set libgksu-gconf-defaults /usr/share/libgksu/debian/gconf-defaults.libgksu-sudo
+			$log $chroot $ROOT update-gconf-defaults || true
+		fi
+		# Configure aptitude to use sudo.
+		echo 'Aptitude::Get-Root-Command "sudo:/usr/bin/sudo";' > $ROOT/etc/apt/apt.conf.d/00aptitude
+	fi
+else
+	# Just in case, clear any preseeded user password from the database
+	# anyway.
+	db_set passwd/user-password-crypted ''
+	db_set passwd/user-password ''
+	db_set passwd/user-password-again ''
+fi
+
+exit 0

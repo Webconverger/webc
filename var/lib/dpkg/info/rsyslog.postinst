@@ -1,0 +1,98 @@
+#!/bin/sh
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+rotate_old_log_files()
+{
+	log_files="syslog mail.info mail.warn mail.err mail.log daemon.log \
+	           kern.log auth.log user.log lpr.log cron.log debug messages"
+	skipped_files=""
+	dir=/var/log
+
+	for f in $log_files; do
+		if [ -e $dir/$f.0 ]; then
+			rotate="yes"
+			if [ -e $dir/$f.1.gz ]; then
+				date0=$(stat --format=%Y $dir/$f.0)
+				date1=$(stat --format=%Y $dir/$f.1.gz)
+				if [ $date0 -lt $date1 ] ; then
+					# .0 log file is older than .1
+					skipped_files="$dir/$f.0\n$skipped_files"
+					rotate="no"
+				fi
+			fi
+			if [ "$rotate" = "yes" ] ; then
+				for s in $(seq 9 -1 1) ; do
+					if [ -e $dir/$f.$s.gz ]; then
+						mv $dir/$f.$s.gz $dir/$f.$(($s+1)).gz
+					fi
+				done
+				mv $dir/$f.0 $dir/$f.1
+			fi
+		fi
+	done
+	if [ -n "$skipped_files" ]; then
+		printf "The following old log files were found which could not be rotated safely.\n"
+		printf "\n$skipped_files\n"
+		printf "Please inspect them manually and delete them, if no longer required.\n"
+	fi
+}
+
+
+case "$1" in
+    configure)
+	# Rotate .0 log files when migrating from sysklogd
+	if dpkg --compare-versions "$2" lt "3.18.5-1"; then
+		rotate_old_log_files
+	fi
+
+	# Update init script priorities
+	if dpkg --compare-versions "$2" lt "3.20.2-1"; then
+		for i in 0 6 ; do
+			if [ -e /etc/rc$i.d/K90rsyslog ]; then
+				mv /etc/rc$i.d/K90rsyslog /etc/rc$i.d/S30rsyslog
+			fi
+		done
+	fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 1
+    ;;
+esac
+
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/rsyslog" ]; then
+	update-rc.d rsyslog start 10 2 3 4 5 . start 30 0 6 . stop 90 1 . >/dev/null
+	if [ -n "$2" ]; then
+		_dh_action=restart
+	else
+		_dh_action=start
+	fi
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d rsyslog $_dh_action || exit $?
+	else
+		/etc/init.d/rsyslog $_dh_action || exit $?
+	fi
+fi
+# End automatically added section
+
+
+exit 0

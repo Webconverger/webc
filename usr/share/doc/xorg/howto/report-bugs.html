@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.5.2" />
+<title>How to report bugs</title>
+<link rel="stylesheet" href="../xsf.css" type="text/css" />
+<link rel="stylesheet" href="../xsf.css" type="text/css" />
+<script type="text/javascript">
+/*<![CDATA[*/
+window.onload = function(){asciidoc.footnotes();}
+/*]]>*/
+</script>
+<script type="text/javascript" src="../asciidoc-xhtml11.js"></script>
+</head>
+<body>
+<div id="header">
+<h1><a href="../index.html">XSF</a> / How to report bugs</h1>
+<span id="author">Cyril Brulebois</span><br />
+<span id="email"><tt>&lt;<a href="mailto:kibi@debian.org">kibi@debian.org</a>&gt;</tt></span><br />
+</div>
+<div id="content">
+<h2 id="_simple_as_reportbug">Simple as reportbug</h2>
+<div class="sectionbody">
+<h3 id="_initial_report">Initial report</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Unless you know which package to report the bug against, you can
+report the bug against the <tt>xorg</tt> metapackage:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>reportbug xorg</tt></pre>
+</div></div>
+<div class="paragraph"><p>Like most packages related to the X server, reporting a bug against
+this package triggers a bug script which is going to collect X-related
+information, be it installed packages, running kernel, X
+configuration, X log, and so on.</p></div>
+<div class="sidebarblock">
+<div class="sidebar-content">
+<div class="paragraph"><div class="title">Note</div><p>In case this metapackage wasn’t used to install your X stack,
+report a bug against <tt>xserver-xorg</tt> instead. And if that one isn’t
+installed either, go for <tt>xserver-xorg-core</tt>.</p></div>
+</div></div>
+<div class="paragraph"><p>If a backtrace shows up in the X log, it’s much appreciated to try and
+get a <a href="use-gdb.html">full backtrace using gdb</a>.</p></div>
+<h3 id="_follow_up_with_more_info">Follow-up with more info</h3><div style="clear:left"></div>
+<div class="paragraph"><p>If you reported a bug against another package and if that bug was
+reassigned to an X-related package, we might need more
+information. You can run the bug script manually and attach its output
+to your mail to the bug report:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>/usr/share/bug/xserver-xorg-core/script 3&gt;/tmp/script.log</tt></pre>
+</div></div>
+<div class="sidebarblock">
+<div class="sidebar-content">
+<div class="paragraph"><div class="title">Note</div><p>Make sure there’s no space between <tt>3</tt> and <tt>&gt;</tt>, that’s a shell
+redirection.</p></div>
+</div></div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2011-07-19 20:29:00 UTC
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+#!/bin/sh -e
+
+. /usr/share/debconf/confmodule
+
+db_capb "backup"
+
+if [ "$1" ]; then
+	ROOT="$1"
+else
+	ROOT=
+fi
+export ROOT
+
+. /usr/lib/user-setup/functions.sh
+
+# For the convenience of heavy testers
+set_special_users() {
+	local realname
+	case "$fullname" in
+	    fjp)	realname="Frans Pop" ;;
+	    tbm)	realname="Martin Michlmayr" ;;
+	    *)		return 1 ;;
+	esac
+	db_set passwd/user-fullname "$realname"
+	userdefault=$fullname
+	db_fset passwd/username seen true
+	return 0
+}
+
+# Main loop starts here. Use a state machine to allow jumping back to
+# previous questions.
+STATE=0
+while :; do
+	case "$STATE" in
+	    0)
+		# Ask how the password files should be set up.
+		db_input low passwd/shadow || true
+		# Ask if root should be allowed to login.
+		db_input medium passwd/root-login || true
+		;;
+	    1)
+		db_get passwd/root-login
+		if [ "$RET" = false ]; then
+			# root password will be locked
+			db_set passwd/root-password ""
+			db_set passwd/root-password-crypted "!"
+		elif ! root_password; then
+			# First check whether the root password was preseeded
+			# crypted to an actual password (not locked)
+			db_get passwd/root-password-crypted || true
+			if ! test "$RET" || [ "x$RET" = "x!" ]; then
+				# No preseed of the root password hash
+				# we will prompt the user
+				db_set passwd/root-password-crypted ""
+				db_input critical passwd/root-password || true
+				db_input critical passwd/root-password-again || true
+			fi
+		fi
+		;;
+	    2)
+		db_get passwd/root-login
+		if [ "$RET" = false ]; then
+			# root password will be locked
+			db_set passwd/root-password-again ""
+		elif ! root_password; then
+			# First check whether the root password was preseeded crypted
+			db_get passwd/root-password-crypted || true
+			if ! test "$RET" ; then
+				# Compare the two passwords, loop back if not
+				# identical, or if empty.
+				db_get passwd/root-password
+				ROOT_PW="$RET"
+				if [ -z "$ROOT_PW" ]; then
+					db_set passwd/root-login false
+					STATE=1
+					continue
+				fi
+				db_get passwd/root-password-again
+				if [ "$ROOT_PW" != "$RET" ]; then
+					db_fset user-setup/password-mismatch seen false
+					db_input critical user-setup/password-mismatch
+					db_fset passwd/root-password seen false
+					db_fset passwd/root-password-again seen false
+					STATE=1
+					continue
+				fi
+				ROOT_PW=''
+			fi
+		fi
+		;;
+	    3)
+		# Ask if a non-root user should be made, if there is not
+		# already one.
+		db_get passwd/root-login
+		if [ "$RET" = false ]; then
+			# always make non-root user; this user will be able
+			# to sudo to root
+			db_set passwd/make-user true
+		elif ! is_system_user; then
+			db_input medium passwd/make-user || true
+		fi
+		;;
+	    4)
+		# Prompt for user info.
+		db_get passwd/make-user
+		if [ "$RET" = true ] && ! is_system_user; then
+			db_input critical passwd/user-fullname || true
+		fi
+		;;
+	    5)
+		# Prompt for user info.
+		db_get passwd/make-user
+		if [ "$RET" = true ] && ! is_system_user; then
+			LOOP=""
+			db_get passwd/username
+			if [ -z "$RET" ]; then
+				db_get passwd/user-fullname
+				fullname=$RET
+				if ! set_special_users; then
+					userdefault=$(echo "$fullname" | \
+						sed 's/ .*//' | LC_ALL=C tr A-Z a-z)
+				fi
+				if test -n "$userdefault" && \
+					LC_ALL=C expr "$userdefault" : '[a-z][-a-z0-9]*$' >/dev/null; then
+					db_set passwd/username "$userdefault"
+				fi
+			fi
+			db_input critical passwd/username || true
+		fi
+		;;
+	    6)
+		# Verify user.
+		db_get passwd/make-user
+		if [ "$RET" = true ] && ! is_system_user; then
+			# Verify the user name, loop with message if bad.
+			db_get passwd/username
+			USER="$RET"
+			if ! LC_ALL=C expr "$USER" : '[a-z][-a-z0-9]*$' >/dev/null; then
+				db_fset passwd/username seen false
+				db_fset passwd/username-bad seen false
+				db_input critical passwd/username-bad
+				STATE=3
+				continue
+			fi
+			
+			if grep -v '^#' /usr/lib/user-setup/reserved-usernames | \
+			   grep -q "^$USER\$"; then
+				db_fset passwd/username seen false
+				db_fset passwd/username-reserved seen false
+				db_subst passwd/username-reserved USERNAME "$USER"
+				db_input critical passwd/username-reserved
+				STATE=3
+				continue
+			fi
+
+			db_get passwd/user-password-crypted || true
+			if ! test "$RET" ; then
+				db_input critical passwd/user-password || true
+				db_input critical passwd/user-password-again || true
+			fi
+		fi
+		;;
+	    7)
+		db_get passwd/make-user
+		if [ "$RET" = true ] && ! is_system_user; then
+			db_get passwd/user-password-crypted || true
+			if ! test "$RET" ; then
+				# Compare the two passwords, loop with message if not
+				# identical, or if empty.
+				db_get passwd/user-password
+				USER_PW="$RET"
+				db_get passwd/user-password-again
+				if [ "$USER_PW" != "$RET" ]; then
+					db_set passwd/user-password ""
+					db_set passwd/user-password-again ""
+					db_fset user-setup/password-mismatch seen false
+					db_input critical user-setup/password-mismatch
+					db_fset passwd/user-password seen false
+					db_fset passwd/user-password-again seen false
+					STATE=6
+					continue
+				fi
+				if [ -z "$USER_PW" ]; then
+					db_set passwd/user-password ""
+					db_set passwd/user-password-again ""
+					db_fset user-setup/password-empty seen false
+					db_input critical user-setup/password-empty
+					db_fset passwd/user-password seen false
+					db_fset passwd/user-password-again seen false
+					STATE=6
+					continue
+				fi
+			fi
+		fi
+		;;
+	    *)
+		break
+		;;
+	esac
+
+	if db_go; then
+		STATE=$(($STATE + 1))
+	else
+		STATE=$(($STATE - 1))
+	fi
+	#echo "ON STATE: $STATE"
+done
+
+if [ "$STATE" = -1 ]; then
+	exit 10
+fi

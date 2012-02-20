@@ -1,0 +1,51 @@
+#! /bin/sh
+#
+# sysvinit postinst
+#
+
+set -e
+
+case "$1" in
+  configure)
+	oldver=$2
+	;;
+  abort-upgrade|abort-remove|abort-deconfigure)
+	exit 0
+	;;
+esac
+
+umask 022
+
+case "$(uname -s)" in
+  *FreeBSD)
+	INITCTL=/etc/.initctl
+	;;
+  *)
+	INITCTL=/dev/initctl
+	;;
+esac
+
+#
+# Check /dev/initctl
+#
+if [ "$INITCTL" ] && [ ! -p "$INITCTL" ]
+then
+	echo "sysvinit: creating $INITCTL"
+	rm -f $INITCTL
+	mkfifo -m 600 $INITCTL
+fi
+rm -f /etc/ioctl.save
+
+if [ ! -f /etc/inittab ]
+then
+	cp -p /usr/share/sysvinit/inittab /etc/inittab
+fi
+
+#
+# Tell init to re-exec itself.
+#
+init u ||:
+
+
+
+exit 0

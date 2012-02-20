@@ -1,0 +1,22 @@
+#!/bin/sh -e
+
+mv_conffile() {
+	local OLDCONFFILE="$1"
+	local NEWCONFFILE="$2"
+
+	[ -e "$OLDCONFFILE" ] || return 0
+
+	echo "Preserving user changes to $NEWCONFFILE ..."
+	mv -f "$NEWCONFFILE" "$NEWCONFFILE".dpkg-new
+	mv -f "$OLDCONFFILE" "$NEWCONFFILE"
+}
+
+case "$1" in
+configure)
+	if dpkg --compare-versions "$2" le "30~pre9-2"; then
+		mv_conffile "/etc/network/if-up.d/wireless-tools" "/etc/network/if-pre-up.d/wireless-tools"
+		mv_conffile "/etc/network/if-down.d/wireless-tools" "/etc/network/if-post-down.d/wireless-tools"
+	fi
+esac
+
+

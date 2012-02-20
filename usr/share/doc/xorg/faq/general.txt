@@ -1,0 +1,91 @@
+General FAQ
+===========
+:toc:
+Cyril Brulebois <kibi@debian.org>
+
+
+Input drivers
+-------------
+
+ * _How do I configure input for X?_ +
+   Look at the link:../howto/configure-input.html[how to configure input] documentation.
+
+ * _Why can’t I kill X through `Ctrl+Alt+Backspace`?_ +
+   That’s explained in the above-mentioned documentation.
+
+
+<<<
+Video drivers
+-------------
+
+All drivers
+~~~~~~~~~~~
+
+ * _What’s wrong with the DPI setting?_ +
+   By the default, the X server uses 96 DPI, as seen on upstream bug
+   https://bugs.freedesktop.org/show_bug.cgi?id=23705[#23705] (in
+   particular
+   https://bugs.freedesktop.org/show_bug.cgi?id=23705#c6[Keith’s comment]). A
+   particular DPI setting can be set through desktop environment’s
+   preferences, through the `-dpi` X server command line option (see
+   ++Xserver++’s manual page), or through ++xrandr++’s `--dpi` option.
+
+Ati driver
+~~~~~~~~~~
+
+ * _Why is it I’m getting low performances, or even crashes?_ +
+   Make sure you have installed the
+   link:http://packages.debian.org/firmware-linux&exact=1[`firmware-linux`
+   package].  The driver might still be working without the firmware,
+   but using code paths which aren’t supported as well as the “normal”
+   ones.
+
+Intel driver
+~~~~~~~~~~~~
+
+ * _Why isn’t it working?_ +
+   KMS is mandatory, as documented in its `README.Debian` (view it
+   online:
+   http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-video-intel.git;a=blob;f=debian/README.Debian[git.debian.org]). You
+   probably disabled KMS or didn’t include it in your kernel
+   configuration if you’re using a custom kernel.
+
+ * _X is crashing all the time with my “old” Intel card. What can I do?_ +
+   Unfortunately, old cards are not very well supported, and you can’t
+   do much more than switching to a generic driver, like `fbdev` or
+   `vesa`, as documented in `README.Debian` (view it online:
+   http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-video-intel.git;a=blob;f=debian/README.Debian[git.debian.org]). Please
+   note that you need to disable `KMS` if you want to use the `vesa`
+   driver. A minimal `xorg.conf` would look like:
+----
+Section "Device"
+    Identifier "MyBuggyCard"
+    Driver     "fbdev"
+EndSection
+----
+
+Nouveau driver
+~~~~~~~~~~~~~~
+
+ * _Why isn’t it working?_ +
+   Since it’s still considered experimental by its authors, the
+   interfaces aren’t stable yet, so the driver has particular
+   dependencies on the kernel, which are documented in `README.Debian`
+   (view it online:
+   http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-video-nouveau.git;a=blob;f=debian/README.Debian;h=27ced6b1bf5102a5b72525318439efdfb330745d;hb=6c2f12ca18f55b55d49e083d86d87d970ce53a07[for squeeze],
+   http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-video-nouveau.git;a=blob;f=debian/README.Debian[for sid]).
+
+
+<<<
+Others
+------
+
+Session management
+~~~~~~~~~~~~~~~~~~
+
+ * _How to start a bare X session (without Gnome, KDE, etc.)?_ +
+   Assuming there’s no X running on the `:1` display, run this from a
+   VT:
+----
+startx /usr/bin/xterm -- :1
+----

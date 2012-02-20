@@ -1,0 +1,1576 @@
+Package: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 592
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libc6 (>= 2.7), libclamav6 (>= 0.97.3+dfsg), zlib1g (>= 1:1.1.4), clamav-freshclam | clamav-data
+Recommends: clamav-base
+Suggests: clamav-docs
+Description: anti-virus utility for Unix - command-line interface
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the command line interface. Features:
+  - built-in support for various archive formats, including Zip, Tar,
+    Gzip, Bzip2, OLE2, Cabinet, CHM, BinHex, SIS and others;
+  - built-in support for almost all mail file formats;
+  - built-in support for ELF executables and Portable Executable files
+    compressed with UPX, FSG, Petite, NsPack, wwpack32, MEW, Upack and
+    obfuscated with SUE, Y0da Cryptor and others;
+  - built-in support for popular document formats including Microsoft
+    Office and Mac Office files, HTML, RTF and PDF.
+ .
+ For scanning to work, a virus database is needed. There are two options
+ for getting it:
+  - clamav-freshclam: updates the database from Internet. This is
+    recommended with Internet access.
+  - clamav-data: for users without Internet access. The package is
+    not updated once installed. The clamav-getfiles package allows
+    creating custom packages from an Internet-connected computer.
+Homepage: http://www.clamav.net/
+Tag: implemented-in::c, interface::commandline, role::program, scope::utility, security::antivirus, use::scanning, works-with::file, works-with::mail
+Section: utils
+Priority: optional
+Filename: pool/main/c/clamav/clamav_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 329414
+MD5sum: b5c59b5b5f376f94757cfc3140657197
+SHA1: 2cf27700fb0eee6e2f7ad2b7af0da5c65579e65f
+SHA256: a241c45a2772bbaaa52e98e525c43fae805bf881e695e062f854675265c3cf56
+
+Package: clamav-base
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 30884
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: all
+Depends: debconf (>= 0.5) | debconf-2.0, adduser, ucf, logrotate
+Recommends: clamav
+Description: anti-virus utility for Unix - base package
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package mainly manages the clamav system account. It is not really
+ useful without the clamav package. It also handles the configuration
+ for both the clamav-daemon and the clamav-milter packages.
+Homepage: http://www.clamav.net/
+Tag: interface::commandline, role::app-data, security::antivirus, special::auto-inst-parts, use::scanning, works-with::file, works-with::mail
+Section: utils
+Priority: optional
+Filename: pool/main/c/clamav/clamav-base_0.97.3+dfsg-1~squeeze1_all.deb
+Size: 31347552
+MD5sum: bdf832de722e368d2d195182fd7ada8d
+SHA1: 324b00f2ecd78913ab3083c664e15c267e81d2ac
+SHA256: f385cc3e8ae61871901bb816b2b81e6f14c59d7cf6ecfc28269f9a742fee6c1a
+
+Package: clamav-daemon
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 832
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libbz2-1.0, libc6 (>= 2.3.6-6~), libclamav6 (>= 0.97.3+dfsg), libncurses5 (>= 5.7+20100313), libtommath0, zlib1g (>= 1:1.2.0.2), clamav-base (= 0.97.3+dfsg-1~squeeze1), clamav-freshclam | clamav-data, lsb-base (>= 3.2-13), ucf
+Suggests: daemon, clamav-docs
+Description: anti-virus utility for Unix - scanner daemon
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the daemon and its command line interface,
+ featuring:
+  - fast, multi-threaded daemon;
+  - easy integration with MTA's;
+  - support for on-access scanning;
+  - remote scanning;
+  - able to be run supervised by daemon.
+Homepage: http://www.clamav.net/
+Tag: implemented-in::c, interface::commandline, interface::daemon, mail::filters, network::server, role::program, security::antivirus, use::scanning, works-with::file, works-with::mail
+Section: utils
+Priority: optional
+Filename: pool/main/c/clamav/clamav-daemon_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 414370
+MD5sum: bf71306de61112f1c6d6b85494751fe6
+SHA1: 148402d559e3f522059e0a33e1a60ca840cf8398
+SHA256: aa743a1fde950b29daad93ee9fd90b5ca24eea6841e7323f023a1f9535120704
+
+Package: clamav-dbg
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 62316
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libclamav6, clamav (= 0.97.3+dfsg-1~squeeze1)
+Description: debug symbols for ClamAV
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the stripped debugging symbols for the ClamAV suite.
+Homepage: http://www.clamav.net/
+Tag: implemented-in::c, role::debug-symbols
+Section: debug
+Priority: extra
+Filename: pool/main/c/clamav/clamav-dbg_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 23828744
+MD5sum: c50eddb12852ab3c56d3d0ffca82bff8
+SHA1: 45c4ae2a0e6645cff29f845618b547a12deffbbb
+SHA256: 58db69e1a07adcda69a0f173dda5b08bbc66866893534a67714d8a8ed69be1a7
+
+Package: clamav-docs
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 1768
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: all
+Description: anti-virus utility for Unix - documentation
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the documentation for the ClamAV suite.
+Homepage: http://www.clamav.net/
+Tag: made-of::html, made-of::pdf, mail::filters, role::documentation, security::antivirus, works-with::file, works-with::mail
+Section: doc
+Priority: optional
+Filename: pool/main/c/clamav/clamav-docs_0.97.3+dfsg-1~squeeze1_all.deb
+Size: 1297878
+MD5sum: e4541053321a90e5bc36284a3f7f7e7e
+SHA1: a947c8325d4f52364070c4632df60e9af4fae3d8
+SHA256: 9ed869a3e4a5ae6714acfcb50f090fdb252ca8a2728724ffd0e7d8632cd83d24
+
+Package: clamav-freshclam
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 656
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Provides: clamav-data
+Depends: debconf (>= 0.5) | debconf-2.0, clamav-base (>= 0.97.3+dfsg-1~squeeze1), libc6 (>= 2.7), libclamav6 (>= 0.97.3+dfsg), zlib1g (>= 1:1.1.4), ucf, logrotate, lsb-base (>= 3.2-13)
+Suggests: clamav-docs
+Conflicts: clamav-data, libclamav2, libclamav3
+Description: anti-virus utility for Unix - virus database update utility
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the freshclam program and scripts to automate virus
+ database updating. It relies on an Internet connection, but can be
+ run in a variety of ways to compensate for intermittent connections.
+Homepage: http://www.clamav.net/
+Tag: implemented-in::c, interface::commandline, interface::daemon, role::program, scope::utility, security::antivirus, use::downloading, works-with::file, works-with::mail
+Section: utils
+Priority: optional
+Filename: pool/main/c/clamav/clamav-freshclam_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 313156
+MD5sum: 3fb127aa0372b9ca63c2792bcf8599bb
+SHA1: cbd82277ab44e716122191df94d8e7cde23f06ff
+SHA256: 18dc3008243da27b93cde8b8917e945be0ac9267fd1f0e048e2a532dfb7680c0
+
+Package: clamav-milter
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 704
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libc6 (>= 2.3.6-6~), libmilter1.0.1, clamav-base (>= 0.97.3+dfsg-1~squeeze1), clamav-freshclam | clamav-data, lsb-base (>= 3.2-13), debconf (>= 0.5) | debconf-2.0, adduser, ucf, logrotate
+Recommends: clamav-daemon
+Suggests: daemon, clamav-docs
+Description: anti-virus utility for Unix - sendmail integration
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains the ClamAV milter for use with sendmail. It can
+ be configured to be run either standalone, or using clamav-daemon.
+Homepage: http://www.clamav.net/
+Tag: implemented-in::c, interface::daemon, mail::filters, network::server, role::program, security::antivirus, use::scanning, works-with::mail
+Section: utils
+Priority: extra
+Filename: pool/main/c/clamav/clamav-milter_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 345800
+MD5sum: b9a96214ee6ce467e3de479e729d0e68
+SHA1: 0e23efff534d28d84b93b913d04cb754a523415e
+SHA256: bbddb3ad89a72bedaeddeef8cf3fd4338af42d7ce27ca03dcf9062586e0b1fb2
+
+Package: clamav-testfiles
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 6876
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: all
+Description: anti-virus utility for Unix - test files
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ This package contains files 'infected' with a test signature. The test
+ signature (ClamAV-Test-Signature) should be detectable by all
+ anti-virus programs.
+Homepage: http://www.clamav.net/
+Tag: devel::testing-qa, interface::commandline, role::app-data, security::antivirus, use::checking
+Section: utils
+Priority: optional
+Filename: pool/main/c/clamav/clamav-testfiles_0.97.3+dfsg-1~squeeze1_all.deb
+Size: 5261478
+MD5sum: 497b10454094e041d8d10f553c0b5271
+SHA1: 990e3f787ce1d605ba5b0a2751bd858bcaac7f5d
+SHA256: f0848f84f5029467f4076ef1e32b4631298552ee8b92501573c5fac5898db447
+
+Package: libclamav-dev
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 312
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libclamav6 (= 0.97.3+dfsg-1~squeeze1), libssl-dev, libidn11-dev, libc6-dev | libc-dev, zlib1g-dev, libbz2-dev, libtommath-dev
+Description: anti-virus utility for Unix - development files
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ The package contains the needed headers and libraries for
+ developing software using the libclamav interface.
+ .
+ This library can be used to develop virus scanner applications.
+Homepage: http://www.clamav.net/
+Tag: devel::lang:c, devel::library, implemented-in::c, role::devel-lib, security::antivirus, use::scanning
+Section: libdevel
+Priority: optional
+Filename: pool/main/c/clamav/libclamav-dev_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 218098
+MD5sum: 6e7630219e09aa101a97765af287539d
+SHA1: 84e515e7629a5c48d90921237db434ddaafc365e
+SHA256: 1dcfce3a88c286ec49ff7fba8387a13011061c664f4646007eab296d454ebee3
+
+Package: libclamav6
+Source: clamav
+Version: 0.97.3+dfsg-1~squeeze1
+Installed-Size: 9444
+Maintainer: ClamAV Team <pkg-clamav-devel@lists.alioth.debian.org>
+Architecture: i386
+Depends: libbz2-1.0, libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libltdl7 (>= 2.2.6b), libstdc++6 (>= 4.2.1), libtommath0, zlib1g (>= 1:1.1.4)
+Suggests: libclamunrar6
+Description: anti-virus utility for Unix - library
+ Clam AntiVirus is an anti-virus toolkit for Unix. The main purpose of
+ this software is the integration with mail servers (attachment
+ scanning). The package provides a flexible and scalable
+ multi-threaded daemon in the clamav-daemon package, a command-line
+ scanner in the clamav package, and a tool for automatic updating via
+ the Internet in the clamav-freshclam package. The programs are based
+ on libclamav6, which can be used by other software.
+ .
+ For programs written using the libclamav library. Libclamav may be used to add
+ virus protection into software. The library is thread-safe, and automatically
+ recognizes and scans archives. Scanning is very fast and most of the time
+ not noticeable.
+Homepage: http://www.clamav.net/
+Tag: role::shared-lib, security::antivirus
+Section: libs
+Priority: optional
+Filename: pool/main/c/clamav/libclamav6_0.97.3+dfsg-1~squeeze1_i386.deb
+Size: 4020282
+MD5sum: 27a257cea6f4de45fb04e53cbfe6d4ec
+SHA1: 7391ef02347e014b3d2f077cdcd0347e9d4b0bea
+SHA256: 5cf922404da074dafb6a02d471429f7105118f6092de13d8a6c474a0a9438453
+
+Package: clive
+Version: 2.2.13-5+squeeze4
+Installed-Size: 208
+Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
+Architecture: all
+Depends: perl, libclass-singleton-perl (>= 1.4), libgetopt-argvfile-perl (>= 1.11), libconfig-tiny-perl (>= 2.12), libwww-curl-perl (>= 4.05), libhtml-parser-perl (>= 2.37), liburi-perl (>= 1.37), libexpect-perl (>= 1.20)
+Recommends: clive-utils, libberkeleydb-perl (>= 0.34), libterm-readkey-perl
+Suggests: ffmpeg
+Description: video extraction utility for YouTube, Google Video and others
+ clive is a command line utility for extracting videos from Youtube and other
+ video sharing Web sites. It was originally written to bypass the Adobe Flash
+ requirement needed to view the hosted videos. It is non-interactive, meaning
+ it can work in the background while the user is not logged on. This allows the
+ user to start an extraction and disconnect from the system, letting clive
+ finish the work.
+Homepage: http://clive.googlecode.com/
+Tag: implemented-in::perl, interface::commandline, network::client, protocol::http, role::program, scope::utility, use::downloading, works-with::video
+Section: utils
+Priority: optional
+Filename: pool/main/c/clive/clive_2.2.13-5+squeeze4_all.deb
+Size: 57290
+MD5sum: 4c048407138e9b53428d036ca78fef66
+SHA1: 12afe55ff70ad9e3c559b2d0f40125ca7ce5c653
+SHA256: 2604536d73cf52fc89b234488b3b1cb25005c2419ff6bb00f76918ade9582777
+
+Package: eglibc-source
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 10900
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: all
+Recommends: xz-utils
+Description: Embedded GNU C Library: sources
+ This package contains the sources and patches which are needed to
+ build eglibc.
+Homepage: http://www.eglibc.org
+Tag: role::source
+Section: devel
+Priority: optional
+Filename: pool/main/e/eglibc/eglibc-source_2.11.3-3_all.deb
+Size: 11114212
+MD5sum: abca1c3a2d894afc2d41f764bbbdf993
+SHA1: c2472e9ca5c91cfe48414aca093ed695eda2c39f
+SHA256: a7e5cfed0314de55f44b1cb6232d37e7b9a3e8e8e3f05989cb48fd4b96e41eb5
+
+Package: glibc-doc
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 1952
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: all
+Suggests: glibc-doc-reference
+Description: Embedded GNU C Library: Documentation
+ Contains man pages for libpthread functions and the complete GNU C Library
+ ChangeLog.  The GNU C Library Reference manual has been moved into
+ glibc-doc-reference for licensing reasons.
+Homepage: http://www.eglibc.org
+Tag: devel::{doc,lang:c,library}, made-of::html, made-of::info, role::documentation, suite::gnu
+Section: doc
+Priority: optional
+Filename: pool/main/e/eglibc/glibc-doc_2.11.3-3_all.deb
+Size: 1851436
+MD5sum: 5ab9b1d7e1645ac2e2fefa6d8c487b95
+SHA1: 271eb2c928572f2634d77b280878a1624d66b1ef
+SHA256: 8be9bf16a11297dd30ec5d002b87bb99406f2c437d0250c2557e2645192937d0
+
+Package: libc-bin
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 1520
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Replaces: libc0.1, libc0.3, libc6, libc6.1
+Breaks: libc0.1 (<< 2.10), libc0.3 (<< 2.10), libc6 (<< 2.10), libc6.1 (<< 2.10)
+Description: Embedded GNU C Library: Binaries
+ This package contains utility programs related to the GNU C Library.
+ .
+  * catchsegv: catch segmentation faults in programs
+  * getconf: query system configuration variables
+  * getent: get entries from administrative databases
+  * iconv, iconvconfig: convert between character encodings
+  * ldd, ldconfig: print/configure shared library dependencies
+  * locale, localedef: show/generate locale definitions
+  * rpcinfo: report RPC information
+  * tzselect, zdump, zic: select/dump/compile time zones
+Homepage: http://www.eglibc.org
+Tag: devel::lang:c, devel::packaging, implemented-in::c, interface::commandline, role::program, scope::utility, special::auto-inst-parts, suite::gnu, works-with::text, works-with::unicode
+Section: libs
+Priority: required
+Filename: pool/main/e/eglibc/libc-bin_2.11.3-3_i386.deb
+Size: 708508
+MD5sum: 5bcdbd3013e8d590feb65848690c6315
+SHA1: cf762ad517deec3395bb68d09f7937c7f1e3deba
+SHA256: eb690e18780ebc9242cd6b12819b275ecb7df53fcb9329029e5842f2981b635b
+
+Package: libc-dev-bin
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 348
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Replaces: libc0.1-dev, libc0.3-dev, libc6-dev, libc6.1-dev
+Depends: libc6 (>> 2.11), libc6 (<< 2.12)
+Recommends: manpages-dev
+Description: Embedded GNU C Library: Development binaries
+ This package contains utility programs related to the GNU C Library
+ development package.
+Homepage: http://www.eglibc.org
+Tag: devel::{code-generator,i18n,library,profiler,rpc,testing-qa}, implemented-in::c, interface::commandline, role::program, special::auto-inst-parts, suite::gnu, works-with::file, works-with::software:running
+Section: libdevel
+Priority: optional
+Filename: pool/main/e/eglibc/libc-dev-bin_2.11.3-3_i386.deb
+Size: 202640
+MD5sum: 38ff936a12551640465ab022705f68d7
+SHA1: 9ed35a5c477b813c859d911a4a48caa2c3bcfe38
+SHA256: fcae844d3aa12a3479db84f823defa49b9aec1df66b0e307f924fa97c73cc45a
+
+Package: libc6
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 9360
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Provides: glibc-2.11-1
+Depends: libc-bin (= 2.11.3-3), libgcc1
+Recommends: libc6-i686
+Suggests: glibc-doc, debconf | debconf-2.0, locales
+Conflicts: prelink (<= 0.0.20090311-1), tzdata (<< 2007k-1), tzdata-etch
+Breaks: locales (<< 2.11), locales-all (<< 2.11), nscd (<< 2.11)
+Description: Embedded GNU C Library: Shared libraries
+ Contains the standard libraries that are used by nearly all programs on
+ the system. This package includes shared versions of the standard C library
+ and the standard math library, as well as many others.
+Homepage: http://www.eglibc.org
+Tag: devel::lang:c, devel::library, implemented-in::c, protocol::ipv6, role::shared-lib, suite::gnu
+Section: libs
+Priority: required
+Filename: pool/main/e/eglibc/libc6_2.11.3-3_i386.deb
+Size: 3884480
+MD5sum: ad3f3e47411a0e6d92a20e5373e15577
+SHA1: edfcd8a3ba16f30b600a7f4925803c03aa22ffb8
+SHA256: 32cce64a9615fdd672425aa65ea86388c464a1261b77c7941cbe6a78cc758f3d
+
+Package: libc6-amd64
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 9864
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Depends: libc6 (= 2.11.3-3)
+Conflicts: amd64-libs (<= 1.2)
+Description: Embedded GNU C Library: 64bit Shared libraries for AMD64
+ This package includes shared versions of the standard C library and the
+ standard math library, as well as many others. This is the 64bit version
+ of the library, meant for AMD64 systems.
+Homepage: http://www.eglibc.org
+Tag: role::shared-lib, suite::gnu
+Section: libs
+Priority: optional
+Filename: pool/main/e/eglibc/libc6-amd64_2.11.3-3_i386.deb
+Size: 4179588
+MD5sum: f320dd0163b1fb466af7f167aa393565
+SHA1: a049b46fe939068a9c15c05b1278dba5f2d651ca
+SHA256: a4bc3db6f94145881181c8999b4660116a8cc564245556c3fa2e94a26d0874b3
+
+Package: libc6-dbg
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 54668
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Provides: libc-dbg
+Depends: libc6 (= 2.11.3-3)
+Description: Embedded GNU C Library: detached debugging symbols
+ This package contains the detached debugging symbols for the GNU C
+ library.
+Homepage: http://www.eglibc.org
+Tag: devel::{debugger,lang:c,library}, implemented-in::c, role::shared-lib, suite::gnu
+Section: debug
+Priority: extra
+Filename: pool/main/e/eglibc/libc6-dbg_2.11.3-3_i386.deb
+Size: 16881168
+MD5sum: 274203d3727f8c22bf704b4806840b78
+SHA1: 1a3b331f45c3add6b01074d4222dae1b70f781aa
+SHA256: 4fdfd22e72f73b8d9f9e34cf0c84d7afe53485311378886768fa6ec772135053
+
+Package: libc6-dev
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 18544
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Provides: libc-dev
+Depends: libc6 (= 2.11.3-3), libc-dev-bin (= 2.11.3-3), linux-libc-dev
+Recommends: gcc | c-compiler
+Suggests: glibc-doc, manpages-dev
+Conflicts: binutils (<< 2.20.1-1), binutils-gold (<< 2.20.1-11)
+Description: Embedded GNU C Library: Development Libraries and Header Files
+ Contains the symlinks, headers, and object files needed to compile
+ and link programs which use the standard C library.
+Homepage: http://www.eglibc.org
+Build-Essential: yes
+Tag: devel::lang:c, devel::library, implemented-in::c, role::devel-lib, suite::gnu
+Section: libdevel
+Priority: optional
+Filename: pool/main/e/eglibc/libc6-dev_2.11.3-3_i386.deb
+Size: 4798814
+MD5sum: 59fcc894e26923c746f2851d50af3808
+SHA1: a103e2185d153f49293cb91de5ee0a5d6f381fcb
+SHA256: 26bf9a089b384541c8c62150759fe680a196fc8591e6c70936e5fd6a3dfd52ac
+
+Package: libc6-dev-amd64
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 8152
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Replaces: amd64-libs-dev (<= 1.2)
+Provides: lib64c-dev
+Depends: libc6-amd64 (= 2.11.3-3), libc6-dev (= 2.11.3-3)
+Recommends: gcc-multilib
+Description: Embedded GNU C Library: 64bit Development Libraries for AMD64
+ Contains the symlinks and object files needed to compile and link programs
+ which use the standard C library. This is the 64bit version of the
+ library, meant for AMD64 systems.
+Homepage: http://www.eglibc.org
+Tag: devel::library, role::devel-lib, suite::gnu
+Section: libdevel
+Priority: optional
+Filename: pool/main/e/eglibc/libc6-dev-amd64_2.11.3-3_i386.deb
+Size: 2031878
+MD5sum: b50bce05027e84c120a73564bd04bbdf
+SHA1: 4090fa5dbf543b0dd667dd54338e001585f282f3
+SHA256: 126a3598971578a4cd5268ef19d91bbd1fb2d645068dd23b805e47d6477c909b
+
+Package: libc6-i686
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 2648
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Pre-Depends: libc6 (= 2.11.3-3)
+Description: Embedded GNU C Library: Shared libraries [i686 optimized]
+ Contains the standard libraries that are used by nearly all programs on
+ the system. This package includes shared versions of the standard C
+ library and the standard math library, as well as many others.
+ .
+ This set of libraries is optimized for i686 machines, and will only be
+ used if you are running a 2.6 kernel on an i686 class CPU (check the
+ output of `uname -m').  This includes Pentium Pro, Pentium II/III/IV,
+ Celeron CPU's and similar class CPU's (including clones such as AMD
+ Athlon/Opteron, VIA C3 Nehemiah, but not VIA C3 Ezra).
+Homepage: http://www.eglibc.org
+Tag: admin::hardware, devel::lang:c, devel::library, implemented-in::c, role::shared-lib, suite::gnu
+Section: libs
+Priority: extra
+Filename: pool/main/e/eglibc/libc6-i686_2.11.3-3_i386.deb
+Size: 1205690
+MD5sum: b5d35e19733d8ebdb7cb43043b1d2ea7
+SHA1: 5a013921d1285975a0c26461077ef1ec876c6eaf
+SHA256: 1f158f1cf6634004d8892c78f93791b5d5b1a47427ce2794339049b4a75e6f71
+
+Package: libc6-pic
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 4436
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Provides: glibc-pic, libc-pic
+Depends: libc6 (= 2.11.3-3)
+Conflicts: libc-pic
+Description: Embedded GNU C Library: PIC archive library
+ Contains an archive library (ar file) composed of individual shared objects.
+ This is used for creating a library which is a smaller subset of the
+ standard libc shared library. The reduced library is used on the Debian
+ boot floppies. If you are not making your own set of Debian boot floppies
+ using the `boot-floppies' package, you probably don't need this package.
+Homepage: http://www.eglibc.org
+Tag: devel::lang:c, devel::library, implemented-in::c, role::app-data, suite::gnu
+Section: libdevel
+Priority: optional
+Filename: pool/main/e/eglibc/libc6-pic_2.11.3-3_i386.deb
+Size: 1216026
+MD5sum: 7b50910cf4b522c907c389b53526eab1
+SHA1: fc92cb482b051f50573728ea7e5753ab662855fc
+SHA256: 597cab86caf88af1b0fdf6bccde1a958171c1df43496ee98a0d99ad1ef519ac6
+
+Package: libc6-prof
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 5264
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Depends: libc6 (= 2.11.3-3)
+Description: Embedded GNU C Library: Profiling Libraries
+ Static libraries compiled with profiling info (-pg) suitable for use
+ with gprof.
+Homepage: http://www.eglibc.org
+Tag: devel::{lang:c,library,profiler}, implemented-in::c, role::devel-lib, suite::gnu
+Section: libdevel
+Priority: extra
+Filename: pool/main/e/eglibc/libc6-prof_2.11.3-3_i386.deb
+Size: 1520516
+MD5sum: fe00796ab00db6723bf1b58b3a8ca5b3
+SHA1: f9151e92d380bd6b5add4c8143bc257c8869d53c
+SHA256: 4fda7a54a949912fb956eba37ac694f3597ce995407f8859217687d28cbced2f
+
+Package: libc6-xen
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 2680
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Pre-Depends: libc6 (= 2.11.3-3)
+Description: Embedded GNU C Library: Shared libraries [Xen version]
+ Contains the standard libraries that are used by nearly all programs on
+ the system. This package includes shared versions of the standard C
+ library and the standard math library, as well as many others.
+ .
+ This set of libraries is optimized for the Xen hypervisor, and will be
+ selected instead when running under Xen.
+Homepage: http://www.eglibc.org
+Tag: role::shared-lib, suite::gnu
+Section: libs
+Priority: extra
+Filename: pool/main/e/eglibc/libc6-xen_2.11.3-3_i386.deb
+Size: 1210136
+MD5sum: a1149d37d5454a6b74d6739b8a0f60da
+SHA1: 9df7c01a58de72ce7611065701dce268be91f07b
+SHA256: e80ec8425bf0047c5ba8571480e07953cfe53e0c9a9e71e292f19070e46dfbc2
+
+Package: locales
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 12536
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: all
+Replaces: base-config, lliurex-belocs-locales-data
+Depends: glibc-2.11-1, debconf (>= 0.5) | debconf-2.0
+Conflicts: base-config, belocs-locales-bin, belocs-locales-data
+Description: Embedded GNU C Library: National Language (locale) data [support]
+ Machine-readable data files, shared objects and programs used by the
+ C library for localization (l10n) and internationalization (i18n) support.
+ .
+ This package contains the libc.mo i18n files, plus tools to generate
+ locale definitions from source files (included in this package). It
+ allows you to customize which definitions actually get
+ generated. This is a space-saver over how this package used to be,
+ with all locales generated by default. This created a package that
+ unpacked to an excess of 30 megs.
+Homepage: http://www.eglibc.org
+Tag: admin::configuring, devel::i18n, implemented-in::c, role::app-data, role::program, scope::utility, suite::gnu
+Task: bosnian, british, croatian, norwegian, swedish, turkish
+Section: localization
+Priority: standard
+Filename: pool/main/e/eglibc/locales_2.11.3-3_all.deb
+Size: 4761188
+MD5sum: a3ed5ca4fc69a9ff8c3a9e5012697f47
+SHA1: 07c64b9cba12ee0bd56763ea7ba5f52c093bd2bc
+SHA256: 3c366cf22b87d1b8c320c4eccf95b2ac18848621fbb642558247225cd96d1d0e
+
+Package: locales-all
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 3632
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Provides: locales
+Depends: glibc-2.11-1, lzma
+Description: Embedded GNU C Library: Precompiled locale data
+ This package contains the precompiled locale data for all supported locales.
+ A better alternative is to install the locales package and only select
+ desired locales, but it can be useful on a low-memory machine because some
+ locale files take a lot of memory to be compiled.
+Homepage: http://www.eglibc.org
+Tag: admin::configuring, devel::i18n, role::app-data, scope::utility, suite::gnu
+Section: libs
+Priority: extra
+Filename: pool/main/e/eglibc/locales-all_2.11.3-3_i386.deb
+Size: 3649538
+MD5sum: 3a22038be67dc262053ed9264b9faf5f
+SHA1: 0262ee4742e9d694f314e716092c0be36080397e
+SHA256: 45b767b8c8cf81e15c5fe929fbd9d72b1356a523219130b4dd6641eaa0aeb825
+
+Package: nscd
+Source: eglibc
+Version: 2.11.3-3
+Installed-Size: 360
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: i386
+Depends: libc6 (>> 2.11), libc6 (<< 2.12)
+Description: Embedded GNU C Library: Name Service Cache Daemon
+ A daemon which handles passwd, group and host lookups
+ for running programs and caches the results for the next
+ query. You should install this package only if you use
+ slow Services like LDAP, NIS or NIS+
+Homepage: http://www.eglibc.org
+Tag: interface::daemon, network::server, protocol::dns, role::program, suite::gnu
+Section: admin
+Priority: optional
+Filename: pool/main/e/eglibc/nscd_2.11.3-3_i386.deb
+Size: 193894
+MD5sum: 972a81f7a745c3d436eea0ace89d4216
+SHA1: de926276c0ea6a55e7437135ee657d09a93b58cf
+SHA256: e861322350886fbab14cf334f2a0a616908751f996ba0508fa66840d15d919b5
+
+Package: firmware-linux-free
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 276
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Description: Binary firmware for various drivers in the Linux kernel
+ This package contains firmware which was previously included in the Linux
+ kernel and which is compliant with the Debian Free Software Guidelines.
+ .
+ Most firmware previously included in the Linux kernel is non-free and has
+ been moved to the firmware-linux-nonfree package.
+Tag: admin::hardware, admin::kernel, role::data, use::driver
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/firmware-linux-free_2.6.32-39_all.deb
+Size: 153538
+MD5sum: c970aa95fd327f764d14d35b6884041a
+SHA1: c33428231c25540a5e08f4651de4ae2fd996aac6
+SHA256: 8512618ac45f63c412ff4d2d9570f0c08e2cb6e056f15f74cfd61a2b87173652
+
+Package: linux-base
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 288
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Depends: libuuid-perl, debconf (>= 0.5) | debconf-2.0, util-linux (>= 2.16-1) | udev (<< 146-1)
+Description: Linux image base package
+ This package contains files and support scripts for all Linux images.
+Tag: admin::boot, implemented-in::c, implemented-in::shell, role::metapackage, role::program
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-base_2.6.32-39_all.deb
+Size: 175614
+MD5sum: 836312bc002cd2061cb56894d78bbb49
+SHA1: 3a64713aa62f1b01f741084605a27d944a349083
+SHA256: 7ced5d58f3ddec924d86bbd09c70068c1b1f55afaa9d50af1d4ad65f8f61b10a
+
+Package: linux-doc-2.6.32
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 26948
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Provides: linux-doc-2.6
+Description: Linux kernel specific documentation for version 2.6.32
+ This package provides the various README files and HTML documentation for
+ the Linux kernel version 2.6.32.  Plenty of information, including the
+ descriptions of various kernel subsystems, filesystems, driver-specific
+ notes and the like.  Consult the file
+ /usr/share/doc/linux-doc-2.6.32/Documentation/00-INDEX for the detailed
+ description of the contents.
+Tag: admin::kernel, made-of::data:html, role::documentation
+Section: doc
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-doc-2.6.32_2.6.32-39_all.deb
+Size: 6053756
+MD5sum: 1f8705ee1d261d43c1c687de5e17a18d
+SHA1: d1ba53c82146aea3f5df1a7ff04168b4a553d2f3
+SHA256: d6d6e3ebe209435ad3b366ef1a1bd223ee7c5cd59f1d811f9166ecd11f38f48a
+
+Package: linux-headers-2.6.32-5-486
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 6768
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-486
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-486, generally used for building out-of-tree kernel
+ modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-486, and can be used for building modules
+ that load into the kernel provided by the linux-image-2.6.32-5-486
+ package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-486_2.6.32-39_i386.deb
+Size: 497886
+MD5sum: b961d10fabb0412f248e7d6b5c5f9041
+SHA1: 71588901c5d557f7eba99a40457dd3b514970861
+SHA256: e5617f23400174198e736ef1ab835541624b823e2857295df6298cc8e0b67628
+
+Package: linux-headers-2.6.32-5-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 6780
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-686
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-686, generally used for building out-of-tree kernel
+ modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-686, and can be used for building modules
+ that load into the kernel provided by the linux-image-2.6.32-5-686
+ package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-686_2.6.32-39_i386.deb
+Size: 499116
+MD5sum: c7ca502fe052f1d0d194bb931ad27c6d
+SHA1: 8b9c7d93f0dd51a0c764d35339b53666b777af83
+SHA256: 9ce5f56da8fad82550f1ecca67caa25fcb46b85b193de73e9c177095ca663055
+
+Package: linux-headers-2.6.32-5-686-bigmem
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 7152
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-686-bigmem
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-686-bigmem, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-686-bigmem, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-2.6.32-5-686-bigmem package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-686-bigmem_2.6.32-39_i386.deb
+Size: 541058
+MD5sum: 34044d70b4528a74ce9fbfc92aaf222e
+SHA1: d04047c5f0c26e0d33854ad7e75aea3348dcaa22
+SHA256: a779c00ed617eb72b3ffc4f2d7c7ed18bfc8e6385ee6c09892043df973283c1e
+
+Package: linux-headers-2.6.32-5-all
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 176
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-headers-2.6.32-5-all-i386 (= 2.6.32-39)
+Description: All header files for Linux 2.6.32 (meta-package)
+ This package depends against all architecture-specific kernel header files
+ for Linux kernel version 2.6.32, generally used for building out-of-tree
+ kernel modules.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-all_2.6.32-39_i386.deb
+Size: 148796
+MD5sum: 46423dbb626f6fec92986d14c35034f1
+SHA1: 75fa9329682858c9bb877351fbb3f0e4b74ecf85
+SHA256: ece6c664dd92d5de39a084fe09b8cc3c618f1cf8390c58fc3552c33924276b4b
+
+Package: linux-headers-2.6.32-5-all-i386
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 176
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-headers-2.6.32-5-486 (= 2.6.32-39), linux-headers-2.6.32-5-686 (= 2.6.32-39), linux-headers-2.6.32-5-686-bigmem (= 2.6.32-39), linux-headers-2.6.32-5-amd64 (= 2.6.32-39), linux-headers-2.6.32-5-openvz-686 (= 2.6.32-39), linux-headers-2.6.32-5-vserver-686 (= 2.6.32-39), linux-headers-2.6.32-5-vserver-686-bigmem (= 2.6.32-39), linux-headers-2.6.32-5-xen-686 (= 2.6.32-39)
+Description: All header files for Linux 2.6.32 (meta-package)
+ This package depends against all architecture-specific kernel header files
+ for Linux kernel version 2.6.32, generally used for building out-of-tree
+ kernel modules.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-all-i386_2.6.32-39_i386.deb
+Size: 148852
+MD5sum: 35ae88ddc0335472432d0bf156c77eea
+SHA1: a2a6b49a84191b654d5b1fe60f419e2e8ba70082
+SHA256: 9e2f747700d15bf9e527e52f1dd0c6f1a43c74204927d714ac271359469ecd24
+
+Package: linux-headers-2.6.32-5-amd64
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 6776
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-amd64
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-amd64, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-amd64, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-2.6.32-5-amd64 package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-amd64_2.6.32-39_i386.deb
+Size: 492454
+MD5sum: adb2a6e8ba85fb9358db4b23ea9f6fda
+SHA1: 18ad92dce1ceb590d4b8a8c13c271fea9df0d634
+SHA256: 16956d30bd48e2ba23c3fd65f90cb8b27e1ee4dd263bf0550c1e5385dcc52287
+
+Package: linux-headers-2.6.32-5-common
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 20324
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Description: Common header files for Linux 2.6.32-5
+ This package provides the architecture-specific common kernel header files
+ for Linux kernel version 2.6.32-5, generally used for building out-of-tree
+ kernel modules.  To obtain a complete set of headers you also need to
+ install the linux-headers-2.6.32-5-(flavour) package, matching the flavour
+ of the kernel you intend the build for.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-common_2.6.32-39_i386.deb
+Size: 3903860
+MD5sum: b731209a0b1b454c164fb395c0e6d492
+SHA1: 39b9f360625aa33fda34cc04cccf8e1dad9f3072
+SHA256: bc4b0de36db77fd5c384b48601ca5eb12278eebc603c3cf2283f777a5b0b88f7
+
+Package: linux-headers-2.6.32-5-common-openvz
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 20656
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Description: Common header files for Linux 2.6.32-5-openvz
+ This package provides the architecture-specific common kernel header files
+ for Linux kernel version 2.6.32-5-openvz, generally used for building
+ out-of-tree kernel modules.  To obtain a complete set of headers you also
+ need to install the linux-headers-2.6.32-5-(flavour) package, matching the
+ flavour of the kernel you intend the build for.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-common-openvz_2.6.32-39_i386.deb
+Size: 3955554
+MD5sum: 45e22f3c019806eac2a5b8479a4a4561
+SHA1: 747c7416ed59784360073e262f99a611aaa7aa28
+SHA256: cfe825ce5071880fffec32780196cf35146e7f3629d58859a67af0a89a2941f0
+
+Package: linux-headers-2.6.32-5-common-vserver
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 20604
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Description: Common header files for Linux 2.6.32-5-vserver
+ This package provides the architecture-specific common kernel header files
+ for Linux kernel version 2.6.32-5-vserver, generally used for building
+ out-of-tree kernel modules.  To obtain a complete set of headers you also
+ need to install the linux-headers-2.6.32-5-(flavour) package, matching the
+ flavour of the kernel you intend the build for.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-common-vserver_2.6.32-39_i386.deb
+Size: 3935906
+MD5sum: e55687f8530b23217218664c574610b9
+SHA1: 74a84b94351b1999714b618a1c57ab734582bd83
+SHA256: 7128dd587e80ef7e7307339f8709e1eb6585e9d08bd4db5e33032e1a38650954
+
+Package: linux-headers-2.6.32-5-common-xen
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 20420
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Description: Common header files for Linux 2.6.32-5-xen
+ This package provides the architecture-specific common kernel header files
+ for Linux kernel version 2.6.32-5-xen, generally used for building
+ out-of-tree kernel modules.  To obtain a complete set of headers you also
+ need to install the linux-headers-2.6.32-5-(flavour) package, matching the
+ flavour of the kernel you intend the build for.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-common-xen_2.6.32-39_i386.deb
+Size: 3920540
+MD5sum: 2302b6810d1afa7c5b7dec53d41513d3
+SHA1: 3fec2dac98b5a8fbfb4b923813202e6044086554
+SHA256: fb90c96d81b2cd6cee9133a068b7ddd911f3bc0f0739c90d0f63e7232727ff6d
+
+Package: linux-headers-2.6.32-5-openvz-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 7328
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common-openvz (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-openvz-686
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-openvz-686, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-openvz-686, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-2.6.32-5-openvz-686 package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-openvz-686_2.6.32-39_i386.deb
+Size: 564184
+MD5sum: a45d406549f6f142ccb29ec812603401
+SHA1: 97edc382b5dbf0bb6f0ce4557d9113a948bf516c
+SHA256: 16155fc2dcbf9070bd4c343897ec07c0f4bf6e93bb6c69e33eebb24d98a698e8
+
+Package: linux-headers-2.6.32-5-vserver-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 6796
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common-vserver (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-vserver-686
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-vserver-686, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-vserver-686, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-2.6.32-5-vserver-686 package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-vserver-686_2.6.32-39_i386.deb
+Size: 501434
+MD5sum: c0daa619dc293bb90da1ee798d5978d1
+SHA1: 2608834834f10b78201ef7205d80630220aa1e3f
+SHA256: 647e1fe0784bc8ebd4eeb5f02dc3b7adbaa493de28b67fc91bee33cbb1706a0f
+
+Package: linux-headers-2.6.32-5-vserver-686-bigmem
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 7188
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common-vserver (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-vserver-686-bigmem
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-vserver-686-bigmem, generally used for building
+ out-of-tree kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-vserver-686-bigmem, and can be used for
+ building modules that load into the kernel provided by the
+ linux-image-2.6.32-5-vserver-686-bigmem package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-vserver-686-bigmem_2.6.32-39_i386.deb
+Size: 541880
+MD5sum: 89ca90f02f6d06e2e2f35b9bd01f07be
+SHA1: ce4e338bde09e4e2ae58b275b84f68ee97d167ad
+SHA256: 18bb3e76d21036e9425b391b21a2c82073b96753006c714827336cb9b8b068a1
+
+Package: linux-headers-2.6.32-5-xen-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 7188
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-headers, linux-headers-2.6
+Depends: linux-headers-2.6.32-5-common-xen (= 2.6.32-39), linux-kbuild-2.6.32, gcc-4.3
+Description: Header files for Linux 2.6.32-5-xen-686
+ This package provides the architecture-specific kernel header files for
+ Linux kernel 2.6.32-5-xen-686, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-2.6.32-5-xen-686, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-2.6.32-5-xen-686 package.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-headers-2.6.32-5-xen-686_2.6.32-39_i386.deb
+Size: 542050
+MD5sum: 349cfd97c93be064991a92d1575f011a
+SHA1: ad878993a807fa834864037f5e6d0eeea605ce98
+SHA256: 3cc7049ec07b409bd327751f84dd2440496a5a2ccdb045821e986e1a4e2f819e
+
+Package: linux-image-2.6.32-5-486
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 77580
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-486
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32)
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for old PCs
+ The Linux kernel 2.6.32 and modules for use on PCs with a 486, Pentium or
+ compatible processor.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-486_2.6.32-39_i386.deb
+Size: 27475516
+MD5sum: be5608eefba4b7180d91b7888abde8da
+SHA1: 93dfa4b51152ab944bed4165507a59df31fd0c78
+SHA256: 2eec429cac89a248105ab8be106d66e108294b1b8bfde49d95c4e6c32a3374b6
+
+Package: linux-image-2.6.32-5-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 77776
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-686
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for modern PCs
+ The Linux kernel 2.6.32 and modules for use on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode LX/NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; VIA
+ C3 "Nehemiah" or C7 processors.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-686_2.6.32-39_i386.deb
+Size: 27621998
+MD5sum: bc3057a7b558d4b31d1b02411711cbca
+SHA1: 0bb330b1ba59df58961ca65d104bc4d57030b074
+SHA256: 6c0807b9c532f8d3a00128423152562a59012c93ba5c7bbfa0962ddad431c245
+
+Package: linux-image-2.6.32-5-686-bigmem
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 78260
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-686-bigmem
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for PCs with 4GB+ RAM
+ The Linux kernel 2.6.32 and modules for use on PCs with 4-64GB RAM, using
+ PAE (Physical Address Extension).
+ .
+ This kernel also runs on a Xen hypervisor.  It supports only unprivileged
+ (domU) operation.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-686-bigmem_2.6.32-39_i386.deb
+Size: 27819704
+MD5sum: 73b0715a232d8117310314d3f5c5ed9c
+SHA1: ff364caea26e012bc053b55372f732f109af250f
+SHA256: 529a65c3972a6a0cd912a212898068e15541d9d38428d375c8dcb929924aa23e
+
+Package: linux-image-2.6.32-5-686-bigmem-dbg
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 1081804
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-image-2.6.32-5-686-bigmem
+Description: Debugging infos for Linux 2.6.32-5-686-bigmem
+ This package provides the binary debug image and pre-built debug loadable
+ modules for Linux kernel 2.6.32 on PCs with 4-64GB RAM, using PAE
+ (Physical Address Extension) machines.
+Section: debug
+Priority: extra
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-686-bigmem-dbg_2.6.32-39_i386.deb
+Size: 418938152
+MD5sum: 0d35ad598f1f77eb8dbd8e3b54531eea
+SHA1: 91cbd53547e38e8eaa884d0ccef573321c94518b
+SHA256: 0ebc8b01d9b1c109c32d6b41ba5103d121db721953429b6169e61e224f9d5dfe
+
+Package: linux-image-2.6.32-5-amd64
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 100384
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-amd64
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for 64-bit PCs
+ The Linux kernel 2.6.32 and modules for use on PCs with AMD64 or Intel 64
+ processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports only unprivileged
+ (domU) operation.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-amd64_2.6.32-39_i386.deb
+Size: 28704056
+MD5sum: 224beae6c45d1b59b5ecd0e4b81e7d58
+SHA1: 5c90a8730f2ac2248bc297354c2e5a7dd9399e82
+SHA256: 00bf47ae38a47a4d8995bab0b5cca1835dcae28c9ea0bfe6ad412a06fbb5eb72
+
+Package: linux-image-2.6.32-5-openvz-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 78716
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-openvz-686
+Depends: module-init-tools, linux-base (>= 2.6.32-39), vzctl, initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for modern PCs, OpenVZ support
+ The Linux kernel 2.6.32 and modules for use on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; or
+ VIA C7 processors.
+ .
+ This kernel includes support for OpenVZ container-based virtualization.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-openvz-686_2.6.32-39_i386.deb
+Size: 27956828
+MD5sum: 515bb488d27d79ac803840e954e4435f
+SHA1: 785b369f3ae473afac343b5226abbf8af53d941c
+SHA256: d31e1a609d0b20828c27eab6088abc647d4e08246b0ace4508ecea37c6493b27
+
+Package: linux-image-2.6.32-5-openvz-686-dbg
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 1279700
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-image-2.6.32-5-openvz-686
+Description: Debugging infos for Linux 2.6.32-5-openvz-686
+ This package provides the binary debug image and pre-built debug loadable
+ modules for Linux kernel 2.6.32 on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; or
+ VIA C7 processors machines.
+Section: debug
+Priority: extra
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-openvz-686-dbg_2.6.32-39_i386.deb
+Size: 493931804
+MD5sum: a67099547c46e5aff8f0a0b2e994e133
+SHA1: a006d6a6ce71e0644b6100cd43b10c2f72f0e4c5
+SHA256: 29086f004e1c064e5c62fcc5fb055b9057f5d8cebc4418c4ed3c2db90c5c2b0d
+
+Package: linux-image-2.6.32-5-vserver-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 77908
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-vserver-686
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for modern PCs, Linux-VServer support
+ The Linux kernel 2.6.32 and modules for use on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode LX/NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; VIA
+ C3 "Nehemiah" or C7 processors.
+ .
+ This kernel includes support for Linux-VServer virtualization.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-vserver-686_2.6.32-39_i386.deb
+Size: 27673336
+MD5sum: de4e8cc0e961076852136afd266de716
+SHA1: 6ff15ae2811591ffecde186acac3d2a4d240bde6
+SHA256: e353ffc70545d77b0a964aa8a63fd17d522ca30febc546be3af4299e850d3b7e
+
+Package: linux-image-2.6.32-5-vserver-686-bigmem
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 78368
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-vserver-686-bigmem
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for PCs with 4GB+ RAM, Linux-VServer support
+ The Linux kernel 2.6.32 and modules for use on PCs with 4-64GB RAM, using
+ PAE (Physical Address Extension).
+ .
+ This kernel includes support for Linux-VServer virtualization.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports only unprivileged
+ (domU) operation.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-vserver-686-bigmem_2.6.32-39_i386.deb
+Size: 27872754
+MD5sum: cedf904125039804a4b9dd694220fdc2
+SHA1: 67e94db6a289a8643166d480ded3889c78d6cf54
+SHA256: 504d90c02b65fec0776aee29f75235d6bd44ab3b5727e1cda1bbf23f913355e3
+
+Package: linux-image-2.6.32-5-vserver-686-bigmem-dbg
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 1105828
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-image-2.6.32-5-vserver-686-bigmem
+Description: Debugging infos for Linux 2.6.32-5-vserver-686-bigmem
+ This package provides the binary debug image and pre-built debug loadable
+ modules for Linux kernel 2.6.32 on PCs with 4-64GB RAM, using PAE
+ (Physical Address Extension) machines.
+Section: debug
+Priority: extra
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-vserver-686-bigmem-dbg_2.6.32-39_i386.deb
+Size: 428737548
+MD5sum: d6f18a8fcbb5fe1fb081dd1295eeac4a
+SHA1: 771be0600d898c0e67e3fd20a6e629a3e9442af3
+SHA256: c7bd9314518739e26f72aea7079980180b901d7c40e595a12f18366e1b79a004
+
+Package: linux-image-2.6.32-5-xen-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 78400
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-xen-686
+Depends: module-init-tools, linux-base (>= 2.6.32-39), initramfs-tools (>= 0.55)
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-xen
+Suggests: linux-doc-2.6.32, grub
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Description: Linux 2.6.32 for modern PCs, Xen dom0 support
+ The Linux kernel 2.6.32 and modules for use on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; or
+ VIA C7 processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-xen-686_2.6.32-39_i386.deb
+Size: 27903302
+MD5sum: 64e6f11b0b412c01cfbdbfc853bd2378
+SHA1: cf1ab08483dd2cb5b546e2ac9691328fcf900db3
+SHA256: 6fcba79b0f88c15923cf031736e404c93e38b1dcbd63f111e0e791e6247b9819
+
+Package: linux-image-2.6.32-5-xen-686-dbg
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 1088908
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-image-2.6.32-5-xen-686
+Description: Debugging infos for Linux 2.6.32-5-xen-686
+ This package provides the binary debug image and pre-built debug loadable
+ modules for Linux kernel 2.6.32 on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; or
+ VIA C7 processors machines.
+Section: debug
+Priority: extra
+Filename: pool/main/l/linux-2.6/linux-image-2.6.32-5-xen-686-dbg_2.6.32-39_i386.deb
+Size: 421573908
+MD5sum: d8df83cb28a46fbd90c17b69f630d295
+SHA1: 8c2525fead7e67185a83c21bbd6104a4b48c21b8
+SHA256: 417b5544c9a885c307fb1a353718f8991db26d198d07a133564ead6a9f375265
+
+Package: linux-libc-dev
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 4080
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Replaces: linux-kernel-headers
+Provides: linux-kernel-headers
+Conflicts: linux-kernel-headers
+Description: Linux support headers for userspace development
+ This package provides userspaces headers from the Linux kernel.  These
+ headers are used by the installed headers for GNU glibc and other system
+ libraries.
+Tag: devel::lang:c, devel::library, implemented-in::c, role::devel-lib
+Section: devel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-libc-dev_2.6.32-39_i386.deb
+Size: 846568
+MD5sum: 817b9ab64888565229c1ca45a29b8f1a
+SHA1: 7fe088d45e5091acbd3b308d58e61dc26bb87a36
+SHA256: 0a350121abc320afd8078deb1e9adbc7e45968a4469c039e2c0da4674041efe1
+
+Package: linux-manual-2.6.32
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 12256
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Replaces: kernel-manual-2.6, linux-manual
+Provides: kernel-manual-2.6, linux-manual
+Conflicts: kernel-manual-2.6, linux-manual
+Description: Linux kernel API manual pages for version 2.6.32
+ This package provides the Kernel Hacker's Guide in the form of manual
+ pages, describing the kernel API functions.  They are installed into
+ section 9 of the manual.
+ .
+ As the files containing manual pages for different kernel versions are
+ installed in the same location, only one linux-manual package may be
+ installed at a time.  The linux-doc package containing the documentation
+ in other formats is free from such restriction.
+Tag: admin::kernel, made-of::data:man, role::documentation
+Section: doc
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-manual-2.6.32_2.6.32-39_all.deb
+Size: 2742268
+MD5sum: c13a0de31b67dcc909c5de9fbe2ee729
+SHA1: a99f55cff20fd4efd8468d7d7a1186461677400c
+SHA256: bd32a9a884d7f793c865b38eb85282131a3e12ecd03f45bb6e41cef3a65f3ba3
+
+Package: linux-patch-debian-2.6.32
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 15252
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Depends: bzip2, linux-support-2.6.32-5, python
+Suggests: linux-source-2.6.32
+Description: Debian patches to version 2.6.32 of the Linux kernel
+ This package includes the patches used to produce the prepackaged
+ linux-source-2.6.32 package, as well as architecture-specific patches.
+ .
+ Note that these patches do NOT apply against a pristine Linux 2.6.32
+ kernel but only against the kernel tarball linux-2.6_2.6.32.orig.tar.gz
+ from the Debian archive.
+Tag: admin::kernel, implemented-in::c, role::source, suite::debian
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-patch-debian-2.6.32_2.6.32-39_all.deb
+Size: 9529196
+MD5sum: 83a381f2599d335e38387cd37ebdfb48
+SHA1: ce164cea755be25e2263037c278ad9bcd7c56c98
+SHA256: 0c674673ee76e44d291ae88f25bb1cf88b3f1c1c9a782fe7df03305f49029138
+
+Package: linux-source-2.6.32
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 63844
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Provides: linux-source, linux-source-2.6
+Depends: binutils, bzip2
+Recommends: libc6-dev | libc-dev, gcc, make
+Suggests: libncurses-dev | ncurses-dev, kernel-package, libqt3-mt-dev
+Description: Linux kernel source for version 2.6.32 with Debian patches
+ This package provides source code for the Linux kernel version 2.6.32.
+ This source closely tracks official Linux kernel releases.  Debian's
+ modifications to that source consist of security fixes, bug fixes, and
+ features that have already been (or are believed to be) accepted by the
+ upstream maintainers.
+Tag: admin::kernel, implemented-in::c, role::source
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-source-2.6.32_2.6.32-39_all.deb
+Size: 65225710
+MD5sum: 8aa7d35796d805658f7a17214ce842a6
+SHA1: af5b300ad21d3de4a51b02d0eb0fbcf431af64fb
+SHA256: 727f4e747fb97fb2f65fdd16feb2428ffc8fd49bd02c6f67dd8bd7fac09ddc1a
+
+Package: linux-support-2.6.32-5
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 312
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: all
+Depends: python, python-support (>= 0.90.0)
+Description: Support files for Linux 2.6.32
+ This package provides support files for the Linux kernel build, e.g.
+ scripts to handle ABI information and for generation of build system meta
+ data.
+Section: devel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-support-2.6.32-5_2.6.32-39_all.deb
+Size: 164340
+MD5sum: 92df94b40ede2c484245b5efed3ec01d
+SHA1: 28cfb7872471965c05422279fde2c48495d30158
+SHA256: 9441c1705bb008868844f2cab1b6595a1a9ffbd835885882dd59f3bc060b957f
+
+Package: linux-tools-2.6.32
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 588
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: libc6 (>= 2.8), libelf1 (>= 0.131)
+Recommends: linux-base (>= 2.6.32-16)
+Suggests: linux-doc-2.6.32
+Description: Performance analysis tools for Linux 2.6.32
+ This package contains the 'perf' performance analysis tools for Linux
+ kernel version 2.6.32.
+ .
+ The linux-base package contains a 'perf' command which will invoke the
+ appropriate version for the running kernel.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/linux-tools-2.6.32_2.6.32-39_i386.deb
+Size: 322446
+MD5sum: 383df11d8c40df133bf9c8f07874dd51
+SHA1: 70ac0f01c6ee39103adef3eb8187622f25ae9cc0
+SHA256: 94ed741e21d8ea661885a6c11ff982221699f808ea581bf1e94bc81315d191b5
+
+Package: xen-linux-system-2.6.32-5-xen-686
+Source: linux-2.6
+Version: 2.6.32-39
+Installed-Size: 176
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Depends: linux-image-2.6.32-5-xen-686 (= 2.6.32-39), xen-hypervisor-i386 | xen-hypervisor-amd64
+Description: Xen system with Linux 2.6.32 on modern PCs (meta-package)
+ This package depends on the binary Linux image and hypervisors.
+Section: kernel
+Priority: optional
+Filename: pool/main/l/linux-2.6/xen-linux-system-2.6.32-5-xen-686_2.6.32-39_i386.deb
+Size: 148790
+MD5sum: 225547b4e5a87a09d5a9a220bf6fd942
+SHA1: 6ca55c993372ac1917ea27f7cdf41b73b204b91e
+SHA256: 66f6df6d3726d2a63ab976988b9e7519245c96eec793d532c7e8cfdaa0c664db
+
+Package: tzdata
+Version: 2011n-0squeeze1
+Installed-Size: 5952
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: all
+Replaces: libc0.1, libc0.3, libc6, libc6.1
+Provides: tzdata-squeeze
+Depends: debconf (>= 0.5) | debconf-2.0
+Description: time zone and daylight-saving time data
+ This package contains data required for the implementation of
+ standard local time for many representative locations around the
+ globe. It is updated periodically to reflect changes made by
+ political bodies to time zone boundaries, UTC offsets, and
+ daylight-saving rules.
+Tag: hardware::storage, implemented-in::perl, interface::commandline, interface::x11, protocol::dns, role::app-data, use::checking, use::timekeeping
+Section: libs
+Priority: required
+Filename: pool/main/t/tzdata/tzdata_2011n-0squeeze1_all.deb
+Size: 629914
+MD5sum: 92a9f0be3e962142cd29c0d420b09e6b
+SHA1: 92a453d5758c618b5df0e41382891784742fa97f
+SHA256: 26dee0a760e9a69e43e44349a844a017b480ad41d978f10de1b5651f7811011c
+
+Package: tzdata-java
+Source: tzdata
+Version: 2011n-0squeeze1
+Installed-Size: 1848
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Architecture: all
+Depends: tzdata (= 2011n-0squeeze1)
+Description: time zone and daylight-saving time data for use by java runtimes
+ This package contains data required for the implementation of
+ standard local time for many representative locations around the
+ globe. It is updated periodically to reflect changes made by
+ political bodies to time zone boundaries, UTC offsets, and
+ daylight-saving rules.
+ .
+ This package contains the data for use by Java runtimes.
+Tag: field::geography, implemented-in::java, role::app-data, use::timekeeping
+Section: java
+Priority: optional
+Filename: pool/main/t/tzdata/tzdata-java_2011n-0squeeze1_all.deb
+Size: 143074
+MD5sum: b9440b9c4e5b19c888552c3d3661fe8e
+SHA1: 4dc2073da7cbac92dc052a7eb48ce91cc031719d
+SHA256: 086b5c860ebdac76bff312540ffbca77f6b72f1bb2dd42d87a4c7ef2569ecc42
+

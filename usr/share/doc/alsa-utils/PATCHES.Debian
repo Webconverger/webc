@@ -1,0 +1,32 @@
+Patches applied in the Debian version of :
+
+debian/patches/move_asound_state_to_var.patch (David B. Harris):
+  Move asound.state location to /var/lib/alsa/
+
+debian/patches/alsaconf_safe_tmp.patch (Thomas Hood):
+  Create alsaconf.cards temporary file safely
+  Always run in modinfo mode
+
+debian/patches/debian_alsaconf_paths.patch (Thomas Hood):
+  Don't precompute paths for lspci and lsmod
+
+debian/patches/debian_alsaconf_idmode.patch (Thomas Hood):
+  Use Debian-specified GID and mode for ALSA devices.
+
+debian/patches/debian_alsaconf_noclear.patch (Thomas Hood):
+  Don't clear the screen. (Let the user see error messages.)
+
+debian/patches/debian_alsaconf_unload_modules.patch (Thomas Hood):
+  Run initscript force-unload method rather than stop
+  and do it after the intro rather than before
+
+debian/patches/debian_alsaconf_improve_intro.patch (Thomas Hood):
+  Improve introductory message
+
+debian/patches/debian_alsaconf_nodup.patch (Thomas Hood):
+  Do not put any lines into /etc/mod{utils,probe.d}/sound that are
+  already present in /etc/mod{utils,probe.d}/alsa-base
+
+debian/patches/debian_alsaconf_modprobe_ignoreinstall.patch (Thomas Hood):
+  Use modprobe --ignore-install when modprobing legacy card drivers with args
+

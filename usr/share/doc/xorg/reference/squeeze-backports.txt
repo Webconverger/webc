@@ -1,0 +1,72 @@
+Backports for squeeze
+=====================
+Cyril Brulebois <kibi@debian.org>
+
+
+Bird’s-eye view
+---------------
+
+If one forgets about libraries and clients, a whole X stack boils down
+to: the server itself, input and video drivers, libdrm, and mesa.
+
+To keep things simple, the idea is to backport all of those to
+`squeeze` through `squeeze-backports`, along with some of the
+additional packages which might be involved (like `libxfont` or
+`x11proto-fixes-dev`).
+
+The backports were prepared so that it’s possible to upgrade the
+`input-all` and `video-all` meta packages on `amd64` and `i386`. If
+specific drivers (maintained by the X Strike Force) are wanted,
+requesting them on the `debian-backports@` / `debian-x@` mailing lists
+should do the trick. For other drivers, please contact the relevant
+package maintainers.
+
+
+Instructions
+------------
+
+The usual link:http://backports-master.debian.org/[backports instructions]
+apply. But let’s gather everything in a single place.
+
+Add that to your `sources.list`:
+----
+deb http://backports.debian.org/debian-backports squeeze-backports main
+----
+
+Update your cache:
+----
+apt-get update
+----
+
+If you’re interested in just upgrading the usual `mesa` packages:
+----
+apt-get install -t squeeze-backports libgl1-mesa-dri libgl1-mesa-glx
+----
+
+If you want the whole stack, we should distinguish between two
+cases.
+
+In the usual case, both the `xserver-xorg-input-all` and
+`xserver-xorg-video-all` meta packages were installed, and pulled a
+lot of packages, which should work for most users. In that case, due
+to a bug in `apt`, one has to remove the `wacom` input package before
+proceeding to the upgrade (the `xserver-xorg-input-all` package might
+be scheduled for removal as a consequence, but that doesn’t
+hurt). Then specifying a few packages to upgrade should pull
+everything from `squeeze-backports`.
+
+----
+apt-get purge xserver-xorg-input-wacom
+apt-get install -t squeeze-backports xorg xserver-xorg xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all
+----
+
+In case only the needed packages were installed, like the `synaptics`
+input driver and the `intel` video driver, the following should be
+sufficient:
+----
+apt-get install -t squeeze-backports xorg xserver-xorg xserver-xorg-core xserver-xorg-input-synaptics xserver-xorg-video-intel
+----
+
+It is probably a very good idea to install the Linux kernel from
+`squeeze-backports` as well. It is even required for the `nouveau`
+video driver.

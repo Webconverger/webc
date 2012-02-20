@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+# Hey, I'm a snippet removing old cruft (Debian #430040); drop me after lenny!
+BOGUSDOCDIR=/usr/share/doc/libpango1.0-doc/pango/pango
+if [ -L $BOGUSDOCDIR ]; then
+  rm -f $BOGUSDOCDIR
+fi
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+

@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+chrooted() {
+	# borrowed from udev's postinst
+	if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ]; then
+		# the devicenumber/inode pair of / is the same as that of
+		# /sbin/init's root, so we're *not* in a chroot and hence
+		# return false.
+		return 1
+	fi
+	return 0
+}
+
+case "$1" in
+	install)
+		mkdir -p /etc/initramfs-tools/conf.d
+
+		# First time install.  Can we autodetect the RESUME partition?
+		if [ -r /proc/swaps ]; then
+			RESUME=$(grep ^/dev/ /proc/swaps | sort -rk3 \
+				| head -n 1 | cut -d " " -f 1)
+			if command -v blkid >/dev/null 2>&1; then
+				UUID=$(blkid -s UUID -o value "$RESUME" || true)
+			# FIXME: post-Wheezy remove vol_id invocations
+			elif command -v vol_id >/dev/null 2>&1; then
+				UUID=$(vol_id -u "$RESUME" || true)
+			elif [ -x /lib/udev/vol_id ]; then
+				UUID=$(/lib/udev/vol_id -u "$RESUME" || true)
+			fi
+			if [ -n "$UUID" ]; then
+				RESUME="UUID=$UUID"
+			fi
+		fi
+
+		# write conf.d/resume if not in a chroot
+		if [ -n "${RESUME}" ] && ! chrooted; then
+			echo "RESUME=${RESUME}" > /etc/initramfs-tools/conf.d/resume
+		fi
+
+	;;
+esac
+
+

@@ -1,0 +1,71 @@
+This is MozPlugger version 1.14.1
+Originally written by Fredrik Hübinette (c) 1997-2001
+Maintained by Louis Bavoil and Peter Leese (c) 2002-2010
+Homepage : http://mozplugger.mozdev.org
+
+This software is distributed under the General Public License.
+Absolutely no warranties. Use this software on your own risk.
+See the file COPYING for more information.
+
+To re-compile:
+	If necessary, edit Makefile to suit to your system.
+	Type 'make xx'. Where xx = the platform and/or type
+        of build you want.
+        e.g. 
+        1/ 'make linux' - builds for linux
+        2/ 'make linux BUILD=DEBUG' - builds debug version for linux
+        3/ 'make linux libprefix=/lib64' - builds and links against the
+                                         for 64bit libraries 
+
+        If you just type 'make' it should list the options available
+Notes:
+        * You will need X-libs development pacakge installed so that
+        the build can find the appropriate include files.
+
+To install in your own directory: (for Mozilla/Firefox)
+	make localinstall_mozilla
+
+To install in your own directory: (for Netscape)
+	make localinstall_netscape
+
+To install in your own directory: (for Opera)
+	make localinstall_opera
+
+To install globally:
+	make install
+or:	
+	make install prefix=/usr/local
+or:
+	make install libprefix=/lib64
+
+By default, the plugin is installed in /usr/lib/mozilla/plugins/
+
+On some systems, the plugin directory may be elsewhere, for example
+   /usr/lib/netscape/plugins
+   /usr/lib/firefox/plugins
+   $MOZILLA_HOME/plugins
+
+If you find that your browser fails to detect the plugin, you need
+to place place a symbolic link in your paricular plugin directory
+that points to /usr/lib/mozilla/plugins/mozplugger.so. I believe
+this is the case for Ubuntu where firefox looks
+in /usr/lib/firefox/plugins
+
+If you don't want to put mozpluggerrc in /etc/ you can put it in one of:
+   $MOZPLUGGER_HOME/
+   $HOME/.mozplugger/
+   $HOME/.netscape/
+   $HOME/.mozilla/
+   $HOME/.opera/
+   $MOZILLA_HOME/
+   $OPERA_HOME/
+   /usr/local/netscape/
+   /etc/
+   /usr/local/mozilla/
+   /usr/local/netscape/
+
+You might also want to customize your 'mozpluggerrc' file before installing it.
+
+In case of problem with this version, submit a bug report on
+http://mozplugger.mozdev.org describing your problem, your system and
+an URL which causes the problem if possible.

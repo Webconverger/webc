@@ -1,0 +1,49 @@
+Documentation:
+==============
+
+The various netfilter and iptables HOWTOS can be found at:
+
+  http://www.netfilter.org/documentation/
+
+
+Bug Reports:
+============
+
+There's a bit of confusion and a lot of bug reports regarding iptables
+missing extension support. Basically, any given extension has kernel
+code and a complimentary user-space module to configure it.
+
+Without the kernel support, you get errors like this:
+
+  ## example from http://www.securityfocus.com/infocus/1723
+  # iptables -A INPUT -p tcp -m tcp --dport 135 -j TARPIT
+  iptables: No chain/target/match by that name
+
+In that example, the TARPIT extension is not available in the kernel.
+
+Without the user-space support, you get errors like this:
+
+  # iptables -A INPUT -p tcp --dport 80 -j FOO
+  iptables v1.4.0: Couldn't load target `FOO':/lib/iptables/libipt_FOO.so: cannot open shared object file: No such file or directory
+
+  Try `iptables -h' or 'iptables --help' for more information.
+
+In that example, the user-space iptables extension FOO does not exist.
+
+
+The iptables package may have user-space support for extensions that may
+not be enabled in your kernel. That's a kernel issue. If possible, your
+kernel maintainer can add support. Reporting a bug on iptables will not
+help much there. The same goes for any netfilter kernel problems.
+
+Conversely, the iptables package may lack user-space support for kernel
+extensions that were added to your kernel. All or most stock extensions
+are already included with iptables.Bug reports for missing stock
+iptables user-space extensions are quite appropriate. Requests to add
+third party extensions and scripts to iptables are pretty much rejected
+wholesale for now.
+
+Some of the extensions (user-space + kernel code) are available from the
+netfilter ftp site and various third party locations. Your mileage may
+vary on adding any of those extensions.
+

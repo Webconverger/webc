@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+	# Is locales installed?
+	if [ -x /usr/sbin/locale-gen ] ; then
+		# If yes, generate locales selected in the debconf question
+		locale-gen
+	else
+		# If not, clean the locales
+		rm -f /usr/lib/locale/locale-archive
+		rmdir --ignore-fail-on-non-empty /usr/lib/locale
+	fi
+	;;
+    *)
+    	;;
+esac
+
+
+
+exit 0

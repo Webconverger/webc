@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -e
+
+case "${1}" in
+	remove|upgrade|deconfigure)
+		update-alternatives --remove traceroute /usr/bin/traceroute.db
+
+		for ALTERNATIVE in traceroute6 lft traceproto
+		do
+			update-alternatives --remove ${ALTERNATIVE} /usr/bin/${ALTERNATIVE}.db
+		done
+
+		for ALTERNATIVE in tcptraceroute
+		do
+			update-alternatives --remove ${ALTERNATIVE} /usr/sbin/${ALTERNATIVE}.db
+		done
+		;;
+
+	failed-upgrade)
+
+		;;
+
+	*)
+		echo "prerm called with unknown argument \`${1}'" >&2
+		exit 1
+		;;
+esac
+
+
+
+exit 0

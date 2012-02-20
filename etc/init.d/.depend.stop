@@ -1,0 +1,12 @@
+TARGETS = plymouth urandom alsa-utils sendsigs rsyslog umountnfs.sh hwclock.sh networking ifupdown umountfs umountroot live-boot halt reboot
+sendsigs: plymouth alsa-utils
+rsyslog: sendsigs
+umountnfs.sh: rsyslog sendsigs plymouth alsa-utils
+hwclock.sh: rsyslog
+networking: umountnfs.sh
+ifupdown: networking umountnfs.sh
+umountfs: urandom networking ifupdown plymouth umountnfs.sh alsa-utils hwclock.sh
+umountroot: umountfs
+live-boot: umountroot
+halt: umountroot live-boot
+reboot: umountroot live-boot

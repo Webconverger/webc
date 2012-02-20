@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/keymap.sh" ] && [ "$1" = remove ]; then
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d keymap.sh stop || exit $?
+	else
+		/etc/init.d/keymap.sh stop || exit $?
+	fi
+fi
+# End automatically added section

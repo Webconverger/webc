@@ -1,0 +1,65 @@
+README for ept
+==============
+
+The intent of this library is to provide high-level access to all sorts of
+sources of information about Debian packages.
+
+There are four data providers currently implemented:
+
+ - APT: access the APT database
+ - Debtags: access the Debtags tag information
+ - Popcon: access Popcon package scores
+ - TextSearch: fast Xapian-based full text search on package description
+
+To enable the popcon data provider, just download the file
+http://popcon.debian.org/all-popcon-results.txt.gz and put it into
+/var/lib/popcon/ or ~/.popcon/ in the user's home directory.
+
+To enable the xapian fast search index, run ept-cache reindex as root.
+
+The xapian index is not regenerated automatically like with popcon and debtags
+because it takes a while to build.  It is also not stored in the user's home
+directory because it is quite large.
+
+
+Development
+===========
+
+The library revolves around two classes: Package and Version.  These classes
+represent a package or one of its specific versions.  Using these classes it is
+possible to query one or more data providers for information about the package.
+
+The idea is to have a way to represent a package or one of its versions, and
+that this way must be valid for any data provider.
+
+A data provider does not need to know about the others, nor it needs to
+implement a specific interface: the only requirement on a data provider is that
+it can be queried using Package and Version objects, as appropriate.
+
+It is easy to implement more data providers.  It is also easy to implement new
+data providers outside of this library, as long as they can be queried using
+Package or Version objects.
+
+The 4 providers are currently shipped with the library to avoid having a chain
+of dependencies on the initial state of the project.  It is straightforward,
+however, to package them separately from the core Package infrastructure.
+
+
+The development of libept is currently published in the Mercurial repository
+at: http://hg.debian.org/hg/private/enrico/libept
+
+It is possible to checkout a copy of the repository with the command:
+
+  hg clone http://hg.debian.org/hg/private/enrico/libept
+
+Mercurial is a distributed version control system: you are encouraged to play
+with the code, join the development and publish your Mercurial tree.
+
+
+Authors
+=======
+
+Enrico Zini <enrico@enricozini.org>
+
+Some code is ported to the Package framework from libept, written by Peter
+Rockai <me@mornfall.net> and Enrico Zini <enrico@enricozini.org>

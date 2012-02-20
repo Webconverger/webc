@@ -1,0 +1,91 @@
+#!/bin/sh -e
+
+create_etc_modules() {
+    if [ ! -e /etc/modules ]; then
+	cat <<EOT > /etc/modules
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+# Parameters can be specified after the module name.
+
+EOT
+	chmod 644 /etc/modules
+    fi
+}
+
+undivert_gen() {
+  DEXT=${3:-modutils}
+  dpkg-divert --remove --rename --package module-init-tools \
+    --divert $2/$1.$DEXT $2/$1 > /dev/null
+}
+
+undivert_man() {
+  DSECTION=${2:-8}
+  for locale in '' fr/; do
+    # When a diverted file is removed from a package, old version of dpkg
+    # forget to delete it. See #428650 for the gory details.
+    rm -f /usr/share/man/${locale}man$DSECTION/$1.modutils.$DSECTION.gz
+    dpkg-divert --remove --rename --package module-init-tools --divert \
+      /usr/share/man/${locale}man$DSECTION/$1.modutils.$DSECTION.gz \
+      /usr/share/man/${locale}man$DSECTION/$1.$DSECTION.gz > /dev/null
+  done
+}
+
+big_modutils_cleanup() {
+  undivert_man modules 5
+
+  # try hard to remove any old file left around (see #509575 for details)
+  for cmd in depmod insmod update-modules modinfo; do
+    rm -f /sbin/$cmd.modutils
+    undivert_gen $cmd /sbin
+    undivert_man $cmd
+  done
+  for cmd in kallsyms ksyms; do
+    rm -f /sbin/$cmd.modutils
+    undivert_gen $cmd /sbin
+  done
+  for cmd in lsmod modprobe rmmod; do
+    rm -f /sbin/$cmd.modutils /sbin/$cmd.Lmodutils
+    undivert_gen $cmd /sbin Lmodutils
+    undivert_man $cmd
+  done
+
+  # modutils forgets to delete this file on purge
+  rm -f /etc/rcS.d/S20modutils
+}
+
+upgrade_quirks() {
+  [ "$2" ] || return 0
+
+  dpkg --compare-versions $2 lt 3.3-pre11-4 || return 0
+  # finally remove the diversions of modutils
+  big_modutils_cleanup
+
+  return 0
+}
+
+case "$1" in
+    configure)
+    create_etc_modules
+
+    upgrade_quirks "$@"
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+    echo "$0 called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+esac
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/module-init-tools" ]; then
+	update-rc.d module-init-tools start 20 S . >/dev/null || exit $?
+fi
+# End automatically added section
+
+
+exit 0

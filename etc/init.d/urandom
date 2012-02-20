@@ -1,0 +1,79 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          urandom
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: Save and restore random seed between restarts.
+# Description:       This script saves the random seed between restarts.
+#                    It is called from the boot, halt and reboot scripts.
+### END INIT INFO
+
+[ -c /dev/urandom ] || exit 0
+
+PATH=/sbin:/bin
+SAVEDFILE=/var/lib/urandom/random-seed
+POOLSIZE=512
+[ -f /proc/sys/kernel/random/poolsize ] && POOLSIZE="$(cat /proc/sys/kernel/random/poolsize)"
+. /lib/init/vars.sh
+
+. /lib/lsb/init-functions
+
+do_status () {
+	if [ -f $SAVEDFILE ] ; then
+		return 0
+	else
+		return 4
+	fi
+}
+
+case "$1" in
+  start|"")
+	[ "$VERBOSE" = no ] || log_action_begin_msg "Initializing random number generator"
+	# Load and then save $POOLSIZE bytes,
+	# which is the size of the entropy pool
+	if [ -f "$SAVEDFILE" ]
+	then
+		# Handle locally increased pool size
+		set -- $(LC_ALL=C ls -l "$SAVEDFILE")
+		SAVEDSIZE="$5"
+		if [ "$SAVEDSIZE" -gt "$POOLSIZE" ]
+		then
+			[ -w /proc/sys/kernel/random/poolsize ] && echo $POOLSIZE > /proc/sys/kernel/random/poolsize
+			POOLSIZE=$SAVEDSIZE
+		fi
+		cat "$SAVEDFILE" >/dev/urandom
+	fi
+	rm -f $SAVEDFILE
+	# Hm, why is the saved pool re-created at boot? [pere 2009-09-03]
+	umask 077
+	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLSIZE count=1 >/dev/null 2>&1
+	ES=$?
+	umask 022
+	[ "$VERBOSE" = no ] || log_action_end_msg $ES
+	;;
+  stop)
+	# Carry a random seed from shut-down to start-up;
+	# see documentation in linux/drivers/char/random.c
+	[ "$VERBOSE" = no ] || log_action_begin_msg "Saving random seed"
+	umask 077
+	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLSIZE count=1 >/dev/null 2>&1
+	ES=$?
+	[ "$VERBOSE" = no ] || log_action_end_msg $ES
+	;;
+  status)
+	do_status
+	exit $?
+	;;
+  restart|reload|force-reload)
+	echo "Error: argument '$1' not supported" >&2
+	exit 3
+	;;
+  *)
+	echo "Usage: urandom start|stop" >&2
+	exit 3
+	;;
+esac
+
+:

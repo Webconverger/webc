@@ -1,0 +1,134 @@
+.\" -mdoc is a groff macro package supporting logical formatting. The author
+.\" of this example considers it the best package available in groff for
+.\" writing manual pages. If you're used to the traditional Unix -man
+.\" macros, give this a try; it doesn't take long to learn. groff_mdoc(7) is
+.\" a complete reference manual.
+.\"
+.\" Many of the macros below stack, so ".Op Ar foo" means an optional
+.\" argument called "foo", while ".Ar foo" means an argument called "foo".
+.\" Where you see things like ".Ql .Fl" below, the second dot causes ".Fl"
+.\" to be interpreted as ordinary text rather than calling the .Fl macro.
+.Dd June 4, 2005
+.Os FooOS
+.Dt FOO 1
+.Sh NAME
+.Nm foo
+.Nd program to do something
+.Sh SYNOPSIS
+A short usage summary.
+.Pp
+.Nm
+.Brq Cm this | Cm that
+.Op Fl flags
+.Op Fl o Ar option
+.Ar argument
+.\" Punctuation is treated specially by -mdoc, and often gets pushed up
+.\" against whatever precedes it without the special formatting, so having
+.\" an underlined argument immediately followed by a normal comma is easy.
+.\" If you want to make sure this special handling isn't applied, put a
+.\" zero-width space, \&, before the punctuation.
+.Op Ar more \&...
+.Sh DESCRIPTION
+.\" Putting a newline after each sentence generates better output.
+Long drawn-out discussion of the program.
+It's a good idea to break this up into subsections using the
+.Ql .Ss
+macro, like these:
+.Ss A Sample Subsection
+.Ss Yet Another Sample Subsection
+.Pp
+References to the
+.Xr foo SECTION
+(or other) manual page should use the
+.Ql .Xr
+macro as here.
+References to the
+.Sx OPTIONS
+(or other) section within this manual page should use the
+.Ql .Sx
+macro as here.
+.Pp
+Use the
+.Ql .Pp
+macro to start a new paragraph within a section.
+.Sh OPTIONS
+Some people make this separate from the description.
+The following list style is typically used to document options:
+.Bl -tag -width 4n
+.It Cm this | Cm that
+The user MUST specify either
+.Cm this
+or
+.Cm that
+to run the program.
+The { and } braces (using the
+.Ql .Brq
+macro) mean one of the enclosed is required.
+The bar (|) separates exclusive options (i.e. you cannot have both at once).
+.It Fl o
+Pass the user-supplied
+.Ar option
+to
+.Nm
+to change its behaviour.
+The fact that
+.Ar option
+is underlined or in italics means that the user replaces it with a valid
+value for this option.
+The [ and ] brackets (using the
+.Ql .Op
+macro) mean it isn't required.
+.Pp
+Use the
+.Ql .Fl
+macro to render dashes in command-line option.
+.It Ar argument
+The last
+.Ar argument
+is required, because it is not in brackets.
+.It Ar more
+means that the user can optionally specify additional arguments at the end.
+The ellipses
+.Pf ( Ar ... )
+indicate one or more of this parameter is allowed.
+.\" Remember to close lists you open with .Bl.
+.El
+.Sh RETURN VALUE
+What the program or function returns if successful.
+.Sh ERRORS
+Return codes, either exit status or errno settings.
+.Sh EXAMPLES
+Give some example uses of the program.
+.Sh ENVIRONMENT
+Environment variables this program might care about.
+.Sh FILES
+All files used by the program.
+Typical usage is like this:
+.Pp
+.Bl -tag -width "/usr/man/man*/*.*" -compact
+.It Pa /usr/man
+default man tree
+.It Pa /usr/man/man*/*.*
+unformatted (nroff source) man pages
+.El
+.Sh NOTES
+Miscellaneous commentary.
+.Sh CAVEATS
+Things to take special care with, sometimes called WARNINGS.
+.Sh DIAGNOSTICS
+All the possible error messages the program can print out,
+what they mean, and how to correct them if applicable.
+.Sh BUGS
+Things that are broken or just don't work quite right.
+.Sh RESTRICTIONS
+Bugs you don't plan to fix. :-)
+.Sh AUTHOR
+Who wrote it (or AUTHORS if multiple).
+.Sh HISTORY
+Programs derived from other sources sometimes have this.
+.Sh SEE ALSO
+Other man pages to check out, like
+.Xr man 1 ,
+.Xr man 7 ,
+.Xr mandb 8 ,
+.Xr catman 8 .

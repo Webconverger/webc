@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# emacsen remove script for the Debian GNU/Linux
+# dictionaries-common package
+#
+# Written by Rafael Laboissiere <rafael@debian.org> and
+# Agustin Martin <agmartin@debian.org> based on
+# Dirk Eddelbuettel <edd@debian.org> script for the octave package.
+# -----------------------------------------------------------------
+
+set -e
+
+# Canadian spelling ;-)
+flavour=$1
+
+# Do nothing for dummy 'emacs' flavour
+if [ ${flavour} = emacs ]; then exit 0; fi
+
+package=dictionaries-common
+destination=/usr/share/${flavour}/site-lisp/${package}
+
+if [ -d $destination ]; then
+    echo remove/${package}: Purging byte-compiled files for flavour ${flavour}
+    rm -f ${destination}/*.elc ${destination}/*.el ${destination}/done
+    rmdir --ignore-fail-on-non-empty ${destination}
+fi
+
+exit 0;

@@ -1,0 +1,29 @@
+#!/bin/sh
+# hendry@webconverger.com (c) 2008-2010
+
+KIOSKRESETSTATION=$1
+test $KIOSKRESETSTATION || exit
+test $KIOSKRESETSTATION -lt 1 -o $KIOSKRESETSTATION -gt 60 && exit
+
+KIOSKRESETSECONDS=`expr $KIOSKRESETSTATION \* 60`
+echo Killing after $KIOSKRESETSECONDS idle seconds
+
+while true
+do
+
+	IDLESECONDS=$(/usr/bin/idleseconds)
+
+	if test $IDLESECONDS -lt $KIOSKRESETSECONDS
+	then
+
+		SLEEPFOR=`expr $KIOSKRESETSECONDS \- $IDLESECONDS`
+		echo Sleeping for $SLEEPFOR
+		sleep $SLEEPFOR
+
+	else
+
+		pkill X
+		sleep $KIOSKRESETSECONDS
+
+fi
+done

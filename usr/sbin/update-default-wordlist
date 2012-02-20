@@ -1,0 +1,214 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Debian::DictionariesCommon q(:all);
+use Debconf::Client::ConfModule q(:all);
+
+dico_checkroot ();
+
+my $triggered;
+my $skip_symlinks_setting;
+my $class  = "wordlist";
+
+# Parse options
+foreach my $option ( @ARGV ){
+  if ( $option eq "--dico-postinst" ){
+    $skip_symlinks_setting++;  # Do not set symlinks from dictionaries-comon.postinst
+    $triggered++;              # Do not enable trigger from dictionaries-comon.postinst
+  } elsif ( $option eq "--rebuild" ){
+    # Do nothing, keep sometime as no-op for old maintainer scripts.
+  } elsif ( $option eq "--triggered" ){
+    $triggered++;
+  } else {
+    die "update-default-$class: Bad option \"$option\". Aborting..."
+  }
+}
+
+version ('2.0');
+
+# Enable trigger if needed
+unless ( $triggered ){
+  exit if dico_activate_trigger("update-default-$class");
+}
+
+my $manual;
+my $libdir    = "/usr/share/dict";
+my $question  = "dictionaries-common/default-$class";
+my $iquestion = "dictionaries-common/invalid_debconf_value";
+my $linkdir   = "/etc/dictionaries-common";
+my $program   = "update-default-$class";
+my $debug     = 1 if defined $ENV{'DICT_COMMON_DEBUG'};
+my $newflag   = "/var/cache/dictionaries-common/flag-$class-new";
+
+# This flag is intended for remove-default-$class. If we are here we do not
+# need it any longer, so we reset for future apt runs by cleaning it.
+if ( -f $newflag ){
+  print STDERR "$program: Removing $newflag\n" if $debug;
+  unlink $newflag
+    or print STDERR " $program: Warning: could not remove $newflag\n";
+}
+
+updatedb ($class);
+my $dictionaries = loaddb ($class);
+
+my ($ret, $value)  = get ($question);
+if ( $ret == 0 && $value ){
+  # Question has a value
+  if ( $value =~ m/^Manual.*/i ){
+    # Question is set to manual mode
+    print STDERR "$program: Manual mode for \"$class\"\n" if $debug;
+    $manual++;
+  } elsif ( not %$dictionaries ) {
+    # Question has a value, but no manual mode and no class elements available. Unset value.
+    print STDERR "$program: No Manual mode and no $class elements. $question unset.\n" if $debug;
+    $value = "";
+    set($question,$value);
+    $manual++;
+  } else {
+    # Normal case, question has a value and is set to one of the installed class elements.
+    print STDERR "$program: Default is set to \"$value\" for \"$class\"\n" if $debug;
+  }
+} elsif ( not %$dictionaries ) {
+  # Question is empty. No default nor class elements available. Proceed as for manual.
+  print STDERR "$program: No \"$class\" elements left.\n" if $debug;
+  $manual++;
+} else {
+  # Question is empty, but $class elements are installed. Two possibilities.
+  if ( -x "/usr/bin/apt-extracttemplates" ){
+    # apt-utils is installed. Other possibility is debconf database corruption.
+    my $shared_question = "shared/packages-$class";
+    print STDERR "$program: Question empty but elements installed for class \"$class\"\n";
+    print STDERR "  $question: return code: \"$ret\", value: \"$value\"\n";
+    print STDERR "  Choices: " . metaget ($question, "choices") . "\n";
+    my ($shared_ret,$shared_owners) = metaget ($shared_question, "owners");
+    print STDERR "  $shared_question: return code: \"$shared_ret\" owners/error: \"$shared_owners\"\n";
+    print STDERR "  Installed elements: " . join(', ',sort keys %{$dictionaries}) . "\n\n";
+    print STDERR "  Please see \"/usr/share/doc/dictionaries-common/README.problems\", section\n";
+    print STDERR "  \"Debconf database corruption\" for recovery info.\n\n";
+  } else {
+    # apt-utils is not installed, so $class templates may not have been parsed at preconfigure stage.
+    # Delay settings until ispell dictionaries/wordlists are configured and their debconf templates parsed.
+    print STDERR "$program: apt-utils is not installed. Delay settings until $class elements are configured.\n";
+    $manual++;
+  }
+}
+
+unless ( $manual ){
+  # Handle invalid debconf values
+  if ( not exists $dictionaries->{$value} ){
+    my @available_keys = ();
+    foreach ( split (/\s*,\s*/, metaget ($question, "choices")) ){
+      # strip leading/trailing whitespace and create a list of available keys
+      s/^\s+//;
+      s/\s+$//;
+      push (@available_keys,$_) if ( defined $dictionaries->{$_} );
+    }
+    my $choices    = join (', ', sort {lc $a cmp lc $b} @available_keys);
+    my $forced_key = $available_keys[0] ||
+      die "$program: Selected wordlist" .
+      " \"$value\" \n" .
+      "does not correspond to any installed package in the system\n" .
+      "and no alternative wordlist could be selected.\n";
+    subst($iquestion,"value",$value);
+    fset ($iquestion,"seen","false");
+    input("high",$iquestion);                # Warn about what happened
+    subst ($question, "choices", $choices);  # Put sane values in debconf choices field
+    subst ($question, "echoices", $choices); # Put sane values in debconf echoices field
+    set ($question, $forced_key);            # Set debconf value to a sane one
+    fset ($question,"seen","false");
+    input ("critical", $question);
+    title ("dictionaries-common: wordlists");
+    go ();
+    ($ret, $value) = get ($question);
+    die "\n Could not get a valid value for debconf question:\n" .
+      "$question\n"
+      if ( $ret != 0 ); # This should never be reached
+
+    # Set manual flag if needed to avoid later symlinking
+    $manual++ if ( $value =~ m/^Manual.*/i )
+  }
+}
+
+#
+
+# Set default symlink(s) and complain if not possible. This should not be done
+# from dictionaries-common postinst, but from dictionaries/wordlists postinst.
+# Otherwise this is called before hashes are autobuild and will fail. If
+# autobuildhash is used, do sylinking now, after autobuildhash.
+unless ( $skip_symlinks_setting or $manual ) {
+  my $dictionaries = loaddb ($class); # Refresh reference, build_stuff above changed it
+  if ( defined $dictionaries->{$value}{"hash-name"} ){
+    print STDERR "update-default-$class: \"$value\" -> \"$dictionaries->{$value}{'hash-name'}\"\n"
+      if $debug;
+    my $hash   = "$libdir/" . $dictionaries->{$value}{"hash-name"};
+    foreach my $i ("") {
+      if (-e "$hash$i") {
+	system "ln -fs $hash$i $linkdir/words$i";
+      } else {
+	die "
+When trying to make the default link to a wordlist
+the file to link [$hash$i] was not found. Please report this as a bug to the
+maintainer of the wordlist package you tried to
+select.
+In the meantime select other default value for your wordlist.\n";
+      }
+    }
+  } else {
+    die "Selected wordlist:\n" .
+      " $value \n" .
+      "does not contain a hash name entry in the database.\n";
+  }
+}
+
+# Local Variables:
+#  perl-indent-level: 2
+# End:
+
+__END__
+
+=head1 NAME
+
+update-default-wordlist - update default wordlist
+
+=head1 SYNOPSIS
+
+ update-default-wordlist [--dico-postinst] [--triggered]
+
+=head1 DESCRIPTION
+
+WARNING: Not to be used from the command line unless you know very well what you are doing.
+
+This program is intended to be called from wordlist package postinst,
+from B<select-default-wordlist> or
+from dictionaries-common postinst (with B<--dico-postinst>).
+
+When called under dpkg control without the B<--dico-postinst> option, a dictionaries-common
+trigger is enabled to be run later.
+In the triggered run (or when is called from the command line or with --trigger option),
+reads the system default from the debconf database and set
+default links in F</etc/dictionaries-common> pointing to the appropriate files in
+F</usr/share/dict/>. 
+and rebuilds the
+F</var/cache/dictionaries-common/wordlist.db>  from the files in
+F</var/lib/dictionaries-common/wordlist>
+
+When called from from dictionaries-common postinst with B<--dico-postinst> symlinks
+creation step will be skipped and trigger not enabled.
+
+=head1 OPTIONS
+
+--dico-postinst  Do not enable trigger nor try to set default symlinks.
+--triggered      Run all the code instead of trying to enable
+                 update-default-wordlist trigger
+
+
+=head1 SEE ALSO
+
+The dictionaries-common policy document
+
+=head1 AUTHORS
+
+Rafael Laboissiere
+Agustin Martin Domingo
+
+=cut

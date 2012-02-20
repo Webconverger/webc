@@ -1,0 +1,50 @@
+#!/bin/sh
+
+## live-config-foobar(7) - Additional Configuration Scripts for Debian Live
+## Copyright (C) 2011 John Doe <john@example.org>
+##
+## live-config-foobar comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Foobar ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/foobar.list ] || \
+	   [ -e /var/lib/live/config/foobar ]
+	then
+		return
+	fi
+
+	echo -n " foobar"
+
+	Configure_foobar
+}
+
+Configure_foobar ()
+{
+	# Boot parameters can be acted up either this way...
+	if ! grep -qs "live-helper.foobar" /proc/cmdline
+	then
+		return
+	fi
+
+	# ...or if you want to specify certain options:
+	for _PARAMETER in $(cat /proc/cmdline)
+	do
+		case "${_PARAMETER}" in
+			live-config.foobar=*)
+				LIVE_FOOBAR="${_PARAMETER#live-config.foobar=}"
+				;;
+		esac
+	done
+
+	# Configuring foobar
+	sleep 1
+
+	# Creating state file
+	touch /var/lib/live/config/foobar
+}
+
+Foobar

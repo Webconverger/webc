@@ -1,0 +1,129 @@
+#!/bin/sh
+
+IWCONFIG=/sbin/iwconfig
+
+if [ ! -x $IWCONFIG ]; then
+  exit 0
+fi
+
+# The wireless driver madness:
+#
+# - Some drivers want everything to be configured before bringing the interface up
+# - Some drivers want everything to be configured after bringing the interface up
+# - Some drivers want some parameters before, other parameters after bringing the interface up
+#
+# So, we try to set every parameter when the interface is still down,
+# and remember which ones failed to be configured properly.
+# If some failed, we bring the interface up, and try the failed ones again.
+
+apply_settings()
+{
+	if [ -n "$IF_WIRELESS_SENS" ]; then
+		$IWCONFIG "$IFACE" sens $IF_WIRELESS_SENS && IF_WIRELESS_SENS= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_MODE" ]; then
+		$IWCONFIG "$IFACE" mode $IF_WIRELESS_MODE && IF_WIRELESS_MODE= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_AP" ]; then
+		$IWCONFIG "$IFACE" ap $IF_WIRELESS_AP && IF_WIRELESS_AP= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_RATE" ]; then
+		$IWCONFIG "$IFACE" rate $IF_WIRELESS_RATE && IF_WIRELESS_RATE= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_RTS" ]; then
+		$IWCONFIG "$IFACE" rts $IF_WIRELESS_RTS && IF_WIRELESS_RTS= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_FRAG" ]; then
+		$IWCONFIG "$IFACE" frag $IF_WIRELESS_FRAG && IF_WIRELESS_FRAG= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_POWER" ]; then
+		$IWCONFIG "$IFACE" power $IF_WIRELESS_POWER && IF_WIRELESS_POWER= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_POWERPERIOD" ]; then
+		$IWCONFIG "$IFACE" power period $IF_WIRELESS_POWERPERIOD && IF_WIRELESS_POWERPERIOD= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_POWERTIMEOUT" ]; then
+		$IWCONFIG "$IFACE" power timeout $IF_WIRELESS_POWERTIMEOUT && IF_WIRELESS_POWERTIMEOUT= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_TXPOWER" ]; then
+		$IWCONFIG "$IFACE" txpower $IF_WIRELESS_TXPOWER && IF_WIRELESS_TXPOWER= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_RETRY" ]; then
+		$IWCONFIG "$IFACE" retry $IF_WIRELESS_RETRY && IF_WIRELESS_RETRY= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_ENC" ]; then
+		eval $IWCONFIG "$IFACE" enc $IF_WIRELESS_ENC && IF_WIRELESS_ENC= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY" ]; then
+		eval $IWCONFIG "$IFACE" key $IF_WIRELESS_KEY && IF_WIRELESS_KEY= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY1" ]; then
+		$IWCONFIG "$IFACE" key [1] "$IF_WIRELESS_KEY1" && IF_WIRELESS_KEY1= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY2" ]; then
+		$IWCONFIG "$IFACE" key [2] "$IF_WIRELESS_KEY2" && IF_WIRELESS_KEY2= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY3" ]; then
+		$IWCONFIG "$IFACE" key [3] "$IF_WIRELESS_KEY3" && IF_WIRELESS_KEY3= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEY4" ]; then
+		$IWCONFIG "$IFACE" key [4] "$IF_WIRELESS_KEY4" && IF_WIRELESS_KEY4= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_DEFAULTKEY" ]; then
+		$IWCONFIG "$IFACE" key ["$IF_WIRELESS_DEFAULTKEY"] && IF_WIRELESS_DEFAULTKEY= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEYMODE" ]; then
+		$IWCONFIG "$IFACE" key "$IF_WIRELESS_KEYMODE" && IF_WIRELESS_KEYMODE= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_FREQ" ]; then
+		$IWCONFIG "$IFACE" freq $IF_WIRELESS_FREQ && IF_WIRELESS_FREQ= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_CHANNEL" ]; then
+		$IWCONFIG "$IFACE" channel $IF_WIRELESS_CHANNEL && IF_WIRELESS_CHANNEL= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_NICK" ]; then
+		$IWCONFIG "$IFACE" nick "$IF_WIRELESS_NICK" && IF_WIRELESS_NICK= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_NWID" ]; then
+		$IWCONFIG "$IFACE" nwid "$IF_WIRELESS_NWID" && IF_WIRELESS_NWID= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_ESSID" ]; then
+		$IWCONFIG "$IFACE" essid "$IF_WIRELESS_ESSID" && IF_WIRELESS_ESSID= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_COMMIT" ]; then
+		$IWCONFIG "$IFACE" commit && IF_WIRELESS_COMMIT= || FAIL=true
+	fi
+}
+
+FAIL=
+apply_settings 2>/dev/null
+
+if [ -n "$FAIL" ]; then
+	FAIL=
+	ifconfig "$IFACE" up
+	apply_settings
+fi

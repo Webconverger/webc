@@ -1,0 +1,198 @@
+#!/bin/sh
+
+# $Id: update-fonts-alias 189 2005-06-11 00:04:27Z branden $
+
+# This program compiles fonts.alias files for X font directories; see
+# mkfontdir(1x) for a description of the format of fonts.alias files.
+
+# Copyright 1999, 2001, 2002, 2004 Branden Robinson.
+# Copyright 2006 Steve Langasek.
+# Licensed under the GNU General Public License, version 2.  See the file
+# /usr/share/common-licenses/GPL or <http://www.gnu.org/copyleft/gpl.txt>.
+
+PROGNAME=${0##*/}
+
+# Query the terminal to establish a default number of columns to use for
+# displaying messages to the user.  This is used only as a fallback in the event
+# the COLUMNS variable is not set.  ($COLUMNS can react to SIGWINCH while the
+# script is running, and this cannot, only being calculated once.)
+DEFCOLUMNS=$(stty size 2>/dev/null | awk '{print $2}') || true
+if ! expr "$DEFCOLUMNS" : "[[:digit:]]\+$" >/dev/null 2>&1; then
+    DEFCOLUMNS=80
+fi
+
+# Display a message, wrapping lines at the terminal width.
+message () {
+    echo "$*" | fmt -t -w ${COLUMNS:-$DEFCOLUMNS}
+}
+
+# Display a warning message.
+warn () {
+    message "warning: $*" >&2
+}
+
+# Display an error message and exit.
+die () {
+    message "fatal error: $*" >&2
+    exit 1
+}
+
+# Display a usage message.
+usage () {
+    if [ -n "$*" ]; then
+        message "usage error: $*"
+    fi
+    cat <<EOF
+Usage: $PROGNAME [OPTIONS] DIRECTORY ...
+       $PROGNAME { -h | --help }
+This program combines X font alias information from several packages into a
+single file that is placed in each specified X font directory DIRECTORY.  This
+utility is primarily useful to Debian package maintainer scripts.  See
+update-fonts-alias(8) for more information.
+Options:
+    -h, --help                        display this usage message and exit
+    -i, --include ALIAS-FILE          drop ALIAS-FILE from exlude list if any
+    -x, --exclude ALIAS-FILE          add ALIAS-FILE to exclude list
+EOF
+}
+
+X11R7_LAYOUT=
+INCLUDE_ALIAS=
+EXCLUDE_ALIAS=
+EXCLUDE_CONF=/var/lib/xfonts/excluded-aliases
+
+# Validate options.
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -7|--x11r7-layout)
+            X11R7_LAYOUT=true
+            shift
+            ;;
+        -i|--include)
+            if [ $# -lt 2 ]; then
+                usage "alias file to include is missing" >&2
+                exit 2
+            fi
+            INCLUDE_ALIAS="$INCLUDE_ALIAS $2"
+            shift 2
+            ;;
+        -x|--exclude)
+            if [ $# -lt 2 ]; then
+                usage "alias file to exclude is missing" >&2
+                exit 2
+            fi
+            EXCLUDE_ALIAS="$EXCLUDE_ALIAS $2"
+            shift 2
+            ;;
+        -*)
+            usage "unrecognized option" >&2
+            exit 2
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+if [ $# -eq 0 ]; then
+    usage "one or more font directories must be specified" >&2
+    exit 2
+fi
+
+# Remove aliases to be included from exclude list
+for f in $INCLUDE_ALIAS; do
+    sed -i "\\,^$f$,d" $EXCLUDE_CONF
+done
+# Add aliases to be excluded to exclude list
+for f in $EXCLUDE_ALIAS; do
+    sed -i "\\,^$f$,d" $EXCLUDE_CONF
+    echo "$f" >> $EXCLUDE_CONF
+done
+
+while [ -n "$1" ]; do
+    # Try to be clever about the argument; were we given an absolute path?
+    if expr "$1" : "/.*" >/dev/null 2>&1; then
+        # Yes; an absolute path to an X font directory was provided.
+        X11R7DIR=$1
+        ETCDIR=/etc/X11/fonts/${X11R7DIR##*/}
+        ETC7DIR=/etc/X11/fonts/X11R7/${X11R7DIR##*/}
+        if [ "$X11R7DIR" = "$ETCDIR" ] || [ "$X11R7DIR" = "$ETC7DIR" ]; then
+            # We were given an /etc directory as an argument.
+            die "path to X font directory must be used"
+        else
+            warn "absolute path $X11R7DIR was provided"
+        fi
+    else
+        # No; a relative path was provided -- assume we were given just the
+        # basename.
+        X11R7DIR=/usr/share/fonts/X11/$1
+        ETCDIR=/etc/X11/fonts/$1
+        ETC7DIR=/etc/X11/fonts/X11R7/$1
+    fi
+
+    shift
+
+    # Confirm that the directories to be operated on exist.
+    VALIDSRC=
+    if [ -d "$ETCDIR" ]; then
+        VALIDSRC=yes
+    else
+        warn "$ETCDIR does not exist or is not a directory"
+    fi
+    if [ -d "$ETC7DIR" ]; then
+        VALIDSRC=yes
+    else
+        if [ -n "$X11R7_LAYOUT" ]; then
+            warn "$ETC7DIR does not exist or is not a directory"
+        fi
+    fi
+
+    VALIDDEST=
+    if [ -d "$X11R7DIR" ]; then
+            VALIDDEST=yes
+    else
+        warn "$X11R7DIR does not exist or is not a directory"
+    fi
+
+    if [ -z "$VALIDSRC" ] || [ -z "$VALIDDEST" ]; then
+        continue
+    fi
+
+    if [ -n "$X11R7DIR" ] && [ -d "$X11R7DIR" ]; then
+        # Write the new alias file in a temporary location in case we are
+        # interrupted.
+        cat >"$X11R7DIR/fonts.alias.update-new" <<EOF
+!! fonts.alias -- automatically generated file.  DO NOT EDIT.
+!! To modify, see update-fonts-alias(8).
+EOF
+        has_data=0
+        for FILE in "$ETCDIR"/*.alias "$ETC7DIR"/*.alias; do
+            [ -e "$FILE" ] || continue
+
+            # Skip excluded aliases
+            grep -q "^$FILE$" $EXCLUDE_CONF && continue
+
+            echo "!! $FILE" >>"$X11R7DIR/fonts.alias.update-new"
+            cat "$FILE" >>"$X11R7DIR/fonts.alias.update-new"
+            has_data=1
+        done
+        if [ $has_data -eq 1 ]; then
+          mv "$X11R7DIR/fonts.alias.update-new" "$X11R7DIR/fonts.alias"
+        else
+          rm -f "$X11R7DIR/fonts.alias.update-new"
+          # There are no files to process; remove any alias file already in
+          # the font directory.
+          rm -f "$X11R7DIR/fonts.alias"
+          # Remove the font directory if it is empty.
+          rmdir "$X11R7DIR" >/dev/null 2>&1 || true
+        fi
+    fi
+done
+
+exit 0
+
+# vim:set ai et sts=4 sw=4 tw=80:

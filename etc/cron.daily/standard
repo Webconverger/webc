@@ -1,0 +1,134 @@
+#!/bin/sh
+# /etc/cron.daily/standard: standard daily maintenance script
+# Written by Ian A. Murdock <imurdock@gnu.ai.mit.edu>
+# Modified by Ian Jackson <ijackson@nyx.cs.du.edu>
+# Modified by Steve Greenland <stevegr@debian.org>
+
+# Start in the root filesystem, make SElinux happy
+cd /
+bak=/var/backups
+LOCKFILE=/var/lock/cron.daily
+umask 022
+
+#
+# Avoid running more than one at a time 
+#
+
+if [ -x /usr/bin/lockfile-create ] ; then
+    lockfile-create $LOCKFILE
+    if [ $? -ne 0 ] ; then
+	cat <<EOF
+
+Unable to run /etc/cron.daily/standard because lockfile $LOCKFILE
+acquisition failed. This probably means that the previous day's
+instance is still running. Please check and correct if necessary.
+
+EOF
+	exit 1
+    fi
+
+    # Keep lockfile fresh
+    lockfile-touch $LOCKFILE &
+    LOCKTOUCHPID="$!"
+fi
+
+#
+# Backup key system files
+#
+
+if cd $bak ; then
+	cmp -s passwd.bak /etc/passwd || (cp -p /etc/passwd passwd.bak &&
+					  chmod 600 passwd.bak)
+	cmp -s group.bak /etc/group || (cp -p /etc/group group.bak &&
+					chmod 600 group.bak)
+        if [ -f /etc/shadow ] ; then
+	  cmp -s shadow.bak /etc/shadow || (cp -p /etc/shadow shadow.bak &&
+                                            chmod 600 shadow.bak)
+	fi
+        if [ -f /etc/gshadow ] ; then
+	  cmp -s gshadow.bak /etc/gshadow || (cp -p /etc/gshadow gshadow.bak &&
+					      chmod 600 gshadow.bak)
+	fi
+fi
+
+#
+# Check to see if any files are in lost+found directories and warn admin
+#
+# Get a list of the (potential) ext2, ext3, ext4 and xfs l+f directories
+# Discard errors, for systems not using any of these.
+lfdirs=`df -P --type=ext2 --type=ext3 --type=ext4 --type=xfs 2>/dev/null |
+	awk '/\/dev\// { print }' | sed -e 's/ [[:space:]]*/ /g'  |
+	while read mount block used avail perc mp; do
+		[ "$mp" = "/" ] && mp=""
+		echo "$mp/lost+found"
+	done`
+
+# Don't use space as a field separator
+oldifs="$IFS"
+IFS=`printf '\n\t'`
+
+for lfdir in $lfdirs; do
+# In each directory, look for files
+    if [ -d "$lfdir" ] ; then
+	more_lost_found=`ls -1  "$lfdir" 2>/dev/null | grep -v 'lost+found$' | sed 's/^/    /'`
+	if [ -n "$more_lost_found" ] ; then
+	    lost_found="$lost_found
+
+$lfdir:
+$more_lost_found"
+	    # NOTE: above weird line breaks in string are intentional!
+        fi
+    else
+# Do nothing for XFS filesystems they do not need to
+# have a lost and found dir
+        fs=`cat /proc/mounts | grep " ${lfdir%/lost+found} "`
+        case "$fs" in
+            ext*)
+        	no_lost_found="$no_lost_found
+$lfdir"
+                ;;
+            *)
+                ;;
+        esac
+    fi
+done
+
+# Restore IFS
+IFS="$oldifs"
+unset oldifs
+
+# NOTE: This might need to be configurable if systems abound
+# w/o lost+found out there to prevent giving out this warning
+# every day.
+if [ -n "$lost_found" ]; then
+    cat << EOF
+Files were found in lost+found directories. This is probably
+the result of a crash or bad shutdown, or possibly of a disk
+problem. These files may contain important information. You
+should examine them, and move them out of lost+found or delete
+them if they are not important.
+
+The following files were found:
+$lost_found
+EOF
+fi
+
+if [ -n "$no_lost_found" ]; then
+    cat << EOF
+Some local filesystems do not have lost+found directories. This
+means that these filesystems will not be able to recover
+lost files when the filesystem is checked after a crash.
+Consider creating a lost+found directory with mklost+found(8).
+
+The following lost+found directories were not available:
+$no_lost_found
+EOF
+fi
+
+#
+# Clean up lockfile
+#
+if [ -x /usr/bin/lockfile-create ] ; then
+    kill $LOCKTOUCHPID
+    lockfile-remove $LOCKFILE
+fi

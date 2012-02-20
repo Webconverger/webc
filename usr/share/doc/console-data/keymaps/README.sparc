@@ -1,0 +1,117 @@
+	
+1. SUPPORTED KEYBOARDS
+
+List of supported keyboards:
+
+Sun Type 5:
+  sunt5-es.kmap
+  sunt5-de-latin1.kmap    (Contributed by Wolfgang Szöcs <wolfi@tfh-berlin.de>)
+  sunt5-fi-latin1.kmap    (  by Riku Meskanen <mesrik@cc.jyu.fi>)
+  sunt5-ru.kmap           (  by Alexander V. Lukyanov <lav@video.yars.free.net>)
+  sunt5-uk.kmap           (  by Steven Brookes <stevejb@eos18.eos.co.uk>)
+
+Sun Type 4:
+  sunt4-es.kmap           (  By Antoni Pàmies Olivé <toni@readysoft.net>)
+
+The other keymaps provided with this package are the original PC ones and are
+included just for reference when creating new ones.
+DO NOT TRY TO LOAD THEM. THEY WILL MAKE YOUR KEYBOARD COMPLETELY UNUSABLE.
+
+Don't forget to check that /etc/sysconfig/keyboard contains the right
+definition. The kbdconfig utility will do it for you. It should be found
+at the same place where you got this package as kbdconfig-1.3-1.sparc.rpm.
+
+Please, send new maps to <eduardo@medusa.es>, so I can include them in new
+releases of this package.
+
+
+
+2. HOW TO CREATE KEYBOARD MAPS
+
+NOTE: Please, send additions, comments and corrections (of ANY kind) to the
+      address above.
+
+2.1 The Hard Way (TM)
+
+  First, execute the dumpkeys command to create a first working keymap:
+
+  $ dumpkeys > sunt5-lang.kmap
+
+  Then, press every key to check if the console shows the symbol it is supposed
+  to. If not, search for the offending keycode into the sunt5-lang.kmap file and
+  change its keysyms to the real ones. (You can get the keycodes using showkey).
+
+  Please read the documentation accompanying this package and check the
+  sunt5-* and PC keymaps provided with this RPM (specially the ones for your
+  native language) if you have any doubt.
+
+2.2 The Easy Way
+
+  Choose one of the provided PC keymaps for your language and do the following:
+
+  $ pc2sun.pl lang.kmap > sunt5-lang.kmap
+
+  Check the file sunt5-lang.kmap as explained in 2.1.
+
+  (pc2sun.pl should work very well in most cases. For the Spanish keyboard,
+  only two keys were misplaced, due to some special characteristics of the
+  Spanish PC keyboard)
+  
+
+
+3. CHANGELOG
+
+Release 0.94-1 (16 May 97)
+
+ * kbd-0.94. Andries Brouwer has included most of the SPARC specific code
+   in this version.
+
+Release 0.93-1 (27 Apr 97)
+
+ * Merged to Andries Brouwer's kbd-0.93
+
+ * Added sunt5-uk.kmap keymap.
+
+ * Small fix to sunt5-ru.kmap (Alexander V. Lukyanov)
+ 
+Release 0.91-12 (18 Jan 97)
+
+ * Added Antoni's sunt4-es.kmap
+
+Release 0.91-11 (13 Jan 97)
+
+ * WARNING WARNING WARNING
+   This was compiled by Antoni Pàmies Olivé <toni@readysoft.net> with a Type 4
+   keymap for Spanish and Catalan.
+
+   This release is NOT complete and won't install the init scripts, for
+   example.
+
+   I won't answer any question about it. Install Release 12 or higher or ask
+   Antoni directly if you have any problems with this one.
+
+Release 0.91-10 (12 Jan 97)
+
+ * Added pc2sun.pl (Thanks to Derrick J Brashear <shadow@dementia.org>)
+
+ * Replaced defkeymap.kmap with system's sunkeymap.kmap (Thanks to Riku Meskanen)
+
+ * Added sunt5-fi-latin1.kmap and sunt5-ru.kmap
+
+ * Improved README.sparc
+
+
+Release 0.91-9a (27 Oct 96)
+
+ * Fixed serious bug in setfont
+
+
+Release 0.91-9  (26 Oct 96)
+
+ * First version for Linux/SPARC with Spanish and German keyboards support.
+   (Same as RedHat kbd-0.91-9 for i386 with Sparc-specific patches)
+
+
+Eduardo Casino
+
+

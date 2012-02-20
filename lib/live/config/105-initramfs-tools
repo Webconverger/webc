@@ -1,0 +1,87 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Initramfs_tools ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/initramfs-tools.list ] || \
+	   [ -e /var/lib/live/config/initramfs-tools ]
+	then
+		return
+	fi
+
+	echo -n " initramfs-tools"
+
+	Configure_update_initramfs
+}
+
+Configure_update_initramfs ()
+{
+	# Checking if apckage is already configured differently
+	if [ -e /usr/sbin/update-initramfs.debian ]
+	then
+		return
+	fi
+
+	# Possibly disabling update-initramfs (useless on a live CD)
+
+	# Diverting /usr/sbin/update-initramfs
+	dpkg-divert --quiet --package live-config --add --rename --divert /usr/sbin/update-initramfs.debian /usr/sbin/update-initramfs
+
+	# rw is guaranteed to be first.
+	if [ -w /cdrom ] && grep -q ' /cdrom rw[, ]' /proc/self/mountinfo
+	then
+		# live-media is writable
+
+cat > /usr/sbin/update-initramfs << 'EOF'
+#!/bin/sh
+
+# Updating initramfs
+update-initramfs.debian "${@}"
+
+if [ -e /initrd.img ]
+then
+	_DIRECTORY=""
+else
+	_DIRECTORY="/boot"
+fi
+
+# Copying kernel and initrd to live media
+if [ -e /cdrom/live/initrd.lz ]
+then
+	zcat "${_DIRECTORY}/initrd.img" | lzma -9c > /cdrom/live/initrd.lz.new
+	mv /cdrom/live/initrd.lz.new /cdrom/live/initrd.lz
+else
+	cp "${_DIRECTORY}/initrd.img" /cdrom/live/initrd.gz.new
+	mv /cdrom/live/initrd.gz.new /cdrom/live/initrd.gz
+fi
+
+cp "${_DIRECTORY}/vmlinuz" /cdrom/live/vmlinuz.new
+mv /cdrom/live/vmlinuz.new /cdrom/live/vmlinuz
+EOF
+
+	else
+		# live-media is read-only
+
+cat > /usr/sbin/update-initramfs << EOF
+#!/bin/sh
+
+echo "I: update-initramfs is disabled (live system is running on read-only media)."
+EOF
+
+fi
+
+	chmod 0755 /usr/sbin/update-initramfs
+
+	# Creating state file
+	touch /var/lib/live/config/initramfs-tools
+}
+
+Initramfs_tools

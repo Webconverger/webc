@@ -1,0 +1,108 @@
+#!/bin/sh
+set -e
+
+install_local_dir() {
+  if [ ! -d $1 ]; then
+    mkdir -p $1
+  fi
+  chown root:staff $1 2> /dev/null || true
+  chmod 2775 $1 2> /dev/null || true
+}
+
+install_from_default() {
+  if [ ! -f $2 ]; then
+    cp -p $1 $2
+  fi
+}
+
+install_directory() {
+  if [ ! -d /$1 ]; then
+    mkdir /$1
+    chown root:$3 /$1
+    chmod $2 /$1
+  fi
+}
+
+if [ ! -e /etc/dpkg/origins/default ]; then
+  if [ -e /etc/dpkg/origins/progress ]; then
+    ln -sf progress /etc/dpkg/origins/default
+  fi
+fi
+
+if [ "$1" = "configure" ] && [ "$2" = "" ]; then
+  install_from_default /usr/share/base-files/nsswitch.conf /etc/nsswitch.conf
+  install_from_default /usr/share/base-files/dot.profile   /root/.profile
+  install_from_default /usr/share/base-files/dot.bashrc    /root/.bashrc
+  install_from_default /usr/share/base-files/profile       /etc/profile
+  install_from_default /usr/share/base-files/motd          /etc/motd
+  install_directory srv       755 root
+  install_directory opt       755 root
+  install_directory etc/opt   755 root
+  install_directory var/opt   755 root
+  install_directory media     755 root
+  install_directory var/mail 2775 mail
+  if [ ! -L /var/spool/mail ]; then
+    ln -s ../mail /var/spool/mail
+  fi
+
+  install_local_dir /usr/local
+  install_local_dir /usr/local/share
+  install_local_dir /usr/local/share/man
+  install_local_dir /usr/local/bin
+  install_local_dir /usr/local/games
+  install_local_dir /usr/local/lib
+  install_local_dir /usr/local/include
+  install_local_dir /usr/local/sbin
+  install_local_dir /usr/local/src
+  install_local_dir /usr/local/etc
+  ln -sf share/man /usr/local/man
+
+  if [ ! -f /var/log/wtmp ]; then
+    echo -n>/var/log/wtmp
+  fi
+  if [ ! -f /var/log/btmp ]; then
+    echo -n>/var/log/btmp
+  fi
+  if [ ! -f /var/log/lastlog ]; then
+    echo -n>/var/log/lastlog
+  fi
+  chown root:utmp /var/log/wtmp /var/log/btmp /var/log/lastlog
+  chmod 664 /var/log/wtmp /var/log/lastlog
+  chmod 660 /var/log/btmp
+  if [ ! -f /var/run/utmp ]; then
+    echo -n>/var/run/utmp
+  fi
+  chown root:utmp /var/run/utmp
+  chmod 664 /var/run/utmp
+fi
+
+if [ ! -d /var/lib/dpkg ]; then
+  mkdir -m 755 -p /var/lib/dpkg
+  chown root:root /var/lib/dpkg
+fi
+if [ ! -f /var/lib/dpkg/status ]; then
+  echo > /var/lib/dpkg/status
+  chmod 644 /var/lib/dpkg/status
+  chown root:root /var/lib/dpkg/status
+fi
+
+if [ ! -f /usr/info/dir ] && [ ! -f /usr/share/info/dir ]; then
+  install_from_default /usr/share/base-files/info.dir /usr/share/info/dir
+  chmod 644 /usr/share/info/dir
+  chown root:root /usr/share/info/dir
+fi
+
+if [ "$1" = "configure" ] && [ "$2" != "" ]; then
+  if [ -f /etc/motd ]; then
+    oldmd=`awk 'NR > 2' /etc/motd | md5sum | awk '{print $1}'`
+    newmd=`awk 'NR > 2' /usr/share/base-files/motd | md5sum | awk '{print $1}'`
+    if [ "$oldmd" != "$newmd" ]; then
+      if grep -q "$oldmd" /usr/share/base-files/motd.md5sums; then
+        awk 'NR <= 2' /etc/motd > /etc/motd.new
+        awk 'NR > 2' /usr/share/base-files/motd >> /etc/motd.new
+        mv /etc/motd /etc/motd.old
+        mv /etc/motd.new /etc/motd
+      fi
+    fi
+  fi
+fi

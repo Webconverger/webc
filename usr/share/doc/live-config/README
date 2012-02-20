@@ -1,0 +1,25 @@
+live-boot in Debian
+===================
+
+Regressions
+-----------
+
+During the squeeze release cycle, live-initramfs was splitted into live-boot
+(early userspace) and live-config (late userspace). This allowed to rewrite the
+late userspace code in a better way and gain a lot of speed improvement at the
+same time.
+
+However, as with every rewrite, there are a few regressions. Compared to lennys
+live-initramfs version 1.x, live-boot and live-config version 2.x of squeeze
+have to following known bugs:
+
+  * no serial console support during booting.
+
+  * the locale script doesn't automatically configures the keyboard when a
+    'short' locale is specified (like locales=de).
+
+All of these bugs will be fixed at some point during the squeeze+1 release
+cycle. Since live-boot and live-config version 3.x will contain legacy support
+for squeeze, upgrading to the next generation will be pretty painless.
+
+ -- Daniel Baumann <daniel@debian.org>  Thu, 02 Sep 2010 16:29:21 +0200

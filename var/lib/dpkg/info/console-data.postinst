@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+# Automatically added by dh_consoledata
+if [ "$1" = "configure" ]
+then
+  # Do nothing if console-common is not installed.
+  if [ -x /usr/share/console/getkmapchoice.pl ] 
+  then 
+      . /usr/share/debconf/confmodule
+      # If the entry contains a / it's broken so overwrite it with a default
+      # value.  See see #110873
+      if db_get console-data/keymap/full && echo "$RET" | grep -q "/"; then
+          db_set console-data/keymap/full us
+      fi
+      echo >&2 "Looking for keymap to install:"
+      if /usr/share/console/getkmapchoice.pl
+      then
+  	install-keymap `PERL_BADLANG=0 \
+	   /usr/share/console/getkmapchoice.pl 2>&1 | tail -n 1`
+      fi
+  fi
+fi
+# End automatically added section
+
+

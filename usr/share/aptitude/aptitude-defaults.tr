@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for tr.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Bölüm belirtilmemiş paketler\n Bu paketler için bölüm belirtilmemiş. Belki paket dosyalarında bir hata vardır?";
+    Virtual	"Sanal paketler\n Bu paketler gerçekte yoktur, yalnızca diğer paketlerin bağımlılıkları tamamlamak için kullandıkları veya bazı işlevler sağlamak için kullanılan isimlerdir.";
+    Tasks	"Bilgisayarınızda belirli bir işi yerine getiren paketler\n 'Görevler' bölümündeki paketler dosya içermez: Bu paketler sadece diğer paketlere bağımlıdır. Bu paketler ön tanımlı bir paket kümesinin kolayca seçilmesini sağlar";
+
+    admin	"Yönetim araçları (yazılım kur, kullanıcıları düzenle, vb.)\n 'yönetim' bölümündeki paketler yazılım kurmak, kullanıcıları düzenlemek, sisteminizin ayarları ve gözlemlenmesi, ağ trafiğinin sınanması gibi yönetimsel işleri yapmanızı sağlar.";
+    alien	"Yabancı biçimlerden çevrilmiş paketler (rpm, tgz, vb)\n 'alien' bölümündeki paketler 'alien' uygulamasıyla RPM gibi diğer biçimlerden çevrilmiş paketlerden oluşur";
+    base	"Debian temem sistem\n'temel' bölümünde başlangıçtaki sistem kurulumunun bir parçasıdır.";
+    comm	"faxmodem ve diğer haberleşme cihazları için uygulamalar\n 'comm' bölümündeki paketler modem ve diğer haberleşme cihazlarının denetiminde kullanılır. Bunlar faxmodemi denetleyen yazılımlar (örneğin, internete bağlanmak için PPP ve bu iş için yazılmış zmodem/kermit gibi uygulamalar), cep telefonları için uygulamalar, FidoNet için arayüz, ve BBS uygulamaları.";
+    devel	"Yazılım geliştirme uygulamaları ve araçları\n'devel' bölümündeki paketler yeni uygulama yazmak için ya da varolanlar üzerinde çalışmak için kullanılır. Geliştirici olmayanlar, kendi yazılımlarını derlemeyenler genellikle bu bölümdeki yazılımlara ihtiyaç duymazlar.\n .\nBurada derleyiciler, hata ayıklama araçları, geliştiriciler için editörler, kaynak işleme araçları, ve diğer yazılım geliştirmeyle ilgili şeyler bulunur.";
+    doc		"Belgeleme ve belge görüntüleme için uygulamalar\n 'doc' bölümündeki paketler Debian sistemin parçaları, ya da belge biçimleriiçin görüntüleme araçlarıdır.";
+    editors	"Metin editörleri ve kelime işlemciler\n'editors' bölümündeki paketler düz metin belgeleri düzenlemenizi sağlar. Bunlar gerekli kelime işlemciler değildir, ayrıca bu başlık altında bazı kelime işlemcilerdebulabilirsiniz.";
+    electronics	"Devreler ve elektronik için gerekli paketler\n 'elektronics' bölümündeki paketler; devre tasarım araçları, benzeticiler ve mikro denetleyiciler için gerekli yazılımları kapsar.";
+    embedded	"Gömülü sistemler için uygulamalar\n 'embedded' bölümünde ki paketler gömülü sistemlerde kullanılmalıdır. Gömülü sistemler alışılmış masaüstü bilgisayarlardan çok daha basit sistemlerdir. Örnek: PDA, cep telefonu ve Tivo'lar.";
+    gnome	"GNOME Masaüstü Sistemi\n GNOME, Linux için kullanımı kolay bir masaüstü ortamı oluşturan yazılımlar bütünüdür. 'gnome' bölümdeki paketler GNOME masaüstü ortamının bir parçası ya da bu ortamla bütünleşik çalışan üçüncü parti yazılımlardır.";
+    games	"Oyun, ve eğlence uygulamaları\n'games' bölümündeki paketler eğlence amaçlı uygulamaları kapsar.";
+    graphics	"Grafik dosyaları yaratmak, görüntülemek ve değiştirmek için araçlar\n'graphics' bölümündeki paketler görüntü dosyaları için görüntüleyiciler, görüntü işlemeyazılımları, grafik donanımıyla etkileşim yazılımları (video kartları, tarayıcılar, dijital kameralar) ve grafikleri işlemek için uygulamalama araçlardan oluşur.";
+    hamradio	"Amatör radyo yazılımları\n 'hamradio' bölümündeki uygulamalar amatör radyo operatörlerinin ihtiyaç duyacağı yazılımları içerir.";
+    interpreters "Yorumlayıcılar ve yordamsal diller\n'interpreters' bölümündeki paketler Python, Perl, ve Ruby gibi diller için yorumlayıcılar ve bu diller için kütüphaneleri içerir.";
+    kde		"KDE Masaüstü Sistemi\n KDE, Linux için kullanımı kolay bir masaüstü ortamı oluşturan yazılımlar bütünüdür. 'kde' bölümüdeki paketler KDE masaüstü ortamının bir parçası ya da bu ortamla bütünleşik çalışan üçüncü parti yazılımlardır.";
+    libdevel	"Geliştirme ve kütüphaneler\n 'libdevel' bölümündeki paketler 'libs' bölümündeki kitaplıkları kullanan uygulamaları inşa etmek için gereklidir.  Yazılım derlemeyecekseniz bu bölümdeki paketlere ihtiyacınız olmaz.";
+    libs	"Yazılım rutinleri kolleksiyonu\n 'libs' bölümündeki paketler diğer yazılımların ihtiyaç duyduğu işlevleri sağlar. Birkaç küçük istisna dışında bu bölümden ayrıca paket kurmanız gerekmez; paket sistemi bağımlılıkların bütünlüğünü sağlamak için gerektiğinde bu paketleri kuracaktır.";
+    perl	"Perl yorumlayıcı ve kütüphaneleri\n 'perl' bölümündeki paketler Perl uygulama geliştirme dilini ve bir çok üçüncü parti kütüphaneleri içerir. Perl geliştiricisi olmadığınız sürece bu bölümdeki paketleri kurmanız gerekmemektedir; paket yönetim sistemi bütünlüğü sağlamak için gerektiğinde bu paketleri kuracaktır.";
+    python	"Python yorumlayıcı ve kütüphaneleri\n 'python' bölümündeki paketler Python uygulama geliştirme dilini ve bir çok üçüncü parti kütüphaneleri içerir. Python geliştiricisi olmadığınız sürece bu bölümdeki paketleri kurmanız gerekmemektedir; paket yönetim sistemi bütünlüğü sağlamak için gerektiğinde bu paketleri kuracaktır.";
+    mail	"eposta yazmak, göndermek, almak için uygulamalar\n'mail' bölümündeki paketler mail okuma, mail taşıma servisleri, mail liste yazılımları, spam filtreleri, ve çeşitli elektronik posta yazılımları bulunur.";
+    math	"Sayısal çözümleme ve matematikle ilgili diğer yazılımlar\n'math' bölümündeki yazılımlar, hesap makineleri, matematik hesaplama dilleri (Matematica benzeri), Simgesel cebir paketleri, ve matematik nesnelerinin görsel gösterimi için uygulamalar.";
+    misc	"Çeşitli yazılımlar\n'misc' bölümündeki paketler çok kullanılmayan sınıflandırılamamış yazılımları içerir.";
+    net		"Çeşitli servis ve servislere bağlantı uygulamaları\n 'net' bölümündeki paketler birçok protokol için istemci ve sunucular,ağ protokolleri için hata ayıklama ve yönlendirme araçları, IM sistemleri,ve diğer ağla ilgili yazılımları içerir.";
+    news	"Usenet istemci ve sunucular\n 'news' bölümünde Usenet dağıtık haber sistemi ile ilgili paketler bulunur.  Bunlar haber okuma ve haber sunucu uygulamaları dahildir.";
+    oldlibs	"Eski kütüphaneler\n 'oldlibs' bölümündeki paketler eskidir ve yeni yazılımlar tarafından kullanılmamalıdırlar.  Uyumluluk nedenlerinden veya Debian tarafından dağıtılan bazı yazılımlar gerek duyduğundan sağlanmışlardır.\n \n Birkaç istisna dışında, bu bölümdeki paketleri kurmanız gerekmez, paket sistemi gerektiğinde bağımlılıkları karşılamak amacıyla bu paketleri sizin adınıza kuracaktır.";
+    otherosfs	"Öykünücüler ve yabancı dosya sistemlerini okumak için yazılımlar\n 'otherosfs' bölümündeki paketler donanımlara ve işletim sistemlerine öykünür, ve farklı işletim sistemleri arasında veri aktarmak için araçlar sağlar. (halihazırda DOS disketlerini okuyacak ve Palm Pilot gibi cihazlarla iletişim kuracak araçlardan ibarettir)\n \n Ayrıca CD yazmak için gerekli yazılımlar da bu bölümdedir.";
+    science	"Bilimsel çalışmalar için yazılımlar\n 'science' bölümündeki yazılımlar astronomi, biyoloji ve kimya için araçların yanı sıra diğer bilimle ilgili yazılımları da içerir.";
+    shells	"Komut kabukları ve diğer alternatif konsol ortamları\n 'shells' bölümündeki paketler komut satırı arayüzü sağlayan uygulamalar içerir.";
+    sound	"Ses kaydetme ve çalma araçları\n 'sound' bölümündeki paketler ses çalma, kaydetme yazılımlarının yanı sıra çeşitli biçemlerde dosya kaydediciler, karıştırıcılar ve ses ayarlayıcılar, MIDI sıralayıcılar ve müzik notasyonu oluşturmaya yarayan uygulamalar, ses donanımı sürücüleri ile ses işleyici yazılımları içerir.";
+    tex		"TeX typesetting sistemi\n 'tex' bölümü içerisindeki paketler, yüksek kaliteli typeset çıktısı üretebilen TeX sistemi ile ilgilidir. TeX'in kendisini, TeX paketlerini, TeX için tasarlanmış düzenleyicileri, TeX ve TeX çıktı dosyalarını çeşitli biçemlere dönüştürecek araçları ve TeX ile ilgili diğer yazılımları içerirler.";
+    text	"Metin işleme araçları\n 'text' bölümündeki paketler metin filtre ve işlemcileri, yazım denetimcileri, sözlük uygulamaları, karakter kodlama ve dosya biçimleri dönüştürücülerini (Unix ve DOS gibi), metin biçemleyicilerini, düzgün-göstericileri ve diğer düz metin işleyebilen yazılımları içerir.";
+    utils	"Muhtelif sistem araçları\n 'utils' bölümündeki paketler sınıflandırılabilmek için fazla eşsiz amaçlara sahip araçlardır.";
+    web		"Web tarayıcıları, sunucular, vekiller ve diğer araçlar\n 'web' bölümündeki paketler Web tarayıcıları, Web sunucuları ve vekilleri, CGI betikleri veya Web-tabanlı uygulamaları geliştirmek için yazılımları, önceden-yazılmış Web-tabanlı uygulamaları ve Web ile ilişkisi olan diğer yazılımları içerir.";
+    x11		"X Pencere Sistemi ve ilgili yazılımlar\n 'x11' bölümündeki yazılımlar X Pencere Sistemi için çekirdek paketleri, pencere yöneticilerini, X için yardımcı araçları ve daha uygun bir yer bulunamadığı için buraya yerleştirilen X arayüzüne sahip uygulamaları içerir.";
+
+    main	"Ana Debian arşivi\n Debian dağıtımı, 'main' bölümündeki paketlerden oluşur. 'main' içerisindeki her paket Özgür Yazılım'dır.\n .\n Debian tarafından neyin Özgür Yazılım olarak değerlendirildiği hakkında daha fazla bilgi için http://www.debian.org/social_contract#guidelines adresine bakabilirsiniz.";
+    contrib	"Debian içerisinde bulunmayan yazılımlara bağımlı uygulamalar\n 'contrib' bölümü içerisindeki paketler Debian kapsamında değildir.\n .\n Bu paketler Özgür Yazılım'dır, fakat Debian Debian kapsamında olmayan bazı paketere bağımlıdırlar.  Bunun nedeni bağımlı oldukları yazılımların non-free içerisinde paketlenmiş ancak Özgür Yazılım olmayan bir paket oluşu, Debian'ın bu paketi asla dağıtamayacak olması veya (çok nadiren) kimsenin henüz paketini hazırlamamış olması olabilir.\n .\n Debian tarafından neyin Özgür Yazılım olarak değerlendirildiği hakkındadaha fazla bilgi için http://www.debian.org/social_contract#guidelines adresine bakabilirsiniz.";
+    non-free	"Özgür Yazılım olmayan uygulamalar\n 'non-free' arşivi içerisindeki paketler Debian kapsamında değildir.\n .\n Bu paketler Debian Özgür Yazılım Yönergeleri'nin bir veya daha fazla şartını karşılayamıyor. Bu bölümdeki yazılımları kullanmadan önce lisanslarını okumalı ve amacınıza uygun kullanma izniniz olduğundan emin olmalısınız.\n .\n Debian tarafından neyin Özgür Yazılım olarak değerlendirildiği hakkında daha fazla bilgi için http://www.debian.org/social_contract#guidelines adresine bakabilirsiniz.";
+    non-US	"İhraç denetimleri nedeniyle ABD dışında tutulan yazılımlar\n 'non-US' bölümündeki paketler büyük olasılıkla patentli kriptografi algoritmalarını uyguladıklarından Amerika Birleşik Devletleri'nden ihraç edilemiyorlar ve bu nedenle de ''özgür dünya''daki bir sunucu üzerinde arşivleniyorlar.\n .\n Not: Debian projesi, ilgili kanundaki son değişikliklerle ilgili olarak uzmanlara danıştıktan sonra şifreleme yazılımları 'main' arşivi ile birleştiriyor. Dolayısıyla daha önceden bu bölümde yer alamn paketler şimdi 'main' arşivi içerisinde yer alıyor.";
+  };
+};
+

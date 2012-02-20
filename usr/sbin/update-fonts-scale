@@ -1,0 +1,192 @@
+#!/bin/sh
+
+# $Id: update-fonts-scale 189 2005-06-11 00:04:27Z branden $
+
+# This program generates fonts.scale files for X font directories; see
+# mkfontdir(1x) for a description of the format of fonts.scale files.
+
+# Copyright 1999-2002, 2004 Branden Robinson.
+# Copyright 2006 Steve Langasek.
+# Licensed under the GNU General Public License, version 2.  See the file
+# /usr/share/common-licenses/GPL or <http://www.gnu.org/copyleft/gpl.txt>.
+
+PROGNAME=${0##*/}
+
+# Query the terminal to establish a default number of columns to use for
+# displaying messages to the user.  This is used only as a fallback in the event
+# the COLUMNS variable is not set.  ($COLUMNS can react to SIGWINCH while the
+# script is running, and this cannot, only being calculated once.)
+DEFCOLUMNS=$(stty size 2>/dev/null | awk '{print $2}') || true
+if ! expr "$DEFCOLUMNS" : "[[:digit:]]\+$" >/dev/null 2>&1; then
+    DEFCOLUMNS=80
+fi
+
+# Display a message, wrapping lines at the terminal width.
+message () {
+    echo "$*" | fmt -t -w ${COLUMNS:-$DEFCOLUMNS}
+}
+
+# Display a debugging message.
+trace () {
+    if [ -n "$DEBUG" ]; then
+        message "note: $*" >&2
+    fi
+}
+
+# Display a warning message.
+warn () {
+    message "warning: $*" >&2
+}
+
+# Display an error message and exit.
+die () {
+    message "fatal error: $*" >&2
+    exit 1
+}
+
+# Display a usage message.
+usage () {
+    if [ -n "$*" ]; then
+        message "usage error: $*"
+    fi
+    cat <<EOF
+Usage: $PROGNAME DIRECTORY ...
+       $PROGNAME { -h | --help }
+This program combines scalable X font information from several packages into a
+single file that is placed in each specified X font directory DIRECTORY.  This
+utility is primarily useful to Debian package maintainer scripts.  See
+update-fonts-scale(8) for more information.
+Options:
+    -h, --help                        display this usage message and exit
+EOF
+}
+
+X11R7_LAYOUT=
+
+# Validate arguments.
+case "$1" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    -7|--x11r7-layout)
+        X11R7_LAYOUT=true
+        shift
+        ;;
+esac
+
+case "$1" in
+    -*)
+        usage "unrecognized option" >&2
+        exit 2
+        ;;
+esac
+
+if [ $# -eq 0 ]; then
+    usage "one or more font directories must be specified" >&2
+    exit 2
+fi
+
+while [ -n "$1" ]; do
+    # Try to be clever about the argument; were we given an absolute path?
+    if expr "$1" : "/.*" >/dev/null 2>&1; then
+        # Yes; an absolute path to an X font directory was provided.
+        X11R7DIR=$1
+        ETCDIR=/etc/X11/fonts/${X11R7DIR##*/}
+        ETC7DIR=/etc/X11/fonts/X11R7/${X11R7DIR##*/}
+        if [ "$X11R7DIR" = "$ETCDIR" ] || [ "$X11R7DIR" = "$ETC7DIR" ]; then
+            # We were given an /etc directory as an argument.
+            die "path to X font directory must be used"
+        else
+            warn "absolute path $X11R7DIR was provided"
+        fi
+    else
+        # No; a relative path was provided -- assume we were given just the
+        # basename.
+        X11R7DIR=/usr/share/fonts/X11/$1
+        ETCDIR=/etc/X11/fonts/$1
+        ETC7DIR=/etc/X11/fonts/X11R7/$1
+    fi
+
+    shift
+
+    # Confirm that the directories to be operated on exist.
+    VALIDSRC=
+    if [ -d "$ETCDIR" ]; then
+        VALIDSRC=yes
+    else
+        warn "$ETCDIR does not exist or is not a directory"
+    fi
+    if [ -d "$ETC7DIR" ]; then
+        VALIDSRC=yes
+    else
+        if [ -n "$X11R7_LAYOUT" ]; then
+            warn "$ETC7DIR does not exist or is not a directory"
+        fi
+    fi
+
+    VALIDDEST=
+    if [ -d "$X11R7DIR" ]; then
+        VALIDDEST=yes
+    else
+        warn "$X11R7DIR does not exist or is not a directory"
+    fi
+
+    if [ -z "$VALIDSRC" ] || [ -z "$VALIDDEST" ]; then
+        continue
+    fi
+
+    # Are there any files to process?
+    if [ "$(echo "$ETCDIR"/*.scale "$ETC7DIR"/*.scale)" != "$ETCDIR/*.scale $ETC7DIR/*.scale" ]
+    then
+        if [ -n "$X11R7DIR" ] && [ -d "$X11R7DIR" ]; then
+            for SCALEFILE in "$ETCDIR"/*.scale "$ETC7DIR"/*.scale; do
+                [ -e "$SCALEFILE" ] || continue
+                # Only write fonts to the .scale file that actually exist, so
+                # that removed-but-not-purged scalable font packages do not
+                # register nonexistent fonts; this has the desirable side effect
+                # that the count at the top of the file is also omitted.
+                #
+                # XXX: This technique will be tricked into yielding false
+                # negatives if the font filename has whitespace in it.
+                while read FONTFILE FONTNAME; do
+                    if [ -f "$X11R7DIR/$FONTFILE" ]; then
+                        echo "$FONTFILE $FONTNAME" \
+                          >>"$X11R7DIR/fonts.scale.update-tmp"
+                    else
+                        trace "$SCALEFILE references nonexistent font file" \
+                          "$FONTFILE; skipping"
+                    fi
+                done <"$SCALEFILE"
+            done
+            if [ -e "$X11R7DIR/fonts.scale.update-tmp" ]; then
+                # Write the new scale file to a temporary location in case we
+                # are interrupted.  Write the new count to the top of file.  Use
+                # cat and pipe to wc so wc doesn't report the filename.
+                cat "$X11R7DIR/fonts.scale.update-tmp" \
+                  | wc -l | tr -d '[:blank:]' \
+                  >"$X11R7DIR/fonts.scale.update-new"
+                cat "$X11R7DIR/fonts.scale.update-tmp" \
+                  >>"$X11R7DIR/fonts.scale.update-new"
+                mv "$X11R7DIR/fonts.scale.update-new" "$X11R7DIR/fonts.scale"
+                rm "$X11R7DIR/fonts.scale.update-tmp"
+            else
+                # No font in the processed *.scale files was in the current
+                # directory, so remove fonts.scale.
+                rm -f "$X11R7DIR/fonts.scale"
+            fi
+        fi
+    else
+        if [ -n "$X11R7DIR" ] && [ -d "$X11R7DIR" ]; then
+            # No files to process; remove any fonts.scale file already in the
+            # font directory.
+            rm -f "$X11R7DIR/fonts.scale"
+            # Remove the font directory if it is empty.
+            rmdir "$X11R7DIR" >/dev/null 2>&1 || true
+        fi
+    fi
+done
+
+exit 0
+
+# vim:set ai et sts=4 sw=4 tw=80:

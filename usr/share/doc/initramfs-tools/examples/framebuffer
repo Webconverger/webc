@@ -1,0 +1,113 @@
+#!/bin/sh
+
+PREREQ=""
+prereqs()
+{
+	echo "$PREREQ"
+}
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+
+# The options part of the kernel "video=" argument (i.e. everyting
+# after "video=<fbdriver>:") has very inconsistent rules.
+#
+# Generally the following applies:
+# 1) options are comma-separated
+# 2) options can be in either of these three forms:
+#    <arg>=<value>, <arg>:<value>, <boolean-arg>.
+# 3) the "mode" or "mode_option" option (name depends on the framebuffer driver)
+#    has the form <xres>x<yres>[M][R][-<bpp>][@<refresh>][i][m]
+#    and may or may not start with "mode=" or "mode_option="
+#    -> please adjust as necessary in the parse_video_opts() function
+#
+# When the options are used with modules, they need to be space-separated
+# and the following conversions are needed:
+#	<arg>:<value> -> <arg>=<value>
+#	<boolean-arg> -> <boolean-arg>=1
+#	<modevalue>   -> mode=<modevalue> or mode_option=<modevalue>
+parse_video_opts()
+{
+	local OPTS="$1"
+	local IFS=","
+
+	# Must be a line like video=<fbdriver>:<opt1>,[opt2]...
+	if [ "${OPTS}" = "${OPTS%%:*}" ]; then
+		return
+	fi
+	OPTS="${OPTS#*:}"
+	for opt in ${OPTS}; do
+		# Already in the "<arg>=<value>" form
+		if [ "${opt}" != "${opt#*=}" ]; then
+			echo -n "$opt "
+		# In the "<arg>:<value>" form
+		elif [ "${opt}" != "${opt#*:}" ]; then
+			echo -n "${opt%:*}=${opt#*:} "
+		# Presumably a modevalue without the "mode=" prefix
+		elif [ "${opt}" != "${opt#[0-9]*x[0-9]}" ]; then
+		  	# Adjust: mode= option?
+			echo -n "mode=$opt "
+			# ... or mode_option= option?
+			# echo -n "mode_option=$opt "
+		# Presumably a boolean
+		else
+			echo -n "${opt}=1 "
+		fi
+	done
+}
+
+FB=""
+OPTS=""
+
+for x in $(cat /proc/cmdline); do
+	case ${x} in
+	vga=*)
+		FB="vesafb";
+		OPTS="";
+		;;
+	video=*)
+		FB=${x#*=}
+		FB="${FB%%:*}"
+		OPTS="$(parse_video_opts "${x}")"
+	esac
+done
+
+# Module-specific workarounds
+case ${FB} in
+matroxfb)
+	# Map command line name to module name
+	FB=matroxfb_base
+	;;
+intelfb|i810fb|i915)
+	# Needs AGP driver loaded
+	modprobe intel-agp
+	;;
+uvesafb)
+	# v86d requires /dev/zero and dev/mem, but udev haven't been started yet
+	[ -e /dev/zero ] || mknod -m 0666 /dev/zero c 1 5
+	[ -e /dev/mem ] || mknod -m 0640 /dev/mem c 1 1
+	;;
+*)
+	;;
+esac
+
+if [ -n "${FB}" ]; then
+	unset MODPROBE_OPTIONS
+	modprobe -q fbcon
+	modprobe -q ${FB} ${OPTS}
+fi
+
+if [ -e /proc/fb ]; then
+	while read fbno desc; do
+		if [ $(($fbno < 32)) ]; then
+			mknod -m 0640 /dev/fb${fbno} c 29 ${fbno}
+		fi
+	done < /proc/fb
+else
+	mknod -m 0640 /dev/fb0 c 29 0
+fi

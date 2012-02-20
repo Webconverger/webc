@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+# adapted from postinst
+chrooted() {
+  if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ];
+  then
+    return 1
+  fi
+  return 0
+}
+
+kill_udevd() {
+    start-stop-daemon --stop --name udevd --oknodo --quiet --retry 5
+}
+
+case "$1" in
+    remove|deconfigure|failed-upgrade)
+    if ! chrooted; then
+      kill_udevd
+    fi
+    ;;
+
+    upgrade)
+    ;;
+
+    *)
+    echo "$0 called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+esac
+
+
+

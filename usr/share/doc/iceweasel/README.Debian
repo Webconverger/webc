@@ -1,0 +1,90 @@
+Iceweasel for Debian
+====================
+
+Please read the file /usr/share/bug/iceweasel/presubj for information
+you may want to know if you will report a bug.
+
+Why is it not called Firefox?
+-----------------------------
+
+Due to our inability to use the Firefox logo because of a non-free
+copyright, the Mozilla Corporation insisted that we not use the
+trademarked name Firefox either. Most of the details are documented in
+#354622 <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=354622>. 
+
+Even though it is not called Firefox, it still comes from exactly the
+same upstream, and is by and large exactly the same (the differences
+some distribution specific customizations, rebranding and the
+occasional bug fix).
+
+Sound
+-----
+
+By default, iceweasel doesn't use a dsp wrapper for sound support. If you
+happen to experience sound issues, you can try to edit
+/etc/iceweasel/iceweaselrc or ~/.mozilla/firefox/rc and set the ICEWEASEL_DSP
+variable to:
+
+"auto": Auto-detection.
+
+"esddsp": Use esd.
+
+"artsdsp": Use arts.
+
+"aoss": Use alsa.
+
+"none": The default, don't use any sound wrapper.
+
+
+using Java. (You should use plugin which compiled with gcc-3.2 or newer)
+----------
+ 
+You can install one of the following packages: 
+ - gcjwebplugin,
+ - java-gcj-compat-plugin,
+ - sun-java5-plugin.
+
+Alternatively, you can grab a binary Java distribution from
+http://java.sun.com/, install the java-package package and do a make-jpkg
+on the file.
+
+Buttons
+-------
+
+Some people have complained that the button order in dialogs is
+non-intuitive (ie, they don't like it). To reverse the order, add the
+following to your chrome/userChrome.css file, under the
+~/.mozilla/firefox directory:
+
+.dialog-button-box { -moz-box-direction: reverse; -moz-box-pack: right; }
+.dialog-button-box spacer { display: none ! important; }
+
+Emacs keybindings
+-----------------
+
+Versions of Firefox before 1.0 supported Emacs style keybindings in
+text entry boxes. Version 1.0 now merely follows the GTK keybindings
+settings. To enable Emacs keybindings in GTK, follow the instructions
+at http://kb.mozillazine.org/Emacs_Keybindings_(Firefox).
+
+Well Known Ports
+----------------
+
+To prevent Iceweasel from being used to launch attacks against other
+protocols, certain ports cannot be connected to by default. See
+http://www.mozilla.org/projects/netlib/PortBanning.html for further
+information. To allow the port numbers being used, enter
+"about:config" in the URL bar and edit the
+"network.security.ports.banned.override" entry to list the ports you
+wish to allow (eg "2049,4045,6000").
+
+Safe Browsing
+-------------
+
+Phishing and malware protection, also known as Safe Browsing, makes use
+of a third party web service and regularly downloads updates. More
+information on how this works and what is being sent and downloaded are
+available on the following page:
+http://www.mozilla.com/en-US/firefox/phishing-protection/
+
+ -- Mike Hommey <glandium@debian.org>, Tue, 13 Apr 2010 14:37:37 +0200

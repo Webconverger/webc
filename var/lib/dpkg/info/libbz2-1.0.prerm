@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+# FHS
+pkg=libbz2-1.0
+if ( [ "$1" = "upgrade" ] || [ "$1" = "remove" ] ) && [ -L /usr/doc/$pkg ]; then
+  rm -f /usr/doc/$pkg
+fi

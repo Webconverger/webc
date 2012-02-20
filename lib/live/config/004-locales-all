@@ -1,0 +1,44 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Locales_all ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/locales-all.list ] || \
+	   [ -e /var/lib/live/config/locales-all ]
+	then
+		return
+	fi
+
+	echo -n " locales-all"
+
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.locales=*|locales=*)
+				LIVE_LOCALES="${_PARAMETER#*locales=}"
+				;;
+		esac
+	done
+
+	Configure_locales_all
+}
+
+Configure_locales_all ()
+{
+	_LOCALE="${LIVE_LOCALES:-en_US.UTF-8}"
+
+	printf 'export LANG="%s"\n' "${_LOCALE}" > /etc/profile.d/locales-all.sh
+
+	# Creating state file
+	touch /var/lib/live/config/locales-all
+}
+
+Locales_all

@@ -1,0 +1,59 @@
+// -*-c++-*-
+//
+// This file defines the names of sections known by aptitude for sk.
+//
+// Due to bug #260446, double-quotes (") cannot be backslash-escaped.
+// For this reason, aptitude treats adjacent pairs of apostrophese('')
+// as double-quotes: that is, the string "''" in a section description
+// will be rendered as one double quote.  No other characters are
+// affected by this behavior.
+
+Aptitude::Sections
+{
+  Descriptions {
+    Unknown	"Balíky bez uvedenej sekcie\n Týmto balíkom nebola priradená žiadna sekcia. Možno je chyba v súbore Packages?";
+    Virtual	"Virtuálne balíky\n Tieto balíky fyzicky neexistujú; sú to iba mená, ktoré využívajú ostatné balíky vyžadujúce konkrétnu funkčnosť.";
+    Tasks	"Balíky, ktoré nastavia počítač na vykonávanie určitých úloh\n Balíky v sekcii 'Úlohy' neobsahujú žiadne súbory, iba závisia na ostatných balíkoch. Tieto balíky ponúkajú jednoduchú cestu na inštaláciu všetkých balíkov potrebných na vykonávanie určitej úlohy.";
+
+    admin	"Nástroje na správu (inštalácia softvéru, správa používateľov, atď.)\n Balíky v sekcii 'admin' umožňujú vykonávať správu systému, ako inštaláciu softvéru, správu užívateľov, nastavenie a sledovanie systému, skúmanie sieťovej prevádzky, a tak podobne.";
+    alien	"Balíky konvertované z cudzích formátov (rpm, tgz, atd.)\n Balíky v sekcii 'alien' boli vytvorené programom 'alien' z cudzích formátov balíkov, ako napríklad RPM";
+    base	"Základný systém Debianu\n Balíky zo sekcie 'base' sú súčasťou minimálnej inštalácie systému.";
+    comm	"Programy na faxmodemy a iné komunikačné zariadenia\n Balíky zo sekcie 'comm' sa používajú na ovládanie modemov a ďalších komunikačných zariadení. To zahŕňa softvér na ovládanie faxmodemov (napr. PPP na vytáčané pripojenie k Internetu a programy pôvodne napísané pre ten účel, ako napr. zmodem/kermit), a taktiež aj programy na ovládanie mobilných telefónov, rozhranie k FidoNetu, alebo prevádzkovanie BBS.";
+    devel	"Nástroje na vývoj softvéru\n Balíky zo sekcie 'devel' sa používajú na písanie nových programov a upravovanie programov existujúcich. Neprogramátori, ktorí si sami nekompilujú programy, z tejto sekcie asi mnoho nepotrebujú.\n .\n Zahrnuté sú kompilátory, debugovacie nástroje, programátorské editory, nástroje na spracovanie zdrojových textov a ďalšie veci s programovaním spojené.";
+    doc		"Dokumentácia a programy na jej prehliadanie\n Balíky zo sekcie 'doc' dokumentujú rôzne časti Debianu, alebo slúžia k prehliadanie tejto dokumentácie.";
+    editors	"Textové editory a procesory\n Balíky zo sekcie 'editors' umožňujú editovať čistý ASCII text. Tieto nástroje nie sú textovými procesormi, hoci i tie môžete v tejto sekcii nájsť.";
+    electronics	"Programy na prácu s el. obvodmi a elektronikou\n Balíky zo sekcie 'electronics' obsahujú nástroje na návrh elektrických obvodov, simulátory a assemblery mikrokontolerov a podobný  softvér.";
+    embedded	"Programy na vložené (embedded) systémy\n Balíky zo sekcie 'embedded' slúžia na ich prácu na vložených zariadeniach. Vložené zariadenia sú špecializované hardwarové zariadenia s minimálnym príkonom, ako napríklad PDA, mobilné telefóny, alebo Tivo.";
+    gnome	"Desktopové prostredie GNOME\n GNOME je kolekcia programov, ktoré spoločne ponúkajú jednoduché a príjemné desktopové prostredie. Balíky v sekcii 'gnome' sú priamo súčasťou prostredia GNOME, alebo s ním úzko súvisia.";
+    games	"Hry, hračky a zábavné programy\n Balíky zo sekcie 'games' slúžia primárne na zábavu.";
+    graphics	"Nástroje na vytváranie, prehliadanie a úpravu grafických súborov\n Balíky v sekcii 'graphics' zahrňujú prehliadače obrázkov, softvér na úpravu obrázkov, softvér na komunikáciu s grafickým hardwarom (ako sú grafické karty, scannery a digitálne kamery) a tiež programovacie nástroje na riešenie grafických úloh";
+    hamradio	"Softvér pre rádioamatérov\n Balíky v sekcii 'hamradio' sú primárne cielené na rádioamatérov.";
+    interpreters "Interpretery pre interpretované jazyky\n Balíky v sekcii 'interpreters' obsahujú interpretre na jazyky ako Python, Perl alebo Ruby a tiež ich rozširujúce knižnice.";
+    kde		"Desktopové prostredie KDE\n KDE je kolekcia programov, ktoré spoločne ponúkajú jednoduché a príjemné desktopové prostredie. Balíky v sekcii 'kde' sú priamo súčasťou prostredia KDE, alebo s ním úzko súvisia.";
+    libdevel	"Vývojové súbory pre knižnice\n Balíky zo sekcie 'libdevel' obsahujú súbory vyžadované na zostavenie programov, ktoré využívajú knižnice zo sekcie 'libs'. Bežný užívateľ tieto balíky nepotrebuje. (Ak si však nechcete zostaviť systém sami.)";
+    libs	"Kolekcia softverových knižníc\n Balíky zo sekcie 'libs' poskytujú nutnú funkcionalitu počítačovým programom. Okrem niekoľkých výnimiek nemusíte v tejto sekcii nič vyberať; balíčkovací systém si vďaka závislostiam nainštaluje všetko potrebné.";
+    perl	"Interpret Perlu a rozširujúce knižnice\n Balíky zo sekcie 'perl' poskytujú programovací jazyk Perl a mnoho rozširujúcich knižníc z ďalších zdrojov. Ak nie ste perlový programátor, nemusíte tu nič vyberať; ak budú nejaké balíky potreba, balíčkovací systém si vďaka závislostiam nainštaluje všetko potrebné.";
+    python	"Interpret Pythonu a rozširujúce knižnice\n Balíky zo sekcie 'python' poskytujú programovací jazyk Python a veľa rozširujúcich knižníc z ďalších zdrojov. Ak nie ste programátor v pythone, nemusíte tu nič vyberať; ak budú nejaké balíky potreba, balíčkovací systém si vďaka závislostiam nainštaluje všetko potrebné.";
+    mail	"Programy na čítanie, písaniu, posielanie a smerovanie pošty\n Balíky zo sekcie 'mail' obsahujú programy na čítanie pošty, poštovné démony, softvér na poštové konferencie, spamové filtre a podobné nástroje na prácu s elektronickou poštou.";
+    math	"Numerická analýza a iný matematický softvér\n Balíky zo sekcie 'math' zahŕňajú kalkulačky, jazyky na matematické výpočty (podobné s programom Mathematica), balíky na symbolickú algebru a nástroje na vizualizáciu matematických objektov.";
+    misc	"Najrôznejší softvér\n Balíky v sekcii 'misc' majú tak neobvyklý účel, že sa nedajú zaradiť inde.";
+    net		"Programy na sieťovanie a poskytovanie sieťových služieb\n Balíky zo sekcie 'net' obsahujú klientov a servery pre mnoho protokolov, nástroje na manipuláciu a ladenie nízko-úrovňových sieťových protokolov, IM systémy a mnoho ďalších sieťových programov.";
+    news	"Klienti a servery pre Usenet\n Balíky zo sekcie 'news' sú spojené s distribuovaným systémom Usenet news. Zahŕňajú news prehliadače, ako aj news servery.";
+    oldlibs	"Zastarané knižnice\n Balíky zo sekcie 'oldlibs' sú staré a v nových programoch by sa nemali používať. Poskytujeme ich z dôvodov kompatibility, pretože niektorý softvér ich stále môže vyžadovať.\n .\n Okrem niekoľkých výnimiek nemusíte v tejto sekcii nič vyberať; balíčkovací systém si vďaka závislostiam nainštaluje všetko potrebné.";
+    otherosfs	"Emulátory a nástroje na prístup k cudzím súborovým systémom\n Balíky zo sekcie 'otherosfs' emulujú rôzny hardware a operačné systémy a poskytujú nástroje na prenos dát medzi rôznymi operačnými systémami a hardwarovými platformami. (Napríklad komunikácia s Palm Pilot.)\n .\n Je vhodné spomenúť, že v TEJTO sekcií je i softvér na vypaľovanie CD.";
+    science	"Softvér na vedeckú prácu\n Balíky zo sekcie 'science' zahŕňajú nástroje na astronómiu, biológiu, chémiu a softvér na podobné obory.";
+    shells	"Shelly a alternatívne konzolové prostredia\n Balíky zo sekcie 'shells' obsahujú programy s riadkovým rozhraním.";
+    sound	"Nástroje na prehrávanie a nahrávanie zvukov\n Balíky zo sekcie 'sound' zahŕňajú prehrávače, rekordéry a enkodéry mnohých formátov, mixážne pulty a ovládače hlasitosti, MIDI sekvencéry, programy na zápis nôt, ovládače zvukových zariadení a softvér na spracovanie zvuku.";
+    tex		"Typografický systém TeX\n Balíky zo sekcie 'tex' sú spriaznené s TeXom, systémom na vytváranie vysoko kvalitných výstupov. Zahŕňajú samotný TeX, editory špeciálne navrhnuté na TeX, nástroje na prevod TeXových súborov do mnohých formátov, TeXové fonty a ďalší podobný softvér.";
+    text	"Nástroje na spracovanie textu\n Balíky zo sekcie 'text' obsahujú textové filtre, procesory, slovníky, sledovače preklepov, konverzné programy na prevod medzi rôznymi formátmi a najrôznejšími kódovaniami, formátovače textu a ďalší softvér, ktorý pracuje s čistým textom.";
+    utils	"Rôzne systémové nástroje\n Balíky v sekcii 'utils' sú nástroje, ktorých účel je príliš špecifický na zarazení do konkrétnej skupiny.";
+    web		"Webové prehliadače, servery a iné programy\n Balíky zo sekcie 'web' ponúka webové prehliadače, webové servery a proxy, softvér na písanie CGI skriptov alebo webových služieb, a vôbec všetko, čo sa týka World Wide Webu.";
+    x11		"X Window System a príbuzný softvér\n Balíky v sekcii 'x11' zahŕňajú jadro X Window Systému, správcu okien, nástroje na X a rôzne programy s grafickým X rozhraním, ktoré sa nehodili do žiadnej inej kategórie.";
+
+    main	"Hlavný archív Debianu\n Debian sa skladá z balíkov zo sekcie 'main'. Každý balík v tejto sekcii je slobodným softvérom.\n .\n Viac informácií o tom, čo Debian považuje za slobodný softvér, nájdete v http://www.debian.org/social_contract#guidelines, alebo česky na http://www.debian.cz/info/social_contract.php#guidelines.";
+    contrib	"Programy závisiace na softvéri, ktorý nie je v Debiane\n Balíky v sekcii 'contrib' nie sú súčasťou Debianu.\n .\n Tieto balíky sú slobodným softvérom, ale závisia na softvéri, ktorý nie je súčasťou Debianu. To môže mať dve príčiny. Buď je tento softvér neslobodný, alebo (zriedka) ho ešte nikto nezabalil.\n .\n Viac informácií o tom, čo Debian považuje za slobodný softvér, nájdete v http://www.debian.org/social_contract#guidelines, alebo česky na http://www.debian.cz/info/social_contract.php#guidelines.";
+    non-free	"Programy, ktoré nie sú slobodným softvérom\n Balíky v sekcii 'non-free' nie sú súčasťou Debianu.\n .\n Tieto balíky nespĺňajú jednu alebo viac požiadavkiek z Debian Free Software Guidelines (pozrite nižšie). V tejto sekcií by ste si mali prečítať licenčné podmienky programov, na uistenie sa, či ich môžete používať spôsobom, akým zamýšľate.\n .\n Viac informácií o tom, čo Debian považuje za slobodný softvér, nájdete na http://www.debian.org/social_contract#guidelines, alebo česky na http://www.debian.cz/info/social_contract.php#guidelines";
+    non-US	"Programy uložené mimo USA kvôli exportným obmedzeniam\n Balíky zo sekcie 'non-US' najčastejšie obsahujú kryptografiu a niekoľko patentovaných algoritmov. Vďaka tomu nemôžu byť vyvážané zo Spojených štátov a preto sú uložené na serveroch v ''slobodnom'' svete.\n .\n Poznámka: Po nedávnych zmenách v exportnej politike USA sú teraz tieto balíky presúvané do hlavného archívu v sekcii 'main'.";
+  };
+};
+

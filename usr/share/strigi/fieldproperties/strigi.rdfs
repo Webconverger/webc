@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE rdf:RDF [
+	 <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+	 <!ENTITY xesam 'http://freedesktop.org/standards/xesam/1.0/core#'>
+	 <!ENTITY strigi 'http://strigi.sf.net/ontologies/0.9#'>
+	 <!ENTITY xss 'http://freedesktop.org/standards/xesam/1.0/schema#'>
+	 <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]>
+<rdf:RDF xmlns:rdf="&rdf;"
+	 xmlns:xesam="&xesam;"
+	 xmlns:strigi="&strigi;"
+	 xmlns:xss="&xss;"
+	 xmlns:rdfs="&rdfs;">
+
+<rdf:Property rdf:about="&rdf;type">
+	<rdfs:label>rdf:type</rdfs:label>
+	<rdfs:domain rdf:resource="&rdfs;Resource"/>
+	<rdfs:range rdf:resource="&rdfs;Class"/>
+	<rdfs:comment>Declaring this here so that it's picked up by FieldPropertiesDb</rdfs:comment>
+</rdf:Property>
+
+<rdf:Property rdf:about="&strigi;depth">
+	<rdfs:label>strigi:depth</rdfs:label>
+	<rdfs:domain rdf:resource="&xesam;Source"/>
+	<rdfs:comment>Embedding  depth</rdfs:comment>
+</rdf:Property>
+
+<rdf:Property rdf:about="&strigi;parentUrl">
+	<rdfs:label>strigi:parentUrl</rdfs:label>
+	<rdfs:domain rdf:resource="&xesam;Source"/>
+	<rdfs:comment>Parent URL</rdfs:comment>
+<!-- for strigi to work properly, this value may not be tokenized. is this the right namespace? -->
+        <rdfs:tokenized>false</rdfs:tokenized>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:about="&strigi;codeLineCount">
+	<rdfs:label>strigi:codeLineCount</rdfs:label>
+	<rdfs:domain rdf:resource="&xesam;SourceCode"/>
+	<rdfs:comment>Source code code line count</rdfs:comment>
+</rdf:Property>
+
+<rdf:Property rdf:about="&strigi;commentLineCount">
+	<rdfs:label>strigi:commentLineCount</rdfs:label>
+	<rdfs:domain rdf:resource="&xesam;SourceCode"/>
+	<rdfs:comment>Source code comment line count</rdfs:comment>
+</rdf:Property>
+
+
+
+<rdfs:Class rdf:about="&strigi;Cursor">
+	<rdfs:subClassOf rdf:resource="&xesam;Visual"/>
+	<rdfs:label>strigi:Cursor</rdfs:label>
+	<rdfs:comment>Cursor is an image with a hot spot.</rdfs:comment>
+</rdfs:Class>
+
+<rdf:Property rdf:about="&strigi;hotSpotX">
+	<rdfs:label>strigi:hotSpotX</rdfs:label>
+	<rdfs:domain rdf:resource="&strigi;Cursor"/>
+	<rdfs:comment>Cursor hot spot X coordinate</rdfs:comment>
+</rdf:Property>
+
+<rdf:Property rdf:about="&strigi;hotSpotY">
+	<rdfs:label>strigi:hotSpotY</rdfs:label>
+	<rdfs:domain rdf:resource="&strigi;Cursor"/>
+	<rdfs:comment>Cursor hot spot Y coordinate</rdfs:comment>
+</rdf:Property>
+
+</rdf:RDF>

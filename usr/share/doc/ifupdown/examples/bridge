@@ -1,0 +1,69 @@
+#!/bin/sh 
+# The following script example, if dropped in /etc/network/if-pre-up.d/
+# and under /etc/network/if-down.d/, will manage to configure a bridge 
+# if defined in the /etc/network/interfaces file as either:
+#
+# Note: The bridge-utils package already provide a similar (more
+# powerful) script this is just provided here for convenience and to
+# show how the /etc/network/if-*.d/ methods can be defined.
+# 
+# [ a bridge with an associated IP address ]
+#  iface br0 inet static
+#       bridge-ifaces eth0 eth1
+#       address 192.168.1.1
+#       netmask 255.255.255.0
+# [ a bridge which acts as an anonymous bridge ]
+#  iface br0 inet manual
+#       bridge-ifaces eth0 eth1
+#       up ifconfig $IFACE up
+#
+# For more information read:
+#  http://bridge.sourceforge.net/howto.html
+
+brctl=`which brctl`
+
+# Notice that the bridge-utils package must be installed and 
+# we need to have the BRIDGE_IFACES in order to work
+[ "$IF_BRIDGE_IFACES" = "" ] && exit 0
+if [ -z "$brctl" ] ; then
+	# ? Somebody is trying to use us without having bridge-utils?
+	echo "Cannot find the 'brctl' program to setup the bridge"
+	echo "Hint: Have you installed the bridge-utils package?"
+	exit 1
+fi 
+
+# Check all interfaces before proceeding
+for i in $IF_BRIDGE_IFACES; do
+	ip link show $i >/dev/null 2>&1
+	if [ $? -ne 0 ] ; then
+		echo "Interface $i is not available, aborting"
+		exit 1
+	fi
+done
+
+if [ "$MODE" = "start" ] ; then
+	# We are being called by ifup:
+	# Bring up all the bridge interfaces
+	for i in $IF_BRIDGE_IFACES; do
+		ifconfig $i 0.0.0.0 up
+	done
+	# And now add the bridge itself and the interfaces which are part
+	# of the bridge
+	brctl addbr $IFACE
+	for i in $IF_BRIDGE_IFACES; do
+		brctl addif $IFACE $i
+	done
+elif [ "$MODE" = "stop" ];  then
+	# We are being called by ifdown:
+	# Remove the bridge itself and the bridge association
+	for i in $IF_BRIDGE_IFACES; do
+		brctl delif $IFACE $i
+	done
+	brctl delbr $IFACE
+	# Bring down all the bridge interfaces
+	for i in $IF_BRIDGE_IFACES; do
+		ifconfig $i down
+	done
+fi
+
+exit 0

@@ -1,0 +1,145 @@
+#! /usr/bin/awk -f
+# (C) 2001 Richard Atterer
+# Released under the GNU General Public License, version 2 or later
+#
+# i386 PS/2 keymap from stdin, output on stdout converted for Acorn RiscPC
+
+BEGIN {
+  setMap_AcornRiscPC();
+  print "# Automatically converted from i386 to RiscPC keycodes";
+  print "";
+}
+
+# Do not warn if definition is empty anyway
+/^[ \t]*keycode[ \t]+[0-9]+[ \t]*=[ \t]*$/ {
+  print "# " $0;
+  next;
+}
+
+{
+  line = $0; outline = "";
+  while (match(line, /keycode[ \t]+[0-9]+/)) {
+    code = substr(line, RSTART+8, RLENGTH-8) + 0;
+    if (code in k) {
+      mapcode = k[code];
+    } else {
+      mapcode = unknownKey;
+      print FNR": Warning: Cannot map input code "code > "/dev/stderr"
+    }
+    outline = outline substr(line, 1, RSTART-1) \
+              sprintf("keycode %3d", mapcode);
+    line = substr(line, RSTART + RLENGTH);
+  }
+  outline = outline line;
+  print outline;
+}
+
+# Acorn RiscPC
+function setMap_AcornRiscPC() {
+unknownKey=127
+k[1]=0
+k[59]=1
+k[60]=2
+k[61]=3
+k[62]=4
+k[63]=5
+k[64]=6
+k[65]=7
+k[66]=8
+k[67]=9
+k[68]=10
+k[87]=11
+k[88]=12
+k[99]=13
+k[70]=14
+k[119]=15
+k[41]=16
+k[2]=17
+k[3]=18
+k[4]=19
+k[5]=20
+k[6]=21
+k[7]=22
+k[8]=23
+k[9]=24
+k[10]=25
+k[11]=26
+k[12]=27
+k[13]=28
+k[14]=30
+k[110]=31
+k[102]=32
+k[104]=33
+k[69]=34
+k[98]=35
+k[55]=36
+k[74]=58
+k[15]=38
+k[16]=39
+k[17]=40
+k[18]=41
+k[19]=42
+k[20]=43
+k[21]=44
+k[22]=45
+k[23]=46
+k[24]=47
+k[25]=48
+k[26]=49
+k[27]=50
+k[28]=71
+k[111]=52
+k[107]=53
+k[109]=54
+k[71]=55
+k[72]=56
+k[73]=57
+k[78]=75
+k[58]=93
+k[30]=60
+k[31]=61
+k[32]=62
+k[33]=63
+k[34]=64
+k[35]=65
+k[36]=66
+k[37]=67
+k[38]=68
+k[39]=69
+k[40]=70
+k[43]=29
+k[75]=72
+k[76]=73
+k[77]=74
+k[42]=76
+k[86]=51
+k[44]=78
+k[45]=79
+k[46]=80
+k[47]=81
+k[48]=82
+k[49]=83
+k[50]=84
+k[51]=85
+k[52]=86
+k[53]=87
+k[54]=88
+k[103]=89
+k[79]=90
+k[80]=91
+k[81]=92
+k[96]=103
+k[29]=59
+k[56]=94
+k[57]=95
+k[100]=96
+k[97]=97
+k[105]=98
+k[108]=99
+k[106]=100
+k[82]=101
+k[83]=102
+k[125]=124
+k[126]=125
+k[127]=126
+}

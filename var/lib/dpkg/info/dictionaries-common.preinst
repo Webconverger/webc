@@ -1,0 +1,36 @@
+#! /bin/sh
+# preinst script for dictionaries-common
+
+set -e
+
+case "$1" in install|upgrade)
+    # This will clean up the alternatives for ispell-dictionary.hash
+    # set by the pre-Policy ispell dictionary packages
+    # A /var/lib/dpkg/alternatives/ispell-dictionary.hash file is sometimes left
+    # if alternative was set to manual mode. Setting it to --auto ensures removal.
+    # Doing also for wordlists just in case.
+	ALTSDIR="/var/lib/dpkg/alternatives"
+	ALTERNATIVES="ispell-dictionary.hash dictionary"
+	for alternative in $ALTERNATIVES; do
+	    if [ -e "$ALTSDIR/$alternative" ]; then
+		echo " Removing obsolete alternative '$alternative'" >&2
+		DICTS=`LANG=C update-alternatives --display $alternative \
+                      | grep priority | cut -f1 -d" "`
+		for i in $DICTS ; do
+		    update-alternatives --remove $alternative $i
+		done
+		update-alternatives --auto $alternative || true
+	    fi
+	done
+    # Once wamerican is the only standard dict package and it does not
+    # depend on dictionaries-common it will provide an own
+    # /usr/share/dict/words pointing to american wordlist. This must be
+    # diverted if dictionaries-common system is used
+	dpkg-divert --package dictionaries-common \
+	    --divert /usr/share/dict/words.pre-dictionaries-common  \
+	    --rename /usr/share/dict/words
+	;;
+esac
+
+
+

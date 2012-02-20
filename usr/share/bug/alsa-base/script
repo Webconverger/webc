@@ -1,0 +1,27 @@
+#!/bin/sh
+
+exec 1>&3 2>&3
+
+# As of reportbug 3.14 package status information can be added by putting
+# a "package-status: <package-name>" line in the bug control file.
+# Unfortunately, reportbug << 3.14 crashes if it finds multiple
+# fields in the control file.  We don't want to Conflict with
+# reportbug << 3.14 if we can avoid it so we use a method of appending
+# package info that works with all current versions of reportbug.
+# We can switch to the package-status: method after etch is released.
+echo "--- Begin additional package status ---"
+dpkg -l libasound2
+echo "--- End additional package status ---"
+
+for F in version cards ; do
+	P="/proc/asound/$F"
+	if [ -r "$P" ] ; then
+		echo "--- Begin $P ---"
+		cat "$P"
+		echo "--- End $P ---"
+	fi
+done
+
+echo "--- Begin /dev/snd/ listing ---"
+ls -l /dev/snd
+echo "--- End /dev/snd/ listing ---"

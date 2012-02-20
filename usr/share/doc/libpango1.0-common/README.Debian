@@ -1,0 +1,75 @@
+Pango for Debian
+----------------
+
+These packages provides the renderer as the follow:
+
+ - X Window System
+ - Xft2
+ - FreeType
+
+
+pangox.aliases file:
+I recommend strongly that /etc/pango/pangox.aliases is
+managed by defoma, because you can also write some font
+settings to ~/.pangox_aliases instead. this file will get
+preference over /etc/pango/pangox.aliases.  When you will
+see some broken characters or empty squares, please try to
+install suggested font packages. these packages supports
+defoma, so pangox.aliases will be automatically generated,
+when you install them.
+
+If you don't want to use defoma and you prefer to edit
+pangox.aliases manually, please run 'dpkg-reconfigure
+libpango1.0-common', and says 'No' for manage the file by
+yourself.
+
+
+Static-linked probram:
+Right now the static version of Pango1.0 includes all of
+modules. even if your program will links those static
+libraries, your program should have no problem.  However if
+you see any problem, which is related the static libraries,
+you may solve it - please try to make your program without
+-static gcc option. I mean:
+
+gcc -export-dynamic -o foo foo.c -Wl,-Bstatic
+ `pkg-config --cflags --libs pango` -Wl,-Bdynamic
+
+Pango uses dlopen(3) function in order to load some
+modules. Generally dynamic-linked programs/libraries has the
+Procedure Linkage Table(PLT), and the undefined symbols are
+resolved with it by the dynamic linker. however fully
+static-linked programs has no PLT. so the dynamic linker has
+no way to know what symbols they have. When the loadable
+modules links another shared libraries and that shared
+libraries has the same symbols with the static-linked
+program, the problem may be caused. It's an ELF spec, but
+not Pango bug.
+
+
+Default renderer:
+the default renderer has been changed to Xft2 since 1.2.0
+has been released. and your font configuration depends on a
+fontconfig configuration file /etc/fonts/fonts.conf.  If you
+want to change any of the fonts, you need to change
+/etc/fonts/fonts.conf.  If you want to use the X window
+system fonts, which is managed by pangox.aliases file,
+rather than the Xft2 renderer, you need to set GDK_USE_XFT=0
+as an environment variable.
+
+
+To work Pango for multilingualization:
+You may need to install appropriate font packages to get
+proper encodings for use with Pango.  If you don't have
+fonts installed that are compatible with the locales you
+want to use, you may get empty squares instead of correct
+glyphs.
+If you add font packages:
+- If you use Pango with GDK_USE_XFT=0, remember to modify
+pangox.aliases file. especially that font packages doesn't
+support the defoma mechanism.
+- Otherwise, remember to run fc-cache.
+
+
+ -- Akira TAGOH <tagoh@debian.org>  Sat,  6 Sep 2003 14:04:28 +0900
+

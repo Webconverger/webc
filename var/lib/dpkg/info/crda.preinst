@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installudev
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	if [ -e "/etc/udev/rules.d/z60_crda.rules" ]; then
+		if [ "`md5sum \"/etc/udev/rules.d/z60_crda.rules\" | sed -e \"s/ .*//\"`" = \
+		     "`dpkg-query -W -f='${Conffiles}' crda | sed -n -e \"\\\\' /etc/udev/rules.d/z60_crda.rules '{s/ obsolete$//;s/.* //p}\"`" ]
+		then
+			rm -f "/etc/udev/rules.d/z60_crda.rules"
+		fi
+	fi
+fi
+# End automatically added section

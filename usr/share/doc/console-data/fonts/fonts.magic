@@ -1,0 +1,54 @@
+#
+# PC Screen (console) Fonts
+#
+0       leshort         0x0436          Linux PC Screen Font data,
+>2      byte            0               256 characters, no Unicode map
+>2      byte            1               512 characters, no Unicode map
+>2	byte		2		256 characters, Unicode map
+>2	byte		3		512 characters, Unicode map
+
+#
+# CPI fonts
+#
+#  MS-DOS
+1	string		FONT\ \ \ 	MS-DOS Code Page Information,
+>23	uleshort	x		%u fonts
+
+>41	uleshort	x		(CP %u,
+>31	uleshort	1		screen
+>31	uleshort	2		printer
+# try to optimize display...
+>37	byte		32		driver
+>>33	string		>\0		%.4s
+>37	byte		>32		driver
+>>33	string		>\0		%.8s
+
+>49	ulelong		0		)
+>49	ulelong		>0		; ...)
+
+#  DR-DOS
+1	string		DRFONT\ 	DR-DOS Code Page Information.
+
+#
+# CP fonts
+#
+6	string		\001\000EGA\ \ \ \ \ 	CP font for Linux's setfont(1) (
+>0	leshort		28
+>>30	uleshort	3
+>>>32	uleshort	9746		maybe not
+>0	byte		x		unusable )
+
+6	string		\001\000VIDEO\ \ \ 	CP font for Linux's setfont(1) (
+>0	leshort		28
+>>30	uleshort	3
+>>>32	uleshort	9746		maybe not
+>0	byte		x		unusable )
+
+#
+# XPSF fonts  -  this entry should not be inserted into /etc/magic yet.
+#
+0	leshort		0x0536		Linux Extended PC Screen Font data,
+>2	uleshort	x		file-format version %d,
+>4	uleshort	x		requires reader to understand at least version %d,
+>8	ulelong		x		%d characters,
+>12	uleshort	x		%d sections.

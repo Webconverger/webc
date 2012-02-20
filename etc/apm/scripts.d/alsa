@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# apmd proxy script for ALSA
+
+[ -x /usr/sbin/alsactl ] || exit 0
+
+case "$1,$2" in
+	suspend,*) /usr/sbin/alsactl store && /usr/sbin/alsa suspend ;;
+	resume,suspend) /usr/sbin/alsa resume && /usr/sbin/alsactl restore ;;
+esac
+

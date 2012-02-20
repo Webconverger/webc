@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+if [ "$1" = "configure" ] || [ "$1" = "upgrade" ]; then
+  update-alternatives --install /usr/bin/infobrowser infobrowser \
+                                /usr/bin/info 60 \
+                      --slave /usr/share/man/man1/infobrowser.1.gz infobrowser.1.gz \
+                              /usr/share/man/man1/info.1.gz
+fi
+
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+

@@ -1,0 +1,100 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Debian::DictionariesCommon q(dico_checkroot);
+use Debconf::Client::ConfModule q(:all);
+
+dico_checkroot ();
+
+die "Usage: $0 package-name\n" if (scalar @ARGV != 1);
+
+version ('2.0');
+
+my $class    = "wordlist";
+my $question = "dictionaries-common/default-$class";
+my $script   = "/usr/share/dictionaries-common/dc-debconf-select.pl";
+my $program  = "remove-default-$class";
+my $debug    = 1 if exists $ENV{'DICT_COMMON_DEBUG'};
+my $newflag  = "/var/cache/dictionaries-common/flag-$class-new";
+my %title    = ('ispell'   => "Dictionaries-common: Ispell dictionary",
+		'wordlist' => "Dictionaries-common: Wordlist dictionary"
+		);
+
+my ($errorcode, $value) = get $question;
+
+if ($errorcode == 0) {
+  require $script;
+
+  my $pkg          = $ARGV[0];
+  my $languages    = &dico_parse_languages($class,"languages");
+  my @newchoices   = ();
+  my %langsinpkg   = ();
+
+  # Get list of languages provided by package being removed. Check
+  # first if package is already removed, some packages using cdbs
+  # call this script twice, the second with package already removed
+  if ( exists $languages->{$pkg} ){
+    foreach ( split (/\s*,\s*/, $languages->{$pkg}) ){
+      $langsinpkg{$_}++;
+    }
+    # Update $languages removing $pkg entry
+    delete $languages->{$pkg};
+
+    # Update question variables with new values
+    my ($choices, $echoices ) = &dico_get_all_choices($class,$languages);
+    subst ($question, "choices", $choices);
+    subst ($question, "echoices", $echoices);
+
+    # Ask with new values if current value is being removed and langs are left
+    if ( %$languages && exists $langsinpkg{$value} ) {
+      fset  ($question, "seen", "false");
+      input ("critical", $question);
+      title ($title{$class});
+      go ();
+    }
+  }
+}
+
+# If $newflag exists, we are removing an IDWP in the same run another IDWP of the same
+# class is to be installed. If the to-be-installed IDWP is the new selection update-default-
+# -$class will fail because the new IDWP is not yet unpacked. Since in this case update-
+# -default-$class will be run in new IDWP postinst, we do not it here and so avoid problems.
+if ( -f $newflag ) {
+  print STDERR "$program: $newflag exists, defer update-default-$class run\n" if $debug;
+} else {
+  system "update-default-$class";
+}
+
+# Local Variables:
+#  perl-indent-level: 2
+# End:
+
+__END__
+
+=head1 NAME
+
+remove-default-wordlist - remove default wordlist
+
+=head1 SYNOPSIS
+
+ remove-default-wordlist <package>
+
+=head1 DESCRIPTION
+
+WARNING: Not to be used from the command line unless you know very well what you are doing.
+
+When called from package postrm, this program will take care of removing the entries
+associated to a wordlist package from the dictionaries-common database
+and call for the new selection if it was the default one.
+
+=head1 SEE ALSO
+
+The dictionaries-common policy document
+
+=head1 AUTHORS
+
+Rafael Laboissiere
+
+=cut
+
+#  LocalWords:  ispell wordlist

@@ -1,0 +1,56 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Hostname ()
+{
+	# Checking if package is installed or already configured
+	if [ -z "${LIVE_HOSTNAME}" ] || \
+	   [ -e /var/lib/live/config/hostname ]
+	then
+		return
+	fi
+
+	echo -n " hostname"
+
+	Configure_hostname
+}
+
+Configure_hostname ()
+{
+	# Change hostname only if it is not set
+	if [ ! -e /etc/hostname ] || grep -qs localhost\.localdomain /etc/hostname
+	then
+		echo "${LIVE_HOSTNAME}" > /etc/hostname
+	else
+		LIVE_HOSTNAME="$(cat /etc/hostname)"
+	fi
+
+	# Create /etc/hosts only if it is not present or empty
+	if [ ! -s /etc/hosts ]
+	then
+
+cat > /etc/hosts << EOF
+127.0.0.1       localhost ${LIVE_HOSTNAME}
+::1             localhost ip6-localhost ip6-loopback
+fe00::0         ip6-localnet
+ff00::0         ip6-mcastprefix
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters
+EOF
+
+	fi
+
+	hostname "${LIVE_HOSTNAME}"
+
+	# Creating state file
+	touch /var/lib/live/config/hostname
+}
+
+Hostname

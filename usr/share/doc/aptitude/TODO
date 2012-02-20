@@ -1,0 +1,102 @@
+  Bugs for 0.4
+
+    - #331199
+    - #331200
+    - 'I' doesn't mark the package as being stickily manually installed.
+    - #331400; and other bugs that occur when jumping from the command-line
+      resolution prompt to the visual UI (e.g., the progress bar hangs
+      around too long)
+    - #331404
+    - #331408
+    - #331431
+
+  Post-0.4 ideas (were 0.3 ideas but have been postponed to get the
+   release out before the heat death of the universe)
+   - Add easy button to search name+description
+
+   - Spend a few minutes making the minesweeper code sane again, esp.
+     cursor navigation.
+
+   - Make it less painful/cut+paste-ish to create a new custom
+     package view.
+
+   - Problem resolver changes:
+    * Disable Auto-Install by default??
+
+
+  Older TODO items:
+
+ -> Implement joeyh's Suggests suggestion.  (what was it?)
+
+ -> Make Suggests-Important really default to false (mm, brown paper bag..)
+
+ -> Enrico's package tags
+
+ -> Look at that Archive column patch (won't hurt to add?)
+
+ -> Mutt-style tagging?
+
+ -> Try warning the user if he/she is going to exceed the available disk space.
+
+  Simpler things:
+
+ -> Let packages be flagged as "interesting", and provide useful functions to
+  make use of that (view only interesting packages, skip to next interesting
+  package, etc)  -- this flagging should be sticky.
+
+ -> It would be nice to make it easy to email a maintainer (just run
+   the mailclient as requested)
+
+ -> (possible suggestion) Commands to clear all actions of a given type
+   (installs, removals, upgrades, etc)
+
+ -> For reverse depends, perhaps the dependency itself should be shown after
+   all?
+
+  Harder things:
+
+ -> Write a vtxxx emulator using the vscreen class, to run dpkg (and debconf,
+   for the time being -- see below) inside.
+
+ -> Action browsing.  Make undoable actions subclasses of
+   vs_treeitem/vs_subtree and let the user see what he/she has done in the
+   past.  Also generic (?)
+
+ -> Mulithread this.  (necessary to make the next option fairly
+   simple) This may require taking mutexes before doing UI-type stuff,
+   so the window doesn't get yanked out from under us!  Probably best
+   not to encode this into the inlines in the header; instead, make
+   get_lock() and release_lock() routines in the vscreen class which
+   users must call when doing curses calls or modifying the window
+   variable.
+
+ -> Allow the user to examine and modify the list of packages to be upgraded
+   *while* a download and upgrade are progressing.  That is, let them switch
+   from the download and unmark or mark packages and have said packages
+   dynamically queued for download, or let them unmark packages from within the
+   download screen.  It would also be nice to have progress indicators within
+   the main tree for packages that are downloading, and a master indicator (in
+   the status or header line?)
+     This might not be possible without modifications to the core APT code,
+   and Jason has indicated that such modifications are unlikely. :-(
+
+ -> Embed an interface to bugs.debian.org .  Very cool idea, could be tricky
+   to implement due to undocumented Web page/LDAP database formats.
+
+
+     The following are (mostly!) insane ideas that, as one person put it,
+   border on 'world domination'.  However, some of the (simpler) items
+   originally in this list have actually been implemented!  Be afraid, be very
+   afraid..
+
+ -> Integrate debconf support -- make debconf just another vs_treeitem, and
+   add debconf-frontend vscreens.
+
+ -> Mouse support (actually easier than you might think)
+
+ -> Assimilate Debian menu system!  That is, allow a user or root to view and
+   edit the current Debian menus.
+
+ -> Insert plumbing.
+
+ -- Daniel Burrows <dburrows@debian.org>

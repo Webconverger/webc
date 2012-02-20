@@ -1,0 +1,39 @@
+RUN="yes"
+
+
+if [ "$RUN" = "yes" ]; then
+        if [ "$new_rfc3442_classless_static_routes" != "" ]; then
+                if [ "$reason" = "BOUND" ] || [ "$reason" = "REBOOT" ]; then
+                        rfc_routes=($new_rfc3442_classless_static_routes)
+
+                        for(( i=0; i < ${#rfc_routes[@]}; )); do
+                                net_length=${rfc_routes[$i]}
+
+                                ((i++))
+
+                                net_address=(0 0 0 0)
+                                for(( j=0; j < $[$net_length / 8 + \
+                                    ($net_length % 8 ? 1 : 0)]; j++, i++)); do
+
+                                        net_address[$j]=${rfc_routes[$i]}
+                                done
+
+                                gateway=(0 0 0 0)
+                                for (( j=0; j < 4; j++, i++ )); do
+                                        gateway[$j]=${rfc_routes[$i]}
+                                done
+
+                                old_IFS="$IFS"
+                                IFS='.'
+
+                                if [ "$net_length" == "32" ]; then
+                                        /sbin/route add -host "${net_address[*]}" gw "${gateway[*]}"
+                                else
+                                        /sbin/route add -net "${net_address[*]}/$net_length" gw "${gateway[*]}"
+                                fi
+                                IFS="$old_IFS"
+
+                        done
+                fi
+        fi
+fi

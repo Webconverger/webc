@@ -1,0 +1,77 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Kdm ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/kdm.list ]
+	then
+		return
+	fi
+
+	if [ -e /var/lib/live/config/kdm ]
+	then
+		# Avoid xinit
+		_X11="true"
+		export _X11
+
+		return
+	fi
+
+	echo -n " kdm"
+
+	Configure_kdm
+}
+
+Configure_kdm ()
+{
+	if [ -e /etc/kde4/kdm/kdmrc ]
+	then
+		# squeeze
+
+		# autologin
+		sed -i -r -e "s|^#?AutoLoginEnable=.*\$|AutoLoginEnable=true|" \
+			  -e "s|^#?AutoLoginAgain=.*\$|AutoLoginAgain=true|" \
+			  -e "s|^#?AutoLoginUser=.*\$|AutoLoginUser=${LIVE_USERNAME}|" \
+		/etc/kde4/kdm/kdmrc
+
+		# language
+		if [ -n "${_LANGUAGE}" ]
+		then
+			sed -i -r -e "s|^#?Language=.*\$|Language=${_LANGUAGE}|" \
+				/etc/kde4/kdm/kdmrc
+		fi
+	elif [ -e /etc/kde3/kdm/kdmrc ]
+	then
+		# lenny
+
+		# autologin
+		sed -i -r -e "s|^#?AutoLoginEnable=.*\$|AutoLoginEnable=true|" \
+			  -e "s|^#?AutoLoginAgain=.*\$|AutoLoginAgain=true|" \
+			  -e "s|^#?AutoLoginUser=.*\$|AutoLoginUser=${LIVE_USERNAME}|" \
+		/etc/kde3/kdm/kdmrc
+
+		# language
+		if [ -n "${_LANGUAGE}" ]
+		then
+			sed -i -r -e "s|^#?Language=.*\$|Language=${_LANGUAGE}|" \
+				/etc/kde3/kdm/kdmrc
+		fi
+	fi
+
+	# Avoid xinit
+	_X11="true"
+	export _X11
+
+	# Creating state file
+	touch /var/lib/live/config/kdm
+}
+
+Kdm

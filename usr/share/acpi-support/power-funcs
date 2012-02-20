@@ -1,0 +1,97 @@
+# a micro library of helper functions for the power scripts
+
+umask 022;
+
+PATH="$PATH:/usr/bin/X11"
+POWERSTATE="/var/lib/acpi-support/powerstate"
+
+# getXuser gets the X user belonging to the display in $displaynum.
+# If you want the foreground X user, use getXconsole!
+
+getXuser() {
+	user=`pinky -fw | awk '{ if ($2 == "?:'$displaynum'" || $(NF) == ":'$displaynum'" || $2 == "?:'$displaynum'.0" || $(NF) == ":'$displaynum'.0"  ) { print $1; exit; } }'`
+
+	if [ x"$user" = x"" ]; then
+		startx=`pgrep -n startx`
+		if [ x"$startx" != x"" ]; then
+			user=`ps -o user --no-headers $startx`
+		fi
+	fi
+	if [ x"$user" != x"" ]; then
+        	userhome=`getent passwd $user | cut -d: -f6`
+        	export XAUTHORITY=$userhome/.Xauthority
+	else
+		export XAUTHORITY=""
+	fi
+	export XUSER=$user
+}
+
+# getXconsole gets the foreground (console) X user
+getXconsole() {
+	console=`fgconsole`;
+	displaynum=`ps t tty$console | sed -n -re 's,.*/X .*:([0-9]+).*,\1,p'`
+	if [ x"$displaynum" != x"" ]; then
+		export DISPLAY=":$displaynum"
+		getXuser
+	fi
+}
+
+ac_adapters() {
+    for x in /sys/class/power_supply/*; do
+       if [ -d "$x" ] ; then
+            read type < $x/type
+            test "$type" = "Mains" && echo $x
+        fi
+    done
+}
+
+getState() {
+	# Run through all power supply information. If we have only one that is online,
+        # then we are on AC power. If we find no power supplies at all, then we assume
+        # that we are on a desktop machine without power supply information and we are
+        # actually on AC.
+        ONLINE_POWER_SUPPLY_PRESENT=0
+	POWER_SUPPLY_PRESENT=0
+
+        for x in $(ac_adapters); do
+            POWER_SUPPLY_PRESENT=1
+            if grep -q 1 $x/online ; then
+                ONLINE_POWER_SUPPLY_PRESENT=1
+            fi
+        done
+
+        for x in /proc/acpi/ac_adapter/*; do
+            if [ -d "$x" ] ; then
+                POWER_SUPPLY_PRESENT=1
+                if grep -q on-line $x/state ; then
+                    ONLINE_POWER_SUPPLY_PRESENT=1
+                fi
+            fi
+        done
+        if [ $POWER_SUPPLY_PRESENT = 1 ] && [ $ONLINE_POWER_SUPPLY_PRESENT = 0 ] ; then
+		STATE="BATTERY";
+        else
+                STATE="AC"
+        fi
+}
+        
+#check our state has actually changed
+checkStateChanged() {
+# do we have our state stashed?
+        if [ -f "$POWERSTATE" ]; then
+                OLDSTATE=$(cat $POWERSTATE) 
+                if [ "$STATE" = "$OLDSTATE" ]; then
+                       exit 0
+                else
+#stash the new state
+                        echo "$STATE" > $POWERSTATE
+                fi
+        else
+#we need to stash the new state
+                echo "$STATE" > $POWERSTATE
+        fi
+}
+
+HDPARM='/sbin/hdparm -q'
+
+LIDSTATE='/var/lib/acpi-support/lidstate'

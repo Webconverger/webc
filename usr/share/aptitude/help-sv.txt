@@ -1,0 +1,127 @@
+                            Hjälp för Aptitude
+
+       Använd piltangenterna och PageUp/PageDown för att se denna hjälp,
+                       tryck 'q' för att lämna den.
+
+  Följande tangenter är tillgängliga som standard i aptitudes informations-
+    vyer.  Andra tangenter är också tillgängliga, se README för en lista.
+
+  "q":          Avsluta.
+  "?":          Visa denna skärm.
+
+  "f":          Töm listan av "nya" paket ("f" för "forget" (glömma)).
+
+  Uppil eller
+  "k":             Flytta markeringen uppåt.
+  Nedpil eller
+  "j":             Flytta markeringen nedåt.
+  Page-Up eller
+  ctrl+b:          Flytta markeringen en skärmbild uppåt.
+  Page-Down eller
+  ctrl+f:          Flytta markeringen en skärmbild nedåt.
+  Home eller
+  ctrl+a:          Flytta markeringen till det första paketet i listan.
+  End eller
+  ctrl+e:          Flytta markeringen till det sista paketet i listan.
+  "^":             Flytta valet till föräldern för aktuell post.
+  Enter:           Expandera eller minska en grupp av paket.
+  "[":             Expandera en grupp av paket och alla dess undergrupper.
+  "]":             Förminska en grupp och alla dess undergrupper.
+
+  ctrl+t:       Aktiver eller avaktivera menyn.
+  "F6":         Flytta till nästa flik i huvudvyn.
+  "F7":         Flytta till föregående flik i huvudvyn.
+
+  Enter:        Se information om ett paket.
+  "C":          Visa ändringsloggen för ett paket.
+  "+":          Installera eller uppgradera ett paket eller ta bort 
+                status för tillbakahållning.
+  "-":          Ta bort ett paket.
+  "=":          Håll kvar ett paket i nuvarande version för att undvika 
+                framtida uppgradering.
+  ":":          Håll kvar ett paket i nuvarande version. Kommer inte att 
+                undvika framtida uppgraderingar.
+  "_":          Ställ in att ett paket och all dess konfiguration tas bort.
+  "L":          Ställ in att ett paket ska installeras om.
+  "M":		Markera ett paket som automatiskt installerat.
+                Automatiskt installerade paket tas bort om inga manuellt 
+                installerade paket kräver dem.
+  "m":		Markera ett paket som manuellt installerat.
+  "F":		Förbjud ett paket från att bli automatiskt uppgraderat 
+                till en viss version; nyare versioner kommer automatiskt 
+                bli installerade.
+
+  "u":          Uppdatera listan av tillgängliga paket.
+  "U":		Markera alla uppgraderingsbara paket för uppgradering.
+  "g":          Genomför alla tänkta installationer, borttagningar och 
+                uppgraderingar.
+
+  ctrl+u:       Ångra den senaste åtgärden eller grupp av åtgärder.
+  "/":          Genomför en sökning.  (på namnet av paketet som standard;
+                se README/Användarhandboken för mer information).
+  "\":          Sök bakåt.
+  "n":          Upprepa senaste sökningen.
+  "N":          Upprepa senaste sökningen, fast åt motsatt håll.
+  "b":          Sök efter nästa trasiga paket.
+
+  "v":          Visa tillgängliga versioner av ett paket.
+  "d":          Visa beroenden för ett paket.
+  "r":          Visa paketen som är beroende av ett angivet paket.
+
+  "D":          Visa eller dölj rutan med paketinformation.
+  "a":          Rulla uppåt i rutan med paketinformation.
+  "z":          Rulla nedåt i rutan med paketinformation.
+  "i":          Bläddra igenom paketinformationsvyerna.
+
+  ",":          Visa föregående lösning för beroenden.
+  ".":          Visa nästa lösning för beroenden, skapar ny lösning.
+  "<":          Visa det första lösningsförslaget.
+  ">":          Visa det sista lösningsförslaget.
+
+    I den interaktiva beroendelösaren:
+  "a":          Godkänn en åtgärd; detta medför att den alltid väljs 
+                framför andra alternativ, upprepa för att ta bort 
+                godkännande.
+  "r":          Avvisa en åtgärd; detta medför att åtgärden aldrig väljs, 
+                upprepa för att ta bort avvisande.
+
+
+  Paket i paketlistan visas i standardutförande som nedan:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  De tre bokstäverna till vänster visar nuvarande status för paketet. Det 
+första tecknet är staus-flaggan, nummer två är åtgärds-flaggan och nummer 
+tre är automatiskt-flaggan. Nästa del är namnet på paketet, sen följer 
+förändringen i diskanvändning och slutligen nuvarande och tillgängliga 
+versionnummer för paketet.
+
+
+  Flaggan "tillstånd" som visas för ett paket har följande möjliga värden:
+
+   v - virtuellt
+   B - trasigt
+   u - "uppackad"
+   C - halvt konfigurerat
+   H - halvt installerat
+   c - borttaget, men konfiguration finns kvar (alltså, inte rensad)
+   i - installerat
+   E - internt fel (ska inte hända)
+
+  Flaggan "åtgärd" som visas för ett paket har följande möjliga värden:
+
+   h - håll kvar
+   p - rensa
+   d - radera (ta bort)
+   B - brutet
+   i - installera
+   r - installera om
+   u - uppgrada
+   F - den tillgängliga uppgraderingen har förbjudits via "F"
+
+  Om "A" visas så indikerar det att paketet installerades automatiskt och
+kommer att tas bort om inga andra paket beror av det.
+
+
+  I exemplet ovan är libsmbclient ett automatiskt installerat paket. Det
+kan uppgraderas från version 3.0.25a-1 till version 3.0.25a-2 men kommer
+istället att tas bort  och frigör därmed 2220 kilobyte på hårddisken.

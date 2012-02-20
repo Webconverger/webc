@@ -1,0 +1,36 @@
+#! /bin/sh
+# preinst script for sysv-rc
+
+set -e
+
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#        * <old-preinst> `abort-upgrade' <new-version>
+
+case "$1" in
+    upgrade)
+	# Remain in legacy mode during upgrades, unless insserv is
+	# already activated.
+	if [ ! -f /var/lib/insserv/using-insserv ] &&
+	    dpkg --compare-versions "$2" lt 2.87dsf-3 ; then
+	    touch /etc/init.d/.legacy-bootordering
+	fi
+        echo "$2" > /var/run/sysv-rc.upgrade
+    	;;
+    install)
+    	;;
+
+    abort-upgrade)
+    	;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+
+
+exit 0

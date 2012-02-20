@@ -1,0 +1,34 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Apport ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/apport.list ] || \
+	   [ -e /var/lib/live/config/apport ]
+	then
+		return
+	fi
+
+	echo -n " apport"
+
+	Configure_apport
+}
+
+Configure_apport ()
+{
+	# Enabling detection of crashes
+	sed -i -e 's|enabled=0|enabled=1|' /etc/default/apport
+
+	# Creating state file
+	touch /var/lib/live/config/apport
+}
+
+Apport

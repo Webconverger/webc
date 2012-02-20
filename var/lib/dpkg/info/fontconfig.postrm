@@ -1,0 +1,20 @@
+#! /bin/sh
+
+set -e
+
+case "$1" in
+	purge)
+	    rm -f /var/log/fontconfig.log
+	    rm -rf /var/lib/defoma/fontconfig.d
+	    rm -f /etc/defoma/fontconfig.subst-rule
+	    rm -rf /var/cache/fontconfig
+	    rmdir /etc/defoma 2> /dev/null || true
+	    ;;
+esac
+
+# Automatically added by dh_installdefoma
+if [ "$1" = "purge" ]; then
+	rm -rf /var/lib/defoma/fontconfig.d/
+fi
+# End automatically added section
+

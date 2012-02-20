@@ -1,0 +1,125 @@
+                             Aptitude On-Line Help
+
+  Use the arrow keys and PageUp/PageDown to view this help; type "q"
+to leave it.
+
+  The following keys are available by default in the aptitude information
+screens.  Other keys are available; consult the README for a list of these.
+
+  "q":          Quit.
+  "?":          Display this screen.
+
+  "f":          Clear the list of "new" packages ('f' for "forget").
+
+  Up or "k":    Move the selection up.
+  Down or "j":  Move the selection down.
+  Page-Up or
+  Control-b:    Move the selection up by a screenful of packages.
+  Page-Down or
+  Control-f:    Move the selection down by a screenful of packages.
+  Home or
+  Control-a:    Move the selection to the first package in the list.
+  End or
+  Control-e:    Move the selection to the last package in the list.
+  "^":          Move the selection to the parent of the current item.
+  Enter:        Expand or collapse a group of packages.
+  "[":          Expand a group of packages and all its subgroups.
+  "]":          Collapse a group of packages and all its subgroups.
+
+  Control-t:    Activate or deactivate the menu.
+  "F6":         Move to the next tab of the main display.
+  "F7":         Move to the previous tab of the main display.
+
+  Enter:        View information about a package.
+  "C":          View a package's changelog.
+  "+":          Install or upgrade a package, or remove its held state.
+  "-":          Remove a package.
+  "=":          Hold a package in its current version to prevent upgrades.
+  ":":          Keep a package at its current version.  Unlike hold, this
+                will not prevent future upgrades.
+  "_":          Request that a package and all its conffiles be removed.
+  "L":          Request that a package be reinstalled.
+  "M":          Mark a package as being automatically installed.
+                Automatically installed packages are removed if no
+                manually installed package requires them.
+  "m":          Mark a package as being manually installed.
+  "F":          Forbid a package from being automatically upgraded to
+                a particular version; newer versions will be automatically
+                installed.
+
+  "u":          Update the lists of available packages.
+  "U":          Mark all upgradable packages to be upgraded.
+  "g":          Perform all pending installations, removals, and upgrades.
+
+  Control-u:    Undo the last action or set of actions.
+  "/":          Perform a search.  (on the name of the package by default;
+                see the README/User's Manual for more information).
+  "\":          Perform a backwards search.
+  "n":          Repeat the last search.
+  "N":          Repeat the last search, but in the opposite direction.
+  "b":          Search for the next broken package.
+
+  "v":          Show the available versions of a package.
+  "d":          Show the dependencies of a package.
+  "r":          Show the packages depending on a given package.
+
+  "D":          Display or hide the package information area.
+  "a":          Scroll the package information area up.
+  "z":          Scroll the package information area down.
+  "i":          Cycle through the package information views.
+
+  ",":          View the previous dependency solution.
+  ".":          View the next dependency solution, generating a new solution
+                if necessary.
+  "<":          View the first dependency solution.
+  ">":          View the last dependency solution.
+
+    In the interactive resolver:
+  "a":          Approve an action, causing it to always be chosen over
+                alternatives, or cancel an approval.
+  "r":          Reject an action, causing it to never be chosen, or
+                cancel a rejection.
+
+
+  Packages in the package list are displayed like this by default:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  The three characters on the left-hand side of the display determine the
+current state of the package.  The first letter is the "state" flag,
+the second letter is the "action" flag, and the third letter is the
+"automatic" flag.  They are followed by the package name, the change
+in disk space attributed to it, and finally the current and available
+versions of the package.
+
+
+  The "state" flag is one of the following:
+
+   v - virtual
+   B - broken
+   u - "unpacked"
+   C - half-configured
+   H - half-installed
+   c - removed, but config-files still present (ie, not purged)
+   i - installed
+   E - internal error (should not happen)
+
+  The "action" flag is one of the following:
+
+   h - hold
+   p - purge
+   d - delete (remove)
+   B - broken
+   i - install
+   r - reinstall
+   u - upgrade
+   F - the available upgrade has been forbidden via "F"
+
+  If present, the "automatic" flag is "A", indicating that the package
+was automatically installed and will be removed when nothing depends
+on it.
+
+
+  So, in the example above, libsmbclient is an automatically installed
+package.  It could be upgraded from version 3.0.25a-1 to version
+3.0.25a-2, but instead it will be deleted, freeing up 2220 kilobytes
+of disk space.

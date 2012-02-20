@@ -1,0 +1,159 @@
+#!/usr/bin/perl -w
+# This file was preprocessed, do not edit!
+
+
+
+my $infodir="/var/lib/dpkg/info";
+
+use strict;
+use Debconf::Db;
+use Debconf::Gettext;
+use Debconf::Template;
+use Debconf::Config;
+use Debconf::AutoSelect qw(:all);
+use Debconf::Log qw(:all);
+
+Debconf::Config->priority('low');
+
+my $unseen_only=0;
+my $all=0;
+my $force=0;
+my $default_priority=0;
+my $reload=1;
+Debconf::Config->getopt(
+gettext(qq{Usage: dpkg-reconfigure [options] packages
+  -a,  --all			Reconfigure all packages.
+  -u,  --unseen-only		Show only not yet seen questions.
+       --default-priority	Use default priority instead of low.
+       --force			Force reconfiguration of broken packages.
+       --no-reload		Do not reload templates. (Use with caution.)}),
+	"all|a"			=> \$all,
+	"unseen-only|u"		=> \$unseen_only,
+	"default-priority"	=> \$default_priority,
+	"force"			=> \$force,
+	"reload!"		=> \$reload,
+);
+
+if ($> != 0) {
+	print STDERR sprintf(gettext("%s must be run as root"), $0)."\n";
+	exit 1;
+}
+
+Debconf::Db->load;
+
+if ($default_priority) {
+	Debconf::Config->priority(Debconf::Question->get('debconf/priority')->value);
+}
+
+if (lc Debconf::Config->frontend eq 'noninteractive' &&
+    ! Debconf::Config->frontend_forced) {
+	Debconf::Config->frontend('dialog');
+}
+
+my $frontend=make_frontend();
+
+unless ($unseen_only) {
+	Debconf::Config->reshow(1);
+}
+
+my @packages;
+if ($all) {
+	@packages=allpackages();
+	exit unless @packages;
+}
+else {
+	@packages=@ARGV;
+	if (! @packages) {
+		print STDERR "$0: ".gettext("please specify a package to reconfigure")."\n";
+		exit 1;
+	}
+}
+
+$ENV{DEBCONF_RECONFIGURE}=1;
+
+foreach my $pkg (@packages) {
+	$frontend->default_title($pkg);
+	$frontend->info(undef);
+
+	$_=`dpkg --status $pkg`;
+	my ($version)=m/Version: (.*)\n/;
+	my ($status)=m/Status: (.*)\n/;
+	if (! $force) {
+		if (! defined $status || $status =~ m/not-installed$/) {
+			print STDERR "$0: ".sprintf(gettext("%s is not installed"), $pkg)."\n";
+			exit 1;
+		}
+		if ($status !~ m/ ok installed$/) {
+			print STDERR "$0: ".sprintf(gettext("%s is broken or not fully installed"), $pkg)."\n";
+			exit 1;
+		}
+	}
+	
+	if ($reload) {
+		Debconf::Template->load("$infodir/$pkg.templates", $pkg)
+			if -e "$infodir/$pkg.templates";
+	}
+
+	foreach my $info (['prerm',    'upgrade',     $version],
+		          ['config',   'reconfigure', $version],
+			  ['postinst', 'configure',   $version]) {
+		my $script=shift @$info;
+		next unless -x "$infodir/$pkg.$script";
+
+		my $is_confmodule='';
+
+		if ($script ne 'config') {
+			open (IN, "<$infodir/$pkg.$script");
+			while (<IN>) {
+				if (/confmodule/i) {
+					$is_confmodule=1;
+					last;
+				}
+			}
+			close IN;
+		}
+		
+		if ($script eq 'config' || $is_confmodule) {
+			my $confmodule=make_confmodule(
+				"$infodir/$pkg.$script", @$info);
+	
+			$confmodule->owner($pkg);
+		
+			1 while ($confmodule->communicate);
+	
+			exit $confmodule->exitcode if $confmodule->exitcode > 0;
+		}
+		else {
+			Debconf::Db->save;
+			
+			delete $ENV{DEBIAN_HAS_FRONTEND};
+			my $ret=system("$infodir/$pkg.$script", @$info);
+			if (int($ret / 256) != 0) {
+				exit int($ret / 256);
+			}
+			$ENV{DEBIAN_HAS_FRONTEND}=1;
+			
+			Debconf::Db->load;
+		}
+	}
+}
+
+$frontend->shutdown;
+
+Debconf::Db->save;
+
+sub allpackages {
+	my @ret;
+	local $/="\n\n";
+	
+	open (STATUS, "</var/lib/dpkg/status")
+		|| die sprintf(gettext("Cannot read status file: %s"), $!);
+	while (<STATUS>) {
+		push @ret, $1
+			if m/Status:\s*.*\sinstalled\n/ && m/Package:\s*(.*)\n/;
+	}
+	close STATUS;
+
+	return sort @ret;
+}
+

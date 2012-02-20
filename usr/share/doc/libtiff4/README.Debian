@@ -1,0 +1,29 @@
+libtiff for Debian
++----------------+
+
+This version of libtiff is installed with a different shared library
+soname from the upstream version.  This is because an accidental
+change to the library's ABI was introduced somewhere between 3.5.7 and
+3.6.1.  There are no source-level incompatibilities between 3.5.7 and
+the current version, so any application that worked with 3.5.7 should
+work fine when recompiled with the libtiff4 packages.
+
+libtiff version 3.7.1 introduced an experimental and minimal C++
+interface.  To use it, you must link against -ltiffxx.
+
+libtiff version 3.8.0 upstream introduced another binary
+incompatibility, but it was fixed within a few days of 3.8.0's
+release, and the binary incompatible never appeared in any debian
+version of the tiff packages.
+
+libtiff version 3.9.0 is binary compatible with all versions going
+back to 3.6.1, even though this was not true of 3.9.0beta.
+
+Example tiff files are available:
+
+ ftp://ftp.remotesensing.org/pub/libtiff/pics-<version>.tar.gz
+
+These files may be useful for people testing software to make sure it
+can work with a wide variety of tiff files.
+
+ -- Jay Berkenbilt <qjb@debian.org>, Fri, 21 Aug 2009 11:38:52 -0400

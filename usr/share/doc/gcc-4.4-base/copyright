@@ -1,0 +1,339 @@
+This is the Debian GNU/Linux prepackaged version of the GNU compiler
+collection, containing Ada, C, C++, Fortran 95, Java, Objective-C,
+Objective-C++, and Treelang compilers, documentation, and support
+libraries.  In addition, Debian provides the gdc compiler, either in
+the same source package, or built from a separate same source package.
+Packaging is done by the Debian GCC Maintainers
+<debian-gcc@lists.debian.org>, with sources obtained from:
+
+  ftp://gcc.gnu.org/pub/gcc/releases/  (for full releases)
+  svn://gcc.gnu.org/svn/gcc/           (for prereleases)
+  http://gnu-pascal.de/alpha/          (for GNU Pascal)
+  http://bitbucket.org/goshawk/gdc     (for D)
+
+The current gcc-4.4 source package is taken from the SVN gcc-4_4-branch.
+
+Changes: See changelog.Debian.gz
+
+Debian splits the GNU Compiler Collection into packages for each language,
+library, and documentation as follows:
+
+Language       Compiler package  Library package    Documentation
+---------------------------------------------------------------------------
+Ada            gnat-4.4          libgnat-4.4        gnat-4.4-doc
+C              gcc-4.4                              gcc-4.4-doc
+C++            g++-4.4           libstdc++6         libstdc++6-4.4-doc
+D              gdc-4.4
+Fortran 95     gfortran-4.4      libgfortran3       gfortran-4.4-doc
+Java           gcj-4.4           libgcj10           libgcj-doc
+Objective C    gobjc-4.4         libobjc2
+Objective C++  gobjc++-4.4
+
+For some language run-time libraries, Debian provides source files,
+development files, debugging symbols and libraries containing position-
+independent code in separate packages:
+
+Language  Sources      Development   Debugging            Position-Independent
+------------------------------------------------------------------------------
+C++                                  libstdc++6-4.4-dbg  libstdc++6-4.4-pic
+D         libphobos-4.4-dev
+Java      libgcj10-src libgcj10-dev  libgcj10-dbg
+
+Additional packages include:
+
+All languages:
+libgcc1, libgcc2, libgcc4       GCC intrinsics (platform-dependent)
+gcc-4.4-base                    Base files common to all compilers
+gcc-4.4-soft-float              Software floating point (ARM only)
+gcc-4.4-source                  The sources with patches
+
+Ada:
+libgnatvsn-dev, libgnatvsn4.4   GNAT version library
+libgnatprj-dev, libgnatprj4.4   GNAT Project Manager library
+
+C:
+cpp-4.4, cpp-4.4-doc            GNU C Preprocessor
+libmudflap0-dev, libmudflap0    Library for instrumenting pointers
+libssp0-dev, libssp0            GCC stack smashing protection library
+fixincludes                     Fix non-ANSI header files
+protoize                        Create/remove ANSI prototypes from C code
+
+Java:
+gij                             The Java bytecode interpreter and VM
+libgcj-common                   Common files for the Java run-time
+libgcj10-awt                    The Abstract Windowing Toolkit
+libgcj10-jar                    Java ARchive for the Java run-time
+
+C, C++ and Fortran 95:
+libgomp1-dev, libgomp1		GCC OpenMP (GOMP) support library
+
+Biarch support: On some 64-bit platforms which can also run 32-bit code,
+Debian provides additional packages containing 32-bit versions of some
+libraries.  These packages have names beginning with 'lib32' instead of
+'lib', for example lib32stdc++6.  Similarly, on some 32-bit platforms which
+can also run 64-bit code, Debian provides additional packages with names
+beginning with 'lib64' instead of 'lib'.  These packages contain 64-bit
+versions of the libraries.  (At this time, not all platforms and not all
+libraries support biarch.)  The license terms for these lib32 or lib64
+packages are identical to the ones for the lib packages.
+
+
+COPYRIGHT STATEMENTS AND LICENSING TERMS
+
+
+GCC is Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
+1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+2008 Free Software Foundation, Inc.
+
+GCC is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 3, or (at your option) any later
+version.
+
+GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+Files that have exception clauses are licensed under the terms of the
+GNU General Public License; either version 3, or (at your option) any
+later version.
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License is in `/usr/share/common-licenses/GPL', version 3 of this
+license in `/usr/share/common-licenses/GPL-3'.
+
+The following runtime libraries are licensed under the terms of the
+GNU General Public License (v3 or later) with version 3.1 of the GCC
+Runtime Library Exception (included in this file):
+
+ - libgcc (libgcc/, gcc/libgcc2.[ch], gcc/unwind*, gcc/gthr*,
+   gcc/coretypes.h, gcc/crtstuff.c, gcc/defaults.h, gcc/dwarf2.h,
+   gcc/emults.c, gcc/gbl-ctors.h, gcc/gcov-io.h, gcc/libgcov.c,
+   gcc/tsystem.h, gcc/typeclass.h).
+ - libdecnumber
+ - libgomp
+ - libssp
+ - libstdc++-v3
+ - libobjc
+ - libmudflap
+ - libgfortran
+ - The libgnat-4.4 Ada support library and libgnatvsn library.
+ - Various config files in gcc/config/ used in runtime libraries.
+
+In contrast, libgnatprj is licensed under the terms of the pure GNU
+General Public License.
+
+The libgcj library is licensed under the terms of the GNU General
+Public License, with a special exception:
+
+    Linking this library statically or dynamically with other modules
+    is making a combined work based on this library.  Thus, the terms
+    and conditions of the GNU General Public License cover the whole
+    combination.
+
+    As a special exception, the copyright holders of this library give
+    you permission to link this library with independent modules to
+    produce an executable, regardless of the license terms of these
+    independent modules, and to copy and distribute the resulting
+    executable under terms of your choice, provided that you also
+    meet, for each linked independent module, the terms and conditions
+    of the license of that module.  An independent module is a module
+    which is not derived from or based on this library.  If you modify
+    this library, you may extend this exception to your version of the
+    library, but you are not obligated to do so.  If you do not wish
+    to do so, delete this exception statement from your version.
+
+The libffi library is licensed under the following terms:
+
+    libffi - Copyright (c) 1996-2003  Red Hat, Inc.
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    ``Software''), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL CYGNUS SOLUTIONS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
+
+
+The documentation is licensed under the GNU Free Documentation License (v1.2).
+On Debian GNU/Linux systems, the complete text of this license is in
+`/usr/share/common-licenses/GFDL-1.2'.
+
+
+GCC RUNTIME LIBRARY EXCEPTION
+
+Version 3.1, 31 March 2009
+
+Copyright (C) 2009 Free Software Foundation, Inc. <http://fsf.org/>
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+This GCC Runtime Library Exception ("Exception") is an additional
+permission under section 7 of the GNU General Public License, version
+3 ("GPLv3"). It applies to a given file (the "Runtime Library") that
+bears a notice placed by the copyright holder of the file stating that
+the file is governed by GPLv3 along with this Exception.
+
+When you use GCC to compile a program, GCC may combine portions of
+certain GCC header files and runtime libraries with the compiled
+program. The purpose of this Exception is to allow compilation of
+non-GPL (including proprietary) programs to use, in this way, the
+header files and runtime libraries covered by this Exception.
+
+0. Definitions.
+
+A file is an "Independent Module" if it either requires the Runtime
+Library for execution after a Compilation Process, or makes use of an
+interface provided by the Runtime Library, but is not otherwise based
+on the Runtime Library.
+
+"GCC" means a version of the GNU Compiler Collection, with or without
+modifications, governed by version 3 (or a specified later version) of
+the GNU General Public License (GPL) with the option of using any
+subsequent versions published by the FSF.
+
+"GPL-compatible Software" is software whose conditions of propagation,
+modification and use would permit combination with GCC in accord with
+the license of GCC.
+
+"Target Code" refers to output from any compiler for a real or virtual
+target processor architecture, in executable form or suitable for
+input to an assembler, loader, linker and/or execution
+phase. Notwithstanding that, Target Code does not include data in any
+format that is used as a compiler intermediate representation, or used
+for producing a compiler intermediate representation.
+
+The "Compilation Process" transforms code entirely represented in
+non-intermediate languages designed for human-written code, and/or in
+Java Virtual Machine byte code, into Target Code. Thus, for example,
+use of source code generators and preprocessors need not be considered
+part of the Compilation Process, since the Compilation Process can be
+understood as starting with the output of the generators or
+preprocessors.
+
+A Compilation Process is "Eligible" if it is done using GCC, alone or
+with other GPL-compatible software, or if it is done without using any
+work based on GCC. For example, using non-GPL-compatible Software to
+optimize any GCC intermediate representations would not qualify as an
+Eligible Compilation Process.
+
+1. Grant of Additional Permission.
+
+You have permission to propagate a work of Target Code formed by
+combining the Runtime Library with Independent Modules, even if such
+propagation would otherwise violate the terms of GPLv3, provided that
+all Target Code was generated by Eligible Compilation Processes. You
+may then convey such a combination under terms of your choice,
+consistent with the licensing of the Independent Modules.
+
+2. No Weakening of GCC Copyleft.
+
+The availability of this Exception does not imply any general
+presumption that third-party software is unaffected by the copyleft
+requirements of the license of GCC.
+
+
+D:
+gdc-4.4                         GNU D Compiler
+libphobos-4.4-dev               D standard runtime library
+
+The D source package is made up of the following components.
+
+The D front-end for GCC:
+ - d/*
+
+Copyright (C) 2004-2007 David Friedman
+Modified by Vincenzo Ampolo, Michael Parrot, Iain Buclaw, (C) 2009, 2010
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License is in `/usr/share/common-licenses/GPL', version 2 of this
+license in `/usr/share/common-licenses/GPL-2'.
+
+
+The DMD Compiler implementation of the D programming language:
+ - d/dmd/*
+
+Copyright (c) 1999-2010 by Digital Mars
+All Rights Reserved
+written by Walter Bright
+http://www.digitalmars.com
+License for redistribution is by either the Artistic License or
+the GNU General Public License (v1).
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License is in `/usr/share/common-licenses/GPL', the Artistic
+license in `/usr/share/common-licenses/Artistic'.
+
+
+The Zlib data compression library:
+ - d/phobos/etc/c/zlib/*
+
+ (C) 1995-2004 Jean-loup Gailly and Mark Adler
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+
+The Phobos standard runtime library:
+ - d/phobos/*
+
+Unless otherwise marked within the file, each file in the source
+is under the following licenses:
+
+Copyright (C) 2004-2005 by Digital Mars, www.digitalmars.com
+Written by Walter Bright
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, in both source and binary form, subject to the following
+restrictions:
+
+ o  The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+ o  Altered source versions must be plainly marked as such, and must not
+    be misrepresented as being the original software.
+ o  This notice may not be removed or altered from any source
+    distribution.
+
+By plainly marking modifications, something along the lines of adding to each
+file that has been changed a "Modified by Foo Bar" line
+underneath the "Written by" line would be adequate.
+

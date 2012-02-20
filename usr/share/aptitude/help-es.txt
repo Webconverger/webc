@@ -1,0 +1,133 @@
+                             Ayuda en línea de Aptitude
+
+  Use las teclas flecha y RePág/AvPág para ver esta ayuda. Presione ENTER para
+salir de ella.
+
+  Las siguientes teclas están disponibles de forma predeterminada en las
+pantallas de información de aptitude. También hay otras teclas disponibles,
+consulte el fichero README para obtener una lista completa.
+
+  "q":          Salir.
+  "?":          Mostrar esta pantalla.
+
+  "f":          Borrar la lista de paquetes «nuevos».
+
+  Arriba o "k": Mover arriba la marca de selección.
+  Abajo o "j":  Mover abajo la marca de selección.
+  Pag Arriba o
+  Control-b:    Mover la selección hacia arriba una pantalla.
+  Pag Abajo o
+  Control-f:    Mover la selección hacia abajo una pantalla.
+  Inicio o 
+  Control-a:    Mueve la seleccion al primer paquete de la lista.
+  Fin o 
+  control-e:    Mueve la selección al último paquete de la lista.
+  "^":          Mover la selección al padre del elemento actual.
+  Enter:        Expandir o contraer un grupo de paquetes.
+  "[":          Expandir un grupo de paquetes y todos sus subgrupos.
+  "]":          Contraer un grupo de paquetes y todos sus subgrupos.
+
+  Control-t:    Activa o desactiva el menú.
+  "F6":         Mueve a la siguiente pestaña en la vista principal.
+  "F7":         Mueve a la pestaña anterior en la vista principal.
+
+
+  Enter:        Ver información de un paquete.
+  "C":          Ver el registro de cambios de un paquete.
+  "+":          Instalar o actualizar un paquete, o eliminar su estado 
+                de bloqueo.
+  "-":          Eliminar un paquete.
+  "=":          Bloquear un paquete en su versión actual para evitar 
+                actualizaciones.
+  ":":          Mantener un paquete en su versión actual. A diferencia de el
+                bloqueo, no previene futuras actualizaciones.
+  "_":          Eliminar un paquete con todos sus conffiles (N.T.ficheros de
+                configuración).
+  "L":          Solicitar la reinstalación de un paquete.
+  "M":          Marcar un paquete como si hubiese sido instalado 
+                automáticamente. Los paquetes instalados automáticamente se
+                eliminan si no los necesita ningún paquete instalado 
+                manualmente.
+  "m":          Marcar un paquete como instalado manualmente.
+  "F":          Prohibir que un paquete se actualice a una versión específica.
+                Las versiones posteriores se instalarán automáticamente.
+
+  "u":          Actualizar la lista de paquetes disponibles.
+  "U":          Marcar todos los paquetes actualizables para actualizar.
+  "g":          Realizar todas las instalaciones, desinstalaciones y
+                actualizaciones pendientes.
+
+  Control-u:    Deshacer la última acción o conjunto de acciones.
+  "/":          Realizar una búsqueda. (Por el nombre del paquete de forma
+                predeterminada, lea el README/Manual de usuario para 
+                más información).
+  "\":          Realizar una búsqueda hacia atrás.
+  "n":          Repetir la última búsqueda.
+  "N":          Repetir la última búsqueda, pero en la dirección opuesta.
+  "b":          Buscar el siguiente paquete roto.
+
+  "v":          Mostrar todas las versiones disponibles de un paquete.
+  "d":          Mostrar las dependencias de un paquete.
+  "r":          Mostrar los paquetes que dependen de un paquete determinado.
+
+  "D":          Mostrar u ocultar el área de información de los paquetes.
+  "a":          Desplazar hacia arriba el área de infomación de los paquetes.
+  "z":          Desplazar hacia abajo el área de información de los paquetes.
+  "i":          Mostrar de forma sucesiva las distintas vistas de información 
+                de los paquetes.
+
+  ",":          View the previous dependency solution.
+  ".":          View the next dependency solution, generating a new solution
+                if necessary.
+  "<":          View the first dependency solution.
+  ">":          View the last dependency solution.
+
+    In the interactive resolver:
+  "a":          Approve an action, causing it to always be chosen over
+                alternatives, or cancel an approval.
+  "r":          Reject an action, causing it to never be chosen, or
+                cancel a rejection.
+
+  Los paquetes en la lista de paquetes se muestran así por omision:
+idA   libsmbclient                             -2220kB 3.0.25a-1  3.0.25a-2
+
+  Los tres primeros caracteres a la izquierda de la línea muestran el estado
+actual del paquete. La primera letra es la marca de "estado", la segunda
+letra es la marca de "acción" y la tercera letra es la marca "automática".
+A esta información le sigue el nombre del paquete, los cambios de espacio 
+en disco atribuídos a este y, por último, las versiones actualmente instaladas
+y disponibles del paquete.
+
+  La marca de «estado» mostrada para cada paquete tiene los siguientes valores
+posibles.
+
+   v - virtual
+   B - roto
+   u - "desempaquetado"
+   C - medio-configurado
+   H - medio-instalado
+   c - eliminado, pero todavía con ficheros de configuración presentes (p. ej.
+       sin purgar)
+   i - instalado
+   E - error interno (no debería ocurrir)
+
+  La marca de «acción» mostrada para cada paquete tiene los siguientes valores
+posibles.
+
+   h - bloquear
+   p - purgar
+   d - eliminar
+   B - roto
+   i - instalar
+   r - reinstalar
+   u - actualizar
+   F - la actualización disponible ha sido prohibida mediante «F»
+
+  Si existe, la marca "automática" es "A". Esta marca indica que el paquete
+se instaló automáticamente y se eliminará cuando nada dependa de él.
+
+  Así, en el ejemplo anterior, libsmbclient es un paquete automático
+instalado. Podría actualizarse de la versión 3.0.25a-1 a la versión
+3.0.25a-2, pero en lugar de actualizarse se va a eliminar, liberando 2220 kilobytes
+de espacio de disco.
+

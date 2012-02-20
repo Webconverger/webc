@@ -1,0 +1,34 @@
+Debian README for xterm package
+===============================
+
+The xterm terminal type on a Debian system is an alias for xterm-debian.
+This means that "xterm" and "xterm-debian" are interchangeable as values of
+the $TERM environment variable in the shell.  Since the xterm-debian type
+is typically not found on non-Debian systems, xterm is used as the system
+default.
+
+The terminal description for xterm-debian differs from that of
+xterm-xorg in exactly two respects:
+  1. kbs is defined as ^? (ASCII 127), not ^H (ASCII 8)
+  2. kdch1 is defined as the sequence: ^[ [ 3 ~ (no spaces, and ^[ is ASCII
+     27, a.k.a ESCAPE) instead of ^? (ASCII 127)
+^[[3~ is the DEC VT220 escape sequence for the keypad delete key (not the
+numeric keypad, the one with Page Up, Page Down, etc. on a PC keyboard).
+DEC VT100's, the text terminal wich xterm was designed to emulate, had no
+keypad delete key.  ^[[3~ is also what the Linux console terminal type
+generates for the keypad delete key.  Note that the terminal definitions
+that a Debian system uses are in the ncurses-term package, not in the xterm
+package itself, though the (pre-compiled) terminfo and termcap files that
+Debian uses may be found in the xterm documentation directory,
+/usr/share/doc/xterm.  People interested in reading further to stock up
+ammo for their backspace/delete and terminal type wars should consult Tom
+Dickey's (current maintainer of the xterm source code) FAQ, available in
+the file /usr/share/doc/xterm/xterm.faq.{html,gz} and the website
+<http://vt100.net>.
+
+The default keymappings for xterm are different than they are upstream to
+comply with the Debian Keyboard Policy and make xterm's behavior more
+consistent with the Linux virtual console (and therefore with the behavior
+of DEC VT 220 terminals).
+
+vim:set ai et sw=4 ts=4 tw=80:

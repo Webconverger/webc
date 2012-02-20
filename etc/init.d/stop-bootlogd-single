@@ -1,0 +1,51 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          stop-bootlogd-single
+# Required-Start:    $local_fs $all
+# Required-Stop:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Stop bootlogd in single user mode
+# Description:       See the init.d/bootlogd script
+### END INIT INFO
+#
+# This has to run in the boot sequence (rcS.d), and not in the "single
+# user" sequence (rc1.d), because rc1.d/ is not used when booting into
+# single user.  "grep :[S1]: /etc/inittab" show that single user is just
+# a call to /sbin/sulogin, while runlevel 1 is a call to
+# "/etc/init.d/rc 1" which in the end switches to runlevel S to run
+# /sbin/sulogin.
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+NAME=stop-bootlogd-single
+DAEMON=/sbin/bootlogd
+
+[ -x "$DAEMON" ] || exit 0
+
+case "$1" in
+  start)
+	single=false
+	for word in $(cat /proc/cmdline); do
+		case "$word" in
+		S|single|1)
+			single=true
+		;;
+		esac
+	done
+	if [ true = "$single" ] ; then
+		/etc/init.d/bootlogd stop
+	fi
+	;;
+  stop|restart|force-reload)
+	# No-op
+	;;
+  status)
+	exec /etc/init.d/bootlogd status
+	;;
+  *)
+	echo "Usage: $NAME {start|stop|restart|force-reload}" >&2
+	exit 3
+	;;
+esac
+
+:

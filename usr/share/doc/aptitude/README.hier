@@ -1,0 +1,80 @@
+                       Configurable package hierarchies
+
+  This document describes a mechanism for allowing aptitude and other APT
+frontends to dynamically generate a package hierarchy using information
+stored on the system.  The mechanism allows packages to be placed in arbitrary
+groups and groups to be placed within arbitrary other groups.
+
+===============================================================================
+
+                             Abstract structure
+
+  The hierarchy information is input as a directed acyclic graph.  Each node
+of the graph is either a "group" or a "package"; only "group" nodes may have
+successors.  The user may define one or more groups as the starting point(s)
+for the displayed hierarchy; the program will then generate a tree from the
+graph using those nodes as the top-level nodes in the tree.
+
+  This is not a terribly complex system with tons of research behind it;
+however, it IS very simple (trivial, in fact) to implement, and will easily
+beat the pants off the horrendous Section-based grouping that we are stuck
+with today.
+
+===============================================================================
+
+                                 File format
+
+  Hierarchy information is stored in a tagfile format similar to that
+used by dpkg.  (this is done primarily because apt has simple facilities for
+parsing such files)  Each record in the tagfile after the first will have one
+of two formats:
+
+  (a) Package records
+
+Package: foo
+Parents: group1,group2,...,groupN
+
+  (b) Group records
+
+Group: bar
+Description: A holding pen for foos.
+Parents: group1,group2,...,groupN
+
+  In each case, the first line identifies the package or group for which
+information is being entered, while successive lines provide information
+about the package or group.  It is an error if both a Group and a Package
+tag exist in a given record.
+
+  References are resolved after all data has been read (ie, references
+to not-yet-defined groups will work)  Dangling references are allowed;
+if an item is placed into a group which does not exist at all, that
+reference will simply be ignored.  Circular references will generate
+an error.
+
+  Package names must be valid package names for the Debian package
+database.  If a name which specifies a package not in the current APT
+cache is encountered, it will be ignored.
+  Group names must follow the same rules as package names, with the
+exception that they may contain any number of periods separating
+groups of alphanumerics/hyphens.  (so "dnb.lisp" is a valid group)
+
+  Note: groups and packages have entirely disjoint namespaces.  It is
+valid (albiet confusing) for a group "linux-doc" and a package
+"linux-doc" to coexist.
+
+  In the future, the Description field may have an extended component,
+interpreted in the same way as the extended Package description.  It
+may also become possible to override package descriptions from within
+a hierarchy definition.
+
+  One exception to this format exists.  The first record in a file may have
+the format:
+
+Global: yes
+Realm: britannia
+
+  In this case, all future group names in the file which do not
+include a "." will have "britannia." prepended to their name.  This is
+a mechanism to avoid namespace collisions.
+
+  Future global file options may be added.

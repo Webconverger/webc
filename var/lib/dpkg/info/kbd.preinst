@@ -1,0 +1,32 @@
+#!/bin/sh
+
+set -e
+
+mv_conffile() {
+    OLD="$1"
+    NEW="$2"
+    [ -e "$OLD" ] || return 0
+
+    MD5SUM=`md5sum "$OLD" | sed -e 's/ .*//'`
+    ORIG_MD5SUM=`dpkg-query -W -f='${Conffiles}' kbd | sed -n -e "\\' $OLD' { s/ obsolete$//; s/.* //; p }"`
+    if [ "$MD5SUM" = "$ORIG_MD5SUM" ]; then
+        echo "Removing obsolete unchanged conffile $OLD..." >&2
+        rm -f "$OLD"
+    else
+        echo "Moving obsolete customized conffile $OLD to $NEW..." >&2
+        mv -f "$OLD" "$NEW"
+    fi
+}
+
+case "$1" in
+    install|upgrade)
+        # rename init script from console-screen.kbd.sh to kbd
+        if dpkg --compare-versions "$2" le '1.15-3'; then
+            update-rc.d -f console-screen.kbd.sh remove
+            mv_conffile /etc/init.d/console-screen.kbd.sh /etc/init.d/kbd
+        fi
+esac
+
+
+
+# vim:sw=4:sts=4:et:

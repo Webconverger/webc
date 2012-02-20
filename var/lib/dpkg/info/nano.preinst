@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "upgrade" ]; then
+    if dpkg --compare-versions "$2" lt 1.2.4-2; then
+	if [ ! -e /usr/man ]; then
+	    ln -s /usr/share/man /usr/man
+	    update-alternatives --remove editor /usr/bin/nano || RET=$?
+	    rm /usr/man
+	    if [ -n "$RET" ]; then
+	        exit $RET
+	    fi
+	else
+	    update-alternatives --remove editor /usr/bin/nano
+	fi
+    fi
+fi
+
+

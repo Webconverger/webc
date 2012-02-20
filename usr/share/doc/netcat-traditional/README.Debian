@@ -1,0 +1,36 @@
+netcat for Debian
+-----------------
+
+A symlink to the netcat binary called 'netcat' has been installed.
+However, the canonical name is still 'nc'. If you use netcat on other
+systems, it will probably only be installed as 'nc', so keep this in
+mind when writing scripts.
+
+    -- Decklin Foster <decklin@red-bean.com>  Fri,  1 Jun 2001 13:38:10 -0400
+
+Examples
+--------
+
+Many examples can be found in /usr/share/doc/netcat/README.gz. The rest of
+this file collects some more that have been contributed by users.
+
+Encrypted File Transfer
+(courtesy of Tom Buskey <tom@buskey.name>)
+
+    Suppose you have an ssh tunnel, and you want to copy a file to the
+    remote machine. You could just scp it directly, but that opens up
+    another connection. The goal is to re-use the existing connection.
+    You can use netcat to do this:
+
+    When you SSH in, add -L 31000:127.0.0.1:31000
+
+    On the remote:
+
+        nc -lvnp 31000 127.0.0.1 > file
+
+    On the local:
+
+        nc -v -w 2 127.0.0.1 31000 < file
+
+    No extra overhead. TCP takes care of error correction. SSH has
+    already encrypted the pipe.

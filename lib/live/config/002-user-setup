@@ -1,0 +1,63 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2011 Daniel Baumann <daniel@debian.org>
+##
+## live-config comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+User_setup ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/user-setup.list ] || \
+	   [ -e /var/lib/live/config/user-setup ]
+	then
+		return
+	fi
+
+	echo -n " user-setup"
+
+	Configure_user_setup
+}
+
+Configure_user_setup ()
+{
+	# Checking if if package is already configured differently
+	if grep -q "^${LIVE_USERNAME}:" /etc/passwd
+	then
+		return
+	fi
+
+	# Default password is: live
+	# passwords can be generated with 'echo "live" | mkpasswd -s',
+	# a blank password is 'U6aMy0wojraho'.
+	_PASSWORD="8Ab05sVQ4LLps"
+
+cat > /tmp/debconf.live << EOF
+user-setup passwd/make-user boolean true
+user-setup passwd/root-password-crypted string *
+user-setup passwd/user-password-crypted string ${_PASSWORD}
+user-setup passwd/user-fullname string ${LIVE_USER_FULLNAME}
+user-setup passwd/username string ${LIVE_USERNAME}
+user-setup passwd/user-uid string 1000
+EOF
+
+	debconf-set-selections < /tmp/debconf.live
+	rm -f /tmp/debconf.live
+
+	# FIXME
+	set +e
+	touch /etc/passwd-
+	chmod 0600 /etc/passwd-
+
+	/usr/lib/user-setup/user-setup-apply 2>&1 \
+	| grep -v "Shadow passwords are now on"
+	set -e
+
+	# Creating state file
+	touch /var/lib/live/config/user-setup
+}
+
+User_setup

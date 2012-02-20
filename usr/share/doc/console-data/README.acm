@@ -1,0 +1,43 @@
+16-bit screen-maps:
+-----------------
+
+ 16-bit screen-maps are used when the screen is in 8-bit mode (the default),
+to define the character-set used by applications, by telling the kernel how
+to interpret these 8-bit chars, in fact by telling to which Unicode character
+they should be mapped.
+
+ The following files are 16-bit screen maps generated from the file
+`UTF-tmpl.8bit', using the `2UTF' program:
+
+	iso{01,02..10}		ISO 8859 charsets
+	cp437			IBM codepage 437 (corresponding to the
+				default PC font)
+	straight-to-font	Maps all application characters directly to
+				the characters, using the straight-to-font
+				unicodes.
+
+
+8-bit screen-maps:
+-----------------
+
+ 8-bit screen maps should be considered obsolete, and should be rewritten as
+16-bit maps where needed. They are used to map the charset used by the
+application directly to the font in use, bypassing the unicode map describing
+the font. Thus, a new 8bit screen-map has to be set each time the font is
+changed.
+
+
+ The following are 8-bit screen-maps whose usefulness with current version of
+the console driver/tools has to be investigated:
+
+	null
+	space
+	zero
+
+
+ The following are 8-bit screen-maps which may still be useful to some users,
+but, as 8-bit maps, they will bypass the unicode map:
+
+	trivial		obsoleted by `straight-to-font' (16-bit)
+	vga2iso
+	koi2alt

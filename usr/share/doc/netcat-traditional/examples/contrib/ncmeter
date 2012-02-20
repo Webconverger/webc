@@ -1,0 +1,82 @@
+#! /bin/bash
+
+# script to measure the speed of netcat.
+# start with one argument for usage information
+#
+# Tools that are used by this script are:
+# nc, bc, wc, sed, awk
+#
+# Author: Karsten Priegnitz (koem@petoria.de)
+
+NCPORT=23457
+WAIT=1
+
+# determine the programme's name
+me=`echo $0 | sed 's+.*/++'`
+
+# check number of arguments provided
+if [ $# -ne 0 -a $# -ne 2 ]; then
+	echo "Usage:"
+	echo
+	echo "  On the transmitter side:"
+	echo "    $me <receivers ip-address> <amount of data>"
+	echo 
+	echo "  The <amount of data> is to be given in byte but you"
+	echo "  also can supply M or K for MegaByte and KiloByte."
+	echo "  Example: $me 10.1.1.3 20M"
+	echo
+	echo "  On the receiver side:"
+	echo "    $me"
+	echo 
+	echo "  Start $me on the receiver side before starting it"
+	echo "  on the transmitter side. Stop the receiver by pressing"
+	echo "  and holding Ctrl-C."
+	exit 1
+fi
+
+# are we the receiver?
+if [ $# -eq 0 ]; then
+	# yes, we are
+	while true; do
+		echo "waiting to receive data... (quit: press and hold Ctrl-C)"
+		
+		# wait for data and count bytes
+		AMOUNT=`nc -v -w 120 -l -p $NCPORT | wc -c | awk '{print $1}'`
+		
+		# display amount of data received
+		echo $AMOUNT byte of data received
+		echo
+
+		# sleep, so that the loop can be
+		# interrupted by pressing Ctrl-C
+		sleep 1
+	done
+fi
+
+# we are the sender
+echo "sending data..."
+
+# calculate the amount of data to be sent
+AMOUNT=`echo $2|sed s/[mM]/\*1048576/g | sed s/[kK]/\*1024/g | bc`
+
+# send data and measure the time spent
+TEMP=/tmp/$me.tx
+( time -p dd if=/dev/zero bs=$AMOUNT count=1 2>/dev/null | nc -v -w $WAIT $1 $NCPORT ) 2>"$TEMP" || cat "$TEMP" 
+
+# read the time needed
+REAL=`grep "^real" "$TEMP" | awk '{print $2}'`
+rm "$TEMP"
+# subtract the wait times
+DOUBLEWAIT=$(($WAIT * 2))
+NEEDED=`echo $REAL - $DOUBLEWAIT|bc`
+
+# calculate and print speed
+BPS=`echo "scale=3;$AMOUNT / $NEEDED"|bc`
+KBPS=`echo "scale=3;$AMOUNT / $NEEDED / 1024"|bc`
+MBPS=`echo "scale=3;$AMOUNT / $NEEDED / 1048576"|bc`
+
+echo "time needed:      ${NEEDED}s"
+echo "byte per second:  $BPS"
+echo "KByte per second: $KBPS"
+echo "MByte per second: $MBPS"
+

@@ -1,0 +1,54 @@
+/etc/network/interfaces
+-----------------------
+
+You can now add extra statements to the iface sections of the files in
+/etc/network/interfaces that are specific for wireless interfaces. They are of
+the form:
+
+    wireless-<function> <value>
+
+After the interface is brought up, such a statement will result in the
+execution of the following command:
+
+    iwconfig <interface> <function> <value>
+
+Note that there may be some drivers that only accept wireless configuration if
+the interface is down. In that case, configuration from /etc/network/interfaces
+may fail.
+
+If you bring the interface down, then for each wireless-<function> statement
+given it will execute a corresponding iwconfig command that reverts that
+function back to sane defaults.  For example, if you specified a wireless-key,
+if you run ifdown it will set the wireless key to "off".
+
+If you want to specify a nick, nwid or essid with spaces in them, you must not
+surround them with quotes.
+
+To specify multiple keys the following statements are also available:
+
+    wireless-key<number> <key>
+    wireless-defaultkey <number>
+    wireless-keymode restricted|open
+
+To finetune powermanagement the following statments are also available:
+
+    wireless-powerperiod <period>
+    wireless-powertimeout <timeout>
+
+Example:
+
+iface eth0 inet static
+    address 192.168.1.2
+    network 192.168.1.0
+    netmask 255.255.255.0
+    broadcast 192.168.1.255
+    wireless-essid Home
+    wireless-mode ad-hoc
+
+Example of multiple keys:
+
+    wireless-key1 0123-4567-89ab-cdef
+    wireless-key2 12345678
+    wireless-key3 s:password
+    wireless-defaultkey 2
+    wireless-keymode open

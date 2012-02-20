@@ -1,0 +1,112 @@
+# ps-cset-enc.data
+# This file describes what standard (national) charset corresponds to
+# Adobe-defined charsets/encodings.
+# Each line consists of three items, the first is Adobe-defined charset,
+# the second is Adobe-defined encoding, the third is standard (national)
+# charset, and the fourth is standard encoding. If Adobe-defined
+# charset/encoding corresponds to multiple standard charsets, write
+# them all by separating comma, in order of major to minor.
+
+#Legend:
+#<Adobe charset>  <Adobe encoding>  <std charset>  <std encoding>
+
+Standard	Standard	ISO8859-1
+Special		Special		font-specific
+*		ISO8859-1	ISO8859-1
+*		ISO8859-2	ISO8859-2
+*		ISO8859-3	ISO8859-3
+*		ISO8859-4	ISO8859-4
+*		ISO8859-5	ISO8859-5
+*		ISO8859-6	ISO8859-6
+*		ISO8859-7	ISO8859-7
+*		ISO8859-8	ISO8859-8
+*		ISO8859-9	ISO8859-9
+*		ISO8859-10	ISO8859-10
+
+# Following is information of the CJK charsets. You should refer to
+# Technical Note #5094 released by Adobe for details.
+
+# Japanese charsets note:
+#
+# Adobe-Japan1-0 corresponds to a combination of JIS X 0208-1983 (new JIS),
+# JIS X 0201-1997, JIS C 6226-1978 (old JIS, aka JIS X 0208-1978) and some
+# local extended characters.
+# Adobe-Japan1-1 corresponds to JIS X 0208-1990.
+# Adobe-Japan1-2 corresponds to Microsoft Windows charset, which consists of
+# JIS X 0208-1997 and some local extended characters.
+# Adobe-Japan2-0 corresponds to JIS X 0212-1990 charset.
+# Families of JIS X 0208 can be regarded as the same charset except
+# JIS C 6226-1978.
+
+JIS-83		JIS		JISX0208		ISO2022-JP
+JIS-83		EUC		JISX0208		EUC
+JIS-78		JIS		JISC6226		ISO2022-JP
+JIS-78		EUC		JISC6226		EUC
+JIS-83|JIS-78	*		ignore
+*		RKSJ		ignore
+83pv		*		ignore
+Ext		*		ignore
+Add		*		ignore
+NWP		*		ignore
+
+Adobe-Japan1*	H|V		JISX0208		ISO2022-JP
+Adobe-Japan1*	EUC-?		JISX0208,JISX0201	EUC
+Adobe-Japan1*	RKSJ-?		JISX0208,JISX0201	SHIFT-JIS
+Adobe-Japan1*	UniJIS-UCS2-?	JISX0208		UCS2
+Adobe-Japan1*	|UniJIS-UTF8-?	JISX0208		UTF8
+Adobe-Japan1*	78-?		JISC6226		ISO2022-JP
+Adobe-Japan1*	78-EUC-?	JISC6226,JISX0201	EUC
+Adobe-Japan1*	Hankaku		JISX0201
+Adobe-Japan1*	*		ignore
+Adobe-Japan2*	Hojo-?		JISX0212		ISO2022-JP
+Adobe-Japan2*	Hojo-EUC-?	JISX0212		EUC
+Adobe-Japan2*	UniHojo-UCS2-?	JISX0212		UCS2
+Adobe-Japan2*	UniHojo-UTF8-?	JISX0212		UTF8
+Adobe-Japan2*	*		ignore
+
+# Simplified Chinese charsets note:
+#
+# Adobe-GB1-0 corresponds to a combination of GB2312-80, GB1988 and others.
+# Adobe-GB1-1 corresponds to GBT12345-90 charset.
+# Adobe-GB1-2 corresponds to GBK charset. GBK consists of all CJK ideographs
+#    included in UCS BMP and some local extentions. 
+# Adobe-GB1-4 corresponds to GBK2K charset.  GBK2K corresponds to the
+#    CJK Extension A area.
+
+Adobe-GB1*	GB-?		GB2312			ISO2022
+Adobe-GB1*	GB-EUC-?	GB2312,GB1988		EUC
+Adobe-GB1*	GBT-?		GBT12345		ISO2022
+Adobe-GB1*	GBT-EUC-?	GBT12345,GB1988		EUC
+Adobe-GB1*	GBK-EUC-?	GB18030,GBK		GBK
+Adobe-GB1*	GBK2K-?		GB18030			GBK2K
+Adobe-GB1*	UniGB-UCS2-?	GBK			UCS2
+Adobe-GB1*	UniGB-UTF8-?	GBK			UTF8
+Adobe-GB1*	*		ignore
+
+# Korean charsets note:
+#
+# Adobe-Korea1-0 corresponds to a combination of KS X 1001:1992,
+# KS X 1003:1993 (aka KS C 5601 and KS C 5636, respectively) and some local
+# extentions.
+# Adobe-Korea1-1 corresponds to a combination of KS X 1001:1992 with
+# Johab extentions and with Microsoft extentions (aka Unified Hangul Code).
+
+Adobe-Korea1*	KSC-?		KSX1001			ISO2022-KR
+Adobe-Korea1*	KSC-EUC-?	KSX1001,KSX1003		EUC
+Adobe-Korea1*	UniKS-UCS2-?	KSX1001			UCS2
+Adobe-Korea1*	UniKS-UTF8-?	KSX1001			UTF8
+Adobe-Korea1*	*		ignore
+
+# Traditional Chinese charsets note: 
+#
+# Adobe-CNS1-0 corresponds to a combination of ETen-extended Big5 charset
+#     and CNS11643 (plane 1 and 2) charsets.
+# Adobe-CNS1-1 corresponds to Government Common Character Set (GCCS)
+#     and Hong Kong Supplementary Character Set (HKSCS).
+
+Adobe-CNS1*	CNS1-?			CNS11643-1	ISO2022
+Adobe-CNS1*	CNS2-?			CNS11643-2	ISO2022
+Adobe-CNS1*	B5-?|ETen-B5-?		BIG5		BIG5
+Adobe-CNS1*	HKscs-B5-?|HKgccs-B5-?	BIG5-HKSCS	BIG5
+Adobe-CNS1*	*			ignore
+
