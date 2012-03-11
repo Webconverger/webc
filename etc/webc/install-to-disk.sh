@@ -13,13 +13,13 @@ find_disk() {
 partition_disk() {
 	local disk="$1"
 	logs "partitioning ${disk}"
-	/sbin/sfdisk $disk <<EOF
+	cat<<EOF | sed -e "s#DISK#${disk}#" |/sbin/sfdisk $disk 
 unit: sectors
 
-/dev/sda1 : start=     2048, size=   262144, Id=83, bootable
-/dev/sda2 : start=   264192, size=   786432, Id=82
-/dev/sda3 : start=  1050624, size=  3145728, Id=83
-/dev/sda4 : start=  4196352, size=  3145728, Id=83
+DISK1 : start=     2048, size=   262144, Id=83, bootable
+DISK2 : start=   264192, size=   786432, Id=82
+DISK3 : start=  1050624, size=  3145728, Id=83
+DISK4 : start=  4196352, size=  3145728, Id=83
 EOF
 }
 verify_partition() {
