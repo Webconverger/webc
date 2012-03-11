@@ -1,0 +1,73 @@
+#!/bin/sh
+
+set -e
+
+_DEVICE="${1}"
+
+# Exit if user has not specified a device to install
+if [ -z "${_DEVICE}" ]
+then
+	echo "E: Usage: ${0} DEVICE"
+	exit 1
+else
+	shift
+fi
+
+_DIRECTORY="/boot/extlinux"
+
+# Exit if user is unprivileged
+if [ "$(id -u)" -ne 0 ]
+then
+	echo "E: need root privileges"
+	exit 1
+fi
+
+# Exit if user has specified a non-existing device
+if [ ! -e "${_DEVICE}" ]
+then
+	echo "E: cannot access \"${_DEVICE}\": No such device"
+	exit 1
+fi
+
+# Exit if user has specified an invalid device
+if [ ! -b "${_DEVICE}" ]
+then
+	echo "E: cannot access \"${_DEVICE}\": No valid device"
+	exit 1
+fi
+
+# Checking extlinux directory
+echo -n "P: Checking for EXTLINUX directory..."
+
+# Creating extlinux directory
+if [ ! -e "${_DIRECTORY}" ]
+then
+	echo " not found."
+
+	echo -n "P: Creating EXTLINUX directory..."
+	mkdir -p "${_DIRECTORY}"
+	echo " done: ${_DIRECTORY}"
+else
+	echo " found."
+fi
+
+# Searching syslinux MBR
+if [ ! -e /usr/lib/extlinux/mbr.bin ]
+then
+	echo "E: /usr/lib/extlinux/mbr.bin: No such file"
+	exit 1
+fi
+
+# Saving old MBR
+echo -n "P: Saving old MBR..."
+dd if="${_DEVICE}" of=/boot/mbr-$(basename "${_DEVICE}").old bs=440 count=1 2> /dev/null
+echo " done: /boot/mbr-$(basename "${_DEVICE}").old"
+
+# Writing syslinux MBR
+echo -n "P: Writing new MBR..."
+dd if=/usr/lib/extlinux/mbr.bin of="${_DEVICE}" bs=440 count=1 2> /dev/null
+echo " done: ${_DEVICE}"
+
+# Writing extlinux loader
+echo "P: Installing EXTLINUX..."
+extlinux --install "${_DIRECTORY}" ${@}

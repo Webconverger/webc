@@ -1,29 +1,56 @@
 #!/bin/sh
-# hendry@webconverger.com (c) 2008-2010
+# BUGS:
+# * Dependent on Iceweasel
+# * Changes on a form / scroll position on the homepage, won't reset kiosk since we are only working from homepage title
+# Perhaps look into a layer utilising https://developer.mozilla.org/en/nsIIdleService
 
-KIOSKRESETSTATION=$1
-test $KIOSKRESETSTATION || exit
-test $KIOSKRESETSTATION -lt 1 -o $KIOSKRESETSTATION -gt 60 && exit
+if test -z "$1"
+then
+	echo Please specify minutes. e.g. $0 5 \# reset kiosk in 5 minutes of inactivity on non-default page
+	exit
+fi
 
-KIOSKRESETSECONDS=`expr $KIOSKRESETSTATION \* 60`
-echo Killing after $KIOSKRESETSECONDS idle seconds
+kioskresetstation=$1
+test "$kioskresetstation" -lt 1 -o "$kioskresetstation" -gt 120 && exit
+
+kioskresetseconds=$( expr $kioskresetstation \* 60 )
+logger "Killing after $kioskresetseconds idle seconds"
+
+title ()
+{
+	xwininfo -root -tree | grep Navigator | grep -v '"Iceweasel":' | awk -F\" '{print $2}'
+}
+
+# when we start up, get the default page
+default=""
+while test "$default" = ""
+do
+	default=$( title )
+done
 
 while true
 do
 
-	IDLESECONDS=$(/usr/bin/idleseconds)
-
-	if test $IDLESECONDS -lt $KIOSKRESETSECONDS
+# if mouse moved, sleep and try again
+	idleseconds=$( /usr/bin/idleseconds )
+	sleepfor=$( expr $kioskresetseconds \- $idleseconds )
+	if test "$sleepfor" -gt 0
 	then
+		echo "Sleeping for $sleepfor"
+		sleep $sleepfor
+		continue
+	fi
 
-		SLEEPFOR=`expr $KIOSKRESETSECONDS \- $IDLESECONDS`
-		echo Sleeping for $SLEEPFOR
-		sleep $SLEEPFOR
+# if on default page, sleep and try again
+	current="$( title )"
+	if test "$current" = "$default"
+	then
+		sleep $kioskresetseconds
+		continue
+	fi
 
-	else
+	logger "Killing '$current' for '$default'"
 
-		pkill X
-		sleep $KIOSKRESETSECONDS
-
-fi
+	pkill X
 done
+

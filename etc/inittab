@@ -51,7 +51,7 @@ po::powerokwait:/etc/init.d/powerfail stop
 # Note that on most Debian systems tty7 is used by the X Window System,
 # so if you want to add more getty's go ahead but skip tty7 if you run X.
 #
-1:2345:respawn:/sbin/getty 38400 tty1
+1:345:respawn:/sbin/getty 38400 tty1
 2:23:respawn:/sbin/getty 38400 tty2
 3:23:respawn:/sbin/getty 38400 tty3
 4:23:respawn:/sbin/getty 38400 tty4
@@ -67,3 +67,6 @@ po::powerokwait:/etc/init.d/powerfail stop
 #
 #T3:23:respawn:/sbin/mgetty -x0 -s 57600 ttyS3
 
+X1:2:respawn:/etc/webc/startx.sh
+X2:2:respawn:/etc/webc/updates.sh
+X3:2:respawn:/etc/webc/install-to-disk.sh

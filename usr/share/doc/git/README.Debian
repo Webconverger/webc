@@ -1,0 +1,69 @@
+Git for Debian
+--------------
+
+When setting up a git.example.org server, there are several things to
+configure to make everything work nicely together.  All this is optional.
+
+1. Run a git-daemon.  This allows people to use a git:// URL to access your
+repositories.  This package provides the git-daemon program, to enable a
+git-daemon service, configure inetd(8) to launch it on demand, or install the
+git-daemon-run package to run it permanently:
+ cat >> /etc/inetd.conf <<EOF
+git stream tcp4 nowait nobody /usr/bin/git git daemon --inetd --base-path=/srv/git
+git stream tcp6 nowait nobody /usr/bin/git git daemon --inetd --base-path=/srv/git
+EOF
+
+Or:
+ apt-get install git-daemon-run
+
+Wait five seconds for the service to be picked up, and check its status and
+logs:
+
+ sv stat git-daemon
+ cat /var/log/git-daemon/current
+
+The git daemon by default looks into the directory /var/cache/git/ for
+repositories (this is configured in /etc/sv/git-daemon/run).  It expects
+the repositories' .git subdirectories in /var/cache/git/, symlinks pointing
+to the corresponding subdirectories in the repositories are just fine, e.g.:
+
+ ln -s ~pape/git/foo/.git /var/cache/git/foo.git
+
+Now git-clone git://git.example.org/git/repo will work.
+
+2. Install rsync.  This allows people to use rsync:// URLs to access your
+repositories.  You then need to add a stanza to /etc/rsyncd.conf that looks
+like this:
+
+[git]
+    path = /var/cache/git
+    readonly = yes
+
+Now git-clone rsync://git.example.org/git/repo will work.
+
+3. Configure a web server for git.  This allows people to use a http:// URL
+to access your repositories.
+
+Here's an example for an apache virtual server.  Add a stanza to your apache
+configuration that looks like this:
+
+<VirtualHost *:80>
+    ServerName git.example.org
+    ServerAdmin webmaster@example.org
+    HeaderName HEADER
+    # bogus but safe DocumentRoot
+    DocumentRoot /var/cache/git
+    ErrorLog /var/log/apache2/git.example.org-error.log
+    CustomLog /var/log/apache2/git.example.org-access.log combined
+    Alias /robots.txt /var/www/cvs.robots.txt
+    Alias /static /usr/share/gitweb/static
+    Alias /git /var/cache/git
+    ScriptAlias / /usr/share/gitweb/gitweb.cgi
+    RedirectMatch permanent "^/~(.*)$" "http://example.org/~$1" 
+</VirtualHost>
+
+Now git clone http://git.example.org/git/repo will work.  And if you
+installed the gitweb package, http://git.example.org/ now will display a
+list of repositories, making them accessible through a web browser.
+
+ -- Gerrit Pape <pape@smarden.org>  Fri, 15 Sep 2006 09:19:37 +0000

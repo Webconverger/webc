@@ -62,3 +62,11 @@ pref("privacy.sanitize.sanitizeOnShutdown", true);
 // Prevent slow script dialogs
 pref("dom.max_chrome_script_run_time", 0);
 pref("dom.max_script_run_time", 0);
+
+// Disable the popup window that shows up when F7 is pressed
+pref("accessibility.browsewithcaret_shortcut.enabled", false);
+
+pref("network.protocol-handler.external.mailto", false);
+pref("network.protocol-handler.external.news", false);
+pref("network.protocol-handler.external.nntp", false);
+pref("network.protocol-handler.external.snews", false);

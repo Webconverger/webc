@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+# The /usr/share/doc/git/contrib/emacs directory was replaced
+# with a symlink in 1:1.7.4~rc1-0.1.
+# If downgrading, put the directory back.
+test "$1" = upgrade || exit 0
+dpkg --compare-versions "$2" le '1:1.7.2.3-2.2' || exit 0
+test -L /usr/share/doc/git/contrib/emacs || exit 0
+target=$(readlink /usr/share/doc/git/contrib/emacs)
+test "$target" = ../../../git-core/emacs || exit 0
+rm -f /usr/share/doc/git/contrib/emacs
+mkdir /usr/share/doc/git/contrib/emacs

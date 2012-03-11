@@ -92,6 +92,12 @@ Description-no.UTF-8: Filsystenoppføringer med noauto og gjennomløpsnummer som
  Fra og med denne utgivelsen vil fsck ikke virke for filsystemer som har et positivt gjennomløpstall og ikke er tilgjengelige (f.eks. ikke koblet til) når fsck kjører. Dette vil gjøre at ved oppstarten vil  systemet starte reparasjon av filsystemer.
  .
  For å unngå dette bør du justere slike fstab-oppføringer for flyttbare enheter, enten ved å sette gjennomløpstallet til null eller ved å legge til «nofail»-valget. Se mount(8) for mer detaljer
+Description-pl.UTF-8: Wpisy systemu plików z noauto oraz niezerową liczbą "pass"
+ /etc/fstab zawiera co najmniej jeden wpis z opcją "noauto" oraz niezerową liczbą "pass" (co oznacza, że system plików nie powinien być montowany automatycznie podczas rozruchu, ale powinien być sprawdzany przez fsck - narzędzie do sprawdzania systemu plików).
+ .
+ Poczynając od tego wydania fsck może zawieść w przypadku systemów plików, które mają niezerową liczbę "pass" i są niedostępne (np. ponieważ dysk jest odłączony) w czasie działania fsck. Skutkiem będzie przejście przez system do trybu naprawczego systemu plików, w czasie rozruchu.
+ .
+ Aby zapobiec temu problemowi, proszę dostosować wpisy fstab w przypadku usuwalnych urządzeń albo przez ustawienie dla nich liczby "pass" na zero, albo przez dodanie opcji "nofail". Aby poznać więcej szczegółów, proszę zapoznać się z mount(8).
 Description-pt.UTF-8: Entradas de sistemas de ficheiros com noauto e número de passagem não-zero
  /etc/fstab contém pelo menos uma entrada que está marcada como "noauto" com um número de passagem diferente de zero (o que significa que o sistema de ficheiros não deve ser montado automaticamente durante o arranque, mas no entanto deve ser verificado pelo fsck, o utilitário de verificação de sistemas de ficheiros).
  .

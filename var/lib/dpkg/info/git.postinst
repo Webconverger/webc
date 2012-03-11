@@ -1,0 +1,43 @@
+#!/bin/sh
+set -e
+test "$1" = configure || exit 0
+
+# Snippet based on dpkg-maintscript-helper from dpkg 1.15.8.  Using a
+# home-grown snippet instead of using Pre-Depends: dpkg (>= 1.15.7)
+# makes the package easier to try out on old systems without requiring
+# new dpkg in these early times.
+#
+# Kind reader of the future: it's about time to rip this out and use a
+# call to dpkg-maintscript-helper, don't you think?
+rm_conffile () {
+  CONFFILE=$1; shift
+  if dpkg --compare-versions "$2" lt-nl '1:1.7.4.1-2~'; then
+    if test -e "$CONFFILE.dpkg-backup"; then
+      mv -f "$CONFFILE.dpkg-backup" "$CONFFILE.dpkg-bak"
+    fi
+    if test -e "$CONFFILE.dpkg-remove"; then
+      echo "Removing $CONFFILE ..."
+      rm -f "$CONFFILE.dpkg-remove"
+    fi
+  fi
+}
+
+removed_conffile=/etc/emacs/site-start.d/50git-core.el
+rm_conffile "$removed_conffile" "$1" "$2"
+
+# Carry over modifications so git-el can use them.
+if dpkg --compare-versions "$2" lt '1:1.7.4.1-2~' &&
+   ! test -e "$removed_conffile" &&
+   test -r "$removed_conffile".dpkg-bak; then
+  mv "$removed_conffile".dpkg-bak "$removed_conffile"
+fi
+
+# 1.7.7-1 replaces /usr/share/doc/git/contrib/hooks with a symlink,
+# but dpkg doesn't do so on package upgrade
+if test -n "$2" && dpkg --compare-versions "$2" lt '1:1.7.7-1' &&
+   test ! -L /usr/share/doc/git/contrib/hooks &&
+   test -d /usr/share/doc/git/contrib/hooks; then
+  rmdir /usr/share/doc/git/contrib/hooks &&
+  ln -s ../../../git-core/contrib/hooks \
+    /usr/share/doc/git/contrib/hooks
+fi

@@ -1,0 +1,34 @@
+#!/bin/sh
+set -e
+
+# Snippet based on dpkg-maintscript-helper from dpkg 1.15.8.
+# Postinst explains why.
+rm_conffile () {
+	CONFFILE=$1; shift
+	if test "$1" = purge; then
+		rm -f "$CONFFILE.dpkg-bak" "$CONFFILE.dpkg-remove" \
+			"$CONFFILE.dpkg-backup"
+		return
+	fi
+
+	test "$1" = abort-install || test "$1" = abort-upgrade || return 0
+	dpkg --compare-versions "$2" lt-nl '1:1.7.4.1-2~' || return 0
+	if test -e "$CONFFILE.dpkg-remove"; then
+		echo "Reinstalling $CONFFILE that was moved away"
+		mv "$CONFFILE.dpkg-remove" "$CONFFILE"
+	fi
+	if test -e "$CONFFILE.dpkg-backup"; then
+		echo "Reinstalling $CONFFILE that was backed up"
+		mv "$CONFFILE.dpkg-backup" "$CONFFILE"
+	fi
+}
+
+
+# Now /etc/emacs/site-start.d/50git-core.el belongs to the
+# git-el package.
+#
+# NOTE: this leaves behind a /etc/emacs/site-start.d/50git-core.el
+# file if it was modified while the broken 1.7.4.1-1 package
+# was installed.  Installing and purging git-el works around
+# that.
+rm_conffile /etc/emacs/site-start.d/50git-core.el "$1" "$2"

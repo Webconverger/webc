@@ -6,10 +6,7 @@
 # Default-Start:	 2 3 4 5
 # Default-Stop:		 0 1 6
 # Short-Description: Webconverger Live environment setup
-# Description:		 http://git.webconverger.org/?p=webconverger-base.git
 ### END INIT INFO
-
-# Author: Kai Hendry <hendry@webconverger.com>
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
@@ -20,45 +17,19 @@ WEBCHOME=/home/webc
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
-
-# Load the VERBOSE setting and other rcS variables
-. /lib/init/vars.sh
-
-# Define LSB log_* functions.
-# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
-. /lib/lsb/init-functions
-
-case "$1" in
-  start)
-	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
-
-
-# For Debian machines acting temporarily as a kiosk, see:
-# http://webconverger.org/blog/entry/Debian_Web_Kiosk/
-if test $(hostname) != $NAME
-then
-	exit 0
-fi
-
-log_daemon_msg "Setting up Webconverger"
-
-if grep -qs noroot /proc/cmdline
-then
-	find /usr/bin -name '*term' -exec rm -f {} \;
-fi
+. /etc/webc/webc.conf
 
 # Make sure we use a default closeicon
-grep -qs "closeicon=" /proc/cmdline || $WEBCHOME/iwcloseconfig.sh strip
+cmdline | grep -qs "closeicon=" || $WEBCHOME/iwcloseconfig.sh strip
 
-# Ensure alsamixer volume is 100%
+# Ensure volume is 100%
 amixer -s &>/dev/null <<END
 set Master 100% unmute
 set Master Front 100% unmute
 END
 
 cat >> /etc/X11/xorg.conf <<WCEND
-
-# Webconverger.com options to disable X options
+# Webconverger.com options to disable X options to break out of X
 
 Section "ServerFlags"
   Option  "AllowMouseOpenFail"
@@ -69,7 +40,8 @@ Section "ServerFlags"
 EndSection
 WCEND
 
-for x in $(cat /proc/cmdline); do
+for x in $(cmdline)
+do
 	case $x in
 		homepage=*)
 		set -f -- $(/bin/busybox httpd -d ${x#homepage=})
@@ -79,10 +51,8 @@ for x in $(cat /proc/cmdline); do
 		else
 			export HOMEPAGE="http://portal.webconverger.com/"
 		fi
-
-x=$1
-shift
-
+		x=$1
+		shift
 		if test -e /etc/iceweasel/profile/prefs.js
 		then
 			echo "user_pref(\"browser.startup.homepage\", \"$x\");" >> /etc/iceweasel/profile/prefs.js
@@ -94,60 +64,19 @@ shift
 		webcchrome=*) # To configure the chrome settings
 		$WEBCHOME/iwchromeconfig.sh ${x#webcchrome=}
 		;;
-		wlan=*)
-
-		WLAN=$(/bin/busybox httpd -d "${x//wlan=}")
-		essid="${WLAN%%,*}" # hack to allow for spaces in essid
-		key="$(echo ${WLAN} | cut -f2 -d ',')"
-
-		for iface in wlan0 eth1
-		do
-
-		/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
-		ping -c 1 google.com && break # ok, do not mess around if the Internet works
-
-		if test $(cat /etc/network/interfaces | grep "^iface $iface" | wc -l) -eq 1
-		then
-			if test "$essid"
-			then
-				#echo ESSID: "$essid"
-				iwconfig $iface essid "$essid" &>/dev/null
-			else
-				#echo "No ESSID set (will try connect to any open network)"
-				iwconfig $iface essid any &>/dev/null
-			fi
-
-			if test $key
-			then
-				#echo KEY: $key
-				iwconfig $iface key $key &>/dev/null
-
-cat >> /etc/wpa_supplicant/wpa_supplicant.conf <<END
-network={
-	ssid="$essid"
-	psk="$key"
-}
-END
-
-			else
-				#echo No KEY set
-				iwconfig $iface key off
-			fi
-
-			ifup $iface 2> /dev/stdout
-		fi
-		done
+		wpa-*)
+		# http://anonscm.debian.org/viewvc/pkg-wpa/wpasupplicant/trunk/debian/README.Debian?view=markup
+		wirelesscfg="${wirelesscfg}$(/bin/busybox httpd -d "${x/=/ }")\n\t"
 		;;
 		http_proxy=*)
 		# http://developer.mozilla.org/en/docs/Mozilla_Networking_Preferences#Proxy
 		export HTTP_PROXY=${x#http_proxy=}
-
 		HOST_PORT=${HTTP_PROXY##*//}
 		PROXY_HOST=${HOST_PORT%%:*}
 		PROXY_PORT=${HOST_PORT##*:}
 
 		logger PROXY SETTINGS: $HTTP_PROXY $PROXY_HOST $PROXY_PORT
-		[ -e /etc/iceweasel/profile/prefs.js ] &&
+		test -e /etc/iceweasel/profile/prefs.js &&
 		echo "user_pref(\"network.proxy.type\", 1);"  >> /etc/iceweasel/profile/prefs.js
 		echo "user_pref(\"network.proxy.http\", \"$PROXY_HOST\");" >> /etc/iceweasel/profile/prefs.js
 		echo "user_pref(\"network.proxy.http_port\", $PROXY_PORT);" >> /etc/iceweasel/profile/prefs.js
@@ -157,46 +86,19 @@ END
 	esac
 done
 
+# Don't try setup wireless if there is no config or we have a working internet connection
+if test -z "$wirelesscfg"
+then
+	exit 0
+fi
 
+sed -i "s,wireless config,$wirelesscfg,g" /etc/network/interfaces
 
-	case "$?" in
-		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
-	esac
-	;;
-  stop)
-	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
-
-	case "$?" in
-		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
-	esac
-	;;
-  restart|force-reload)
-	#
-	# If the "reload" option is implemented then remove the
-	# 'force-reload' alias
-	#
-	log_daemon_msg "Restarting $DESC" "$NAME"
-	case "$?" in
-	  0|1)
-
-		case "$?" in
-			0) log_end_msg 0 ;;
-			1) log_end_msg 1 ;; # Old process is still running
-			*) log_end_msg 1 ;; # Failed to start
-		esac
-		;;
-	  *)
-		# Failed to stop
-		log_end_msg 1
-		;;
-	esac
-	;;
-  *)
-	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-	exit 3
-	;;
-esac
+for iface in wlan0 eth1 # for want of a better way of detecting wireless interfaces
+do
+	ping -c 1 google.com && break # If the network works, don't touch it
+	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
+	ifup $iface
+done
 
 :

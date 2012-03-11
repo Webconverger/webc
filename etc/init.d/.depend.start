@@ -1,9 +1,9 @@
-TARGETS = rsyslog killprocs bootlogs sudo single acpid cron plymouth rmnologin rc.local stop-bootlogd
+TARGETS = rsyslog killprocs bootlogs sudo webconverger single acpid cron plymouth rmnologin rc.local stop-bootlogd
 INTERACTIVE =
 single: killprocs bootlogs
 acpid: rsyslog
 cron: rsyslog
-plymouth: rsyslog bootlogs acpid sudo cron
-rmnologin: sudo rsyslog bootlogs acpid cron
-rc.local: rsyslog bootlogs acpid sudo cron
-stop-bootlogd: rsyslog bootlogs acpid sudo cron
+plymouth: rsyslog bootlogs acpid sudo cron webconverger
+rmnologin: sudo rsyslog bootlogs acpid cron webconverger
+rc.local: rsyslog bootlogs acpid sudo cron webconverger
+stop-bootlogd: rsyslog bootlogs acpid sudo cron webconverger

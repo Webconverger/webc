@@ -1,0 +1,54 @@
+extlinux for Debian
+-------------------
+
+In order to use extlinux as your bootloader, you should do the following steps:
+
+1. install extlinux:
+
+   # apt-get install extlinux
+
+2. install a syslinux theme to optain a graphical menu displayed to select the
+   kernel to boot (optional):
+
+   # apt-get install syslinux-themes-debian
+
+3. create all necessary config files:
+
+   # extlinux-update
+
+4. optionally alter defaults (like timeout etc.) in /etc/default/extlinux and
+   running extlinux-update again.
+
+5. install extlinux into your harddisk (e.g. sda):
+
+   # extlinux-install /dev/sda
+
+6. make sure your partition which you boot from is marked with the bootable flag,
+   set it with tools like fdisk, cfdisk or parted if necessary.
+
+7. if you were using grub before, remember to disable automatic re-installation
+   of grub into the mbr with:
+
+   # dpkg-reconfigure -plow grub-pc
+
+8. be happy :)
+
+
+Notes:
+
+  * the current MBR is saved to /boot/mbr-${DEVICE}.old. In case of troubles,
+    you can restore it with the following command:
+
+    # dd if=/boot/mbr-${DEVICE}.old of=/dev/${DEVICE} bs=440 count=1
+
+    Remember that MBR backups are not rotated which means that every call of
+    extlinux-install will overwrite the previous backup with a new one.
+
+  * any ISO (*.iso) or HDD (*.img) image stored in /boot/ can be booted through
+    memdisk. In order to enable these, set EXTLINUX_MEMDISK=true in /etc/default/extlinux.
+
+  * other operating systems which are detected by os-prober can be booted via
+    chainloading. In order to enable this feature, install the os-prober package and
+    set EXTLINUX_OS_PROBER=true in /etc/default/extlinux.
+
+ -- Daniel Baumann <daniel.baumann@progress-technologies.net>  Tue, 22 Jun 2010 02:56:04 +0200

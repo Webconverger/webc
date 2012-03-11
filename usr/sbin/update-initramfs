@@ -190,12 +190,6 @@ run_bootloader()
 			/etc/initramfs/post-update.d/
 		return 0
 	fi
-
-	# FIXME: to be removed once flash-kernel installs a hook
-	if flash-kernel --supported >/dev/null 2>&1; then
-		flash-kernel ${version}
-		return 0
-	fi
 }
 
 compare_sha1()

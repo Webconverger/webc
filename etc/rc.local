@@ -1,14 +1,13 @@
-#!/bin/sh -e
+#!/bin/sh
+# 
+# save the webc id to disk
 #
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
+mac=`ip address show dev eth0 | awk '/ether/ { print $2 }'`
+test "$mac" = "" && mac="unknown_mac"
 
-exit 0
+uuid=`cat /sys/devices/virtual/dmi/id/product_uuid`
+test "$uuid" = "" && uuid="unknown_uuid"
+
+webc_id="${uuid};${mac}"
+echo "$webc_id" > /etc/webc/id
+chmod 644 /etc/webc/id

@@ -38,6 +38,7 @@ hwclocksh()
 {
     [ ! -x /sbin/hwclock ] && return 0
     [ ! -r /etc/default/rcS ] || . /etc/default/rcS
+    [ ! -r /etc/default/hwclock ] || . /etc/default/hwclock
 
     . /lib/lsb/init-functions
     verbose_log_action_msg() { [ "$VERBOSE" = no ] || log_action_msg "$@"; }

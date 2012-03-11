@@ -23,9 +23,9 @@
 set -e
 
 # Defaults
-LIVE_HOSTNAME="progress"
-LIVE_USERNAME="user"
-LIVE_USER_FULLNAME="Progress Linux user"
+LIVE_HOSTNAME="webconverger"
+LIVE_USERNAME="webc"
+LIVE_USER_FULLNAME="Webconverger Hero"
 
 Cmdline ()
 {
