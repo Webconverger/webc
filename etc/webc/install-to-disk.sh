@@ -16,10 +16,7 @@ partition_disk() {
 	cat<<EOF | sed -e "s#DISK#${disk}#" |/sbin/sfdisk $disk 
 unit: sectors
 
-DISK1 : start=     2048, size=   262144, Id=83, bootable
-DISK2 : start=   264192, size=   786432, Id=82
-DISK3 : start=  1050624, size=  3145728, Id=83
-DISK4 : start=  4196352, size=  3145728, Id=83
+DISK1 : start=     2048, size=   3145728, Id=83, bootable
 EOF
 }
 verify_partition() {
@@ -36,7 +33,7 @@ install_extlinux() {
 install_root() {
 	local dir="$1"
 	logs "installing root to ${dir}"
-	unsquashfs -f -n -d /mnt/root /live/image/live/filesystem.squashfs 
+	unsquashfs -f -n -d $dir /live/image/live/filesystem.squashfs 
 }
 user_setup() {
 	local dir="$1"
@@ -51,15 +48,14 @@ while ! wget -q -O /etc/webc/cmdline $config_url; do sleep 5; done
 disk=$( find_disk )
 partition_disk $disk
 verify_partition $disk
-mkswap ${disk}2
-swapon ${disk}2
-for p in 1 3 4; do mke2fs -j ${disk}${p}; done
+mke2fs -j ${disk}1
 test -d /mnt/root || mkdir /mnt/root
-mount ${disk}3 /mnt/root
-mkdir /mnt/root/boot
-mount ${disk}1 /mnt/root/boot
-install_root ${disk}3
-install_extlinux /mnt/root/boot
+mount ${disk}1 /mnt/root
+dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+mkswap /mnt/root/swap
+swapon /mnt/root/swap
+install_root /mnt/root
+install_extlinux /mnt/root/
 
 ( cd /mnt/root/boot && ln -s . boot )
 
@@ -85,9 +81,8 @@ sed -i \
 logs "adding fstab"
 cat<<EOF > /mnt/root/etc/fstab
 proc /proc proc defaults 0 0
-/dev/sda1 /boot ext3 defaults 0 0
-/dev/sda2 none swap sw 0 0
-/dev/sda3 / ext3 defaults 0 0
+/dev/sda1 / ext3 defaults 0 0
+/swap none swap sw 0 0
 EOF
 
 user_setup /mnt/root
@@ -106,6 +101,6 @@ EOF
 cp /etc/webc/cmdline /mnt/root/etc/webc/cmdline
 
 logs "umount'ing partitions"
-for p in 1 3; do umount ${disk}${p}; done
+umount ${disk}1
 logs "install complete"
 /sbin/reboot
