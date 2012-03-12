@@ -1,4 +1,18 @@
 #!/bin/sh
 
-echo "fixing etc/sudoers"
+echo "fixing sudo"
 chmod 0440 etc/sudoers
+chmod 0440 etc/sudoers.d/README
+
+
+echo "fixing setuids"
+suids="
+/bin/ping
+/bin/su
+/usr/bin/sudo
+/usr/bin/X
+"
+
+for s in $suids; do
+	chmod 4755 $s
+done
