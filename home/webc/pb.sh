@@ -4,14 +4,14 @@
 # hendry@webconverger.com
 WEBCHOME=/home/webc
 
+. "/etc/webc/webc.conf"
 logger xsession invoked
 
-cmdline ! grep -qs noroot && {
+cmdline | grep -qs noroot && {
 	set -x
 	exec 2> ~/pb.log
 }
 
-source "/etc/webc/webc.conf"
 homepage="$1"
 wm="/usr/bin/dwm.default"
 
@@ -32,7 +32,6 @@ for x in $(cmdline); do
 		noroot)
 			wm="/usr/bin/dwm.web"
 			;;
-
 		compose)
 			setxkbmap -option "compose:rwin" 
 			logs "Compose key setup"
@@ -55,7 +54,7 @@ xsetroot -solid "#ffffff"
 exec $wm &
 
 # hide the cursor by default, showcursor to override
-! cmdline | grep -qs showcursor && exec /usr/bin/unclutter &
+cmdline | grep -qs showcursor || exec /usr/bin/unclutter &
 
 # Stop (ab)users breaking the loop to restart the exited browser
 trap "echo Unbreakable!" SIGINT SIGTERM
@@ -64,7 +63,7 @@ trap "echo Unbreakable!" SIGINT SIGTERM
 test $homepage = "" &&  homepage="http://portal.webconverger.com/"
 
 # if no-x-background is unset, try setup a background from homepage sans query
-! cmdline | grep -qs noxbg && {
+cmdline | grep -qs noxbg || {
 	cp /etc/webc/bg.png $WEBCHOME/bg.png
 	wget --timeout=5 ${homepage}/bg.png -O $WEBCHOME/bg.png.tmp 
 	file $WEBCHOME/bg.png.tmp | grep -qs "image data" && {
@@ -75,14 +74,7 @@ test $homepage = "" &&  homepage="http://portal.webconverger.com/"
 
 
 
-# TODO: Maybe merge MAC finding code?
-# https://github.com/Webconverger/Debian-Live-config/blob/master/webconverger/config/includes.chroot/etc/network/if-up.d/ping
-for i in $(ls /sys/class/net)
-do
-	test $(basename $i) = "lo" && continue
-	mac=$(cat /sys/class/net/$i/address | tr -d ":")
-	test "$mac" && break
-done
+mac=$( mac_address )
 x=$(echo $homepage | sed "s,MACID,$mac,")
 shift
 
