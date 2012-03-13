@@ -7,9 +7,9 @@ WEBCHOME=/home/webc
 . "/etc/webc/webc.conf"
 logger xsession invoked
 
-cmdline | grep -qs noroot && {
+cmdline | grep -qs noroot || {
 	set -x
-	exec 2> ~/pb.log
+	exec &> ~/pb.log
 }
 
 #homepage="$1"
