@@ -9,9 +9,12 @@ for x in $( cmdline ); do
 	case $x in
 	webcchrome=*) 
 		chrome=${x#webcchrome=}
-		test -e $link && rm -f $link 
-		logs "switching chrome to ${chrome}"
-		ln -s "/etc/webc/iceweasel/extensions/${chrome}" $link
+		dir="/etc/webc/iceweasel/extensions/${chrome}"
+		test -d $dir && { 
+			test -e $link && rm -f $link 
+			logs "switching chrome to ${chrome}"
+			ln -s $dir $link
+		}
 		;;
 	esac
 done
