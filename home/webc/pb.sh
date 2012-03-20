@@ -7,12 +7,12 @@ WEBCHOME=/home/webc
 . "/etc/webc/webc.conf"
 logger xsession invoked
 
-cmdline noroot || {
+cmdline_has noroot || {
 	set -x
 	exec &> ~/pb.log
 }
 
-if ! has_network && cmdline noroot; then
+if ! has_network && cmdline_has noroot; then
 	xloadimage -quiet -onroot -center /etc/webc/no-net.png
 	while ! has_network; do
 		sleep 1
