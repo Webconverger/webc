@@ -26,8 +26,9 @@ for x in $( cmdline ); do
 	esac
 done
 
+install_qa_url="${install_qa_url/&/\\&}"
 sed -i \
-	-e "s#OS not running#${webc_version}#"  \
+	-e "s#OS not running#version ${webc_version}#"  \
 	-e "s#http://config.webconverger.com#${install_qa_url}#"  \
 	${link}/content/about.xhtml
 }
