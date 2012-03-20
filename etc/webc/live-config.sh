@@ -1,6 +1,20 @@
 #!/bin/bash
 . /etc/webc/webc.conf
 
+sub_literal() {
+  awk -v str="$1" -v rep="$2" '
+  BEGIN {
+    len = length(str);
+  }
+
+  (i = index($0, str)) {
+    $0 = substr($0, 1, i-1) rep substr($0, i + len);
+  }
+
+  1'
+}
+
+
 fix_chrome() 
 {
 link="/usr/lib/iceweasel/extensions/webconverger"
@@ -26,12 +40,13 @@ for x in $( cmdline ); do
 	esac
 done
 
-install_qa_url=${install_qa_url/&/\\&amp;}
+install_qa_url=${install_qa_url/&/\&amp;}
 stamp=$( git show $webc_version |grep '^Date')
-sed -i \
-	-e "s#OS not running#Version ${webc_version} ${stamp}#"  \
-	-e "s#http://config.webconverger.com#${install_qa_url}#"  \
-	${link}/content/about.xhtml
+
+cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
+cat ${link}/content/about.xhtml.bak |
+sub_literal 'OS not running' "${webc_version} ${stamp}" |
+sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/content/about.xhtml
 }
 	
 
