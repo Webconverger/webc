@@ -16,10 +16,20 @@ for x in $( cmdline ); do
 			ln -s $dir $link
 		}
 		;;
+	homepage=*)
+		x=$(/bin/busybox httpd -d ${x#homepage=})
+		prefs="/etc/iceweasel/profile/prefs.js"
+		if test -e $prefs; then
+			echo "user_pref(\"browser.startup.homepage\", \"$x\");" >> $prefs
+		fi
+		;;
 	esac
 done
 
-sed -e "s#config.webconverger.com#${config_url}#" ${link}/content/about.xhtml
+sed -i \
+	-e "s#OS not running#${webc_version}#"  \
+	-e "s#config.webconverger.com#${config_url}#"  \
+	${link}/content/about.xhtml
 }
 	
 
