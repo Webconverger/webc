@@ -27,8 +27,9 @@ for x in $( cmdline ); do
 done
 
 install_qa_url=${install_qa_url/&/\\&amp;}
+stamp=$( git show $webc_version |grep '^Date')
 sed -i \
-	-e "s#OS not running#version ${webc_version}#"  \
+	-e "s#OS not running#Version ${webc_version} ${stamp}#"  \
 	-e "s#http://config.webconverger.com#${install_qa_url}#"  \
 	${link}/content/about.xhtml
 }
