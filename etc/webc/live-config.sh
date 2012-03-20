@@ -35,15 +35,17 @@ sed -i \
 }
 	
 
-fix_chrome  
 
-cmdline=""
-while test "$cmdline" = ""; do
-	wget -q -O /etc/webc/cmdline.tmp $config_url
-	cmdline="$( cat /etc/webc/cmdline.tmp )" 
+while ! netstat -rn |grep -qs '^0.0.0.0'; do
+	sleep 1
+	echo -n '.'
 done
-mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+
+wget -q -O /etc/webc/cmdline.tmp $config_url
+cmdline="$( cat /etc/webc/cmdline.tmp )" 
+if test "$cmdline" != ""; then
+	mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+fi
 
 fix_chrome # user may have changed it
 
-exec sleep 3600
