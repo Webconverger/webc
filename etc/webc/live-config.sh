@@ -53,7 +53,6 @@ sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/conte
 
 while ! netstat -rn |grep -qs '^0.0.0.0'; do
 	sleep 1
-	echo -n '.'
 done
 
 wget -q -O /etc/webc/cmdline.tmp $config_url
