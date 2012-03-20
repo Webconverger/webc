@@ -41,10 +41,11 @@ for x in $( cmdline ); do
 done
 
 install_qa_url=${install_qa_url/&/\&amp;}
+stamp=$( git show $webc_version |grep '^Date')
 
 cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
 cat ${link}/content/about.xhtml.bak |
-sub_literal 'OS not running' "${webc_version}" |
+sub_literal 'OS not running' "${webc_version} ${stamp}" |
 sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/content/about.xhtml
 }
 	
