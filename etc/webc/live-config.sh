@@ -28,7 +28,7 @@ done
 
 sed -i \
 	-e "s#OS not running#${webc_version}#"  \
-	-e "s#config.webconverger.com#${install_qa_url}#"  \
+	-e "s#http://config.webconverger.com#${install_qa_url}#"  \
 	${link}/content/about.xhtml
 }
 	
