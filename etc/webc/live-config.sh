@@ -50,16 +50,11 @@ sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/conte
 }
 	
 
-
-while ! netstat -rn |grep -qs '^0.0.0.0'; do
-	sleep 1
-done
-
 wget -q -O /etc/webc/cmdline.tmp $config_url
 cmdline="$( cat /etc/webc/cmdline.tmp )" 
 if test "$cmdline" != ""; then
 	mv /etc/webc/cmdline.tmp /etc/webc/cmdline
 fi
 
-fix_chrome # user may have changed it
+fix_chrome
 

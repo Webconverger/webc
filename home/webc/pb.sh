@@ -7,10 +7,18 @@ WEBCHOME=/home/webc
 . "/etc/webc/webc.conf"
 logger xsession invoked
 
-cmdline | grep -qs noroot || {
+cmdline noroot || {
 	set -x
 	exec &> ~/pb.log
 }
+
+if ! has_network && cmdline noroot; then
+	xloadimage -quiet -onroot -center /etc/webc/no-net.png
+	while ! has_network; do
+		sleep 1
+	done
+	exit 1
+fi
 
 #homepage="$1"
 homepage="$install_qa_url"
