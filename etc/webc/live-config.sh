@@ -18,6 +18,8 @@ for x in $( cmdline ); do
 		;;
 	esac
 done
+
+sed -e "s#config.webconverger.com#${config_url}#" ${link}/content/about.xhtml
 }
 	
 
