@@ -47,55 +47,6 @@ export MOZ_APP_LAUNCHER
 ## Load system and user properties
 ##
 
-if [ "${ICEWEASEL_DSP}" ] ; then 
-    RUNTIME_ICEWEASEL_DSP="${ICEWEASEL_DSP}"
-fi
-
-if [ -f /etc/iceweasel/iceweaselrc ]; then
-    . /etc/iceweasel/iceweaselrc
-fi
-
-if [ -f "${HOME}/.mozilla/firefox/rc" ]; then
-    . "${HOME}/.mozilla/firefox/rc"
-elif [ -f "${HOME}/.mozilla-firefoxrc" ]; then
-    . "${HOME}/.mozilla-firefoxrc"
-    echo "Warning: a .mozilla-firefoxrc file has been found in your home directory" >&2
-    echo "While it is still supported, it is recommended to move it to" >&2
-    echo "\${HOME}/.mozilla/firefox/rc" >&2
-fi
-
-if [ "${RUNTIME_ICEWEASEL_DSP}" ]; then
-    ICEWEASEL_DSP="${RUNTIME_ICEWEASEL_DSP}"
-fi
-
-if [ -z "${ICEWEASEL_DSP}" ]; then
-    ICEWEASEL_DSP="none"
-fi
-
-##
-## find /dev/dsp handler
-##
-
-if [ "${ICEWEASEL_DSP}" = "auto" ]; then
-    ICEWEASEL_DSP=
-    if [ -n "${AUDIOSERVER}" ]; then
-        # do not prevent using other wrappers if $AUDIOSERVER was set up
-        # unintentionally or audiooss is not available
-        if type audiooss >/dev/null 2>&1; then
-            ICEWEASEL_DSP=audiooss
-        fi
-    fi
-    if pgrep -u `id -u` esd >/dev/null 2>&1; then 
-        ICEWEASEL_DSP=esddsp 
-    elif pgrep -u `id -u` arts >/dev/null 2>&1; then 
-        ICEWEASEL_DSP=artsdsp 
-    elif [ -x /usr/bin/aoss ] && [ -d /proc/asound ] ; then
-        ICEWEASEL_DSP=aoss
-    fi
-elif [ "${ICEWEASEL_DSP}" = "none" ]; then
-    ICEWEASEL_DSP=
-fi
-
 verbose () {
     if [ "${VERBOSE}" ]; then
         echo $@
@@ -163,7 +114,7 @@ if [ $# -ne 0 ]; then
 fi
 OPTIONS="$@"
 
-echo_vars ICEWEASEL_DSP OPTIONS DEBUG DEBUGGER
+echo_vars OPTIONS DEBUG DEBUGGER
 
 if [ ${DEBUG} -eq 1 ]; then
     if [ "${DEBUGGER}" = "" ]; then
@@ -184,10 +135,6 @@ if [ ${DEBUG} -eq 1 ]; then
     esac
     rm ${TMPFILE}
     exit
-fi
-
-if type "${ICEWEASEL_DSP}" > /dev/null 2>&1; then
-    MOZ_PROGRAM="${ICEWEASEL_DSP} ${MOZ_PROGRAM}"
 fi
 
 exec_verbose ${MOZ_PROGRAM} "$@"
