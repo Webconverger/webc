@@ -1,31 +1,24 @@
 #!/bin/sh
-server="http://ping.webconverger.org"
+. /etc/webc/webc.conf
+server="http://ping.webconverger.org/"
 sleeping=5
 
-test -f /etc/webc/version || exit
-
 ping () {
-	logger Pinging $1
-	wget -qO- --timeout=5 --post-data="M=$(md5sum $1 |
-	awk '{print $1}')&V=$(cat /etc/webc/version)" "$server"
+	logger "Pinging $server"
+	wget -qO- --timeout=5 --post-data="M=$( 
+		mac_address | md5sum | awk '{print $1}'
+	)&V=${webc_version}" $server 
 }
 
 while true
 do
-
-for i in /sys/class/net/*/address
-do
-	if test "$i" != "/sys/class/net/lo/address"
+	if ping "$i"
 	then
-		if ping "$i"
-		then
-			logger Successful ping to "$server"
-			exit
-		else
-			logger Failed to ping "$server", sleeping $sleeping seconds
-		fi
+		logger "Successful ping to $server"
+		exit
 	fi
+
+	logger "Failed to ping $server, sleeping $sleeping seconds"
 	sleep $sleeping
-done
 
 done &
