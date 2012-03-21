@@ -106,4 +106,5 @@ do
 	rm -rf $WEBCHOME/Downloads
 
 	live_config_update
+	sleep 3
 done
