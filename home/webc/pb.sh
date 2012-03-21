@@ -17,7 +17,8 @@ if ! has_network && cmdline_has noroot; then
 	while ! has_network; do
 		sleep 1
 	done
-	exit 1
+	live_config_update
+	sleep 3
 fi
 
 #homepage="$1"
@@ -104,4 +105,5 @@ do
 	rm -rf $WEBCHOME/.macromedia
 	rm -rf $WEBCHOME/Downloads
 
+	live_config_update
 done

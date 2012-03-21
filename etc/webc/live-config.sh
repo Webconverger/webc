@@ -48,13 +48,26 @@ cat ${link}/content/about.xhtml.bak |
 sub_literal 'OS not running' "${webc_version} ${stamp}" |
 sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/content/about.xhtml
 }
+
+update_cmdline() {	
+	wget -q -O /etc/webc/cmdline.tmp $config_url
+	cmdline="$( cat /etc/webc/cmdline.tmp )" 
+	if test "$cmdline" != ""; then
+		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+	fi
+}
 	
+test -e $live_config_pipe && rm -f $live_config_pipe
+mknod $live_config_pipe p 
+chmod 666 $live_config_pipe
 
-wget -q -O /etc/webc/cmdline.tmp $config_url
-cmdline="$( cat /etc/webc/cmdline.tmp )" 
-if test "$cmdline" != ""; then
-	mv /etc/webc/cmdline.tmp /etc/webc/cmdline
-fi
-
+update_cmdline
 fix_chrome
+
+while true; do
+	cat $live_config_pipe | while read flag; do
+		update_cmdline
+		fix_chrome
+	done
+done
 
