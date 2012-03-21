@@ -21,8 +21,8 @@ link="/usr/lib/iceweasel/extensions/webconverger"
 
 for x in $( cmdline ); do
 	case $x in
-	webcchrome=*) 
-		chrome=${x#webcchrome=}
+	chrome=*) 
+		chrome=${x#chrome=}
 		dir="/etc/webc/iceweasel/extensions/${chrome}"
 		test -d $dir && { 
 			test -e $link && rm -f $link 
