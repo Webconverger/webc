@@ -40,13 +40,12 @@ for x in $( cmdline ); do
 	esac
 done
 
-install_qa_url=${install_qa_url/&/\&amp;}
 stamp=$( git show $webc_version |grep '^Date')
 
-cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
+test -f ${link}/content/about.xhtml.bak || cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
 cat ${link}/content/about.xhtml.bak |
 sub_literal 'OS not running' "${webc_version} ${stamp}" |
-sub_literal 'http://config.webconverger.com' "${install_qa_url}" > ${link}/content/about.xhtml
+sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | sed 's,&,&amp;,')\";" > ${link}/content/about.xhtml
 }
 
 update_cmdline() {	
