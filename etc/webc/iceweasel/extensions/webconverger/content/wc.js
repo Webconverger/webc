@@ -19,7 +19,9 @@ if (typeof webc == 'undefined') { (function() {
 		function init() {
 			// Add close tab listener, gBrowser has not been initiated by this point
 			getBrowser().tabContainer.addEventListener("TabClose", tabRemoved, false);
-			getBrowser().tabContainer.addEventListener("DisableDownload", onDownloadStateChange, false);
+			try {
+				getBrowser().tabContainer.addEventListener("DisableDownload", onDownloadStateChange, false);
+			} catch (ex) {}
 			var pbs = Components.classes["@mozilla.org/privatebrowsing;1"].getService(Components.interfaces.nsIPrivateBrowsingService);
 			pbs.privateBrowsingEnabled = true;
 		}
