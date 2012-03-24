@@ -30,6 +30,18 @@ for x in $( cmdline ); do
 			ln -s $dir $link
 		}
 		;;
+
+	keyboard-layouts=*)
+		_CMDLINE="$x"
+		./keyboard-configuration.sh
+		;;
+
+
+
+	locales=*)
+		echo "pref("intl.accept_languages", \"$(echo ${x#locales=} | tr '_' '-'), en\");" >> /etc/iceweasel/pref/iceweasel.js
+		;;
+
 	homepage=*)
 		x=$(/bin/busybox httpd -d ${x#homepage=})
 		prefs="/etc/iceweasel/profile/prefs.js"

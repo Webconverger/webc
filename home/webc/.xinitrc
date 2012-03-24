@@ -68,9 +68,6 @@ do
 			homepage=*)
 				homepage="$( /bin/busybox httpd -d ${x#homepage=} )"
 				;;
-			locales=*)
-				export LANG=$( locale -a | grep ^${x#locales=}_...utf8 )
-				;;
 			install)
 				homepage="$install_qa_url"
 				;;
