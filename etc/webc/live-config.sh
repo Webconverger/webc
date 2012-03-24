@@ -36,10 +36,10 @@ for x in $( cmdline ); do
 		./keyboard-configuration.sh
 		;;
 
-
-
 	locales=*)
-		echo "pref("intl.accept_languages", \"$(echo ${x#locales=} | tr '_' '-'), en\");" >> /etc/iceweasel/pref/iceweasel.js
+		locales=${x#locales=}
+		export LANG=$( for i in ${locales//,/ }; do locale -a |grep ^$i ; done | sed 1q )
+		echo "pref("intl.accept_languages", \"$(echo $locales | tr '_' '-'), en\");" >> /etc/iceweasel/pref/iceweasel.js
 		;;
 
 	homepage=*)
