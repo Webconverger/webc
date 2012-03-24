@@ -30,6 +30,21 @@ for x in $( cmdline ); do
 			ln -s $dir $link
 		}
 		;;
+
+
+	locale=*)
+		locale=${x#locale=}
+		for i in /usr/lib/iceweasel/extensions/webc*/defaults/preferences/prefs.js; do
+			echo "pref(\"general.useragent.locale\", \"${locale}\");" >> $i
+			echo "pref(\"intl.accept_languages\", \"${locale},en\");" >> $i
+		done
+		;;
+
+	keyboard-layouts=*)
+		_CMDLINE="$x"
+		/etc/webc/keyboard-configuration.sh
+		;;
+
 	homepage=*)
 		x=$(/bin/busybox httpd -d ${x#homepage=})
 		prefs="/etc/iceweasel/profile/prefs.js"

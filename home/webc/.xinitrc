@@ -1,5 +1,4 @@
 #!/bin/bash
-# pb = persistent browser
 # Keep the browser running and clean between sessions in $WEBCHOME
 # hendry@webconverger.com
 WEBCHOME=/home/webc
@@ -9,7 +8,7 @@ logger xsession invoked
 
 cmdline_has noroot || {
 	set -x
-	exec &> ~/pb.log
+	exec &> ~/.xerrors
 }
 
 if ! has_network && cmdline_has noroot; then
@@ -67,9 +66,6 @@ do
 		case $x in
 			homepage=*)
 				homepage="$( /bin/busybox httpd -d ${x#homepage=} )"
-				;;
-			locales=*)
-				export LANG=$( locale -a | grep ^${x#locales=}_...utf8 )
 				;;
 			install)
 				homepage="$install_qa_url"
