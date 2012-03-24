@@ -4,7 +4,7 @@
 WEBCHOME=/home/webc
 
 . "/etc/webc/webc.conf"
-logger xsession invoked
+logs xsession invoked
 
 cmdline_has noroot || {
 	set -x
@@ -27,21 +27,31 @@ wm="/usr/bin/dwm.default"
 
 for x in $(cmdline); do
 	case $x in
+
 		kioskresetstation=*) # For killing the browser after a number of minutes of idleness
 			exec /usr/bin/kioskresetstation ${x#kioskresetstation=} &
 			;;
+
 		noroot)
 			wm="/usr/bin/dwm.web"
 			;;
-		compose)
-			setxkbmap -option "compose:rwin" 
-			logs "Compose key setup"
+
+		xkb=*)
+			koptions=$( /bin/busybox httpd -d ${x#xkb=} )
+			if setxkbmap $koptions; then logs "setxkbmap OK $koptions"; else logs "setxkbmap ERR $koptions"; fi
 			;;
+
+		xrandr=*)
+			xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
+			if xrandr $xoptions; then logs "xrandr OK $xoptions"; else logs "xrandr ERR $xoptions"; fi
+			;;
+
 		noblank)
 			logs "noblank"
 			xset s off 
 			xset -dpms
 			;;
+
 	esac
 done
 

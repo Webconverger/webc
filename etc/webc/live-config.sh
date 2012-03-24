@@ -40,11 +40,6 @@ for x in $( cmdline ); do
 		done
 		;;
 
-	keyboard-layouts=*)
-		_CMDLINE="$x"
-		/etc/webc/keyboard-configuration.sh
-		;;
-
 	homepage=*)
 		x=$(/bin/busybox httpd -d ${x#homepage=})
 		prefs="/etc/iceweasel/profile/prefs.js"
