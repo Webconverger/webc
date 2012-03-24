@@ -35,8 +35,8 @@ for x in $( cmdline ); do
 	locale=*)
 		locale=${x#locale=}
 		for i in /usr/lib/iceweasel/extensions/webc*/defaults/preferences/prefs.js; do
-			echo "pref(\"general.useragent.locale\", \"${locale}\");" >> $i
-			echo "pref(\"intl.accept_languages\", \"${locale},en\");" >> $i
+			echo "user_pref(\"general.useragent.locale\", \"${locale}\");" >> $i
+			echo "user_pref(\"intl.accept_languages\", \"${locale}, en\");" >> $i
 		done
 		;;
 
