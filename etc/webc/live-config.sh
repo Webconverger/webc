@@ -31,15 +31,18 @@ for x in $( cmdline ); do
 		}
 		;;
 
-	keyboard-layouts=*)
-		_CMDLINE="$x"
-		./keyboard-configuration.sh
+
+	locale=*)
+		locale=${x#locale=}
+		for i in /usr/lib/iceweasel/extensions/webc*/defaults/preferences/prefs.js; do
+			echo "pref(\"general.useragent.locale\", \"${locale}\");" >> $i
+			echo "pref(\"intl.accept_languages\", \"${locale},en\");" >> $i
+		done
 		;;
 
-	locales=*)
-		locales=${x#locales=}
-		export LANG=$( for i in ${locales//,/ }; do locale -a |grep ^$i ; done | sed 1q )
-		echo "pref("intl.accept_languages", \"$(echo $locales | tr '_' '-'), en\");" >> /etc/iceweasel/pref/iceweasel.js
+	keyboard-layouts=*)
+		_CMDLINE="$x"
+		/etc/webc/keyboard-configuration.sh
 		;;
 
 	homepage=*)

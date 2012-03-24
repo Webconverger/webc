@@ -27,11 +27,7 @@ pref("security.warn_leaving_secure", false);
 pref("security.warn_submit_insecure", false);
 pref("signon.rememberSignons", false);
 
-// Update via APT
 pref("extensions.update.enabled", false);
-
-// Use LANG environment variable to choose locale
-pref("intl.locale.matchOS", true);
 
 // Disable default browser checking.
 pref("browser.shell.checkDefaultBrowser", false);
@@ -40,9 +36,6 @@ pref("browser.shell.checkDefaultBrowser", false);
 pref("browser.link.open_newwindow", 3);
 pref("browser.link.open_external",3);
 pref("browser.link.open_newwindow.restriction", 0);
-
-// Disable for http://git.webconverger.org/?p=webconverger-base;a=blob;f=home/webc/iwcloseconfig.sh;
-// pref("browser.tabs.closeButtons", 3);
 
 // Defence in depth
 pref("browser.sessionstore.enabled", false);
