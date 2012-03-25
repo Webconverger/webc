@@ -14,23 +14,22 @@ sub_literal() {
   1'
 }
 
-
-fix_chrome() 
+fix_chrome()
 {
 link="/usr/lib/iceweasel/extensions/webconverger"
 
 for x in $( cmdline ); do
 	case $x in
-	chrome=*) 
+
+	chrome=*)
 		chrome=${x#chrome=}
 		dir="/etc/webc/iceweasel/extensions/${chrome}"
-		test -d $dir && { 
-			test -e $link && rm -f $link 
+		test -d $dir && {
+			test -e $link && rm -f $link
 			logs "switching chrome to ${chrome}"
 			ln -s $dir $link
 		}
 		;;
-
 
 	locale=*)
 		locale=${x#locale=}
@@ -40,13 +39,19 @@ for x in $( cmdline ); do
 		done
 		;;
 
+	closeicon=*) # For toggling the close icons in iceweasel (bit OTT tbh)
+		/home/webc/iwcloseconfig.sh ${x#closeicon=}
+		;;
+
 	homepage=*)
-		x=$(/bin/busybox httpd -d ${x#homepage=})
+		set -f -- $(/bin/busybox httpd -d ${x#homepage=})
 		prefs="/etc/iceweasel/profile/prefs.js"
-		if test -e $prefs; then
-			echo "user_pref(\"browser.startup.homepage\", \"$x\");" >> $prefs
+		if test -e $prefs
+		then
+			echo "user_pref(\"browser.startup.homepage\", \"$1\");" >> $prefs
 		fi
 		;;
+
 	esac
 done
 
@@ -58,16 +63,16 @@ sub_literal 'OS not running' "${webc_version} ${stamp}" |
 sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | sed 's,&,&amp;,g')\";" > ${link}/content/about.xhtml
 }
 
-update_cmdline() {	
+update_cmdline() {
 	wget -q -O /etc/webc/cmdline.tmp $config_url
-	cmdline="$( cat /etc/webc/cmdline.tmp )" 
+	cmdline="$( cat /etc/webc/cmdline.tmp )"
 	if test "$cmdline" != ""; then
 		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
 	fi
 }
-	
+
 test -e $live_config_pipe && rm -f $live_config_pipe
-mknod $live_config_pipe p 
+mknod $live_config_pipe p
 chmod 666 $live_config_pipe
 
 update_cmdline

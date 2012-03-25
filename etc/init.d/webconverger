@@ -5,7 +5,7 @@
 # Required-Stop:     $remote_fs
 # Default-Start:	 2 3 4 5
 # Default-Stop:		 0 1 6
-# Short-Description: Webconverger Live environment setup
+# Short-Description: Webconverger Live environment setup http://webconverger.org/startup/
 ### END INIT INFO
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
@@ -19,9 +19,6 @@ WEBCHOME=/home/webc
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
 . /etc/webc/webc.conf
 
-# Make sure we use a default closeicon
-cmdline | grep -qs "closeicon=" || $WEBCHOME/iwcloseconfig.sh strip
-
 # Ensure volume is 100%
 amixer -s &>/dev/null <<END
 set Master 100% unmute
@@ -29,7 +26,7 @@ set Master Front 100% unmute
 END
 
 cat >> /etc/X11/xorg.conf <<WCEND
-# Webconverger.com options to disable X options to break out of X
+# Webconverger.com options to prevent break out of X
 
 Section "ServerFlags"
   Option  "AllowMouseOpenFail"
@@ -43,24 +40,6 @@ WCEND
 for x in $(cmdline)
 do
 	case $x in
-		homepage=*)
-		set -f -- $(/bin/busybox httpd -d ${x#homepage=})
-		if test "$1"
-		then
-			export HOMEPAGE=$1
-		else
-			export HOMEPAGE="http://portal.webconverger.com/"
-		fi
-		x=$1
-		shift
-		if test -e /etc/iceweasel/profile/prefs.js
-		then
-			echo "user_pref(\"browser.startup.homepage\", \"$x\");" >> /etc/iceweasel/profile/prefs.js
-		fi
-		;;
-		closeicon=*) # For controling the close icons in iceweasel
-		$WEBCHOME/iwcloseconfig.sh ${x#closeicon=}
-		;;
 		wpa-*)
 		# http://anonscm.debian.org/viewvc/pkg-wpa/wpasupplicant/trunk/debian/README.Debian?view=markup
 		wirelesscfg="${wirelesscfg}$(/bin/busybox httpd -d "${x/=/ }")\n\t"
@@ -84,6 +63,7 @@ do
 done
 
 # Don't try setup wireless if there is no config or we have a working internet connection
+
 if test -z "$wirelesscfg"
 then
 	exit 0
@@ -93,7 +73,7 @@ sed -i "s,wireless config,$wirelesscfg,g" /etc/network/interfaces
 
 for iface in wlan0 eth1 # for want of a better way of detecting wireless interfaces
 do
-	ping -c 1 google.com && break # If the network works, don't touch it
+	ping -c 1 google.com &> /dev/null && break # If the network works, don't touch it
 	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
 	ifup $iface
 done

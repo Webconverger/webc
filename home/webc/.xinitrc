@@ -1,5 +1,5 @@
 #!/bin/bash
-# Keep the browser running and clean between sessions in $WEBCHOME
+# Keep the browser running and clean between sessions in /home/webc
 # hendry@webconverger.com
 WEBCHOME=/home/webc
 
@@ -20,8 +20,8 @@ if ! has_network && cmdline_has noroot; then
 	sleep 3
 fi
 
-#homepage="$1"
-homepage="$install_qa_url"
+homepage="$install_qa_url" # default homepage
+
 shift
 wm="/usr/bin/dwm.default"
 
@@ -48,7 +48,7 @@ for x in $(cmdline); do
 
 		noblank)
 			logs "noblank"
-			xset s off 
+			xset s off
 			xset -dpms
 			;;
 
@@ -64,7 +64,7 @@ xsetroot -solid "#ffffff"
 # only when noroot is supplied, we use Webc's WM dwm.web
 exec $wm &
 
-# hide the cursor by default, showcursor to override
+# hide the cursor by default, showcursor to override TODO: toggle from cmdline
 cmdline | grep -qs showcursor || exec /usr/bin/unclutter &
 
 # Stop (ab)users breaking the loop to restart the exited browser
@@ -85,31 +85,33 @@ do
 
 	# if no-x-background is unset, try setup a background from homepage sans query
 	cmdline | grep -qs noxbg || {
-		cp /etc/webc/bg.png $WEBCHOME/bg.png
-		wget --timeout=5 ${homepage}/bg.png -O $WEBCHOME/bg.png.tmp 
-		file $WEBCHOME/bg.png.tmp | grep -qs "image data" && {
-			mv $WEBCHOME/bg.png.tmp $WEBCHOME/bg.png
+		cp /etc/webc/bg.png /home/webc/bg.png
+		set -f -- $homepage
+		if echo $1 | grep -q \? # assume if we see a query we want to dirname this to find the PNG
+		then
+			h=$(dirname $1)
+		else
+			h=$1
+		fi
+		wget --timeout=5 ${h}/bg.png -O /home/webc/bg.png.tmp
+		file /home/webc/bg.png.tmp | grep -qs "image data" && {
+			mv /home/webc/bg.png.tmp /home/webc/bg.png
 		}
-		xloadimage -quiet -onroot -center $WEBCHOME/bg.png
+		xloadimage -quiet -onroot -center /home/webc/bg.png
 	}
 
-	# Set default homepage if homepage cmdline isn't set
-	test $homepage = "" &&  homepage="http://portal.webconverger.com/"
-
-
 	mac=$( mac_address )
-	x=$(echo $homepage | sed "s,MACID,$mac,")
 
 	if test -x /usr/bin/iceweasel
 	then
-		rm -rf $WEBCHOME/.mozilla/
-		iceweasel "$x" "$@"
-		rm -rf $WEBCHOME/.mozilla/
+		rm -rf /home/webc/.mozilla/
+		iceweasel $(echo $homepage | sed "s,MACID,$mac,g")
+		rm -rf /home/webc/.mozilla/
 	fi
 
-	rm -rf $WEBCHOME/.adobe
-	rm -rf $WEBCHOME/.macromedia
-	rm -rf $WEBCHOME/Downloads
+	rm -rf /home/webc/.adobe
+	rm -rf /home/webc/.macromedia
+	rm -rf /home/webc/Downloads
 
 	live_config_update
 	sleep 3
