@@ -21,7 +21,7 @@ if ! has_network && cmdline_has noroot; then
 fi
 
 homepage="$install_qa_url" # default homepage
-cp /etc/webc/bg.orig /etc/webc/bg.png # default Webconverger branding
+cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
 
 shift
 wm="/usr/bin/dwm.default"
@@ -47,14 +47,6 @@ for x in $(cmdline); do
 			if xrandr $xoptions; then logs "xrandr OK $xoptions"; else logs "xrandr ERR $xoptions"; fi
 			;;
 
-		bgurl=*)
-			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
-				wget --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
-				file /home/webc/bg.png.custom | grep -qs "image data" && {
-					mv /home/webc/bg.png.custom /home/webc/bg.png
-				}
-			;;
-
 		noblank)
 			logs "noblank"
 			xset s off
@@ -70,10 +62,6 @@ xset b 0 0
 
 # white background http://webconverger.org/artwork/
 xsetroot -solid "#ffffff"
-
-
-# set the background
-xloadimage -quiet -onroot -center /home/webc/bg.png
 
 # only when noroot is supplied, we use Webc's WM dwm.web
 exec $wm &
@@ -93,11 +81,23 @@ do
 				homepage="$( /bin/busybox httpd -d ${x#homepage=} )"
 				;;
 
+		bgurl=*)
+			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
+				# only download if newer
+				wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+				file /home/webc/bg.png.custom | grep -qs "image data" && {
+					cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+				}
+			;;
+
 			install)
 				homepage="$install_qa_url"
 				;;
 		esac
 	done
+
+	# set the background http://webconverger.org/artwork/
+	xloadimage -quiet -onroot -center /home/webc/bg.png
 
 	mac=$( mac_address )
 
