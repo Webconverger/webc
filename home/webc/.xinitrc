@@ -11,9 +11,10 @@ cmdline_has debug || {
 	exec &> ~/.xerrors
 }
 
-if ! has_network && cmdline_has debug; then
+if ! has_network
+then
 	xloadimage -quiet -onroot -center /etc/webc/no-net.png
-	while ! has_network; do
+	while ! has_network && ! cmdline_has debug; do
 		sleep 1
 	done
 	live_config_update

@@ -21,6 +21,10 @@ link="/usr/lib/iceweasel/extensions/webconverger"
 for x in $( cmdline ); do
 	case $x in
 
+	debug)
+		echo "webc ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+		;;
+
 	chrome=*)
 		chrome=${x#chrome=}
 		dir="/etc/webc/iceweasel/extensions/${chrome}"
