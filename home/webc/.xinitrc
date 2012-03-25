@@ -6,12 +6,12 @@ WEBCHOME=/home/webc
 . "/etc/webc/webc.conf"
 logs xsession invoked
 
-cmdline_has noroot || {
+cmdline_has debug || {
 	set -x
 	exec &> ~/.xerrors
 }
 
-if ! has_network && cmdline_has noroot; then
+if ! has_network && cmdline_has debug; then
 	xloadimage -quiet -onroot -center /etc/webc/no-net.png
 	while ! has_network; do
 		sleep 1
@@ -23,8 +23,7 @@ fi
 homepage="$install_qa_url" # default homepage
 cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
 
-shift
-wm="/usr/bin/dwm.default"
+wm="/usr/bin/dwm.web" # default
 
 for x in $(cmdline); do
 	case $x in
@@ -33,8 +32,8 @@ for x in $(cmdline); do
 			exec /usr/bin/kioskresetstation ${x#kioskresetstation=} &
 			;;
 
-		noroot)
-			wm="/usr/bin/dwm.web"
+		debug)
+			wm="/usr/bin/dwm.default" # dwm.default is the dwm default, not webc
 			;;
 
 		xkb=*)
@@ -63,7 +62,6 @@ xset b 0 0
 # white background http://webconverger.org/artwork/
 xsetroot -solid "#ffffff"
 
-# only when noroot is supplied, we use Webc's WM dwm.web
 exec $wm &
 
 # hide the cursor by default, showcursor to override

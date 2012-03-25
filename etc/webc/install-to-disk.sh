@@ -71,7 +71,7 @@ sed -i \
 	/mnt/root/boot/extlinux/extlinux.conf 
 
 sed -i \
-	-e 's#\(append.*\)#\1 root=/dev/sda3 quiet silent noroot #' \
+	-e 's#\(append.*\)#\1 root=/dev/sda3 quiet silent #' \
 	/mnt/root/boot/extlinux/linux.cfg
 
 sed -i \
