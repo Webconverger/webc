@@ -18,6 +18,9 @@ fix_chrome()
 {
 link="/usr/lib/iceweasel/extensions/webconverger"
 
+# Make sure we use a default closeicon, because the default does not have X on the last tab
+cmdline | grep -qs "closeicon=" || /etc/webc/iwcloseconfig.sh strip
+
 for x in $( cmdline ); do
 	case $x in
 
@@ -44,7 +47,7 @@ for x in $( cmdline ); do
 		;;
 
 	closeicon=*) # For toggling the close icons in iceweasel (bit OTT tbh)
-		/home/webc/iwcloseconfig.sh ${x#closeicon=}
+		/etc/webc/iwcloseconfig.sh ${x#closeicon=}
 		;;
 
 	homepage=*)
