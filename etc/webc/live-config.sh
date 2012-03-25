@@ -44,18 +44,18 @@ for x in $( cmdline ); do
 		;;
 
 	homepage=*)
-		set -f -- $(/bin/busybox httpd -d ${x#homepage=})
+		homepage=$(/bin/busybox httpd -d ${x#homepage=})
 		prefs="/etc/iceweasel/profile/prefs.js"
 		if test -e $prefs
 		then
-			echo "user_pref(\"browser.startup.homepage\", \"$1\");" >> $prefs
+			echo "user_pref(\"browser.startup.homepage\", \"$(echo $homepage | awk '{print $1}')\");" >> $prefs
 		fi
 		;;
 
 	esac
 done
 
-stamp=$( git show $webc_version |grep '^Date')
+stamp=$( git show $webc_version | grep '^Date')
 
 test -f ${link}/content/about.xhtml.bak || cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
 cat ${link}/content/about.xhtml.bak |

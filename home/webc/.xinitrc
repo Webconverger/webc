@@ -21,6 +21,7 @@ if ! has_network && cmdline_has noroot; then
 fi
 
 homepage="$install_qa_url" # default homepage
+cp /etc/webc/bg.orig /etc/webc/bg.png # default Webconverger branding
 
 shift
 wm="/usr/bin/dwm.default"
@@ -46,6 +47,14 @@ for x in $(cmdline); do
 			if xrandr $xoptions; then logs "xrandr OK $xoptions"; else logs "xrandr ERR $xoptions"; fi
 			;;
 
+		bgurl=*)
+			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
+				wget --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+				file /home/webc/bg.png.custom | grep -qs "image data" && {
+					mv /home/webc/bg.png.custom /home/webc/bg.png
+				}
+			;;
+
 		noblank)
 			logs "noblank"
 			xset s off
@@ -55,21 +64,27 @@ for x in $(cmdline); do
 	esac
 done
 
+
 # disable bell
 xset b 0 0
 
 # white background http://webconverger.org/artwork/
 xsetroot -solid "#ffffff"
 
+
+# set the background
+xloadimage -quiet -onroot -center /home/webc/bg.png
+
 # only when noroot is supplied, we use Webc's WM dwm.web
 exec $wm &
 
-# hide the cursor by default, showcursor to override TODO: toggle from cmdline
+# hide the cursor by default, showcursor to override
 cmdline | grep -qs showcursor || exec /usr/bin/unclutter &
 
 # Stop (ab)users breaking the loop to restart the exited browser
 trap "echo Unbreakable!" SIGINT SIGTERM
 
+# Stuff in here gets run at every browser restart:
 while true
 do
 	for x in $(cmdline); do
@@ -77,28 +92,12 @@ do
 			homepage=*)
 				homepage="$( /bin/busybox httpd -d ${x#homepage=} )"
 				;;
+
 			install)
 				homepage="$install_qa_url"
 				;;
 		esac
 	done
-
-	# if no-x-background is unset, try setup a background from homepage sans query
-	cmdline | grep -qs noxbg || {
-		cp /etc/webc/bg.png /home/webc/bg.png
-		set -f -- $homepage
-		if echo $1 | grep -q \? # assume if we see a query we want to dirname this to find the PNG
-		then
-			h=$(dirname $1)
-		else
-			h=$1
-		fi
-		wget --timeout=5 ${h}/bg.png -O /home/webc/bg.png.tmp
-		file /home/webc/bg.png.tmp | grep -qs "image data" && {
-			mv /home/webc/bg.png.tmp /home/webc/bg.png
-		}
-		xloadimage -quiet -onroot -center /home/webc/bg.png
-	}
 
 	mac=$( mac_address )
 
@@ -113,6 +112,4 @@ do
 	rm -rf /home/webc/.macromedia
 	rm -rf /home/webc/Downloads
 
-	live_config_update
-	sleep 3
 done
