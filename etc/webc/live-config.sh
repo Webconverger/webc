@@ -19,7 +19,7 @@ fix_chrome()
 link="/usr/lib/iceweasel/extensions/webconverger"
 
 # Make sure we use a default closeicon, because the default does not have X on the last tab
-cmdline | grep -qs "closeicon=" || /etc/webc/iwcloseconfig.sh strip
+cmdline | grep -qs "closeicon=" || /etc/webc/iwcloseconfig.sh activefix
 
 for x in $( cmdline ); do
 	case $x in
