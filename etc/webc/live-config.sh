@@ -71,7 +71,12 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 }
 
 update_cmdline() {
-	wget -q -O /etc/webc/cmdline.tmp $config_url
+	SECONDS=0
+	while ! wget -q -O /etc/webc/cmdline.tmp $config_url; do
+		sleep 0.1
+		test $SECONDS -gt 30 && break
+	done
+		
 	cmdline="$( cat /etc/webc/cmdline.tmp )"
 	if test "$cmdline" != ""; then
 		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
