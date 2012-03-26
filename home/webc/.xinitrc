@@ -77,7 +77,7 @@ do
 	for x in $(cmdline); do
 		case $x in
 			homepage=*)
-				homepage="$( /bin/busybox httpd -d ${x#homepage=} )"
+				homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
 				;;
 
 		bgurl=*)

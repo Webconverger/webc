@@ -52,7 +52,7 @@ for x in $( cmdline ); do
 		;;
 
 	homepage=*)
-		homepage=$(/bin/busybox httpd -d ${x#homepage=})
+		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
 		prefs="/etc/iceweasel/profile/prefs.js"
 		if test -e $prefs
 		then
