@@ -87,8 +87,8 @@ test -e $live_config_pipe && rm -f $live_config_pipe
 mknod $live_config_pipe p
 chmod 666 $live_config_pipe
 
-update_cmdline
 fix_chrome
+update_cmdline
 
 while true; do
 	cat $live_config_pipe | while read flag; do
