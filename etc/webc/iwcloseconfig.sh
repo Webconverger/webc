@@ -25,7 +25,8 @@ elif [ $1 = 'strip' ]; then
 fi
 
 # Inject the preference
-for i in /usr/lib/iceweasel/extensions/webc*/defaults/preferences/prefs.js; do
+for i in /etc/webc/iceweasel/extensions/webc*/defaults/preferences/prefs.js
+do
 	echo "pref(\"browser.tabs.closeButtons\", $iconset);" >> $i
 done
 

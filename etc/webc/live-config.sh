@@ -40,7 +40,8 @@ for x in $( cmdline ); do
 
 	locale=*)
 		locale=${x#locale=}
-		for i in /usr/lib/iceweasel/extensions/webc*/defaults/preferences/prefs.js; do
+		for i in /etc/webc/iceweasel/extensions/webc*/defaults/preferences/prefs.js
+		do
 			echo "user_pref(\"general.useragent.locale\", \"${locale}\");" >> $i
 			echo "user_pref(\"intl.accept_languages\", \"${locale}, en\");" >> $i
 		done
@@ -89,6 +90,7 @@ chmod 666 $live_config_pipe
 
 fix_chrome
 update_cmdline
+fix_chrome
 
 while true; do
 	cat $live_config_pipe | while read flag; do
