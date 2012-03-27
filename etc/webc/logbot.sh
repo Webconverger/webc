@@ -3,8 +3,6 @@
 
 ! cmdline_has debug && { "$@"; exit 0; }
 
-filename="$@"
-
-bash -x "$filename" 2>&1 | while read line; do
-	logs "$filename" "$line"
+"$@" 2>&1 | while read line; do
+	logger -t $1 -p syslog.debug  "$line"
 done

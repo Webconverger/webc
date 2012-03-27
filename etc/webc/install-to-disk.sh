@@ -2,7 +2,11 @@
 . "/etc/webc/webc.conf"
 set -x
 exec 2>&1
-exec > /tmp/install.log
+if cmdline_has debug; then
+	set -x
+else
+	exec > /tmp/install.log
+fi
 
 find_disk() {
 	logs "finding disk"

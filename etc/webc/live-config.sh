@@ -1,6 +1,8 @@
 #!/bin/bash
 . /etc/webc/webc.conf
 
+cmdline_has debug && set -x
+
 sub_literal() {
   awk -v str="$1" -v rep="$2" '
   BEGIN {

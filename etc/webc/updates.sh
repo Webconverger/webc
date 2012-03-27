@@ -3,6 +3,8 @@ set -e
 source "$(dirname $0)/webc.conf"
 gpg_opts="--status-file /dev/null --logger-file /dev/null --attribute-file /dev/null --batch --no-tty -q"
 
+cmdline_has debug && set -x
+
 signed ()
 {
 	local name="$1"
