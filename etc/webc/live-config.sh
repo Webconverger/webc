@@ -75,15 +75,16 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 
 update_cmdline() {
 	SECONDS=0
-	while ! wget -q -O /etc/webc/cmdline.tmp $config_url; do
-		sleep 0.1
+	while :
+	do
+		wget -q -O /etc/webc/cmdline.tmp "$config_url" && break
+		test $? = 8 && break # 404
 		test $SECONDS -gt 30 && break
+		sleep 1
 	done
-		
-	cmdline="$( cat /etc/webc/cmdline.tmp )"
-	if test "$cmdline" != ""; then
-		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
-	fi
+	
+	# A configuration file always has a homepage
+	test -s /etc/webc/cmdline.tmp && grep -qs homepage /etc/webc/cmdline.tmp && mv /etc/webc/cmdline.tmp /etc/webc/cmdline
 }
 
 test -e $live_config_pipe && rm -f $live_config_pipe

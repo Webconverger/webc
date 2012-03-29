@@ -18,7 +18,7 @@ then
 		sleep 1
 	done
 	live_config_update
-	sleep 3
+	sleep 5
 fi
 
 homepage="$install_qa_url" # default homepage
