@@ -40,8 +40,8 @@ if [ -x /usr/bin/lockfile-create ]; then
 fi
 
 while true; do
-	ping -c 1 pool.ntp.org 2>&1 > /dev/null
-	test $? = 2 && continue
+	ping -c 1 pool.ntp.org && break
+	test $? = 2 && { sleep 1; continue; }
 	break
 done
 
