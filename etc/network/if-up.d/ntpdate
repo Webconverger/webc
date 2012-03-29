@@ -39,6 +39,12 @@ if [ -x /usr/bin/lockfile-create ]; then
 	LOCKTOUCHPID="$!"
 fi
 
+while true; do
+	ping -c 1 pool.ntp.org 2>&1 > /dev/null
+	test $? = 2 && continue
+	break
+done
+
 /usr/sbin/ntpdate-debian -s $OPTS 2>/dev/null || :
 
 if [ -x /usr/bin/lockfile-create ] ; then
