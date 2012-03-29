@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -e
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
@@ -40,12 +39,12 @@ if [ -x /usr/bin/lockfile-create ]; then
 fi
 
 while true; do
-	ping -c 1 pool.ntp.org && break
+	ping -c 1 pool.ntp.org
 	test $? = 2 && { sleep 1; continue; }
 	break
 done
 
-/usr/sbin/ntpdate-debian -s $OPTS 2>/dev/null || :
+/usr/sbin/ntpdate-debian -s $OPTS 
 
 if [ -x /usr/bin/lockfile-create ] ; then
 	kill $LOCKTOUCHPID
