@@ -25,6 +25,10 @@ homepage="$install_qa_url" # default homepage
 cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
 
 wm="/usr/bin/dwm.web" # default
+xset s on
+xset s blank
+xset s 600
+xset +dpms
 
 for x in $(cmdline); do
 	case $x in
@@ -52,7 +56,11 @@ for x in $(cmdline); do
 			xset s off
 			xset -dpms
 			;;
-
+		blank)
+			length=${x#blank=}
+			logs "screen will blank after ${length} seconds"
+			xset s ${length}
+			;;
 	esac
 done
 
