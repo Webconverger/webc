@@ -3,9 +3,6 @@
 # save the webc id to disk
 #
 
-echo "boot completed"
-
-
 mac=`ip address show dev eth0 | awk '/ether/ { print $2 }'`
 test "$mac" = "" && mac="unknown_mac"
 
@@ -15,3 +12,5 @@ test "$uuid" = "" && uuid="unknown_uuid"
 webc_id="${uuid};${mac}"
 echo "$webc_id" > /etc/webc/id
 chmod 644 /etc/webc/id
+
+pkill dhclient

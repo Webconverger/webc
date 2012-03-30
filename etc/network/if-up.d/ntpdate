@@ -1,5 +1,5 @@
 #!/bin/sh
-
+. /etc/webc/webc.conf
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
@@ -44,6 +44,7 @@ while true; do
 	break
 done
 
+logs "running ntpdate"
 /usr/sbin/ntpdate-debian -s $OPTS 
 
 if [ -x /usr/bin/lockfile-create ] ; then
