@@ -24,7 +24,7 @@ fi
 homepage="$install_qa_url" # default homepage
 cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
 
-wm="/usr/bin/dwm.web" # default
+wm="/usr/bin/dwm.web" # defaults
 xset s on
 xset s blank
 xset s 600
@@ -56,10 +56,10 @@ for x in $(cmdline); do
 			xset s off
 			xset -dpms
 			;;
-		blank)
-			length=${x#blank=}
-			logs "screen will blank after ${length} seconds"
-			xset s ${length}
+		blank=*)
+			secondstillblank=$((${x#blank=} * 60))
+			logs "screen will blank after $secondstillblank seconds"
+			xset s $secondstillblank
 			;;
 	esac
 done
