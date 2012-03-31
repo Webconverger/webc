@@ -85,6 +85,7 @@ update_cmdline() {
 	
 	# A configuration file always has a homepage
 	grep -qs homepage /etc/webc/cmdline.tmp && mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+	touch /etc/webc/cmdline
 }
 
 test -e $live_config_pipe && rm -f $live_config_pipe

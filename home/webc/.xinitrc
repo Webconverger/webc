@@ -11,17 +11,19 @@ cmdline_has debug || {
 	exec &> ~/.xerrors
 }
 
+homepage="$install_qa_url" # default homepage
+cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
+
+xloadimage -quiet -onroot -center /home/webc/bg.png
 if ! has_network
 then
 	xloadimage -quiet -onroot -center /etc/webc/no-net.png
 	while ! has_network && ! cmdline_has debug; do
 		sleep 1
 	done
-	live_config_update
 fi
+live_config_update
 
-homepage="$install_qa_url" # default homepage
-cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
 
 wm="/usr/bin/dwm.web" # defaults
 xset s on
@@ -118,4 +120,5 @@ do
 	rm -rf /home/webc/.macromedia
 	rm -rf /home/webc/Downloads
 
+	live_config_update
 done
