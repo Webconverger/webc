@@ -7,29 +7,22 @@ webcping () {
 	logger "Pinging $server"
 	wget -qO- --timeout=5 --post-data="M=$( 
 		mac_address | md5sum | awk '{print $1}'
-	)&V=${webc_version}" $server 
+	)&V=${webc_version}" "$server"
 }
 
 runonce=/var/run/webcping
+mkdir /var/lock/webcping 2>/dev/null || exit 0
 
-if test -f /var/lock/webcping
-then
-	logger webcping already running
-	exit
-fi
-
-while ! test -f $runonce
+while ! test -f "$runonce"
 do
-	touch /var/lock/webcping
 	if webcping
 	then
 		logger "Successful ping to $server"
-		date > $runonce
-		exit
+		date > "$runonce"
+		exit 0
 	fi
 
 	logger "Failed to ping $server, sleeping $sleeping seconds"
-	sleep $sleeping
+	sleep "$sleeping"
 
 done &
-
