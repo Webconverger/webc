@@ -56,7 +56,7 @@ label fail
 EOF
 
 sed -i \
-	-e 's/^\(prompt\).*/\1 0/' \
+	-e 's/^\(prompt\).*/\1 1/' \
 	-e 's/^\(timeout\).*/\1 50/' \
 	-e 's/^\(display\).*//' \
 	${dir}/extlinux.conf 
