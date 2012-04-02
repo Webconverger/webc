@@ -62,7 +62,7 @@ sed -i \
 	${dir}/extlinux.conf 
 
 sed -i \
-	-e 's|\(append.*\)|\1 boot=local |' \
+	-e 's|\(append.*\)|\1 boot=local root='$disk' |' \
 	${dir}/linux.cfg
 
 	( cd ${dir}/.. && ln -s . boot )
