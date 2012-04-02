@@ -22,6 +22,13 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_device_get_reference_count@Base 1.10.0
  cairo_device_get_type@Base 1.10.0
  cairo_device_get_user_data@Base 1.10.0
+ cairo_device_observer_elapsed@Base 1.12.0
+ cairo_device_observer_fill_elapsed@Base 1.12.0
+ cairo_device_observer_glyphs_elapsed@Base 1.12.0
+ cairo_device_observer_mask_elapsed@Base 1.12.0
+ cairo_device_observer_paint_elapsed@Base 1.12.0
+ cairo_device_observer_print@Base 1.12.0
+ cairo_device_observer_stroke_elapsed@Base 1.12.0
  cairo_device_reference@Base 1.10.0
  cairo_device_release@Base 1.10.0
  cairo_device_set_user_data@Base 1.10.0
@@ -57,6 +64,9 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_format_stride_for_width@Base 1.6.0
  cairo_ft_font_face_create_for_ft_face@Base 1.2.4
  cairo_ft_font_face_create_for_pattern@Base 1.2.4
+ cairo_ft_font_face_get_synthesize@Base 1.12.0
+ cairo_ft_font_face_set_synthesize@Base 1.12.0
+ cairo_ft_font_face_unset_synthesize@Base 1.12.0
  cairo_ft_font_options_substitute@Base 1.2.4
  cairo_ft_scaled_font_lock_face@Base 1.2.4
  cairo_ft_scaled_font_unlock_face@Base 1.2.4
@@ -114,6 +124,18 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_matrix_transform_distance@Base 1.2.4
  cairo_matrix_transform_point@Base 1.2.4
  cairo_matrix_translate@Base 1.2.4
+ cairo_mesh_pattern_begin_patch@Base 1.12.0
+ cairo_mesh_pattern_curve_to@Base 1.12.0
+ cairo_mesh_pattern_end_patch@Base 1.12.0
+ cairo_mesh_pattern_get_control_point@Base 1.12.0
+ cairo_mesh_pattern_get_corner_color_rgba@Base 1.12.0
+ cairo_mesh_pattern_get_patch_count@Base 1.12.0
+ cairo_mesh_pattern_get_path@Base 1.12.0
+ cairo_mesh_pattern_line_to@Base 1.12.0
+ cairo_mesh_pattern_move_to@Base 1.12.0
+ cairo_mesh_pattern_set_control_point@Base 1.12.0
+ cairo_mesh_pattern_set_corner_color_rgb@Base 1.12.0
+ cairo_mesh_pattern_set_corner_color_rgba@Base 1.12.0
  cairo_move_to@Base 1.2.4
  cairo_new_path@Base 1.2.4
  cairo_new_sub_path@Base 1.2.4
@@ -125,7 +147,9 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_pattern_add_color_stop_rgba@Base 1.2.4
  cairo_pattern_create_for_surface@Base 1.2.4
  cairo_pattern_create_linear@Base 1.2.4
+ cairo_pattern_create_mesh@Base 1.12.0
  cairo_pattern_create_radial@Base 1.2.4
+ cairo_pattern_create_raster_source@Base 1.12.0
  cairo_pattern_create_rgb@Base 1.2.4
  cairo_pattern_create_rgba@Base 1.2.4
  cairo_pattern_destroy@Base 1.2.4
@@ -168,7 +192,18 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_ps_surface_set_size@Base 1.2.4
  cairo_push_group@Base 1.2.4
  cairo_push_group_with_content@Base 1.2.4
+ cairo_raster_source_pattern_get_acquire@Base 1.12.0
+ cairo_raster_source_pattern_get_callback_data@Base 1.12.0
+ cairo_raster_source_pattern_get_copy@Base 1.12.0
+ cairo_raster_source_pattern_get_finish@Base 1.12.0
+ cairo_raster_source_pattern_get_snapshot@Base 1.12.0
+ cairo_raster_source_pattern_set_acquire@Base 1.12.0
+ cairo_raster_source_pattern_set_callback_data@Base 1.12.0
+ cairo_raster_source_pattern_set_copy@Base 1.12.0
+ cairo_raster_source_pattern_set_finish@Base 1.12.0
+ cairo_raster_source_pattern_set_snapshot@Base 1.12.0
  cairo_recording_surface_create@Base 1.10.0
+ cairo_recording_surface_get_extents@Base 1.12.0
  cairo_recording_surface_ink_extents@Base 1.10.0
  cairo_rectangle@Base 1.2.4
  cairo_rectangle_list_destroy@Base 1.4.10
@@ -221,6 +256,14 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_scaled_font_status@Base 1.2.4
  cairo_scaled_font_text_extents@Base 1.2.4
  cairo_scaled_font_text_to_glyphs@Base 1.7.2
+ cairo_script_create@Base 1.12.0
+ cairo_script_create_for_stream@Base 1.12.0
+ cairo_script_from_recording_surface@Base 1.12.0
+ cairo_script_get_mode@Base 1.12.0
+ cairo_script_set_mode@Base 1.12.0
+ cairo_script_surface_create@Base 1.12.0
+ cairo_script_surface_create_for_target@Base 1.12.0
+ cairo_script_write_comment@Base 1.12.0
  cairo_select_font_face@Base 1.2.4
  cairo_set_antialias@Base 1.2.4
  cairo_set_dash@Base 1.2.4
@@ -253,7 +296,9 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_stroke_preserve@Base 1.2.4
  cairo_surface_copy_page@Base 1.6.0
  cairo_surface_create_for_rectangle@Base 1.10.0
+ cairo_surface_create_observer@Base 1.12.0
  cairo_surface_create_similar@Base 1.2.4
+ cairo_surface_create_similar_image@Base 1.12.0
  cairo_surface_destroy@Base 1.2.4
  cairo_surface_finish@Base 1.2.4
  cairo_surface_flush@Base 1.2.4
@@ -267,8 +312,18 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_surface_get_type@Base 1.2.4
  cairo_surface_get_user_data@Base 1.2.4
  cairo_surface_has_show_text_glyphs@Base 1.8.0
+ cairo_surface_map_to_image@Base 1.12.0
  cairo_surface_mark_dirty@Base 1.2.4
  cairo_surface_mark_dirty_rectangle@Base 1.2.4
+ cairo_surface_observer_add_fill_callback@Base 1.12.0
+ cairo_surface_observer_add_finish_callback@Base 1.12.0
+ cairo_surface_observer_add_flush_callback@Base 1.12.0
+ cairo_surface_observer_add_glyphs_callback@Base 1.12.0
+ cairo_surface_observer_add_mask_callback@Base 1.12.0
+ cairo_surface_observer_add_paint_callback@Base 1.12.0
+ cairo_surface_observer_add_stroke_callback@Base 1.12.0
+ cairo_surface_observer_elapsed@Base 1.12.0
+ cairo_surface_observer_print@Base 1.12.0
  cairo_surface_reference@Base 1.2.4
  cairo_surface_set_device_offset@Base 1.2.4
  cairo_surface_set_fallback_resolution@Base 1.2.4
@@ -276,6 +331,8 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_surface_set_user_data@Base 1.2.4
  cairo_surface_show_page@Base 1.6.0
  cairo_surface_status@Base 1.2.4
+ cairo_surface_supports_mime_type@Base 1.12.0
+ cairo_surface_unmap_image@Base 1.12.0
  cairo_surface_write_to_png@Base 1.2.4
  cairo_surface_write_to_png_stream@Base 1.2.4
  cairo_svg_get_versions@Base 1.2.4
@@ -312,10 +369,17 @@ libcairo.so.2 libcairo2 #MINVER#
  cairo_version_string@Base 1.2.4
  cairo_xcb_device_debug_cap_xrender_version@Base 1.10.0
  cairo_xcb_device_debug_cap_xshm_version@Base 1.10.0
+ cairo_xcb_device_debug_get_precision@Base 1.12.0
+ cairo_xcb_device_debug_set_precision@Base 1.12.0
+ cairo_xcb_device_get_connection@Base 1.12.0
  cairo_xcb_surface_create@Base 1.6.4-5~
  cairo_xcb_surface_create_for_bitmap@Base 1.6.4-5~
  cairo_xcb_surface_create_with_xrender_format@Base 1.6.4-5~
+ cairo_xcb_surface_set_drawable@Base 1.12.0
  cairo_xcb_surface_set_size@Base 1.6.4-5~
+ cairo_xlib_device_debug_cap_xrender_version@Base 1.12.0
+ cairo_xlib_device_debug_get_precision@Base 1.12.0
+ cairo_xlib_device_debug_set_precision@Base 1.12.0
  cairo_xlib_surface_create@Base 1.2.4
  cairo_xlib_surface_create_for_bitmap@Base 1.2.4
  cairo_xlib_surface_create_with_xrender_format@Base 1.2.4
