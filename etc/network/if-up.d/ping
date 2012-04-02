@@ -3,18 +3,28 @@
 server="http://ping.webconverger.org/"
 sleeping=5
 
-ping () {
+webcping () {
 	logger "Pinging $server"
 	wget -qO- --timeout=5 --post-data="M=$( 
 		mac_address | md5sum | awk '{print $1}'
 	)&V=${webc_version}" $server 
 }
 
-while true
+runonce=/var/run/webcping
+
+if test -f /var/lock/webcping
+then
+	logger webcping already running
+	exit 1
+fi
+
+while ! test -f $runonce
 do
-	if ping "$i"
+	touch /var/lock/webcping
+	if webcping
 	then
 		logger "Successful ping to $server"
+		date > $runonce
 		exit
 	fi
 
@@ -22,3 +32,4 @@ do
 	sleep $sleeping
 
 done &
+
