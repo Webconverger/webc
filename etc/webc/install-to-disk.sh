@@ -49,6 +49,7 @@ install_extlinux() {
 	test -e ${dir}/ldlinux.sys || _err "extlinux install failed"
 
 cat<<EOF >> ${dir}/linux.cfg
+
 label fail
 	linux /boot/vmlinuz-old 
 	append initrd=/boot/initrd.img-old quiet
@@ -56,12 +57,12 @@ EOF
 
 sed -i \
 	-e 's/^\(prompt\).*/\1 0/' \
-	-e 's/^\(timeout\).*/\1 5/' \
+	-e 's/^\(timeout\).*/\1 50/' \
 	-e 's/^\(display\).*//' \
 	${dir}/extlinux.conf 
 
 sed -i \
-	-e 's|\(append.*\)|\1 root='$disk' quiet silent |' \
+	-e 's|\(append.*\)|\1 boot=local |' \
 	${dir}/linux.cfg
 
 	( cd ${dir}/.. && ln -s . boot )
@@ -104,7 +105,6 @@ EOF
 EOF
 
 	cat<<EOF >> ${dir}/etc/network/interfaces
-auto eth0
 EOF
 
 }
