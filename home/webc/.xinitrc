@@ -5,10 +5,9 @@ WEBCHOME=/home/webc
 
 . "/etc/webc/webc.conf"
 logs xsession invoked
-
-cmdline_has debug || {
+exec &> /home/webc/.xerrors.debug
+cmdline_has debug && {
 	set -x
-	exec &> ~/.xerrors
 }
 
 homepage="$install_qa_url" # default homepage
