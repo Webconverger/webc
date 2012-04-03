@@ -10,17 +10,12 @@ webcping () {
 	)&V=${webc_version}" "$server"
 }
 
-runonce=/var/run/webcping
-mkdir /var/lock/webcping 2>/dev/null || exit 0
+lockdir=/var/run/webcping
+test -f "$lockdir" && exit 0
+touch "$lockdir"
 
-while ! test -f "$runonce"
+while ! webcping
 do
-	if webcping
-	then
-		logger "Successful ping to $server"
-		date > "$runonce"
-		exit 0
-	fi
 
 	logger "Failed to ping $server, sleeping $sleeping seconds"
 	sleep "$sleeping"
