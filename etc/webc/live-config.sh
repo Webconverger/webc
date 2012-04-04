@@ -16,6 +16,9 @@ sub_literal() {
   1'
 }
 
+# If printing support is installed, delete lines that prevent print dialog
+dpkg -s cups 2>/dev/null >/dev/null && sed -i '/print/d' /etc/iceweasel/pref/iceweasel.js
+
 fix_chrome()
 {
 link="/usr/lib/iceweasel/extensions/webconverger"
