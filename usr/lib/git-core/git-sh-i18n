@@ -1,8 +1,9 @@
-# This shell library is Git's interface to gettext.sh. See po/README
-# for usage instructions.
+#!/bin/sh
 #
 # Copyright (c) 2010 Ævar Arnfjörð Bjarmason
 #
+# This is Git's interface to gettext.sh. See po/README for usage
+# instructions.
 
 # Export the TEXTDOMAIN* data that we need for Git
 TEXTDOMAIN=git

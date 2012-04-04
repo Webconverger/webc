@@ -98,10 +98,9 @@ do_start() {
 	# and/or rpc.idmapd, and loads the right kernel modules if
 	# applicable) if we use Kerberos and/or NFSv4 mounts.
 	#
-	if [ "$start_nfs" = yes ] && [ -x /etc/init.d/nfs-common ]
+	if [ "$start_nfs" = yes ] && [ -x /etc/init.d/portmap ] && [ -x /etc/init.d/nfs-common ]
 	then
-		[ -x /etc/init.d/portmap ] && /etc/init.d/portmap start
-		[ -x /etc/init.d/rpcbind ] && /etc/init.d/rpcbind start
+		/etc/init.d/portmap start
 		/etc/init.d/nfs-common start
 	fi
 

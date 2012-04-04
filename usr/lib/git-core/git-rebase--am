@@ -1,5 +1,4 @@
-# This shell script fragment is sourced by git-rebase to implement
-# its default, fast, patch-based, non-interactive mode.
+#!/bin/sh
 #
 # Copyright (c) 2010 Junio C Hamano.
 #

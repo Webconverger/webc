@@ -37,10 +37,11 @@
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
-Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var ice = Services.appinfo.name.toLowerCase();
+var ice = Cc["@mozilla.org/xre/app-info;1"]
+          .getService(Ci.nsIXULAppInfo)
+          .QueryInterface(Ci.nsIXULRuntime).name.toLowerCase();
 
 function AboutIce() {}
 
@@ -52,7 +53,8 @@ AboutIce.prototype = {
 
   newChannel: function(uri)
   {
-    var channel = Services.io.newChannel("chrome://ice/content/ice.xhtml", null, null);
+    var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+    var channel = ioService.newChannel("chrome://ice/content/ice.xhtml", null, null);
     var securityManager = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager);
     var principal = securityManager.getCodebasePrincipal(uri);
     channel.originalURI = uri;
@@ -66,4 +68,7 @@ AboutIce.prototype = {
   }
 }
 
-var NSGetFactory = XPCOMUtils.generateNSGetFactory([AboutIce]);
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([AboutIce]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([AboutIce]);

@@ -27,7 +27,7 @@ BEGIN {
 	CGI->compile() if $ENV{'MOD_PERL'};
 }
 
-our $version = "1.7.9.5";
+our $version = "1.7.9.1";
 
 our ($my_url, $my_uri, $base_url, $path_info, $home_link);
 sub evaluate_uri {
@@ -52,7 +52,7 @@ sub evaluate_uri {
 	# as base URL.
 	# Therefore, if we needed to strip PATH_INFO, then we know that we have
 	# to build the base URL ourselves:
-	our $path_info = decode_utf8($ENV{"PATH_INFO"});
+	our $path_info = $ENV{"PATH_INFO"};
 	if ($path_info) {
 		if ($my_url =~ s,\Q$path_info\E$,, &&
 		    $my_uri =~ s,\Q$path_info\E$,, &&
@@ -816,9 +816,9 @@ sub evaluate_query_params {
 
 	while (my ($name, $symbol) = each %cgi_param_mapping) {
 		if ($symbol eq 'opt') {
-			$input_params{$name} = [ map { decode_utf8($_) } $cgi->param($symbol) ];
+			$input_params{$name} = [ $cgi->param($symbol) ];
 		} else {
-			$input_params{$name} = decode_utf8($cgi->param($symbol));
+			$input_params{$name} = $cgi->param($symbol);
 		}
 	}
 }
@@ -1073,16 +1073,7 @@ sub evaluate_and_validate_params {
 		if (length($searchtext) < 2) {
 			die_error(403, "At least two characters are required for search parameter");
 		}
-		if ($search_use_regexp) {
-			$search_regexp = $searchtext;
-			if (!eval { qr/$search_regexp/; 1; }) {
-				(my $error = $@) =~ s/ at \S+ line \d+.*\n?//;
-				die_error(400, "Invalid search regexp '$search_regexp'",
-				          esc_html($error));
-			}
-		} else {
-			$search_regexp = quotemeta $searchtext;
-		}
+		$search_regexp = $search_use_regexp ? $searchtext : quotemeta $searchtext;
 	}
 }
 
@@ -1132,10 +1123,8 @@ sub dispatch {
 	if (!defined $action) {
 		if (defined $hash) {
 			$action = git_get_type($hash);
-			$action or die_error(404, "Object does not exist");
 		} elsif (defined $hash_base && defined $file_name) {
 			$action = git_get_type("$hash_base:$file_name");
-			$action or die_error(404, "File or directory does not exist");
 		} elsif (defined $project) {
 			$action = 'summary';
 		} else {
@@ -2402,7 +2391,7 @@ sub get_feed_info {
 	return unless (defined $project);
 	# some views should link to OPML, or to generic project feed,
 	# or don't have specific feed yet (so they should use generic)
-	return if (!$action || $action =~ /^(?:tags|heads|forks|tag|search)$/x);
+	return if ($action =~ /^(?:tags|heads|forks|tag|search)$/x);
 
 	my $branch;
 	# branches refs uses 'refs/heads/' prefix (fullname) to differentiate
@@ -2776,7 +2765,7 @@ sub git_populate_project_tagcloud {
 	}
 
 	my $cloud;
-	my $matched = $input_params{'ctag'};
+	my $matched = $cgi->param('by_tag');
 	if (eval { require HTML::TagCloud; 1; }) {
 		$cloud = HTML::TagCloud->new;
 		foreach my $ctag (sort keys %ctags_lc) {
@@ -2980,10 +2969,10 @@ sub filter_forks_from_projects_list {
 sub search_projects_list {
 	my ($projlist, %opts) = @_;
 	my $tagfilter  = $opts{'tagfilter'};
-	my $search_re = $opts{'search_regexp'};
+	my $searchtext = $opts{'searchtext'};
 
 	return @$projlist
-		unless ($tagfilter || $search_re);
+		unless ($tagfilter || $searchtext);
 
 	my @projects;
  PROJECT:
@@ -2995,10 +2984,10 @@ sub search_projects_list {
 				grep { lc($_) eq lc($tagfilter) } keys %{$pr->{'ctags'}};
 		}
 
-		if ($search_re) {
+		if ($searchtext) {
 			next unless
-				$pr->{'path'} =~ /$search_re/ ||
-				$pr->{'descr_long'} =~ /$search_re/;
+				$pr->{'path'} =~ /$searchtext/ ||
+				$pr->{'descr_long'} =~ /$searchtext/;
 		}
 
 		push @projects, $pr;
@@ -3882,7 +3871,7 @@ sub print_search_form {
 	                       -values => ['commit', 'grep', 'author', 'committer', 'pickaxe']) .
 	      $cgi->sup($cgi->a({-href => href(action=>"search_help")}, "?")) .
 	      " search:\n",
-	      $cgi->textfield(-name => "s", -value => $searchtext, -override => 1) . "\n" .
+	      $cgi->textfield(-name => "s", -value => $searchtext) . "\n" .
 	      "<span title=\"Extended regular expression\">" .
 	      $cgi->checkbox(-name => 'sr', -value => 1, -label => 're',
 	                     -checked => $search_use_regexp) .
@@ -5291,9 +5280,9 @@ sub git_project_list_body {
 
 	my $check_forks = gitweb_check_feature('forks');
 	my $show_ctags  = gitweb_check_feature('ctags');
-	my $tagfilter = $show_ctags ? $input_params{'ctag'} : undef;
+	my $tagfilter = $show_ctags ? $cgi->param('by_tag') : undef;
 	$check_forks = undef
-		if ($tagfilter || $search_regexp);
+		if ($tagfilter || $searchtext);
 
 	# filtering out forks before filling info allows to do less work
 	@projects = filter_forks_from_projects_list(\@projects)
@@ -5301,9 +5290,9 @@ sub git_project_list_body {
 	@projects = fill_project_list_info(\@projects);
 	# searching projects require filling to be run before it
 	@projects = search_projects_list(\@projects,
-	                                 'search_regexp' => $search_regexp,
+	                                 'searchtext' => $searchtext,
 	                                 'tagfilter'  => $tagfilter)
-		if ($tagfilter || $search_regexp);
+		if ($tagfilter || $searchtext);
 
 	$order ||= $default_projects_order;
 	$from = 0 unless defined $from;
@@ -5579,7 +5568,7 @@ sub git_tags_body {
 
 sub git_heads_body {
 	# uses global variable $project
-	my ($headlist, $head_at, $from, $to, $extra) = @_;
+	my ($headlist, $head, $from, $to, $extra) = @_;
 	$from = 0 unless defined $from;
 	$to = $#{$headlist} if (!defined $to || $#{$headlist} < $to);
 
@@ -5588,7 +5577,7 @@ sub git_heads_body {
 	for (my $i = $from; $i <= $to; $i++) {
 		my $entry = $headlist->[$i];
 		my %ref = %$entry;
-		my $curr = defined $head_at && $ref{'id'} eq $head_at;
+		my $curr = $ref{'id'} eq $head;
 		if ($alternate) {
 			print "<tr class=\"dark\">\n";
 		} else {
@@ -5861,10 +5850,9 @@ sub git_search_files {
 	my $alternate = 1;
 	my $matches = 0;
 	my $lastfile = '';
-	my $file_href;
 	while (my $line = <$fd>) {
 		chomp $line;
-		my ($file, $lno, $ltext, $binary);
+		my ($file, $file_href, $lno, $ltext, $binary);
 		last if ($matches++ > 1000);
 		if ($line =~ /^Binary file (.+) matches$/) {
 			$file = $1;
@@ -6004,7 +5992,7 @@ sub git_project_list {
 	}
 	print $cgi->startform(-method => "get") .
 	      "<p class=\"projsearch\">Search:\n" .
-	      $cgi->textfield(-name => "s", -value => $searchtext, -override => 1) . "\n" .
+	      $cgi->textfield(-name => "s", -value => $searchtext) . "\n" .
 	      "</p>" .
 	      $cgi->end_form() . "\n";
 	git_project_list_body(\@list, $order);
@@ -6207,7 +6195,7 @@ sub git_tag {
 
 sub git_blame_common {
 	my $format = shift || 'porcelain';
-	if ($format eq 'porcelain' && $input_params{'javascript'}) {
+	if ($format eq 'porcelain' && $cgi->param('js')) {
 		$format = 'incremental';
 		$action = 'blame_incremental'; # for page title etc
 	}
