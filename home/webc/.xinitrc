@@ -9,20 +9,24 @@ exec &> /home/webc/.xerrors.debug
 cmdline_has debug && {
 	set -x
 }
+update_background() { xloadimage -quiet -onroot -center "$1"; }
 
 homepage="$install_qa_url" # default homepage
-cp /home/webc/bg.orig /home/webc/bg.png # default Webconverger branding
+cp /home/webc/bg.orig /home/webc/bg.png
+xsetroot -solid "#ffffff"
 
-xloadimage -quiet -onroot -center /home/webc/bg.png
 if ! has_network
 then
-	xloadimage -quiet -onroot -center /etc/webc/no-net.png
+	update_background /etc/webc/no-net.png
 	while ! has_network && ! cmdline_has debug; do
 		sleep 1
 	done
 fi
-live_config_update
 
+update_background /etc/webc/configuring.png
+! cmdline_has debug && live_config_update
+
+update_background /home/webc/bg.png
 
 wm="/usr/bin/dwm.web" # defaults
 xset s on
@@ -68,9 +72,6 @@ done
 # disable bell
 xset b 0 0
 
-# white background http://webconverger.org/artwork/
-xsetroot -solid "#ffffff"
-
 exec $wm &
 
 # hide the cursor by default, showcursor to override
@@ -94,17 +95,15 @@ do
 				wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
 				file /home/webc/bg.png.custom | grep -qs "image data" && {
 					cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+					update_background /home/webc/bg.png
 				}
 			;;
 
-			install)
-				homepage="$install_qa_url"
-				;;
+		install)
+			homepage="$install_qa_url"
+			;;
 		esac
 	done
-
-	# set the background http://webconverger.org/artwork/
-	xloadimage -quiet -onroot -center /home/webc/bg.png
 
 	mac=$( mac_address )
 
@@ -119,5 +118,5 @@ do
 	rm -rf /home/webc/.macromedia
 	rm -rf /home/webc/Downloads
 
-	live_config_update
+	! cmdline_has debug && live_config_update
 done

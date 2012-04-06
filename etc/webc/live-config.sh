@@ -78,11 +78,11 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 
 update_cmdline() {
 	SECONDS=0
-	while :
+	while true
 	do
-		wget -q -O /etc/webc/cmdline.tmp "$config_url" && break
+		wget --timeout=5 -t 1 -q -O /etc/webc/cmdline.tmp "$config_url" && break
 		test $? = 8 && break # 404
-		test $SECONDS -gt 30 && break
+		test $SECONDS -gt 10 && break
 		sleep 1
 	done
 	
