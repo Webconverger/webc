@@ -82,7 +82,7 @@ update_cmdline() {
 	do
 		wget --timeout=5 -t 1 -q -O /etc/webc/cmdline.tmp "$config_url" && break
 		test $? = 8 && break # 404
-		test $SECONDS -gt 10 && break
+		test $SECONDS -gt 15 && break
 		sleep 1
 	done
 	

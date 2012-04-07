@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e
 source "$(dirname $0)/webc.conf"
+export HOME=/root
 gpg_opts="--status-file /dev/null --logger-file /dev/null --attribute-file /dev/null --batch --no-tty -q"
 
 cmdline_has debug && set -x
@@ -13,10 +13,10 @@ signed ()
 
 	test -d $updates_cache_dir || mkdir -p $updates_cache_dir
 	( cd $updates_cache_dir && {
-		wget -q $url
+		wget -q "$url"
 		wget -q "${url}.asc"
 	} )
-	gpg $gpg_opts --verify "${file}.asc" $file && return 0
+	gpg $gpg_opts --verify "${file}.asc" "$file" && return 0
 	logs "gpg verify failed for ${file}"
 	rm -f ${file} "${file}.asc"
 	return 1
@@ -39,8 +39,16 @@ updates ()
 		logs "Update completed: $f"
 	done
 }
+update_keys() {
+	test -e /var/run/gpg-check && return
+	gpg --refresh-keys --keyserver hkp://keys.gnupg.net &>/dev/null && touch /var/run/gpg-check
+}
 
-while sleep $updates_interval; do
-	cmdline | grep -qs noupdates && continue
-	updates
+while has_network
+do
+	! cmdline | grep -qs noupdates && {
+		update_keys
+		updates
+	}
+	sleep $updates_interval
 done
