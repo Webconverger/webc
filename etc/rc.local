@@ -1,9 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 # 
 # save the webc id to disk
 #
 
-mac=`ip address show dev eth0 | awk '/ether/ { print $2 }'`
+_mac() {
+	ip route | egrep '^default' | sed -nr 's/.*dev (\S+).*/\1/p' | while read eth; do
+		ip address show dev $eth | sed -nr 's/.*ether (\S+).*/\1/p' 
+	done | sed 1q
+}
+
+mac=`_mac`		
 test "$mac" = "" && mac="unknown_mac"
 
 uuid=`cat /sys/devices/virtual/dmi/id/product_uuid`
