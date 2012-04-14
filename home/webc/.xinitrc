@@ -23,8 +23,12 @@ then
 	done
 fi
 
-source "/etc/webc/webc.conf"
 update_background /etc/webc/configuring.png
+while ! test -e /etc/webc/id; do
+	sleep 0.25
+	test $SECONDS -gt 30 && break
+done
+source "/etc/webc/webc.conf"
 ! cmdline_has debug && live_config_update
 
 update_background /home/webc/bg.png
@@ -84,6 +88,7 @@ trap "echo Unbreakable!" SIGINT SIGTERM
 # Stuff in here gets run at every browser restart:
 while true
 do
+	source "/etc/webc/webc.conf"
 	for x in $(cmdline); do
 		case $x in
 			homepage=*)
