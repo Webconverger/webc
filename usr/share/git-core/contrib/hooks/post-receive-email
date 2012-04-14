@@ -85,7 +85,6 @@ prep_for_email()
 	oldrev=$(git rev-parse $1)
 	newrev=$(git rev-parse $2)
 	refname="$3"
-	maxlines=$4
 
 	# --- Interpret
 	# 0000->1234 (create)
@@ -234,7 +233,9 @@ generate_email_header()
 	cat <<-EOF
 	To: $recipients
 	Subject: ${emailprefix}$projectdesc $refname_type $short_refname ${change_type}d. $describe
+	MIME-Version: 1.0
 	Content-Type: text/plain; charset=utf-8
+	Content-Transfer-Encoding: 8bit
 	X-Git-Refname: $refname
 	X-Git-Reftype: $refname_type
 	X-Git-Oldrev: $oldrev
@@ -462,8 +463,8 @@ generate_delete_branch_email()
 {
 	echo "       was  $oldrev"
 	echo ""
-	echo $LOGEND
-	git show -s --pretty=oneline $oldrev
+	echo $LOGBEGIN
+	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
 	echo $LOGEND
 }
 
@@ -539,11 +540,11 @@ generate_atag_email()
 		# performed on them
 		if [ -n "$prevtag" ]; then
 			# Show changes since the previous release
-			git rev-list --pretty=short "$prevtag..$newrev" | git shortlog
+			git shortlog --encoding=UTF-8 "$prevtag..$newrev"
 		else
 			# No previous tag, show all the changes since time
 			# began
-			git rev-list --pretty=short $newrev | git shortlog
+			git shortlog --encoding=UTF-8 "$newrev"
 		fi
 		;;
 	*)
@@ -562,8 +563,8 @@ generate_delete_atag_email()
 {
 	echo "       was  $oldrev"
 	echo ""
-	echo $LOGEND
-	git show -s --pretty=oneline $oldrev
+	echo $LOGBEGIN
+	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
 	echo $LOGEND
 }
 
@@ -609,7 +610,7 @@ generate_general_email()
 	echo ""
 	if [ "$newrev_type" = "commit" ]; then
 		echo $LOGBEGIN
-		git show --no-color --root -s --pretty=medium $newrev
+		git diff-tree --encoding=UTF-8 --root -s --pretty=oneline $newrev
 		echo $LOGEND
 	else
 		# What can we do here?  The tag marks an object that is not
@@ -627,8 +628,8 @@ generate_delete_general_email()
 {
 	echo "       was  $oldrev"
 	echo ""
-	echo $LOGEND
-	git show -s --pretty=oneline $oldrev
+	echo $LOGBEGIN
+	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
 	echo $LOGEND
 }
 

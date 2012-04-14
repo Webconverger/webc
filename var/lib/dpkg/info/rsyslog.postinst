@@ -14,50 +14,8 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-rotate_old_log_files()
-{
-	log_files="syslog mail.info mail.warn mail.err mail.log daemon.log \
-	           kern.log auth.log user.log lpr.log cron.log debug messages"
-	skipped_files=""
-	dir=/var/log
-
-	for f in $log_files; do
-		if [ -e $dir/$f.0 ]; then
-			rotate="yes"
-			if [ -e $dir/$f.1.gz ]; then
-				date0=$(stat --format=%Y $dir/$f.0)
-				date1=$(stat --format=%Y $dir/$f.1.gz)
-				if [ $date0 -lt $date1 ] ; then
-					# .0 log file is older than .1
-					skipped_files="$dir/$f.0\n$skipped_files"
-					rotate="no"
-				fi
-			fi
-			if [ "$rotate" = "yes" ] ; then
-				for s in $(seq 9 -1 1) ; do
-					if [ -e $dir/$f.$s.gz ]; then
-						mv $dir/$f.$s.gz $dir/$f.$(($s+1)).gz
-					fi
-				done
-				mv $dir/$f.0 $dir/$f.1
-			fi
-		fi
-	done
-	if [ -n "$skipped_files" ]; then
-		printf "The following old log files were found which could not be rotated safely.\n"
-		printf "\n$skipped_files\n"
-		printf "Please inspect them manually and delete them, if no longer required.\n"
-	fi
-}
-
-
 case "$1" in
     configure)
-	# Rotate .0 log files when migrating from sysklogd
-	if dpkg --compare-versions "$2" lt "3.18.5-1"; then
-		rotate_old_log_files
-	fi
-
 	# Update init script priorities
 	if dpkg --compare-versions "$2" lt "3.20.2-1"; then
 		for i in 0 6 ; do

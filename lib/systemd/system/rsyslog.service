@@ -1,0 +1,12 @@
+[Unit]
+Description=System Logging Service
+
+[Service]
+ExecStartPre=/bin/systemctl stop systemd-kmsg-syslogd.service
+ExecStart=/usr/sbin/rsyslogd -n -c5
+Sockets=syslog.socket
+StandardOutput=null
+
+[Install]
+WantedBy=multi-user.target
+Alias=syslog.service

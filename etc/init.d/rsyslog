@@ -23,7 +23,7 @@ NAME=rsyslog
 
 RSYSLOGD=rsyslogd
 RSYSLOGD_BIN=/usr/sbin/rsyslogd
-RSYSLOGD_OPTIONS="-c4"
+RSYSLOGD_OPTIONS="-c5"
 RSYSLOGD_PIDFILE=/var/run/rsyslogd.pid
 
 SCRIPTNAME=/etc/init.d/$NAME
@@ -52,29 +52,29 @@ do_start()
 
 do_stop()
 {
-	NAME="$RSYSLOGD"
+	DAEMON="$RSYSLOGD_BIN"
 	PIDFILE="$RSYSLOGD_PIDFILE"
 
 	# Return
 	#   0 if daemon has been stopped
 	#   1 if daemon was already stopped
 	#   other if daemon could not be stopped or a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --exec $DAEMON
 }
 
 #
-# Tell rsyslogd to reload its configuration
+# Tell rsyslogd to close all open files
 #
-do_reload() {
-	NAME="$RSYSLOGD"
+do_rotate() {
+	DAEMON="$RSYSLOGD_BIN"
 	PIDFILE="$RSYSLOGD_PIDFILE"
 
-	start-stop-daemon --stop --signal HUP --quiet --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --signal HUP --quiet --pidfile $PIDFILE --exec $DAEMON
 }
 
 create_xconsole() {
 	XCONSOLE=/dev/xconsole
-	if [ "$(uname -s)" = "GNU/kFreeBSD" ]; then
+	if [ "$(uname -s)" != "Linux" ]; then
 		XCONSOLE=/var/run/xconsole
 		ln -sf $XCONSOLE /dev/xconsole
 	fi
@@ -88,8 +88,7 @@ create_xconsole() {
 sendsigs_omit() {
 	OMITDIR=/lib/init/rw/sendsigs.omit.d
 	mkdir -p $OMITDIR
-	rm -f $OMITDIR/rsyslog
-	ln -s $RSYSLOGD_PIDFILE $OMITDIR/rsyslog
+	ln -sf $RSYSLOGD_PIDFILE $OMITDIR/rsyslog
 }
 
 case "$1" in
@@ -117,12 +116,12 @@ case "$1" in
 	esac
 
 	;;
-  reload|force-reload)
-	log_daemon_msg "Reloading $DESC" "$RSYSLOGD"
-	do_reload
+  rotate)
+	log_daemon_msg "Closing open files" "$RSYSLOGD"
+	do_rotate
 	log_end_msg $?
 	;;
-  restart)
+  restart|force-reload)
 	$0 stop
 	$0 start
 	;;
@@ -130,7 +129,7 @@ case "$1" in
 	status_of_proc -p $RSYSLOGD_PIDFILE $RSYSLOGD_BIN $RSYSLOGD && exit 0 || exit $?
 	;;
   *)
-	echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload|status}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|rotate|restart|force-reload|status}" >&2
 	exit 3
 	;;
 esac
