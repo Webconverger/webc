@@ -101,6 +101,7 @@ fix_chrome
 
 while true; do
 	cat $live_config_pipe | while read flag; do
+		source "/etc/webc/webc.conf"
 		update_cmdline
 		fix_chrome
 	done
