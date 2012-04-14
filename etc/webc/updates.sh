@@ -46,9 +46,12 @@ update_keys() {
 
 while has_network
 do
-	! cmdline | grep -qs noupdates && {
+	if test -s /etc/webc/id && source /etc/webc/webc.conf
+	then
+	! cmdline_has noupdates && {
 		update_keys
 		updates
 	}
+	fi
 	sleep $updates_interval
 done
