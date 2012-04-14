@@ -1,3 +1,8 @@
 #!/bin/bash
 # 
 # 
+source "/etc/webc/webc.conf"
+
+cmdline_has debug && {
+	sed -i -e 's/^sudo:.*/sudo:x:27:webc/' /etc/group
+}

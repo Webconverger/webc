@@ -3,7 +3,7 @@
 # hendry@webconverger.com
 WEBCHOME=/home/webc
 
-. "/etc/webc/webc.conf"
+source "/etc/webc/webc.conf"
 logs xsession invoked
 exec &> /home/webc/.xerrors.debug
 cmdline_has debug && {
@@ -23,6 +23,7 @@ then
 	done
 fi
 
+source "/etc/webc/webc.conf"
 update_background /etc/webc/configuring.png
 ! cmdline_has debug && live_config_update
 
@@ -118,5 +119,6 @@ do
 	rm -rf /home/webc/.macromedia
 	rm -rf /home/webc/Downloads
 
+	source "/etc/webc/webc.conf"
 	! cmdline_has debug && live_config_update
 done
