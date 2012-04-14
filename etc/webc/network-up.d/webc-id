@@ -14,10 +14,6 @@ test -e $flag && {
 }
 touch $flag
 
-while ! ip route | grep -qs default; do
-	sleep 0.25
-done
-
 _mac() {
 	ip route | egrep '^default' | sed -nr 's/.*dev (\S+).*/\1/p' | while read eth; do
 		ip address show dev $eth | sed -nr 's/.*ether (\S+).*/\1/p' 
