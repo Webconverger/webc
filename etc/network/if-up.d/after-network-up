@@ -1,5 +1,4 @@
 #!/bin/bash
-
 wait_until_network() {
 	while ! ip route | grep -qs default; do
 		sleep 0.25
@@ -7,5 +6,5 @@ wait_until_network() {
 }
 
 for i in /etc/webc/network-up.d/*; do
-	( wait_until_network && $i ) &
+	( wait_until_network && $i) &
 done

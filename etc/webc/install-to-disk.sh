@@ -125,7 +125,6 @@ mkswap /mnt/root/swap
 swapon /mnt/root/swap
 install_root /mnt/root
 install_files /mnt/root $partition
-user_setup /mnt/root
 install_extlinux /mnt/root/boot/extlinux $partition
 
 _logs "umount'ing partitions"
