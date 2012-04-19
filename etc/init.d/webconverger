@@ -15,10 +15,6 @@ DESC="Webconverger live environment"
 SCRIPTNAME=/etc/init.d/$NAME
 WEBCHOME=/home/webc
 
-# Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-. /etc/webc/webc.conf
-
 # Ensure volume is 100%
 amixer -s &>/dev/null <<END
 set Master 100% unmute
@@ -37,6 +33,7 @@ Section "ServerFlags"
 EndSection
 WCEND
 
+. /etc/webc/webc.conf
 for x in $(cmdline)
 do
 	case $x in
@@ -77,5 +74,3 @@ do
 	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
 	ifup $iface
 done
-
-:

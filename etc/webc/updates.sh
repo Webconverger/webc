@@ -1,5 +1,5 @@
 #!/bin/bash
-source "$(dirname $0)/webc.conf"
+source "/etc/webc/webc.conf"
 export HOME=/root
 gpg_opts="--status-file /dev/null --logger-file /dev/null --attribute-file /dev/null --batch --no-tty -q"
 
@@ -46,9 +46,12 @@ update_keys() {
 
 while has_network
 do
-	! cmdline | grep -qs noupdates && {
+	if test -s /etc/webc/id && source /etc/webc/webc.conf
+	then
+	! cmdline_has noupdates && {
 		update_keys
 		updates
 	}
+	fi
 	sleep $updates_interval
 done

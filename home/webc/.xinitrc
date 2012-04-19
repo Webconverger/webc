@@ -2,8 +2,8 @@
 # Keep the browser running and clean between sessions in /home/webc
 # hendry@webconverger.com
 WEBCHOME=/home/webc
-
 source "/etc/webc/webc.conf"
+
 logs xsession invoked
 exec &> /home/webc/.xerrors.debug
 cmdline_has debug && {
@@ -11,7 +11,6 @@ cmdline_has debug && {
 }
 update_background() { xloadimage -quiet -onroot -center "$1"; }
 
-homepage="$install_qa_url" # default homepage
 cp /home/webc/bg.orig /home/webc/bg.png
 xsetroot -solid "#ffffff"
 
@@ -29,7 +28,9 @@ while ! test -e /etc/webc/id; do
 	test $SECONDS -gt 30 && break
 done
 source "/etc/webc/webc.conf"
-! cmdline_has debug && live_config_update
+homepage="$install_qa_url" # default homepage
+
+live_config_update # expecting it to block here
 
 update_background /home/webc/bg.png
 
@@ -88,7 +89,6 @@ trap "echo Unbreakable!" SIGINT SIGTERM
 # Stuff in here gets run at every browser restart:
 while true
 do
-	source "/etc/webc/webc.conf"
 	for x in $(cmdline); do
 		case $x in
 			homepage=*)
@@ -124,6 +124,4 @@ do
 	rm -rf /home/webc/.macromedia
 	rm -rf /home/webc/Downloads
 
-	source "/etc/webc/webc.conf"
-	! cmdline_has debug && live_config_update
 done

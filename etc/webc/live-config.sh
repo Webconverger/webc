@@ -95,10 +95,6 @@ test -e $live_config_pipe && rm -f $live_config_pipe
 mknod $live_config_pipe p
 chmod 666 $live_config_pipe
 
-fix_chrome
-update_cmdline
-fix_chrome
-
 while true; do
 	cat $live_config_pipe | while read flag; do
 		source "/etc/webc/webc.conf"
