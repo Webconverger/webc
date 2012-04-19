@@ -1,11 +1,23 @@
 #!/bin/bash
+flag="/var/run/after-network-up"
+[[ -e $flag ]] && exit 0
+touch $flag
+_exit() {
+	rm -f $flag
+}
+trap _exit EXIT
 
 wait_until_network() {
 	while ! ip route | grep -qs default; do
 		sleep 0.25
 	done
+	return 0
 }
+
+source "/etc/webc/webc.conf"
 
 for i in /etc/webc/network-up.d/*; do
 	( wait_until_network && $i ) &
 done
+
+
