@@ -1,56 +1,86 @@
-#!/bin/sh
+#!/bin/bash
+# reset webc after $1 minutes idle
+#
 # BUGS:
 # * Dependent on Iceweasel
 # * Changes on a form / scroll position on the homepage, won't reset kiosk since we are only working from homepage title
 # Perhaps look into a layer utilising https://developer.mozilla.org/en/nsIIdleService
+source "/etc/webc/webc.conf"
+set -e
+_exit() {
+	echo "Error in ${BASH_SOURCE[1]} at line ${BASH_LINENO[0]}, exiting..."
+}
+trap _exit EXIT
 
-if test -z "$1"
-then
-	echo Please specify minutes. e.g. $0 5 \# reset kiosk in 5 minutes of inactivity on non-default page
-	exit
-fi
+idle_get_timeout() {
+	minutes="$1"
 
-kioskresetstation=$1
-test "$kioskresetstation" -lt 1 -o "$kioskresetstation" -gt 120 && exit
+	timeout=$( expr $minutes \* 60 )
+	logs "Killing after $timeout idle seconds"
+	echo $timeout
+}
 
-kioskresetseconds=$( expr $kioskresetstation \* 60 )
-logger "Killing after $kioskresetseconds idle seconds"
+idle_timeout_is_invalid() {
+	timeout=$1
+	test "$timeout" -lt 60 && return 0
+	test "$timeout" -gt $(( 60 * 120 )) && return 0
+	return 1
+}
 
-title ()
+idle_too_long() {
+	timeout="$1"
+	sleepfor=$( expr $timeout \- $( idleseconds ) )
+	if test "$sleepfor" -gt 0
+	then
+		logs "Sleeping for $sleepfor"
+		sleep $sleepfor
+		return 1
+	fi
+	return 0
+}
+
+page_title ()
 {
 	xwininfo -root -tree | grep Navigator | grep -v '"Iceweasel":' | awk -F\" '{print $2}'
 }
 
-# when we start up, get the default page
-default=""
-while test "$default" = ""
-do
-	default=$( title )
-done
+page_get_default() {
+	title=""
+	while [[ "$title" = "" ]];do
+		sleep 1
+		title=$(page_title)
+	done
+	logs "default = '$title'"
+	echo "$title"
+}
 
-while true
-do
+page_isnt() {
+	default="$1"
+	current="$( page_title )"
+	logs "page current '${current}' vs default '${1}'"
+	[[ "$current" != "$default" ]] && { 
+		logs "page current != default"
+		return 0
+	}
+	return 1
+}
 
-# if mouse moved, sleep and try again
-	idleseconds=$( /usr/bin/idleseconds )
-	sleepfor=$( expr $kioskresetseconds \- $idleseconds )
-	if test "$sleepfor" -gt 0
-	then
-		echo "Sleeping for $sleepfor"
-		sleep $sleepfor
-		continue
-	fi
-
-# if on default page, sleep and try again
-	current="$( title )"
-	if test "$current" = "$default"
-	then
-		sleep $kioskresetseconds
-		continue
-	fi
-
-	logger "Killing '$current' for '$default'"
-
+kill_X() {
+	logs "Killing X"
+	cmdline_has debug && sleep 5
 	pkill X
+}
+
+timeout=$( idle_get_timeout $1 )
+idle_timeout_is_invalid $timeout && exit
+default_page=$( page_get_default )
+while true; do
+	idle_too_long $timeout || continue
+	if page_isnt "$default_page"; then
+		kill_X
+	else
+		sleep $timeout
+	fi
 done
+	
 
