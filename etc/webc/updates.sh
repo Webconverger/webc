@@ -24,7 +24,7 @@ signed ()
 
 updates ()
 {
-	signed $updates_manifest
+	signed $updates_manifest &&
 	cat "${updates_cache_dir}/${updates_manifest}" | while read f ; do
 		file="${updates_cache_dir}/${f}"
 		test -e "${file}.done" && continue
