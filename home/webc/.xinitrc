@@ -30,7 +30,7 @@ done
 source "/etc/webc/webc.conf"
 homepage="$install_qa_url" # default homepage
 
-live_config_update # expecting it to block here
+cmdline_has noconfig || live_config_update # expecting it to block here
 
 update_background /home/webc/bg.png
 
