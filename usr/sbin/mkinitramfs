@@ -318,6 +318,18 @@ fi
 (cd "${DESTDIR}" && find . -type l -printf '%p %Y\n' | sed -n 's/ [LN]$//p' \
 	| xargs ${xargs_verbose:-} -rL1 rm -f)
 
+# dirty hack for armhf's double-linker situation; if we have one of
+# the two known eglibc linkers, nuke both and re-create sanity
+if [ "$DPKG_ARCH" = armhf ]; then
+	if [ -e "${DESTDIR}/lib/arm-linux-gnueabihf/ld-linux.so.3" ] || \
+	   [ -e "${DESTDIR}/lib/ld-linux-armhf.so.3" ]; then
+		rm -f "${DESTDIR}/lib/arm-linux-gnueabihf/ld-linux.so.3"
+		rm -f "${DESTDIR}/lib/ld-linux-armhf.so.3"
+		cp -aL /lib/ld-linux-armhf.so.3 "${DESTDIR}/lib/"
+		ln -sf /lib/ld-linux-armhf.so.3 "${DESTDIR}/lib/arm-linux-gnueabihf/ld-linux.so.3"
+	fi
+fi
+
 [ "${verbose}" = y ] && echo "Building cpio ${outfile} initramfs"
 (
 # work around lack of "set -o pipefail" for the following pipe:

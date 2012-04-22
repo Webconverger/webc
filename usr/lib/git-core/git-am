@@ -15,6 +15,7 @@ q,quiet         be quiet
 s,signoff       add a Signed-off-by line to the commit message
 u,utf8          recode into utf8 (default)
 k,keep          pass -k flag to git-mailinfo
+keep-non-patch  pass -b flag to git-mailinfo
 keep-cr         pass --keep-cr flag to git-mailsplit for mbox format
 no-keep-cr      do not pass --keep-cr flag to git-mailsplit independent of am.keepcr
 c,scissors      strip everything before a scissors line
@@ -379,7 +380,9 @@ do
 	-i|--interactive)
 		interactive=t ;;
 	-b|--binary)
-		: ;;
+		echo >&2 "The $1 option has been a no-op for long time, and"
+		echo >&2 "it will be removed. Please do not use it anymore."
+		;;
 	-3|--3way)
 		threeway=t ;;
 	-s|--signoff)
@@ -390,6 +393,8 @@ do
 		utf8= ;;
 	-k|--keep)
 		keep=t ;;
+	--keep-non-patch)
+		keep=b ;;
 	-c|--scissors)
 		scissors=t ;;
 	--no-scissors)
@@ -568,16 +573,25 @@ case "$resolved" in
 	fi
 esac
 
+# Now, decide what command line options we will give to the git
+# commands we invoke, based on the result of parsing command line
+# options and previous invocation state stored in $dotest/ files.
+
 if test "$(cat "$dotest/utf8")" = t
 then
 	utf8=-u
 else
 	utf8=-n
 fi
-if test "$(cat "$dotest/keep")" = t
-then
-	keep=-k
-fi
+keep=$(cat "$dotest/keep")
+case "$keep" in
+t)
+	keep=-k ;;
+b)
+	keep=-b ;;
+*)
+	keep= ;;
+esac
 case "$(cat "$dotest/scissors")" in
 t)
 	scissors=--scissors ;;

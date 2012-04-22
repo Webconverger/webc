@@ -56,6 +56,15 @@ for x in $( cmdline ); do
 		/etc/webc/iwcloseconfig.sh ${x#closeicon=}
 		;;
 
+	cron=*)
+		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"		
+		cat <<EOC > /etc/cron.d/live-config
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+$cron
+EOC
+		;;
+
 	homepage=*)
 		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
 		prefs="/etc/iceweasel/profile/prefs.js"
