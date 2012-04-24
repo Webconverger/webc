@@ -1,5 +1,5 @@
 #!/bin/bash
-. /etc/webc/webc.conf
+source /etc/webc/webc.conf
 
 cmdline_has debug && set -x
 
@@ -100,15 +100,16 @@ update_cmdline() {
 	touch /etc/webc/cmdline
 }
 
-test -e $live_config_pipe && rm -f $live_config_pipe
-mknod $live_config_pipe p
-chmod 666 $live_config_pipe
-
-while true; do
-	cat $live_config_pipe | while read flag; do
-		source "/etc/webc/webc.conf"
-		update_cmdline
-		fix_chrome
-	done
+until test -p $live_config_pipe # wait for xinitrc to trigger an update
+do
+    sleep 0.25 # wait for xinitrc to create pipe
 done
 
+source "/etc/webc/webc.conf"
+cmdline_has noconfig || update_cmdline
+fix_chrome
+
+echo ACK > $live_config_pipe
+
+# live-config should restart via inittab and get blocked 
+# until $live_config_pipe is re-created
