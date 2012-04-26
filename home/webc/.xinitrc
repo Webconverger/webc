@@ -38,7 +38,6 @@ mkfifo $live_config_pipe
 read answer < $live_config_pipe # blocking till live-config is finished
 rm -f $live_config_pipe
 
-# be good if this could be done in parallel somehow
 mkfifo $updates_pipe
 read answer < $updates_pipe # blocking till updates is finished
 rm -f $updates_pipe
