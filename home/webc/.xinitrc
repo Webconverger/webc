@@ -11,7 +11,7 @@ cmdline_has debug && {
 }
 update_background() { xloadimage -quiet -onroot -center "$1"; }
 
-cp /home/webc/bg.orig /home/webc/bg.png
+cp /home/webc/bg-orig.png /home/webc/bg.png
 xsetroot -solid "#ffffff"
 
 if ! has_network
