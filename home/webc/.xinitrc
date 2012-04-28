@@ -23,14 +23,24 @@ then
 fi
 
 update_background /etc/webc/configuring.png
+
+# if there is a network, then I don't see why /etc/webc/id should not be there
 while ! test -e /etc/webc/id; do
 	sleep 0.25
 	test $SECONDS -gt 30 && break
 done
+
+# get the $webc_id
 source "/etc/webc/webc.conf"
 homepage="$install_qa_url" # default homepage
 
-cmdline_has noconfig || live_config_update # expecting it to block here
+mkfifo $live_config_pipe
+read answer < $live_config_pipe # blocking till live-config is finished
+rm -f $live_config_pipe
+
+mkfifo $updates_pipe
+read answer < $updates_pipe # blocking till updates is finished
+rm -f $updates_pipe
 
 update_background /home/webc/bg.png
 

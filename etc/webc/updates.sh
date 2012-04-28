@@ -15,7 +15,8 @@ signed ()
 	( cd $updates_cache_dir && {
 		wget -q "$url"
 		wget -q "${url}.asc"
-	} )
+	} ) &&
+	update_keys # this can be slow, only run on successful download
 	gpg $gpg_opts --verify "${file}.asc" "$file" && return 0
 	logs "gpg verify failed for ${file}"
 	rm -f ${file} "${file}.asc"
@@ -44,14 +45,20 @@ update_keys() {
 	gpg --refresh-keys --keyserver hkp://keys.gnupg.net &>/dev/null && touch /var/run/gpg-check
 }
 
-while has_network
+until test -p $updates_pipe # wait for xinitrc to trigger an update
 do
-	if test -s /etc/webc/id && source /etc/webc/webc.conf
-	then
-	! cmdline_has noupdates && {
-		update_keys
-		updates
-	}
-	fi
-	sleep $updates_interval
+    sleep 0.25 # wait for xinitrc to create pipe
 done
+
+# ensure $updates_url has latest $webc_id
+source "/etc/webc/webc.conf"
+
+if cmdline_has updates
+then
+	updates
+fi
+
+echo ACK > $updates_pipe
+
+# updates should restart via inittab and get blocked 
+# until $updates_pipe is re-created
