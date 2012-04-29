@@ -21,7 +21,9 @@ set Master 100% unmute
 set Master Front 100% unmute
 END
 
-cat >> /etc/X11/xorg.conf <<WCEND
+source /etc/webc/webc.conf
+
+cmdline_has debug || cat >> /etc/X11/xorg.conf <<WCEND
 # Webconverger.com options to prevent break out of X
 
 Section "ServerFlags"
@@ -33,7 +35,6 @@ Section "ServerFlags"
 EndSection
 WCEND
 
-. /etc/webc/webc.conf
 for x in $(cmdline)
 do
 	case $x in
