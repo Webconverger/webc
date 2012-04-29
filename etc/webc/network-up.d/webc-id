@@ -19,10 +19,13 @@ _mac() {
 }
 
 mac=`_mac`		
-test "$mac" = "" && mac="unknown_mac"
+test "$mac" || mac="unknown_mac"
 
-uuid=`cat /sys/devices/virtual/dmi/id/product_uuid`
-test "$uuid" = "" && uuid="unknown_uuid"
+if test -e /sys/devices/virtual/dmi/id/product_uuid
+then
+	uuid=`cat /sys/devices/virtual/dmi/id/product_uuid`
+fi
+test "$uuid" || uuid="unknown_uuid"
 
 webc_id="${uuid};${mac}"
 echo "$webc_id" > /etc/webc/id
