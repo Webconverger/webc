@@ -41,9 +41,10 @@ verify_partition() {
 }	
 install_extlinux() {
 	local dir="$1"
-	local disk="$2"
+	local part="$2"
+	local disk="$3"
 	_logs "installing extlinux to ${dir}"
-
+	dd if=/usr/lib/extlinux/mbr.bin of="$disk" bs=440 count=1 
 	extlinux --install ${dir}
 	rm -f ${dir}/boot.txt
 	test -e ${dir}/ldlinux.sys || _err "extlinux install failed"
@@ -62,7 +63,7 @@ sed -i \
 	${dir}/extlinux.conf 
 
 sed -i \
-	-e 's|\(append.*\)|\1 boot=local root='$disk' |' \
+	-e 's|\(append.*\)|\1 boot=local root='$part' |' \
 	${dir}/linux.cfg
 
 	( cd ${dir}/.. && ln -s . boot )
@@ -125,7 +126,7 @@ mkswap /mnt/root/swap
 swapon /mnt/root/swap
 install_root /mnt/root
 install_files /mnt/root $partition
-install_extlinux /mnt/root/boot/extlinux $partition
+install_extlinux /mnt/root/boot/extlinux $partition $disk
 
 _logs "umount'ing partitions"
 umount /mnt/root
