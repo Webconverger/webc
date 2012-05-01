@@ -20,6 +20,7 @@ _err() {
 
 find_disk() {
 	_logs "finding disk"
+	local disk
 	for disk in /dev/hda /dev/sda; do
 		test -e $disk && { echo $disk ; return 0; }
 	done
@@ -39,15 +40,25 @@ verify_partition() {
 	/sbin/sfdisk -V -q $disk && return 0
 	# scream / abort?
 }	
+md5() { md5sum | awk '{ print $1 }'; }
+verify_extlinux_mbr() {
+	local disk="$1"
+	_logs "verifying mbr on ${disk}"
+	a=$( md5 < /usr/lib/extlinux/mbr.bin )
+	b=$( dd if=$disk bs=440 count=1 2>/dev/null | md5 )
+	test "$a" = "$b" && return 0
+	return 1
+}
 install_extlinux() {
 	local dir="$1"
 	local part="$2"
 	local disk="$3"
 	_logs "installing extlinux to ${dir}"
-	dd if=/usr/lib/extlinux/mbr.bin of="$disk" bs=440 count=1 
 	extlinux --install ${dir}
-	rm -f ${dir}/boot.txt
 	test -e ${dir}/ldlinux.sys || _err "extlinux install failed"
+	rm -f ${dir}/boot.txt
+	_logs "installing mbr to ${disk}"
+	dd if=/usr/lib/extlinux/mbr.bin of="$disk" 
 
 cat<<EOF >> ${dir}/linux.cfg
 
@@ -86,8 +97,8 @@ user_setup() {
 }
 
 install_files() {
-	dir="$1"
-	disk="$2"
+	local dir="$1"
+	local disk="$2"
 	sed -i 's/^root::\(.*\)/root:x:\1/' ${dir}/etc/passwd
 
 	sed -i \
@@ -127,6 +138,10 @@ swapon /mnt/root/swap
 install_root /mnt/root
 install_files /mnt/root $partition
 install_extlinux /mnt/root/boot/extlinux $partition $disk
+verify_extlinux_mbr $disk ||  {
+	_err "Extlinux MBR setup failed, starting a shell for user intervention"
+	/bin/bash
+}
 
 _logs "umount'ing partitions"
 umount /mnt/root
