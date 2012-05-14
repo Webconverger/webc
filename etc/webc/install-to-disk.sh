@@ -28,8 +28,10 @@ find_disk() {
 partition_disk() {
 	local disk="$1"
 	_logs "partitioning ${disk}"
-	/sbin/sfdisk $disk <<EOF
-,,L
+	cat<<EOF | sed -e "s#DISK#${disk}#" |/sbin/sfdisk $disk 
+unit: sectors
+
+DISK1 : start=     2048, Id=83, bootable
 EOF
 }
 verify_partition() {
