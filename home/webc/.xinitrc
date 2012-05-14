@@ -69,6 +69,7 @@ for x in $(cmdline); do
 		xrandr=*)
 			xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
 			if xrandr $xoptions; then logs "xrandr OK $xoptions"; else logs "xrandr ERR $xoptions"; fi
+			update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
 			;;
 
 		noblank)
