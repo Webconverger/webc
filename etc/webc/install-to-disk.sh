@@ -28,10 +28,8 @@ find_disk() {
 partition_disk() {
 	local disk="$1"
 	_logs "partitioning ${disk}"
-	cat<<EOF | sed -e "s#DISK#${disk}#" |/sbin/sfdisk $disk 
-unit: sectors
-
-DISK1 : start=     2048, Id=83, bootable
+	/sbin/sfdisk $disk <<EOF
+,,L,*
 EOF
 }
 verify_partition() {
@@ -45,7 +43,7 @@ verify_extlinux_mbr() {
 	local disk="$1"
 	_logs "verifying mbr on ${disk}"
 	a=$( md5 < /usr/lib/extlinux/mbr.bin )
-	b=$( dd if=$disk bs=440 count=1 2>/dev/null | md5 )
+	b=$( dd if=$disk bs=440c count=1 2>/dev/null | md5 )
 	test "$a" = "$b" && return 0
 	return 1
 }
@@ -54,11 +52,17 @@ install_extlinux() {
 	local part="$2"
 	local disk="$3"
 	_logs "installing extlinux to ${dir}"
-	extlinux --install ${dir}
-	test -e ${dir}/ldlinux.sys || _err "extlinux install failed"
-	rm -f ${dir}/boot.txt
+	for d in dev proc sys; do
+		mount --bind /$d /mnt/root/$d
+	done
 	_logs "installing mbr to ${disk}"
-	dd if=/usr/lib/extlinux/mbr.bin of="$disk" 
+	chroot /mnt/root extlinux-install $disk 
+	chroot /mnt/root extlinux --install /boot/extlinux
+	for d in dev proc sys; do
+		umount /mnt/root/$d
+	done
+	test -e ${dir}/ldlinux.sys || _err " no ${dir}/ldlinux.sys?"
+	rm -f ${dir}/boot.txt
 
 cat<<EOF >> ${dir}/linux.cfg
 
@@ -68,7 +72,7 @@ label fail
 EOF
 
 sed -i \
-	-e 's/^\(prompt\).*/\1 1/' \
+	-e 's/^\(prompt\).*/\1 0/' \
 	-e 's/^\(timeout\).*/\1 50/' \
 	-e 's/^\(display\).*//' \
 	${dir}/extlinux.conf 
@@ -144,6 +148,7 @@ verify_extlinux_mbr $disk ||  {
 }
 
 _logs "umount'ing partitions"
+cd /
 umount /mnt/root
 _logs "install complete"
 if cmdline_has debug; then
