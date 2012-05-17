@@ -1,6 +1,13 @@
 #!/bin/bash
 . "/etc/webc/webc.conf"
 exec &> /root/install.log
+set -e
+
+failed_install() {
+	echo -e "\n\n\n\tFAILED INSTALL\n\n" > /dev/console
+	exec sleep 86400
+}
+trap failed_install ERR
 
 clear_screen() {
 	for i in `seq 200`; do
@@ -35,8 +42,8 @@ EOF
 verify_partition() {
 	local disk="$1"
 	_logs "verifying partitions on ${disk}"
-	/sbin/sfdisk -V -q $disk && return 0
-	# scream / abort?
+	test -e ${disk}1
+	# /sbin/sfdisk -V -q $disk  # never times out when 0 partitions exist
 }	
 md5() { md5sum | awk '{ print $1 }'; }
 verify_extlinux_mbr() {
@@ -142,13 +149,10 @@ swapon /mnt/root/swap
 install_root /mnt/root
 install_files /mnt/root $partition
 install_extlinux /mnt/root/boot/extlinux $partition $disk
-verify_extlinux_mbr $disk ||  {
-	_err "Extlinux MBR setup failed, starting a shell for user intervention"
-	/bin/bash
-}
+verify_extlinux_mbr $disk
 
 _logs "umount'ing partitions"
-cd /
+swapoff /mnt/root/swap
 umount /mnt/root
 _logs "install complete"
 if cmdline_has debug; then
