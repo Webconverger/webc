@@ -126,13 +126,16 @@ do
 
 	if test -x /usr/bin/iceweasel
 	then
-		rm -rf /home/webc/.mozilla/
+		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc; do
+			test -d $d && rm -rf $d
+			test -e $d && rm -f $d
+		done
+		mkdir /tmp/webc
+		for d in .mozilla .adobe .macromedia Downloads; do
+			mkdir /tmp/webc/$d
+			ln -s /tmp/webc/$d /home/webc/$d
+		done
 		iceweasel $(echo $homepage | sed "s,MACID,$mac,g")
-		rm -rf /home/webc/.mozilla/
 	fi
-
-	rm -rf /home/webc/.adobe
-	rm -rf /home/webc/.macromedia
-	rm -rf /home/webc/Downloads
 
 done
