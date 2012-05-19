@@ -124,7 +124,7 @@ EOF
 
 
 	cat<<EOF > ${dir}/etc/hosts
-127.0.0.1	localhost localhost.localdomain
+127.0.0.1	localhost localhost.localdomain webconverger
 EOF
 
 	cat<<EOF >> ${dir}/etc/network/interfaces
