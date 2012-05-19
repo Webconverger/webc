@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source /etc/webc/webc.conf
+
+Configure_tzdata ()
+{
+	timezone=$( cmdline_get timezone )
+	if [ -n "${timezone}" ]
+	then
+		_AREA="$(echo ${timezone} | cut -f1 -d '/')"
+		_ZONE="$(echo ${timezone} | cut -f2 -d '/')"
+	else
+		_AREA="Etc"
+		_ZONE="UTC"
+	fi
+
+	cp -f /usr/share/zoneinfo/${_AREA}/${_ZONE} /etc/localtime
+}
+
+Configure_tzdata
