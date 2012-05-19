@@ -3,11 +3,14 @@
 server="http://ping.webconverger.org/"
 sleeping=5
 
+device=$( df 2>/dev/null | grep /live/image | awk '{ print $1 }' )
+test "$device" = "" && device="hd-install"
+
 webcping () {
 	logger "Pinging $server"
 	wget -qO- --timeout=5 --post-data="M=$( 
 		mac_address | md5sum | awk '{print $1}'
-	)&V=${webc_version}" "$server"
+	)&V=${webc_version}&D=${device}" "$server"
 }
 
 lockdir=/var/run/webcping
