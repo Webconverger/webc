@@ -9,4 +9,4 @@ cmdline_has debug && {
 	sed -i -e 's#^root:.*#root::0:0:root:/root:/bin/bash#' /etc/passwd
 }
 
-mount -o remount,noexec /tmp
+mount -o remount,noexec /tmp || mount -t tmpfs -o noexec,nosuid,nodev,rw none /tmp
