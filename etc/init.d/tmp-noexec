@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mount -o remount,noexec /tmp &>/dev/null && exit 0
+
+test -e /tmp.img || {
+	dd if=/dev/zero of=/tmp.img seek=256M count=0 bs=1
+	mke2fs -F /tmp.img
+}
+
+modprobe loop
+
+mount -t ext2 -o loop,noexec,noatime /tmp.img /tmp
