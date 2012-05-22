@@ -1,6 +1,6 @@
 nvidia-installer log file '/var/log/nvidia-installer.log'
-creation time: Sun May 13 11:59:51 2012
-installer version: 295.40
+creation time: Tue May 22 13:13:26 2012
+installer version: 295.53
 
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -33,11 +33,12 @@ Using: nvidia-installer ncurses user interface
 -> found `rmmod` : `/sbin/rmmod`
 -> found `lsmod` : `/sbin/lsmod`
 -> found `depmod` : `/sbin/depmod`
--> The file '/tmp/.X0-lock' exists and appears to contain the process ID '2479' of a runnning X server.
+-> The file '/tmp/.X0-lock' exists and appears to contain the process ID '2872' of a runnning X server.
 -> Continuing per the '--no-x-check' option.
 -> Not installing a kernel module; skipping the "is an NVIDIA kernel module loaded?" test.
 -> License accepted by command line option.
--> Installing NVIDIA driver version 295.40.
+-> Installing NVIDIA driver version 295.53.
+-> There appears to already be a driver installed on your system (version: 295.40).  As part of installing this driver (version: 295.53), the existing driver will be uninstalled.  Are you sure you want to continue? ('no' will abort installation) (Answer: Yes)
 -> No distribution pre-install script found.
 WARNING: You specified the '--no-kernel-module' command line option, nvidia-installer will not install a kernel module as part of this driver installation, and it will not remove existing NVIDIA kernel modules not part of an earlier NVIDIA driver installation.  Please ensure that an NVIDIA kernel module matching this driver version is installed seperately.
 -> X installation prefix (only under rare circumstances should this be changed from the default) (Answer: '/usr')
@@ -57,30 +58,72 @@ WARNING: You specified the '--no-kernel-module' command line option, nvidia-inst
 -> Install NVIDIA's OpenGL header files? (Answer: No)
 -> Installation will not install the OpenGL header files.
 -> Installing both new and classic TLS OpenGL libraries.
+ERROR: The directory permissions of /var/lib/nvidia have been changed sincethe directory was created!
+ERROR: Uninstallation failed.
 -> Searching for conflicting X files:
 -> done.
 -> Searching for conflicting OpenGL files:
 -> done.
 -> Not creating a symlink from /usr/lib/xorg/modules/libwfb.so to libnvidia-wfb.so.1 because a file already exists at that path or the path is inaccessible.
--> Installing 'NVIDIA Accelerated Graphics Driver for Linux-x86' (295.40):
+-> Installing 'NVIDIA Accelerated Graphics Driver for Linux-x86' (295.53):
+-> Backing up: /usr/lib/libGL.la
+-> Backing up: /usr/lib/libGL.so
 -> Backing up: /usr/lib/libGL.so.1
 -> Backing up: /usr/lib/libGL.so.1.2
+-> Backing up: /usr/lib/libGL.so.295.40
+-> Backing up: /usr/lib/libnvidia-glcore.so.295.40
 -> Backing up: /usr/lib/xorg/modules/extensions/libglx.so
--> Installing: libnvidia-glcore.so.295.40 --> /usr/lib/libnvidia-glcore.so.295.40
--> Installing: libGL.so.295.40 --> /usr/lib/libGL.so.295.40
--> Installing: libglx.so.295.40 --> /usr/lib/xorg/modules/extensions/libglx.so.295.40
--> Installing: libnvidia-tls.so.295.40 --> /usr/lib/libnvidia-tls.so.295.40
--> Installing: tls/libnvidia-tls.so.295.40 --> /usr/lib/tls/libnvidia-tls.so.295.40
+-> Backing up: /usr/lib/xorg/modules/extensions/libglx.so.295.40
+-> Backing up: /usr/lib/libXvMCNVIDIA.a
+-> Backing up: /usr/lib/libXvMCNVIDIA.so.295.40
+-> Backing up: /usr/lib/libXvMCNVIDIA_dynamic.so
+-> Backing up: /usr/lib/libXvMCNVIDIA_dynamic.so.1
+-> Backing up: /usr/lib/libcuda.so
+-> Backing up: /usr/lib/libcuda.so.1
+-> Backing up: /usr/lib/libcuda.so.295.40
+-> Backing up: /usr/lib/libnvcuvid.so
+-> Backing up: /usr/lib/libnvcuvid.so.1
+-> Backing up: /usr/lib/libnvcuvid.so.295.40
+-> Backing up: /usr/lib/libnvidia-cfg.so
+-> Backing up: /usr/lib/libnvidia-cfg.so.1
+-> Backing up: /usr/lib/libnvidia-cfg.so.295.40
+-> Backing up: /usr/lib/libnvidia-compiler.so.295.40
+-> Backing up: /usr/lib/libnvidia-ml.so
+-> Backing up: /usr/lib/libnvidia-ml.so.1
+-> Backing up: /usr/lib/libnvidia-ml.so.295.40
+-> Backing up: /usr/lib/libvdpau.so
+-> Backing up: /usr/lib/libvdpau.so.1
+-> Backing up: /usr/lib/libvdpau.so.295.40
+-> Backing up: /usr/lib/libvdpau_nvidia.so
+-> Backing up: /usr/lib/libvdpau_trace.so
+-> Backing up: /usr/lib/vdpau/libvdpau_nvidia.so.1
+-> Backing up: /usr/lib/vdpau/libvdpau_nvidia.so.295.40
+-> Backing up: /usr/lib/vdpau/libvdpau_trace.so.1
+-> Backing up: /usr/lib/vdpau/libvdpau_trace.so.295.40
+-> Backing up: /usr/lib/xorg/modules/drivers/nvidia_drv.so
+-> Backing up: /usr/lib/libnvidia-tls.so.295.40
+-> Backing up: /usr/lib/tls/libnvidia-tls.so.295.40
+-> Backing up: /usr/lib/xorg/modules/libnvidia-wfb.so.1
+-> Backing up: /usr/bin/nvidia-xconfig
+-> Backing up: /usr/lib/libOpenCL.so.1.0.0
+-> Backing up: /usr/lib/libOpenCL.so.1.0
+-> Backing up: /usr/lib/libOpenCL.so.1
+-> Backing up: /usr/lib/libOpenCL.so
+-> Installing: libnvidia-glcore.so.295.53 --> /usr/lib/libnvidia-glcore.so.295.53
+-> Installing: libGL.so.295.53 --> /usr/lib/libGL.so.295.53
+-> Installing: libglx.so.295.53 --> /usr/lib/xorg/modules/extensions/libglx.so.295.53
+-> Installing: libnvidia-tls.so.295.53 --> /usr/lib/libnvidia-tls.so.295.53
+-> Installing: tls/libnvidia-tls.so.295.53 --> /usr/lib/tls/libnvidia-tls.so.295.53
 -> Installing: nvidia_drv.so --> /usr/lib/xorg/modules/drivers/nvidia_drv.so
--> Installing: libnvidia-wfb.so.295.40 --> /usr/lib/xorg/modules/libnvidia-wfb.so.295.40
+-> Installing: libnvidia-wfb.so.295.53 --> /usr/lib/xorg/modules/libnvidia-wfb.so.295.53
 -> Installing: libXvMCNVIDIA.a --> /usr/lib/libXvMCNVIDIA.a
--> Installing: libXvMCNVIDIA.so.295.40 --> /usr/lib/libXvMCNVIDIA.so.295.40
+-> Installing: libXvMCNVIDIA.so.295.53 --> /usr/lib/libXvMCNVIDIA.so.295.53
 -> Installing: NVIDIA_Changelog --> /usr/share/doc/NVIDIA_GLX-1.0/NVIDIA_Changelog
 -> Installing: nvidia-settings.png --> /usr/share/doc/NVIDIA_GLX-1.0/nvidia-settings.png
 -> Installing: LICENSE --> /usr/share/doc/NVIDIA_GLX-1.0/LICENSE
 -> Installing: nvidia-smi --> /usr/bin/nvidia-smi
 -> Installing: nvidia-smi.1.gz --> /usr/share/man/man1/nvidia-smi.1.gz
--> Installing: libnvidia-ml.so.295.40 --> /usr/lib/libnvidia-ml.so.295.40
+-> Installing: libnvidia-ml.so.295.53 --> /usr/lib/libnvidia-ml.so.295.53
 -> Installing: nvidia-debugdump --> /usr/bin/nvidia-debugdump
 -> Installing: nvidia-xconfig --> /usr/bin/nvidia-xconfig
 -> Installing: nvidia-xconfig.1.gz --> /usr/share/man/man1/nvidia-xconfig.1.gz
@@ -89,16 +132,16 @@ WARNING: You specified the '--no-kernel-module' command line option, nvidia-inst
 -> Installing: nvidia-bug-report.sh --> /usr/bin/nvidia-bug-report.sh
 -> Installing: nvidia-installer.1.gz --> /usr/share/man/man1/nvidia-installer.1.gz
 -> Installing: nvidia-installer --> /usr/bin/nvidia-installer
--> Installing: libnvidia-cfg.so.295.40 --> /usr/lib/libnvidia-cfg.so.295.40
+-> Installing: libnvidia-cfg.so.295.53 --> /usr/lib/libnvidia-cfg.so.295.53
 -> Installing: README.txt --> /usr/share/doc/NVIDIA_GLX-1.0/README.txt
--> Installing: libcuda.so.295.40 --> /usr/lib/libcuda.so.295.40
+-> Installing: libcuda.so.295.53 --> /usr/lib/libcuda.so.295.53
 -> Installing: libOpenCL.so.1.0.0 --> /usr/lib/libOpenCL.so.1.0.0
 -> Installing: nvidia.icd --> /etc/OpenCL/vendors/nvidia.icd
--> Installing: libnvidia-compiler.so.295.40 --> /usr/lib/libnvidia-compiler.so.295.40
--> Installing: libvdpau.so.295.40 --> /usr/lib/libvdpau.so.295.40
--> Installing: libvdpau_trace.so.295.40 --> /usr/lib/vdpau/libvdpau_trace.so.295.40
--> Installing: libvdpau_nvidia.so.295.40 --> /usr/lib/vdpau/libvdpau_nvidia.so.295.40
--> Installing: libnvcuvid.so.295.40 --> /usr/lib/libnvcuvid.so.295.40
+-> Installing: libnvidia-compiler.so.295.53 --> /usr/lib/libnvidia-compiler.so.295.53
+-> Installing: libvdpau.so.295.53 --> /usr/lib/libvdpau.so.295.53
+-> Installing: libvdpau_trace.so.295.53 --> /usr/lib/vdpau/libvdpau_trace.so.295.53
+-> Installing: libvdpau_nvidia.so.295.53 --> /usr/lib/vdpau/libvdpau_nvidia.so.295.53
+-> Installing: libnvcuvid.so.295.53 --> /usr/lib/libnvcuvid.so.295.53
 -> Installing: html/acknowledgements.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/acknowledgements.html
 -> Installing: html/addtlresources.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/addtlresources.html
 -> Installing: html/appendices.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/appendices.html
@@ -146,36 +189,40 @@ WARNING: You specified the '--no-kernel-module' command line option, nvidia-inst
 -> Installing: html/xineramaglx.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/xineramaglx.html
 -> Installing: html/xrandrextension.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/xrandrextension.html
 -> Installing: html/xvmcsupport.html --> /usr/share/doc/NVIDIA_GLX-1.0/html/xvmcsupport.html
--> Installing: /tmp/template-k6zx1D --> /usr/lib/libGL.la
--> Deleting: /tmp/template-k6zx1D
--> Installing: /tmp/template-b2XFZl --> /usr/share/applications/nvidia-settings.desktop
--> Deleting: /tmp/template-b2XFZl
--> Creating symlink: /usr/lib/libGL.so.1 -> libGL.so.295.40
+-> Installing: /tmp/template-hZ8unJ --> /usr/lib/libGL.la
+-> Deleting: /tmp/template-hZ8unJ
+-> Installing: /tmp/template-a7ceKT --> /usr/share/applications/nvidia-settings.desktop
+-> Deleting: /tmp/template-a7ceKT
+-> Creating symlink: /usr/lib/libGL.so.1 -> libGL.so.295.53
 -> Creating symlink: /usr/lib/libGL.so -> libGL.so.1
--> Creating symlink: /usr/lib/xorg/modules/extensions/libglx.so -> libglx.so.295.40
--> Creating symlink: /usr/lib/xorg/modules/libnvidia-wfb.so.1 -> libnvidia-wfb.so.295.40
--> Creating symlink: /usr/lib/libXvMCNVIDIA_dynamic.so.1 -> libXvMCNVIDIA.so.295.40
+-> Creating symlink: /usr/lib/xorg/modules/extensions/libglx.so -> libglx.so.295.53
+-> Creating symlink: /usr/lib/xorg/modules/libnvidia-wfb.so.1 -> libnvidia-wfb.so.295.53
+-> Creating symlink: /usr/lib/libXvMCNVIDIA_dynamic.so.1 -> libXvMCNVIDIA.so.295.53
 -> Creating symlink: /usr/lib/libXvMCNVIDIA_dynamic.so -> libXvMCNVIDIA_dynamic.so.1
--> Creating symlink: /usr/lib/libnvidia-ml.so.1 -> libnvidia-ml.so.295.40
+-> Creating symlink: /usr/lib/libnvidia-ml.so.1 -> libnvidia-ml.so.295.53
 -> Creating symlink: /usr/lib/libnvidia-ml.so -> libnvidia-ml.so.1
 -> Creating symlink: /usr/bin/nvidia-uninstall -> nvidia-installer
--> Creating symlink: /usr/lib/libnvidia-cfg.so.1 -> libnvidia-cfg.so.295.40
+-> Creating symlink: /usr/lib/libnvidia-cfg.so.1 -> libnvidia-cfg.so.295.53
 -> Creating symlink: /usr/lib/libnvidia-cfg.so -> libnvidia-cfg.so.1
--> Creating symlink: /usr/lib/libcuda.so.1 -> libcuda.so.295.40
+-> Creating symlink: /usr/lib/libcuda.so.1 -> libcuda.so.295.53
 -> Creating symlink: /usr/lib/libcuda.so -> libcuda.so.1
 -> Creating symlink: /usr/lib/libOpenCL.so.1.0 -> libOpenCL.so.1.0.0
 -> Creating symlink: /usr/lib/libOpenCL.so.1 -> libOpenCL.so.1.0
 -> Creating symlink: /usr/lib/libOpenCL.so -> libOpenCL.so.1
--> Creating symlink: /usr/lib/libvdpau.so.1 -> libvdpau.so.295.40
+-> Creating symlink: /usr/lib/libvdpau.so.1 -> libvdpau.so.295.53
 -> Creating symlink: /usr/lib/libvdpau.so -> libvdpau.so.1
--> Creating symlink: /usr/lib/vdpau/libvdpau_trace.so.1 -> libvdpau_trace.so.295.40
--> Creating symlink: /usr/lib/libvdpau_trace.so -> vdpau/libvdpau_trace.so.295.40
--> Creating symlink: /usr/lib/vdpau/libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.295.40
--> Creating symlink: /usr/lib/libvdpau_nvidia.so -> vdpau/libvdpau_nvidia.so.295.40
--> Creating symlink: /usr/lib/libnvcuvid.so.1 -> libnvcuvid.so.295.40
+-> Creating symlink: /usr/lib/vdpau/libvdpau_trace.so.1 -> libvdpau_trace.so.295.53
+-> Creating symlink: /usr/lib/libvdpau_trace.so -> vdpau/libvdpau_trace.so.295.53
+-> Creating symlink: /usr/lib/vdpau/libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.295.53
+-> Creating symlink: /usr/lib/libvdpau_nvidia.so -> vdpau/libvdpau_nvidia.so.295.53
+-> Creating symlink: /usr/lib/libnvcuvid.so.1 -> libnvcuvid.so.295.53
 -> Creating symlink: /usr/lib/libnvcuvid.so -> libnvcuvid.so.1
 -> Executing: /sbin/ldconfig
    executing: '/sbin/ldconfig'...
+   /sbin/ldconfig: /usr/lib/libopcodes-2.20.1-system.20100303.so is not a symbolic link
+   
+   /sbin/ldconfig: /usr/lib/libbfd-2.20.1-system.20100303.so is not a symbolic link
+   
 -> Executing: /sbin/depmod -aq
    executing: '/sbin/depmod -aq'...
 -> done.
@@ -188,5 +235,5 @@ WARNING: You specified the '--no-kernel-module' command line option, nvidia-inst
 -> Running runtime sanity check:
 -> done.
 -> Runtime sanity check passed.
--> Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that the NVIDIA X driver will be used when you restart X?  Any pre-existing X configuration file will be backed up. (Answer: Yes)
--> Your X configuration file has been successfully updated.  Installation of the NVIDIA Accelerated Graphics Driver for Linux-x86 (version: 295.40) is now complete.
+-> Would you like to run the nvidia-xconfig utility to automatically update your X configuration file so that the NVIDIA X driver will be used when you restart X?  Any pre-existing X configuration file will be backed up. (Answer: No)
+-> Installation of the NVIDIA Accelerated Graphics Driver for Linux-x86 (version: 295.53) is now complete.  Please update your XF86Config or xorg.conf file as appropriate; see the file /usr/share/doc/NVIDIA_GLX-1.0/README.txt for details.
