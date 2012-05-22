@@ -10,3 +10,8 @@ test -e /tmp.img || {
 modprobe loop
 
 mount -t ext2 -o loop,noexec,noatime /tmp.img /tmp
+chmod 1777 /tmp
+u="/tmp/.X11-unix"
+test -d $u || mkdir $u
+chown root:root $u
+chmod 1777 $u
