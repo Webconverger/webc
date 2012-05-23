@@ -1,5 +1,8 @@
 #!/bin/bash
 
+test -d /tmp || mkdir /tmp
+chmod 1777 /tmp
+
 mount -o remount,noexec /tmp &>/dev/null && exit 0
 
 test -e /tmp.img || {
