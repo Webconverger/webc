@@ -2,6 +2,11 @@
 
 source /etc/webc/webc.conf
 
+while ! test -e /etc/webc/cmdline; do
+	sleep 1
+	test $SECONDS -gt 60 && exit 1
+done
+
 cmdline_has dns || exit 0
 
 cat /etc/resolv.conf | sed '/nameserver/d' > /etc/resolv.conf.tmp
