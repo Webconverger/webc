@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source /etc/webc/webc.conf
-
 while ! test -e /etc/webc/cmdline; do
 	sleep 1
 	test $SECONDS -gt 60 && exit 1
@@ -10,11 +9,15 @@ done
 cmdline_has dns || exit 0
 
 cat /etc/resolv.conf | sed '/nameserver/d' > /etc/resolv.conf.tmp
-cmdline_get dns | sed -e 's/,/ /' -e 's/"//' | fmt 1 | while read s; do
-	echo "nameserver ${s}" >> /etc/resolv.conf.tmp
-done
+
+for i in $(cmdline_get dns)
+do
+	IFS=,; for dns in $i
+	do
+		echo nameserver $dns
+	done
+done > /etc/resolv.conf.tmp
 
 mv -f /etc/resolv.conf /etc/resolv.conf.old
 mv -f /etc/resolv.conf.tmp /etc/resolv.conf
 chmod 644 /etc/resolv.conf
-		
