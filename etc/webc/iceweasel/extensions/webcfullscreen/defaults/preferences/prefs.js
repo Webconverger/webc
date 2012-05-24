@@ -22,6 +22,8 @@ pref("browser.urlbar.hideGoButton", true);
 pref("network.cookie.prefsMigrated", true);
 pref("pref.advanced.javascript.disable_button.advanced", false);
 pref("pref.privacy.disable_button.view_cookies", false);
+pref("security.warn_viewing_mixed", false);
+pref("security.warn_viewing_mixed.show_once", false);
 pref("security.warn_entering_secure", false);
 pref("security.warn_leaving_secure", false);
 pref("security.warn_submit_insecure", false);
