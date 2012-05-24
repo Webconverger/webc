@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for i in /sys/class/net/eth*; do
+	 /sbin/ethtool -s $(basename $i) wol g
+done
