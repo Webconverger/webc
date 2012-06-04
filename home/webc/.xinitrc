@@ -50,6 +50,11 @@ xset s blank
 xset s 600
 xset +dpms
 
+# rotate right
+xrandr | awk '/connected/ { print $1 }' | while read output; do
+       xrandr --output $output --rotate right
+done
+
 for x in $(cmdline); do
 	case $x in
 
