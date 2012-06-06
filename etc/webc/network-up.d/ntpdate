@@ -2,6 +2,10 @@
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 . /etc/webc/webc.conf
 
+if cmdline_has timezone; then
+	cmdline_get timezone > /etc/timezone
+fi
+
 # This is a heuristic:  The idea is that if a static interface is brought
 # up, that is a major event, and we can put in some extra effort to fix
 # the system time.  Feel free to change this, especially if you regularly
@@ -20,7 +24,6 @@ if [ ! -x /usr/sbin/ntpdate-debian ] && [ -d /usr/sbin ]; then
 	exit 0
 fi
 
-(
 
 # This is for the case that /usr will be mounted later.
 if [ -r /lib/udev/hotplug.functions ]; then
@@ -51,4 +54,6 @@ if [ -x /usr/bin/lockfile-create ] ; then
 	lockfile-remove $LOCKFILE
 fi
 
-) &
+for d in cron rsyslog; do
+	/etc/init.d/${d} restart
+done
