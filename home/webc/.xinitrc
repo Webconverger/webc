@@ -50,43 +50,62 @@ xset s blank
 xset s 600
 xset +dpms
 
-for x in $(cmdline); do
-	case $x in
+for x in $(cmdline)
+do
+case $x in
 
-		kioskresetstation=*) # For killing the browser after a number of minutes of idleness
-			exec /usr/bin/kioskresetstation ${x#kioskresetstation=} &
-			;;
+	kioskresetstation=*) # For killing the browser after a number of minutes of idleness
+	exec /usr/bin/kioskresetstation ${x#kioskresetstation=} &
+	;;
 
-		debug)
-			wm="/usr/bin/dwm.default" # dwm.default is the dwm default, not webc
-			;;
+	debug)
+	wm="/usr/bin/dwm.default" # dwm.default is the dwm default, not webc
+	;;
 
-		xkb=*)
-			koptions=$( /bin/busybox httpd -d ${x#xkb=} )
-			if setxkbmap $koptions; then logs "setxkbmap OK $koptions"; else logs "setxkbmap ERR $koptions"; fi
-			;;
+	xkb=*)
+	koptions=$( /bin/busybox httpd -d ${x#xkb=} )
+	if setxkbmap $koptions; then logs "setxkbmap OK $koptions"; else logs "setxkbmap ERR $koptions"; fi
+	;;
 
-		xrandr=*)
-			xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
-			xrandr | awk '/connected/ { print $1 }' | while read output
-			do
-			   xrandr --output $output $xoptions
-			done
+	# https://groups.google.com/forum/#!msg/webc-users/GlHh_SX17BM/GojceXVSazgJ
+	xrandr-all=*)
+	xoptions=$( /bin/busybox httpd -d ${x#xrandr-all=} )
 
-			update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
-			;;
+	xrandr | awk '/connected/ { print $1 }' | while read output
+	do
+	xrandr --output $output $xoptions
+	done
 
-		noblank)
-			logs "noblank"
-			xset s off
-			xset -dpms
-			;;
-		blank=*)
-			secondstillblank=$((${x#blank=} * 60))
-			logs "screen will blank after $secondstillblank seconds"
-			xset s $secondstillblank
-			;;
-	esac
+	update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
+	;;
+
+	xrandr=*)
+
+	xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
+
+	if xrandr $xoptions
+	then
+	logs "xrandr OK $xoptions"
+	else
+	logs "xrandr ERR $xoptions"
+	fi
+
+	update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
+	;;
+
+	noblank)
+	logs "noblank"
+	xset s off
+	xset -dpms
+	;;
+
+	blank=*)
+	secondstillblank=$((${x#blank=} * 60))
+	logs "screen will blank after $secondstillblank seconds"
+	xset s $secondstillblank
+	;;
+
+esac
 done
 
 
