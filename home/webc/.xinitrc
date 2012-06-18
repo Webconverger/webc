@@ -71,7 +71,7 @@ do
 		xrandr-all=*)
 			xoptions=$( /bin/busybox httpd -d ${x#xrandr-all=} )
 
-			xrandr | awk '/connected/ { print $1 }' | while read output
+			xrandr | awk '$2 ~ /^connected$/ { print $1 }' | while read output
 			do
 				xrandr --output $output $xoptions
 			done
