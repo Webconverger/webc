@@ -10,6 +10,13 @@
 
 Tzdata ()
 {
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/tzdata.list ] || \
+	   [ -e /var/lib/live/config/tzdata ]
+	then
+		return
+	fi
+
 	echo -n " tzdata"
 
 	Configure_tzdata

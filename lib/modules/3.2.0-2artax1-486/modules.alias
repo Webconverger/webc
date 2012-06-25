@@ -65,6 +65,7 @@ alias stdrng ansi_cprng
 alias ghash ghash_generic
 alias net-pf-38 af_alg
 alias pci:v000010DBd0000802Esv*sd*bc*sc*i* gpio_ml_ioh
+alias pci:v000010DBd00008803sv*sd*bc*sc*i* gpio_pch
 alias pci:v000010DBd00008043sv*sd*bc*sc*i* gpio_pch
 alias pci:v000010DBd00008014sv*sd*bc*sc*i* gpio_pch
 alias pci:v00008086d00008803sv*sd*bc*sc*i* gpio_pch
@@ -95,7 +96,6 @@ alias pci:v0000102Bd0000051Fsv*sd*bc*sc*i* matroxfb_base
 alias pci:v0000102Bd0000051Bsv*sd*bc*sc*i* matroxfb_base
 alias pci:v0000102Bd00000519sv*sd*bc*sc*i* matroxfb_base
 alias i2c:maven matroxfb_maven
-alias pci:v000010DEd*sv*sd*bc03sc*i* nvidiafb
 alias pci:v00001002d00004C53sv*sd*bc*sc*i* atyfb
 alias pci:v00001002d00004C52sv*sd*bc*sc*i* atyfb
 alias pci:v00001002d00004C4Esv*sd*bc*sc*i* atyfb
@@ -744,6 +744,7 @@ alias acpi*:IFX0101:* tpm_infineon
 alias pnp:dIFX0101* tpm_infineon
 alias i2c:ch7006 ch7006
 alias i2c:sil164 sil164
+alias pci:v00001002d0000980Asv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009809sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009808sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009807sv*sd*bc*sc*i* radeon
@@ -763,6 +764,7 @@ alias pci:v00001002d0000964Esv*sd*bc*sc*i* radeon
 alias pci:v00001002d0000964Csv*sd*bc*sc*i* radeon
 alias pci:v00001002d0000964Bsv*sd*bc*sc*i* radeon
 alias pci:v00001002d0000964Asv*sd*bc*sc*i* radeon
+alias pci:v00001002d00009649sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009648sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009647sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00009645sv*sd*bc*sc*i* radeon
@@ -1058,6 +1060,7 @@ alias pci:v00001002d0000677Bsv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006779sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006778sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006772sv*sd*bc*sc*i* radeon
+alias pci:v00001002d00006771sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006770sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006768sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006767sv*sd*bc*sc*i* radeon
@@ -1075,6 +1078,7 @@ alias pci:v00001002d00006759sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006758sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006751sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006750sv*sd*bc*sc*i* radeon
+alias pci:v00001002d0000674Asv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006749sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006748sv*sd*bc*sc*i* radeon
 alias pci:v00001002d00006747sv*sd*bc*sc*i* radeon
@@ -2031,6 +2035,7 @@ alias pci:v00001186d00001002sv00001186sd00001040bc*sc*i* sundance
 alias pci:v00001186d00001002sv00001186sd00001012bc*sc*i* sundance
 alias pci:v00001186d00001002sv00001186sd00001003bc*sc*i* sundance
 alias pci:v00001186d00001002sv00001186sd00001002bc*sc*i* sundance
+alias pci:v000010DFd00000720sv*sd*bc*sc*i* be2net
 alias pci:v000010DFd0000E228sv*sd*bc*sc*i* be2net
 alias pci:v000010DFd0000E220sv*sd*bc*sc*i* be2net
 alias pci:v000019A2d00000710sv*sd*bc*sc*i* be2net
@@ -3392,10 +3397,18 @@ alias usb:v07B8pB21Ed*dc*dsc*dp*ic*isc*ip* rt73usb
 alias usb:v07B8pB21Dd*dc*dsc*dp*ic*isc*ip* rt73usb
 alias usb:v07B8pB21Cd*dc*dsc*dp*ic*isc*ip* rt73usb
 alias usb:v07B8pB21Bd*dc*dsc*dp*ic*isc*ip* rt73usb
+alias usb:v04DAp23F6d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v148Fp5372d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v148Fp5370d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v0471p2104d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v04DAp1800d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v04DAp1801d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v043Ep7A22d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v13D3p3365d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v13D3p3329d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v043Ep7A12d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v2001p3C19d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v2001p3C15d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v5A57p0284d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0930p0A07d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0DF6p0062d*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3424,7 +3437,9 @@ alias usb:v0CDEp0025d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0CDEp0022d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v157Ep3013d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v157Ep300Ed*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v177Fp0313d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v177Fp0302d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v177Fp0153d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v15A9p0006d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v083ApB522d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v083ApA703d*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3467,7 +3482,10 @@ alias usb:v0471p200Fd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1D4Dp0011d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1D4Dp000Ed*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1D4Dp000Cd*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v1D4Dp0002d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v20B8p8888d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v1B75p3072d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v1B75p3071d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0DB0p899Ad*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0DB0p871Cd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0DB0p871Bd*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3488,6 +3506,7 @@ alias usb:v0789p0166d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0789p0164d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0789p0163d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0789p0162d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v1737p0078d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1737p0077d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1737p0071d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1737p0070d*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3515,6 +3534,7 @@ alias usb:v1740p9702d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v1740p9701d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v203Dp14A9d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v203Dp1480d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v7392p7722d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v7392p7718d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v7392p7717d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v7392p7711d*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3522,6 +3542,8 @@ alias usb:v0FE9pB307d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07FAp7712d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v2001p3C1Bd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07D1p3C16d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v07D1p3C15d*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v07D1p3C13d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07D1p3C11d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07D1p3C0Fd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07D1p3C0Ed*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -3534,11 +3556,13 @@ alias usb:v07AAp003Cd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v07AAp002Fd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0411p01A2d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0411p016Fd*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v0411p015Dd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0411p0158d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v0411p00E8d*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp935Bd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp935Ad*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp825Bd*dc*dsc*dp*ic*isc*ip* rt2800usb
+alias usb:v050Dp825Ad*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp815Cd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp805Cd*dc*dsc*dp*ic*isc*ip* rt2800usb
 alias usb:v050Dp8053d*dc*dsc*dp*ic*isc*ip* rt2800usb
@@ -4130,6 +4154,7 @@ alias usb:v077Bp2226d*dc*dsc*dp*ic*isc*ip* asix
 alias usb:v12D1p*d*dc*dsc*dp*ic02isc06ipFF* cdc_ether
 alias usb:v*p*d*dc*dsc*dp*ic02isc0Aip00* cdc_ether
 alias usb:v*p*d*dc*dsc*dp*ic02isc06ip00* cdc_ether
+alias usb:v1410pB001d*dc*dsc*dp*ic02isc06ip00* cdc_ether
 alias usb:v046DpC11Fd*dc*dsc*dp*ic02isc0Aip00* cdc_ether
 alias usb:v1004p61AAd*dc*dsc*dp*ic02isc06ip00* cdc_ether
 alias usb:v07B4p0F02d*dc*dsc*dp*ic02isc06ip00* cdc_ether
@@ -4409,6 +4434,7 @@ alias usb:v1B1Cp1AB5d0200dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v1908p3335d0200dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v1908p1320d0000dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v1908p1315d0000dc*dsc*dp*ic*isc*ip* usb_storage
+alias usb:v177Fp0400d0000dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v1652p6600d0201dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v152Dp2329d0100dc*dsc*dp*ic*isc*ip* usb_storage
 alias usb:v14CDp6600d0201dc*dsc*dp*ic*isc*ip* usb_storage
@@ -4987,6 +5013,7 @@ alias usb:v0403pED74d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v0403pA6D0d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v0403p9E90d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v1A79p6001d*dc*dsc*dp*ic*isc*ip* ftdi_sio
+alias usb:v1A72p1008d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v0C33p0010d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v0FD8p0001d*dc*dsc*dp*ic*isc*ip* ftdi_sio
 alias usb:v9E88p9E8Fd*dc*dsc*dp*ic*isc*ip* ftdi_sio
@@ -6611,6 +6638,7 @@ alias usb:v1410p7006d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p7005d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p7004d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p7003d*dc*dsc*dp*ic*isc*ip* option
+alias usb:v1410p7001d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p6001d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p9000d*dc*dsc*dp*ic*isc*ip* option
 alias usb:v1410p8000d*dc*dsc*dp*ic*isc*ip* option
@@ -6911,6 +6939,7 @@ alias usb:v0908p0004d*dc*dsc*dp*ic*isc*ip* siemens_mpi
 alias usb:v413Cp8133d*dc*dsc*dp*ic*isc*ip* sierra
 alias usb:v0F3Dp68A3d*dc*dsc*dp*ic*isc*ip* sierra
 alias usb:v1199p68A3d*dc*dsc*dp*ic*isc*ip* sierra
+alias usb:v1199p68A2d*dc*dsc*dp*ic*isc*ip* sierra
 alias usb:v1199p6893d*dc*dsc*dp*ic*isc*ip* sierra
 alias usb:v1199p6892d*dc*dsc*dp*icFFiscFFipFF* sierra
 alias usb:v1199p6891d*dc*dsc*dp*icFFiscFFipFF* sierra
@@ -6978,6 +7007,7 @@ alias usb:v04FCp0204d*dc*dsc*dp*ic*isc*ip* spcp8x5
 alias usb:v0471p081Ed*dc*dsc*dp*ic*isc*ip* spcp8x5
 alias usb:v061DpC020d*dc*dsc*dp*ic*isc*ip* ssu100
 alias usb:v05E0p0600d*dc*dsc*dp*ic*isc*ip* symbolserial
+alias usb:v0451p5053d*dc*dsc*dp*ic*isc*ip* ti_usb_3410_5052
 alias usb:v1A61p3410d*dc*dsc*dp*ic*isc*ip* ti_usb_3410_5052
 alias usb:v04B3p454Cd*dc*dsc*dp*ic*isc*ip* ti_usb_3410_5052
 alias usb:v04B3p454Bd*dc*dsc*dp*ic*isc*ip* ti_usb_3410_5052
@@ -7303,9 +7333,11 @@ alias usb:v078Cp0400d*dc*dsc*dp*ic*isc*ip* gtco
 alias usb:v0B57p*d*dc*dsc*dp*ic03isc01ip02* hanwang
 alias usb:v084Ep1001d*dc*dsc*dp*ic*isc*ip* kbtab
 alias usb:v17EFp6004d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap00F4d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap0047d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00ECd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00E6d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap00E5d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00E3d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00E2d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap009Fd*dc*dsc*dp*ic*isc*ip* wacom
@@ -7315,6 +7347,9 @@ alias usb:v056Ap0093d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap0090d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00CCd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00F0d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap00DFd*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap00DEd*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap00DDd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00DBd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00DAd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00D8d*dc*dsc*dp*ic*isc*ip* wacom
@@ -7326,11 +7361,17 @@ alias usb:v056Ap00D3d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00D2d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00D1d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00D0d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap0084d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00CEd*dc*dsc*dp*ic03isc01ip02* wacom
 alias usb:v056Ap00C7d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00C6d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00C5d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap003Fd*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap002Ad*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap0029d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap0028d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap0027d*dc*dsc*dp*ic*isc*ip* wacom
+alias usb:v056Ap0026d*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00BCd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00BBd*dc*dsc*dp*ic*isc*ip* wacom
 alias usb:v056Ap00BAd*dc*dsc*dp*ic*isc*ip* wacom
@@ -9141,6 +9182,7 @@ alias usb:v2040pC602d*dc*dsc*dp*ic*isc*ip* dvb_usb_mxl111sf
 alias usb:v2040pC601d*dc*dsc*dp*ic*isc*ip* dvb_usb_mxl111sf
 alias usb:v2040pC600d*dc*dsc*dp*ic*isc*ip* dvb_usb_mxl111sf
 alias pci:v00000432d00000001sv*sd*bc*sc*i* pluto2
+alias usb:v2040pC0A0d*dc*dsc*dp*ic*isc*ip* smsusb
 alias usb:v2040pC090d*dc*dsc*dp*ic*isc*ip* smsusb
 alias usb:v2040pC080d*dc*dsc*dp*ic*isc*ip* smsusb
 alias usb:v2040pC010d*dc*dsc*dp*ic*isc*ip* smsusb
@@ -9200,6 +9242,12 @@ alias pci:v000018C3d00000720sv000018C3sd0000DB02bc*sc*i* ngene
 alias pci:v000018C3d00000720sv000018C3sd0000DB01bc*sc*i* ngene
 alias pci:v000018C3d00000720sv000018C3sd0000ABC4bc*sc*i* ngene
 alias pci:v000018C3d00000720sv000018C3sd0000ABC3bc*sc*i* ngene
+alias pci:v0000DD01d00000003sv*sd*bc*sc*i* ddbridge
+alias pci:v0000DD01d00000003sv0000DD01sd00000020bc*sc*i* ddbridge
+alias pci:v0000DD01d00000003sv0000DD01sd00000010bc*sc*i* ddbridge
+alias pci:v0000DD01d00000003sv0000DD01sd00000002bc*sc*i* ddbridge
+alias pci:v0000DD01d00000003sv0000DD01sd00000001bc*sc*i* ddbridge
+alias pci:v0000DD01d00000002sv0000DD01sd00000001bc*sc*i* ddbridge
 alias ieee1394:ven00001287mo00000036sp0000A02Dver00010001* firedtv
 alias ieee1394:ven00001287mo00000035sp0000A02Dver00010001* firedtv
 alias ieee1394:ven00001287mo00000034sp0000A02Dver00010001* firedtv
@@ -11297,6 +11345,7 @@ alias pci:v*d*sv*sd*bc01sc06i01* ahci
 alias pci:v00001B21d00000612sv*sd*bc*sc*i* ahci
 alias pci:v0000105Ad00003F20sv*sd*bc*sc*i* ahci
 alias pci:v00001B4Bd000091A3sv*sd*bc*sc*i* ahci
+alias pci:v00001B4Bd0000917Asv*sd*bc*sc*i* ahci
 alias pci:v00001B4Bd00009125sv*sd*bc*sc*i* ahci
 alias pci:v00001B4Bd00009123sv*sd*bc01sc06i01* ahci
 alias pci:v000011ABd00006121sv*sd*bc*sc*i* ahci
@@ -11941,6 +11990,7 @@ alias usb:v07B4p010Ad*dc*dsc*dp*ic*isc*ip* alauda
 alias usb:v0584p0008d*dc*dsc*dp*ic*isc*ip* alauda
 alias pci:v00001180d00000852sv*sd*bc*sc*i* r852
 alias platform:onenand-flash generic
+alias ofoldpart ofpart
 alias RedBoot redboot
 alias char-major-90-* mtdchar
 alias char-major-90-* mtdchar
@@ -12107,7 +12157,13 @@ alias pcmcia:m*c*f*fn*pfn*paEFCE0A31pb*pcD4CE9B02pd* bt3c_cs
 alias pcmcia:m*c*f*fn*pfn*pa0A0736ECpb24E6DFABpc*pd* bluecard_cs
 alias pcmcia:m*c*f*fn*pfn*paE3987764pb2524B59Cpc*pd* bluecard_cs
 alias pcmcia:m*c*f*fn*pfn*paBAF16FBFpb657CC15Epc*pd* bluecard_cs
+alias usb:v0489pE033d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v413Cp8197d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0A5Cp21F3d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0A5Cp21E8d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0A5Cp21E6d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0A5Cp21E3d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0489pE042d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v0C10p0000d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v0BDBp1002d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v044Ep3002d*dc*dsc*dp*ic*isc*ip* btusb
@@ -12121,12 +12177,18 @@ alias usb:v05ACp821Bd*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v05ACp8218d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v05ACp8215d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v05ACp8213d*dc*dsc*dp*ic*isc*ip* btusb
-alias usb:v05ACp21E1d*dc*dsc*dp*ic*isc*ip* btusb
+alias usb:v0A5Cp21E1d*dc*dsc*dp*ic*isc*ip* btusb
 alias usb:v*p*d*dcE0dsc01dp01ic*isc*ip* btusb
 alias sdio:c09v*d* btsdio
 alias sdio:c03v*d* btsdio
 alias sdio:c02v*d* btsdio
+alias usb:v0489pE03Cd*dc*dsc*dp*ic*isc*ip* ath3k
 alias usb:v0489pE02Cd*dc*dsc*dp*ic*isc*ip* ath3k
+alias usb:v0CF3pE004d*dc*dsc*dp*ic*isc*ip* ath3k
+alias usb:v13D3p3362d*dc*dsc*dp*ic*isc*ip* ath3k
+alias usb:v04CAp3005d*dc*dsc*dp*ic*isc*ip* ath3k
+alias usb:v13D3p3375d*dc*dsc*dp*ic*isc*ip* ath3k
+alias usb:v0CF3p311Dd*dc*dsc*dp*ic*isc*ip* ath3k
 alias usb:v0CF3p3004d*dc*dsc*dp*ic*isc*ip* ath3k
 alias usb:v03F0p311Dd*dc*dsc*dp*ic*isc*ip* ath3k
 alias usb:v0489pE03Dd*dc*dsc*dp*ic*isc*ip* ath3k
@@ -13607,6 +13669,7 @@ alias net-pf-10-proto-132 sctp
 alias net-pf-2-proto-132 sctp
 alias virtio:d00000009v* 9pnet_virtio
 alias rtnl-link-lowpan 6lowpan
+alias pci:v000010DEd*sv*sd*bc03sc*i* nvidiafb
 alias char-major-195-* nvidia
 alias pci:v000010DEd00000E00sv*sd*bc04sc80i00* nvidia
 alias pci:v000010DEd00000AA3sv*sd*bc0Bsc40i00* nvidia

@@ -28,18 +28,6 @@ Configure_openssh_server ()
 	then
 		ssh-keygen -q -f /etc/ssh/ssh_host_rsa_key -N "" -t rsa
 
-		_SSH="true"
-	fi
-
-	if [ ! -e /etc/ssh/ssh_host_dsa_key ]
-	then
-		ssh-keygen -q -f /etc/ssh/ssh_host_dsa_key -N "" -t dsa
-
-		_SSH="true"
-	fi
-
-	if [ "${_SSH}" = "true" ]
-	then
 		# Creating state file
 		touch /var/lib/live/config/openssh-server
 	fi

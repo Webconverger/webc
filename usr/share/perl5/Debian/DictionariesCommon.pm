@@ -23,15 +23,15 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 my $infodir             = "/var/lib/dictionaries-common";
 my $cachedir            = "/var/cache/dictionaries-common";
-my $etcdir              = "/etc/dictionaries-common";
+my $sys_default_dir     = "/etc/dictionaries-common";
 my $ispelldefault       = "ispell-default";
 my $userdefault         = ( defined $ENV{HOME} ) ? "$ENV{HOME}/.$ispelldefault" : undef;
 my $emacsensupport      = "emacsen-ispell-dicts.el";
 my $jedsupport          = "jed-ispell-dicts.sl";
 my $squirrelmailsupport = "sqspell.php";
 my $debug               = 1 if ( defined $ENV{'DICT_COMMON_DEBUG'} );
-my %sysetcdefault       = ("ispell"   => "$etcdir/ispell-default",
-			   "wordlist" => "$etcdir/wordlist-default");
+my %sys_default_file    = ("ispell"   => "$sys_default_dir/ispell-default",
+			   "wordlist" => "$sys_default_dir/wordlist-default");
 
 # ------------------------------------------------------------------
 sub dico_checkroot {
@@ -228,7 +228,7 @@ sub dico_getsysdefault {
 # Get system default value for given class
 # ------------------------------------------------------------------
   my $class = shift;
-  getdefault ($sysetcdefault{$class});
+  getdefault ($sys_default_file{$class});
 }
 
 # ------------------------------------------------------------------
@@ -239,7 +239,7 @@ sub dico_setsysdefault {
   my $class = shift;
   my $value = shift;
 
-  open (DEFAULT, "> $sysetcdefault{$class}");
+  open (DEFAULT, "> $sys_default_file{$class}");
   print DEFAULT $value;
   close DEFAULT;
 }

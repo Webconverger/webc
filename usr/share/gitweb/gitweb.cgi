@@ -27,7 +27,7 @@ BEGIN {
 	CGI->compile() if $ENV{'MOD_PERL'};
 }
 
-our $version = "1.7.10";
+our $version = "1.7.10.4";
 
 our ($my_url, $my_uri, $base_url, $path_info, $home_link);
 sub evaluate_uri {

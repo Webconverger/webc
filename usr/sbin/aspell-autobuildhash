@@ -29,7 +29,7 @@ sub usage {
   print STDERR "\nUsage:\taspell-autobuildhash [options]\n"
     . "\n"
     . "Options:\n"
-    . "\t--debug         Show debugging infor about aspell-autobuildhash\n"
+    . "\t--debug         Show debugging info about aspell-autobuildhash\n"
     . "\t                internal work. Will also enable aspell affix validation.\n"
     . "\t--dry-run       Show what would be done, but do nothing real.\n"
     . "\t--force         Do the job regardless of versions comparisons.\n"
@@ -69,7 +69,7 @@ sub autorebuild {
     myerror("aspell-autobuildhash","No argument passed to function autorebuild");
   my $data      = "/usr/lib/aspell";                    # The data/lib dir
   my $langsfile = "/usr/share/aspell/$lang.contents";   # The subdicts file
-  my $options   = " --per-conf=  ";                     # Make sure no personal conf is used at all
+  my $options   = " --per-conf=/dev/null ";             # Make sure no personal conf is used at all
   my @sublangs  = ();
 
   $options     .= " --dont-validate-affixes " unless $debug;
