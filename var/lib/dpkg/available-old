@@ -2052,6 +2052,24 @@ Description: X.Org X Window System
  It should be noted that a package providing x-window-manager should also
  be installed to ensure a comfortable X experience.
 
+Package: linux-image-686
+Priority: optional
+Section: oldlibs
+Installed-Size: 52
+Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux-latest (45~artax1)
+Version: 3.2+45~artax1
+Depends: linux-image-686-pae, debconf (>= 0.5) | debconf-2.0
+Size: 8310
+Description: Linux for modern PCs (dummy package)
+ This is a dummy transitional package.  It can be safely removed.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
+
 Package: ncurses-bin
 Essential: yes
 Priority: required
@@ -3323,6 +3341,27 @@ Description: The GTK+ graphical user interface library
  This package contains the shared libraries.
 Homepage: http://www.gtk.org/
 
+Package: linux-image-2.6.32-5-686
+Priority: optional
+Section: kernel
+Installed-Size: 77900
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux-2.6
+Version: 2.6.32-45
+Provides: linux-image, linux-image-2.6, linux-modules-2.6.32-5-686
+Depends: module-init-tools, linux-base (>= 2.6.32-45), initramfs-tools (>= 0.55) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 2.6.32), libc6-i686
+Suggests: linux-doc-2.6.32, grub | lilo (>= 22.8-8.2~)
+Breaks: initramfs-tools (<< 0.55), lilo (<< 22.8-8.2~)
+Size: 27668654
+Description: Linux 2.6.32 for modern PCs
+ The Linux kernel 2.6.32 and modules for use on PCs with Intel Pentium
+ Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode LX/NX, Athlon
+ (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; VIA
+ C3 "Nehemiah" or C7 processors.
+
 Package: xserver-xorg-input-evdev
 Priority: optional
 Section: x11
@@ -3753,6 +3792,34 @@ Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Original-Uploaders: Clint Adams <clint@gnu.org>, Aurelien Jarno <aurel32@debian.org>, Pierre Habouzit <madcoder@debian.org>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
 Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
+
+Package: linux-image-686-pae
+Priority: optional
+Section: kernel
+Installed-Size: 48
+Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux-latest (45~artax1)
+Version: 3.2+45~artax1
+Provides: linux-latest-modules-3.2.0-3artax1-686-pae
+Depends: linux-image-3.2.0-3artax1-686-pae
+Size: 6314
+Description: Linux for modern PCs (meta-package)
+ This package depends on the latest Linux kernel and modules for use on PCs
+ with one or more processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
 
 Package: browser-plugin-adobe-flash
 Priority: optional
@@ -9919,6 +9986,38 @@ Description: X11 Session Management library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libSM
+
+Package: linux-image-3.2.0-3artax1-686-pae
+Priority: optional
+Section: kernel
+Installed-Size: 86504
+Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.2.21-3~artax1
+Provides: linux-image, linux-modules-3.2.0-3artax1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.2, debian-kernel-handbook, grub-pc | extlinux | lilo (>= 22.8-8.2~)
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~), lilo (<< 22.8-8.2~)
+Size: 22868096
+Description: Linux 3.2 for modern PCs
+ The Linux kernel 3.2 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
 
 Package: firmware-brcm80211
 Priority: optional
