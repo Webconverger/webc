@@ -112,7 +112,11 @@ done
 # disable bell
 xset b 0 0
 
-exec $wm &
+while true
+do
+	$wm
+	update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
+done &
 
 # hide the cursor by default, showcursor to override
 cmdline | grep -qs showcursor || exec /usr/bin/unclutter &
