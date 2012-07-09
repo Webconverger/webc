@@ -9,10 +9,19 @@ exec &> /home/webc/.xerrors.debug
 cmdline_has debug && {
 	set -x
 }
-update_background() { xloadimage -quiet -onroot -center "$1"; }
 
 cp /home/webc/bg-orig.png /home/webc/bg.png
-xsetroot -solid "#ffffff"
+
+if test `cmdline_get chrome` = neon
+then
+	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
+	xsetroot -solid black
+else
+	update_background() { xloadimage -quiet -onroot -center "$1"; }
+	xsetroot -solid white
+fi
+
+
 
 if ! has_network
 then
@@ -154,13 +163,12 @@ do
 	if test -x /usr/bin/iceweasel
 	then
 		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc; do
-			test -d $d && rm -rf $d
-			test -e $d && rm -f $d
+			cmdline_has dirty || ( test -d $d && rm -rf $d )
+			cmdline_has dirty || ( test -e $d && rm -f $d )
 		done
-		mkdir /tmp/webc
 		for d in .mozilla .adobe .macromedia Downloads; do
-			mkdir /tmp/webc/$d
-			ln -s /tmp/webc/$d /home/webc/$d
+			test -d /tmp/webc/$d || mkdir -p /tmp/webc/$d
+			test -h /home/webc/$d || ln -s /tmp/webc/$d /home/webc/$d
 		done
 		iceweasel $(echo $homepage | sed "s,MACID,$mac,g")
 	fi
