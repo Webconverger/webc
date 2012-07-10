@@ -31,7 +31,7 @@ then
 	done
 fi
 
-update_background /etc/webc/configuring.png
+cmdline_has noconfig || update_background /etc/webc/configuring.png
 
 # if there is a network, then I don't see why /etc/webc/id should not be there
 while ! test -e /etc/webc/id; do
