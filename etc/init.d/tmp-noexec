@@ -6,8 +6,8 @@ chmod 1777 /tmp
 mount -o remount,noexec /tmp &>/dev/null && exit 0
 
 test -e /tmp.img || {
-	dd if=/dev/zero of=/tmp.img seek=256M count=0 bs=1
-	mke2fs -F /tmp.img
+	dd if=/dev/zero of=/tmp.img seek=256M count=0 bs=1 &>/dev/null
+	mke2fs -F /tmp.img &>/dev/null
 }
 
 modprobe loop

@@ -12,7 +12,7 @@ cmdline_has debug && {
 
 cp /home/webc/bg-orig.png /home/webc/bg.png
 
-if test `cmdline_get chrome` = neon
+if test "$(cmdline_get chrome)" = neon
 then
 	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
 	xsetroot -solid black
@@ -156,11 +156,16 @@ do
 
 	if test -x /usr/bin/iceweasel
 	then
-		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc; do
-			cmdline_has dirty || ( test -d $d && rm -rf $d )
-			cmdline_has dirty || ( test -e $d && rm -f $d )
+		if ! cmdline_has dirty
+		then
+		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
+		do
+			test -d $d && rm -rf $d
+			test -e $d && rm -f $d
 		done
-		for d in .mozilla .adobe .macromedia Downloads; do
+		fi
+		for d in .mozilla .adobe .macromedia Downloads
+		do
 			test -d /tmp/webc/$d || mkdir -p /tmp/webc/$d
 			test -h /home/webc/$d || ln -s /tmp/webc/$d /home/webc/$d
 		done
