@@ -21,8 +21,6 @@ else
 	xsetroot -solid white
 fi
 
-
-
 if ! has_network
 then
 	update_background /etc/webc/no-net.png
@@ -47,11 +45,9 @@ mkfifo $live_config_pipe
 read answer < $live_config_pipe # blocking till live-config is finished
 rm -f $live_config_pipe
 
-mkfifo $updates_pipe
+cmdline_has updates && ( mkfifo $updates_pipe
 read answer < $updates_pipe # blocking till updates is finished
-rm -f $updates_pipe
-
-update_background /home/webc/bg.png
+rm -f $updates_pipe )
 
 wm="/usr/bin/dwm.web" # defaults
 xset s on
@@ -85,7 +81,6 @@ do
 				xrandr --output $output $xoptions
 			done
 
-			update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
 			;;
 
 		xrandr=*)
@@ -99,7 +94,6 @@ do
 				logs "xrandr ERR $xoptions"
 			fi
 
-			update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
 			;;
 
 		noblank)
@@ -123,8 +117,8 @@ xset b 0 0
 
 while true
 do
-	$wm
 	update_background /home/webc/bg.png # bg needs to be re-rendered on rotation for example
+	$wm
 done &
 
 # hide the cursor by default, showcursor to override
