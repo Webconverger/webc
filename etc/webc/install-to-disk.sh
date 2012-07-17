@@ -132,31 +132,35 @@ EOF
 
 }
 
-! grep -qs install /proc/cmdline && exec sleep 86400
-clear_screen
-cmdline_has debug && echo "debug has been enabled" >/dev/console
-add_root
-disk=$( find_disk )
-partition_disk $disk
-verify_partition $disk
-partition="${disk}1"
-mke2fs -j $partition
-test -d /mnt/root || mkdir /mnt/root
-mount $partition /mnt/root
-dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
-mkswap /mnt/root/swap
-swapon /mnt/root/swap
-install_root /mnt/root
-install_files /mnt/root $partition
-install_extlinux /mnt/root/boot/extlinux $partition $disk
-verify_extlinux_mbr $disk
+if cmdline_has install
+then
+	clear_screen
+	cmdline_has debug && echo "debug has been enabled" >/dev/console
+	add_root
+	disk=$( find_disk )
+	partition_disk $disk
+	verify_partition $disk
+	partition="${disk}1"
+	mke2fs -j $partition
+	test -d /mnt/root || mkdir /mnt/root
+	mount $partition /mnt/root
+	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+	mkswap /mnt/root/swap
+	swapon /mnt/root/swap
+	install_root /mnt/root
+	install_files /mnt/root $partition
+	install_extlinux /mnt/root/boot/extlinux $partition $disk
+	verify_extlinux_mbr $disk
 
-_logs "umount'ing partitions"
-swapoff /mnt/root/swap
-umount /mnt/root
-_logs "install complete"
-if cmdline_has debug; then
+	_logs "umount'ing partitions"
+	swapoff /mnt/root/swap
+	umount /mnt/root
+	_logs "install complete"
+	if cmdline_has debug; then
+		exec sleep 86400
+	fi
+	_logs "rebooting..."
+	/sbin/reboot 
+else
 	exec sleep 86400
 fi
-_logs "rebooting..."
-/sbin/reboot
