@@ -77,6 +77,21 @@ EOC
 	esac
 done
 
+# Make sure /home has noexec and nodev, for extra security.
+# First, just try to remount, in case /home is already a separate filesystem
+# (when using persistence, for example).
+mount -o remount,noexec,nodev /home || (
+	# Turn /home into a tmpfs. We use a trick here: after the mount, this
+	# subshell will still have the old /home as its current directory, so
+	# we can still read the files in the original /home. By passing -C to
+	# the second tar invocation, it does a chdir, which causes it to end
+	# up in the new filesystem. This enables us to easily copy the
+	# existing files from /home into the new tmpfs.
+	cd /home
+	mount -o noexec,nodev -t tmpfs tmpfs /home
+	tar -c . | tar -x -C /home
+)
+
 stamp=$( git show $webc_version | grep '^Date')
 
 test -f ${link}/content/about.xhtml.bak || cp ${link}/content/about.xhtml ${link}/content/about.xhtml.bak
