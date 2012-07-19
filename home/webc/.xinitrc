@@ -156,7 +156,7 @@ do
 
 	if test -x /usr/bin/iceweasel
 	then
-		if ! cmdline_has dirty
+		if ! cmdline_has noclean
 		then
 		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
 		do
