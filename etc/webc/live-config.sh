@@ -19,7 +19,7 @@ sub_literal() {
 # If printing support is installed, delete lines that prevent print dialog
 dpkg -s cups 2>/dev/null >/dev/null && sed -i '/print/d' /etc/iceweasel/pref/iceweasel.js
 
-fix_chrome()
+process_options()
 {
 link="/usr/lib/iceweasel/extensions/webconverger"
 
@@ -122,7 +122,7 @@ done
 
 source "/etc/webc/webc.conf"
 cmdline_has noconfig || update_cmdline
-fix_chrome
+process_options
 
 echo ACK > $live_config_pipe
 
