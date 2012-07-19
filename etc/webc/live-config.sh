@@ -81,8 +81,28 @@ EOC
 		echo "lockPref(\"browser.startup.homepage\", \"$(echo $homepage | awk '{print $1}')\");" >> "$prefs"
 		;;
 
+	noclean)
+		NOCLEAN=1
+		;;
 	esac
 done
+
+if [ -z "$NOCLEAN" ]; then
+	cat >> "$prefs" <<EOF
+// Enable private browsing and enable all sanitize on shutdown features just
+// te be sure.
+pref("privateBrowsingEnabled", true);
+pref("browser.privatebrowsing.autostart", true);
+pref("privacy.sanitize.sanitizeOnShutdown", true);
+pref("privacy.clearOnShutdown.offlineApps", true);
+pref("privacy.clearOnShutdown.passwords", true);
+pref("privacy.clearOnShutdown.siteSettings", true);
+// cpd = Clear Private Data
+pref("privacy.cpd.offlineApps", true);
+pref("privacy.cpd.passwords", true);
+pref("privacy.sanitize.sanitizeOnShutdown", true);
+EOF
+fi
 
 # Make sure /home has noexec and nodev, for extra security.
 # First, just try to remount, in case /home is already a separate filesystem
