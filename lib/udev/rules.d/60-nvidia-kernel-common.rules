@@ -1,0 +1,12 @@
+# Set ACLs for console users on /dev/nvidia*
+# This is necessary until the driver uses some other form of auth
+ENV{ACL_MANAGE}=="0", GOTO="nvidia_end"
+DRIVER=="nvidia",ENV{NVIDIA_DEVICE}="1"
+ENV{NVIDIA_DEVICE}!="1", GOTO="nvidia_end"
+ENV{ACL_MANAGE}="1"
+TEST!="/lib/libglib-2.0.so.0", GOTO="nvidia_end"
+# apply ACL for all locally logged in users
+TEST=="/var/run/ConsoleKit/database", \
+  RUN+="nvidia_helper --action=$env{ACTION} --device=$env{DEVNAME}"
+LABEL="nvidia_end"
+
