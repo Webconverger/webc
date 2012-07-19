@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+if [ "$1" = "upgrade" ] || [ "$1" = "install" ] ; then
+    dpkg-divert --package iceweasel --divert /usr/bin/firefox.real --rename /usr/bin/firefox
+fi
+
+

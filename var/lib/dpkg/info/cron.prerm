@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ -x /etc/init.d/cron ]; then
+	if [ -x /usr/sbin/invoke-rc.d ] ; then
+	       invoke-rc.d cron stop
+	else
+	       /etc/init.d/cron stop
+	fi
+fi
+
+

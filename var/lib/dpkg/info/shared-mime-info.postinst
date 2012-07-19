@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "triggered" ]; then
+    if [ -x /usr/bin/update-mime-database.real ]; then
+        update-mime-database.real /usr/share/mime
+    fi
+    exit 0
+fi
+
+if [ -x /usr/bin/update-mime-database.real ]; then
+    update-mime-database.real /usr/share/mime
+fi
+
+# Automatically added by dh_installmime
+if [ "$1" = "configure" ] && [ -x "`which update-mime-database 2>/dev/null`" ]; then
+	update-mime-database /usr/share/mime
+fi
+# End automatically added section
+

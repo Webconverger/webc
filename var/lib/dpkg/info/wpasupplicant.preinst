@@ -1,0 +1,59 @@
+#!/bin/sh
+# This script can be called in the following ways:
+#
+# Before the package is installed:
+#       <new-preinst> install
+#
+# Before removed package is upgraded:
+#       <new-preinst> install <old-version>
+#
+# Before the package is upgraded:
+#       <new-preinst> upgrade <old-version>
+#
+#
+# If postrm fails during upgrade or fails on failed upgrade:
+#       <old-preinst> abort-upgrade <new-version>
+
+set -e
+
+rm_conffile() {
+	local PKGNAME="$1"
+	local CONFFILE="$2"
+
+	[ -e "$CONFFILE" ] || return 0
+
+	local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
+	local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
+		sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+	if [ "$md5sum" != "$old_md5sum" ]; then
+		echo "Obsolete conffile $CONFFILE has been modified by you."
+		echo "Saving as $CONFFILE.dpkg-bak ..."
+		mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+	else
+		echo "Removing obsolete conffile $CONFFILE ..."
+		rm -f "$CONFFILE"
+	fi
+}
+
+case "$1" in
+	install|upgrade)
+		if dpkg --compare-versions "$2" lt "0.6.9-4"; then
+			rm_conffile wpasupplicant /etc/logrotate.d/wpa_supplicant
+			rm_conffile wpasupplicant /etc/logrotate.d/wpa_action
+		fi
+		if dpkg --compare-versions "$2" lt "0.6.10-1"; then
+			rm_conffile wpasupplicant /etc/init.d/wpa-ifupdown
+			update-rc.d -f wpa-ifupdown remove >/dev/null
+		fi
+		;;
+	abort-upgrade)
+		;;
+	*)
+		echo "$0 called with unknown argument \`$1'" 1>&2
+		exit 1
+		;;
+esac
+
+
+
+exit 0

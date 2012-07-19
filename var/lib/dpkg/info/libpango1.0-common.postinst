@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+# until version 1.14.5-1, we generated a /etc/pango/pango.modules
+if [ "$1" = "configure" ] && dpkg --compare-versions "$2" lt-nl "1.14.5-1"; then
+    echo "I: Purging /etc/pango/pango.modules" >&2
+    rm -f /etc/pango/pango.modules
+fi
+
+if [ "$1" = "configure" ]; then
+    update-pangox-aliases
+    if test -f /etc/pango/pangox.aliases && ! test -h /etc/pango/pangox.aliases; then
+        echo "I: Backuping /etc/pango/pangox.aliases as /etc/pango/pangox.aliases-old" >&2
+        mv /etc/pango/pangox.aliases /etc/pango/pangox.aliases-old
+    fi
+    if ! test -e /etc/pango/pangox.aliases && test -f /var/lib/defoma/pango.d/pangox.aliases; then
+        ln -sf /var/lib/defoma/pango.d/pangox.aliases /etc/pango/pangox.aliases
+    fi
+fi
+
+

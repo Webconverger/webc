@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+case "${1}" in
+	install|upgrade)
+		if [ -L /usr/share/doc/ncurses-bin ]
+		then
+			rm -f /usr/share/doc/ncurses-bin
+		fi
+		;;
+
+	abort-upgrade)
+
+		;;
+
+	*)
+		echo "preinst called with unknown argument \`${1}'" >&2
+		exit 1
+		;;
+esac
+
+
+
+exit 0

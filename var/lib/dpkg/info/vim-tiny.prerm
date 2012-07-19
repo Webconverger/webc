@@ -1,0 +1,57 @@
+#!/bin/sh
+set -e
+
+pkg=vim-tiny
+variant=tiny
+
+# two things to do:
+# 1) remove /usr/bin/vim.variant as alternative for /usr/bin/vim
+# 2) remove /usr/bin/gvim as an alternative for gnome-text-editor for
+#    variants built with gnome support
+
+remove_gnome_alternative () {
+  if [ -f /usr/bin/vim.$variant ]; then
+    update-alternatives --remove gnome-text-editor /usr/bin/vim.$variant
+  fi
+}
+
+remove_variant_alternative () {
+  for i in vi view ex editor rvim rview vimdiff vim; do
+    update-alternatives --remove $i /usr/bin/vim.$variant
+  done
+  case "$variant" in
+    gtk|lesstif|gnome) # gui enabled variants
+      remove_gui_variant_alternative
+      ;;
+  esac
+}
+
+remove_gui_variant_alternative () {
+  for i in eview evim gview gvimdiff rgview rgvim gvim; do
+    update-alternatives --remove $i /usr/bin/vim.$variant
+  done
+}
+
+case "$1" in
+  # only remove in remove/deconfigure so we don't disrupt users' preferences
+  remove|deconfigure)
+    case "$pkg" in
+      vim-gnome) # gnome enabled variants
+        remove_gnome_alternative
+        ;;
+    esac
+    remove_variant_alternative
+    ;;
+
+  upgrade|failed-upgrade)
+    ;;
+
+  *)
+    echo "prerm called with unknown argument \`$1'" >&2
+    exit 0
+    ;;
+esac
+
+
+
+exit 0

@@ -1,0 +1,40 @@
+#!/bin/sh -e
+# 
+# postinst maintainer script for the Debian install-info package
+#
+# Copyright (C) 2009 Norbert Preining <preining@logic.at>.
+#
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# This file is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to: The Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+#
+# On Debian GNU/Linux System you can find a copy of the GNU General Public
+# License in "/usr/share/common-licenses/GPL".
+#
+
+umask 022
+
+# we only have to call update-info-dir for configure, reconfigure, and
+# triggered transitions. All others are simply ignored.
+
+case $1 in
+    configure|reconfigure|triggered)
+        update-info-dir
+        ;;
+    *)
+        ;;
+esac
+
+
+
+# vim:set tabstop=4 expandtab: #

@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+if [ "$1" = configure ]
+then
+    # The 5.6.0 packages had /usr/share/doc/perl as a symlink to
+    # perl-base, now the reverse.
+    docs=/usr/share/doc
+    if [ -L $docs/perl ] && [ ! -L $docs/perl-base ] && [ -d $docs/perl-base ]
+    then
+	rm -f $docs/perl
+	mv $docs/perl-base $docs/perl
+	ln -s perl $docs/perl-base
+    fi
+
+    # util-linux has an alternate rename
+    update-alternatives --install /usr/bin/rename rename /usr/bin/prename 60 \
+	--slave /usr/share/man/man1/rename.1.gz rename.1.gz \
+		/usr/share/man/man1/prename.1.gz
+fi
+
+exit 0

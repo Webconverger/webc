@@ -1,0 +1,30 @@
+#! /bin/sh -e
+
+case $1 in
+    install|upgrade)
+	if dpkg --compare-versions "$2" lt 1.17-2; then
+	    if [ -d /usr/share/groff/site-tmac ]; then
+		if [ -d /etc/groff ]; then
+		    # Erm. This shouldn't happen.
+		    echo "Moving /usr/share/groff/site-tmac out of the way."
+		    mv -f /usr/share/groff/site-tmac \
+			  /usr/share/groff/site-tmac.old
+		else
+		    echo "Moving /usr/share/groff/site-tmac to /etc/groff."
+		    mv -f /usr/share/groff/site-tmac /etc/groff
+		    touch /usr/share/groff/site-tmac.moved-by-preinst
+		fi
+	    fi
+	    if [ -e /etc/tmac.man.local ]; then
+		echo "Moving /etc/tmac.man.local to /etc/groff/man.local."
+		mkdir -p /etc/groff
+		mv -f /etc/tmac.man.local /etc/groff/man.local
+		touch /etc/tmac.man.local.moved-by-preinst
+	    fi
+	fi
+	;;
+esac
+
+
+
+exit 0

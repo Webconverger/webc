@@ -1,0 +1,52 @@
+#!/bin/sh
+
+set -e
+
+mv_conffile() {
+  local package='alsa-utils'
+  local name="$1"
+  local newname="$2"
+
+  [ -e "$name" ] || return 0
+
+  local md5="$(md5sum $name | sed -e 's/ .*//')"
+  oldmd5="$(dpkg-query -W -f='${Conffiles}' $package | \
+    sed -n -e "\' $name ' { s/ obsolete$//; s/.* //; p }")"
+
+  if [ "$md5" = "$oldmd5" ]; then
+    rm -f "$name"
+  else
+    mv "$name" "$newname"
+  fi
+}
+
+rm_conffile() {
+  mv_conffile "$1" "$1.dpkg-bak"
+}
+
+case "$1" in
+  install|upgrade)
+	# Delete obsolete alsa-base dev.d symlinks
+	for N in 0 1 2 3 4 5 6 7 ; do
+		D="/etc/dev.d/snd/controlC$N"
+		if [ -d "$D" ] ; then
+			L="$D/alsa-base.dev"
+			rm -f "$L"
+		fi
+	done
+	# Delete obsolete alsa-base dev.d script
+	rm_conffile /etc/alsa/dev.d/alsa-base
+	# Delete obsolete modprobe dir
+	rm -rf /etc/alsa/modprobe-post-install.d
+	# Remove udev rules symlink and alsa-utils.rules since it is stored as
+	# /lib/udev/rules.d/80-alsa.rules
+	L="/etc/udev/rules.d/z60_alsa-utils.rules"
+	[ -L "$L" ] && rm -f "$L"
+	rm_conffile /etc/udev/alsa-utils.rules
+	;;
+  abort-upgrade)
+	# Nothing to do
+	;;
+esac
+
+

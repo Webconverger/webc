@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+# Conffile has become obsolete
+dpkg-maintscript-helper rm_conffile /etc/cron.monthly/standard "3.0pl1-113" -- "$@"
+
+if [ $1 = purge ]; then 
+    update-rc.d cron remove >/dev/null
+    rm -f /etc/cron.allow /etc/cron.deny
+fi
+
+

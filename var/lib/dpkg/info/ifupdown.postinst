@@ -1,0 +1,130 @@
+#!/bin/sh
+set -e
+
+MYNAME="${0##*/}"
+
+report() { echo "${MYNAME}: $*" ; }
+report_warn() { report "Warning: $*" >&2 ; }
+report_err() { report "Error: $*" >&2 ; }
+
+# Create /etc/network/run 
+if [ "$1" = configure -a ! -d /etc/network/run ]; then
+  if [ -e /etc/network/run -o -L /etc/network/run ]; then
+    echo "Renaming non-directory /etc/network/run to run.dpkg-old..."
+    mv /etc/network/run /etc/network/run.dpkg-old
+  fi
+
+  # The best choice is to use /dev/shm/network
+  #
+  # If we can't use that, we'll just make /etc/network/run a directory,
+  # unless we're upgrading, in which case we'll just keep ifstate where it
+  # is, by making /etc/network/run a symlink to /etc/network.
+
+  WHAT_TO_USE=devshm
+
+  if [ ! -d /dev/shm -o ! -w /dev/shm -o ! -r /proc/mounts ]; then
+    WHAT_TO_USE=owndir
+  elif ! grep -qs "^tmpfs[[:space:]]\+/dev/shm[[:space:]]\+tmpfs[[:space:]]\+\([^[:space:]]\+,\)\?rw" /proc/mounts
+  then
+    WHAT_TO_USE=owndir
+  elif grep -qs '[[:space:]]/dev[[:space:]]devfs[[:space:]]' /proc/mounts; then
+    WHAT_TO_USE=owndir
+  fi
+
+  # Check for available space if we are using devshm
+  if [ "$WHAT_TO_USE" = devshm ]; then
+    SPACE=`df -k /dev/shm | tail -1 | awk '{if ($4 ~ /%/) { print $3 } else { print $4 } }'`
+    if [ "$SPACE" -le 0 ]; then
+      WHAT_TO_USE=owndir
+    fi
+  fi
+
+  if [ "$WHAT_TO_USE" = owndir -a -e /etc/network/ifstate ]; then
+    WHAT_TO_USE=etcnetwork
+  fi
+
+  if [ "$WHAT_TO_USE" = devshm ]
+  then
+    [ -d /dev/shm/network ] || mkdir /dev/shm/network
+    ln -s /dev/shm/network /etc/network/run
+  elif [ "$WHAT_TO_USE" = "owndir" ]; then
+    mkdir /etc/network/run
+  else
+    ln -s . /etc/network/run
+  fi
+fi 
+
+# Move /etc/network/ifstate to /etc/network/run/ifstate
+if [ "$1" = configure -a "$2" != "" -a -e /etc/network/ifstate ] &&
+     dpkg --compare-versions "$2" lt "0.6.5"
+then
+  if [ ! -e /etc/network/run/ifstate ] || ! diff /etc/network/ifstate /etc/network/run/ifstate >/dev/null
+  then
+    echo "Moving /etc/network/ifstate to /etc/network/run/ifstate"
+    if [ ! -L /etc/network/ifstate ]; then
+      mv /etc/network/ifstate /etc/network/run/ifstate
+    else
+      cat /etc/network/ifstate >/etc/network/run/ifstate
+      mv /etc/network/ifstate /etc/network/ifstate.dpkg-old
+    fi
+  fi
+fi
+   
+if [ "$1" = "configure" -a "$2" != "" ] &&
+     dpkg --compare-versions "$2" le "0.6.4-4.1" &&
+     [ -f /etc/network/run/ifstate -a -x /sbin/dhclient ]
+then
+  # for every active ifupdown-controlled dhclient interface, copy
+  # /var/run/dhclient.pid, so that the new ifdown is able to kill
+  # dhclient.
+  #
+  # the old version had a bug with more than one DHCP iface anyway,
+  # so we don't know which one the PID file actually belongs to.
+
+  sed -e 's/^.*=//' /etc/network/run/ifstate |
+    while read iface; do
+      # handle \<newline>-continued lines
+      if sed -e '/^[[:space:]]*#/b;:g /\\$/{N;s/\\\n//;bg;}' /etc/network/interfaces | grep -qe "^[[:space:]]*iface[[:space:]]*\\b${iface}\\b[[:space:]]*.*\\bdhcp\\b.*" &&
+          [ -f "/var/run/dhclient.pid" ] &&
+          [ ! -f "/var/run/dhclient.${iface}.pid" ]
+      then
+        # copy original file.  If dhclient was started
+        # manually, one can still use dhclient.pid, if started
+        # by ifupdown, the new ifupdown can take it down with 
+        # dhclient.${iface}.pid.  Obsolete files are removed during
+        # next boot (bootmisc.sh).
+        cp /var/run/dhclient.pid "/var/run/dhclient.${iface}.pid"
+      fi
+    done
+fi
+
+# Generic stuff done on all configurations
+if [ "$1" = "configure" ] ; then
+  if [ -f /etc/network/interfaces ] ; then
+    # TODO: This should be handled with debconf and the script
+    # could introduce the line there directly
+    if ! grep -q "^[[:space:]]*iface[[:space:]]\+lo[[:space:]]\+inet[[:space:]]\+loopback\>" /etc/network/interfaces ; then
+      report_warn "No 'iface lo' definition found in /etc/network/interfaces"
+    fi
+    if ! grep -q "^[[:space:]]*auto[[:space:]].*\<lo\>" /etc/network/interfaces ; then
+      report_warn "No 'auto lo' statement found in /etc/network/interfaces"
+    fi
+  else  # ! -f /etc/network/interfaces
+    echo "Creating /etc/network/interfaces."
+    echo "# interfaces(5) file used by ifup(8) and ifdown(8)" > /etc/network/interfaces
+    echo "auto lo" >> /etc/network/interfaces
+    echo "iface lo inet loopback" >> /etc/network/interfaces
+  fi
+fi
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/ifupdown-clean" ]; then
+	update-rc.d ifupdown-clean start 18 S . >/dev/null || exit $?
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/ifupdown" ]; then
+	update-rc.d ifupdown start 39 S . start 36 0 6 . >/dev/null || exit $?
+fi
+# End automatically added section
+

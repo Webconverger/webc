@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ "$1" = "configure" ]; then
+    update-alternatives \
+        --install /bin/nc nc /bin/nc.traditional 10 \
+        --slave /bin/netcat netcat /bin/nc.traditional \
+        --slave /usr/share/man/man1/nc.1.gz nc.1.gz \
+                /usr/share/man/man1/nc_traditional.1.gz \
+        --slave /usr/share/man/man1/netcat.1.gz netcat.1.gz \
+                /usr/share/man/man1/nc_traditional.1.gz
+fi
+
+

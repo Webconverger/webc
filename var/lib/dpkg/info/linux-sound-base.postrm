@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+  remove)
+	rm -f /etc/hotplug/blacklist.d/linux-sound-base_noOSS
+	rm -f /etc/discover.d/linux-sound-base_noOSS
+	rm -f /etc/modutils/linux-sound-base_noOSS
+	rm -f /etc/modprobe.d/linux-sound-base_noOSS
+	rm -f /etc/modprobe.d/linux-sound-base_noOSS.conf
+	rm -f /etc/hotplug/blacklist.d/linux-sound-base_noALSA
+	rm -f /etc/discover.d/linux-sound-base_noALSA
+	rm -f /etc/modutils/linux-sound-base_noALSA
+	rm -f /etc/modprobe.d/linux-sound-base_noALSA
+	rm -f /etc/modprobe.d/linux-sound-base_noALSA.conf
+	rm -f /etc/discover.conf.d/10linux-sound-base
+	;;
+esac
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+

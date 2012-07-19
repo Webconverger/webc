@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "install" -a -n "$2" ] ; then
+	[ -f /etc/logrotate.d/rsyslog.disabled ] && mv -f /etc/logrotate.d/rsyslog.disabled /etc/logrotate.d/rsyslog
+fi
+
+if [ "$1" = "upgrade" ] && dpkg --compare-versions "$2" lt "5.7.8-1" ; then
+	rm -f /etc/systemd/system/sockets.target.wants/rsyslog.socket
+fi
+
+
+
+exit 0

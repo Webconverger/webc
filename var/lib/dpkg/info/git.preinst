@@ -1,0 +1,66 @@
+#!/bin/sh
+set -e
+
+# Snippet based on dpkg-maintscript-helper from dpkg 1.15.8.
+# Postinst explains why.
+rm_conffile () {
+	CONFFILE=$1; shift
+	test "$1" = install || test "$1" = upgrade || return 0
+	dpkg --compare-versions "$2" lt-nl '1:1.7.4.1-2~' || return 0
+	test -e "$CONFFILE" || return 0
+
+	md5sum=$(md5sum $CONFFILE | sed -e 's/ .*//')
+	old_md5sum=$(
+		dpkg-query -W -f='${Conffiles}' git |
+		sed -n -e "\' $CONFFILE ' { s/ obsolete\$//; s/.* //; p }"
+	)
+	if test "$md5sum" != "$old_md5sum"; then
+		echo "$CONFFILE has been modified by you."
+		echo "Saving as $CONFFILE.dpkg-bak ..."
+		mv -f "$CONFFILE" "$CONFFILE.dpkg-backup"
+	else
+		echo "Moving $CONFFILE out of the way..."
+		mv -f "$CONFFILE" "$CONFFILE.dpkg-remove"
+	fi
+}
+
+# Now /etc/emacs/site-start.d/50git-core.el belongs to the
+# git-el package.  If we are upgrading from a pre- 1.7.4.1-2~
+# version then git-el is at most unpacked (so its version
+# is 50git-core.el.dpkg-new if present), and we can remove
+# an unchanged 50git-core.el file without danger.
+#
+rm_conffile /etc/emacs/site-start.d/50git-core.el "$1" "$2"
+
+# Git versions before 1.7.7-2 kept about 100 hard links to
+# /usr/lib/git-core/git at /usr/lib/git-core/git-* to avoid
+# wasting time resolving a symlink when old scripts call "git
+# foo" as git-foo.  Btrfs doesn't like to have more than 130 or
+# so links to a single inode in a given directory.  dpkg versions
+# 1.16.1 and later temporarily double the number of hard links to
+# an inode when upgrading a package.
+#
+# Replace the hard links with symlinks _before_ upgrading to
+# avoid trouble.
+#
+# For added fun, coreutils mv will not replace a file by a
+# symlink to the same inode (bug #654666).  We give
+# /usr/lib/git-core/git its own inode to work around that.
+
+if test "$1" = upgrade &&
+   dpkg --compare-versions "$2" lt-nl '1:1.7.7-2'; then
+	refinode=$(stat -c%i /usr/lib/git-core/git-add)
+
+	rm -f /usr/lib/git-core/git.tmp
+	cp -p /usr/lib/git-core/git /usr/lib/git-core/git.tmp
+	mv -f /usr/lib/git-core/git.tmp /usr/lib/git-core/git
+	for f in /usr/lib/git-core/*; do
+		test "$f" != /usr/lib/git-core/git &&
+		test "$f" != /usr/lib/git-core/git-add || continue
+		rm -f "$f.tmp"
+		inode=$(stat -c%i "$f")
+		test "$inode" = "$refinode" || continue
+		ln -s git "$f.tmp"
+		mv -f "$f.tmp" "$f"
+	done
+fi

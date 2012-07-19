@@ -1,0 +1,25 @@
+#!/bin/sh -e
+
+prep_mv_conffile() {
+	local PKGNAME="$1"
+	local CONFFILE="$2"
+
+	[ -e "$CONFFILE" ] || return 0
+
+	local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
+	local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
+			sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+	if [ "$md5sum" = "$old_md5sum" ]; then
+		rm -f "$CONFFILE"
+	fi
+}
+
+case "$1" in
+install|upgrade)
+	if dpkg --compare-versions "$2" le "30~pre9-2"; then
+		prep_mv_conffile wireless-tools "/etc/network/if-up.d/wireless-tools"
+		prep_mv_conffile wireless-tools "/etc/network/if-down.d/wireless-tools"
+	fi
+esac
+
+

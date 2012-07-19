@@ -1,0 +1,24 @@
+#! /bin/sh -e
+
+case $1 in
+    abort-install|abort-upgrade)
+	if [ -e /etc/tmac.man.local.moved-by-preinst ]; then
+	    mv -f /etc/groff/man.local /etc/tmac.man.local
+	    rm -f /etc/tmac.man.local.moved-by-preinst
+	fi
+	if [ -e /usr/share/groff/site-tmac.moved-by-preinst ]; then
+	    mv -f /etc/groff /usr/share/groff/site-tmac
+	    rm -f /usr/share/groff/site-tmac.moved-by-preinst
+	fi
+	if [ -d /usr/share/groff/site-tmac.old ]; then
+	    mv -f /usr/share/groff/site-tmac.old /usr/share/groff/site-tmac
+	fi
+	;;
+esac
+
+# Automatically added by dh_installmime
+if which update-mime >/dev/null 2>&1; then update-mime; fi
+# End automatically added section
+
+
+exit 0

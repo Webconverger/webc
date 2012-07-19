@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "purge" ]; then
+#	if [ -L /dev/sndstat ]; then
+#		rm -f /dev/sndstat
+#		echo "Remaking /dev/sndstat."
+#		# Keep this in sync with /sbin/MAKEDEV
+#		if cd /dev && mknod --mode=0660 sndstat c 14 6 ; then
+#			chown root:audio sndstat || :
+#		fi
+#	fi
+	# Remove configuration files
+	rm -f \
+		/etc/default/alsa \
+		/etc/default/alsa.dpkg-old
+	# Remove apm symlinks
+	rm -f \
+		/etc/apm/suspend.d/??alsa \
+		/etc/apm/resume.d/??alsa
+	# Remove run time files
+	rm -rf /var/run/alsa
+fi
+
+

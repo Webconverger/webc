@@ -1,0 +1,174 @@
+#!/bin/bash
+
+. /usr/share/debconf/confmodule
+
+set -e
+
+package_name()
+{
+    echo $(basename $0 .postinst)
+}
+
+# element() is a helper function for file-rc:
+element() {
+    local element list IFS
+
+    element="$1"
+
+    [ "$2" = "in" ] && shift
+    list="$2"
+    [ "$list" = "-" ] && return 1
+    [ "$list" = "*" ] && return 0
+
+    IFS=","
+    set -- $list
+    case $element in
+	"$1"|"$2"|"$3"|"$4"|"$5"|"$6"|"$7"|"$8"|"$9")
+	    return 0
+    esac
+    return 1
+}
+
+# filerc (runlevel, service) returns /etc/init.d/service, if service is
+# running in $runlevel:
+filerc() {
+    local runlevel basename
+    runlevel=$1
+    basename=$2
+    while read LINE
+    do
+	case $LINE in
+	    \#*|"") continue
+	esac
+
+	set -- $LINE
+	SORT_NO="$1"; STOP="$2"; START="$3"; CMD="$4"
+	[ "$CMD" = "/etc/init.d/$basename" ] || continue
+
+	if element "$runlevel" in "$START" || element "S" in "$START"
+	then
+	    echo "/etc/init.d/$basename"
+	    return 0
+	fi
+    done < /etc/runlevel.conf
+    echo ""
+}
+
+if [ "$1" = "configure" ]
+then
+    if [ ! -z "$2" ]; then
+	if dpkg --compare-versions "$2" lt 0.9.8g-9 && dpkg --compare-versions "$2" gt 0.9.8c-4etch3; then
+	    db_version 2.0
+
+	    echo -n "Checking for services that may need to be restarted..."
+
+	    check="sendmail openssh-server"
+	    check="$check apache2-common ssh-nonfree exim4"
+	    check="$check apache-ssl libapache-mod-ssl openvpn spamassassin"
+	    check="$check courier-imap-ssl courier-mta-ssl courier-pop-ssl"
+	    check="$check postfix cyrus21-imapd cyrus21-pop3d"
+	    check="$check postgresql-7.4 postgresql-8.0 postgresql-8.1"
+	    check="$check postgresql-8.2"
+	    check="$check racoon dovecot-common bind9"
+	    check="$check ntp openntpd clamcour nagios-nrpe-server"
+	    check="$check clamav-freshclam clamav-daemon"
+	    check="$check fetchmail ftpd-ssl slapd"
+	    check="$check proftpd proftpd-ldap proftpd-mysql proftpd-pgsql"
+	    check="$check partimage-server conserver-server tor"
+	    check="$check stunnel4"
+	    # Only get the ones that are installed, and configured
+	    check=$(dpkg -s $check 2> /dev/null | egrep '^Package:|^Status:' | awk '{if ($1 ~ /^Package:/) { package=$2 } else if ($0 ~ /^Status: .* installed$/) { print package }}')
+	    # apache2 ships its init script in apache2-common, but the
+	    # script is apache2
+	    check=$(echo $check | sed 's/apache2-common/apache2/g')
+	    # For mod-ssl apache has to be restarted
+	    check=$(echo $check | sed 's/libapache-mod-ssl/apache/g')
+	    # The name of proftpd-{ldap,mysql,pgsql} init script is
+	    # same as "proftpd".
+	    check=$(echo $check | sed 's/proftpd-.*/proftpd/g')
+            # dovecot-common ships its init script, but the
+	    # script name is dovecot for dovecot-{imapd,pop3d}.
+	    check=$(echo $check | sed 's/dovecot-common/dovecot/g')
+	    # openssh-server's init script it called ssh
+	    check=$(echo $check | sed 's/openssh-server/ssh/g')
+	    echo "done."
+
+	    echo "Checking init scripts..."
+	    for service in $check; do
+		if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		   idl=$(ls /etc/init.d/${service} 2> /dev/null | head -n 1)
+		   if [ -n "$idl" ] && [ -x $idl ]; then
+			services="$service $services"
+		   else
+			echo "WARNING: init script for $service not found."
+		   fi
+		else
+		    if [ -f /usr/share/file-rc/rc ] || [ -f /usr/lib/file-rc/rc ] && [ -f /etc/runlevel.conf ]; then
+
+			idl=$(filerc $rl $service)
+		    else
+			idl=$(ls /etc/rc${rl}.d/S??${service} 2> /dev/null | head -n 1)
+		    fi
+		    if [ -n "$idl" ] && [ -x $idl ]; then
+		        services="$service $services"
+		    fi
+		fi
+	    done
+	    if [ -n "$services" ]; then
+		db_reset libssl0.9.8/restart-services
+		db_set libssl0.9.8/restart-services "$services"
+		db_input critical libssl0.9.8/restart-services || true
+		db_go || true
+		db_get libssl0.9.8/restart-services
+		
+		if [ "x$RET" != "x" ]
+		then
+		    services=$RET
+		    answer=yes
+		else
+		    answer=no
+		fi
+		echo
+		if [ "$answer" = yes ] && [ "$services" != "" ]; then
+		    echo "Restarting services possibly affected by the upgrade:"
+		    failed=""
+		    rl=$(runlevel | sed 's/.*\ //')
+		    for service in $services; do
+			if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+			    idl="invoke-rc.d ${service}"
+			elif [ -f /usr/share/file-rc/rc ] || [ -f /usr/lib/file-rc/rc ] && [ -f /etc/runlevel.conf ]; then
+			    idl=$(filerc $rl $service)
+			else
+			    idl=$(ls /etc/rc${rl}.d/S??${service} 2> /dev/null | head -n 1)
+			fi
+
+			if ! $idl restart; then
+			    failed="$service $failed"
+			fi
+		    done
+		    echo
+		    if [ -n "$failed" ]; then
+			db_subst libssl0.9.8/restart-failed services "$failed"
+			db_input critical libssl0.9.8/restart-failed || true
+			db_go || true
+		    else
+			echo "Services restarted successfully."
+		    fi
+		    echo
+		fi
+	    else
+		echo "Nothing to restart."
+	    fi
+	    # Shut down the frontend, to make sure none of the
+	    # restarted services keep a connection open to it
+	    db_stop
+	fi # end upgrading and $2 lt 0.9.8c-2
+    fi # Upgrading
+fi
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+

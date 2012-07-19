@@ -1,0 +1,212 @@
+#!/bin/sh -e
+
+supported_kernel() {
+  case "$(uname -r)" in
+    2.[012345].*|2.6.[0-9]|2.6.[0-9][!0-9]*) return 1 ;;
+    2.6.1[0-9]|2.6.1[0-9][!0-9]*) return 1 ;;
+    2.6.2[0-5]|2.6.2[0-5][!0-9]*) return 1 ;;
+  esac
+  return 0
+}
+
+tempdir() {
+  local dir=$(tempfile --prefix=udev.)
+  rm $dir
+  mkdir $dir
+  echo $dir
+}
+
+chrooted() {
+  if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ];
+  then
+    # the devicenumber/inode pair of / is the same as that of /sbin/init's
+    # root, so we're *not* in a chroot and hence return false.
+    return 1
+  fi
+  echo "A chroot environment has been detected, udev not started."
+  return 0
+}
+
+in_debootstrap() {
+  # debootstrap --second-stage may be run in an emulator instead of a chroot,
+  # we need to check for this special case because start-stop-daemon would
+  # not be available. (#520742)
+  if [ -d /debootstrap/ ]; then
+    echo "Being installed by debootstrap, udev not started."
+    return 0
+  fi
+  return 1
+} 
+
+restart_udevd() {
+  start-stop-daemon --stop --name udevd --oknodo --quiet --retry 5
+
+  local rc=0
+  udevd --daemon || rc=$?
+  if [ $rc -ne 0 ]; then
+    echo "Cannot start udevd. (rc=$rc)"
+    return $rc
+  fi
+}
+
+can_start_udevd() {
+  if ! supported_kernel; then
+    echo "udev requires a kernel >= 2.6.26, not started."
+    return 1
+  fi
+
+  if [ ! -d /sys/class/ ]; then
+    echo "udev requires a mounted sysfs, not started."
+    return 1
+  fi
+
+  if [ ! -e /sys/kernel/uevent_helper ]; then
+    echo "udev requires hotplug support, not started."
+    return 1
+  fi
+
+  if ! grep -q '[[:space:]]tmpfs$' /proc/filesystems; then
+    echo "udev requires tmpfs support, not started."
+    return 1
+  fi
+
+  if [ -e /etc/udev/disabled ]; then
+    echo "/etc/udev/disabled has been detected, udev not started."
+    return 1
+  fi
+
+  return 0
+}
+
+enable_udev() {
+  can_start_udevd || return 0
+
+  echo > /sys/kernel/uevent_helper || true
+
+  # create the directory which will hold our new /dev
+  TEMPDEV=$(tempdir)
+
+  export UDEV_ROOT=$TEMPDEV
+  UDEV_RUN=no restart_udevd
+
+  if ! mount -n -o size=10M,mode=0755 -t tmpfs tmpfs $TEMPDEV; then
+    echo "Not enabling udev because the system lacks tmpfs support!"
+    rm -f $TEMPDEV/.udev/uevent_seqnum
+    rmdir $TEMPDEV/.udev/ 2> /dev/null || true
+    return
+  fi
+
+  echo "Populating the new /dev filesystem temporarily mounted on $TEMPDEV/..."
+  /lib/udev/create_static_nodes $TEMPDEV
+  udevadm trigger --action=add
+
+  # wait for the udevd children to finish
+  udevadm settle || true
+
+  for dir in pts shm; do
+    [ -d /dev/$dir ] || continue
+    mkdir -p $TEMPDEV/$dir
+    if mountpoint -q /dev/$dir; then
+      mount -n --move /dev/$dir $TEMPDEV/$dir
+    fi
+  done
+
+  mount -n --move $TEMPDEV /dev
+
+  # start the final daemon with the normal configuration
+  unset UDEV_ROOT
+  restart_udevd
+
+  # XXX Some people reported that the directory was not empty.
+  # This should fix the issue (udevd reopens the file for each event):
+  rm -f $TEMPDEV/.udev/uevent_seqnum
+  rmdir $TEMPDEV/.udev/ 2> /dev/null || true
+
+  if ! rmdir $TEMPDEV; then
+    echo "WARNING: $TEMPDEV is not empty!"
+    ls -laR $TEMPDEV
+  fi
+
+  # restart some daemons because their /dev sockets have been hidden by
+  # the tmpfs
+  kill -s HUP 1
+  local sysloginits="inetutils-syslogd rsyslog socklog-run sysklogd syslog-ng"
+  for script in $sysloginits; do
+    [ -x /etc/init.d/$script ] && invoke-rc.d $script restart || true
+  done
+}
+
+update_initramfs() {
+  [ -x /usr/sbin/update-initramfs -a -e /etc/initramfs-tools/initramfs.conf ] \
+    || return 0
+  update-initramfs -u
+}
+
+write_interfaces_rules() {
+  local devpath
+  for devpath in /sys/class/net/*; do
+    [ -d "$devpath" ] || continue
+    udevadm test --action=add $devpath > /dev/null || true
+  done
+}
+
+fix_persistent_net_rules() {
+  if [ -e /etc/udev/rules.d/70-persistent-net.rules ]; then
+    sed -i -e 's/\bATTRS{/ATTR{/g' /etc/udev/rules.d/70-persistent-net.rules
+  fi
+}
+
+upgrade_fixes() {
+  if dpkg --compare-versions "$2" lt "140-2"; then
+    fix_persistent_net_rules
+  fi
+}
+
+case "$1" in
+    configure)
+    if [ -z "$2" ]; then # first install
+      write_interfaces_rules
+      if ! chrooted && ! in_debootstrap; then
+	enable_udev
+      fi
+    else # upgrades
+      upgrade_fixes "$@"
+      if ! chrooted; then
+	if [ -e /etc/udev/kernel-upgrade ]; then
+	  echo "Kernel upgrade mode, udevd has not been restarted."
+	  echo "Please reboot the system as soon as possible."
+	  rm /etc/udev/kernel-upgrade
+	elif can_start_udevd; then
+	  restart_udevd
+	fi
+      fi
+    fi
+
+    update_initramfs
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    interfaces)
+    write_interfaces_rules
+    ;;
+
+    *)
+    echo "$0 called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+esac
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/udev" ]; then
+	update-rc.d udev start 03 S . >/dev/null || exit $?
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/udev-mtab" ]; then
+	update-rc.d udev-mtab start 36 S . >/dev/null || exit $?
+fi
+# End automatically added section
+
+

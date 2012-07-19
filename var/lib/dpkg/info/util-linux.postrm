@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+case "$1" in
+	remove)
+		;;
+        purge)
+                update-rc.d hwclock.sh remove >/dev/null || true
+		update-rc.d hwclockfirst.sh remove >/dev/null || true
+		rm -f /etc/adjtime
+                ;;
+	*)
+		;;
+esac
+
+if [ -x /usr/sbin/update-mime ]; then
+	update-mime
+fi
+
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+

@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -e
+
+rm_conffile() {
+    CONFFILE="$1"
+
+    if [ -e "$1" ]; then
+        md5sum="$(md5sum "$1" | awk '{print $1}')"
+        old_md5sum="$(dpkg-query -W -f='${Conffiles}' dmsetup | sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }"))"
+        if [ "$md5sum" != "$old_md5sum" ]; then
+            echo "Obsolete conffile $CONFFILE has been modified by you."
+            echo "Saving as $CONFFILE.dpkg-bak ..."
+            mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+        else
+            rm -f "$CONFFILE"
+        fi
+    fi
+}
+
+case "$1" in
+    upgrade)
+        if dpkg --compare-versions "$2" lt 2:2.02.51-4; then
+            rm_conffile "/etc/udev/rules.d/65_dmsetup.rules"
+        fi
+    ;;
+esac
+
+
+
+exit 0

@@ -1,0 +1,21 @@
+#! /bin/sh -e
+
+case $1 in
+    configure)
+	if [ -e /etc/tmac.man.local.moved-by-preinst ]; then
+	    rm -f /etc/tmac.man.local.moved-by-preinst
+	fi
+	if [ -e /usr/share/groff/site-tmac.moved-by-preinst ]; then
+	    rm -f /usr/share/groff/site-tmac.moved-by-preinst
+	fi
+	;;
+esac
+
+# Automatically added by dh_installmime
+if [ "$1" = "configure" ] && [ -x "`which update-mime 2>/dev/null`" ]; then
+	update-mime
+fi
+# End automatically added section
+
+
+exit 0

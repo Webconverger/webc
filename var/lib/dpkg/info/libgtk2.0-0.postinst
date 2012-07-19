@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+# versions prior to 2.10.1-1 used the 2.4.0 binary version and generated module
+# files below /etc/gtk-2.0 which will we can not leave behind (since they
+# reference modules not on the system anymore)
+if [ "$1" = "configure" ] && dpkg --compare-versions "$2" lt-nl "2.10.3-2"; then
+    echo "Removing generated module files coming from the previous Gtk binary version..."
+    rm -v -f /etc/gtk-2.0/gdk-pixbuf.loaders
+    rm -v -f /etc/gtk-2.0/gtk.immodules
+fi
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+
+

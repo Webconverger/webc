@@ -1,0 +1,35 @@
+#! /bin/sh
+# prerm script for dictionaries-common
+# Written by Rafael Laboissiere <rafael@debian.org> on 
+# Mon Oct 18 16:17:08 CEST 1999
+
+set -e
+
+case "$1" in
+    remove|deconfigure)
+	rm -f /etc/dictionaries-common/default.aff \
+	    /etc/dictionaries-common/default.hash \
+	    /etc/dictionaries-common/words \
+	    /etc/dictionaries-common/ispell-default
+	rm -f /var/cache/dictionaries-common/*
+	if [ -L /usr/dict ]; then
+	    rm /usr/dict
+	fi
+	;;
+    
+    upgrade) ;;
+    
+    *)
+	echo "prerm called with unknown argument \`$1'" >&2
+	exit 0
+	
+esac
+
+# Verifying that there are emacsen installed before calling emacs-package-remove
+if [ -x /usr/lib/emacsen-common/emacs-package-remove ] && [ -e /var/lib/emacsen-common/installed-flavors ]; then
+    /usr/lib/emacsen-common/emacs-package-remove dictionaries-common
+fi
+
+
+
+exit 0

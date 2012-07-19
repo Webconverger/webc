@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+
+
+# Remove a no-longer used conffile
+rm_conffile() {
+    PKGNAME="$1"
+    CONFFILE="$2"
+    if [ -e "$CONFFILE" ]; then
+        md5sum="`md5sum \"$CONFFILE\" | sed -e \"s/ .*//\"`"
+        old_md5sum="`dpkg-query -W -f='${Conffiles}' $PKGNAME | sed -n -e \"\\\\' $CONFFILE '{s/ obsolete$//;s/.* //p}\"`"
+        if [ "$md5sum" != "$old_md5sum" ]; then
+            echo "Obsolete conffile $CONFFILE has been modified by you."
+            echo "Saving as $CONFFILE.dpkg-bak ..."
+            mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+        else
+	    if [ "$CONFFILE" = "/etc/acpi/events/powerbtn" -a -e /etc/acpi/powerbtn.sh.dpkg-bak ]; then
+		# we need some special logic for /etc/acpi/events/powerbtn because it might
+		# be kept because it was changed itself or because /etc/acpi/powerbtn.sh was changed
+		echo "Obsolete conffile $CONFFILE saved as $CONFFILE.dpkg-bak ..."
+		sed -e 's#/etc/acpi/powerbtn.sh#/etc/acpi/powerbtn.sh.dpkg-bak#' < "$CONFFILE" > "$CONFFILE".dpkg-bak
+	    else
+		echo "Removing obsolete conffile $CONFFILE ..."
+	    fi
+	    rm -f "$CONFFILE"
+        fi
+    fi
+}
+
+case "$1" in
+  install|upgrade)
+    if dpkg --compare-versions "$2" lt 1.0.8-7; then
+	rm_conffile acpid /etc/logrotate.d/acpid
+	rm_conffile acpid /etc/acpi/powerbtn.sh
+	rm_conffile acpid /etc/acpi/events/powerbtn
+    fi
+  ;;
+esac
+

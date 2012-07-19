@@ -1,0 +1,124 @@
+#!/bin/sh
+
+set -e
+
+# Source debconf library.
+. /usr/share/debconf/confmodule
+
+CONFIGDIR=/etc/console-setup
+CONFIGFILE=/etc/default/console-setup
+
+if [ "$1" = "configure" ]; then
+    
+    db_get console-setup/codesetcode
+    codeset="$RET"
+    db_get console-setup/fontface47
+    fontface="$RET"
+    db_metaget console-setup/use_system_font description
+    if [ "$fontface" = "$RET" ]; then
+	fontface=''
+    fi
+    db_get console-setup/fontsize
+    fontsize="$RET"
+    if [ -z "$fontface" ]; then
+	fontsize=''
+    fi
+
+    db_get console-setup/charmap47
+    charmap="${RET:-UTF-8}"
+
+    if [ ! -e $CONFIGFILE ]; then
+	cat /usr/share/console-setup/console-setup >$CONFIGFILE || true
+    fi
+
+    . $CONFIGFILE || true
+
+    CONSOLE_MAP=${CONSOLE_MAP:-$ACM}
+
+# If $CONFFILE is produced by an old version of console-setup or by a
+# new version of console-setup-mini
+    if \
+	grep "^ *XKBLAYOUT=" $CONFIGFILE >/dev/null || \
+	! grep "^ *CHARMAP=" $CONFIGFILE >/dev/null
+    then
+	cp -a $CONFIGFILE $CONFIGFILE.tmp
+
+	cat /usr/share/console-setup/console-setup >$CONFIGFILE.tmp
+
+	cat >>$CONFIGFILE.tmp <<EOF
+
+if [ -f /etc/default/keyboard ]; then
+    . /etc/default/keyboard
+fi
+######################################################################
+# You can remove the lines that follow.  They contain the contents of
+# this file before version 1.47 of console-setup.
+######################################################################
+EOF
+	sed 's/^/# /' <$CONFIGFILE >>$CONFIGFILE.tmp
+	
+	mv -f $CONFIGFILE.tmp $CONFIGFILE
+    fi
+
+    # For compatibility with programs that expect console-setup-mini
+    # to define XKB... variables in /etc/default/console-setup.
+    if \
+	! grep '^ *[.] */etc/default/keyboard' $CONFIGFILE >/dev/null
+    then
+	cat >>$CONFIGFILE <<EOF
+
+if [ -f /etc/default/keyboard ]; then
+    . /etc/default/keyboard
+fi
+EOF
+    fi
+
+    # Ensure we do not mess up the config file's ownership and permissions.
+    cp -a -f $CONFIGFILE $CONFIGFILE.tmp
+
+    # If the admin deleted or commented some variables but then set
+    # them via debconf, (re-)add them to the conffile.
+    for var in \
+	VERBOSE_OUTPUT ACTIVE_CONSOLES CHARMAP CODESET FONTFACE FONTSIZE
+    do
+        if ! grep "^ *${var}=" $CONFIGFILE >/dev/null; then
+	    echo "${var}=" >>$CONFIGFILE
+	fi
+    done    
+
+    if [ "$FONT" ] && ! grep "^ *FONT=" $CONFIGFILE >/dev/null; then
+	echo "FONT=" >>$CONFIGFILE
+    fi
+    if [ "$FONT_MAP" ] && ! grep "^ *FONT_MAP=" $CONFIGFILE >/dev/null; then
+	echo "FONT_MAP=" >>$CONFIGFILE
+    fi
+    if \
+	[ "$CONSOLE_MAP" ] \
+	&& ! grep "^ *CONSOLE_MAP=" $CONFIGFILE >/dev/null \
+	&& ! grep "^ *ACM=" $CONFIGFILE >/dev/null
+    then
+	echo "CONSOLE_MAP=" >>$CONFIGFILE
+    fi
+    
+    sed \
+	-e "s|^ *VERBOSE_OUTPUT=.*|VERBOSE_OUTPUT=\"${VERBOSE_OUTPUT:-no}\"|" \
+	-e "s|^ *ACTIVE_CONSOLES=.*|ACTIVE_CONSOLES=\"${ACTIVE_CONSOLES:-/dev/tty[1-6]}\"|" \
+	-e "s|^ *FONT=.*|FONT=\"$FONT\"|" \
+	-e "s|^ *FONT_MAP=.*|FONT_MAP=\"$FONT_MAP\"|" \
+	-e "s|^ *CONSOLE_MAP=.*|CONSOLE_MAP=\"$CONSOLE_MAP\"|" \
+	-e "s|^ *ACM=.*|CONSOLE_MAP=\"$CONSOLE_MAP\"|" \
+	-e "s|^ *CHARMAP=.*|CHARMAP=\"$charmap\"|" \
+	-e "s|^ *CODESET=.*|CODESET=\"$codeset\"|" \
+	-e "s|^ *FONTFACE=.*|FONTFACE=\"$fontface\"|" \
+	-e "s|^ *FONTSIZE=.*|FONTSIZE=\"$fontsize\"|" \
+	<$CONFIGFILE >$CONFIGFILE.tmp
+    
+    mv -f $CONFIGFILE.tmp $CONFIGFILE
+
+    db_set console-setup/store_defaults_in_debconf_db true
+fi
+
+# This works even if we are not on the console
+setupcon --save-only
+
+

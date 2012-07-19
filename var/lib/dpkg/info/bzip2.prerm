@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+# FHS
+pkg=bzip2
+if ( [ "$1" = "upgrade" ] || [ "$1" = "remove" ] ) && [ -L /usr/doc/$pkg ]; then
+  rm -f /usr/doc/$pkg
+fi

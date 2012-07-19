@@ -1,0 +1,218 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+now=`date +%Y%m%dT%H%M`
+logdir=/var/lib/insserv
+logfile="$logdir/run-$now.log"
+flagfile=/etc/init.d/.legacy-bootordering
+
+# Make sure insserv is in path
+PATH=/sbin:$PATH
+
+# Based on code from dash postinst
+check_divert() {
+    package=insserv
+    div=$(dpkg-divert --list $2)
+    distrib=${4:-$2.distrib}
+    case "$1" in
+    false)
+        if [ -n "$div" ] && [ -z "${div%%*by $package}" ]; then
+	    mv $distrib $2
+	    dpkg-divert --package $package --remove $2
+	fi
+	;;
+    status) # Return true if the divert is in effect
+        if [ -n "$div" ] && [ -z "${div%%*by $package}" ]; then
+            :
+	else
+	    false
+	fi
+    esac
+}
+
+
+convert_rc_s_to_k() {
+  runlevel=$1
+  for link in $(cd $target/etc/rc$runlevel.d; ls S* || true); do
+      set `echo $link|sed "s%S\(..\)\(.*\)%\1 \2%"`
+      seq=$1
+      service=$2
+      mv $target/etc/rc$runlevel.d/$link $target/etc/rc$runlevel.d/K$seq$service
+  done
+}
+
+add_problematic() {
+    msg="$1"
+    if [ -z "$PROBLEMATIC" ] ; then
+	PROBLEMATIC="$msg"
+    else
+	PROBLEMATIC="$PROBLEMATIC, $msg"
+    fi
+}
+
+is_unsafe_to_activate() {
+    retval=1
+    # Refuse to convert when there are obsolete init.d scripts left
+    # behind, as these tend to confuse the boot sequence.
+    echo "info: Checking if it is safe to convert to dependency based boot." 1>&2
+    for package in $(dpkg -S $(find /etc/init.d -type f -perm /+x) \
+                     2>/dev/null | cut -d: -f1 | sort -u); do
+        obsolete_initscripts=$(dpkg-query -W -f='${Conffiles}\n' $package | \
+	    grep 'obsolete$' | grep -o '/etc/init.d/[^ ]\+') || :
+        if [ "$obsolete_initscripts" ]; then
+            for initscript in $obsolete_initscripts; do
+                if [ -e "$initscript" ]; then
+                    retval=0
+                    add_problematic "package $package left obsolete init.d script behind"
+                fi
+            done
+        fi
+    done
+
+    # Refuse to migrate if insserv find problems, like loops,
+    # duplicate provides, script providing system facility or missing
+    # header completely.
+    insserv -nv > $logfile 2>&1 || true
+    errstr='There is a loop between|loop involving service|already provided!|provides system facility|missing LSB tags'
+    if egrep -q "$errstr" $logfile ; then
+	msg=$(egrep "$errstr" $logfile | sed 's/$/, /' | tr "\n" " ")
+	retval=0
+	add_problematic "$msg"
+
+	# If insserv found problems, report removed but not purged
+	# packages, as their dependency information is probably
+	# outdated or missing, leading to incorrect ordering.
+	for package in $(dpkg -l $(dpkg -S /etc/init.d/* 2>/dev/null |
+		cut -d: -f1 |sort -u)|grep ^rc|awk '{print $2}') ; do
+	    retval=0
+	    add_problematic "package $package removed but not purged"
+	done
+    fi
+    rm $logfile
+    return $retval
+}
+
+activate_insserv() {
+    # Save the current sequence numbers in
+    # /var/lib/update-rc.d/.  This directory will be updated
+    # when update-rc.d is called, to make it possible to migrate away
+    # from dependency based boot sequencing.  If some script is
+    # missing in /var/lib/update-rc.d/, one will have to
+    # reconfigure the package it belong to for update-rc.d to update
+    # the content in /var/lib/update-rc.d/.
+    /usr/share/sysv-rc/saveconfig -s /var/lib/update-rc.d
+
+    echo "info: Reordering boot system, log to $logfile" 1>&2
+    (
+	echo "info: Converting rc0.d/S* and rc6.d/S* to K*." 1>&2
+	convert_rc_s_to_k 0
+	convert_rc_s_to_k 6
+	echo "info: running insserv" 1>&2
+	insserv -v
+    ) > $logfile 2>&1
+
+    # Indicate that system is no longer using the legacy ordering
+    rm $flagfile
+
+    return 0
+}
+
+try_to_convert() {
+    PROBLEMATIC=""
+    if is_unsafe_to_activate ; then
+	# Make sure the note is seen every time
+	db_fset sysv-rc/unable-to-convert seen false
+	db_subst sysv-rc/unable-to-convert PROBLEMATIC "$PROBLEMATIC"
+	db_input critical sysv-rc/unable-to-convert || [ $? -eq 30 ]
+	db_go || true
+	return 1
+    else
+	# Ask if the legacy boot sequence should be converted to
+	# dependency based.
+
+	# Priority is critical during upgrades, to give those with
+	# existing installations a good  chance of seeing and rejecting
+	# the migration.
+	db_input critical sysv-rc/convert-legacy || [ $? -eq 30 ]
+
+	db_go
+	db_get sysv-rc/convert-legacy || true
+	if [ true = "$RET" ] ; then
+	    if activate_insserv ; then
+		echo "success: Enabled dependency based boot system." 1>&2
+	    else
+		echo "error: Something failed while migrating." 1>&2
+	    fi
+	else
+	    echo "warning: Asked to not convert legacy boot sequence to dependency based boot sequencing." 1>&2
+	fi
+    fi
+}
+
+case "$1" in
+    configure)
+        # Remove divert created by insserv during upgrades if it
+        # exist.  It was dropped in insserv 1.12.0-11 converted since
+        # sysvinit 2.87dsf-3, 2009-08-19.
+        if [ -f /var/run/sysv-rc.upgrade ]; then
+	    lastver=$(cat /var/run/sysv-rc.upgrade)
+	    if dpkg --compare-versions "$2" lt 2.87dsf-3 ; then
+		if check_divert status /usr/sbin/update-rc.d \
+		    /usr/sbin/update-rc.d-insserv ; then
+		    check_divert false /usr/sbin/update-rc.d \
+			/usr/sbin/update-rc.d-insserv
+		    rm /var/lib/insserv/using-insserv
+		else
+		    touch $flagfile
+		fi
+	    fi
+	    rm /var/run/sysv-rc.upgrade
+	fi
+
+	# Detect migrations away from file-rc, where the legacy boot
+	# ordering is used but the flag file to indicated legacy boot
+	# ordering is missing.  Can not do this in preinst, as preinst
+	# might be executed before the postinst of file-rc creatingthe
+	# files in /etc/rc?.d/.
+	for f in /etc/rc0.d/S* ; do
+	    if [ ! -f $flagfile ] && [ -f $f ] ; then
+		touch $flagfile
+		break
+	    fi
+	done
+
+	if [ -f $flagfile ] ; then
+	    # Still using legacy ordering, try to convert
+	    if try_to_convert ; then
+		:
+	    else
+		cat 1>&2 <<EOF
+
+error: Unable to migrate to dependency based boot sequencing.
+error: Problems detected: $PROBLEMATIC
+
+See http://wiki.debian.org/LSBInitScripts/DependencyBasedBoot for
+more information about dependency based boot sequencing. To
+reattempt the migration process run 'dpkg-reconfigure sysv-rc'.
+
+EOF
+	    fi
+	fi
+	if dpkg --compare-versions "$2" lt 2.87dsf-5 ; then
+	    removedfiles=$(grep -l 'remove$' /var/lib/update-rc.d/* 2>/dev/null || true)
+	    if [ "$removedfiles" ] ; then
+		rm $removedfiles
+	    fi
+	fi
+	;;
+    *)
+	;;
+esac
+
+db_stop
+
+

@@ -1,0 +1,55 @@
+#!/bin/sh
+
+set -e
+
+# Remove old init.d links
+if dpkg --compare-versions "$2" lt-nl "1.0.10-3"; then
+	rm -f /etc/rc1.d/K??acpid
+fi
+
+if dpkg --compare-versions "$2" lt-nl "1.0.6-16"; then
+	rm -f /etc/rc[06].d/K??acpid
+fi
+
+if dpkg --compare-versions "$2" lt "1.0.6-6"; then
+	rm -f /etc/rc1.d/K20acpid /etc/rc[2-5].d/S20acpid
+fi
+
+# Fix very old permission problem
+if dpkg --compare-versions "$2" lt-nl "1.0.10-5"; then
+	[ -f /var/log/acpid ] && chmod 640 /var/log/acpid*
+fi
+
+HAL_NEEDS_RESTARTING=no
+case "$1" in
+  configure|reconfigure)
+    # check whether the hal init script is present and hal seems running; we
+    # need to stop hal to grab /proc/acpi/event; when hal starts again, it will
+    # simply ignore this interface as long as acpid is installed; see
+    # Launchpad #63450
+    if [ -x /etc/init.d/hal ] && [ -f /var/run/hal/hald.pid ]; then
+      HAL_NEEDS_RESTARTING=yes
+      invoke-rc.d hal stop
+    fi
+    ;;
+esac
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/acpid" ]; then
+	update-rc.d acpid start 12 2 3 4 5 . >/dev/null
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d acpid start || exit $?
+	else
+		/etc/init.d/acpid start || exit $?
+	fi
+fi
+# End automatically added section
+
+
+case "$1" in
+  configure|reconfigure)
+    if [ -x /etc/init.d/hal ] && [ "$HAL_NEEDS_RESTARTING" = "yes" ]; then
+      invoke-rc.d hal start
+    fi
+    ;;
+esac
