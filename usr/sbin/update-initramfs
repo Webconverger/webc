@@ -237,7 +237,7 @@ get_sorted_versions()
 		fi
 		worklist=""
 		for gsv_i in $version_list; do
-			if dpkg --compare-versions "${gsv_x}" '>' "${gsv_i}"; then
+			if dpkg --compare-versions "${gsv_x}" '>' "${gsv_i}" 2>/dev/null; then
 				worklist="${worklist} ${gsv_x} ${gsv_i}"
 				gsv_x=""
 			else

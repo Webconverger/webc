@@ -139,7 +139,7 @@ if ! command -v "${compress}" >/dev/null 2>&1; then
 	COMPRESS=gzip
 fi
 
-if dpkg --compare-versions "${version}" lt "2.6.38"; then
+if dpkg --compare-versions "${version}" lt "2.6.38" 2>/dev/null; then
 	compress=gzip
 	[ "${verbose}" = y ] && \
 		echo "linux-2.6 likely misses ${COMPRESS} support, using gzip"

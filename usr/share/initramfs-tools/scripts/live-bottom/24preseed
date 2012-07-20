@@ -1,0 +1,71 @@
+#!/bin/sh
+
+#set -e
+
+# initramfs-tools header
+
+PREREQ=""
+
+prereqs()
+{
+	echo "${PREREQ}"
+}
+
+case "${1}" in
+	prereqs)
+		prereqs
+		exit 0
+		;;
+esac
+
+# live-boot header
+
+if [ -n "${NOPRESEED}" ]
+then
+	exit 0
+fi
+
+. /scripts/live-functions
+
+log_begin_msg "Loading preseed file"
+
+# live-boot script
+
+if [ -e /preseed.cfg ]
+then
+	chroot /root debconf-set-selections < /preseed.cfg
+fi
+
+if [ -n "${LOCATIONS}" ]
+then
+	for item in ${LOCATIONS}
+	do
+		chroot /root debconf-set-selections < "/root${item}"
+	done
+fi
+
+if [ -n "${PRESEEDS}" ]
+then
+	for preseed in ${PRESEEDS}
+	do
+		question="${preseed%%=*}"
+		value="${preseed#*=}"
+
+		live-preseed /root "${question}" "${value}"
+	done
+fi
+
+reply="$(echo "GET preseed/early_command" | chroot /root debconf-communicate -fnoninteractive live-boot)"
+
+if [ "${reply#0 }" != "${reply}" ]
+then
+	reply="${reply#0 }"
+	sh -c "${reply}"
+fi
+
+# Clear out debconf database backup files to save memory.
+rm -f /root/var/cache/debconf/*.dat-old
+
+log_end_msg
+
+exit 0
