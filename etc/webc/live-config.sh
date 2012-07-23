@@ -98,7 +98,7 @@ fi
 # Make sure /home has noexec and nodev, for extra security.
 # First, just try to remount, in case /home is already a separate filesystem
 # (when using persistence, for example).
-mount -o remount,noexec,nodev /home || (
+mount -o remount,noexec,nodev /home 2>/dev/null || (
 	# Turn /home into a tmpfs. We use a trick here: after the mount, this
 	# subshell will still have the old /home as its current directory, so
 	# we can still read the files in the original /home. By passing -C to
