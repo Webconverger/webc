@@ -156,19 +156,13 @@ do
 
 	if test -x /usr/bin/iceweasel
 	then
-		if ! cmdline_has dirty
+		if ! cmdline_has noclean
 		then
 		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
 		do
-			test -d $d && rm -rf $d
-			test -e $d && rm -f $d
+			rm -rf $d
 		done
 		fi
-		for d in .mozilla .adobe .macromedia Downloads
-		do
-			test -d /tmp/webc/$d || mkdir -p /tmp/webc/$d
-			test -h /home/webc/$d || ln -s /tmp/webc/$d /home/webc/$d
-		done
 		iceweasel $(echo $homepage | sed "s,MACID,$mac,g")
 	fi
 
