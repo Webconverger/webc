@@ -1,0 +1,107 @@
+#!/bin/sh
+set -e
+
+
+# A trigger that handles the alternatives for /usr/lib/xorg/modules/extensions/libglx.so
+if [ "$1" = "triggered" ]; then
+
+	if [ -e /usr/lib/nvidia/diversions/libglx.so ]; then
+		update-alternatives --install /usr/lib/xorg/modules/extensions/libglx.so libglx.so /usr/lib/nvidia/diversions/libglx.so 5 \
+			--slave /usr/lib/debug/usr/lib/xorg/modules/extensions/libglx.so libglx.so.dbg /usr/lib/nvidia/diversions/libglx.so.dbg
+	else
+		update-alternatives --remove libglx.so /usr/lib/nvidia/diversions/libglx.so
+	fi
+
+fi
+
+
+#DIVERT_QUIET="--quiet"
+
+# <target: squeeze>
+exists()
+{
+	test -e "$1" || test -L "$1"
+}
+
+if [ "$1" = "configure" ]
+then
+
+	# dpkg-reconfigure does not set DPKG_MAINTSCRIPT_PACKAGE (#560317)
+	if [ -z "$DPKG_MAINTSCRIPT_PACKAGE" ]
+	then
+		echo "ERROR: DPKG_MAINTSCRIPT_PACKAGE is not set, usually a bug in dpkg-reconfigure"
+		exit 1
+	fi
+
+	# the destination directory for the diversions
+	test -d /usr/lib/nvidia/diversions || \
+		mkdir -p /usr/lib/nvidia/diversions || true
+
+	# <target: squeeze>
+	# take over diversion from nvidia-glx*
+	file_orig="/usr/lib/xorg/modules/extensions/libglx.so"
+	file_old_divert="/usr/lib/nvidia/libglx.so.xlibmesa"
+	file_new_divert="/usr/lib/nvidia/diversions/libglx.so"
+	old_diverter="`dpkg-divert --listpackage $file_orig`"
+
+	if [ -n "$old_diverter" ] \
+		&& [ "$old_diverter" != "$DPKG_MAINTSCRIPT_PACKAGE" ]
+	then
+		if exists "$file_orig"
+		then
+			# we have Breaks: with all old versions of nvidia-glx* that
+			# shipped $file_orig, so if the file is still there while being
+		        # diverted by some other package we don't know where it came from
+			echo "ERROR: $file_orig does exist even if it is diverted. Aborting."
+			exit 1
+		fi
+
+		if [ -z "$(dpkg-query -S "$file_new_divert" 2>/dev/null || true)" ]
+		then
+			dpkg-divert --remove --rename --package $old_diverter --divert \
+				"$file_old_divert" \
+				"$file_orig"
+		else
+			dpkg-divert --remove --rename --package $old_diverter --divert \
+				"$file_new_divert" \
+				"$file_orig"
+		fi
+	fi
+
+	if exists "$file_old_divert"
+	then
+		echo "ERROR: $file_old_divert does still exist. Aborting."
+		exit 1
+	fi
+	# </target: squeeze>
+
+fi
+# </target: squeeze>
+
+if [ "$1" = "configure" ]
+then
+
+	# <target: squeeze>
+	# The old nvidia-glx postrm would delete /usr/lib/nvidia/diversions
+	# out from under us, so create it if it doesn't exist.
+	test -d /usr/lib/nvidia/diversions || \
+		mkdir -p /usr/lib/nvidia/diversions
+	# </target: squeeze>
+
+	# make new diversions
+	dpkg-divert $DIVERT_QUIET --add --rename --package $DPKG_MAINTSCRIPT_PACKAGE --divert \
+		/usr/lib/nvidia/diversions/libglx.so \
+		/usr/lib/xorg/modules/extensions/libglx.so
+	dpkg-divert $DIVERT_QUIET --add --rename --package $DPKG_MAINTSCRIPT_PACKAGE --divert \
+		/usr/lib/nvidia/diversions/libglx.so.dbg \
+		/usr/lib/debug/usr/lib/xorg/modules/extensions/libglx.so
+
+	# activate our trigger
+	dpkg-trigger /usr/lib/xorg/modules/extensions/libglx.so
+
+fi
+
+
+
+
+exit 0
