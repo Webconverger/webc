@@ -370,7 +370,7 @@ is_live_path ()
 
 	if [ -d "${DIRECTORY}"/"${LIVE_MEDIA_PATH}" ]
 	then
-		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2
+		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2 git
 		do
 			if [ "$(echo ${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM})" != "${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM}" ]
 			then
@@ -418,6 +418,10 @@ get_backing_device ()
 			echo "directory"
 			;;
 
+		*.git)
+			echo "git repository"
+			;;
+
 		*)
 			panic "Unrecognized live filesystem: ${1}"
 			;;
@@ -449,7 +453,8 @@ mount_images_in_directory ()
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext3" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext4" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.jffs2" ||
-		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.dir"
+		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.dir" ||
+		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.git"
 	then
 		[ -n "${mac}" ] && adddirectory="${directory}/${LIVE_MEDIA_PATH}/${mac}"
 		setup_unionfs "${directory}/${LIVE_MEDIA_PATH}" "${rootmnt}" "${adddirectory}"
@@ -1140,7 +1145,7 @@ setup_unionfs ()
 			done
 		else
 			# ${MODULE}.module does not exist, create a list of images
-			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
+			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
 			do
 				for IMAGE in "${image_directory}"/*."${FILESYSTEM}"
 				do
@@ -1153,7 +1158,7 @@ setup_unionfs ()
 
 			if [ -n "${addimage_directory}" ] && [ -d "${addimage_directory}" ]
 			then
-				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
+				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
 				do
 					for IMAGE in "${addimage_directory}"/*."${FILESYSTEM}"
 					do
@@ -1182,9 +1187,37 @@ setup_unionfs ()
 			log_begin_msg "Running /scripts/live-realpremount"
 			run_scripts /scripts/live-realpremount
 			log_end_msg
+			_log_msg croot: $croot
 
-			if [ -d "${image}" ]
+			if [ "${image##*.}" = "git" ]; then
+				_log_msg git
+				if [ "${UNIONTYPE}" != "unionmount" ]
+				then
+					mpoint="${croot}/${imagename}"
+					rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
+					_log_msg mpoint: $mpoint
+				else
+					mpoint="${rootmnt}"
+				fi
+
+				mkdir -p "${mpoint}"
+				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
+				# Replace /etc/mtab with a symlink to
+				# /proc/mounts. This prevents fuse from
+				# calling /bin/mount to update the mtab,
+				# using options that busybox mount does
+				# not understand...
+				ln -sf /proc/mounts /etc/mtab
+				#ulimit -c unlimited
+				#openvt -c 2 -- sh -c "git-fs -d -o allow_other \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
+				#sleep 2
+				git-fs -o allow_other "${image}" "${mpoint}"
+				log_end_msg
+				#maybe_break gitfs
+				#openvt -c 3 -- /bin/sh
+			elif [ -d "${image}" ]
 			then
+				_log_msg dir
 				# it is a plain directory: do nothing
 				rofsstring="${image}=${roopt}:${rofsstring}"
 				rofslist="${image} ${rofslist}"
