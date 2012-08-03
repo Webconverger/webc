@@ -1,0 +1,169 @@
+#!/bin/sh
+
+# Copyright (C)2007 Sun Microsystems, Inc.
+# Copyright (C)2009-2011 D. R. Commander
+#
+# This library is free software and may be redistributed and/or modified under
+# the terms of the wxWindows Library License, Version 3.1 or (at your option)
+# any later version.  The full license is in the LICENSE.txt file included
+# with this distribution.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# wxWindows Library License for more details.
+
+maketemp()
+{
+	umask 077
+	mktemp $1.XXXXXX || exit 1
+}
+
+VGLTUNNEL=0
+X11TUNNEL=1
+CONNECT=1
+FORCE=0
+SSHCMD=ssh
+
+usage()
+{
+	echo
+	echo "USAGE: $0"
+	echo "       [vglconnect options] [user@]hostname [Additional SSh options]"
+	echo
+	echo "vglconnect options:"
+	echo "-display <d> = Local X display to use when drawing VirtualGL's images"
+	echo "               (default: read from DISPLAY environment variable)"
+	echo "-s = Tunnel VGL Transport and X11 through SSh (default: tunnel only X11)"
+	echo "-x = Do not tunnel X11 or the VGL Transport, but create an xauth key"
+	echo "     and add it to the VirtualGL server's keyring so that the VirtualGL"
+	echo "     server (and any that share its home directory) can use this X display"
+	echo "-k = Do not connect to server, but create an xauth key for this X display and"
+	echo "     add it to the local keyring so that any VirtualGL servers that share the"
+	echo "     same home directory as this machine can use this X display"
+	echo "-g = Use gsissh from Globus Toolkit to make all SSh connections"
+	echo "-force = Force a new vglclient instance (use with caution)"
+	echo "-bindir <d> = Path in which the VGL executables and scripts are installed on"
+	echo "              the server machine (default: /opt/VirtualGL/bin).  Can also be"
+	echo "              set with the VGL_BINDIR environment variable on the client"
+	echo "              machine."
+	echo
+	exit $1
+}
+
+if [ -z $VGL_BINDIR ]; then
+	VGL_BINDIR=/opt/VirtualGL/bin
+fi
+
+while [ $# -gt 0 ]
+do
+	case "$1" in
+	-d*) DISPLAY=$2; shift ;;
+	-b*) VGL_BINDIR=$2; shift ;;
+	-f*) FORCE=1 ;;
+	-s*) X11TUNNEL=1; VGLTUNNEL=1; CONNECT=1 ;;
+	-x*) X11TUNNEL=0; VGLTUNNEL=0; CONNECT=1 ;;
+	-k*) X11TUNNEL=0; VGLTUNNEL=0; CONNECT=0 ;;
+	-g*) SSHCMD=gsissh; GLOBUS=1 ;;
+	*) break ;;
+	esac
+	shift
+done
+
+if [ $# -eq 0 -a $CONNECT -eq 1 ]; then
+	usage 0
+fi
+
+if [ "$DISPLAY" = "" ]; then
+	echo "[VGL] ERROR: An X display must be specified, either by using the -display"
+	echo "[VGL]    argument to vglconnect or by setting the DISPLAY environment variable"
+	exit 1
+fi
+
+if [ "$X11TUNNEL" = "1" ]; then
+	SSHARG='-X'
+	SSHVER=`$SSHCMD -V 2>&1 | sed 's/.*[_]//g' | sed 's/[, ].*//g'`
+	if [ $? -ne 0 -o "$SSHVER" = "" ]; then
+		echo "[VGL] ERROR: Could not find ssh in your PATH."
+		exit 1
+	fi
+	case "$SSHVER" in
+	3.8*) SSHARG='-Y' ;;
+	3.9*) SSHARG='-Y' ;;
+	4*) SSHARG='-Y' ;;
+	5*) SSHARG='-Y' ;;
+	esac
+	if [ "$SSHCMD" = "gsissh" ]; then
+		SSHARG='-Y'
+	fi
+fi
+
+LOGDIR=$HOME/.vgl
+if [ ! -d $LOGDIR ]; then mkdir $LOGDIR; fi
+LOGDISPLAY=`basename $DISPLAY`
+LOGFILE=$LOGDIR/vglconnect-$HOSTNAME-$LOGDISPLAY.log
+
+VGLARGS="-l "$LOGFILE" -d "$DISPLAY" -detach"
+if [ "$FORCE" = "1" ]; then VGLARGS=$VGLARGS" -force"; fi
+if [ ! "$VGL_PORT" = "" -a "$__VGL_SSHTUNNEL" = "1" ]; then
+	PORT=$VGL_PORT
+else
+	VGLCLIENT=`dirname $0`/vglclient
+	if [ ! -x $VGLCLIENT ]; then
+		if [ -x /opt/VirtualGL/bin/vglclient ]; then
+			VGLCLIENT=/opt/VirtualGL/bin/vglclient
+		else
+			VGLCLIENT=vglclient
+		fi
+	fi
+	PORT=`$VGLCLIENT $VGLARGS`
+	if [ $? -ne 0 -o "$PORT" = "" ]; then
+		echo "[VGL] ERROR: vglclient failed to execute."
+		exit 1
+	fi
+	echo
+fi
+
+if [ $VGLTUNNEL = 1 ]; then
+	echo Making preliminary SSh connection to find a free port on the server ...
+	REMOTEPORT=`$SSHCMD ${1+"$@"} "$VGL_BINDIR/nettest -findport && $VGL_BINDIR/vgllogin -check"`
+	if [ $? -ne 0 -o "$REMOTEPORT" = "" ]; then
+		echo "[VGL] ERROR: The server does not appear to have VirtualGL 2.1 or later"
+		echo "[VGL]    installed."
+		exit 1
+	fi
+	echo Making final SSh connection ...
+	$SSHCMD -t $SSHARG -R$REMOTEPORT:localhost:$PORT ${1+"$@"} "$VGL_BINDIR/vgllogin -s "$REMOTEPORT
+	exit 0
+fi
+
+if [ $X11TUNNEL = 1 ]; then
+	$SSHCMD $SSHARG ${1+"$@"}
+	exit 0
+fi
+
+XAUTH=xauth
+if [ -x /usr/X11R6/bin/xauth ]; then
+	XAUTH=/usr/X11R6/bin/xauth
+else
+	if [ -x /usr/openwin/bin/xauth ]; then
+		XAUTH=/usr/openwin/bin/xauth
+	fi
+fi
+XAUTHFILE=`maketemp vglconnect`
+$XAUTH -f $XAUTHFILE generate $DISPLAY . trusted timeout 0
+if [ $? -ne 0 ]; then
+	echo "[VGL] ERROR: Could not generate xauth key, possibly because the X server does"
+	echo "[VGL]    not have the SECURITY extension (this is normal for TurboVNC) or"
+	echo "[VGL]    because the xauth command could not be found."
+	rm -f $XAUTHFILE
+	exit 1
+fi
+XAUTHCOOKIE=`$XAUTH -f $XAUTHFILE list | sed "s/.*[ ]//g"`
+rm -f $XAUTHFILE
+if [ "$CONNECT" = "1" ]; then
+	$SSHCMD -t -x ${1+"$@"} "exec $VGL_BINDIR/vgllogin -x "$DISPLAY" "$XAUTHCOOKIE
+else
+	DNUM=`echo $DISPLAY | sed 's/.*[:]//g'`
+	xauth add `hostname`":"$DNUM . $XAUTHCOOKIE
+fi

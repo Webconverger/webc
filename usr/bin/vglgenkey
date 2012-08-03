@@ -1,0 +1,17 @@
+#!/bin/sh
+XAUTH=xauth
+if [ -x /usr/X11R6/bin/xauth ]; then
+	XAUTH=/usr/X11R6/bin/xauth
+fi
+if [ -x /usr/openwin/bin/xauth ]; then
+	XAUTH=/usr/openwin/bin/xauth
+fi
+if [ ! -d /etc/opt/VirtualGL ]; then
+	mkdir -p /etc/opt/VirtualGL
+fi
+if [ -f /etc/opt/VirtualGL/vgl_xauth_key ]; then
+	rm /etc/opt/VirtualGL/vgl_xauth_key
+fi
+$XAUTH -f /etc/opt/VirtualGL/vgl_xauth_key generate $DISPLAY . trusted timeout 0 ||
+	$XAUTH -f /etc/opt/VirtualGL/vgl_xauth_key add $DISPLAY . `xauth list | awk '{print $3}'`
+chmod 644 /etc/opt/VirtualGL/vgl_xauth_key
