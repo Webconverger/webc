@@ -1,5 +1,5 @@
 #!/bin/bash
-source "/etc/webc/webc.conf"
+. "/etc/webc/webc.conf"
 export HOME=/root
 gpg_opts="--status-file /dev/null --logger-file /dev/null --attribute-file /dev/null --batch --no-tty -q"
 
@@ -51,7 +51,7 @@ do
 done
 
 # ensure $updates_url has latest $webc_id
-source "/etc/webc/webc.conf"
+. "/etc/webc/webc.conf"
 
 if cmdline_has updates
 then

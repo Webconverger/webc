@@ -1,6 +1,6 @@
 #!/bin/bash
 # Setting up Webconverger system as root user
-source /etc/webc/webc.conf
+. /etc/webc/webc.conf
 
 cmdline_has debug && set -x
 
@@ -139,7 +139,7 @@ do
     sleep 0.25 # wait for xinitrc to create pipe
 done
 
-source "/etc/webc/webc.conf"
+. "/etc/webc/webc.conf"
 cmdline_has noconfig || update_cmdline
 process_options
 

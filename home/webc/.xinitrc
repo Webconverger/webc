@@ -2,7 +2,7 @@
 # Keep the browser running and clean between sessions in /home/webc
 # hendry@webconverger.com
 WEBCHOME=/home/webc
-source "/etc/webc/webc.conf"
+. "/etc/webc/webc.conf"
 
 logs xsession invoked
 exec &> /home/webc/.xerrors.debug
