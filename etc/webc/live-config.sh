@@ -69,7 +69,7 @@ EOC
 
 	homepage=*)
 		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
-		echo "lockPref(\"browser.startup.homepage\", \"$(echo $homepage | awk '{print $1}')\");" >> "$prefs"
+		echo "browser.startup.homepage=$(echo $homepage | awk '{print $1}')" > /opt/firefox/defaults/preferences/homepage.properties
 		;;
 	esac
 done

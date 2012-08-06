@@ -13,3 +13,4 @@ pref("toolkit.telemetry.prompted", 2);
 pref("toolkit.telemetry.rejected", true);
 
 pref("browser.newtab.url", "about:blank");
+pref("browser.startup.homepage", "file:/opt/firefox/defaults/preferences/homepage.properties");
