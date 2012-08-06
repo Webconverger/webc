@@ -163,7 +163,12 @@ do
 			rm -rf $d
 		done
 		fi
-		iceweasel $(echo $homepage | sed "s,MACID,$mac,g")
-	fi
+		if cmdline_has noptirun || ! pidof bumblebeed
+		then
+			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
+		else
+			optirun /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
+		fi
 
+	fi
 done
