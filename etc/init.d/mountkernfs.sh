@@ -35,7 +35,7 @@ do_start () {
 	#
 	# Mount proc filesystem on /proc
 	#
-	domount proc "" /proc proc -onodev,noexec,nosuid
+	domount proc "" /proc proc -onodev,noexec,nosuid,hidepid=2
 
 	#
 	# Mount sysfs on /sys
