@@ -6367,6 +6367,27 @@ Description: X Window System (X.Org) infrastructure
  terms are functionally interchangeable in an Debian system.
 Multi-Arch: foreign
 
+Package: inotify-tools
+Priority: optional
+Section: misc
+Installed-Size: 96
+Maintainer: Ryan Niebur <ryan@debian.org>
+Architecture: i386
+Version: 3.13-3
+Depends: libc6 (>= 2.2), libinotifytools0 (>= 3.11)
+Size: 27124
+Description: command-line programs providing a simple interface to inotify
+ inotify-tools is a set of command-line programs for Linux providing a
+ simple interface to inotify. These programs can be used to monitor and
+ act upon filesystem events. inotify-tools consists of two utilities:
+ .
+ inotifywait simply blocks for inotify events, making it appropriate
+ for use in shell scripts.
+ .
+ inotifywatch collects filesystem usage statistics and outputs counts
+ of each inotify event.
+Homepage: http://inotify-tools.sourceforge.net/
+
 Package: net-tools
 Priority: important
 Section: net
@@ -9640,6 +9661,26 @@ Description: small, friendly text editor inspired by Pico
   - filename tab-completion and support for multiple buffers;
   - full internationalization support.
 Homepage: http://www.nano-editor.org/
+
+Package: libinotifytools0
+Priority: optional
+Section: libs
+Installed-Size: 96
+Maintainer: Ryan Niebur <ryan@debian.org>
+Architecture: i386
+Source: inotify-tools
+Version: 3.13-3
+Replaces: inotify-tools (<< 3.10-2)
+Depends: libc6 (>= 2.4)
+Size: 21552
+Description: utility wrapper around inotify
+ Inotify is a Linux kernel feature enabling user space programs to
+ monitor parts of the filesystem in a efficient way. libinotifytools
+ is a thin layer on top of the kernel interface which makes it easy
+ to set up watches on many files at once, read events without having
+ to deal with low-level I/O, and several utility functions for inotify-
+ related string formatting
+Homepage: http://inotify-tools.sourceforge.net/
 
 Package: live-config
 Priority: optional

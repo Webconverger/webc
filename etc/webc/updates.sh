@@ -45,10 +45,11 @@ update_keys() {
 	gpg --refresh-keys --keyserver hkp://keys.gnupg.net &>/dev/null && touch /var/run/gpg-check
 }
 
-until test -p $updates_pipe # wait for xinitrc to trigger an update
+# wait for xinitrc to create pipe
+while read OUTPUT
 do
-    sleep 0.25 # wait for xinitrc to create pipe
-done
+    if echo $OUTPUT | grep -q "CREATE $(basename $updates_pipe)"; then break; fi
+done < <(inotifywait -qm -e create $(dirname $updates_pipe))
 
 # ensure $updates_url has latest $webc_id
 . "/etc/webc/webc.conf"
