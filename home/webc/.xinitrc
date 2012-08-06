@@ -72,6 +72,12 @@ do
 			if setxkbmap $koptions; then logs "setxkbmap OK $koptions"; else logs "setxkbmap ERR $koptions"; fi
 			;;
 
+		# swarp=0,0 // move mouse pointer to top left of screen
+		swarp=*)
+			koptions=$( /bin/busybox httpd -d ${x#xkb=} )
+			swarp $(echo $koptions | sed 's/[^0-9]/ /g')
+			;;
+
 		# https://groups.google.com/forum/#!msg/webc-users/GlHh_SX17BM/GojceXVSazgJ
 		xrandr-all=*)
 			xoptions=$( /bin/busybox httpd -d ${x#xrandr-all=} )
