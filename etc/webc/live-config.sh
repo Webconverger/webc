@@ -31,8 +31,8 @@ EOF
 # shown
 if ! dpkg -s cups 2>/dev/null >/dev/null; then
 	echo '// Print support not included, disable print dialogs' >> "$prefs"
-	echo 'lockPref("print.always_print_silent", true);' >> "$prefs"
-	echo 'lockPref("print.show_print_progress", false);' >> "$prefs"
+	echo 'pref("print.always_print_silent", true);' >> "$prefs"
+	echo 'pref("print.show_print_progress", false);' >> "$prefs"
 fi
 
 for x in $( cmdline ); do
@@ -54,8 +54,8 @@ for x in $( cmdline ); do
 
 	locale=*)
 		locale=${x#locale=}
-		echo "lockPref(\"general.useragent.locale\", \"${locale}\");" >> "$prefs"
-		echo "lockPref(\"intl.accept_languages\", \"${locale}, en\");" >> "$prefs"
+		echo "pref(\"general.useragent.locale\", \"${locale}\");" >> "$prefs"
+		echo "pref(\"intl.accept_languages\", \"${locale}, en\");" >> "$prefs"
 		;;
 
 	cron=*)
