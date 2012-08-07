@@ -21,7 +21,7 @@ set Master 100% unmute
 set Master Front 100% unmute
 END
 
-source /etc/webc/webc.conf
+. /etc/webc/webc.conf
 
 for x in $(cmdline)
 do
@@ -38,12 +38,11 @@ do
 		PROXY_PORT=${HOST_PORT##*:}
 
 		logger PROXY SETTINGS: $HTTP_PROXY $PROXY_HOST $PROXY_PORT
-		test -e /etc/iceweasel/profile/prefs.js &&
-		echo "user_pref(\"network.proxy.type\", 1);"  >> /etc/iceweasel/profile/prefs.js
-		echo "user_pref(\"network.proxy.http\", \"$PROXY_HOST\");" >> /etc/iceweasel/profile/prefs.js
-		echo "user_pref(\"network.proxy.http_port\", $PROXY_PORT);" >> /etc/iceweasel/profile/prefs.js
-		echo "user_pref(\"network.proxy.ssl\", \"$PROXY_HOST\");" >> /etc/iceweasel/profile/prefs.js
-		echo "user_pref(\"network.proxy.ssl_port\", $PROXY_PORT);" >> /etc/iceweasel/profile/prefs.js
+		echo "pref(\"network.proxy.type\", 1);"  >> $prefs
+		echo "pref(\"network.proxy.http\", \"$PROXY_HOST\");" >> $prefs
+		echo "pref(\"network.proxy.http_port\", $PROXY_PORT);" >> $prefs
+		echo "pref(\"network.proxy.ssl\", \"$PROXY_HOST\");" >> $prefs
+		echo "pref(\"network.proxy.ssl_port\", $PROXY_PORT);" >> $prefs
 		;;
 	esac
 done
