@@ -11,3 +11,5 @@ pref("toolkit.telemetry.rejected", true);
 
 pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/defaults/preferences/homepage.properties");
+
+pref("keyword.URL", "https://duckduckgo.com/?t=webconverger&q=");
