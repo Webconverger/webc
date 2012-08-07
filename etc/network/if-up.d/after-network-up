@@ -14,7 +14,7 @@ wait_until_network() {
 	return 0
 }
 
-source "/etc/webc/webc.conf"
+. "/etc/webc/webc.conf"
 
 for i in /etc/webc/network-up.d/*; do
 	( wait_until_network && $i) &

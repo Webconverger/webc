@@ -131,11 +131,7 @@ update_cmdline() {
 	touch /etc/webc/cmdline
 }
 
-# wait for xinitrc to create pipe
-while read OUTPUT
-do
-    if echo $OUTPUT | grep -q "CREATE $(basename $live_config_pipe)"; then break; fi
-done < <(inotifywait -qm -e create $(dirname $live_config_pipe))
+wait_for $live_config_pipe
 
 . "/etc/webc/webc.conf"
 cmdline_has noconfig || update_cmdline
