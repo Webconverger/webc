@@ -1,7 +1,9 @@
 /* http://webconverger.org/kiosk/
 */
 
+// X on top right
 pref("browser.tabs.closeButtons", 3);
+
 pref("accessibility.typeaheadfind.flashBar", 0);
 pref("app.update.enabled", false);
 pref("browser.download.dir", "/dev/null");
@@ -40,21 +42,9 @@ pref("browser.link.open_newwindow", 3);
 pref("browser.link.open_external",3);
 pref("browser.link.open_newwindow.restriction", 0);
 
-// Defence in depth
-pref("browser.sessionstore.enabled", false);
-pref("browser.sessionstore.resume_from_crash", false);
+// Block extension installs
 pref("xpinstall.enabled", false);
-pref("privateBrowsingEnabled", true);
-pref("browser.privatebrowsing.autostart", true);
-pref("browser.privatebrowsing.dont_prompt_on_enter", true);
-pref("privacy.sanitize.sanitizeOnShutdown", true);
-pref("privacy.clearOnShutdown.offlineApps", true);
-pref("privacy.clearOnShutdown.passwords", true);
-pref("privacy.clearOnShutdown.siteSettings", true);
-// cpd = Clear Private Data
-pref("privacy.cpd.offlineApps", true);
-pref("privacy.cpd.passwords", true);
-pref("privacy.sanitize.sanitizeOnShutdown", true);
+
 // Prevent slow script dialogs
 pref("dom.max_chrome_script_run_time", 0);
 pref("dom.max_script_run_time", 0);

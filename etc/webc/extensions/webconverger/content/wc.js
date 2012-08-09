@@ -22,8 +22,6 @@ if (typeof webc == 'undefined') { (function() {
 			try {
 				getBrowser().tabContainer.addEventListener("DisableDownload", onDownloadStateChange, false);
 			} catch (ex) {}
-			var pbs = Components.classes["@mozilla.org/privatebrowsing;1"].getService(Components.interfaces.nsIPrivateBrowsingService);
-			pbs.privateBrowsingEnabled = true;
 		}
 
 		webc.init = init();
