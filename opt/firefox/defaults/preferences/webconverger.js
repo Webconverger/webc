@@ -12,4 +12,8 @@ pref("toolkit.telemetry.rejected", true);
 pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/defaults/preferences/homepage.properties");
 
+// Disable updates, since we use git
+pref("app.update.auto", false);
+pref("app.update.enabled", false);
+
 pref("keyword.URL", "https://duckduckgo.com/?t=webconverger&q=");
