@@ -60,5 +60,5 @@ for iface in wlan0 eth1 # for want of a better way of detecting wireless interfa
 do
 	ping -c 1 google.com &> /dev/null && break # If the network works, don't touch it
 	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
-	ifup $iface
+	ifup $iface &> /dev/null
 done
