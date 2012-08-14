@@ -46,7 +46,7 @@ update_keys() {
 }
 
 
-wait_for $updates_pipe
+wait_for $updates_pipe 2>/dev/null
 
 # ensure $updates_url has latest $webc_id
 . "/etc/webc/webc.conf"

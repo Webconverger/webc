@@ -131,7 +131,7 @@ update_cmdline() {
 	touch /etc/webc/cmdline
 }
 
-wait_for $live_config_pipe
+wait_for $live_config_pipe 2>/dev/null
 
 . "/etc/webc/webc.conf"
 cmdline_has noconfig || update_cmdline
