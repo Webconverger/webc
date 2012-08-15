@@ -34,6 +34,7 @@
     <command id="Browser:SavePage" disabled="true"/>
     <command id="Browser:SaveFrame" disabled="true"/>
     <command id="Browser:SendLink" disabled="true"/>
+    <command id="Browser:ShowAllHistory" disabled="true"/>
     <command id="cmd_pageSetup" disabled="true"/>
     <command id="cmd_close" disabled="false"/>
     <command id="cmd_closeWindow" disabled="false"/>
@@ -54,6 +55,7 @@
     <command id="View:PageInfo" disabled="true"/>
     <command id="View:FullScreen" disabled="true"/>
     <command id="Browser:AddBookmarkAs" disabled="true"/>
+    <command id="Browser:ShowAllBookmarks" disabled="true"/>
     <command id="Browser:BookmarkAllTabs" disabled="true"/>
     <command id="Browser:Home"    oncommand="BrowserHome();"/>
     <command id="Browser:Back" disabled="true"/>
@@ -67,13 +69,16 @@
     <command id="Browser:OpenLocation" disabled="false"/>
     <command id="Tools:Search" disabled="true"/>
     <command id="Tools:Downloads" disabled="true"/>
+    <command id="Tools:WebConsole" disabled="true"/>
     <command id="Download:Manager" disabled="true"/>
     <command id="Tools:Addons" disabled="true"/>
     <command id="Tools:Sanitize" disabled="true"/>
     <command id="History:UndoCloseTab" disabled="true"/>
+	<command id="Tools:PrivateBrowsing" oncommand=""/>
   </commandset>
 
   <keyset id="mainKeyset">
+
 
     <key id="restart" keycode="VK_F10" oncommand="goQuitApplication();"/>
 
@@ -106,10 +111,11 @@
     <key id="key_debugger" disabled="true"/>
     <key id="key_scratchpad" disabled="true"/>
     <key id="key_styleeditor" disabled="true"/>
-    <key id="key_errorConsole" disabled="true"/>
     <key id="key_openAddons" disabled="true"/>
 
     <key id="addBookmarkAsKb" disabled="true"/>
+    <key id="manBookmarkKb" disabled="true"/>
+    <key id="showAllHistoryKb" disabled="true"/>
     <key id="bookmarkAllTabsKb" disabled="true"/>
     <key id="key_textZoomReduce" disabled="true"/>
     <key id="key_textZoomEnlarge" disabled="true"/>
@@ -120,6 +126,7 @@
     <key id="key_gotoHistory" command="doNothing();"/>
     <key id="viewBookmarksSidebarKb" command="doNothing();"/>
     <key id="viewBookmarksSidebarWinKb" command="doNothing();"/>
+	<key id="key_errorConsole" oncommand=""/>
   </keyset>
 
 <tabs id="tabbrowser-tabs" ondragstart="event.preventDefault();event.stopPropagation();"/>
@@ -133,5 +140,6 @@
 <menuseparator id="inspect-separator" style="display: none;"/>
 <menuseparator id="context-sep-viewsource" style="display: none;"/>
 <menuitem id="context-inspect" style="display: none;"/>
+<menuitem id="javascriptConsole" style="display: none;"/>
 </menupopup>
 </overlay>

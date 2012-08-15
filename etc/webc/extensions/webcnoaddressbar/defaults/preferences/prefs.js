@@ -1,5 +1,6 @@
-/* http://webconverger.org/kiosk/
-*/
+// http://webconverger.org/kiosk/
+
+pref("devtools.errorconsole.enabled", false);
 
 // X on top right
 pref("browser.tabs.closeButtons", 3);
