@@ -147,7 +147,8 @@ then
 	if cmdline_has debug; then
 		exec sleep 86400
 	fi
-	_logs "rebooting..."
+	_logs "press enter to reboot..."
+	read DUMMY
 	/sbin/reboot 
 else
 	exec sleep 86400
