@@ -1,7 +1,6 @@
 #!/bin/bash
 . "/etc/webc/webc.conf"
 exec &> /root/install.log
-set -e
 
 failed_install() {
 	echo -e "\n\n\n\tFAILED INSTALL\n\n" > /dev/console
