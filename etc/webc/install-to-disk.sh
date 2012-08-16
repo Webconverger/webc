@@ -1,9 +1,16 @@
 #!/bin/bash
 . "/etc/webc/webc.conf"
 
+# Set up:
+#   - fd 1 (stdout) to write to install.log
+#   - fd 2 (stderr) to write to install.log
+#   - fd 3 to write to install.log as well (useful inside command
+#     substitutions  where stdout is not available)
+#   - fd 4 to write to the console
+# Don't write to fd 3 and 4 directly, use _logs or _err instead.
 install_log="/root/install.log"
 
-exec &> "$install_log"
+exec >"$install_log" 2>&1 3>&1 4>/dev/console
 
 set -e
 
@@ -12,9 +19,9 @@ set -e
 # does not trigger.
 failed_install() {
 	if [ "$1" -ne 0 ]; then
-		echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >/dev/console
-		echo -e "Here's some log output that may help (see $install_log for more):\n" >/dev/console
-		tail /root/install.log >/dev/console
+		echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >&4
+		echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
+		tail /root/install.log >&4
 
 		exec sleep 86400
 	fi
@@ -24,12 +31,15 @@ trap failed_install EXIT
 
 clear_screen() {
 	for i in `seq 200`; do
-		echo > /dev/console
+		echo >&4
 	done
 }
 
 _logs() {
-	echo "$@" > /dev/console
+	# Write to install.log
+	echo ">> $@" >&3
+	# Write to console
+	echo ">> $@" >&4
 }
 _err() {
 	_logs "ERR:" "$@"
@@ -70,7 +80,7 @@ install_extlinux() {
 	local part="$2"
 	local disk="$3"
 	_logs "installing extlinux configuration"
-	test -e ${dir}/boot && _err " ${dir}/boot already exists?"
+	test -e ${dir}/boot && _err "${dir}/boot already exists?"
 
 	cp -r /boot "${dir}"
 
@@ -79,7 +89,7 @@ install_extlinux() {
 	_logs "installing extlinux to ${dir}/boot/extlinux"
 	extlinux --install "${dir}/boot/extlinux"
 
-	test -e ${dir}/boot/extlinux/ldlinux.sys || _err " no ${dir}/boot/extlinux/ldlinux.sys?"
+	test -e ${dir}/boot/extlinux/ldlinux.sys || _err "no ${dir}/boot/extlinux/ldlinux.sys?"
 	rm -f ${dir}/boot/extlinux/boot.txt
 
 cat<<EOF >> ${dir}/boot/extlinux/linux.cfg
@@ -104,7 +114,7 @@ sed -i \
 }
 install_root() {
 	local dir="$1"
-	_logs "installing root to ${dir}, this will take several minutes"
+	_logs "copying files to ${dir}"
 	mkdir -p "${dir}/live"
 	cp -r /live/image/live/filesystem.git ${dir}/live/
 }
@@ -112,22 +122,25 @@ install_root() {
 if cmdline_has install
 then
 	clear_screen
-	cmdline_has debug && echo "debug has been enabled" >/dev/console
+	cmdline_has debug && _logs "debug has been enabled"
 	disk=$( find_disk )
 	partition_disk $disk
 	verify_partition $disk
 	partition="${disk}1"
+	_logs "building filesystem on $partition"
 	mke2fs -j $partition
+	_logs "mounting $partition on /mnt/root"
 	test -d /mnt/root || mkdir /mnt/root
 	mount $partition /mnt/root
 	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+	_logs "enabling swap on /mnt/root/swap"
 	mkswap /mnt/root/swap
 	swapon /mnt/root/swap
 	install_root /mnt/root
 	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
 
-	_logs "umount'ing partitions"
+	_logs "unmounting partitions"
 	swapoff /mnt/root/swap
 	umount /mnt/root
 	_logs "install complete"
