@@ -33,6 +33,7 @@ _logs() {
 }
 _err() {
 	_logs "ERR:" "$@"
+	return 1
 }
 
 find_disk() {
