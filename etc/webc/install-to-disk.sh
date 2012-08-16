@@ -1,9 +1,15 @@
 #!/bin/bash
 . "/etc/webc/webc.conf"
-exec &> /root/install.log
+
+install_log="/root/install.log"
+
+exec &> "$install_log"
 
 failed_install() {
-	echo -e "\n\n\n\tFAILED INSTALL\n\n" > /dev/console
+	echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >/dev/console
+	echo -e "Here's some log output that may help (see $install_log for more):\n" >/dev/console
+	tail /root/install.log >/dev/console
+
 	exec sleep 86400
 }
 trap failed_install ERR
