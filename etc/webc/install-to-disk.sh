@@ -14,9 +14,6 @@ clear_screen() {
 		echo > /dev/console
 	done
 }
-add_root() {
-	sed -i 's/^root:x:\(.*\)/root::\1/' /etc/passwd
-}
 
 _logs() {
 	echo "$@" > /dev/console
@@ -58,20 +55,20 @@ install_extlinux() {
 	local dir="$1"
 	local part="$2"
 	local disk="$3"
-	_logs "installing extlinux to ${dir}"
-	for d in dev proc sys; do
-		mount --bind /$d /mnt/root/$d
-	done
-	_logs "installing mbr to ${disk}"
-	chroot /mnt/root extlinux-install $disk 
-	chroot /mnt/root extlinux --install /boot/extlinux
-	for d in dev proc sys; do
-		umount /mnt/root/$d
-	done
-	test -e ${dir}/ldlinux.sys || _err " no ${dir}/ldlinux.sys?"
-	rm -f ${dir}/boot.txt
+	_logs "installing extlinux configuration"
+	test -e ${dir}/boot && _err " ${dir}/boot already exists?"
 
-cat<<EOF >> ${dir}/linux.cfg
+	cp -r /boot "${dir}"
+
+	_logs "installing mbr to ${disk}"
+	dd if=/usr/lib/extlinux/mbr.bin of="${disk}" bs=440 count=1 2> /dev/null
+	_logs "installing extlinux to ${dir}/boot/extlinux"
+	extlinux --install "${dir}/boot/extlinux"
+
+	test -e ${dir}/boot/extlinux/ldlinux.sys || _err " no ${dir}/boot/extlinux/ldlinux.sys?"
+	rm -f ${dir}/boot/extlinux/boot.txt
+
+cat<<EOF >> ${dir}/boot/extlinux/linux.cfg
 
 label fail
 	linux /boot/vmlinuz-old 
@@ -82,11 +79,11 @@ sed -i \
 	-e 's/^\(prompt\).*/\1 0/' \
 	-e 's/^\(timeout\).*/\1 50/' \
 	-e 's/^\(display\).*//' \
-	${dir}/extlinux.conf 
+	${dir}/boot/extlinux/extlinux.conf 
 
 sed -i \
-	-e 's|\(append.*\)|\1 boot=local root='$part' |' \
-	${dir}/linux.cfg
+	-e 's|\(append.*\)|\1 boot=live |' \
+	${dir}/boot/extlinux/linux.cfg
 
 	( cd ${dir}/.. && ln -s . boot )
 
@@ -94,49 +91,14 @@ sed -i \
 install_root() {
 	local dir="$1"
 	_logs "installing root to ${dir}, this will take several minutes"
-	unsquashfs -f -n -d $dir /live/image/live/filesystem.squashfs 
-}
-user_setup() {
-	local dir="$1"
-	_logs "user setup"
-	chroot $dir groupadd webc
-	chroot $dir useradd -g webc webc
-	chroot $dir chown -R webc:webc /home/webc
-	grep -qs '^webc' ${dir}/etc/passwd || {
-		_err "user setup failed"
-	}
-}
-
-install_files() {
-	local dir="$1"
-	local disk="$2"
-	sed -i 's/^root::\(.*\)/root:x:\1/' ${dir}/etc/passwd
-
-	sed -i \
-		-e 's/^.sudo.*/webc ALL=NOPASSWD: ALL/' \
-		${dir}/etc/sudoers 
-
-	cat<<EOF > ${dir}/etc/fstab
-proc /proc proc defaults 0 0
-${disk} / ext3 defaults 0 0
-/swap none swap sw 0 0
-EOF
-
-
-	cat<<EOF > ${dir}/etc/hosts
-127.0.0.1	localhost localhost.localdomain webconverger
-EOF
-
-	cat<<EOF >> ${dir}/etc/network/interfaces
-EOF
-
+	mkdir -p "${dir}/live"
+	cp -r /live/image/live/filesystem.git ${dir}/live/
 }
 
 if cmdline_has install
 then
 	clear_screen
 	cmdline_has debug && echo "debug has been enabled" >/dev/console
-	add_root
 	disk=$( find_disk )
 	partition_disk $disk
 	verify_partition $disk
@@ -148,8 +110,7 @@ then
 	mkswap /mnt/root/swap
 	swapon /mnt/root/swap
 	install_root /mnt/root
-	install_files /mnt/root $partition
-	install_extlinux /mnt/root/boot/extlinux $partition $disk
+	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
 
 	_logs "umount'ing partitions"
