@@ -66,7 +66,7 @@ do
 
 		# swarp=0,0 // move mouse pointer to top left of screen
 		swarp=*)
-			koptions=$( /bin/busybox httpd -d ${x#xkb=} )
+			koptions=$( /bin/busybox httpd -d ${x#swarp=} )
 			swarp $(echo $koptions | sed 's/[^0-9]/ /g')
 			;;
 
