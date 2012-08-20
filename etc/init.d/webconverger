@@ -15,7 +15,7 @@ DESC="Webconverger live environment"
 SCRIPTNAME=/etc/init.d/$NAME
 WEBCHOME=/home/webc
 
-# Ensure volume is 100%
+# Ensure sound volume is 100%
 amixer -s &>/dev/null <<END
 set Master 100% unmute
 set Master Front 100% unmute
@@ -32,7 +32,7 @@ do
 		;;
 		http_proxy=*)
 		# http://developer.mozilla.org/en/docs/Mozilla_Networking_Preferences#Proxy
-		export HTTP_PROXY=${x#http_proxy=}
+		echo "http_proxy=${x#http_proxy=}" >> /etc/environment
 		HOST_PORT=${HTTP_PROXY##*//}
 		PROXY_HOST=${HOST_PORT%%:*}
 		PROXY_PORT=${HOST_PORT##*:}
