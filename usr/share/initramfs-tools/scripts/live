@@ -370,7 +370,7 @@ is_live_path ()
 
 	if [ -d "${DIRECTORY}"/"${LIVE_MEDIA_PATH}" ]
 	then
-		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2
+		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2 git
 		do
 			if [ "$(echo ${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM})" != "${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM}" ]
 			then
@@ -418,6 +418,10 @@ get_backing_device ()
 			echo "directory"
 			;;
 
+		*.git)
+			echo "git repository"
+			;;
+
 		*)
 			panic "Unrecognized live filesystem: ${1}"
 			;;
@@ -449,7 +453,8 @@ mount_images_in_directory ()
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext3" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext4" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.jffs2" ||
-		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.dir"
+		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.dir" ||
+		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.git"
 	then
 		[ -n "${mac}" ] && adddirectory="${directory}/${LIVE_MEDIA_PATH}/${mac}"
 		setup_unionfs "${directory}/${LIVE_MEDIA_PATH}" "${rootmnt}" "${adddirectory}"
@@ -1140,7 +1145,7 @@ setup_unionfs ()
 			done
 		else
 			# ${MODULE}.module does not exist, create a list of images
-			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
+			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
 			do
 				for IMAGE in "${image_directory}"/*."${FILESYSTEM}"
 				do
@@ -1153,7 +1158,7 @@ setup_unionfs ()
 
 			if [ -n "${addimage_directory}" ] && [ -d "${addimage_directory}" ]
 			then
-				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
+				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
 				do
 					for IMAGE in "${addimage_directory}"/*."${FILESYSTEM}"
 					do
@@ -1182,9 +1187,58 @@ setup_unionfs ()
 			log_begin_msg "Running /scripts/live-realpremount"
 			run_scripts /scripts/live-realpremount
 			log_end_msg
+			_log_msg croot: $croot
 
-			if [ -d "${image}" ]
+			if [ "${image##*.}" = "git" ]; then
+				_log_msg git
+				if [ "${UNIONTYPE}" != "unionmount" ]
+				then
+					mpoint="${croot}/${imagename}"
+					rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
+					_log_msg mpoint: $mpoint
+				else
+					mpoint="${rootmnt}"
+				fi
+
+				mkdir -p "${mpoint}"
+				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
+				# Replace /etc/mtab with a symlink to
+				# /proc/mounts. This prevents fuse from
+				# calling /bin/mount to update the mtab,
+				# using options that busybox mount does
+				# not understand...
+				ln -sf /proc/mounts /etc/mtab
+
+				# In debug mode, we make the rootfs a big git repo / checkout, for
+				# easy development.
+				if [ "${debug}" == "y" ]; then
+					# Make sure aufs and fuse both keep persistent inode numbers
+					# (i.e.  disable noxino and add noforget), to not confuse
+					# git.
+					noxino_opt=""
+					noforget_opt=",noforget"
+
+					# This will be later moved into the real rootfs (but we
+					# can't do that now, since the .git dir would end up
+					# underneath the aufs mount).
+					mkdir /.git
+					mount --bind ${image} /.git
+				else
+					noforget_opt=""
+				fi
+
+				#ulimit -c unlimited # enable core dumps
+				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
+				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
+				git-fs -o allow_other${noforget_opt} "${image}" "${mpoint}"
+
+
+				log_end_msg
+				#maybe_break gitfs
+				#openvt -c 3 -- /bin/sh
+			elif [ -d "${image}" ]
 			then
+				_log_msg dir
 				# it is a plain directory: do nothing
 				rofsstring="${image}=${roopt}:${rofsstring}"
 				rofslist="${image} ${rofslist}"
@@ -1826,6 +1880,28 @@ mountroot ()
 	then
 		mkdir -p /root/live/image
 		mount --move /live/image /root/live/image
+	fi
+
+	# If the git-fs code made a bindmount of the git repo, make it available in the real rootfs.
+	if [ -d /.git ]; then
+		mkdir "${rootmnt}/.git"
+		# Try to make /.git read-write, by simply remounting it, or by
+		# using a second aufs. Note that mount will return success even
+		# if the filesystem is still ro, so we test for writeability
+		# using touch.
+		if ! (mount -o remount,rw /.git && touch /.git ) && [ "${UNIONTYPE}" = aufs ]; then
+			# Overlay a second aufs over /.git. Even though
+			# changes will be lost on reboots, you can still make
+			# a change and push it out before the reboot. We can't
+			# include this in the main aufs mount, since aufs
+			# doesn't handle (bind)mounts in subdirectories.
+			mkdir /cow-git
+			mount -o rw,noatime,mode=755 -t tmpfs tmpfs /cow-git
+			mount -t aufs -o noatime,dirs=/cow-git=rw:/.git=rr aufs "${rootmnt}/.git"
+		else
+			mount --move /.git "${rootmnt}/.git"
+		fi
+
 	fi
 
 	# aufs2 in kernel versions around 2.6.33 has a regression:
