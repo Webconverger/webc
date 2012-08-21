@@ -1,28 +1,49 @@
 #!/bin/bash
 . "/etc/webc/webc.conf"
-exec &> /root/install.log
+
+# Set up:
+#   - fd 1 (stdout) to write to install.log
+#   - fd 2 (stderr) to write to install.log
+#   - fd 3 to write to install.log as well (useful inside command
+#     substitutions  where stdout is not available)
+#   - fd 4 to write to the console
+# Don't write to fd 3 and 4 directly, use _logs or _err instead.
+install_log="/root/install.log"
+
+exec >"$install_log" 2>&1 3>&1 4>/dev/console
+
 set -e
 
+# If the shell exists, we assume the install failed. If the install succeeds,
+# the EXIT trap is removed just before exiting the script, so this handler
+# does not trigger.
 failed_install() {
-	echo -e "\n\n\n\tFAILED INSTALL\n\n" > /dev/console
-	exec sleep 86400
+	if [ "$1" -ne 0 ]; then
+		echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >&4
+		echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
+		tail /root/install.log >&4
+
+		exec sleep 86400
+	fi
 }
-trap failed_install ERR
+
+trap failed_install EXIT
 
 clear_screen() {
 	for i in `seq 200`; do
-		echo > /dev/console
+		echo >&4
 	done
-}
-add_root() {
-	sed -i 's/^root:x:\(.*\)/root::\1/' /etc/passwd
 }
 
 _logs() {
-	echo "$@" > /dev/console
+	# Write to install.log
+	echo ">> $@" >&3
+	# Write to console
+	echo ">> $@" >&4
 }
 _err() {
 	_logs "ERR:" "$@"
+	return 1
 }
 
 find_disk() {
@@ -58,20 +79,20 @@ install_extlinux() {
 	local dir="$1"
 	local part="$2"
 	local disk="$3"
-	_logs "installing extlinux to ${dir}"
-	for d in dev proc sys; do
-		mount --bind /$d /mnt/root/$d
-	done
-	_logs "installing mbr to ${disk}"
-	chroot /mnt/root extlinux-install $disk 
-	chroot /mnt/root extlinux --install /boot/extlinux
-	for d in dev proc sys; do
-		umount /mnt/root/$d
-	done
-	test -e ${dir}/ldlinux.sys || _err " no ${dir}/ldlinux.sys?"
-	rm -f ${dir}/boot.txt
+	_logs "installing extlinux configuration"
+	test -e ${dir}/boot && _err "${dir}/boot already exists?"
 
-cat<<EOF >> ${dir}/linux.cfg
+	cp -r /boot "${dir}"
+
+	_logs "installing mbr to ${disk}"
+	dd if=/usr/lib/extlinux/mbr.bin of="${disk}" bs=440 count=1 2> /dev/null
+	_logs "installing extlinux to ${dir}/boot/extlinux"
+	extlinux --install "${dir}/boot/extlinux"
+
+	test -e ${dir}/boot/extlinux/ldlinux.sys || _err "no ${dir}/boot/extlinux/ldlinux.sys?"
+	rm -f ${dir}/boot/extlinux/boot.txt
+
+cat<<EOF >> ${dir}/boot/extlinux/linux.cfg
 
 label fail
 	linux /boot/vmlinuz-old 
@@ -82,85 +103,56 @@ sed -i \
 	-e 's/^\(prompt\).*/\1 0/' \
 	-e 's/^\(timeout\).*/\1 50/' \
 	-e 's/^\(display\).*//' \
-	${dir}/extlinux.conf 
+	${dir}/boot/extlinux/extlinux.conf 
 
 sed -i \
-	-e 's|\(append.*\)|\1 boot=local root='$part' |' \
-	${dir}/linux.cfg
+	-e 's|\(append.*\)|\1 boot=live |' \
+	${dir}/boot/extlinux/linux.cfg
 
 	( cd ${dir}/.. && ln -s . boot )
 
 }
 install_root() {
 	local dir="$1"
-	_logs "installing root to ${dir}, this will take several minutes"
-	unsquashfs -f -n -d $dir /live/image/live/filesystem.squashfs 
-}
-user_setup() {
-	local dir="$1"
-	_logs "user setup"
-	chroot $dir groupadd webc
-	chroot $dir useradd -g webc webc
-	chroot $dir chown -R webc:webc /home/webc
-	grep -qs '^webc' ${dir}/etc/passwd || {
-		_err "user setup failed"
-	}
-}
-
-install_files() {
-	local dir="$1"
-	local disk="$2"
-	sed -i 's/^root::\(.*\)/root:x:\1/' ${dir}/etc/passwd
-
-	sed -i \
-		-e 's/^.sudo.*/webc ALL=NOPASSWD: ALL/' \
-		${dir}/etc/sudoers 
-
-	cat<<EOF > ${dir}/etc/fstab
-proc /proc proc defaults 0 0
-${disk} / ext3 defaults 0 0
-/swap none swap sw 0 0
-EOF
-
-
-	cat<<EOF > ${dir}/etc/hosts
-127.0.0.1	localhost localhost.localdomain webconverger
-EOF
-
-	cat<<EOF >> ${dir}/etc/network/interfaces
-EOF
-
+	_logs "copying files to ${dir}"
+	mkdir -p "${dir}/live"
+	cp -r /live/image/live/filesystem.git ${dir}/live/
 }
 
 if cmdline_has install
 then
 	clear_screen
-	cmdline_has debug && echo "debug has been enabled" >/dev/console
-	add_root
+	cmdline_has debug && _logs "debug has been enabled"
 	disk=$( find_disk )
 	partition_disk $disk
 	verify_partition $disk
 	partition="${disk}1"
+	_logs "building filesystem on $partition"
 	mke2fs -j $partition
+	_logs "mounting $partition on /mnt/root"
 	test -d /mnt/root || mkdir /mnt/root
 	mount $partition /mnt/root
 	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+	_logs "enabling swap on /mnt/root/swap"
 	mkswap /mnt/root/swap
 	swapon /mnt/root/swap
 	install_root /mnt/root
-	install_files /mnt/root $partition
-	install_extlinux /mnt/root/boot/extlinux $partition $disk
+	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
 
-	_logs "umount'ing partitions"
+	_logs "unmounting partitions"
 	swapoff /mnt/root/swap
 	umount /mnt/root
 	_logs "install complete"
 	if cmdline_has debug; then
 		exec sleep 86400
 	fi
-	_logs "rebooting..."
+	_logs "press enter to reboot..."
+	read DUMMY
 	/sbin/reboot 
 else
 	exec sleep 86400
 fi
+
+# Install did not fail, unregister the trap
+trap - EXIT
