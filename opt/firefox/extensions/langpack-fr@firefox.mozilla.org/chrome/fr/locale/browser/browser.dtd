@@ -1,10 +1,10 @@
-<!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items --> 
+<!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
 <!-- LOCALIZATION NOTE : FILE Do not translate commandkeys -->
 
-<!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE --> 
-<!ENTITY mainWindow.title "&brandFullName;"> 
-<!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE --> 
-<!ENTITY mainWindow.titlemodifier "&brandFullName;"> 
+<!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
+<!ENTITY mainWindow.title "&brandFullName;">
+<!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
+<!ENTITY mainWindow.titlemodifier "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifiermenuseparator): DONT_TRANSLATE -->
 <!ENTITY mainWindow.titlemodifiermenuseparator " - ">
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
@@ -77,6 +77,12 @@ can reach it easily. -->
 <!ENTITY pageInfoCmd.label "Informations sur la page">
 <!ENTITY pageInfoCmd.accesskey "I">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
+These should match what Safari and other Apple applications use on OS X Lion. -->
+<!ENTITY enterFullScreenCmd.label "Passer en mode Plein écran">
+<!ENTITY enterFullScreenCmd.accesskey "P">
+<!ENTITY exitFullScreenCmd.label "Quitter le mode Plein écran">
+<!ENTITY exitFullScreenCmd.accesskey "P">
 <!ENTITY fullScreenCmd.label "Plein écran">
 <!ENTITY fullScreenCmd.accesskey "P">
 <!ENTITY fullScreenCmd.macCommandKey "f">
@@ -90,7 +96,13 @@ can reach it easily. -->
 <!ENTITY fullScreenAutohide.accesskey "M">
 <!ENTITY fullScreenExit.label "Quitter le mode plein écran">
 <!ENTITY fullScreenExit.accesskey "Q">
-<!ENTITY domFullScreenWarning.label "Appuyer sur Échap pour quitter le mode plein écran">
+<!ENTITY fullscreenAllowButton.label "Autoriser">
+<!ENTITY fullscreenExitButton.label "Interdire">
+<!ENTITY fullscreenApproval.value "Autoriser le mode plein écran ?">
+
+<!ENTITY fullscreenExitHint.value "Appuyez sur Échap à tout moment pour quitter le mode plein écran.">
+<!ENTITY leaveDOMFullScreen.label "Quitter le mode plein écran">
+<!ENTITY leaveDOMFullScreen.accesskey "u">
 
 <!ENTITY closeWindow.label "Fermer la fenêtre">
 <!ENTITY closeWindow.accesskey "r">
@@ -112,7 +124,7 @@ can reach it easily. -->
 <!ENTITY forwardCmd.label             "Page suivante">
 <!ENTITY forwardCmd.accesskey         "a">
 <!ENTITY forwardButton.tooltip        "Avancer d'une page">
-<!ENTITY backForwardButtonMenu.tooltip "Faire un clic droit ou cliquer tout en déplaçant la souris vers le bas pour afficher l'historique">
+<!ENTITY backForwardButtonMenu.tooltip "Faire un clic droit ou cliquer en déplaçant la souris vers le bas pour afficher l'historique">
 <!ENTITY backForwardButtonMenuMac.tooltip "Cliquer tout en déplaçant la souris vers le bas pour afficher l'historique">
 <!ENTITY reloadCmd.label              "Actualiser">
 <!ENTITY reloadCmd.accesskey          "c">
@@ -197,6 +209,10 @@ can reach it easily. -->
 <!ENTITY inspectContextMenu.label     "Examiner l'élément">
 <!ENTITY inspectContextMenu.accesskey "x">
 
+<!ENTITY responsiveDesignTool.label      "Mode Responsive Design">
+<!ENTITY responsiveDesignTool.accesskey  "R">
+<!ENTITY responsiveDesignTool.commandkey "M">
+
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -214,6 +230,15 @@ can reach it easily. -->
 
 <!ENTITY inspectCloseButton.tooltiptext "Fermer l'inspecteur">
 
+<!ENTITY devToolbarCloseButton.tooltiptext "Fermer la Barre de développement">
+<!ENTITY devToolbarMenu.label              "Barre de développement">
+<!ENTITY devToolbarMenu.accesskey          "v">
+<!ENTITY devToolbar.commandkey             "v">
+
+<!ENTITY webConsoleButton.label "Console Web">
+<!ENTITY inspectorButton.label "Inspecteur">
+<!ENTITY scriptsButton.label "Scripts">
+
 <!ENTITY inspectorHTMLCopyInner.label       "Copier innerHTML">
 <!ENTITY inspectorHTMLCopyInner.accesskey   "C">
 
@@ -222,6 +247,16 @@ can reach it easily. -->
 
 <!ENTITY inspectorHTMLDelete.label          "Supprimer le nœud">
 <!ENTITY inspectorHTMLDelete.accesskey      "S">
+
+<!-- LOCALIZATION NOTE (inspectOptionButton.*): The menu in the Inspector
+  -  toolbar.  -->
+<!ENTITY inspectOptionButton.tooltiptext    "Options de l'inspecteur">
+
+<!-- LOCALIZATION NOTE: These are for the menu in the Inspector Toolbar -->
+<!ENTITY inspectorToggleVeil.label          "Réduire l'intensité de la page">
+<!ENTITY inspectorToggleVeil.accesskey      "d">
+<!ENTITY inspectorToggleInfobar.label       "Infos sur le nœud">
+<!ENTITY inspectorToggleInfobar.accesskey   "s">
 
 <!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
   -  alternate view for the Inspector, creating a 3D visualization of the
@@ -329,7 +364,7 @@ can reach it easily. -->
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Aller à l'onglet :">
 
-<!-- 
+<!--
   Comment duplicated from browser-sets.inc:
 
   Search Command Key Logic works like this:
@@ -339,7 +374,7 @@ can reach it easily. -->
   Mac:  Cmd+K (cross platform binding)
         Cmd+Opt+F (platform convention)
   Win:  Ctrl+K (cross platform binding)
-        Ctrl+E (IE compat) 
+        Ctrl+E (IE compat)
 
   We support Ctrl+K on all platforms now and advertise it in the menu since it is
   our standard - it is a "safe" choice since it is near no harmful keys like "W" as
@@ -372,7 +407,7 @@ can reach it easily. -->
 <!ENTITY reloadFrameCmd.accesskey     "c">
 <!ENTITY viewPartialSourceForSelectionCmd.label "Code source de la sélection">
 <!ENTITY viewPartialSourceForMathMLCmd.label    "Code MathML de la sélection">
-<!-- LOCALIZATION NOTE (viewPartialSourceCmd.accesskey): This accesskey is used for both 
+<!-- LOCALIZATION NOTE (viewPartialSourceCmd.accesskey): This accesskey is used for both
          viewPartialSourceForSelectionCmd.label and viewPartialSourceForMathMLCmd.label -->
 <!ENTITY viewPartialSourceCmd.accesskey "e">
 <!ENTITY viewPageSourceCmd.label      "Code source de la page">

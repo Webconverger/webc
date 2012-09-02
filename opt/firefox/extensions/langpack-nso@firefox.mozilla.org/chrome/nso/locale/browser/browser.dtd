@@ -1,6 +1,10 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
 <!-- LOCALIZATION NOTE : FILE Do not translate commandkeys --> 
 <!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
+
 
 <!ENTITY mainWindow.title "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
@@ -77,6 +81,12 @@ can reach it easily. -->
 <!ENTITY pageInfoCmd.label "Tshedimošo ya letlakala">
 <!ENTITY pageInfoCmd.accesskey "T">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
+These should match what Safari and other Apple applications use on OS X Lion. -->
+<!ENTITY enterFullScreenCmd.label "Tsena mokgweng wa sekirini se tletšego">
+<!ENTITY enterFullScreenCmd.accesskey "m">
+<!ENTITY exitFullScreenCmd.label "Etšwa mokgweng wa sekirini se tletšego">
+<!ENTITY exitFullScreenCmd.accesskey "m">
 <!ENTITY fullScreenCmd.label "Sekirini se se tletšego">
 <!ENTITY fullScreenCmd.accesskey "t">
 <!ENTITY fullScreenCmd.macCommandKey "f">
@@ -90,7 +100,13 @@ can reach it easily. -->
 <!ENTITY fullScreenAutohide.accesskey "h">
 <!ENTITY fullScreenExit.label "Etšwa mokgweng wa sekirini se se feleletšego">
 <!ENTITY fullScreenExit.accesskey "m">
-<!ENTITY domFullScreenWarning.label "Gatelela ESC gore o tloge mokgweng wa sekirini se tletšego">
+<!ENTITY fullscreenAllowButton.label "Dumelela">
+<!ENTITY fullscreenExitButton.label "Gana">
+<!ENTITY fullscreenApproval.value "Dumelela sekirini se tletšego?">
+
+<!ENTITY fullscreenExitHint.value "Gatelela ESC nako efe goba efe gore o tšwe sekirining se tletšego.">
+<!ENTITY leaveDOMFullScreen.label "Etšwa sekirining se tletšego">
+<!ENTITY leaveDOMFullScreen.accesskey "t">
 
 <!ENTITY closeWindow.label "Tswalela lefasetere">
 <!ENTITY closeWindow.accesskey "e">
@@ -197,6 +213,10 @@ can reach it easily. -->
 
 <!ENTITY inspectContextMenu.label     "Setho sa go hlahloba">
 <!ENTITY inspectContextMenu.accesskey "Q">
+
+<!ENTITY responsiveDesignTool.label   "Responsive Design View">
+<!ENTITY responsiveDesignTool.accesskey "R">
+<!ENTITY responsiveDesignTool.commandkey "M">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -213,10 +233,35 @@ can reach it easily. -->
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
 
-<!ENTITY inspectPanelTitle.label        "HTML">
-<!ENTITY inspectButton.label            "Hlahloba">
-<!ENTITY inspectButton.accesskey        "H">
 <!ENTITY inspectCloseButton.tooltiptext "Tswalela mohlahlobi">
+
+<!ENTITY devToolbarCloseButton.tooltiptext "Tswalela thulupa ya mohlabollodi">
+<!ENTITY devToolbarMenu.label              "Thulupa ya mohlabollodi">
+<!ENTITY devToolbarMenu.accesskey          "b">
+<!ENTITY devToolbar.commandkey             "v">
+
+<!ENTITY webConsoleButton.label "Khonsole ya wepe">
+<!ENTITY inspectorButton.label "Mohlahlobi">
+<!ENTITY scriptsButton.label "Dikripte">
+
+<!ENTITY inspectorHTMLCopyInner.label       "Bokagare bja sekopiši sa HTML">
+<!ENTITY inspectorHTMLCopyInner.accesskey   "a">
+
+<!ENTITY inspectorHTMLCopyOuter.label       "Bokantle bja sekopiši sa HTML">
+<!ENTITY inspectorHTMLCopyOuter.accesskey   "n">
+
+<!ENTITY inspectorHTMLDelete.label          "Phumula senoko">
+<!ENTITY inspectorHTMLDelete.accesskey      "P">
+<!-- LOCALIZATION NOTE (inspectOptionButton.*): The menu in the Inspector
+  -  toolbar.  -->
+
+<!ENTITY inspectOptionButton.tooltiptext    "Dikgetho tša mohlahlobi">
+<!-- LOCALIZATION NOTE: These are for the menu in the Inspector Toolbar -->
+
+<!ENTITY inspectorToggleVeil.label          "Fokotša seetša sa letlakala">
+<!ENTITY inspectorToggleVeil.accesskey      "F">
+<!ENTITY inspectorToggleInfobar.label       "Laetša tshedimošo ya senoko">
+<!ENTITY inspectorToggleInfobar.accesskey   "L">
 <!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
   -  alternate view for the Inspector, creating a 3D visualization of the
   -  webpage. -->
@@ -273,7 +318,7 @@ can reach it easily. -->
 
 <!ENTITY clearRecentHistory.label               "Tloša histori ya morago bjale…">
 <!ENTITY clearRecentHistory.accesskey           "h">
-<!-- LOCALIZATION NOTE : These two strings can share an access key beause they never appear together on the menu -->
+<!-- LOCALIZATION NOTE : These two strings can share an access key because they never appear together on the menu -->
 
 <!ENTITY privateBrowsingCmd.start.label         "Thoma go praosa ga praebete">
 <!ENTITY privateBrowsingCmd.start.accesskey     "p">
@@ -600,22 +645,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY addonBarCloseButton.tooltip  "Tswalela para ya setlaleletši">
 <!ENTITY toggleAddonBarCmd.key        "/">
-
-<!ENTITY inspectorHTMLCopyInner.accesskey   "I">
-
-<!ENTITY inspectorHTMLCopyInner.label       "Copy Inner HTML">
-<!ENTITY inspectorHTMLCopyOuter.accesskey   "O">
-
-<!ENTITY inspectorHTMLCopyOuter.label       "Copy Outer HTML">
-<!ENTITY inspectorHTMLDelete.accesskey      "D">
-
-<!ENTITY inspectorHTMLDelete.label          "Delete Node">
-<!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
-toolbar button -->
-<!ENTITY markupButton.accesskey          "M">
-
 <!-- LOCALIZATION NOTE (markupButton.arialabel): The markup button is the button
 located in front of the breadcrumbs display in the inspector toolbar. The button
 doesn't display any label, but exposes a label to screen-readers with "aria-label".
 -->
-<!ENTITY markupButton.arialabel          "Markup">
+
+<!ENTITY markupButton.arialabel          "Tshwayo">
+<!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
+toolbar button -->
+<!ENTITY markupButton.accesskey          "M">

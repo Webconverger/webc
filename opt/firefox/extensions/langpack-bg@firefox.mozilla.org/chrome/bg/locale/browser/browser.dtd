@@ -1,6 +1,10 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
 <!-- LOCALIZATION NOTE : FILE Do not translate commandkeys --> 
 <!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
+
 
 <!ENTITY mainWindow.title "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
@@ -77,6 +81,12 @@ can reach it easily. -->
 <!ENTITY pageInfoCmd.label "Информация за страницата">
 <!ENTITY pageInfoCmd.accesskey "И">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
+These should match what Safari and other Apple applications use on OS X Lion. -->
+<!ENTITY enterFullScreenCmd.label "Влизане в режим на цял екран">
+<!ENTITY enterFullScreenCmd.accesskey "ц">
+<!ENTITY exitFullScreenCmd.label "Излизане от режим на цял екран">
+<!ENTITY exitFullScreenCmd.accesskey "ц">
 <!ENTITY fullScreenCmd.label "Цял екран">
 <!ENTITY fullScreenCmd.accesskey "Ц">
 <!ENTITY fullScreenCmd.macCommandKey "f">
@@ -90,7 +100,13 @@ can reach it easily. -->
 <!ENTITY fullScreenAutohide.accesskey "л">
 <!ENTITY fullScreenExit.label "Изход от цял екран">
 <!ENTITY fullScreenExit.accesskey "ц">
-<!ENTITY domFullScreenWarning.label "Натиснете Esc, за да напуснете целоекранния режим">
+<!ENTITY fullscreenAllowButton.label "Разрешаване">
+<!ENTITY fullscreenExitButton.label "Отказване">
+<!ENTITY fullscreenApproval.value "Разрешаване на цял екран?">
+
+<!ENTITY fullscreenExitHint.value "Натиснете Esc по всяко време и ще излезете от режима на цял екран">
+<!ENTITY leaveDOMFullScreen.label "Излизане от режим на цял екран">
+<!ENTITY leaveDOMFullScreen.accesskey "ц">
 
 <!ENTITY closeWindow.label "Затваряне на прозореца">
 <!ENTITY closeWindow.accesskey "п">
@@ -197,6 +213,10 @@ can reach it easily. -->
 
 <!ENTITY inspectContextMenu.label     "Изследване на елемент">
 <!ENTITY inspectContextMenu.accesskey "И">
+
+<!ENTITY responsiveDesignTool.label   "Изглед на нагаждащ се дизайн">
+<!ENTITY responsiveDesignTool.accesskey "н">
+<!ENTITY responsiveDesignTool.commandkey "M">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -213,12 +233,42 @@ can reach it easily. -->
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
 
-<!ENTITY inspectPanelTitle.label        "HTML">
-<!ENTITY inspectButton.label            "Изследване">
-<!ENTITY inspectButton.accesskey        "И">
 <!ENTITY inspectCloseButton.tooltiptext "Затваряне на Инспектор">
-<!ENTITY inspect3DButton.label        "3D">
-<!ENTITY inspect3DButton.accesskey    "3">
+
+<!ENTITY devToolbarCloseButton.tooltiptext "Затваряне на лентата за разработчици">
+<!ENTITY devToolbarMenu.label              "Лента за разработчици">
+<!ENTITY devToolbarMenu.accesskey          "р">
+<!ENTITY devToolbar.commandkey             "v">
+
+<!ENTITY webConsoleButton.label "Уеб конзола">
+<!ENTITY inspectorButton.label "Изследване">
+<!ENTITY scriptsButton.label "Скриптове">
+
+<!ENTITY inspectorHTMLCopyInner.label       "Копиране на вътрешен HTML">
+<!ENTITY inspectorHTMLCopyInner.accesskey   "т">
+
+<!ENTITY inspectorHTMLCopyOuter.label       "Копиране на външен HTML">
+<!ENTITY inspectorHTMLCopyOuter.accesskey   "ш">
+
+<!ENTITY inspectorHTMLDelete.label          "Изтриване на възел">
+<!ENTITY inspectorHTMLDelete.accesskey      "з">
+<!-- LOCALIZATION NOTE (inspectOptionButton.*): The menu in the Inspector
+  -  toolbar.  -->
+
+<!ENTITY inspectOptionButton.tooltiptext    "Настройки на изследването">
+<!-- LOCALIZATION NOTE: These are for the menu in the Inspector Toolbar -->
+
+<!ENTITY inspectorToggleVeil.label          "Замъгляване на страницата">
+<!ENTITY inspectorToggleVeil.accesskey      "З">
+<!ENTITY inspectorToggleInfobar.label       "Показване на информация за възела">
+<!ENTITY inspectorToggleInfobar.accesskey   "П">
+<!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
+  -  alternate view for the Inspector, creating a 3D visualization of the
+  -  webpage. -->
+
+<!ENTITY inspect3DViewButton.label     "3D изглед">
+<!ENTITY inspect3DViewButton.accesskey "3">
+
 <!ENTITY inspectStyleButton.label     "Стил">
 <!ENTITY inspectStyleButton.accesskey "С">
 <!-- LOCALIZATION NOTE (styleeditor.label): This menu item label appears
@@ -268,7 +318,7 @@ can reach it easily. -->
 
 <!ENTITY clearRecentHistory.label               "Изчистване на скорошна история…">
 <!ENTITY clearRecentHistory.accesskey           "И">
-<!-- LOCALIZATION NOTE : These two strings can share an access key beause they never appear together on the menu -->
+<!-- LOCALIZATION NOTE : These two strings can share an access key because they never appear together on the menu -->
 
 <!ENTITY privateBrowsingCmd.start.label         "Включване на „Поверително сърфиране“">
 <!ENTITY privateBrowsingCmd.start.accesskey     "с">
@@ -595,28 +645,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY addonBarCloseButton.tooltip  "Затваряне на лентата за добавки">
 <!ENTITY toggleAddonBarCmd.key        "/">
-
-<!ENTITY inspect3DViewButton.accesskey "W">
-
-<!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
-  -  alternate view for the Inspector, creating a 3D visualization of the
-  -  webpage. -->
-<!ENTITY inspect3DViewButton.label     "3D View">
-<!ENTITY inspectorHTMLCopyInner.accesskey   "I">
-
-<!ENTITY inspectorHTMLCopyInner.label       "Copy Inner HTML">
-<!ENTITY inspectorHTMLCopyOuter.accesskey   "O">
-
-<!ENTITY inspectorHTMLCopyOuter.label       "Copy Outer HTML">
-<!ENTITY inspectorHTMLDelete.accesskey      "D">
-
-<!ENTITY inspectorHTMLDelete.label          "Delete Node">
-<!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
-toolbar button -->
-<!ENTITY markupButton.accesskey          "M">
-
 <!-- LOCALIZATION NOTE (markupButton.arialabel): The markup button is the button
 located in front of the breadcrumbs display in the inspector toolbar. The button
 doesn't display any label, but exposes a label to screen-readers with "aria-label".
 -->
-<!ENTITY markupButton.arialabel          "Markup">
+
+<!ENTITY markupButton.arialabel          "Маркиране">
+<!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
+toolbar button -->
+<!ENTITY markupButton.accesskey          "М">
