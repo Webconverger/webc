@@ -144,9 +144,8 @@ then
 	swapoff /mnt/root/swap
 	umount /mnt/root
 	_logs "install complete"
-	if cmdline_has debug; then
-		exec sleep 86400
-	fi
+	e2label $partition install
+	_logs $(blkid)
 	_logs "press enter to reboot..."
 	read DUMMY
 	/sbin/reboot 
