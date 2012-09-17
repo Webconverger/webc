@@ -1,0 +1,23 @@
+#! /bin/sh -e
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+# Automatically added by dh_makeshlibs
+if [ "$1" = "remove" ]; then
+	ldconfig
+fi
+# End automatically added section
+
+
+case "$1" in
+  purge)
+    [ -x /usr/bin/ucf ] && ucf --purge /etc/papersize
+    rm -f /etc/papersize
+  ;;
+esac
+exit 0
+

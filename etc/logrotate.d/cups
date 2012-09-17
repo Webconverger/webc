@@ -1,0 +1,15 @@
+/var/log/cups/*log {
+	daily
+	missingok
+	rotate 7
+	sharedscripts
+	postrotate
+		if [ -e /var/run/cups/cupsd.pid ]; then
+			invoke-rc.d --quiet cups force-reload > /dev/null
+			sleep 10
+		fi
+	endscript
+	compress
+	notifempty
+	create 640 root lpadmin
+}

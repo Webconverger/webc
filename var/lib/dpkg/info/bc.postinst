@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# This is the postinst script for the Debian GNU/Linux bc package
+#
+# Written by John G. Hasler  
+# Previous versions written by Dirk Eddelbuettel, Bill Mitchell, 
+# Austin Donnelly and James Troup
+
+set -e
+
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+
+
+case "$1" in
+	configure)
+		if [ -x "`which update-menus 2>/dev/null`" ]; then
+        		update-menus
+		fi
+	;;
+    	abort-remove|abort-deconfigure|abort-upgrade)
+    		# Nothing to undo
+	;;
+
+    *)
+	echo "postinst called with unknown argument \`$1'" >&2
+	;;
+esac

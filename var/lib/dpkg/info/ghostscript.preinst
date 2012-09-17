@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+    install|upgrade)
+	# Do away with update-alternative for /usr/bin/gs, we have one
+	# grand unified Ghostscript now!
+	if dpkg --compare-versions "$2" lt-nl "8.63.dfsg.1-1"; then
+		update-alternatives --remove-all gs || true
+		update-alternatives --remove-all gs.1 || true
+	fi
+
+	# Do away with update-alternative for /usr/bin/ps2pdf, upstream
+	# provides it as a script
+        if dpkg --compare-versions "$2" lt-nl "8.64~dfsg-1"; then
+		update-alternatives --remove-all ps2pdf || true
+	fi
+
+	# Remove obsolete defoma files
+	if dpkg --compare-versions "$2" lt-nl "8.71~dfsg2-1"; then
+	  rm -rf /var/lib/defoma/gs.d
+	  rm -f /etc/defoma/ghostscript.subst-rule
+	  rm -f /etc/defoma/ghostscript.subst-rule~
+	  rm -f /var/lib/defoma/ghostscript.subst-cache
+	fi
+	;;
+    abort-upgrade)
+	;;
+    *)
+	echo "preinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
+esac
+
+
+
+exit 0

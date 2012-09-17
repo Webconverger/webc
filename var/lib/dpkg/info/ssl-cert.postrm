@@ -1,0 +1,35 @@
+#!/bin/sh -e
+
+if [ "$1" = purge ] ; then
+	rm -f /etc/ssl/certs/ssl-cert-snakeoil.pem \
+	      /etc/ssl/certs/ssl-cert-snakeoil.pem.broken \
+              /etc/ssl/private/ssl-cert-snakeoil.key \
+	      /etc/ssl/private/ssl-cert-snakeoil.key.broken
+
+	# remove hash symlink
+	find /etc/ssl/certs -maxdepth 1 -lname ssl-cert-snakeoil.pem -delete > /dev/null 2>&1 || true
+
+	if dpkg-statoverride --list /etc/ssl/private 2>&1 | grep -q "root ssl-cert 710"
+	then
+		dpkg-statoverride --remove /etc/ssl/private
+		# /etc/ssl/private is also in package openssl, change permissions back
+		# if not
+		if [ -e /etc/ssl/private ] ; then
+			chgrp root /etc/ssl/private
+			chmod 700 /etc/ssl/private
+				
+		fi
+	fi
+	# if openssl conffiles are not there (i.e purged), try to delete dirs
+	if [ ! -e /etc/ssl/openssl.cnf ] ; then
+		rmdir /etc/ssl/private /etc/ssl/certs /etc/ssl 2> /dev/null || true
+	fi
+fi
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+

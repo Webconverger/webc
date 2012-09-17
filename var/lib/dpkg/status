@@ -437,6 +437,27 @@ Description: GNU privacy guard - signature verification tool
  make the signature are trustworthy.
 Homepage: http://www.gnupg.org
 
+Package: cups-ppdc
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 296
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Replaces: cupsddk (<< 1.4.0)
+Provides: cupsddk
+Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common
+Conflicts: cupsddk (<< 1.4.0)
+Description: Common UNIX Printing System(tm) - PPD manipulation utilities
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides utilities to generate and manipulate PPD files.
+
 Package: libgmp3c2
 Status: install ok installed
 Priority: optional
@@ -1421,6 +1442,23 @@ Description: X11 keyboard file manipulation library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libxkbfile
 
+Package: ssl-cert
+Status: install ok installed
+Priority: optional
+Section: utils
+Installed-Size: 112
+Maintainer: Debian Apache Maintainers <debian-apache@lists.debian.org>
+Architecture: all
+Version: 1.0.28
+Depends: debconf (>= 0.5) | debconf-2.0, openssl (>= 0.9.8g-9), adduser
+Suggests: openssl-blacklist
+Description: simple debconf wrapper for OpenSSL
+ This package enables unattended installs of packages that
+ need to create SSL certificates.
+ .
+ It is a simple wrapper for OpenSSL's certificate request utility that
+ feeds it with the correct user variables.
+
 Package: xserver-xorg-video-s3virge
 Status: install ok installed
 Priority: optional
@@ -1897,6 +1935,22 @@ Description: MIT Kerberos runtime libraries - Crypto Library
  applications and Kerberos clients.
 Homepage: http://web.mit.edu/kerberos/
 
+Package: bc
+Status: install ok installed
+Priority: standard
+Section: math
+Installed-Size: 300
+Maintainer: John G. Hasler <jhasler@debian.org>
+Architecture: i386
+Version: 1.06.95-2
+Depends: libc6 (>= 2.3), libncurses5 (>= 5.6+20071006-3), libreadline6, dpkg (>= 1.15.4) | install-info
+Description: The GNU bc arbitrary precision calculator language
+ GNU bc is an interactive algebraic language with arbitrary precision which
+ follows the POSIX 1003.2 draft standard, with several extensions including
+ multi-character variable names, an `else' statement and full Boolean
+ expressions.  GNU bc does not require the separate GNU dc program.
+ Home page: http://directory.fsf.org/GNU/bc.html
+
 Package: netbase
 Status: install ok installed
 Priority: important
@@ -2055,6 +2109,26 @@ Description: streams library for for Strigi Desktop Search
  .
  See the 'strigi-daemon' package for more information.
 Homepage: http://strigi.sourceforge.net
+
+Package: cups-client
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 480
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), zlib1g (>= 1:1.2.3.3.dfsg), cups-common (>= 1.4.4), adduser
+Suggests: cups, kdeprint, gtklp, cups-pt, xpp, cups-bsd
+Conflicts: lprng
+Description: Common UNIX Printing System(tm) - client programs (SysV)
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the System V style print client programs.
 
 Package: libsepol1
 Status: install ok installed
@@ -2676,6 +2750,28 @@ Description: The GTK+ graphical user interface library
  This package contains the shared libraries.
 Homepage: http://www.gtk.org/
 
+Package: libslp1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 160
+Maintainer: Ganesan Rajagopal <rganesan@debian.org>
+Architecture: i386
+Source: openslp-dfsg
+Version: 1.2.1-7.8
+Depends: debconf (>= 0.5) | debconf-2.0, libc6 (>= 2.3)
+Suggests: slpd (= 1.2.1-7.8), openslp-doc (= 1.2.1-7.8)
+Description: OpenSLP libraries
+ Service Location Protocol is an IETF standard protocol that is used to
+ discover/advertise services on the network. You can use SLP for anything
+ from locating a suitable printer on your floor to discovering what LDAP
+ directories are available in your organization.  This package provides
+ the OpenSLP run-time library package that is linked to SLP aware
+ applications. This library implements RFC 2614 - An API for Service
+ Location. Unless there is a SLP DA in the network, you must install the
+ slpd package to be able to advertise the services.
+Homepage: http://www.openslp.org/
+
 Package: linux-image-2.6.32-5-686
 Status: deinstall ok config-files
 Priority: optional
@@ -2969,6 +3065,22 @@ Description: Mesa OpenGL utility library (GLU)
  Mesa package (ergo the "-mesa" suffix).
 Homepage: http://mesa3d.sourceforge.net/
 
+Package: gsfonts
+Status: install ok installed
+Priority: optional
+Section: text
+Installed-Size: 4632
+Maintainer: Masayuki Hatta (mhatta) <mhatta@debian.org>
+Architecture: all
+Version: 1:8.11+urwcyr1.0.7~pre44-4.2
+Conflicts: gs (<< 5.50-5), gs-aladdin (<< 6.50-4), gsfonts-x11 (<< 0.13)
+Conffiles:
+ /etc/ghostscript/fontmap.d/10gsfonts.conf 39b53e1126184b434b52585a113fe125
+Description: Fonts for the Ghostscript interpreter(s)
+ These are free look-alike fonts of the Adobe PostScript fonts.
+ Recommended for all flavors of Ghostscript (gs-gpl, gs-afpl and gs-esp).
+Homepage: http://www.ghostscript.com/
+
 Package: adduser
 Status: install ok installed
 Priority: important
@@ -3004,6 +3116,25 @@ Description: add and remove users and groups
   Development mailing list:
     http://lists.alioth.debian.org/mailman/listinfo/adduser-devel/
 Homepage: http://alioth.debian.org/projects/adduser/
+
+Package: libcupsmime1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 156
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libcups2 (>= 1.4.0), libgcrypt11 (>= 1.4.2), libgnutls26 (>= 2.7.14-0)
+Description: Common UNIX Printing System(tm) - MIME library
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides a shared library for file type detection and
+ file conversion filter chain building.
 
 Package: libxcb1
 Status: install ok installed
@@ -3348,6 +3479,25 @@ Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconra
 Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
 Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
 
+Package: libcupsdriver1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 168
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libcups2 (>= 1.4.0), libgcrypt11 (>= 1.4.2), libgnutls26 (>= 2.7.14-0)
+Description: Common UNIX Printing System(tm) - Driver library
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides a shared library with useful functions for printer
+ drivers.
+
 Package: libsqlite3-0
 Status: deinstall ok config-files
 Priority: standard
@@ -3384,6 +3534,23 @@ Description: converts between character sets in Perl
  This package allows access to them from Perl via the Text::Iconv
  package.
 Homepage: http://search.cpan.org/search?module=Text::Iconv
+
+Package: cups-common
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 4068
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: all
+Source: cups
+Version: 1.4.4-7+squeeze1
+Description: Common UNIX Printing System(tm) - common files
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides common files for CUPS server and client packages.
 
 Package: libuuid-perl
 Status: install ok installed
@@ -4006,6 +4173,21 @@ Description: The Linux Kernel Device Mapper userspace library
  consistent interface (as opposed to through kernel ioctls).
 Homepage: http://sources.redhat.com/lvm2/
 
+Package: ttf-freefont
+Status: install ok installed
+Priority: optional
+Section: fonts
+Installed-Size: 4204
+Maintainer: Debian Fonts Task Force <pkg-fonts-devel@lists.alioth.debian.org>
+Architecture: all
+Version: 20090104-7
+Recommends: x-ttcidfont-conf
+Description: Freefont Serif, Sans and Mono Truetype fonts
+ A set of free high-quality TrueType fonts covering the UCS
+ character set. These fonts are similar to the (in)famous Helvetica,
+ Times and Courier fonts.
+Homepage: http://savannah.gnu.org/projects/freefont/
+
 Package: libxi6
 Status: install ok installed
 Priority: optional
@@ -4552,6 +4734,27 @@ Original-Maintainer: Agustin Martin Domingo <agmartin@debian.org>
 Original-Uploaders: Rene Engelhard <rene@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=dict-common/dictionaries-common.git;a=summary
 Original-Vcs-Git: git://git.debian.org/git/dict-common/dictionaries-common
+
+Package: libgs8
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 14672
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Source: ghostscript
+Version: 8.71~dfsg2-9
+Replaces: ghostscript (<< 8.71~dfsg2-7)
+Depends: libc6 (>= 2.7), libcomerr2 (>= 1.01), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libfontconfig1 (>= 2.8.0), libgcrypt11 (>= 1.4.2), libgnutls26 (>= 2.7.14-0), libgssapi-krb5-2 (>= 1.6.dfsg.2), libjasper1 (>= 1.900.1), libjbig2dec0, libjpeg62 (>= 6b1), libk5crypto3 (>= 1.6.dfsg.2), libkrb5-3 (>= 1.6.dfsg.2), libpaper1, libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.1.1), libtiff4, zlib1g (>= 1:1.1.4)
+Breaks: ghostscript (<< 8.71~dfsg2-7)
+Description: The Ghostscript PostScript/PDF interpreter Library
+ Ghostscript is used for PostScript/PDF preview and printing.  Usually as
+ a back-end to a program such as ghostview, it can display PostScript and PDF
+ documents in an X11 environment.
+ .
+ This package provides the Ghostscript library which makes the
+ facilities of Ghostscript available to applications.
+Homepage: http://www.ghostscript.com/
 
 Package: libkrb5support0
 Status: install ok installed
@@ -5478,6 +5681,33 @@ Description: system-wide keyboard preferences
  provided by this package in order to configure the keyboard on the
  console or in X Window.
 
+Package: libijs-0.35
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 68
+Maintainer: Bradley Smith <bradsmith@debian.org>
+Architecture: i386
+Source: ijs
+Version: 0.35-7
+Depends: libc6 (>= 2.1.3)
+Description: IJS raster image transport protocol: shared library
+ IJS is, first and foremost, a protocol for transmission of raster page
+ images. This snapshot provides a reference implementation of the protocol,
+ the design of which is still in flux. When the protocol specification is
+ published, it will be authoritative. Applications should feel free to link
+ against the library provided in this package, adapt that code for their own
+ needs, or roll a completely new implementation.
+ .
+ IJS is a client-server protocol, used to write ghostscript drivers. The
+ drivers are separate programs. The client and server communicate via pipes,
+ though shared memory may be used additionally in the future. Currently IJS
+ is used by the hpijs and ijsgimpprint drivers.
+ .
+ Code for both the client- and server-side is included in the library. This
+ package provides the shared library.
+Homepage: http://www.linuxprinting.org/ijs/
+
 Package: xserver-xorg-video-neomagic
 Status: install ok installed
 Priority: optional
@@ -6321,6 +6551,24 @@ Description: ext2/ext3/ext4 file system utilities
 Homepage: http://e2fsprogs.sourceforge.net
 Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 
+Package: libpaper1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 60
+Maintainer: Giuseppe Sacco <eppesuig@debian.org>
+Architecture: i386
+Source: libpaper
+Version: 1.1.24
+Replaces: libpaperg (<< 1.1.9)
+Provides: libpaperg
+Depends: libc6 (>= 2.3), debconf (>= 0.5) | debconf-2.0, ucf (>= 0.28)
+Recommends: libpaper-utils
+Description: library for handling paper characteristics
+ The libpaper paper-handling library automates recognition of many
+ different paper types and sizes for programs that need to deal with
+ printed output.
+
 Package: libsigc++-2.0-0c2a
 Status: install ok installed
 Priority: optional
@@ -6601,6 +6849,28 @@ Description: X.Org X server -- MGA display driver
  <URL:http://www.X.org>
  .
  This package is built from the X.org xf86-video-mga driver module.
+
+Package: poppler-utils
+Status: install ok installed
+Priority: optional
+Section: utils
+Installed-Size: 492
+Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-issues@lists.progress-linux.org
+Architecture: i386
+Source: poppler
+Version: 0.12.4-1.2artax2
+Replaces: pdftohtml, xpdf-reader, xpdf-utils
+Provides: pdftohtml, xpdf-utils
+Depends: libc6 (>= 2.3.6-6~), libfontconfig1 (>= 2.8.0), libgcc1 (>= 1:4.1.1), libpoppler5, libstdc++6 (>= 4.1.1), libxml2 (>= 2.7.4)
+Recommends: ghostscript
+Conflicts: pdftohtml (<< 0.36-14), xpdf-utils (<< 3.02-9)
+Description: PDF utilitites (based on libpoppler)
+ This package contains pdftops (PDF to PostScript converter), pdfinfo
+ (PDF document information extractor), pdfimages (PDF image extractor),
+ pdftohtml (PDF to HTML converter), pdftotext (PDF to text converter),
+ and pdffonts (PDF font analyzer).
+Original-Maintainer: Loic Minier <lool@dooz.org>
 
 Package: debian-archive-keyring
 Status: install ok installed
@@ -6991,6 +7261,31 @@ Description: Utilities for configuring and using ALSA
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
 
+Package: ghostscript
+Status: install ok installed
+Priority: optional
+Section: text
+Installed-Size: 420
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Version: 8.71~dfsg2-9
+Replaces: gs-afpl (<< 8.63), gs-common (<< 8.63), gs-esp (<< 8.63), gs-gpl (<< 8.63)
+Provides: gs-common, postscript-viewer
+Depends: libc6 (>= 2.0), libgs8 (= 8.71~dfsg2-9), gsfonts (>= 6.0-1), debconf | debconf-2.0, debianutils (>= 1.6)
+Breaks: ghostscript-x (<< 8.64~dfsg-8)
+Conflicts: gs-afpl (<< 8.63), gs-cjk-resource (<< 1.20010910-1), gs-common (<< 8.63), gs-esp (<< 8.63), gs-gpl (<< 8.63)
+Description: The GPL Ghostscript PostScript/PDF interpreter
+ Ghostscript is used for PostScript/PDF preview and printing.  Usually as
+ a back-end to a program such as ghostview, it can display PostScript and PDF
+ documents in an X11 environment.
+ .
+ Furthermore, it can render PostScript and PDF files as graphics to be printed
+ on non-PostScript printers. Supported printers include common
+ dot-matrix, inkjet and laser models.
+ .
+ Package gsfonts contains a set of standard fonts for Ghostscript.
+Homepage: http://www.ghostscript.com/
+
 Package: xserver-xorg-video-s3
 Status: install ok installed
 Priority: optional
@@ -7293,6 +7588,25 @@ Description: Fixed-width fonts for fast reading on the Linux console
  European Latin, Turkish Latin, Romanian Latin, Slavic Cyrillic and
  Asian Cyrillic (Bashkyr, Kazakh, Mongolian and others).
 
+Package: libcupscgi1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 196
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libcups2 (>= 1.4.0), libgcrypt11 (>= 1.4.2), libgnutls26 (>= 2.7.14-0)
+Description: Common UNIX Printing System(tm) - CGI library
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides a shared library for CGI programs in the
+ CUPS web interface
+
 Package: libdrm-intel1
 Status: install ok installed
 Priority: optional
@@ -7327,6 +7641,24 @@ Description: Tools for manipulating Linux Wireless Extensions
  allowing you to set Wireless LAN specific parameters and get the
  specific stats.
 Homepage: http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
+
+Package: libjbig2dec0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 140
+Maintainer: Jonas Smedegaard <dr@jones.dk>
+Architecture: i386
+Source: jbig2dec
+Version: 0.11-1
+Depends: libc6 (>= 2.7), libpng12-0 (>= 1.2.13-4), zlib1g (>= 1:1.1.4)
+Description: JBIG2 decoder library - shared libraries
+ jbig2dec is a decoder library and example utility implementing the JBIG2
+ bi-level image compression spec. Also known as ITU T.88 and ISO IEC
+ 14492, and included by reference in Adobe's PDF version 1.4 and later.
+ .
+ This package contains the shared library libjbig2dec.
+Homepage: http://jbig2dec.sourceforge.net/
 
 Package: libx11-xcb1
 Status: install ok installed
@@ -7905,6 +8237,25 @@ Maintainer: Kai Hendry <hendry@webconverger.com>
 Version: 15.0.0
 Provides: firefox
 Description: Firefox Web browser
+
+Package: libcupsppdc1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 284
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libcups2 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Description: Common UNIX Printing System(tm) - PPD manipulation library
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the base shared library for generating and
+ manipulating PPD files.
 
 Package: libx11-data
 Status: install ok installed
@@ -9141,6 +9492,25 @@ Description: Netfilter netlink library
  nfnetlink_log, nfnetlink_queue, nfnetlink_conntrack) and their
  respective users and/or management tools in userspace.
 
+Package: libcupsimage2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 236
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cups
+Version: 1.4.4-7+squeeze1
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (>= 1.4.0), libjpeg62 (>= 6b1), libpng12-0 (>= 1.2.13-4), libtiff4, zlib1g (>= 1:1.1.4)
+Description: Common UNIX Printing System(tm) - Raster image library
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the image libraries for handling the CUPS
+ raster format.
+
 Package: gcc-4.4-base
 Status: install ok installed
 Priority: required
@@ -9154,6 +9524,38 @@ Description: The GNU Compiler Collection (base package)
  This package contains files common to all languages and libraries
  contained in the GNU Compiler Collection (GCC).
 Homepage: http://gcc.gnu.org/
+
+Package: cups
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 8196
+Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Architecture: i386
+Version: 1.4.4-7+squeeze1
+Replaces: cupsddk-drivers (<< 1.4.0)
+Provides: cupsddk-drivers
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (>= 1.4.4-3~), libcupscgi1 (>= 1.4.2), libcupsdriver1 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.7.14-0), libgssapi-krb5-2 (>= 1.8+dfsg), libijs-0.35, libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libpoppler5, libslp1, libstdc++6 (>= 4.1.1), libusb-0.1-4 (>= 2:0.1.12), zlib1g (>= 1:1.1.4), debconf (>= 1.2.9) | debconf-2.0, poppler-utils (>= 0.12), procps, ghostscript, lsb-base (>= 3), cups-common (>= 1.4.4), cups-client (>= 1.4.4-7+squeeze1), ssl-cert (>= 1.0.11), adduser, bc, ttf-freefont, cups-ppdc
+Recommends: foomatic-filters (>= 4.0), cups-driver-gutenprint, ghostscript-cups
+Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, hplip, xpdf-korean | xpdf-japanese | xpdf-chinese-traditional | xpdf-chinese-simplified, cups-pdf, smbclient (>= 3.0.9), udev
+Breaks: foomatic-filters (<< 4.0)
+Conflicts: cupsddk-drivers (<< 1.4.0)
+Conffiles:
+ /etc/cups/cupsd.conf f445c98c20432c264dad5060207bbffb
+ /etc/cups/cupsd.conf.default c53d958d1c7f47cd894e8964118cb0b9
+ /etc/cups/snmp.conf 2326a8af1e112676d55245bc5eb459ca
+ /etc/pam.d/cups ff2488324854f7b1e892bb0df062d5f0
+ /etc/fonts/conf.d/99pdftoopvp.conf a5221cfad70a981c80864229ef56586d
+ /etc/init.d/cups 7aaba466614799b00d74c700fe04c603
+ /etc/default/cups 2b436fbb1a32b82b6aba45a76a1d7e40
+ /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
+Description: Common UNIX Printing System(tm) - server
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the CUPS scheduler/daemon and related files.
 
 Package: libkrb5-3
 Status: install ok installed

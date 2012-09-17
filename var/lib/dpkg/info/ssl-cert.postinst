@@ -1,0 +1,62 @@
+#!/bin/sh -e
+
+. /usr/share/debconf/confmodule
+
+# Create the ssl-cert system group for snakeoil ownership:
+if ! getent group ssl-cert >/dev/null; then
+	addgroup --quiet --system --force-badname ssl-cert
+fi
+
+check_vuln_version () {
+	if dpkg --compare-versions "$2" ge "$1" && dpkg --compare-versions "$2" lt $3 ; then
+		check_key="yes"
+	fi
+}
+
+# Check if the generated snakeoil key/cert has been generated 
+# from a vulnerable openssl version and replace it if necessary.
+if [ -x /usr/bin/openssl-vulnkey -a -n "$2" ] ; then
+	check_key=""
+	check_vuln_version 0               "$2" 1.0.13-0ubuntu0.7.04.1
+	check_vuln_version 1.0.13-1        "$2" 1.0.14-0ubuntu0.7.10.1
+	check_vuln_version 1.0.14-0ubuntu1 "$2" 1.0.14-0ubuntu2.1
+	check_vuln_version 1.0.15          "$2" 1.0.19ubuntu1
+
+	CERT="/etc/ssl/certs/ssl-cert-snakeoil.pem"
+	KEY="/etc/ssl/private/ssl-cert-snakeoil.key"
+	# check if the cert and key file exist,
+	# the issuer and subject are the same (self signed cert)
+	# and the private key is vulnerable
+	if [ "${check_key}" = "yes" -a \
+	     -e "${CERT}" -a -e "${KEY}" -a \
+	     "$(openssl x509 -issuer -noout < ${CERT} | sed 's/issuer= //')" = "$(openssl x509 -subject -noout < ${CERT} | sed 's/subject= //')" ]; then
+	    	if ! openssl-vulnkey -q ${KEY}; then
+			db_version 2.0
+        		db_input critical make-ssl-cert/vulnerable_prng || true
+        		db_go
+			if [ ! -e ${CERT}.broken ] && [ ! -e ${KEY}.broken ] ; then
+				mv ${CERT} ${CERT}.broken
+				mv ${KEY} ${KEY}.broken
+			fi
+			make-ssl-cert generate-default-snakeoil --force-overwrite
+		fi
+	fi
+fi
+
+# no need to perform any check. If the certificates are there
+# it will exit 0.
+make-ssl-cert generate-default-snakeoil
+
+# allow group ssl-cert to access /etc/ssl/private
+if ! dpkg-statoverride --list /etc/ssl/private >/dev/null 2>&1
+then
+    dpkg-statoverride --update --add root ssl-cert 710 /etc/ssl/private
+fi
+
+# If we're upgrading from an older version, fix the unreadable key:
+if dpkg --compare-versions "$2" lt 1.0.12; then
+	chgrp ssl-cert /etc/ssl/private/ssl-cert-snakeoil.key
+	chmod g+r /etc/ssl/private/ssl-cert-snakeoil.key
+fi
+
+

@@ -1,0 +1,117 @@
+#!/bin/bash -e
+# This is a mockup of a script to produce a snakeoil cert
+# The aim is to have a debconfisable ssl-certificate script
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+db_capb backup
+
+ask_via_debconf() {
+    RET=""
+    if db_settitle make-ssl-cert/title ; then
+	: # OK
+    else
+	echo Debconf failed with error code $? $RET >&2
+	echo Maybe your debconf database is corrupt. >&2
+	echo Try re-installing ssl-cert. >&2
+    fi
+
+    RET=""
+    while [ "x$RET" = "x" ]; do
+	db_fset make-ssl-cert/hostname seen false
+	db_input high make-ssl-cert/hostname || true
+	db_go
+	db_get make-ssl-cert/hostname
+    done
+    
+    db_get make-ssl-cert/hostname
+    HostName="$RET"
+    db_fset make-ssl-cert/hostname seen false
+}
+
+make_snakeoil() {
+    if ! HostName="$(hostname -f)" ; then
+        HostName="$(hostname)"
+        echo make-ssl-cert: Could not get FQDN, using \"$HostName\".
+        echo make-ssl-cert: You may want to fix your /etc/hosts and/or DNS setup and run
+        echo make-ssl-cert: 'make-ssl-cert generate-default-snakeoil --force-overwrite'
+        echo make-ssl-cert: again.
+    fi
+}
+
+create_temporary_cnf() {
+    sed -e s#@HostName@#"$HostName"# $template > $TMPFILE
+}
+
+# Takes two arguments, the base layout and the output cert.
+
+if [ $# -lt 2 ] && [ "$1" != "generate-default-snakeoil" ]; then
+    printf "Usage: $0 template output [--force-overwrite]\n";
+    printf "Usage: $0 generate-default-snakeoil [--force-overwrite]\n";
+    exit 1;
+fi
+
+if [ "$1" != "generate-default-snakeoil" ]; then
+    template="$1"
+    output="$2"
+    # be anal in manual mode.
+    if [ ! -f $template ]; then
+	printf "Could not open template file: $template!\n";
+	exit 1;
+    fi
+    if [ -f $output ] && [ "$3" != "--force-overwrite" ]; then
+        printf "$output file already exists!\n";
+        exit 1;
+    fi
+    ask_via_debconf
+else
+    template="/usr/share/ssl-cert/ssleay.cnf"
+    if [ -f "/etc/ssl/certs/ssl-cert-snakeoil.pem" ] && [ -f "/etc/ssl/private/ssl-cert-snakeoil.key" ]; then
+        if [ "$2" != "--force-overwrite" ]; then
+             exit 0
+        fi
+    fi
+    make_snakeoil
+fi
+
+# # should be a less common char
+# problem is that openssl virtually accepts everything and we need to
+# sacrifice one char.
+
+TMPFILE="$(mktemp)" || exit 1
+TMPOUT="$(mktemp)"  || exit 1
+
+trap "rm -f $TMPFILE $TMPOUT" EXIT
+
+create_temporary_cnf
+
+# create the certificate.
+
+if [ "$1" != "generate-default-snakeoil" ]; then
+    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes \
+	-out $output -keyout $output > $TMPOUT 2>&1
+    then
+	echo Could not create certificate. Openssl output was: >&2
+	cat $TMPOUT >&2
+	exit 1
+    fi
+    chmod 600 $output
+    # hash symlink
+    cd $(dirname $output)
+    ln -sf $(basename $output) $(openssl x509 -hash -noout -in $(basename $output))
+else
+    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes \
+	-out /etc/ssl/certs/ssl-cert-snakeoil.pem \
+        -keyout /etc/ssl/private/ssl-cert-snakeoil.key > $TMPOUT 2>&1
+    then
+	echo Could not create certificate. Openssl output was: >&2
+	cat $TMPOUT >&2
+	exit 1
+    fi
+    chmod 644 /etc/ssl/certs/ssl-cert-snakeoil.pem
+    chmod 640 /etc/ssl/private/ssl-cert-snakeoil.key
+    chown root:ssl-cert /etc/ssl/private/ssl-cert-snakeoil.key
+    # hash symlink
+    cd /etc/ssl/certs/
+    ln -sf ssl-cert-snakeoil.pem $(openssl x509 -hash -noout -in ssl-cert-snakeoil.pem)
+fi
