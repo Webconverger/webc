@@ -1,11 +1,11 @@
 #!/bin/sh
 
-echo "fixing sudo"
+echo "Fixing sudo"
 chmod 0440 etc/sudoers
 chmod 0440 etc/sudoers.d/README
 
 
-echo "fixing setuids"
+echo "Fixing setuids"
 suids="
 bin/ping
 bin/su
