@@ -140,6 +140,10 @@ then
 	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
 
+	uname -r | grep -q 486 && 
+	_logs "setting up 486 kernel" &&
+	sed -i 's,default l0,default l1,' /mnt/root/boot/extlinux/extlinux.conf
+
 	_logs "unmounting partitions"
 	swapoff /mnt/root/swap
 	umount /mnt/root
