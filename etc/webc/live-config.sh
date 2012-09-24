@@ -1,5 +1,6 @@
 #!/bin/bash
 # Setting up Webconverger system as root user
+. /etc/webc/functions.sh
 . /etc/webc/webc.conf
 
 cmdline_has debug && set -x

@@ -1,4 +1,5 @@
 #!/bin/bash
+. /etc/webc/functions.sh
 . /etc/webc/webc.conf
 
 ! cmdline_has debug && { "$@"; exit 0; }

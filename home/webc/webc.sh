@@ -1,5 +1,6 @@
 # Keep the browser running and clean between sessions in /home/webc
 # hendry@webconverger.com
+. "/etc/webc/functions.sh"
 . "/etc/webc/webc.conf"
 
 cp /home/webc/bg-orig.png /home/webc/bg.png

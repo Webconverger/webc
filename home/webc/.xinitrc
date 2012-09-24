@@ -1,3 +1,4 @@
+. /etc/webc/functions.sh
 . /etc/webc/webc.conf
 
 if cmdline_has debug

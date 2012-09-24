@@ -1,4 +1,5 @@
 #!/bin/bash
+. "/etc/webc/functions.sh"
 . "/etc/webc/webc.conf"
 
 # Set up:
