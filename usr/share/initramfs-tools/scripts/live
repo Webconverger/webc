@@ -334,6 +334,10 @@ Arguments ()
 				UNIONTYPE="${ARGUMENT#union=}"
 				export UNIONTYPE
 				;;
+			git-revision=*)
+				GIT_REVISION="${ARGUMENT#git-revision=}"
+				export GIT_REVISION
+				;;
 		esac
 	done
 
@@ -1209,6 +1213,7 @@ setup_unionfs ()
 				# not understand...
 				ln -sf /proc/mounts /etc/mtab
 
+				gitfs_opt=""
 				# In debug mode, we make the rootfs a big git repo / checkout, for
 				# easy development.
 				if [ "${debug}" == "y" ]; then
@@ -1216,21 +1221,23 @@ setup_unionfs ()
 					# (i.e.  disable noxino and add noforget), to not confuse
 					# git.
 					noxino_opt=""
-					noforget_opt=",noforget"
+					gitfs_opt="$gitfs_opt,noforget"
 
 					# This will be later moved into the real rootfs (but we
 					# can't do that now, since the .git dir would end up
 					# underneath the aufs mount).
 					mkdir /.git
 					mount --bind ${image} /.git
-				else
-					noforget_opt=""
+				fi
+
+				if [ -n "$GIT_REVISION" ]; then
+					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
 				fi
 
 				#ulimit -c unlimited # enable core dumps
 				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
 				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-				git-fs -o allow_other${noforget_opt} "${image}" "${mpoint}"
+				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
 
 
 				log_end_msg
@@ -1902,6 +1909,17 @@ mountroot ()
 			mount --move /.git "${rootmnt}/.git"
 		fi
 
+		# Make sure that HEAD corresponds to the commit
+		# mounted by git-fs
+		if [ -n "$GIT_REVISION" ]; then
+			# We don't do a normal (--mixed) reset, since
+			# that also scans the entire working copy to
+			# update the cached info in the index (which is
+			# slow on git-fs / aufs). Instead, we reset HEAD
+			# and the index separately.
+			chroot "${rootmnt}" git --git-dir "/.git" reset --soft "${GIT_REVISION}"
+			chroot "${rootmnt}" git --git-dir "/.git" read-tree "${GIT_REVISION}"
+		fi
 	fi
 
 	# aufs2 in kernel versions around 2.6.33 has a regression:
