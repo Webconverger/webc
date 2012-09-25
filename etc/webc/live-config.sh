@@ -118,19 +118,154 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 
 } # end of process_options
 
+git_repo="/live/image/live/filesystem.git"
+
 update_cmdline() {
+	# Get the revision we're currently running as given on the
+	# cmdline. Get it now, so we can be sure it's taken from
+	# /proc/cmdline, not /etc/webc/cmdline.
+	current_git_revision=$(cmdline_get git-revision)
+
+	# If no git-revision was given on the commandline, default to HEAD
+	[ -n "$current_git_revision" ] || current_git_revision=$(git --git-dir "${git_repo}" rev-parse HEAD)
+
+	# If we have a "cached" version of the configuration on disk,
+	# copy that to /etc/webc, so we can compare the new version with
+	# it to detect changes and/or use it in case the new download
+	# fails.
+	if [ -e "/live/image/live/webc-cmdline" ]; then
+		cp /live/image/live/webc-cmdline /etc/webc/cmdline
+	else
+		touch /etc/webc/cmdline
+	fi
+
 	SECONDS=0
 	while true
 	do
 		wget --timeout=5 -t 1 -q -O /etc/webc/cmdline.tmp "$config_url" && break
 		test $? = 8 && break # 404
 		test $SECONDS -gt 15 && break
+		logs "Failed to download configuration, trying again..."
 		sleep 1
 	done
-	
-	# A configuration file always has a homepage
-	grep -qs homepage /etc/webc/cmdline.tmp && mv /etc/webc/cmdline.tmp /etc/webc/cmdline
-	touch /etc/webc/cmdline
+
+	# A configuration file always has an update-revision
+	if ! [ -e "/etc/webc/cmdline.tmp" ] || ! grep -qs update-revision /etc/webc/cmdline.tmp; then
+		# No (valid) file downloaded, just keep running with
+		# what we have
+		logs "Failed to download (valid) configuration, using existing config"
+		return
+	fi
+
+	# Apply the new config
+	mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+
+	# Try to make /live/image writable
+	mount -o remount,rw /live/image
+	# mount always returns success, so we use touch to see if this
+	# worked.
+	if ! touch /live/image; then
+		# /live/image could not be made writable (e.g. booting
+		# from an iso fs), so just use the new config downloaded
+		# and skip all the other stuff below
+		logs "Not a writable boot medium, skipping upgrade check"
+		return
+	fi
+
+
+	if ! cmdline_has noupdates; then
+		# Get the update_revision from the downloaded config
+		# file or cmdline. update_revision is any refname
+		# (branch, tag) that refers to a commit and can be
+		# fetched. It cannot be a sha, since that cannot be
+		# fetched by git.
+		update_revision=$(cmdline_get update-revision)
+
+		logs "Fetching git revision ${update_revision}"
+
+		# Fetch the git revision. It will not be stored
+		# in any local branch, just in FETCH_HEAD.
+		rm -f /.git/FETCH_HEAD
+		if ! git --git-dir "${git_repo}" fetch --quiet origin "${update_revision}" ||
+		   ! git --git-dir "${git_repo}" rev-parse --verify --quiet FETCH_HEAD; then
+			# Fetching the revision failed, to prevent an
+			# unbootable system, bail out now. Since we're not
+			# updating /live/image/live/webc-cmdline, this will be
+			# retried after the next reboot.
+			logs "Fetching git revision ${update_revision} failed"
+			return
+		fi
+
+		if [ -z "$(git --git-dir "${git_repo}" tag --contains FETCH_HEAD)" ]; then
+			# If there is no tag that contains the
+			# downloaded revision yet, create one. Keeping a
+			# tag for every revision downloaded allows git
+			# fetch to not download these revisions again
+			# (since it does not take into account all
+			# commit objects in the repository, only named
+			# refs when telling the server what we already
+			# have).
+			git tag fetched-$(date '+%s') FETCH_HEAD
+
+			# TODO: Clean up tag list by removing tags that
+			# are reachable from other tags / FETCH_HEAD
+			# already?
+		fi
+
+
+		# Get the sha of the commit we fetched. This param is
+		# named differently from update_revision, since
+		# git_revision must always contain a sha, and must
+		# only be used on the real cmdline in the bootloader
+		# config.
+		git_revision=$(git --git-dir "${git_repo}" rev-parse FETCH_HEAD)
+		logs "Successfully fetched git revision (got ${git_revision})"
+
+		# TODO: Also enter this if when boot_params was changed
+		if [ "${current_git_revision}" != "${git_revision}" ]; then
+			# The config says we should be running a different
+			# revision than we're currently running, so change our
+			# bootloader config to make sure that happens.
+
+			# Get bootparams from inside the new rootfs. This
+			# allows having bootparams that are specific to a
+			# given rootfs / revision.
+			rootfs_bootparams=$(git --git-dir "${git_repo}" show ${git_revision}:etc/webc/boot-cmdline | grep -v "^#" | head -n 1)
+
+			# The bootparams to pass
+			bootparams="${rootfs_bootparams} $(cmdline_get boot_append) git-revision=${git_revision}"
+
+			# TODO: Unhardcode this list
+			flavours="486 686-pae"
+
+			# The code below is mostly taken from lb_binary_syslinux from
+			# live-build and is intended to recreate the same live.cfg
+			rm -f "/live/image/boot/live.cfg"
+			_NUMBER="0"
+			for _FLAVOUR in ${flavours}; do
+				_NUMBER="$((${_NUMBER} + 1))"
+
+				# TODO: Actually update the kernel and initrd
+
+				sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
+				    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
+				    -e "s|@INITRD@|/live/initrd${_NUMBER}.img|g" \
+				    -e "s|@LB_BOOTAPPEND_LIVE@|${bootparams}|g" \
+				"/live/image/boot/live.cfg.in" >> "/live/image/boot/live.cfg"
+			done
+			logs "Updated bootloader to boot from ${git_revision})"
+		else
+			logs "Already running ${current_git_revision}, no upgrade needed"
+		fi
+	else
+		logs "noupdates given, skipping upgrade check"
+
+	fi
+
+	# Copy the cmdline outside to a persistent spot, in case we
+	# can't reach the config server on next boot and to allow
+	# detecting changes in the config.
+	cp /etc/webc/cmdline /live/image/live/webc-cmdline
 }
 
 wait_for $live_config_pipe 2>/dev/null
