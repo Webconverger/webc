@@ -37,10 +37,6 @@ mkfifo "$live_config_pipe"
 read answer < "$live_config_pipe" # blocking till live-config is finished
 rm -f "$live_config_pipe"
 
-cmdline_has updates && ( mkfifo $updates_pipe
-read answer < $updates_pipe # blocking till updates is finished
-rm -f $updates_pipe )
-
 wm="/usr/bin/dwm.web" # defaults
 xset s on
 xset s blank
