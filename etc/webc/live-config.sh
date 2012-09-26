@@ -149,8 +149,8 @@ update_cmdline() {
 		sleep 1
 	done
 
-	# A configuration file always has an update-revision
-	if ! [ -e "/etc/webc/cmdline.tmp" ] || ! grep -qs update-revision /etc/webc/cmdline.tmp; then
+	# A configuration file always has an fetch-revision
+	if ! [ -e "/etc/webc/cmdline.tmp" ] || ! grep -qs fetch-revision /etc/webc/cmdline.tmp; then
 		# No (valid) file downloaded, just keep running with
 		# what we have
 		logs "Failed to download (valid) configuration, using existing config"
@@ -174,25 +174,37 @@ update_cmdline() {
 
 
 	if ! cmdline_has noupdates; then
-		# Get the update_revision from the downloaded config
-		# file or cmdline. update_revision is any refname
-		# (branch, tag) that refers to a commit and can be
-		# fetched. It cannot be a sha, since that cannot be
-		# fetched by git.
+		# See to what we should be updating. fetch_revision is
+		# the revision we should fetch from the git server (it
+		# can only be a branch or tag name, since we can't fetch
+		# a sha directly).
+		# update_revision is optional and can be used to specify
+		# a sha of a revision to update to (but it must be
+		# "included" in the fetch triggered by fetch_revision).
+		# If no update_revision is given, the revision specified
+		# by fetch_revision is used.
+		#
+		# Note that there is a third revision parameter,
+		# git_revision, which must always contain a sha and must
+		# only be used on the real kernel cmdline in the
+		# bootloader config to tell the initrd which revision to
+		# mount. It is automatically generated below based on
+		# fetch_revision / update_revision.
+		fetch_revision=$(cmdline_get fetch-revision)
 		update_revision=$(cmdline_get update-revision)
 
-		logs "Fetching git revision ${update_revision}"
+		logs "Fetching git revision ${fetch_revision}"
 
 		# Fetch the git revision. It will not be stored
 		# in any local branch, just in FETCH_HEAD.
 		rm -f /.git/FETCH_HEAD
-		if ! git --git-dir "${git_repo}" fetch --quiet origin "${update_revision}" ||
+		if ! git --git-dir "${git_repo}" fetch --quiet origin "${fetch_revision}" ||
 		   ! git --git-dir "${git_repo}" rev-parse --verify --quiet FETCH_HEAD; then
 			# Fetching the revision failed, to prevent an
 			# unbootable system, bail out now. Since we're not
 			# updating /live/image/live/webc-cmdline, this will be
 			# retried after the next reboot.
-			logs "Fetching git revision ${update_revision} failed"
+			logs "Fetching git revision ${fetch_revision} failed"
 			return
 		fi
 
@@ -212,14 +224,22 @@ update_cmdline() {
 			# already?
 		fi
 
+		# Get the sha has of the latest revision we just fetched
+		fetched_revision=$(git --git-dir "${git_repo}" rev-parse FETCH_HEAD)
+		logs "Successfully fetched git revision (got ${fetched_revision})"
 
-		# Get the sha of the commit we fetched. This param is
-		# named differently from update_revision, since
-		# git_revision must always contain a sha, and must
-		# only be used on the real cmdline in the bootloader
-		# config.
-		git_revision=$(git --git-dir "${git_repo}" rev-parse FETCH_HEAD)
-		logs "Successfully fetched git revision (got ${git_revision})"
+		if [ -z "${update_revision}" ]; then
+			git_revision="${fetched_revision}"
+			logs "Trying update to latest revision fetched (${git_revision})"
+		elif git --git-dir "${git_repo}" rev-parse --verify --quiet "${update_revision}"; then
+			# Get the canonical sha hash
+			git_revision="$(git --git-dir "${git_repo}" rev-parse "${update_revision}")"
+			logs "Trying update to specific revision (${git_revision})"
+		else
+			logs "Invalid update_revision (${update_revision}), skipping upgrade"
+			return
+		fi
+
 
 		# TODO: Also enter this if when boot_params was changed
 		if [ "${current_git_revision}" != "${git_revision}" ]; then
