@@ -217,7 +217,7 @@ update_cmdline() {
 			# commit objects in the repository, only named
 			# refs when telling the server what we already
 			# have).
-			git tag fetched-$(date '+%s') FETCH_HEAD
+			git tag "fetched-${fetch_revision}-$(date '+%s')" FETCH_HEAD
 
 			# TODO: Clean up tag list by removing tags that
 			# are reachable from other tags / FETCH_HEAD
