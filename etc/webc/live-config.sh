@@ -245,7 +245,15 @@ update_cmdline() {
 			for _FLAVOUR in ${flavours}; do
 				_NUMBER="$((${_NUMBER} + 1))"
 
-				# TODO: Actually update the kernel and initrd
+				# Find out the filenames for the kernel and
+				# initrd for this flavour inside the new
+				# rootfs
+				kernel=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^vmlinuz-.*-${_FLAVOUR}$ | head -n 1)
+				initrd=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^initrd.img-.*-${_FLAVOUR}$ | head -n 1)
+
+				# Fetch the actual files
+				git --git-dir "${git_repo}" show "${git_revision}:boot/${kernel}" > /live/image/live/vmlinuz${_NUMBER}
+				git --git-dir "${git_repo}" show "${git_revision}:boot/${initrd}" > /live/image/live/initrd${_NUMBER}.img
 
 				sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
 				    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
@@ -253,7 +261,7 @@ update_cmdline() {
 				    -e "s|@LB_BOOTAPPEND_LIVE@|${bootparams}|g" \
 				"/live/image/boot/live.cfg.in" >> "/live/image/boot/live.cfg"
 			done
-			logs "Updated bootloader to boot from ${git_revision})"
+			logs "Updated bootloader to boot from ${git_revision}"
 		else
 			logs "Already running ${current_git_revision}, no upgrade needed"
 		fi
