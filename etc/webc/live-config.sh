@@ -247,41 +247,8 @@ update_cmdline() {
 			# The config says we should be running a different
 			# revision than we're currently running, so change our
 			# bootloader config to make sure that happens.
+			generate_live_config /live/image "${git_repo}" "${git_revision}"
 
-			# Get bootparams from inside the new rootfs. This
-			# allows having bootparams that are specific to a
-			# given rootfs / revision.
-			rootfs_bootparams=$(git --git-dir "${git_repo}" show ${git_revision}:etc/webc/boot-cmdline | grep -v "^#" | head -n 1)
-
-			# The bootparams to pass
-			bootparams="${rootfs_bootparams} $(cmdline_get boot_append) git-revision=${git_revision}"
-
-			# TODO: Unhardcode this list
-			flavours="486 686-pae"
-
-			# The code below is mostly taken from lb_binary_syslinux from
-			# live-build and is intended to recreate the same live.cfg
-			rm -f "/live/image/boot/live.cfg"
-			_NUMBER="0"
-			for _FLAVOUR in ${flavours}; do
-				_NUMBER="$((${_NUMBER} + 1))"
-
-				# Find out the filenames for the kernel and
-				# initrd for this flavour inside the new
-				# rootfs
-				kernel=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^vmlinuz-.*-${_FLAVOUR}$ | head -n 1)
-				initrd=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^initrd.img-.*-${_FLAVOUR}$ | head -n 1)
-
-				# Fetch the actual files
-				git --git-dir "${git_repo}" show "${git_revision}:boot/${kernel}" > /live/image/live/vmlinuz${_NUMBER}
-				git --git-dir "${git_repo}" show "${git_revision}:boot/${initrd}" > /live/image/live/initrd${_NUMBER}.img
-
-				sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
-				    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
-				    -e "s|@INITRD@|/live/initrd${_NUMBER}.img|g" \
-				    -e "s|@LB_BOOTAPPEND_LIVE@|${bootparams}|g" \
-				"/live/image/boot/live.cfg.in" >> "/live/image/boot/live.cfg"
-			done
 			logs "Updated bootloader to boot from ${git_revision}"
 		else
 			logs "Already running ${current_git_revision}, no upgrade needed"

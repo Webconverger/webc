@@ -59,4 +59,87 @@ has_network()
 	netstat -rn | grep -qs '^0.0.0.0'
 }
 
+################################################################################
+# Functions related to installing and updating
+################################################################################
+
+# Extract a kernel and initrd from git.
+# dir           - The directory to store the kernel and initrd in
+# flavour       - The flavour of kernel to extract
+# postfix       - A postfix to use as the name of the kernel and initrd (e.g.,
+#                 vmlinux${postfix} and initrd${postfix}.img
+# git_repo      - The .git repository to look in
+# git_revision  - The revision to look at
+extract_kernel() {
+	local dir="$1"
+	local flavour="$2"
+	local postfix="$3"
+	local git_repo="$4"
+	local git_revision="$5"
+
+	# Find out the filenames for the kernel and
+	# initrd for this flavour inside the new
+	# rootfs
+	local kernel=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^vmlinuz-.*-${flavour}$ | head -n 1)
+	local initrd=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^initrd.img-.*-${flavour}$ | head -n 1)
+
+	# Fetch the actual files
+	git --git-dir "${git_repo}" show "${git_revision}:boot/${kernel}" > ${dir}/vmlinuz${postfix}
+	git --git-dir "${git_repo}" show "${git_revision}:boot/${initrd}" > ${dir}/initrd${postfix}.img
+}
+
+# Generate the boot params needed to boot the given revision. Boot parameters
+# from the cmdline config are also included.
+# git_repo      - The .git repository to look in
+# git_revision  - The revision to look at
+get_bootparams()
+{
+	local git_repo="$1"
+	local git_revision="$2"
+
+	# Get bootparams from inside the new rootfs. This
+	# allows having bootparams that are specific to a
+	# given rootfs / revision.
+	local rootfs_bootparams=$(git --git-dir "${git_repo}" show "${git_revision}:etc/webc/boot-cmdline" | grep -v "^#" | head -n 1)
+
+	# The bootparams to pass
+	echo "${rootfs_bootparams} $(cmdline_get boot_append) git-revision=${git_revision}"
+}
+
+# Extract a kernel and generate a bootloader configuration for a live boot of
+# the given revision. This regenerates live.cfg (based on live.cfg.in), but
+# leaves the main bootloader config alone.
+# dir           - The directory where the disk is mounted (e.g. which contains
+#                 the live and boot directories)
+# git_repo      - The .git repository to look in
+# git_revision  - The revision to look at
+generate_live_config()
+{
+	local dir="$1"
+	local git_repo="$2"
+	local git_revision="$3"
+
+	# The bootparams to pass
+	local bootparams=$(get_bootparams "$git_repo" "$git_revision")
+
+	# TODO: Unhardcode this list
+	local flavours="486 686-pae"
+
+	# The code below is based on lb_binary_syslinux from
+	# live-build and is intended to recreate the same live.cfg
+	rm -f "${dir}/boot/live.cfg"
+	local _NUMBER="0"
+	for _FLAVOUR in ${flavours}; do
+		_NUMBER="$((${_NUMBER} + 1))"
+
+		extract_kernel "${dir}/live" "${_FLAVOUR}" "${_NUMBER}" "${git_repo}" "${git_revision}"
+
+		sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
+		    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
+		    -e "s|@INITRD@|/live/initrd${_NUMBER}.img|g" \
+		    -e "s|@LB_BOOTAPPEND_LIVE@|${bootparams}|g" \
+		"${dir}/boot/live.cfg.in" >> "${dir}/boot/live.cfg"
+	done
+}
+
 # vim: set sw=8 sts=8 noexpandtab:
