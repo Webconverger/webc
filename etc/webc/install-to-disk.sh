@@ -11,7 +11,7 @@
 # Don't write to fd 3 and 4 directly, use _logs or _err instead.
 install_log="/root/install.log"
 
-exec >"$install_log" 2>&1 3>&1 4>/dev/console
+exec >>"$install_log" 2>&1 3>&1 4>/dev/console
 
 set -e
 
