@@ -19,13 +19,11 @@ set -e
 # the EXIT trap is removed just before exiting the script, so this handler
 # does not trigger.
 failed_install() {
-	if [ "$1" -ne 0 ]; then
-		echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >&4
-		echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
-		tail /root/install.log >&4
+	echo -e "\n\n\n\tINSTALL FAILED\n\n\n" >&4
+	echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
+	tail /root/install.log >&4
 
-		exec sleep 86400
-	fi
+	exec sleep 86400
 }
 
 trap failed_install EXIT
