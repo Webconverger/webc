@@ -142,4 +142,43 @@ generate_live_config()
 	done
 }
 
+# Extract a kernel and generate a bootloader configuration for a installed
+# boot of the given revision. This regenerates live.cfg (based on
+# live.cfg.in), but leaves the main bootloader config alone.
+# dir           - The directory where the disk is mounted (e.g. which contains
+#                 the live and boot directories)
+# git_repo      - The .git repository to look in
+# git_revision  - The revision to look at
+generate_installed_config()
+{
+	local dir="$1"
+	local git_repo="$2"
+	local git_revision="$3"
+
+	# Install the same kernel flavour as we're currently running
+	local flavour=$(cmdline_get kernel-flavour)
+
+	# The bootparams to pass (we keep the kernel flavour used in the
+	# cmdline, so it can be used again on upgrades).
+	local bootparams="$(get_bootparams "$git_repo" "$git_revision") kernel-flavour=${flavour}"
+
+	# Extract the kernel and initrd from git
+	extract_kernel "${dir}/live" "${flavour}" "" "${git_repo}" "${git_revision}"
+
+	# Generate global extlinux config file
+	cat<<EOF > ${dir}/boot/extlinux/extlinux.conf
+default linux
+prompt 0
+
+include linux.cfg
+EOF
+
+	# Generate config entry to boot our selected flavour
+	cat<<EOF > ${dir}/boot/extlinux/linux.cfg
+label linux
+	linux    /live/vmlinuz
+	append   initrd=/live/initrd.img ${bootparams}
+EOF
+}
+
 # vim: set sw=8 sts=8 noexpandtab:

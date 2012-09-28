@@ -50,7 +50,7 @@ _err() {
 find_disk() {
 	_logs "finding disk"
 	local disk
-	for disk in /dev/hda /dev/sda; do
+	for disk in /dev/[sh]d?; do
 		test -e $disk && { echo $disk ; return 0; }
 	done
 }
@@ -80,39 +80,25 @@ install_extlinux() {
 	local dir="$1"
 	local part="$2"
 	local disk="$3"
-	_logs "installing extlinux configuration"
-	test -e ${dir}/boot && _err "${dir}/boot already exists?"
-
-	cp -r /boot "${dir}"
 
 	_logs "installing mbr to ${disk}"
 	dd if=/usr/lib/extlinux/mbr.bin of="${disk}" bs=440 count=1 2> /dev/null
+
 	_logs "installing extlinux to ${dir}/boot/extlinux"
+	mkdir -p "${dir}/boot/extlinux"
 	extlinux --install "${dir}/boot/extlinux"
+	test -e "${dir}/boot/extlinux/ldlinux.sys" || _err "no ${dir}/boot/extlinux/ldlinux.sys?"
+	rm -f "${dir}/boot/extlinux/boot.txt"
 
-	test -e ${dir}/boot/extlinux/ldlinux.sys || _err "no ${dir}/boot/extlinux/ldlinux.sys?"
-	rm -f ${dir}/boot/extlinux/boot.txt
+	_logs "generating extlinux configuration"
 
-cat<<EOF >> ${dir}/boot/extlinux/linux.cfg
+	git_repo=/live/image/live/filesystem.git
+	git_revision=$(cmdline_get git-revision)
 
-label fail
-	linux /boot/vmlinuz-old 
-	append initrd=/boot/initrd.img-old quiet
-EOF
-
-sed -i \
-	-e 's/^\(prompt\).*/\1 0/' \
-	-e 's/^\(timeout\).*/\1 50/' \
-	-e 's/^\(display\).*//' \
-	${dir}/boot/extlinux/extlinux.conf 
-
-sed -i \
-	-e 's|\(append.*\)|\1 boot=live |' \
-	${dir}/boot/extlinux/linux.cfg
-
-	( cd ${dir}/.. && ln -s . boot )
-
+	# Extract kernel and initrd and generate extlinux config
+	generate_installed_config "${dir}" "${git_repo}" "${git_revision}"
 }
+
 install_root() {
 	local dir="$1"
 	_logs "copying files to ${dir}"
@@ -140,10 +126,6 @@ then
 	install_root /mnt/root
 	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
-
-	uname -r | grep -q 486 && 
-	_logs "setting up 486 kernel" &&
-	sed -i 's,default l0,default l1,' /mnt/root/boot/extlinux/extlinux.conf
 
 	_logs "unmounting partitions"
 	swapoff /mnt/root/swap
