@@ -247,7 +247,17 @@ update_cmdline() {
 			# The config says we should be running a different
 			# revision than we're currently running, so change our
 			# bootloader config to make sure that happens.
-			generate_live_config /live/image "${git_repo}" "${git_revision}"
+
+			if [ -f /live/image/boot/live.cfg.in ]; then
+				# This is the "live" version, which
+				# offers a boot menu
+				generate_live_config /live/image "${git_repo}" "${git_revision}"
+			else
+				# This is the "installed" version, which
+				# does not show a boot prompt and just
+				# boots the default entry
+				generate_installed_config /live/image "${git_repo}" "${git_revision}"
+			fi
 
 			logs "Updated bootloader to boot from ${git_revision}"
 		else
