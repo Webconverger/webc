@@ -23,6 +23,10 @@ failed_install() {
 	echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
 	tail /root/install.log >&4
 
+	# Clean up mounts
+	[ -n "$SWAPON" ] && swapoff /mnt/root/swap
+	[ -n "$MOUNTED" ] && umount -f -l -r /mnt/root
+
 	_logs "press enter to try start over..."
 	read DUMMY
 	# init should restart us.
@@ -118,11 +122,13 @@ then
 	mke2fs -j $partition
 	_logs "mounting $partition on /mnt/root"
 	test -d /mnt/root || mkdir /mnt/root
+	MOUNTED=1
 	mount $partition /mnt/root
 	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
 	_logs "enabling swap on /mnt/root/swap"
 	mkswap /mnt/root/swap
 	swapon /mnt/root/swap
+	SWAPON=1
 	install_root /mnt/root
 	install_extlinux /mnt/root $partition $disk
 	verify_extlinux_mbr $disk
@@ -130,6 +136,8 @@ then
 	_logs "unmounting partitions"
 	swapoff /mnt/root/swap
 	umount /mnt/root
+	unset SWAPON MOUNTED
+
 	_logs "install complete"
 	e2label $partition install
 	_logs $(blkid)
