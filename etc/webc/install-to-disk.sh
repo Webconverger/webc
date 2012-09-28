@@ -23,7 +23,9 @@ failed_install() {
 	echo -e "Here's some log output that may help (see $install_log for more):\n" >&4
 	tail /root/install.log >&4
 
-	exec sleep 86400
+	_logs "press enter to try start over..."
+	read DUMMY
+	# init should restart us.
 }
 
 trap failed_install EXIT
