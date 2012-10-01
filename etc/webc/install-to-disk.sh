@@ -32,8 +32,6 @@ failed_install() {
 	# init should restart us.
 }
 
-trap failed_install EXIT
-
 clear_screen() {
 	for i in `seq 200`; do
 		echo >&4
@@ -112,6 +110,9 @@ install_root() {
 
 if cmdline_has install
 then
+	# Trap any shell exits with the failed handler
+	trap failed_install EXIT
+
 	clear_screen
 	cmdline_has debug && _logs "debug has been enabled"
 	disk=$( find_disk )
@@ -143,10 +144,12 @@ then
 	_logs $(blkid)
 	_logs "press enter to reboot..."
 	read DUMMY
-	/sbin/reboot 
+	# Install did not fail, unregister the trap (do this before the
+	# reboot, since the reboot might kill us before we get to
+	# exit ourselves)
+	trap - EXIT
+
+	/sbin/reboot
 else
 	exec sleep 86400
 fi
-
-# Install did not fail, unregister the trap
-trap - EXIT
