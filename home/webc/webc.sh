@@ -70,9 +70,22 @@ do
 			swarp $(echo $koptions | sed 's/[^0-9]/ /g')
 			;;
 
+		# http://webconverger.org/touch_screen_calibration/
+		xinput=*)
+			option=$( /bin/busybox httpd -d ${x#xinput=} )
+			if xinput "$option"
+			then
+				logs "OK: xinput $option"
+			else
+				logs "ERROR: xinput $option"
+			fi
+			;;
+
 		# https://groups.google.com/forum/#!msg/webc-users/GlHh_SX17BM/GojceXVSazgJ
 		xrandr-all=*)
 			xoptions=$( /bin/busybox httpd -d ${x#xrandr-all=} )
+
+			logs "xrandr-all: $xoptions"
 
 			xrandr | awk '$2 ~ /^connected$/ { print $1 }' | while read output
 			do
@@ -161,10 +174,15 @@ do
 			rm -rf $d
 		done
 		fi
+
+		# IDEA: Log process accounts ? http://stackoverflow.com/questions/1853884
+
 		if cmdline_has noptirun || ! pidof bumblebeed
 		then
+			logs "FF (re)start"
 			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
 		else
+			logs "FF optirun (re)start"
 			optirun /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
 		fi
 	fi
