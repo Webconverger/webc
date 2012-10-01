@@ -31,4 +31,7 @@ webc_id="${uuid};${mac}"
 echo "$webc_id" > /etc/webc/id
 chmod 644 /etc/webc/id
 
+# So we can view individual machine logs, see log=
+sed -i "s,localhost,$(cat /etc/webc/id | tr -d ":")," /etc/hosts
+
 logs "set webc id to '${webc_id}'"

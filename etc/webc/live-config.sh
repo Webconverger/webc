@@ -54,6 +54,13 @@ for x in $( cmdline ); do
 		}
 		;;
 
+	log=*)
+		log=${x#log=}
+		echo "*.*          @${log}" >> /etc/rsyslog.conf
+		logs "Logging to ${log}"
+		/etc/init.d/rsyslog restart
+		;;
+
 	locale=*)
 		locale=${x#locale=}
 		echo "pref(\"general.useragent.locale\", \"${locale}\");" >> "$prefs"
