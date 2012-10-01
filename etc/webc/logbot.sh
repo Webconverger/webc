@@ -5,7 +5,7 @@
 if !cmdline_has debug; then
 	exec "$@" >/dev/null 2>/dev/null
 else
-	exec "$@" 2>&1 | while read line
+	exec "$@" 2>&1 | while read -r line
 	do
 		if test "$1" = "bash" # For the "bash -x webc.sh" case
 		then
