@@ -251,12 +251,18 @@ update_cmdline() {
 			if [ -f /live/image/boot/live.cfg.in ]; then
 				# This is the "live" version, which
 				# offers a boot menu
-				generate_live_config /live/image "${git_repo}" "${git_revision}"
+				if ! generate_live_config /live/image "${git_repo}" "${git_revision}"; then
+					logs "Updating bootloader config failed!"
+					return
+				fi
 			else
 				# This is the "installed" version, which
 				# does not show a boot prompt and just
 				# boots the default entry
-				generate_installed_config /live/image "${git_repo}" "${git_revision}"
+				if ! generate_installed_config /live/image "${git_repo}" "${git_revision}"; then
+					logs "Updating bootloader config failed!"
+					return
+				fi
 			fi
 
 			logs "Updated bootloader to boot from ${git_revision}"

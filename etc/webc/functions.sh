@@ -83,6 +83,10 @@ extract_kernel() {
 	local kernel=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^vmlinuz-.*-${flavour}$ | head -n 1)
 	local initrd=$(git --git-dir "${git_repo}" show "${git_revision}:boot" | grep ^initrd.img-.*-${flavour}$ | head -n 1)
 
+	if [ -z "$kernel" -o -z "$initrd" ]; then
+		logs "No kernel or initrd found in revision ${git_revision} for flavour ${flavour}!"
+	fi
+
 	# Fetch the actual files
 	git --git-dir "${git_repo}" show "${git_revision}:boot/${kernel}" > ${dir}/vmlinuz${postfix}
 	git --git-dir "${git_repo}" show "${git_revision}:boot/${initrd}" > ${dir}/initrd${postfix}.img
@@ -125,6 +129,11 @@ generate_live_config()
 	# TODO: Unhardcode this list
 	local flavours="486 686-pae"
 
+	if ! [ -r "${dir}/boot/live.cfg.in" ]; then
+		logs "live.cfg.in not found, skipping bootloader update!"
+		return 1
+	fi
+
 	# The code below is based on lb_binary_syslinux from
 	# live-build and is intended to recreate the same live.cfg
 	rm -f "${dir}/boot/live.cfg"
@@ -132,7 +141,7 @@ generate_live_config()
 	for _FLAVOUR in ${flavours}; do
 		_NUMBER="$((${_NUMBER} + 1))"
 
-		extract_kernel "${dir}/live" "${_FLAVOUR}" "${_NUMBER}" "${git_repo}" "${git_revision}"
+		extract_kernel "${dir}/live" "${_FLAVOUR}" "${_NUMBER}" "${git_repo}" "${git_revision}" || continue
 
 		sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
 		    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
@@ -158,12 +167,19 @@ generate_installed_config()
 	# Install the same kernel flavour as we're currently running
 	local flavour=$(cmdline_get kernel-flavour)
 
+	# If no flavour was given, fall back to any available flavour
+	# (rather than blowing up...)
+	if [ -z "${flavour}" ]; then
+		logs "No kernel flavour found, skipping bootloader update!"
+		return 1
+	fi
+
 	# The bootparams to pass (we keep the kernel flavour used in the
 	# cmdline, so it can be used again on upgrades).
 	local bootparams="$(get_bootparams "$git_repo" "$git_revision") kernel-flavour=${flavour}"
 
 	# Extract the kernel and initrd from git
-	extract_kernel "${dir}/live" "${flavour}" "" "${git_repo}" "${git_revision}"
+	extract_kernel "${dir}/live" "${flavour}" "" "${git_repo}" "${git_revision}" || return 1
 
 	# Generate global extlinux config file
 	cat<<EOF > ${dir}/boot/extlinux/extlinux.conf
