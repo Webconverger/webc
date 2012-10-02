@@ -95,7 +95,13 @@ install_extlinux() {
 	_logs "generating extlinux configuration"
 
 	git_repo=/live/image/live/filesystem.git
-	git_revision=$(cmdline_get git-revision)
+
+	if cmdline_has git-revision
+	then
+		git_revision=$(cmdline_get git-revision)
+	else
+		git_revision=$(git --git-dir "${git_repo}" rev-parse HEAD)
+	fi
 
 	# Extract kernel and initrd and generate extlinux config
 	generate_installed_config "${dir}" "${git_repo}" "${git_revision}"
