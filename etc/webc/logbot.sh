@@ -2,7 +2,7 @@
 . /etc/webc/functions.sh
 . /etc/webc/webc.conf
 
-if !cmdline_has debug; then
+if ! cmdline_has debug; then
 	exec "$@" >/dev/null 2>/dev/null
 else
 	exec "$@" 2>&1 | while read -r line
