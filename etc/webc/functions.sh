@@ -37,7 +37,7 @@ mac_address()
 	done
 }
 
-# # http://stackoverflow.com/questions/11827252
+# http://stackoverflow.com/questions/11827252
 wait_for()
 {
 	np=$(mktemp -u)
