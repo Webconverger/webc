@@ -127,32 +127,15 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 } # end of process_options
 
 update_cmdline() {
-	SECONDS=0
-	while true
-	do
-		wget --timeout=5 -t 1 -q -O /etc/webc/cmdline.tmp "$config_url" && break
-		test $? = 8 && break # 404
-		test $SECONDS -gt 15 && break
-		logs "Failed to download configuration, trying again..."
-		sleep 1
-	done
-
-	# A configuration file always has a homepage
-	if ! [ -e "/etc/webc/cmdline.tmp" ] || ! grep -qs homepage /etc/webc/cmdline.tmp
+	if curl -f -o /etc/webc/cmdline.tmp --retry 5 "$config_url"
 	then
-		# No (valid) file downloaded, just keep running with
-		# what we have
-		logs "Failed to download (valid) configuration, using existing config"
-		return
+		# curl has a bug where it doesn't write an empty file
+		touch /etc/webc/cmdline.tmp
+		# This file can be empty in the case of an invalidated configuration
+		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+		# Replace persistent copy
+		cp /etc/webc/cmdline /live/image/live/webc-cmdline
 	fi
-
-	# Apply the new config
-	mv /etc/webc/cmdline.tmp /etc/webc/cmdline
-
-	# Copy the cmdline outside to a persistent spot, in case we
-	# can't reach the config server on next boot and to allow
-	# detecting changes in the config.
-	cp /etc/webc/cmdline /live/image/live/webc-cmdline
 }
 
 wait_for $live_config_pipe 2>/dev/null
@@ -163,7 +146,8 @@ wait_for $live_config_pipe 2>/dev/null
 # copy that to /etc/webc, so we can compare the new version with
 # it to detect changes and/or use it in case the new download
 # fails.
-if [ -e "/live/image/live/webc-cmdline" ]; then
+if test -s /live/image/live/webc-cmdline
+then
 	cp /live/image/live/webc-cmdline /etc/webc/cmdline
 else
 	touch /etc/webc/cmdline
