@@ -44,7 +44,7 @@ fi
 # mount. It is automatically generated below based on
 # fetch_revision / update_revision.
 
-if cmdline_has fetch_revision
+if cmdline_has fetch-revision
 then
 	fetch_revision=$(cmdline_get fetch-revision)
 else
