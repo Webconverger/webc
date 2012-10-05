@@ -3,7 +3,6 @@
 . /etc/webc/functions.sh
 . /etc/webc/webc.conf
 
-cmdline_has debug && set -x
 
 sub_literal() {
   awk -v str="$1" -v rep="$2" '
@@ -127,7 +126,7 @@ sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | 
 } # end of process_options
 
 update_cmdline() {
-	if curl -f -o /etc/webc/cmdline.tmp --retry 5 "$config_url"
+	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url"
 	then
 		# curl has a bug where it doesn't write an empty file
 		touch /etc/webc/cmdline.tmp
@@ -150,6 +149,8 @@ then
 else
 	touch /etc/webc/cmdline
 fi
+
+cmdline_has debug && set -x
 
 cmdline_has noconfig || update_cmdline
 process_options
