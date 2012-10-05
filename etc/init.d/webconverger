@@ -63,3 +63,6 @@ do
 	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
 	ifup $iface &> /dev/null
 done
+
+# Try to make /live/image writable
+mount -o remount,rw /live/image

@@ -133,8 +133,6 @@ update_cmdline() {
 		touch /etc/webc/cmdline.tmp
 		# This file can be empty in the case of an invalidated configuration
 		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
-		# Replace persistent copy
-		cp /etc/webc/cmdline /live/image/live/webc-cmdline
 	fi
 }
 
@@ -158,8 +156,23 @@ process_options
 
 echo ACK > $live_config_pipe
 
-# Kicks off an upgrade
-mkfifo $upgrade_pipe
+# Try to make /live/image writable
+mount -o remount,rw /live/image
+
+# if writable
+if touch /live/image
+then
+	# Cache cmdline in case subsequent boots can't reach $config_url
+	cp /etc/webc/cmdline /live/image/live/webc-cmdline
+
+	# Kicks off an upgrade
+	mkfifo $upgrade_pipe
+else
+# /live/image could not be made writable (e.g. live version: booting
+# from an iso fs), so just use the new config downloaded
+# and skip all the other stuff below
+	logs "Not a writable boot medium. Could not cache configuration nor upgrade."
+fi
 
 # live-config should restart via inittab and get blocked 
 # until $live_config_pipe is re-created

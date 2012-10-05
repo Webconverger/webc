@@ -14,19 +14,6 @@ current_git_revision=$(cmdline_get git-revision)
 # If no git-revision was given on the commandline, default to HEAD
 test -n "$current_git_revision" || current_git_revision=$(git --git-dir "${git_repo}" rev-parse HEAD)
 
-# Try to make /live/image writable
-mount -o remount,rw /live/image
-# mount always returns success, so we use touch to see if this
-# worked.
-if ! touch /live/image
-then
-# /live/image could not be made writable (e.g. booting
-# from an iso fs), so just use the new config downloaded
-# and skip all the other stuff below
-	logs "Not a writable boot medium, skipping upgrade check"
-	return
-fi
-
 # See to what we should be updating. fetch_revision is
 # the revision we should fetch from the git server (it
 # can only be a branch or tag name, since we can't fetch
@@ -135,11 +122,13 @@ else
 fi
 }
 
-logs "Upgrade waiting"
+logs "Upgrade waiting to be triggered."
 wait_for $upgrade_pipe 2>/dev/null
 
-if ! cmdline_has noupgrade
+if cmdline_has noupgrade
 then
+	logs "Upgrade disabled."
+else
 	upgrade
 fi
 
