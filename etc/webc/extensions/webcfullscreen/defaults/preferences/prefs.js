@@ -5,6 +5,7 @@ pref("devtools.errorconsole.enabled", false);
 // X on top right
 pref("browser.tabs.closeButtons", 3);
 
+pref("devtools.gcli.hideIntro", true);
 pref("accessibility.typeaheadfind.flashBar", 0);
 pref("app.update.enabled", false);
 pref("browser.download.dir", "/dev/null");

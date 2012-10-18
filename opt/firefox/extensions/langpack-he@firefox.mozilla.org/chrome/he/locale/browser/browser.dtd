@@ -115,6 +115,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.accesskey "ס">
 <!ENTITY bookmarkThisPageCmd.label "צור סימנייה לדף זה">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
+<!ENTITY sharePageCmd.commandkey "l">
 <!ENTITY subscribeToPageMenupopup.label "הירשם לדף זה">
 <!ENTITY subscribeToPageMenuitem.label "הירשם לדף זה...">
 <!ENTITY addCurPagesCmd.label "הוסף סימנייה לכל הלשוניות...">
@@ -214,6 +215,10 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY inspectContextMenu.label     "חקירת אלמנט">
 <!ENTITY inspectContextMenu.accesskey "ח">
 
+<!ENTITY responsiveDesignTool.label   "תצוגת עיצוב רספונסיבי">
+<!ENTITY responsiveDesignTool.accesskey "ר">
+<!ENTITY responsiveDesignTool.commandkey "M">
+
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -234,11 +239,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbarCloseButton.tooltiptext "סגירת סרגל כלים מפתחים">
 <!ENTITY devToolbarMenu.label              "סרגל כלים מפתחים">
 <!ENTITY devToolbarMenu.accesskey          "ס">
-<!ENTITY devToolbar.commandkey             "v">
+<!ENTITY devToolbar.keycode                "VK_F2">
+<!ENTITY devToolbar.keytext                "F2">
 
 <!ENTITY webConsoleButton.label "מסוף רשת">
 <!ENTITY inspectorButton.label "חוקר">
-<!ENTITY scriptsButton.label "תסריטים">
 
 <!ENTITY inspectorHTMLCopyInner.label       "העתקת HTML פנימי">
 <!ENTITY inspectorHTMLCopyInner.accesskey   "פ">
@@ -256,6 +261,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!-- LOCALIZATION NOTE: These are for the menu in the Inspector Toolbar -->
 <!ENTITY inspectorToggleVeil.label          "החשכת הדף">
 <!ENTITY inspectorToggleVeil.accesskey      "ח">
+<!ENTITY inspectorToggleInfobar.label       "הצגת מידע צומת">
+<!ENTITY inspectorToggleInfobar.accesskey   "צ">
 
 <!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
   -  alternate view for the Inspector, creating a 3D visualization of the
@@ -432,8 +439,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarkThisLinkCmd.accesskey  "ק">
 <!ENTITY bookmarkThisFrameCmd.label      "צור סימנייה למסגרת זו">
 <!ENTITY bookmarkThisFrameCmd.accesskey  "מ">
-<!ENTITY sendPageCmd.label            "שלח דף...">
-<!ENTITY sendPageCmd.accesskey        "ל">
+<!ENTITY emailPageCmd.label           "שליחת קישור בדוא״ל…">
+<!ENTITY emailPageCmd.accesskey       "ק">
 <!ENTITY savePageCmd.label            "שמור דף בשם...">
 <!ENTITY savePageCmd.accesskey        "ר">
 <!-- alternate for content area context menu -->
@@ -445,20 +452,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printFrameCmd.accesskey      "ה">
 <!ENTITY saveLinkCmd.label            "שמור קישור בשם...">
 <!ENTITY saveLinkCmd.accesskey        "מ">
-<!ENTITY sendLinkCmd.label            "שלח קישור..."> 
-<!ENTITY sendLinkCmd.accesskey        "ש">
 <!ENTITY saveImageCmd.label           "שמור תמונה בשם...">
 <!ENTITY saveImageCmd.accesskey       "ב">
 <!ENTITY saveVideoCmd.label           "שמור וידאו בשם…">
 <!ENTITY saveVideoCmd.accesskey       "מ">
 <!ENTITY saveAudioCmd.label           "שמור אודיו בשם…">
 <!ENTITY saveAudioCmd.accesskey       "מ">
-<!ENTITY sendImageCmd.label           "שלח תמונה...">
-<!ENTITY sendImageCmd.accesskey       "נ">
-<!ENTITY sendVideoCmd.label           "שלח וידאו…">
-<!ENTITY sendVideoCmd.accesskey       "ל">
-<!ENTITY sendAudioCmd.label           "שלח אודיו…">
-<!ENTITY sendAudioCmd.accesskey       "ל">
+<!ENTITY emailImageCmd.label          "שליחת תמונה בדוא״ל…">
+<!ENTITY emailImageCmd.accesskey      "ת">
+<!ENTITY emailVideoCmd.label          "שליחת וידאו בדוא״ל…">
+<!ENTITY emailVideoCmd.accesskey      "ו">
+<!ENTITY emailAudioCmd.label          "שליחת אודיו בדוא״ל…">
+<!ENTITY emailAudioCmd.accesskey      "א">
 <!ENTITY copyLinkCmd.label            "העתק מיקום קישור">
 <!ENTITY copyLinkCmd.accesskey        "ה">
 <!ENTITY copyImageCmd.label           "העתק מיקום התמונה">
@@ -639,28 +644,20 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY addonBarCloseButton.tooltip  "סגירת שורת התוספות">
 <!ENTITY toggleAddonBarCmd.key        "/">
 
-<!-- LOCALIZATION NOTE (htmlPanel.label): This is a label for a button that
-activates the Web Developer->Inspect UI's HTML Tree Panel. -->
-<!ENTITY htmlPanel.label              "HTML">
-
-<!-- LOCALIZATION NOTE (htmlPanel.tooltiptext): The text that appears when a user
-hovers over the HTML panel's toolbar button. -->
-<!ENTITY htmlPanel.tooltiptext        "לוח HTML">
-
-<!-- LOCALIZATION NOTE (htmlPanel.accesskey): The key bound to the HTML panel's
-toolbar button -->
-<!ENTITY markupButton.accesskey          "ס">
-
-
-<!ENTITY inspectorToggleInfobar.accesskey   "S">
-<!ENTITY inspectorToggleInfobar.label       "Show Node Info">
-
 <!-- LOCALIZATION NOTE (markupButton.arialabel): The markup button is the button
 located in front of the breadcrumbs display in the inspector toolbar. The button
 doesn't display any label, but exposes a label to screen-readers with "aria-label".
 -->
-<!ENTITY markupButton.arialabel          "Markup">
-<!ENTITY responsiveDesignTool.accesskey "R">
-<!ENTITY responsiveDesignTool.commandkey "M">
+<!ENTITY markupButton.arialabel          "סימון">
+<!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
+toolbar button -->
+<!ENTITY markupButton.accesskey          "ס">
 
-<!ENTITY responsiveDesignTool.label   "Responsive Design View">
+<!ENTITY socialToolbar.title        "כפתור סרגל כלים חברתי">
+<!ENTITY social.notLoggedIn.label   "לא מחובר">
+
+<!ENTITY social.sharePopup.undo.label     "ביטול שיתוף">
+<!ENTITY social.sharePopup.undo.accesskey "ב">
+<!ENTITY social.sharePopup.ok.label       "אישור">
+<!ENTITY social.sharePopup.ok.accesskey   "א">
+
