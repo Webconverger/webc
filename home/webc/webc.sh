@@ -3,6 +3,13 @@
 . "/etc/webc/functions.sh"
 . "/etc/webc/webc.conf"
 
+if test -f /etc/X11/Xresources/x11-common
+then
+	xrdb -merge /etc/X11/Xresources/x11-common
+else
+	logs x11 config not found
+fi
+
 cp /home/webc/bg-orig.png /home/webc/bg.png
 
 if test "$(cmdline_get chrome)" = neon
