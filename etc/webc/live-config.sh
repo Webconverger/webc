@@ -63,6 +63,7 @@ for x in $( cmdline ); do
 
 	locale=*)
 		locale=${x#locale=}
+		for i in /opt/firefox/langpacks/langpack-$locale*; do ln -s $i /opt/firefox/extensions/$(basename $i); done
 		echo "pref(\"general.useragent.locale\", \"${locale}\");" >> "$prefs"
 		echo "pref(\"intl.accept_languages\", \"${locale}, en\");" >> "$prefs"
 		;;
