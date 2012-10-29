@@ -135,10 +135,6 @@ update_cmdline() {
 	fi
 }
 
-wait_for $live_config_pipe 2>/dev/null
-
-. "/etc/webc/webc.conf"
-
 # If we have a "cached" version of the configuration on disk,
 # copy that to /etc/webc, so we can compare the new version with
 # it to detect changes and/or use it in case the new download
@@ -149,6 +145,12 @@ then
 else
 	touch /etc/webc/cmdline
 fi
+
+/etc/init.d/webconverger
+
+wait_for $live_config_pipe 2>/dev/null
+
+. "/etc/webc/webc.conf"
 
 cmdline_has debug && set -x
 
