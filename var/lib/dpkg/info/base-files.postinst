@@ -5,8 +5,10 @@ install_local_dir() {
   if [ ! -d $1 ]; then
     mkdir -p $1
   fi
-  chown root:staff $1 2> /dev/null || true
-  chmod 2775 $1 2> /dev/null || true
+  if [ -f /etc/staff-group-for-usr-local ]; then
+    chown root:staff $1 2> /dev/null || true
+    chmod 2775 $1 2> /dev/null || true
+  fi
 }
 
 install_from_default() {
@@ -24,12 +26,14 @@ install_directory() {
 }
 
 if [ ! -e /etc/dpkg/origins/default ]; then
-  if [ -e /etc/dpkg/origins/progress ]; then
-    ln -sf progress /etc/dpkg/origins/default
+  if [ -e /etc/dpkg/origins/progress-linux ]; then
+    ln -sf progress-linux /etc/dpkg/origins/default
   fi
 fi
 
 if [ "$1" = "configure" ] && [ "$2" = "" ]; then
+  install_from_default /usr/share/base-files/staff-group-for-usr-local \
+    /etc/staff-group-for-usr-local
   install_from_default /usr/share/base-files/nsswitch.conf /etc/nsswitch.conf
   install_from_default /usr/share/base-files/dot.profile   /root/.profile
   install_from_default /usr/share/base-files/dot.bashrc    /root/.bashrc
@@ -93,16 +97,18 @@ if [ ! -f /usr/info/dir ] && [ ! -f /usr/share/info/dir ]; then
 fi
 
 if [ "$1" = "configure" ] && [ "$2" != "" ]; then
-  if [ -f /etc/motd ]; then
-    oldmd=`awk 'NR > 2' /etc/motd | md5sum | awk '{print $1}'`
-    newmd=`awk 'NR > 2' /usr/share/base-files/motd | md5sum | awk '{print $1}'`
-    if [ "$oldmd" != "$newmd" ]; then
-      if grep -q "$oldmd" /usr/share/base-files/motd.md5sums; then
-        awk 'NR <= 2' /etc/motd > /etc/motd.new
-        awk 'NR > 2' /usr/share/base-files/motd >> /etc/motd.new
-        mv /etc/motd /etc/motd.old
-        mv /etc/motd.new /etc/motd
+  if [ -f /etc/profile ]; then
+    md5=`md5sum /etc/profile | cut -f 1 -d " "`
+    if grep -q "$md5" /usr/share/base-files/profile.md5sums; then
+      if ! cmp -s /usr/share/base-files/profile /etc/profile; then
+        cp -p /usr/share/base-files/profile /etc/profile
+        echo Updating unmodified /etc/profile to current default.
       fi
     fi
   fi
+fi
+
+if dpkg --compare-versions "$2" lt-nl "6.10"; then
+  install_from_default /usr/share/base-files/staff-group-for-usr-local \
+    /etc/staff-group-for-usr-local
 fi

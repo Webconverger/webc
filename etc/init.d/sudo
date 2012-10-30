@@ -7,6 +7,8 @@
 # X-Start-Before:    rmnologin
 # Default-Start:     2 3 4 5
 # Default-Stop:
+# Short-Description: Provide limited super user privileges to specific users
+# Description: Provide limited super user privileges to specific users.
 ### END INIT INFO
 
 N=/etc/init.d/sudo
@@ -21,10 +23,10 @@ case "$1" in
                 find /var/lib/sudo -exec touch -t 198501010000 '{}' \;
 	fi
 	;;
-  stop|reload|restart|force-reload)
+  stop|reload|restart|force-reload|status)
 	;;
   *)
-	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
 	exit 1
 	;;
 esac

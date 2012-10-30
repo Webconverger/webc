@@ -174,17 +174,18 @@ Package: sudo
 Status: install ok installed
 Priority: optional
 Section: admin
-Installed-Size: 920
+Installed-Size: 1944
 Maintainer: Bdale Garbee <bdale@gag.com>
 Architecture: i386
-Version: 1.7.4p4-2.squeeze.3
+Version: 1.8.5p2-1~bpo60+1
 Replaces: sudo-ldap
-Depends: libc6 (>= 2.11), libpam0g (>= 0.99.7.1), libpam-modules
+Depends: libc6 (>= 2.11), libpam0g (>= 0.99.7.1), libselinux1 (>= 1.32), libpam-modules
 Conflicts: sudo-ldap
 Conffiles:
- /etc/pam.d/sudo 402488da83015090763d681fffae6340
- /etc/sudoers.d/README 2ec19eb188781dd8e2ff0ad509399497
- /etc/init.d/sudo 4856492c7d71bc37aa15323f1c554cd1
+ /etc/sudoers.d/README 8d3cf36d1713f40a0ddc38e1b21a51b6
+ /etc/pam.d/sudo 85da64f888739f193fc0fa896680030e
+ /etc/init.d/sudo 2d26995849d9edc1294c94516e9a68cc
+ /etc/sudoers 45437b4e86fba2ab890ac81db2ec3606
 Description: Provide limited super user privileges to specific users
  Sudo is a program designed to allow a sysadmin to give limited root
  privileges to users and log root activity.  The basic philosophy is to give
@@ -545,12 +546,12 @@ Package: libcairo2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 1440
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 1429
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: cairo
-Version: 1.12.2-1~artax1
+Version: 1.12.2-2~artax1
 Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.3.5), libpixman-1-0 (>= 0.21.6), libpng12-0 (>= 1.2.13-4), libx11-6, libxcb-render0, libxcb-shm0, libxcb1 (>= 1.6), libxrender1, zlib1g (>= 1:1.1.4)
 Breaks: iceape-browser (<= 2.0.3-3), libgtk-directfb-2.0-0, xulrunner-1.9, xulrunner-1.9.1 (<= 1.9.1.8-3)
 Description: The Cairo 2D vector graphics library
@@ -576,6 +577,7 @@ Original-Uploaders: Sebastian Dröge <slomo@debian.org>,
            Emilio Pozuelo Monfort <pochu@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=collab-maint/cairo.git
 Original-Vcs-Git: git://git.debian.org/git/collab-maint/cairo.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libgdbm3
 Status: install ok installed
@@ -640,7 +642,7 @@ Installed-Size: 600
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.1.1-P1-15+squeeze6
+Version: 4.1.1-P1-15+squeeze8
 Replaces: dhcp3-common
 Provides: dhcp3-common
 Depends: debianutils (>= 2.8.2), libc6 (>= 2.7)
@@ -985,12 +987,12 @@ Package: firmware-ralink
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 104
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 120
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Ralink wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -1003,15 +1005,18 @@ Description: Binary firmware for Ralink wireless cards
   * Ralink RT2561 (RT2501/RT5201 chipset) firmware, version 1.2 (rt2561.bin)
   * Ralink RT2561S (RT2501 Turbo/RT5201 Turbo chipset) firmware, version 1.2 (rt2561s.bin)
   * Ralink RT2661 (RT2600/RT5600 chipset) firmware, version 1.2 (rt2661.bin)
-  * Ralink RT2760/RT2790/RT2860/RT2890/RT3090 (RT2700P[D]/RT2700E[D]/RT2800P[D]/RT2800E[D]/RT3000E[D] chipset) firmware, version 34 (rt2860.bin, rt3090.bin)
-  * Ralink RT2870/RT3070/RT3071/RT3072 (RT2800U[D] chipset) firmware, version 29 (rt2870.bin, rt3070.bin)
+  * Ralink RT2760/RT2790/RT2860/RT2890/RT3090 (RT2700P[D]/RT2700E[D]/RT2800P[D]/RT2800E[D]/RT3000E[D] chipset) firmware, version 34 (rt2860.bin)
+  * Ralink RT2870/RT3070/RT3071/RT3072 (RT2800U[D] chipset) firmware, version 29 (rt2870.bin)
+  * rt3070.bin
   * Ralink RT3071/RT3072 firmware, version 29 (rt3071.bin)
+  * rt3090.bin
   * Ralink RT2571W/RT2671 (RT2501USB/RT5201USB chipset) firmware, version 1.8 (rt73.bin)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
 Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ncurses-base
 Essential: yes
@@ -1263,11 +1268,11 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 504
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Realtek wired and wireless network adapters
  This package contains the binary firmware for some Ethernet adapters with
@@ -1286,9 +1291,9 @@ Description: Binary firmware for Realtek wired and wireless network adapters
   * Realtek RTL8111D-2/RTL8168D-2 firmware (rtl_nic/rtl8168d-2.fw)
   * Realtek RTL8168E-1 firmware (rtl_nic/rtl8168e-1.fw)
   * Realtek RTL8168E-2 firmware (rtl_nic/rtl8168e-2.fw)
-  * Realtek RTL8168E-3 firmware, version 0.0.3 (rtl_nic/rtl8168e-3.fw)
-  * Realtek RTL8168F-1 firmware, version 0.0.3 (rtl_nic/rtl8168f-1.fw)
-  * Realtek RTL8168F-2 firmware, version 0.0.3 (rtl_nic/rtl8168f-2.fw)
+  * Realtek RTL8168E-3 firmware, version 0.0.4 (rtl_nic/rtl8168e-3.fw)
+  * Realtek RTL8168F-1 firmware, version 0.0.4 (rtl_nic/rtl8168f-1.fw)
+  * Realtek RTL8168F-2 firmware, version 0.0.4 (rtl_nic/rtl8168f-2.fw)
   * Realtek RTL8192CE/RTL8188CE firmware (rtlwifi/rtl8192cfw.bin)
   * Realtek RTL8192CU/RTL8188CU firmware (rtlwifi/rtl8192cufw.bin)
   * Realtek RTL8192DE firmware (rtlwifi/rtl8192defw.bin)
@@ -1299,6 +1304,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-apm
 Status: install ok installed
@@ -1672,14 +1678,14 @@ Description: X.Org X Window System
 
 Package: linux-image-686
 Status: install ok installed
-Priority: optional
+Priority: extra
 Section: oldlibs
 Installed-Size: 52
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
 Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
-Source: linux-latest (45~artax1)
-Version: 3.2+45~artax1
+Source: linux-latest (46~artax1)
+Version: 3.2+46~artax1
 Depends: linux-image-686-pae, debconf (>= 0.5) | debconf-2.0
 Description: Linux for modern PCs (dummy package)
  This is a dummy transitional package.  It can be safely removed.
@@ -1687,6 +1693,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
 Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ncurses-bin
 Essential: yes
@@ -2932,6 +2939,21 @@ Description: library for dealing with netlink sockets
  netlink family specific interfaces.
 Homepage: http://www.infradead.org/~tgr/libnl/
 
+Package: libnl2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 448
+Maintainer: Heiko Stuebner <heiko@sntech.de>
+Architecture: i386
+Version: 1.99+git20091216-2
+Depends: libc6 (>= 2.3)
+Description: library for dealing with netlink sockets
+ This is a library for applications dealing with netlink sockets.
+ The library provides an interface for raw netlink messaging and various
+ netlink family specific interfaces.
+Homepage: http://people.suug.ch/~tgr/libnl/
+
 Package: libdrm-radeon1
 Status: install ok installed
 Priority: optional
@@ -2989,12 +3011,12 @@ Package: libvpx1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 724
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 698
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: libvpx
-Version: 1.0.0-2~artax1
+Version: 1.1.0-1~artax1
 Depends: libc6 (>= 2.3.6-6~)
 Description: VP8 video codec (shared library)
  VP8 is an open video codec, originally developed by On2 and released
@@ -3005,6 +3027,7 @@ Description: VP8 video codec (shared library)
 Multi-Arch: same
 Homepage: http://www.webmproject.org
 Original-Maintainer: Sebastian Dröge <slomo@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: zlib1g
 Status: install ok installed
@@ -3210,16 +3233,16 @@ Description: X.Org X server -- output driver metapackage
 
 Package: linux-image-686-pae
 Status: install ok installed
-Priority: optional
+Priority: extra
 Section: kernel
 Installed-Size: 48
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
 Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
-Source: linux-latest (45~artax1)
-Version: 3.2+45~artax1
-Provides: linux-latest-modules-3.2.0-3artax1-686-pae
-Depends: linux-image-3.2.0-3artax1-686-pae
+Source: linux-latest (46~artax1)
+Version: 3.2+46~artax1
+Provides: linux-latest-modules-3.2.0-4artax1-686-pae
+Depends: linux-image-3.2.0-4artax1-686-pae
 Description: Linux for modern PCs (meta-package)
  This package depends on the latest Linux kernel and modules for use on PCs
  with one or more processors supporting PAE.
@@ -3235,6 +3258,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
 Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: browser-plugin-adobe-flash
 Status: install ok installed
@@ -3461,28 +3485,32 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 508
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 410
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
-Version: 6.9~artax1
+Version: 6.11~artax1
 Replaces: base, dpkg (<= 1.15.0), miscutils
 Provides: base
 Pre-Depends: awk
 Conffiles:
- /etc/debian_version 1c683b3498356ccfa171f1bb1aeaee54
+ /etc/debian_version 716bb0a1d1229671f1d24ce209306e45
+ /etc/progress-linux_version 6e11601fb5d98a9eb5dab9924c681bdf
  /etc/dpkg/origins/debian 731423fa8ba067262f8ef37882d1e742
- /etc/dpkg/origins/progress eb8cd942c2cc678ca65dcb012ad92d5e
+ /etc/dpkg/origins/progress-linux 311541169573008a8a70090448b9fa6a
  /etc/host.conf 4eb63731c9f5e30903ac4fc07a7fe3d6
  /etc/issue 8cd2126de83d13e9ed24ec10a41b12e6
  /etc/issue.net 588da79357b77ef2a3d39e0f7369c1b5
- /etc/os-release 6fcf553d69c15f24bfaaee2027aa71df
+ /etc/lsb-release 25586dccea0c3b19d94874807a865359
+ /etc/os-release a5612cfb7ce3cb24f6534c8c0f0acfc6
+ /etc/dpkg/origins/progress eb8cd942c2cc678ca65dcb012ad92d5e obsolete
 Description: Debian base system miscellaneous files
  This package contains the basic filesystem hierarchy of a Debian system, and
  several important miscellaneous files, such as /etc/debian_version,
- /etc/host.conf, /etc/issue, /etc/motd, /etc/profile, /etc/nsswitch.conf,
- and others, and the text of several common licenses in use on Debian systems.
+ /etc/host.conf, /etc/issue, /etc/motd, /etc/profile, and others,
+ and the text of several common licenses in use on Debian systems.
 Original-Maintainer: Santiago Vila <sanvila@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: mount
 Essential: yes
@@ -3866,7 +3894,7 @@ Section: misc
 Installed-Size: 76
 Maintainer: Rob Browning <rlb@defaultvalue.org>
 Architecture: i386
-Version: 0.1.15
+Version: 0.1.15+squeeze1
 Depends: libc6 (>= 2.0), liblockfile1 (>= 1.0)
 Description: Programs for locking and unlocking files and mailboxes
  This package includes several programs to safely lock and unlock
@@ -3901,6 +3929,34 @@ Description: Qt 4 network module
  The QtNetwork module offers classes that allow you to write TCP/IP clients and
  servers. It provides classes to make network programming easier and portable.
 Homepage: http://www.qtsoftware.com
+
+Package: libnspr4
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 320
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
+Architecture: i386
+Source: nspr
+Version: 2:4.9.2-1~artax1
+Depends: libc6 (>= 2.3.6-6~)
+Conflicts: libnspr4-0d (<< 2:4.9-2~)
+Description: NetScape Portable Runtime Library
+ This library provides platform independent non-GUI operating system
+ facilities including:
+  * threads,
+  * thread synchronisation,
+  * normal file I/O and network I/O,
+  * interval timing and calendar time,
+  * basic memory management (malloc and free),
+  * shared library linking.
+Homepage: http://www.mozilla.org/projects/nspr/
+Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Mike Hommey <glandium@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxcb-aux0
 Status: install ok installed
@@ -4129,6 +4185,39 @@ Description: Layout and rendering of internationalized text
   - Native fonts on Microsoft backends
  .
  This package contains the shared libraries.
+
+Package: linux-image-3.2.0-4artax1-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 86520
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.2.32-1~artax1
+Provides: linux-image, linux-modules-3.2.0-4artax1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.2, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~)
+Description: Linux 3.2 for modern PCs
+ The Linux kernel 3.2 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libevent-1.4-2
 Status: install ok installed
@@ -4464,7 +4553,7 @@ Installed-Size: 488
 Maintainer: Jay Berkenbilt <qjb@debian.org>
 Architecture: i386
 Source: tiff
-Version: 3.9.4-5+squeeze4
+Version: 3.9.4-5+squeeze6
 Depends: libc6 (>= 2.3), libjpeg62 (>= 6b1), zlib1g (>= 1:1.1.4)
 Description: Tag Image File Format (TIFF) library
  libtiff is a library providing support for the Tag Image File Format
@@ -4530,12 +4619,12 @@ Package: firmware-linux-nonfree
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 1436
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 1816
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Replaces: firmware-linux (<< 0.19)
 Suggests: initramfs-tools, linux-image
 Conflicts: firmware-linux (<< 0.19)
@@ -4558,7 +4647,9 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Chelsio T3B protocol engine firmware, version 1.1.0 (cxgb3/t3b_psram-1.1.0.bin)
   * Chelsio T3C protocol engine firmware, version 1.1.0 (cxgb3/t3c_psram-1.1.0.bin)
   * Chelsio T3 main firmware, version 7.4.0 (cxgb3/t3fw-7.4.0.bin)
-  * Chelsio T4 firmware, version 1.3.10.0 (cxgb4/t4fw.bin)
+  * Chelsio T3 main firmware, version 7.10.0 (cxgb3/t3fw-7.10.0.bin)
+  * cxgb4/t4fw.bin
+  * Chelsio T4 firmware, version 1.4.16.0 (cxgb4/t4fw-1.4.16.0.bin)
   * DAB-USB FPGA bitfile (dabusb/bitstream.bin)
   * DAB-USB firmware (dabusb/firmware.fw)
   * Xceive 5000 tuner firmware, version 1.6.114 (dvb-fe-xc5000-1.6.114.fw)
@@ -4648,6 +4739,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: e2fslibs
 Status: install ok installed
@@ -5487,11 +5579,11 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 748
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Atheros wireless cards
  This package contains the binary firmware for USB wireless network and
@@ -5515,6 +5607,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: plymouth
 Status: hold ok installed
@@ -6508,12 +6601,12 @@ Package: firmware-linux-free
 Status: install ok installed
 Priority: optional
 Section: kernel
-Installed-Size: 144
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 168
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-free
-Version: 3~artax6
+Version: 3.1~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for various drivers in the Linux kernel
  This package contains firmware which was previously included in the Linux
@@ -6541,15 +6634,18 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Sierra Wireless AC850/AC860 CIS fix (cis/SW_8xx_SER.cis)
   * Tamarack PCMCIA Ethernet card CIS fix (cis/tamarack.cis)
   * Atari Falcon DSP56001 firmware (dsp56k/bootstrap.bin)
+  * Intel C600 SAS/SATA controller default parameters, version 1.3 (isci/isci_firmware.bin)
   * Keyspan USA-19 firmware (keyspan_pda/keyspan_pda.fw)
   * Xircom PGSDB9/Entrega PortGear firmware (keyspan_pda/xircom_pgs.fw)
   * USB-DUX firmware (usbdux_firmware.bin)
   * USB-DUXfast firmware (usbduxfast_firmware.bin)
-Homepage: http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git
+  * USB-DUXsigma firmware (usbduxsigma_firmware.bin)
+Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
 Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-free/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-free/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: e2fsprogs
 Essential: yes
@@ -6903,15 +6999,13 @@ Status: install ok installed
 Priority: important
 Section: misc
 Installed-Size: 72
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Maintainer: Debian Release Team <packages@release.debian.org>
 Architecture: all
-Version: 2010.08.28artax2
+Version: 2010.08.28+squeeze1
 Depends: gnupg
 Description: GnuPG archive keys of the Debian archive
  The Debian project digitally signs its Release files. This package
  contains the archive keys used for that.
-Original-Maintainer: Debian Release Team <packages@release.debian.org>
 
 Package: insserv
 Status: install ok installed
@@ -7004,18 +7098,19 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6696
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 6868
+Origin: debian
+Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+Bugs: debbugs://bugs.debian.org
 Architecture: i386
-Version: 1.15.8.12artax2
-Pre-Depends: libbz2-1.0, libc6 (>= 2.6), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), coreutils (>= 5.93-1), lzip, xz-utils
+Version: 1.15.8.13
+Pre-Depends: libbz2-1.0, libc6 (>= 2.6), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), coreutils (>= 5.93-1), xz-utils
 Suggests: apt
 Breaks: apt (<< 0.7.7), aptitude (<< 0.4.7-1), dpkg-dev (<< 1.15.8), libdpkg-perl (<< 1.15.8), pinfo (<< 0.6.9-3.1), tkinfo (<< 2.8-3.1)
 Conffiles:
- /etc/cron.daily/dpkg b6b8dc21210ea50db7cc4636f521758f
  /etc/dpkg/dpkg.cfg f4413ffb515f8f753624ae3bb365b81b
  /etc/logrotate.d/dpkg 782ea5ae536f67ff51dc8c3e2eeb4cf9
+ /etc/cron.daily/dpkg b6b8dc21210ea50db7cc4636f521758f
  /etc/alternatives/README 69c4ba7f08363e998e0f2e244a04f881
 Description: Debian package management system
  This package provides the low-level infrastructure for handling the
@@ -7023,10 +7118,6 @@ Description: Debian package management system
  .
  For Debian package development tools, install dpkg-dev.
 Homepage: http://wiki.debian.org/Teams/Dpkg
-Original-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
-Original-Uploaders: Guillem Jover <guillem@debian.org>, Raphaël Hertzog <hertzog@debian.org>
-Original-Vcs-Browser: http://git.debian.org/?p=dpkg/dpkg.git
-Original-Vcs-Git: git://git.debian.org/git/dpkg/dpkg.git
 
 Package: libpcre3
 Status: install ok installed
@@ -7198,11 +7289,11 @@ Status: install ok installed
 Priority: optional
 Section: net
 Installed-Size: 140
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Version: 1.1.2-1~artax1
-Depends: libc6 (>= 2.1), libnl1 (>= 1.1), libssl0.9.8 (>= 0.9.8m-1), wireless-regdb
+Depends: libc6 (>= 2.1), libnl2 (>= 1.99+git20091216), libssl0.9.8 (>= 0.9.8m-1), wireless-regdb
 Recommends: iw
 Conffiles:
  /etc/default/crda d1f1468521b60cdfc0b9d22d5a74975a
@@ -7213,11 +7304,11 @@ Description: wireless Central Regulatory Domain Agent
  .
  CRDA queries operational frequency regulations stored within the regulatory
  database provided by the wireless-regdb package.
-Multi-Arch: foreign
 Homepage: http://wireless.kernel.org/en/developers/Regulatory/#CRDA
 Original-Maintainer: Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://git.debian.org/?p=kernel/crda.git
 Original-Vcs-Git: git://git.debian.org/kernel/crda.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: dmsetup
 Status: install ok installed
@@ -7731,12 +7822,12 @@ Package: firmware-iwlwifi
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 5316
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 7264
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel Wireless 3945, 4965 and 5000-series cards
  This package contains the binary firmware for Intel Wireless 1000, 3945,
@@ -7745,19 +7836,19 @@ Description: Binary firmware for Intel Wireless 3945, 4965 and 5000-series cards
  .
  Contents:
   * Intel Wireless 100 firmware, version 39.31.5.1 (iwlwifi-100-5.ucode)
-  * Intel Wireless 1000 firmware, version 128.50.3.1 (iwlwifi-1000-3.ucode)
+  * Intel Wireless 105 firmware, version 18.168.6.1 (iwlwifi-105-6.ucode)
+  * Intel Wireless 135 firmware, version 18.168.6.1 (iwlwifi-135-6.ucode)
   * Intel Wireless 1000 firmware, version 39.31.5.1 (iwlwifi-1000-5.ucode)
-  * Intel Wireless 3945 firmware, version 15.28.1.6 (iwlwifi-3945-1.ucode)
+  * Intel Wireless 2200 firmware, version 18.168.6.1 (iwlwifi-2000-6.ucode)
+  * Intel Wireless 2230 firmware, version 18.168.6.1 (iwlwifi-2030-6.ucode)
   * Intel Wireless 3945 firmware, version 15.32.2.9 (iwlwifi-3945-2.ucode)
-  * Intel Wireless 4965 firmware, version 228.57.1.21 (iwlwifi-4965-1.ucode)
   * Intel Wireless 4965 firmware, version 228.61.2.24 (iwlwifi-4965-2.ucode)
-  * Intel Wireless 5100, 5300 and 5350 firmware, version 5.4.A.11 (iwlwifi-5000-1.ucode)
   * Intel Wireless 5100, 5300 and 5350 firmware, version 8.24.2.12 (iwlwifi-5000-2.ucode)
   * Intel Wireless 5100, 5300 and 5350 firmware, version 8.83.5.1 (iwlwifi-5000-5.ucode)
   * Intel Wireless 5150 firmware, version 8.24.2.2 (iwlwifi-5150-2.ucode)
   * Intel Wireless 6000 firmware, version 9.221.4.1 (iwlwifi-6000-4.ucode)
   * Intel Wireless 6005 firmware, version 17.168.5.3 (iwlwifi-6000g2a-5.ucode)
-  * Intel Wireless 6030 firmware, version 17.168.5.1 (iwlwifi-6000g2b-5.ucode)
+  * Intel Wireless 6030 firmware, version 18.168.6.1 (iwlwifi-6000g2b-6.ucode)
   * Intel Wireless 6250 firmware, version 9.201.4.1 (iwlwifi-6050-4.ucode)
   * Intel Wireless 6250 firmware, version 41.28.5.1 (iwlwifi-6050-5.ucode)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
@@ -7765,6 +7856,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libavahi-client3
 Status: install ok installed
@@ -7791,17 +7883,16 @@ Package: libc-bin
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 3148
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 1520
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Source: eglibc
-Version: 2.11.3-3artax2
+Version: 2.11.3-4
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Breaks: libc0.1 (<< 2.10), libc0.3 (<< 2.10), libc6 (<< 2.10), libc6.1 (<< 2.10)
 Conffiles:
- /etc/gai.conf bef7187bc7be3830f50ac50727897840
  /etc/bindresvport.blacklist 154db0e55fa99051ff1bd99e5b2c0584
+ /etc/gai.conf bef7187bc7be3830f50ac50727897840
  /etc/ld.so.conf.d/libc.conf d4d833fd095fb7b90e1bb4a547f16de6
 Description: Embedded GNU C Library: Binaries
  This package contains utility programs related to the GNU C Library.
@@ -7815,10 +7906,6 @@ Description: Embedded GNU C Library: Binaries
   * rpcinfo: report RPC information
   * tzselect, zdump, zic: select/dump/compile time zones
 Homepage: http://www.eglibc.org
-Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
-Original-Uploaders: Clint Adams <clint@gnu.org>, Aurelien Jarno <aurel32@debian.org>, Pierre Habouzit <madcoder@debian.org>
-Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
-Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
 
 Package: alsa-base
 Status: install ok installed
@@ -8178,29 +8265,24 @@ Original-Vcs-Git: git://live.debian.net/git/live-config.git
 
 Package: libnspr4-0d
 Status: install ok installed
-Priority: optional
-Section: libs
-Installed-Size: 340
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Priority: extra
+Section: oldlibs
+Installed-Size: 64
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: nspr
-Version: 4.9-1~artax1
-Depends: libc6 (>= 2.4)
-Description: NetScape Portable Runtime Library
- This library provides platform independent non-GUI operating system
- facilities including:
-  * threads,
-  * thread synchronisation,
-  * normal file I/O and network I/O,
-  * interval timing and calendar time,
-  * basic memory management (malloc and free),
-  * shared library linking.
+Version: 2:4.9.2-1~artax1
+Depends: libnspr4 (= 2:4.9.2-1~artax1)
+Description: NetScape Portable Runtime Library - transitional package
+ This is a transitional package to ensure smooth transition of all packages
+ to libnspr4.
 Homepage: http://www.mozilla.org/projects/nspr/
 Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
 Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libice6
 Status: install ok installed
@@ -8227,11 +8309,11 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 1244
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Pre-Depends: debconf | debconf-2.0
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
@@ -8254,6 +8336,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: firefox
 Status: install ok installed
@@ -8339,16 +8422,16 @@ Package: firmware-libertas
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 2188
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 3000
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Replaces: libertas-firmware
 Provides: libertas-firmware
 Suggests: initramfs-tools, linux-image
-Conflicts: libertas-firmware (<< 9.70.7.p0.0-2~)
+Conflicts: libertas-firmware (<< 9.70.7.p0.0-2)
 Description: Binary firmware for Marvell Libertas 8xxx wireless cards
  This package contains the binary firmware for wireless network cards with
  Marvell Libertas 8xxx chips supported by the libertas_cs, libertas_sdio,
@@ -8358,34 +8441,46 @@ Description: Binary firmware for Marvell Libertas 8xxx wireless cards
   * USB8388 'Thinfirm' firmware (lbtf_usb.bin)
   * CF8381 main code (libertas/cf8381.bin)
   * CF8381 boot code (libertas/cf8381_helper.bin)
-  * CF8385 main code (libertas/cf8385.bin, libertas_cs.fw)
-  * CF8385 boot code (libertas/cf8385_helper.bin, libertas_cs_helper.fw)
+  * CF8385 main code (libertas/cf8385.bin)
+  * CF8385 boot code (libertas/cf8385_helper.bin)
+  * libertas/gspi8686.bin
+  * libertas/gspi8686_hlp.bin
   * GSPI8686 main code, version 9.x (libertas/gspi8686_v9.bin)
   * GSPI8686 boot code, version 9.x (libertas/gspi8686_v9_helper.bin)
   * GSPI8688 main code (libertas/gspi8688.bin)
   * GSPI8688 boot code (libertas/gspi8688_helper.bin)
-  * SD8385 main code (libertas/sd8385.bin, sd8385.bin)
-  * SD8385 boot code (libertas/sd8385_helper.bin, sd8385_helper.bin)
-  * SD8686 main code, version 8.x (libertas/sd8686_v8.bin, sd8686.bin)
-  * SD8686 boot code, version 8.x (libertas/sd8686_v8_helper.bin, sd8686_helper.bin)
+  * SD8385 main code (libertas/sd8385.bin)
+  * SD8385 boot code (libertas/sd8385_helper.bin)
+  * SD8686 main code, version 8.x (libertas/sd8686_v8.bin)
+  * SD8686 boot code, version 8.x (libertas/sd8686_v8_helper.bin)
   * SD8686 main code, version 9.x (libertas/sd8686_v9.bin)
   * SD8686 boot code, version 9.x (libertas/sd8686_v9_helper.bin)
-  * SD8688 main code (libertas/sd8688.bin, sd8688.bin)
-  * SD8688 boot code (libertas/sd8688_helper.bin, sd8688_helper.bin)
+  * SD8688 main code (libertas/sd8688.bin)
+  * SD8688 boot code (libertas/sd8688_helper.bin)
   * USB8388 OLPC firmware, version 5.110.22.p23 (libertas/usb8388_olpc.bin)
-  * USB8388 firmware, version 5.x (libertas/usb8388_v5.bin, usb8388.bin)
+  * USB8388 firmware, version 5.x (libertas/usb8388_v5.bin)
   * USB8388 firmware, version 9.x (libertas/usb8388_v9.bin)
   * USB8682 firmware (libertas/usb8682.bin)
+  * libertas_cs.fw
+  * libertas_cs_helper.fw
   * MWL8366 main code (mwl8k/fmimage_8366.fw)
   * MWL8366 AP-mode main code (mwl8k/fmimage_8366_ap-2.fw)
   * MWL8687 main code (mwl8k/fmimage_8687.fw)
   * MWL8366 boot code (mwl8k/helper_8366.fw)
   * MWL8687 boot code (mwl8k/helper_8687.fw)
+  * sd8385.bin
+  * sd8385_helper.bin
+  * sd8686.bin
+  * sd8686_helper.bin
+  * sd8688.bin
+  * sd8688_helper.bin
+  * usb8388.bin
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
 Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libfam0
 Status: install ok installed
@@ -8465,14 +8560,13 @@ Package: libc6
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 9212
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 9360
+Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Source: eglibc
-Version: 2.11.3-3artax2
+Version: 2.11.3-4
 Provides: glibc-2.11-1
-Depends: libc-bin (= 2.11.3-3artax2), libgcc1
+Depends: libc-bin (= 2.11.3-4), libgcc1
 Recommends: libc6-i686
 Suggests: glibc-doc, debconf | debconf-2.0, locales
 Breaks: locales (<< 2.11), locales-all (<< 2.11), nscd (<< 2.11)
@@ -8484,10 +8578,6 @@ Description: Embedded GNU C Library: Shared libraries
  the system. This package includes shared versions of the standard C library
  and the standard math library, as well as many others.
 Homepage: http://www.eglibc.org
-Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
-Original-Uploaders: Clint Adams <clint@gnu.org>, Aurelien Jarno <aurel32@debian.org>, Pierre Habouzit <madcoder@debian.org>
-Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
-Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
 
 Package: libsm6
 Status: install ok installed
@@ -8513,7 +8603,7 @@ Description: X11 Session Management library
  git://anongit.freedesktop.org/git/xorg/lib/libSM
 
 Package: linux-image-3.2.0-3artax1-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 86524
@@ -8522,6 +8612,7 @@ Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
 Version: 3.2.23-1~artax1
+Config-Version: 3.2.23-1~artax1
 Provides: linux-image, linux-modules-3.2.0-3artax1-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -8549,11 +8640,11 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 168
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: firmware-nonfree
-Version: 0.35~artax2
+Version: 0.36~artax1
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Broadcom 802.11 wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -8568,6 +8659,7 @@ Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
 Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxxf86vm1
 Status: install ok installed
@@ -8759,12 +8851,12 @@ Package: libpixman-1-0
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 772
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-issues@lists.progress-linux.org
+Installed-Size: 760
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: pixman
-Version: 0.24.4-1~artax1
+Version: 0.26.0-3~artax1
 Depends: libc6 (>= 2.3)
 Description: pixel-manipulation library for X and cairo
  A library for manipulating pixel regions -- a set of Y-X banded
@@ -8775,6 +8867,7 @@ Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Original-Uploaders: Cyril Brulebois <kibi@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/lib/pixman.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-xorg/lib/pixman
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: iptables
 Status: install ok installed
@@ -9166,10 +9259,10 @@ Installed-Size: 628
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.1.1-P1-15+squeeze6
+Version: 4.1.1-P1-15+squeeze8
 Replaces: dhcp3-client
 Provides: dhcp3-client
-Depends: debianutils (>= 2.8.2), isc-dhcp-common (= 4.1.1-P1-15+squeeze6), iproute, libc6 (>= 2.7)
+Depends: debianutils (>= 2.8.2), isc-dhcp-common (= 4.1.1-P1-15+squeeze8), iproute, libc6 (>= 2.7)
 Suggests: resolvconf, avahi-autoipd
 Conflicts: dhcp-client (<< 3.0), ifupdown (<< 0.6.8+nmu3), resolvconf (<= 1.45), samba-common (<< 3.0.0beta1-2)
 Conffiles:
@@ -9192,14 +9285,15 @@ Description: ISC DHCP client
  Extra documentation can be found in the package isc-dhcp-common.
 
 Package: libglx-nvidia-alternatives
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: non-free/libs
 Installed-Size: 136
 Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 195.36.31-6
+Version: 195.36.31-6squeeze2
+Config-Version: 195.36.31-6
 Depends: dpkg (>= 1.15)
 Breaks: nvidia-glx (<< 195.36.31-3), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18)
 Conflicts: fglrx-driver

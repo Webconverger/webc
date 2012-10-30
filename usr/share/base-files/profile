@@ -10,7 +10,7 @@ if [ "$PS1" ]; then
       . /etc/bash.bashrc
     fi
     if [ "`id -u`" -eq 0 ]; then
-      PS1='\[\033[1;31m\]\u@\H:\w\$ \[\033[0m\]'
+      PS1='\[\033[1;34m\]\u@\H:\w\$ \[\033[0m\]'
     else
       PS1='\[\033[0m\]\u@\H:\w\$ \[\033[0m\]'
     fi
@@ -31,25 +31,26 @@ alias ln="ln -i"
 alias mv="mv -i"
 alias rm="rm -i --preserve-root --one-file-system"
 
+alias cgrep="grep --color=always"
 alias less="less -R"
 alias ls="ls --color=auto"
 
-alias \.\.="cd .."
-alias \.\.\.="cd ../.."
-alias la="ls -al"
 alias ll="ls -l"
+alias la="ls -al"
 
-alias leave="unset HISTORY; unset HISTFILE; logout"
+alias leave="unset HISTORY; unset HISTFILE; exit"
 
 GREP_OPTIONS="--color=auto"
 
-HISTCONTROL="ignoredups"
-HISTIGNORE="[ 	]*"
+HISTCONTROL="ignoredups:ignorespace"
+HISTSIZE="1000"
+HISTFILESIZE="10000"
 
+shopt -s histappend
 shopt -s histverify
 shopt -s cdspell
-shopt -s no_empty_cmd_completion
 shopt -s checkwinsize
+shopt -s no_empty_cmd_completion
 
 if [ -d /etc/profile.d ]; then
   for i in /etc/profile.d/*.sh; do
