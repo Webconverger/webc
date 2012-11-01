@@ -54,6 +54,15 @@ for x in $( cmdline ); do
 		}
 		;;
 
+	hosts=*)
+		hosts="$( /bin/busybox httpd -d ${x#hosts=} )"
+			wget --timeout=5 "${hosts}" -O /etc/hosts
+			if echo $hosts | grep -q whitelist
+			then
+				: > /etc/resolv.conf
+			fi
+		;;
+
 	log=*)
 		log=${x#log=}
 		echo "*.*          @${log}" >> /etc/rsyslog.conf
