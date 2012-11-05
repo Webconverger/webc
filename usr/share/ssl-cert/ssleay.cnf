@@ -10,6 +10,11 @@ default_keyfile         = privkey.pem
 distinguished_name      = req_distinguished_name
 prompt                  = no
 policy			= policy_anything
+req_extensions          = v3_req
+x509_extensions         = v3_req
 
 [ req_distinguished_name ]
 commonName                      = @HostName@
+
+[ v3_req ]
+basicConstraints        = CA:FALSE

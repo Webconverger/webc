@@ -4619,6 +4619,7 @@ Description-da.utf-8: Skal EXTLINUX installeres til MBR?
 Description-de.utf-8: Soll EXTLINUX in den MBR installiert werden?
 Description-es.utf-8: ¿Se debe instalar EXTLINUX en el MBR?
 Description-fr.utf-8: EXTLINUX doit-il être installé sur le secteur d'amorçage ?
+Description-id.utf-8: Apakah EXTLINUX harus dipasang pada MBR?
 Description-it.utf-8: Installare EXTLINUX nel MBR?
 Description-ja.utf-8: EXTLINUX を MBR にインストールしますか?
 Description-ko.utf-8: EXTLINUX를 MBR에 설치합니까?
@@ -4634,6 +4635,7 @@ Extended_description-da.utf-8: Hvis du vælger denne indstilling, vil EXTLINUX a
 Extended_description-de.utf-8: Falls Sie diese Option auswählen, wird EXTLINUX automatisch in den MBR ihrer Festplatte geschrieben. Der aktuelle MBR wird in eine Datei in /boot gesichert.\n\nAndernfalls kann EXTLINUX wie in /usr/share/doc/extlinux/README.Debian beschrieben manuell installiert werden.\n\nAchtung: Die automatische Installation funktioniert derzeit nur dann, wenn die root Partition sich auf der Festplatte befindet, in dessen MBR extlinux installiert werden soll.
 Extended_description-es.utf-8: Si selecciona esta opción, EXTLINUX se escribirá en el MBR de su disco duro. El MBR actual se guardará en un archivo en «/boot».\n\nDe lo contrario, puede configurar EXTLINUX de forma manual tal y como se explica en «/usr/share/doc/extlinux/README.Debian».\n\nNota: Actualmente, la instalación automática sólo funciona si la partición raíz se encuentra en el disco duro en cuyo MBR se debe instalar EXTLINUX.
 Extended_description-fr.utf-8: Si vous choisissez cette option, EXTLINUX sera automatiquement installé sur le secteur d'amorçage (« Master Boot Record ») du disque. Le secteur d'amorçage actuel sera sauvegardé dans un fichier qui sera conservé dans /boot.\n\nAlternativement, vous pouvez installer EXTLINUX vous-même comme décrit dans /usr/share/doc/extlinux/README.Debian.\n\nVeuillez noter que l'installation automatique ne fonctionne que si la partition racine est située sur le disque où le secteur d'amorçage EXTLINUX doit être installé.
+Extended_description-id.utf-8: Jika anda memilih opsi ini, EXTLINUX akan otomatis ditulis pada MBR disk anda. MBR yang ada saat ini akan disimpan ke sebuah berkas di /boot.\n\nJika tidak, EXTLINUX dapat diatur secara manual seperti yang dijelaskan di /usr/share/doc/extlinux/README.Debian.\n\nCatatan: Pemasangan otomatis saat ini hanya bekerja jika partisi root anda terletak pada disk yang akan dipasangi MBR extlinux.
 Extended_description-it.utf-8: Selezionando questa opzione, EXTLINUX sarà scritto automaticamente nel MBR del disco. L'attuale MBR verrà salvato in un file in /boot.\n\nAltrimenti, EXTLINUX può essere installato manualmente come descritto in /usr/share/doc/extlinux/README.Debian.\n\nNota: Attualmente l'installazione automatica funziona solo se la partizione di root è sullo stesso disco nel quale MBR extlinux dovrebbe essere installato.
 Extended_description-ja.utf-8: このオプションを選んだ場合、EXTLINUX がディスクの MBR (マスターブートレコード) に書き込まれます。現在の MBR は /boot にファイルとして保存されます。\n\nこのオプションを選ばない場合は、/usr/share/doc/extlinux/README.Debian に記述されている通りに行えば EXTLINUX の設定ができます。\n\n注意: 現在のところ、自動インストールは extlinux をインストールする先の MBR があるディスクに root パーティションが存在している場合にのみ動作します。
 Extended_description-ko.utf-8: 이 옵션을 선택하면 EXTLINU가 자동으로 당신의 디스크의 MBR에 기록됩니다. 현재 MBR은 /boot 파일에 저장됩니다.\n\n그렇지 않으면 EXTLINUX는 /usr/공유/문서/extlinux/REAEME.Debian 에 설명된 것처럼 수동으로 설치해야 합니다.\n\n참고: 루트파티션이 MBR extlinux가 설치되어있는 디스크에 있다면 현재에서만 자동설치가 작동합니다.
@@ -8439,12 +8441,51 @@ Extended_description-vi.utf-8: ALSA và OSS là hai hệ thống trình điều 
 Type: select
 Owners: linux-sound-base/sound_system
 
+Name: make-ssl-cert/altname
+Description: Alternative name(s):
+Description-bg.utf-8: Алтернативно име/имена:
+Description-ca.utf-8: Nom(s) alternatiu(s):
+Description-cs.utf-8: Alternativní jména:
+Description-da.utf-8: Alternative navne:
+Description-de.utf-8: Alternativ-Name(n):
+Description-es.utf-8: Nombre/s alternativo/s:
+Description-fr.utf-8: Nom(s) supplémentaire(s) :
+Description-it.utf-8: Nomi alternativi:
+Description-nl.utf-8: Alternatieve naam (of namen):
+Description-pl.utf-8: Nazwa alternatywna:
+Description-pt.utf-8: Nome(s) alternativos:
+Description-pt_br.utf-8: Nome(s) alternativo(s):
+Description-ru.utf-8: Дополнительное имя(имена):
+Description-sk.utf-8: Alternatívne názvy:
+Description-sv.utf-8: Alternativa namn:
+Description-zh_cn.utf-8: 候补名称：
+Extended_description: Please enter any additional names to use in the SSL certificate.\n\nIt will become the 'subjectAltName' field of the generated SSL certificate.\n\nMultiple alternative names should be delimited with comma and no spaces. For a web server with multiple DNS names this could look like:\n\nDNS:www.example.com,DNS:images.example.com\n\nA more complex example including a hostname, a WebID, an email address, and an IPv4 address:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-bg.utf-8: Въведете евентуални допълнителни имена, които да се използват в сертификата.\n\nСтойността ще се използва в полето „subjectAltName“ на генерирания сертификат.\n\nАко алтернативните имена са няколко, разделете ги със запетая, без интервали. За уеб-сървър с няколко имена в DNS стойността би изглеждала така:\n\nDNS:www.example.com,DNS:images.example.com\n\nПо-сложен пример, включващ име на хост, WebID, адрес за електронна поща и, адрес по IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-ca.utf-8: Escriviu els noms addicionals per utilitzar en el certificat SSL.\n\nEs farà servir en el camp «subjectAltName» del certificat SSL generat.\n\nCal separar amb comes i sense espais els diversos noms alternatius. Per a un servidor web amb múltiples noms DNS es farà així:\n\nDNS:www.exemple.com,DNS:imatges.exemple.com\n\nUn exemple més complexe, incloent-hi un nom d'amfitrió, un WebID, una adreça de correu i una adreça IPv4:\n\nDNS:exemple.com,URI:http://exemple.com/joe#me,email:me@exemple.com,IP:192.168.7.3
+Extended_description-cs.utf-8: Zadejte případná další jména, která se mají použít v SSL certifikátu.\n\nV certifikátu se tato informace zapíše do pole „subjectAltName“.\n\nVíce alternativních jmen by mělo být odděleno jen čárkou bez mezer. Pro webový server s několika DNS jmény by to mohlo vypadat třeba takto:\n\nDNS:www.example.com,DNS:archiv.example.com\n\nSložitější příklad se jménem počítače, WebID, emailovou adresou a IPv4 adresou:\n\nDNS:example.com,URI:http://example.com/franta#me,email:me@example.com,IP:192.168.7.3
+Extended_description-da.utf-8: Indtast eventuelle yderligere navne der skal bruges i SSL-certifikatet.\n\nDet vil blive feltet »subjectAltName« i det oprettede SSL-certifikat.\n\nFlere alternative navne skal afgrænses med komma og ingen mellemrum. For en internetserver med flere DNS-navne kan det se således ud:\n\nDNS:www.eksempel.com,DNS:billeder.eksempel.com\n\nEt mere kompleks eksempel inluderer et værtsnavn, en WebID, en e-post-adresse og en IPv4-adresse:\n\nDNS:eksempel.com,URI:http://eksempel.com/joe#mig,email:mig@eksempel.com,IP:192.168.7.3
+Extended_description-de.utf-8: Bitte geben Sie jegliche weitere Namen für das Zertifikat ein.\n\nDas wird im Feld »subjectAltName« des erzeugten SSL-Zertifikats verwendet.\n\nMehrere alternative Namen sollten durch Komma getrennt werden, nicht durch Leerzeichen. Für einen Web-Server mit mehreren DNS-Namen könnte dies wie folgt aussehen:\n\nDNS:www.example.com,DNS:images.example.com\n\nEin komplexeres Beispiel, bestehend aus einem Rechnernamen, einer Web-Adresse, einer E-Mail-Adresse und eine IPv4-Adresse:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-es.utf-8: Introduzca cualquier nombre adicional que deba utilizarse en el certificado SSL.\n\nSe utilizará en el campo «subjectAltName» del certificado SSL generado.\n\nDebe separar con comas, no con espacios, los distintos nombres alternativos. Para un servidor web con múltiples nombres DNS ésto podría hacerse, por ejemplo, como:\n\nDNS:www.ejemplo.com,DNS:imagenes.ejemplo.com\n\nA continuación se muestra un ejemplo más complejo que incluye un nombre de equipo, un WebID, una dirección de correo y una dirección IPv4:\n\nDNS:ejemplo.com,URI:http://ejemplo.com/jose#yo,email:yo@ejemplo.com,IP:192.168.7.3
+Extended_description-fr.utf-8: Veuillez indiquer d'éventuels noms d'hôte supplémentaires à utiliser dans le certificat SSL.\n\nCe sera le contenu du champ « subjectAltName » du certificat SSL créé.\n\nDes entrées multiples doivent être délimitées par des virgules, sans espaces. Ainsi, pour un serveur web qui utilise plusieurs noms DNS, cette entrée devrait ressembler à :\n\nDNS:www.example.com,DNS:images.example.com\n\nExemple plus complexe comportant un nom d'hôte, un identifiant web (« WebID »), une adresse électronique et une adresse IPv4 :\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-it.utf-8: Inserire tutti i nomi alternativi da usare nel certificato SSL.\n\nQuesto corrisponderà al campo "subjectAltName" nel certificato SSL generato.\n\nIn caso di due o più nomi alternativi è necessario delimitarli usando una virgola e nessun spazio. Esempio, per un server web con più nomi nel DNS potrebbe assomigliare a questo:\n\nDNS:www.example.com,DNS:images.example.com\n\nUn esempio più complesso che contiene  un nome host, un WebID, un indirizzo mail e un indirizzo IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-nl.utf-8: Welke extra namen wilt u gebruiken voor het SSL-certificaat?\n\nDe naam zal in het 'subjectAltName'-veld komen van het gegenereerde SSL-certificaat.\n\nMeerdere alternatieve namen moeten worden gescheiden door enkel een komma en geen spaties. Voor een webserver met meerdere DNS-namen zou dit er zou uit kunnen zien:\n\nDNS:www.example.com,DNS:images.example.com\n\nEen ingewikkelder voorbeeld bevat een computernaam, een WebID, een e-mailadres en een IPv4-adres:\n\nDNS:example.com,URI:http://example.com/jan#ik,email:ik@example.com,IP:192.168.7.3
+Extended_description-pl.utf-8: Można podać dodatkowe nazwy do certyfikatu SSL.\n\nWpis pojawi się w polu "subjectAltName" wygenerowanego certyfikatu SSL.\n\nWiele nazw alternatywnych powinno być oddzielonych przecinkiem, bez spacji. W przypadku serwera WWW z wieloma nazwami DNS, powinno to wyglądać następująco:\n\nDNS:www.example.com,DNS:images.example.com\n\nBardziej złożony przykład, z nazwą hosta, WebID, adresem poczty elektronicznej i adresem IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-pt.utf-8: Por favor introduza quaisquer nomes adicionais a usar no certificado SSL.\n\nSerá o campo 'subjectAltName' do certificado SSL criado.\n\nVários nomes alternativos devem ser limitados por vírgula e não por espaços. Para um servidor web com vários nomes de DNS isto pode parecer-se com:\n\nDNS:www.example.com,DNS:images.example.com\n\nUm exemplo mais complexo com um nome de máquina, um WebID, um endereço de email e um endereço IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-pt_br.utf-8: Por favor, informe quaisquer nomes adicionais para usar no certificado SSL.\n\nEles se tornarão o campo 'subjectAltName' do certificado SSL gerado.\n\nMúltiplos nomes alternativos devem ser separados por vírgulas e sem espaços. Para um servidor web com múltiplos nomes DNS isso poderia parecer com:\n\nDNS:www.exemplo.com,DNS:imagens.exemplo.com\n\nUm exemplo mais complexo, incluindo um nome de máquina, um WebID, um endereço de e-mail e um endereço IPv4:\n\nDNS:exemplo.com,URI:http://exemplo.com/joe#eu,email:eu@exemplo.com,IP:192.168.7.3
+Extended_description-ru.utf-8: Введите дополнительные имена машины, которые будут использованы в сертификате SSL.\n\nОни будут указаны в поле «subjectAltName» сгенерированного сертификата SSL.\n\nВвод нескольких дополнительных имён производится через запятую без пробелов. Для веб-сервера с несколькими именами DNS это должно выглядеть так:\n\nDNS:www.example.com,DNS:images.example.com\n\nБолее сложный пример с именем узла, WebID, адресом электронной почты и IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-sk.utf-8: Prosím, zadajte akékoľvek ďalšie názvy, ktoré sa použijú v certifikáte SSL.\n\nStane sa poľom „subjectAltName“ vytvoreného certifikátu SSL.\n\nViaceré alternatívne názvy by mali byť oddelené čiarkami a bez medzier. Pre webový server s viacerými názvami v DNS by to mohlo vyzerať takto:\n\nDNS:www.example.com,DNS:images.example.com\n\nKomplexnejší príklad s použitím názvu hostiteľa, WebID, emailovej adresy a adresy IPv4:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-sv.utf-8: Ange ytterligare namn som ska användas i SSL-certifikatet.\n\nDe kommer att placeras i "subjectAltName"-fältet i det genererade SSL-certifikatet.\n\nAlternativa namn separeras med kommatecken, inga mellanslag. För en webbserver med flera DNS-namn kan detta se ut så här:\n\nDNS:www.example.com,DNS:images.example.com\n\nEtt mer komplicerat exempel med ett värdnamn, ett WebID, en e-post-adress och en IPv4-adress:\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Extended_description-zh_cn.utf-8: 请输入要在 SSL 证书中使用的任何附加名称。\n\n它将成为生成的 SSL 证书的 'subjectAltName' 字段。\n\n多个候补名称应该使用逗号分隔，没有空格。对于有多个域名的网页服务器，看起来类似：\n\nDNS:www.example.com,DNS:images.example.com\n\n更复杂的例子包括一个主机名，一个 WebID，一个电子邮件地址以及一个 IPv4 地址：\n\nDNS:example.com,URI:http://example.com/joe#me,email:me@example.com,IP:192.168.7.3
+Type: string
+Owners: make-ssl-cert/altname
+
 Name: make-ssl-cert/hostname
 Default: localhost
 Description: Host name:
 Description-bg.utf-8: Име на хост:
+Description-ca.utf-8: Nom de l'equip:
 Description-cs.utf-8: Jméno počítače:
-Description-da.utf-8: V??rtsnavn:
+Description-da.utf-8: Værtsnavn:
 Description-de.utf-8: Rechnername:
 Description-es.utf-8: Nombre del equipo:
 Description-eu.utf-8: Ostalari-izena:
@@ -8454,6 +8495,7 @@ Description-gl.utf-8: Nome da máquina:
 Description-it.utf-8: Nome host:
 Description-ja.utf-8: ホスト名:
 Description-nl.utf-8: Computernaam:
+Description-pl.utf-8: Nazwa hosta:
 Description-pt.utf-8: Nome da máquina:
 Description-pt_br.utf-8: Nome da máquina:
 Description-ru.utf-8: Имя машины:
@@ -8461,11 +8503,13 @@ Description-sk.utf-8: Názov hostiteľa:
 Description-sv.utf-8: Värdnamn:
 Description-tr.utf-8: Makine İsmi:
 Description-vi.utf-8: Tên máy;
+Description-zh_cn.utf-8: 主机名：
 Extended_description: Please enter the host name to use in the SSL certificate.\n\nIt will become the 'commonName' field of the generated SSL certificate.
 Extended_description-bg.utf-8: Въведете името на хоста.\n\nСтойността ще се използва за полето „commonName“ на генерирания сертификат.
+Extended_description-ca.utf-8: Escriviu el nom del sistema per fer servir en el certificat SSL.\n\nEs farà servir en el camp «commonName» del certificat SSL generat.
 Extended_description-cs.utf-8: Zadejte prosím jméno počítače, které se má použít v SSL certifikátu.\n\nV certifikátu se tato informace zapíše do pole „commonName“.
-Extended_description-da.utf-8: Indtast venligst v??rtsnavnet der skal bruges i SSL-certifikatet.\n\nDet vil blive feltet ??commonName?? i det oprettede SSL-certifikat.
-Extended_description-de.utf-8: Bitte geben Sie den Rechnernamen für das Zertifikat ein.\n\nDas wird im Feld »commonName« des erzeugten SSL-Zertifikats verwendet.
+Extended_description-da.utf-8: Indtast venligst værtsnavnet der skal bruges i SSL-certifikatet.\n\nDet vil blive feltet »commonName« i det oprettede SSL-certifikat.
+Extended_description-de.utf-8: Bitte geben Sie den Rechnernamen für das SSL-Zertifikat ein.\n\nDas wird im Feld »commonName« des erzeugten SSL-Zertifikats verwendet.
 Extended_description-es.utf-8: Introduzca el nombre del sistema para el certificado SSL.\n\nSe utilizará en el campo «commonName» del certificado SSL generado.
 Extended_description-eu.utf-8: Mesedez idatzi SSL ziurtagirian erabiliko den ostalari-izena.\n\nBerau SSL sortutako ziurtagiriko 'commonName' eremuan erabiliko da.
 Extended_description-fi.utf-8: Anna SSL-varmenteessa käytettävä tietokoneen verkkonimi.\n\nTämä tulee luodun SSL-varmenteen kenttään 'commonName'.
@@ -8473,20 +8517,23 @@ Extended_description-fr.utf-8: Veuillez indiquer le nom d'hôte à utiliser dans
 Extended_description-gl.utf-8: Introduza o nome da máquina a empregar no certificado SSL.\n\nHa ser o campo "commonName" do certificado SSL xerado.
 Extended_description-it.utf-8: Inserire il nome host da usare nel certificato SSL.\n\nQuesto corrisponderà al campo "commonName" nel certificato SSL generato.
 Extended_description-ja.utf-8: SSL 証明書で使うホスト名を入力してください。\n\nこれは生成される SSL 証明書内での「commonName」になります。
-Extended_description-nl.utf-8: Welke computernaam wilt u gebruiken voor het SSL-certificaat?\n\nDe naam zal in het 'commonName' veld komen van het gegenereerde SSL-certificaat.
+Extended_description-nl.utf-8: Welke computernaam wilt u gebruiken voor het SSL-certificaat?\n\nDe naam zal in het 'commonName'-veld komen van het gegenereerde SSL-certificaat.
+Extended_description-pl.utf-8: Proszę podać nazwę hosta, która ma zostać użyta w certyfikacie SSL.\n\nPojawi się ona w polu "commonName" wygenerowanego certyfikatu SSL.
 Extended_description-pt.utf-8: Por favor introduza o nome da máquina a usar no certificado SSL.\n\nSerá o campo 'commonName' do certificado SSL que for gerado.
 Extended_description-pt_br.utf-8: Por favor, informe o nome da máquina para uso no certificado SSL.\n\nEle se tornará o campo 'commonName' do certificado SSL gerado.
-Extended_description-ru.utf-8: Введите имя машины, которое будет использовано в сертификате SSL.\n\nОно будет указано в поле 'commonName' сгенерированного сертификата SSL.
+Extended_description-ru.utf-8: Введите имя машины, которое будет использовано в сертификате SSL.\n\nОно будет указано в поле «commonName» сгенерированного сертификата SSL.
 Extended_description-sk.utf-8: Prosím, zadajte názov hostiteľa, ktorý sa použije v SSL certifikáte.\n\nStane sa poľom „commonName“ vytvoreného SSL certifikátu.
-Extended_description-sv.utf-8: Ange värdnamnet som ska användas i SSL-certifikatet.\n\nDet kommer att bli "commonName"-fältet i det genererade SSL-certifikatet.
+Extended_description-sv.utf-8: Ange värdnamnet som ska användas i SSL-certifikatet.\n\nDet kommer att placeras i "commonName"-fältet i det genererade SSL-certifikatet.
 Extended_description-tr.utf-8: SSL sertifikasında kullanılmak üzere bir makine adı girin.\n\nÜretilen SSL sertifikasında 'genel ad' alanında kullanılacak (commonName).
 Extended_description-vi.utf-8: Hãy gõ tên máy cần hiển thị trong chứng nhận SSL.\n\nNó sẽ điền vào trường « commonName » của chứng nhận SSL đã tạo ra.
+Extended_description-zh_cn.utf-8: 请输入要在 SSL 证书中使用的主机名。\n\n这将是生成的 SSL 证书的 'commonName' 字段。
 Type: string
 Owners: make-ssl-cert/hostname
 
 Name: make-ssl-cert/title
 Description: Configure an SSL Certificate.
 Description-bg.utf-8: Настройване на сертификат за SSL.
+Description-ca.utf-8: Configureu un certificat SSL.
 Description-cs.utf-8: Nastavení SSL certifikátu.
 Description-da.utf-8: Konfigurer et SSL-certifikat.
 Description-de.utf-8: SSL-Zertifikat einrichten.
@@ -8495,22 +8542,25 @@ Description-eu.utf-8: Konfiguratu SSL ziurtagiri bat.
 Description-fi.utf-8: Tee SSL-varmenteen asetukset.
 Description-fr.utf-8: Configuration d'un certificat SSL
 Description-gl.utf-8: Configurar un certificado SSL.
-Description-it.utf-8: Configura un certificato SSL.
+Description-it.utf-8: Configurazione di un certificato SSL.
 Description-ja.utf-8: SSL 証明書を設定します。
 Description-nl.utf-8: Een SSL-certificaat configureren.
+Description-pl.utf-8: Konfiguracja certyfikatu SSL
 Description-pt.utf-8: Configurar um certificado SSL.
-Description-pt_br.utf-8: Configurar um Certificado SSL
-Description-ru.utf-8: Настройка SSL сертификата
+Description-pt_br.utf-8: Configurar um Certificado SSL.
+Description-ru.utf-8: Настройка сертификата SSL
 Description-sk.utf-8: Konfigurovať SSL certifikát.
-Description-sv.utf-8: Konfigurera ett SSL-certifikat
+Description-sv.utf-8: Konfigurera ett SSL-certifikat.
 Description-tr.utf-8: Bir SSL sertifikası yapılandır
 Description-vi.utf-8: Cấu hình một chứng nhận SSL.
+Description-zh_cn.utf-8: 配置一个 SSL 证书。
 Type: title
 Owners: make-ssl-cert/title
 
 Name: make-ssl-cert/vulnerable_prng
 Description: Local SSL certificates must be replaced
 Description-bg.utf-8: Локалните сертификати за SSL трябва да бъдат подменени
+Description-ca.utf-8: S'ha de substituir els certificats SSL locals
 Description-cs.utf-8: Místní SSL certifikáty musí být nahrazeny
 Description-da.utf-8: Lokale SSL-certifikater skal erstattes
 Description-de.utf-8: Das lokale SSL-Zertifikat muss ersetzt werden.
@@ -8519,9 +8569,10 @@ Description-eu.utf-8: SSL ziurtagiri lokalak ordeztu egin behar dira
 Description-fi.utf-8: Paikalliset SSL-varmenteet tulee korvata uusilla
 Description-fr.utf-8: Remplacement indispensable des certificats SSL locaux
 Description-gl.utf-8: É preciso substituír algúns certificados SSL locais
-Description-it.utf-8: I certificati SSL locali devono essere sostituiti
+Description-it.utf-8: È necessario sostituire i certificati SSL locali
 Description-ja.utf-8: ローカルの SSL 証明書を入れ替える必要があります
 Description-nl.utf-8: Lokale SSL-certificaten moeten worden vervangen.
+Description-pl.utf-8: Lokalne certyfikaty SSL muszą zostać zastąpione
 Description-pt.utf-8: Os certificados SSL locais têm de ser substituídos
 Description-pt_br.utf-8: Certificados SSL locais devem ser substituídos
 Description-ru.utf-8: Локальные SSL сертификаты должны быть заменены.
@@ -8529,10 +8580,12 @@ Description-sk.utf-8: Lokálne SSL certifikáty je potrebné nahradiť
 Description-sv.utf-8: Lokala SSL-certifikat måste ersättas
 Description-tr.utf-8: Yerel SSL sertifikaları değiştirilmeli
 Description-vi.utf-8: Phải thay thế chứng nhận SSL cục bộ
+Description-zh_cn.utf-8: 必须替换本地 SSL 证书
 Extended_description: A security certificate which was automatically created for your local system needs to be replaced due to a flaw which renders it insecure. This will be done automatically.\n\nIf you don't know anything about this, you can safely ignore this message.
 Extended_description-bg.utf-8: Автоматично генериран сертификат за SSL трябва да бъде подменен заради пропуск, който го прави несигурен. Замяната ще бъде направена автоматично.\n\nАко не разбирате за какво става дума, не обръщайте внимание на това съобщение.
-Extended_description-cs.utf-8: V certifikátu, který byl automaticky vytvořen pro tento systém, byla objevena skupina, která jej činí nepoužitelným. Certifikát musí být nahrazen novým, což se provede automaticky.\n\nPokud nevíte, o čem se tu píše, můžete tuto hlášku jednoduše ignorovat.
-Extended_description-da.utf-8: Et sikkerhedscertifikat som automatisk blev oprettet for dit lokale system skal erstattes p?? grund af en fejl, som g??r certifikatet usikkert. Dette vil blive gjort automatisk.\n\nHvis du intet ved om dette, s?? kan du trygt ignorere denne besked.
+Extended_description-ca.utf-8: El certificat de seguretat generat automàticament per al seu sistema local s'ha de reemplaçar degut a un error que el fa insegur. Aquesta substitució es farà automàticament.\n\nSi no sabeu res sobre això, pot ignorar tranquil·lament aquest missatge.
+Extended_description-cs.utf-8: V certifikátu, který byl automaticky vytvořen pro tento systém, byla objevena slabina, která jej činí nezabezpečeným. Certifikát musí být nahrazen novým, což se provede automaticky.\n\nPokud nevíte, o čem se tu píše, můžete tuto hlášku jednoduše ignorovat.
+Extended_description-da.utf-8: Et sikkerhedscertifikat som automatisk blev oprettet for dit lokale system skal erstattes på grund af en fejl, som gør certifikatet usikkert. Dette vil blive gjort automatisk.\n\nHvis du intet ved om dette, så kan du trygt ignorere denne besked.
 Extended_description-de.utf-8: Ein automatisch für Ihr lokales System erzeugtes Sicherheitszertifikat muss wegen einer Schwachstelle, die es unsicher macht, ersetzt werden. Das geschieht automatisch.\n\nWenn Sie damit nichts anfangen können, ignorieren Sie diese Nachricht einfach.
 Extended_description-es.utf-8: Debe reemplazarse un certificado de seguridad que se creó automáticamente para su sistema local debido a que hay un fallo que lo hace inseguro. Esto se realizará automáticamente.\n\nPuede ignorar con tranquilidad este mensaje si no sabe nada de esto.
 Extended_description-eu.utf-8: Zure sistema lokalean sortutako segurtasun ziurtagiri bat ordeztu egin behar da ziurtasunik gabe uzten duen akats bat dela eta. Hau automatikoki egingo da.\n\nHoni buruz ezer ez badakizu mezu hau baztertu dezakezu.
@@ -8542,6 +8595,7 @@ Extended_description-gl.utf-8: É necesario substituír un certificado de seguri
 Extended_description-it.utf-8: È necessario sostituire un certificato di sicurezza creato automaticamente per il sistema locale che, a causa di un difetto, non è sicuro. Questa operazione verrà eseguita automaticamente.\n\nSe non si conosce a cosa si sta facendo riferimento, è possibile ignorare questo messaggio.
 Extended_description-ja.utf-8: ローカルシステム用に自動的に作成されたセキュリティ証明書ですが、安全ではない状態で生成された問題のため、入れ替えを行う必要があります。なお、これは自動的に実行されます。\n\nこれが何についての説明なのかが分からない場合は、メッセージを無視して構いません。
 Extended_description-nl.utf-8: Een automatisch aangemaakt veiligheidscertificaat voor uw lokale systeem moet worden vervangen vanwege een fout die het onveilig maakt. Dit gebeurt automatisch.\n\nU kunt dit bericht veilig negeren, als u niet weet waar het hier over gaat.
+Extended_description-pl.utf-8: Certyfikat bezpieczeństwa, który był utworzony automatycznie do tego systemu, musi zostać zastąpiony, ze względu na wadę, która spowodowała, że nie jest on bezpieczny. Stanie się to automatycznie.\n\nJeśli ta wiadomość nie jest jasna, można ją bezpiecznie zignorować.
 Extended_description-pt.utf-8: Um certificado de segurança que foi criado automaticamente para o seu sistema local precisa de ser substituído devido a uma falha que o torna inseguro. Isto será feito automaticamente.\n\nSe não sabe nada sobre este assunto, pode ignorar esta mensagem em segurança.
 Extended_description-pt_br.utf-8: Um certificado de segurança que foi criado automaticamente para seu sistema local precisa ser substituído devido a uma falha que o torna inseguro. Isto será feito automaticamente.\n\nSe você não sabe nada sobre isto, você pode ignorar seguramente esta mensagem.
 Extended_description-ru.utf-8: Сертификат безопасности, который был автоматически создан для вашей локальной системы, требуется заменить из-за ошибок в программе создания. Это будет сделано автоматически.\n\nЕсли вы не понимаете о чём речь, то можете просто не обращать внимание на это сообщение.
@@ -8549,6 +8603,7 @@ Extended_description-sk.utf-8: Bezpečnostný certifikát, ktorý bol automatick
 Extended_description-sv.utf-8: Ett certifikat som tagits fram för ditt lokala system måste bytas ut då det är osäkert. Detta kommer att göras automatiskt.\n\nOm du inte vet något om det här så kan du ignorera detta meddelande.
 Extended_description-tr.utf-8: Lokal sistemi için otomatik olarak yaratılmış bir güvenlik sertifikasının, bu sertifikayı güvensiz kılan bir kusur nedeniyle değiştirilmesi gerekiyor. Bu işlem otomatik olarak gerçekleştirilecektir.\n\nBunun hakkında herhangi birşey bilmiyorsanız, bu mesajı gözardı edebilirsiniz.
 Extended_description-vi.utf-8: Một chứng nhận bảo mật mà được tự động tạo cho hệ thống cục bộ này cần phải được thay thế do một lỗi gây ra nó không an toàn. Sự thay thế này sẽ được tự động thực hiện.\n\nChưa biết gì về vấn đề này thì bạn có thể lờ đi thông điệp này một cách an toàn.
+Extended_description-zh_cn.utf-8: 为本地系统自动生成的安全证书需要被替换，因为一个缺陷使其变得不安全。这将自动完成。\n\n如果您不了解这些内容，可以安全地忽略此信息。
 Type: note
 Owners: make-ssl-cert/vulnerable_prng
 
