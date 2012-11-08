@@ -2,7 +2,7 @@
 # reset webc after $1 minutes idle
 #
 # BUGS:
-# * Dependent on Iceweasel
+# * Dependent on Firefox
 # * Changes on a form / scroll position on the homepage, won't reset kiosk since we are only working from homepage title
 # Perhaps look into a layer utilising https://developer.mozilla.org/en/nsIIdleService
 source "/etc/webc/functions.sh"
@@ -42,7 +42,7 @@ idle_too_long() {
 
 page_title ()
 {
-	xwininfo -root -tree | grep Navigator | grep -v '"Iceweasel":' | awk -F\" '{print $2}'
+	xwininfo -root -tree | grep Navigator | grep -v '"Mozilla Firefox":' | awk -F\" '{print $2}'
 }
 
 page_get_default() {
