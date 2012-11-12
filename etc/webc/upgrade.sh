@@ -6,13 +6,11 @@ cmdline_has debug && set -x
 
 upgrade() {
 
-# Get the revision we're currently running as given on the
-# cmdline. Get it now, so we can be sure it's taken from
-# /proc/cmdline, not /etc/webc/cmdline.
-current_git_revision=$(cmdline_get git-revision)
-
-# If no git-revision was given on the commandline, default to HEAD
-test -n "$current_git_revision" || current_git_revision=$(git --git-dir "${git_repo}" rev-parse HEAD)
+# webc.conf exports the currently mounted git revision
+if test -z "$current_git_revision"; then
+	logs "No current revision found, not running git-fs? Skipping upgrade"
+	return
+fi
 
 # See to what we should be updating. fetch_revision is
 # the revision we should fetch from the git server (it

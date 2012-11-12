@@ -96,15 +96,8 @@ install_extlinux() {
 
 	git_repo=/live/image/live/filesystem.git
 
-	if cmdline_has git-revision
-	then
-		git_revision=$(cmdline_get git-revision)
-	else
-		git_revision=$(git --git-dir "${git_repo}" rev-parse HEAD)
-	fi
-
 	# Extract kernel and initrd and generate extlinux config
-	generate_installed_config "${dir}" "${git_repo}" "${git_revision}"
+	generate_installed_config "${dir}" "${git_repo}" "${current_git_revision}"
 }
 
 install_root() {
@@ -121,6 +114,10 @@ then
 
 	clear_screen
 	cmdline_has debug && _logs "debug has been enabled"
+
+	# webc.conf exports the currently mounted git revision
+	test -n "$current_git_revision" || _err "No current revision found, not running git-fs?"
+
 	disk=$( find_disk )
 	partition_disk $disk
 	verify_partition $disk
