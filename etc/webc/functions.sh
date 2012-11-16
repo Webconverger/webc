@@ -144,9 +144,9 @@ generate_live_config()
 		extract_kernel "${dir}/live" "${_FLAVOUR}" "${_NUMBER}" "${git_repo}" "${git_revision}" || continue
 
 		sed -e "s|@FLAVOUR@|${_FLAVOUR}|g" \
-		    -e "s|@KERNEL@|/live/vmlinuz${_NUMBER}|g" \
+		    -e "s|@LINUX@|/live/vmlinuz${_NUMBER}|g" \
 		    -e "s|@INITRD@|/live/initrd${_NUMBER}.img|g" \
-		    -e "s|@LB_BOOTAPPEND_LIVE@|${bootparams}|g" \
+		    -e "s|@APPEND_LIVE@|${bootparams}|g" \
 		"${dir}/boot/live.cfg.in" >> "${dir}/boot/live.cfg"
 	done
 }
