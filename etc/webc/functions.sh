@@ -37,6 +37,17 @@ mac_address()
 	done
 }
 
+
+usb_serials() {
+for i in /sys/bus/usb/devices/*/serial
+do
+	for j in $(dirname $i)/*/host*/target*/*/block/sd*
+	do
+		test -e "$j" && cat $i
+	done
+done
+}
+
 # http://stackoverflow.com/questions/11827252
 wait_for()
 {

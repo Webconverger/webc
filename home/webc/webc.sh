@@ -168,6 +168,7 @@ do
 	done
 
 	mac=$( mac_address )
+	usbid=$( usb_serials | head -n1 )
 
 	if test -x /opt/firefox/firefox
 	then
@@ -184,10 +185,10 @@ do
 		if cmdline_has noptirun || ! pidof bumblebeed
 		then
 			logs "FF (re)start"
-			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
+			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,USBID,$usbid,g" )
 		else
 			logs "FF optirun (re)start"
-			optirun /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g")
+			optirun /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,USBID,$usbid,g")
 		fi
 	fi
 done
