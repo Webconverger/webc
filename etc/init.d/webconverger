@@ -34,6 +34,7 @@ do
 		http_proxy=*)
 		# http://developer.mozilla.org/en/docs/Mozilla_Networking_Preferences#Proxy
 		echo "http_proxy=${x#http_proxy=}" >> /etc/environment
+		export HTTP_PROXY=${x#http_proxy=}
 		HOST_PORT=${HTTP_PROXY##*//}
 		PROXY_HOST=${HOST_PORT%%:*}
 		PROXY_PORT=${HOST_PORT##*:}
