@@ -77,7 +77,7 @@ do
 		# http://webconverger.org/touch_screen_calibration/
 		xinput=*)
 			option=$( /bin/busybox httpd -d ${x#xinput=} )
-			if xinput "$option"
+			if eval xinput "$option"
 			then
 				logs "OK: xinput $option"
 			else
