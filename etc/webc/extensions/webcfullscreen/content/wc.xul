@@ -7,9 +7,9 @@
 
 <script src="wc.js"/>
 
-<menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
-<menuitem id="menu_preferences" disabled="true"/>
-</menubar>
+        <menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
+              <menuitem id="menu_preferences" disabled="true"/>
+        </menubar>
 
   <commandset id="mainCommandSet">
     <command id="cmd_newNavigator" disabled="true"/>
@@ -34,6 +34,7 @@
     <command id="Browser:SavePage" disabled="true"/>
     <command id="Browser:SaveFrame" disabled="true"/>
     <command id="Browser:SendLink" disabled="true"/>
+    <command id="Browser:ShowAllHistory" disabled="true"/>
     <command id="cmd_pageSetup" disabled="true"/>
     <command id="cmd_close" disabled="true"/>
     <command id="cmd_closeWindow" disabled="true"/>
@@ -49,14 +50,12 @@
     <command id="cmd_paste"  disabled="false"/>
     <command id="cmd_delete" disabled="false"/>
     <command id="cmd_selectAll" disabled="true"/>
-    <command id="cmd_switchTextDirection" disabled="true"/>
+    <command id="cmd_switchTextDirection" disabled="false"/>
     <command id="View:PageSource" disabled="true"/>
     <command id="View:PageInfo" disabled="true"/>
     <command id="View:FullScreen" disabled="true"/>
-    <command id="cmd_find" disabled="true"/>
-    <command id="cmd_findAgain" disabled="true"/>
-    <command id="cmd_findPrevious" disabled="true"/>
     <command id="Browser:AddBookmarkAs" disabled="true"/>
+    <command id="Browser:ShowAllBookmarks" disabled="true"/>
     <command id="Browser:BookmarkAllTabs" disabled="true"/>
     <command id="Browser:Home"    oncommand="BrowserHome();"/>
     <command id="Browser:Back" disabled="true"/>
@@ -64,28 +63,28 @@
     <command id="Browser:Stop" disabled="true"/>
     <command id="Browser:Reload" disabled="true"/>
     <command id="Browser:ReloadSkipCache" disabled="true"/>
-    <command id="cmd_fullZoomReduce" disabled="true"/>
-    <command id="cmd_fullZoomEnlarge" disabled="true"/>
-    <command id="cmd_fullZoomReset" disabled="true"/>
-    <command id="cmd_fullZoomToggle" disabled="true"/>
-    <command id="cmd_textZoomReduce" disabled="true"/>
-    <command id="cmd_textZoomEnlarge" disabled="true"/>
+    <command id="cmd_textZoomReduce" disabled="false"/>
+    <command id="cmd_textZoomEnlarge" disabled="false"/>
     <command id="cmd_textZoomReset" disabled="false"/>
     <command id="Browser:OpenLocation" disabled="true"/>
     <command id="Tools:Search" disabled="true"/>
     <command id="Tools:Downloads" disabled="true"/>
+    <command id="Tools:WebConsole" disabled="true"/>
     <command id="Download:Manager" disabled="true"/>
     <command id="Tools:Addons" disabled="true"/>
     <command id="Tools:Sanitize" disabled="true"/>
     <command id="History:UndoCloseTab" disabled="true"/>
+	<command id="Tools:PrivateBrowsing" oncommand=""/>
+	<command id="Tools:ErrorConsole" oncommand=""/>
   </commandset>
 
   <keyset id="mainKeyset">
 
+
     <key id="restart" keycode="VK_F10" oncommand="goQuitApplication();"/>
 
     <key id="key_newNavigator" disabled="true"/>
-    <key id="key_newNavigatorTab" disabled="true"/>
+    <key id="key_newNavigatorTab" disabled="false"/>
     <key id="focusURLBar" disabled="true"/>
     <key id="focusURLBar2" disabled="true"/>
     <key id="key_search" disabled="true"/>
@@ -107,21 +106,41 @@
     <key id="goHome" keycode="VK_HOME" command="Browser:Home" modifiers="alt"/>
     <key id="key_fullScreen" disabled="true"/>
     <key id="key_viewSource" disabled="true"/>
-    <key id="key_find" disabled="true"/>
-    <key id="key_findAgain" disabled="true"/>
-    <key id="key_findPrevious" disabled="true"/>
+
+    <key id="key_webConsole" disabled="true"/>
+    <key id="key_inspect" disabled="true"/>
+    <key id="key_debugger" disabled="true"/>
+    <key id="key_scratchpad" disabled="true"/>
+    <key id="key_styleeditor" disabled="true"/>
+    <key id="key_openAddons" disabled="true"/>
+
     <key id="addBookmarkAsKb" disabled="true"/>
+    <key id="manBookmarkKb" disabled="true"/>
+    <key id="showAllHistoryKb" disabled="true"/>
     <key id="bookmarkAllTabsKb" disabled="true"/>
-    <key id="key_stop" disabled="true"/>
     <key id="key_textZoomReduce" disabled="true"/>
     <key id="key_textZoomEnlarge" disabled="true"/>
     <key id="key_textZoomReset" disabled="true"/>
     <key id="key_switchTextDirection" disabled="true"/>
     <key id="key_sanitize" disabled="true"/>
-    <key id="key_undoCloseTab" disabled="true"/>
+    <key id="key_undoCloseTab" disabled="false"/>
     <key id="key_gotoHistory" command="doNothing();"/>
     <key id="viewBookmarksSidebarKb" command="doNothing();"/>
     <key id="viewBookmarksSidebarWinKb" command="doNothing();"/>
+	<key id="key_errorConsole" oncommand=""/>
   </keyset>
 
+<tabs id="tabbrowser-tabs" ondragstart="event.preventDefault();event.stopPropagation();"/>
+
+<box id="identity-box" onclick="" onkeypress="" ondragstart=""/>
+
+<menuitem id="menu_tabview" hidden="true"/>
+<menuseparator id="alltabs-popup-separator" hidden="true"/>
+<key id="key_tabview" command=""/>
+<menupopup id="contentAreaContextMenu">
+<menuseparator id="inspect-separator" style="display: none;"/>
+<menuseparator id="context-sep-viewsource" style="display: none;"/>
+<menuitem id="context-inspect" style="display: none;"/>
+<menuitem id="javascriptConsole" style="display: none;"/>
+</menupopup>
 </overlay>
