@@ -17,3 +17,6 @@ pref("app.update.auto", false);
 pref("app.update.enabled", false);
 
 pref("keyword.URL", "https://duckduckgo.com/?t=webconverger&q=");
+
+pref("general.config.obscure_value", 0);
+pref("general.config.filename", "mozilla.cfg");
