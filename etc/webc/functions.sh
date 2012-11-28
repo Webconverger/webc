@@ -192,20 +192,18 @@ generate_installed_config()
 	# Extract the kernel and initrd from git
 	extract_kernel "${dir}/live" "${flavour}" "" "${git_repo}" "${git_revision}" || return 1
 
+	cmdline_has noescape && noescape="noescape 1"
+
 	# Generate global extlinux config file
 	cat<<EOF > ${dir}/boot/extlinux/extlinux.conf
 default linux
 prompt 0
-
-include linux.cfg
-EOF
-
-	# Generate config entry to boot our selected flavour
-	cat<<EOF > ${dir}/boot/extlinux/linux.cfg
+${noescape}
 label linux
-	linux    /live/vmlinuz
-	append   initrd=/live/initrd.img ${bootparams}
+linux    /live/vmlinuz
+append   initrd=/live/initrd.img ${bootparams}
 EOF
+
 }
 
 # vim: set sw=8 sts=8 noexpandtab:
