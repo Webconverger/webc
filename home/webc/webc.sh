@@ -10,10 +10,9 @@ else
 	logs x11 config not found
 fi
 
-cp /home/webc/bg-orig.png /home/webc/bg.png
-
 if test "$(cmdline_get chrome)" = neon
 then
+	neon="-neon"
 	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
 	xsetroot -solid black
 else
@@ -21,15 +20,17 @@ else
 	xsetroot -solid white
 fi
 
+cp /home/webc/bg-orig${neon}.png /home/webc/bg.png
+
 if ! has_network
 then
-	update_background /etc/webc/no-net.png
+	update_background /etc/webc/no-net${neon}.png
 	while ! has_network && ! cmdline_has debug; do
 		sleep 1
 	done
 fi
 
-cmdline_has noconfig || update_background /etc/webc/configuring.png
+cmdline_has noconfig || update_background /etc/webc/configuring${neon}.png
 
 # if there is a network, then I don't see why /etc/webc/id should not be there
 while ! test -e /etc/webc/id; do
@@ -180,15 +181,21 @@ do
 		done
 		fi
 
-		# IDEA: Log process accounts ? http://stackoverflow.com/questions/1853884
-
 		if cmdline_has noptirun || ! pidof bumblebeed
 		then
 			logs "FF (re)start"
-			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,USBID,$usbid,g" )
+			/opt/firefox/firefox $(echo $homepage | 
+			sed "s,MACID,$mac,g" | 
+			sed "s,WEBCID,$webc_id,g" | 
+			sed "s,WEBCVERSION,$webc_version,g" | 
+			sed "s,USBID,$usbid,g" )
 		else
 			logs "FF optirun (re)start"
-			optirun /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,USBID,$usbid,g")
+			optirun /opt/firefox/firefox $(echo $homepage | 
+			sed "s,MACID,$mac,g" | 
+			sed "s,WEBCID,$webc_id,g" | 
+			sed "s,WEBCVERSION,$webc_version,g" | 
+			sed "s,USBID,$usbid,g" )
 		fi
 	fi
 done
