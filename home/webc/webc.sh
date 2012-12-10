@@ -10,8 +10,11 @@ else
 	logs x11 config not found
 fi
 
+wm="/usr/bin/dwm.web" # default
+
 if test "$(cmdline_get chrome)" = neon
 then
+	wm="/usr/bin/dwm.neon" # special version to show version/id info on top bar
 	neon="-neon"
 	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
 	xsetroot -solid black
@@ -46,7 +49,6 @@ mkfifo "$live_config_pipe"
 read answer < "$live_config_pipe" # blocking till live-config is finished
 rm -f "$live_config_pipe"
 
-wm="/usr/bin/dwm.web" # defaults
 xset s on
 xset s blank
 xset s 600
@@ -173,6 +175,9 @@ do
 
 	if test -x /opt/firefox/firefox
 	then
+
+		xsetroot -name "$webc_version $webc_id"
+
 		if ! cmdline_has noclean
 		then
 		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
