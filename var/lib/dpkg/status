@@ -345,7 +345,7 @@ Section: libs
 Installed-Size: 1588
 Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
 Architecture: i386
-Version: 2.7.8.dfsg-2+squeeze5
+Version: 2.7.8.dfsg-2+squeeze6
 Depends: libc6 (>= 2.7), zlib1g (>= 1:1.2.3.3.dfsg)
 Recommends: xml-core
 Description: GNOME XML library
@@ -4562,7 +4562,7 @@ Installed-Size: 488
 Maintainer: Jay Berkenbilt <qjb@debian.org>
 Architecture: i386
 Source: tiff
-Version: 3.9.4-5+squeeze6
+Version: 3.9.4-5+squeeze7
 Depends: libc6 (>= 2.3), libjpeg62 (>= 6b1), zlib1g (>= 1:1.1.4)
 Description: Tag Image File Format (TIFF) library
  libtiff is a library providing support for the Tag Image File Format
@@ -7111,19 +7111,20 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6868
-Origin: debian
-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
-Bugs: debbugs://bugs.debian.org
+Installed-Size: 6696
+Origin: progress-linux
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
-Version: 1.15.8.13
-Pre-Depends: libbz2-1.0, libc6 (>= 2.6), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), coreutils (>= 5.93-1), xz-utils
+Version: 1.15.8.13-0artax1
+Provides: dpkg-lzip
+Pre-Depends: libbz2-1.0, libc6 (>= 2.6), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), coreutils (>= 5.93-1), lzip, xz-utils
 Suggests: apt
 Breaks: apt (<< 0.7.7), aptitude (<< 0.4.7-1), dpkg-dev (<< 1.15.8), libdpkg-perl (<< 1.15.8), pinfo (<< 0.6.9-3.1), tkinfo (<< 2.8-3.1)
 Conffiles:
- /etc/dpkg/dpkg.cfg f4413ffb515f8f753624ae3bb365b81b
- /etc/logrotate.d/dpkg 782ea5ae536f67ff51dc8c3e2eeb4cf9
  /etc/cron.daily/dpkg b6b8dc21210ea50db7cc4636f521758f
+ /etc/logrotate.d/dpkg 782ea5ae536f67ff51dc8c3e2eeb4cf9
+ /etc/dpkg/dpkg.cfg f4413ffb515f8f753624ae3bb365b81b
  /etc/alternatives/README 69c4ba7f08363e998e0f2e244a04f881
 Description: Debian package management system
  This package provides the low-level infrastructure for handling the
@@ -7131,6 +7132,11 @@ Description: Debian package management system
  .
  For Debian package development tools, install dpkg-dev.
 Homepage: http://wiki.debian.org/Teams/Dpkg
+Original-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+Original-Uploaders: Guillem Jover <guillem@debian.org>, Raphaël Hertzog <hertzog@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=dpkg/dpkg.git
+Original-Vcs-Git: git://git.debian.org/git/dpkg/dpkg.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libpcre3
 Status: install ok installed
@@ -7897,16 +7903,18 @@ Package: libc-bin
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 1520
-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Installed-Size: 3148
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: eglibc
-Version: 2.11.3-4
+Version: 2.11.3-4artax1
 Replaces: libc0.1, libc0.3, libc6, libc6.1
+Pre-Depends: dpkg-lzip
 Breaks: libc0.1 (<< 2.10), libc0.3 (<< 2.10), libc6 (<< 2.10), libc6.1 (<< 2.10)
 Conffiles:
- /etc/bindresvport.blacklist 154db0e55fa99051ff1bd99e5b2c0584
  /etc/gai.conf bef7187bc7be3830f50ac50727897840
+ /etc/bindresvport.blacklist 154db0e55fa99051ff1bd99e5b2c0584
  /etc/ld.so.conf.d/libc.conf d4d833fd095fb7b90e1bb4a547f16de6
 Description: Embedded GNU C Library: Binaries
  This package contains utility programs related to the GNU C Library.
@@ -7920,6 +7928,11 @@ Description: Embedded GNU C Library: Binaries
   * rpcinfo: report RPC information
   * tzselect, zdump, zic: select/dump/compile time zones
 Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Original-Uploaders: GOTO Masanori <gotom@debian.org>, Jeff Bailey <jbailey@raspberryginger.com>, Daniel Jacobowitz <dan@debian.org>, Clint Adams <schizo@debian.org>, Aurelien Jarno <aurel32@debian.org>, Pierre Habouzit <madcoder@debian.org>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: alsa-base
 Status: install ok installed
@@ -8574,13 +8587,15 @@ Package: libc6
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 9360
-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Installed-Size: 9212
+Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
+Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: eglibc
-Version: 2.11.3-4
+Version: 2.11.3-4artax1
 Provides: glibc-2.11-1
-Depends: libc-bin (= 2.11.3-4), libgcc1
+Depends: libc-bin (= 2.11.3-4artax1), libgcc1
+Pre-Depends: dpkg-lzip
 Recommends: libc6-i686
 Suggests: glibc-doc, debconf | debconf-2.0, locales
 Breaks: locales (<< 2.11), locales-all (<< 2.11), nscd (<< 2.11)
@@ -8592,6 +8607,11 @@ Description: Embedded GNU C Library: Shared libraries
  the system. This package includes shared versions of the standard C library
  and the standard math library, as well as many others.
 Homepage: http://www.eglibc.org
+Original-Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
+Original-Uploaders: GOTO Masanori <gotom@debian.org>, Jeff Bailey <jbailey@raspberryginger.com>, Daniel Jacobowitz <dan@debian.org>, Clint Adams <schizo@debian.org>, Aurelien Jarno <aurel32@debian.org>, Pierre Habouzit <madcoder@debian.org>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libsm6
 Status: install ok installed
@@ -9163,14 +9183,14 @@ Package: libpcsclite1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 112
+Installed-Size: 72
 Maintainer: Ludovic Rousseau <rousseau@debian.org>
 Architecture: i386
 Source: pcsc-lite
-Version: 1.5.5-4
-Depends: libc6 (>= 2.3.6-6~)
-Suggests: pcscd
-Conflicts: libpcsclite-dev (<< 1.5.5-4), pcscd (<< 1.5.5-4)
+Version: 1.8.4-1~bpo60+1
+Depends: libc6 (>= 2.4)
+Suggests: pcscd (= 1.8.4-1~bpo60+1)
+Breaks: libpcsclite-dev (<< 1.8.4-1~bpo60+1), pcscd (<< 1.8.4-1~bpo60+1)
 Description: Middleware to access a smart card using PC/SC (library)
  The purpose of PC/SC Lite is to provide a Windows(R) SCard interface
  in a very small form factor for communicating to smartcards and
