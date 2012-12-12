@@ -1,3 +1,8 @@
 #!/bin/sh
+. "/etc/webc/functions.sh"
+. "/etc/webc/webc.conf"
 
-exec /usr/bin/X -nolisten tcp >/home/webc/.xerrors.xserver 2>&1
+# Cursor not needed for touch screen displays
+cmdline_has hidecursor && cursor='-nocursor'
+
+exec /usr/bin/X $cursor -nolisten tcp >/home/webc/.xerrors.xserver 2>&1
