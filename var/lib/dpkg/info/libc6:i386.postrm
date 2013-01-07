@@ -1,0 +1,43 @@
+#! /bin/sh
+set -e
+
+if [ "$1" = remove ]; then
+    if command -v suidunregister >/dev/null 2>&1 && [ -e /etc/suid.conf ]; then
+	if [ -x /usr/lib/pt_chown ]; then
+	    suidunregister -s libc6 /usr/lib/pt_chown
+	elif [ -x /usr/libexec/pt_chown ]; then
+	    suidunregister -s libc6 /usr/libexec/pt_chown
+	fi
+    fi
+    ARCH=${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)}
+    if [ "${ARCH}" = "i386" ]; then
+	if [ -f /lib32/ld-linux.so.2 ] && [ ! -f /lib/ld-linux.so.2 ]; then
+	    ln -sf /lib32/ld-linux.so.2 /lib/ld-linux.so.2
+	elif [ -h /lib/ld-linux.so.2 ] && [ ! -f /lib/ld-linux.so.2 ]; then
+	    rm /lib/ld-linux.so.2
+	fi
+    fi
+fi
+
+if [ "$1" = deconfigure ]; then
+    :; # blah, do something useful with ldso
+fi
+
+#if [ "$1" = purge ]; then
+#    update-rc.d mountkernfs remove > /dev/null
+#fi
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+# Automatically added by dh_makeshlibs
+if [ "$1" = "remove" ]; then
+	ldconfig
+fi
+# End automatically added section
+
+
+exit 0

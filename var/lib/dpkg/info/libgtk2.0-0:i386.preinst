@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+# remove /usr/share/doc symlinks as it's a directory since 2.12.5-2
+pkg=libgtk2.0-0
+oldsymtarget=libgtk2.0-common
+if [ "$1" = upgrade ] && [ -L /usr/share/doc/$pkg ] && [ $oldsymtarget = "$(readlink /usr/share/doc/$pkg)" ]; then
+    rm -f /usr/share/doc/$pkg
+fi
+
+
+

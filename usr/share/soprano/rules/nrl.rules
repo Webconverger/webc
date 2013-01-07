@@ -1,0 +1,11 @@
+#------------------------------------------------------------------
+# NRL rule set v0.1.
+# This is a basic NRL (Nepomuk Representation Language) ruleset
+#------------------------------------------------------------------
+
+PREFIX nrl: <http://www.semanticdesktop.org/ontologies/2007/08/15/nrl/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+[nrl1: (?p rdf:type nrl:TransitiveProperty), (?x ?p ?y), (?y ?p ?z) -> (?x ?p ?z)]
+[nrl2: (?p rdf:type nrl:SymmetricProperty), (?x ?p ?y) -> (?y ?p ?x)]
+[nrl3: (?a nrl:inverseProperty ?b), (?x ?a ?y) -> (?y ?b ?x)]

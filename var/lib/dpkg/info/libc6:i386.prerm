@@ -1,0 +1,70 @@
+#!/bin/sh
+set -e
+export LC_ALL=C
+
+type=$1
+if [ "x$2" != "xin-favour" ]; then
+    preversion=$2
+fi
+
+restore_lib64_symlink() {
+# Downgrading from a version with a /lib64 directory to a version with
+# a /lib64 symlink is extremely dangerous.  We need to move the
+# directory aside and restore the symlink, otherwise the dynamic
+# linker gets lost after unpacking the replacing version.
+
+    ldfile=$(readlink -e /lib/ld-linux.so.2)
+    # Test if libc is of the same architecture as coreutils
+    # If not, they almost surely have a multiarch system and we can use
+    # the native ELF interpreter
+    if ! $ldfile /bin/true 2>/dev/null; then
+	interpreter=
+    else
+	interpreter=$ldfile
+    fi
+
+    # Create the symlink in /lib again
+    cp -a /lib/ld-linux.so.2 /lib/
+
+    # sync before and after the operation to reduce the danger of hosing
+    # the system
+    sync
+    # See if they have anything in /lib64 besides the ELF interpreter.
+    # If yes, move the directory aside so they can restore it later,
+    # otherwise we just remove it.
+    if ls -1A /lib64 | grep -vq "^$(basename /lib/ld-linux.so.2)$"; then
+	echo "Warning: /lib64 not empty during libc downgrade, renaming it to /lib64.eglibc-old"
+	mv /lib64 /lib64.eglibc-old
+    else
+	rm -rf /lib64
+    fi
+
+    $interpreter /bin/ln -s /lib /lib64
+    sync
+}
+
+
+
+
+if [ "$type" = upgrade ]; then
+    if dpkg --compare-versions "$preversion" lt 2.13-17; then
+	if ! test -L /lib64; then
+	    case ${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)} in
+		amd64 | ppc64 | sparc64)
+		    restore_lib64_symlink ;;
+	    esac
+	fi
+    fi
+fi
+
+if [ -n "$preversion" ]; then
+    if dpkg --compare-versions "$preversion" lt 2.13-5; then
+        # downgrading from a multiarch libc to a pre-multiarch libc; we have
+        # to blow away /etc/ld.so.cache, otherwise the old unpacked libc
+        # is still first in the cache and segfaults when combined with
+        # our newly-unpacked ld.so. 
+        rm -f /etc/ld.so.cache
+    fi
+fi
+
+exit 0

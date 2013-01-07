@@ -1,0 +1,43 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Scripts
+## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+Gnome_panel_data ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-panel-data.list ] || \
+	   [ -e /var/lib/live/config/gnome-panel-data ]
+	then
+		return
+	fi
+
+	echo -n " gnome-panel-data"
+
+	# Reading kernel command line
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.username=*|username=*)
+				LIVE_USERNAME="${_PARAMETER#*username=}"
+				;;
+		esac
+	done
+
+	Configure_gnome_panel_data
+}
+
+Configure_gnome_panel_data ()
+{
+	sudo -u "${LIVE_USERNAME}" gconftool-2 -s -t bool /apps/panel/global/disable_lock_screen true
+
+	# Creating state file
+	touch /var/lib/live/config/gnome-panel-data
+}
+
+Gnome_panel_data

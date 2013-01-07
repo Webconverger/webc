@@ -1,0 +1,23 @@
+#! /bin/sh
+# preinst script for pciutils
+
+set -e
+
+case "$1" in
+install|upgrade)
+	for ext in new neww old
+	do
+		rm -f /var/lib/pciutils/pci.ids.$ext
+	done
+	;;
+abort-upgrade)
+	;;
+*)
+	echo "preinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
+esac
+
+
+
+exit 0

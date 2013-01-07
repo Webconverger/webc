@@ -1,0 +1,20 @@
+#!/bin/sh -e
+
+RUNDIR=$(udevadm info --run || exit 0)
+
+[ -d $RUNDIR ] || exit 0
+mkdir -p $RUNDIR/rules.d/
+
+[ ! -e $RUNDIR/rules.d/61-dev-root-link.rules ] || exit 0
+
+eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/ || true)
+
+[ "$ROOT_MAJOR" -a "$ROOT_MINOR" ] || exit 0
+
+# btrfs filesystems have bogus major/minor numbers
+[ "$ROOT_MAJOR" != 0 ] || exit 0
+
+echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' \
+    > $RUNDIR/root-link-rule
+mv $RUNDIR/root-link-rule $RUNDIR/rules.d/61-dev-root-link.rules
+

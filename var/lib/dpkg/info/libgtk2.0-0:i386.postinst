@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+
+IMMODULES_DIR=/usr/lib/i386-linux-gnu/gtk-2.0/2.10.0/immodules
+IMMODULES_DIR_OLD=/usr/lib/gtk-2.0/2.10.0/immodules
+
+if [ "$1" = triggered ]; then
+    for trigger in $2; do
+        if ! [ -d $trigger ]; then
+            continue
+        fi
+        case $trigger in
+          $IMMODULES_DIR|$IMMODULES_DIR_OLD)
+            # This is triggered everytime an application installs a
+            # GTK immodule loader
+            /usr/lib/i386-linux-gnu/libgtk2.0-0/gtk-query-immodules-2.0 \
+                $(find $IMMODULES_DIR $IMMODULES_DIR_OLD -name *.so 2> /dev/null) \
+            > /usr/lib/i386-linux-gnu/gtk-2.0/2.10.0/gtk.immodules || true
+            ;;
+        esac
+    done
+    exit 0
+fi
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+
+
+# Also handle the initial installation
+if [ -d $IMMODULES_DIR ] || [ -d $IMMODULES_DIR_OLD ]; then
+     /usr/lib/i386-linux-gnu/libgtk2.0-0/gtk-query-immodules-2.0 \
+         $(find $IMMODULES_DIR $IMMODULES_DIR_OLD -name *.so 2> /dev/null) \
+     > /usr/lib/i386-linux-gnu/gtk-2.0/2.10.0/gtk.immodules || true
+fi
+
