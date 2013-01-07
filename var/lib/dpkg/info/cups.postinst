@@ -36,13 +36,6 @@ if [ "$1" = configure ]; then
 	addgroup --system lpadmin
     fi
 
-    if [ -L /usr/share/ppd/cups-transitional-dir ]; then
-	rm -f /usr/share/ppd/cups-transitional-dir
-    fi
-    if [ -L /usr/share/cups/model/cups-included ]; then
-	rm -f /usr/share/cups/model/cups-included
-    fi
-    
     # set up custom PPD directory
     chown root:lpadmin /usr/share/ppd/custom 2>/dev/null || true
     chmod 3775 /usr/share/ppd/custom 2>/dev/null || true
@@ -84,23 +77,39 @@ EOF
     fi
     # Set up backends
     db_get cupsys/backend && SELECTED=$RET
-    list=`echo $SELECTED | sed -e 's/, /,/g'`
+    # We remove the scsi backend from the output as it got removed in CUPS 1.5.0
+    list=`echo $SELECTED | sed -e 's/, /,/g' | sed -e 's/scsi,*//g' | sed -e 's/parallel,*//g' | sed -e 's/serial,*//g'`
+    if dpkg --compare-versions "$2" lt-nl "1.5.3-2.1"; then
+        # Make sure the above dropped backends are effectively away
+ 	for i in scsi parallel serial; do
+		# Drop the file if it doesn't belong to any package.
+		dpkg -S /usr/lib/cups/backend/$i 2>/dev/null 1>&2 || rm -f /usr/lib/cups/backend/$i 
+	done
+	if ! echo $list | grep -q "\bipp14\b"; then
+	    list=`echo $list | sed -e 's/\bipp\b/ipp,ipp14/g'`
+	fi
+    fi
     save_IFS=$IFS
     IFS=,
-    (cd /usr/lib/cups/backend && rm -f http ipp lpd parallel scsi serial socket usb snmp dnssd)
+    (cd /usr/lib/cups/backend && rm -f http https ipp ipp14 ipps lpd socket usb snmp dnssd mdns)
     for module in $list; do
       ln /usr/lib/cups/backend-available/$module /usr/lib/cups/backend/$module
       if [ "$module" = "ipp" ]; then
 	ln /usr/lib/cups/backend/ipp /usr/lib/cups/backend/http
+	ln /usr/lib/cups/backend/ipp /usr/lib/cups/backend/https
+	ln /usr/lib/cups/backend/ipp /usr/lib/cups/backend/ipps
+      fi
+      if [ "$module" = "dnssd" ]; then
+	ln /usr/lib/cups/backend/dnssd /usr/lib/cups/backend/mdns
       fi
     done
     IFS=$save_IFS
 
     # activate new backends on upgrades
     db_fset cupsys/backend changed false
-    
+
     # Resync Debconf database with real state
-    list=`( cd /usr/lib/cups/backend && for f in ipp lpd parallel scsi serial socket usb snmp dnssd; do [ -e $f ] && echo -n "$f, "; done ) | sed -e 's/, $//'`
+    list=`( cd /usr/lib/cups/backend && for f in ipp ipp14 lpd socket usb snmp dnssd; do [ -e $f ] && echo -n "$f, "; done ) | sed -e 's/, $//'`
     db_set cupsys/backend $list;
 
     if [ -f /etc/cups/classes.conf ]; then
@@ -118,14 +127,15 @@ EOF
 	  -a ! -h /etc/cups/ssl/server.key ]; then
 	 ln -s /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/cups/ssl/server.crt
 	 ln -s /etc/ssl/private/ssl-cert-snakeoil.key /etc/cups/ssl/server.key
-    fi 
+    fi
 
     APP_PROFILE=/etc/apparmor.d/usr.sbin.cupsd
     if [ -f "$APP_PROFILE" ]; then
         # Add the local/ include
         LOCAL_APP_PROFILE=/etc/apparmor.d/local/usr.sbin.cupsd
 
-        test -e "$LOCAL_APP_PROFILE" || {
+        [ -e "$LOCAL_APP_PROFILE" ] || \
+        [ -e /etc/apparmor.d/local -a ! -d /etc/apparmor.d/local ] || {
             tmp=`mktemp`
         cat <<EOM > "$tmp"
 # Site-specific additions and overrides for usr.sbin.cupsd.
@@ -142,20 +152,14 @@ EOM
         fi
     fi
 
-    # init.d priority transition
-    if dpkg --compare-versions "$2" le-nl "1.3.9-15"; then
-	for l in 2 3 4 5; do
-	    old=/etc/rc${l}.d/S20cups
-	    new=/etc/rc${l}.d/S50cups
-	    if [ -e "$old" ] && [ ! -e "$new" ]; then
-		mv "$old" "$new"
-	    fi
-	done
-    fi
-
     # Clear cache if we upgrade to 1.4.x
     if dpkg --compare-versions "$2" lt-nl "1.4.1-5"; then
 	rm /var/cache/cups/* 2> /dev/null || :
+    fi
+
+    # Clear PPD cache if we upgrade to 1.5.x
+    if dpkg --compare-versions "$2" lt-nl "1.5.0-3"; then
+	rm /var/cache/cups/ppds.dat 2> /dev/null || :
     fi
 
     # Manage printcap file and associated symlinks
@@ -176,82 +180,104 @@ EOM
 	fi
     fi
 
-    # Clean up after some broken cups-pdf versions
-    if dpkg --compare-versions "$2" lt-nl "1.4.4-1"; then
-	chmod 755 /usr/lib/cups/backend /usr/lib/cups/backend-available
+    if dpkg --compare-versions "$2" lt "1.5.3-2.1"; then
+        modprobe -b usblp >/dev/null 2>&1 || :
     fi
 fi
 
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/cups" ]; then
 	update-rc.d cups start 50 2 3 4 5 . stop 80 1 . >/dev/null
-	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-		invoke-rc.d cups start || exit $?
-	else
-		/etc/init.d/cups start || exit $?
-	fi
+	invoke-rc.d cups start || exit $?
 fi
 # End automatically added section
-# Automatically added by dh_usrlocal
-if [ "$1" = configure ]; then
-(
-	while read line; do
-		set -- $line
-		dir="$1"; mode="$2"; user="$3"; group="$4"
-		if [ ! -e "$dir" ]; then
-			if mkdir "$dir" 2>/dev/null; then
-				chown "$user":"$group" "$dir"
-				chmod "$mode" "$dir"
-			fi
-		fi
-	done
-) << DATA
-/usr/local/share 2775 root staff
-/usr/local/share/ppd 2775 root staff
-DATA
-fi
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.3-2.1~ -- "$@"
 # End automatically added section
 
+
+# ppd_updater is supposed to be launched only with a running CUPS.
+ppd_updater () {
+	driverregexp="$1"
+	gennicknameregexp="$2"
+
+	[ ! -z "$gennicknameregexp" ] && \
+	    gennicknameregexp="; $gennicknameregexp"
+	gennicknameregexp='s/\s*\(recommended\)//'"$gennicknameregexp"
+	tmpfile1=`mktemp -t updateppds.XXXXXX`
+	tempfiles="$tempfiles $tmpfile1"
+	grep -E $driverregexp $tmpfile0 > $tmpfile1 || :
+	cd /etc/cups/ppd
+	for ppd in *.ppd; do
+	    [ -r "$ppd" ] || continue
+	    queue=${ppd%.ppd}
+	    lpstat -h /var/run/cups/cups.sock -p "$queue" >/dev/null 2>&1 || continue
+	    nickname=`grep '\*NickName:' "$ppd" | cut -d '"' -f 2 | perl -p -e 's/\n$//' | perl -p -e "$gennicknameregexp" | perl -p -e 's/(\W)/\\\\$1/g'`
+	    lang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
+	    ppdfound="0"
+	    englishppduri=""
+	    tmpfile2=`mktemp -t updateppds.XXXXXX`
+	    tempfiles="$tempfiles $tmpfile2"
+	    cat $tmpfile1 | perl -p -e "$gennicknameregexp; s/\n*$/\n/s" | grep -E '^\S+\s+.*'"$nickname"'$' | cut -d ' ' -f 1 > $tmpfile2
+	    while read newppduri; do
+		[ "$ppdfound" = "0" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $newppduri 2>/dev/null || continue
+		newlang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
+		[ "$newlang" = "$lang" ] && ppdfound="1"
+		[ "$newlang" = "english" ] && englishppduri="$newppduri"
+	    done < $tmpfile2
+	    [ "$ppdfound" = "0" ] && [ ! -z "$englishppduri" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $englishppduri 2>/dev/null && ppdfound="1"
+	    [ "$ppdfound" = "1" ] && echo PPD for printer $queue updated >&2
+	done
+	return 0
+}
 
 # Do the following only if CUPS is running and the needed CUPS tools
 # are available
-if [ "$1" = configure ] && \
-	which lpstat > /dev/null 2>&1 && \
+if which lpstat > /dev/null 2>&1 && \
 	which lpinfo > /dev/null 2>&1 && \
 	which lpadmin > /dev/null 2>&1 && \
-    LC_ALL=C lpstat -h /var/run/cups/cups.sock -r | grep -v not > /dev/null 2>&1; then
-    # Update the PPD files of all already installed print queues
-    driverregexp='lsb/usr/cups-included/|drv:///sample.drv/'
-    gennicknameregexp='s/,\s*\d+\.\d+[\d\.]*$//i'
-    [ ! -z "$gennicknameregexp" ] && \
-	gennicknameregexp="; $gennicknameregexp"
-    gennicknameregexp='s/\s*\(recommended\)//'"$gennicknameregexp"
-    tempfiles=
-    trap 'rm -f $tempfiles; exit 0' 0 HUP INT QUIT ILL ABRT PIPE TERM
-    tmpfile1=`mktemp -t updateppds.XXXXXX`
-    tempfiles="$tempfiles $tmpfile1"
-    lpinfo -h /var/run/cups/cups.sock -m | grep -E $driverregexp > $tmpfile1
-    cd /etc/cups/ppd
-    for ppd in *.ppd; do
-	[ -r "$ppd" ] || continue
-	queue=${ppd%.ppd}
-	lpstat -h /var/run/cups/cups.sock -p "$queue" >/dev/null 2>&1 || continue
-	nickname=`grep '\*NickName:' "$ppd" | cut -d '"' -f 2 | perl -p -e 's/\n$//' | perl -p -e "$gennicknameregexp" | perl -p -e 's/(\W)/\\\\$1/g'`
-	lang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
-	ppdfound="0"
-	englishppduri=""
-	tmpfile2=`mktemp -t updateppds.XXXXXX`
-	tempfiles="$tempfiles $tmpfile2"
-	cat $tmpfile1 | perl -p -e "$gennicknameregexp" | grep -i "$nickname"'$' | cut -d ' ' -f 1 > $tmpfile2
-	while read newppduri; do
-	    [ "$ppdfound" = "0" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $newppduri 2>/dev/null || continue
-	    newlang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
-	    [ "$newlang" = "$lang" ] && ppdfound="1"
-	    [ "$newlang" = "english" ] && englishppduri="$newppduri"
-	done < $tmpfile2
-	[ "$ppdfound" = "0" ] && [ ! -z "$englishppduri" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $englishppduri 2>/dev/null && ppdfound="1"
-	[ "$ppdfound" = "1" ] && echo PPD for printer $queue updated >&2
-    done
+	LC_ALL=C lpstat -h /var/run/cups/cups.sock -r | grep -v not > /dev/null 2>&1; then
+
+	tempfiles=
+	trap 'rm -f $tempfiles; exit 0' 0 HUP INT QUIT ILL ABRT PIPE TERM
+	tmpfile0=`mktemp -t updateppds.XXXXXX`
+	tempfiles="$tempfiles $tmpfile0"
+
+	lpinfo -h /var/run/cups/cups.sock -m > $tmpfile0
+
+	if [ "$1" = configure ] ; then
+		# Update CUPS included drivers' queues
+		echo "Updating PPD files for cups ..."
+		ppd_updater 'lsb/usr/cups-included/|drv:///sample.drv/' 's/,\s*\d+\.\d+[\d\.]*$//i'
+	fi
+	if [ "$1" = triggered ] || [ "$1" = configure ] ; then
+		# Update external drivers' queues.
+		# 
+		# We log the modification dates of the file in 
+		# /usr/share/cups/ppd-updaters/* after updating the PPDs 
+		# according to them. These dates are more or less the creation
+		# dates of the driver packages. Then we only update the PPDs of
+		# packages, where the /usr/share/cups/ppd-updaters/* file has a
+		# modification date different to the logged date as this means
+		# that a fresh /usr/share/cups/ppd-updaters/* file and
+		# therefore a fresh package got installed. This avoids updating
+		# of PPDs when the corresponding package was not changed.
+	        logfile=/var/cache/cups/ppd-updates
+		touch $logfile
+		for driverfile in `ls /usr/share/cups/ppd-updaters`; do
+		        driver=`echo $driverfile | perl -p -e 's/\.ppd-updater$//' | perl -p -e 's/^printer-driver-//'`
+			modtime=`ls -l --time-style=+%s /usr/share/cups/ppd-updaters/$driverfile | perl -p -e 's/^\s*\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(\S+)\s+(\S+)\s*$/$1\n/'`
+			oldmodtime=`cat $logfile | grep " $driver$" | cut -d ' ' -f 1`
+			if [ "$modtime" != "$oldmodtime" ]; then
+				echo "Updating PPD files for $driver ..."
+				. /usr/share/cups/ppd-updaters/${driverfile}
+				ppd_updater "${DRIVER_REGEXP}" "${GENNICKNAME_REGEXP}"
+				cat $logfile | grep -v " $driver$" > $logfile.new || touch $logfile.new
+				echo "$modtime $driver" >> $logfile.new
+				mv $logfile.new $logfile
+			fi
+		done
+	fi
 fi
 
 db_stop

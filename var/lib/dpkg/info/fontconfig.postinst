@@ -9,29 +9,10 @@ if [ "$1" = triggered ]; then
   exit 0
 fi
 
-if [ "$1" = configure ]; then
-  # If defoma is installed, ensure Defoma subst file exists, with some default substitutions
-    if [ -x "`which defoma-subst`" ]; then
-	if ! defoma-subst check-rule fontconfig; then
-	    defoma-subst new-rule fontconfig \
-		'serif --GeneralFamily,* Roman --Shape Serif Upright --Weight Medium' \
-		'sans-serif --GeneralFamily,* SansSerif --Shape NoSerif Upright --Weight Medium' \
-		'monospace --Width,* Fixed --GeneralFamily,2 Typewriter --Shape Upright --Weight Medium'
-	fi
-    fi
-fi
-
-# Automatically added by dh_installdefoma
-if [ "$1" = "configure" ]; then
-	if [ -x "`which defoma-app 2>/dev/null`" ]; then
-		defoma-app update fontconfig
-	fi
-fi
-# End automatically added section
   
 
 if [ "$1" = configure ]; then
-  if dpkg --compare-versions "$2" lt 2.4.0-1; then
+  if dpkg --compare-versions "$2" lt-nl 2.4.0-1; then
   printf "Cleaning up old fontconfig caches... "
   for dir in /usr/share/fonts /var/lib/defoma/fontconfig.d /usr/X11R6/lib/X11/fonts /usr/local/share/fonts ; do
   	if [ -d $dir ]; then

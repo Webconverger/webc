@@ -18,11 +18,12 @@ FSCK_LOGFILE=/var/log/fsck/checkfs
 . /lib/init/vars.sh
 
 . /lib/lsb/init-functions
-. /lib/init/splash-functions-base
-. /lib/init/usplash-fsck-functions.sh
 . /lib/init/swap-functions.sh
 
 do_start () {
+	# Trap SIGINT so that we can handle user interupt of fsck.
+	trap "" INT
+
 	# See if we're on AC Power.  If not, we're not gonna run our
 	# check.  If on_ac_power (in /usr/) is unavailable, behave as
 	# before and check all file systems needing it.
@@ -75,7 +76,7 @@ do_start () {
 			spinner=""
 			;;
 		esac
-		[ "$(uname -m)" = s390 ] && spinner=""  # This should go away
+		[ "$(uname -m)" = s390x ] && spinner=""  # This should go away
 		FSCKTYPES_OPT=""
 		[ "$FSCKTYPES" ] && FSCKTYPES_OPT="-t $FSCKTYPES"
 		handle_failed_fsck() {
@@ -95,21 +96,14 @@ Continuing with system boot in 5 seconds."
 		if [ "$VERBOSE" = no ]
 		then
 			log_action_begin_msg "Checking file systems"
-			if usplash_running; then
-			    PROGRESS_FILE=`mktemp` || exit 1
-			    set -m
-			    logsave -s $FSCK_LOGFILE fsck -C3 -R -A $fix $force $FSCKTYPES_OPT >/dev/console 2>&1 3>$PROGRESS_FILE &
-			    set +m
-			    usplash_progress "$PROGRESS_FILE"
-			    rm -f $PROGRESS_FILE
-			else
-			    splash_start_indefinite
-			    logsave -s $FSCK_LOGFILE fsck $spinner -R -A $fix $force $FSCKTYPES_OPT
-			    FSCKCODE=$?
-			    splash_stop_indefinite
-			fi
+			logsave -s $FSCK_LOGFILE fsck $spinner -R -A $fix $force $FSCKTYPES_OPT
+			FSCKCODE=$?
 
-			if [ "$FSCKCODE" -gt 1 ]
+			if [ "$FSCKCODE" -eq 32 ]
+			then
+				log_action_end_msg 1 "code $FSCKCODE"
+				log_warning_msg "File system check was interrupted by user"
+			elif [ "$FSCKCODE" -gt 1 ]
 			then
 				log_action_end_msg 1 "code $FSCKCODE"
 				handle_failed_fsck
@@ -123,11 +117,12 @@ Continuing with system boot in 5 seconds."
 			else
 				log_action_msg "Will now check all file systems"
 			fi
-			splash_start_indefinite
 			logsave -s $FSCK_LOGFILE fsck $spinner -V -R -A $fix $force $FSCKTYPES_OPT
 			FSCKCODE=$?
-			splash_stop_indefinite
-			if [ "$FSCKCODE" -gt 1 ]
+			if [ "$FSCKCODE" -eq 32 ]
+			then
+				log_warning_msg "File system check was interrupted by user"
+			elif [ "$FSCKCODE" -gt 1 ]
 			then
 				handle_failed_fsck
 			else

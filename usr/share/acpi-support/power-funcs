@@ -1,97 +1,140 @@
 # a micro library of helper functions for the power scripts
 
-umask 022;
+umask 022
 
-PATH="$PATH:/usr/bin/X11"
-POWERSTATE="/var/lib/acpi-support/powerstate"
+PATH=$PATH:/usr/bin/X11
+POWERSTATE=/var/lib/acpi-support/powerstate
 
-# getXuser gets the X user belonging to the display in $displaynum.
-# If you want the foreground X user, use getXconsole!
-
+# getXuser: get the user for the specified X display, or if none is
+# specified, then the user for whatever X display we find.
+# input: $displaynum: the X display to query
+# output: $XAUTHORITY: the path to the xauth data used for connecting to the
+#                      detected X display.
+#         $XUSER: the username of the user who owns the display.
 getXuser() {
-	user=`pinky -fw | awk '{ if ($2 == "?:'$displaynum'" || $(NF) == ":'$displaynum'" || $2 == "?:'$displaynum'.0" || $(NF) == ":'$displaynum'.0"  ) { print $1; exit; } }'`
+	local plist display uid user startx pid userhome IFS
 
-	if [ x"$user" = x"" ]; then
-		startx=`pgrep -n startx`
-		if [ x"$startx" != x"" ]; then
-			user=`ps -o user --no-headers $startx`
-		fi
-	fi
-	if [ x"$user" != x"" ]; then
-        	userhome=`getent passwd $user | cut -d: -f6`
-        	export XAUTHORITY=$userhome/.Xauthority
+	if [ "$displaynum" ]; then
+		display=:$displaynum
 	else
-		export XAUTHORITY=""
+		display=.+
+	fi
+
+	user=
+	if [ -x /usr/bin/ck-list-sessions ]; then
+		uid=$(ck-list-sessions | awk 'BEGIN { unix_user = ""; } /^Session/ { unix_user = ""; } /unix-user =/ { gsub(/'\''/,"",$3); unix_user = $3; } /x11-display = '\'$display\''/ { print unix_user; exit (0); }')
+
+		if [ "$uid" ]; then
+			IFS=:
+			set -- $(getent passwd $uid)
+			user=$1
+			unset IFS
+		fi
+	else
+		plist=$(pinky -fw) || pwf_error "pinky lost"
+		while read l; do
+			set -- $l
+			eval lastpp=\$$#
+			for ds in $2 $lastpp; do
+				case $ds in
+					$display)
+						user=$1
+						break
+						;;
+				esac
+			done
+			[ -z "$user" ] || break
+			for ds in $2 $lastpp; do
+				case $ds in
+					$display.0)
+						user=$1
+						break
+						;;
+				esac
+			done
+			[ -z "$user" ] || break
+		done <<-EOF
+			$plist
+		EOF
+	fi
+
+	if [ -z "$user" ]; then
+		startx=$(pgrep -n startx || :)
+		[ -z "$startx" ] || user=$(ps -o user --no-headers $startx || :)
+	fi
+
+	if [ x"$user" != x ]; then
+        	for pid in `ps -U $user -o pid=`; do
+			if grep -z -q XAUTHORITY /proc/$pid/environ; then
+				export `grep -z XAUTHORITY /proc/$pid/environ`
+				break
+			fi
+		done
+		if [ -z $XAUTHORITY ]; then
+			eval userhome=~$user
+			export XAUTHORITY=$userhome/.Xauthority
+		fi
+	else
+		export XAUTHORITY=
 	fi
 	export XUSER=$user
 }
 
-# getXconsole gets the foreground (console) X user
+# getXconsole: get the information for the active X console, if any.
+# 	calls getXuser to get information related to the logged-in user.
+# input: none
+# output: $XAUTHORITY: the path to the xauth data used for connecting to the
+#                      detected X display.
+#         $DISPLAY: the X display
+#         $XUSER: the username of the user who owns the display.
 getXconsole() {
-	console=`fgconsole`;
-	displaynum=`ps t tty$console | sed -n -re 's,.*/X .*:([0-9]+).*,\1,p'`
-	if [ x"$displaynum" != x"" ]; then
-		export DISPLAY=":$displaynum"
+	local displaynum
+
+	displaynum=$(ck-list-sessions | awk 'BEGIN { active = 0; } /^Session/ { active = 0; } /active = TRUE/ { active = 1; } active && /x11-display = '\':.+\''/ { gsub(/'\':*'/,"",$3); print $3; exit (0); }')
+
+	if [ "$displaynum" ]; then
+		export DISPLAY=:$displaynum
 		getXuser
 	fi
 }
 
-ac_adapters() {
-    for x in /sys/class/power_supply/*; do
-       if [ -d "$x" ] ; then
-            read type < $x/type
-            test "$type" = "Mains" && echo $x
-        fi
-    done
-}
-
+# getState side effect: sets global variable STATE
 getState() {
-	# Run through all power supply information. If we have only one that is online,
-        # then we are on AC power. If we find no power supplies at all, then we assume
-        # that we are on a desktop machine without power supply information and we are
-        # actually on AC.
-        ONLINE_POWER_SUPPLY_PRESENT=0
-	POWER_SUPPLY_PRESENT=0
-
-        for x in $(ac_adapters); do
-            POWER_SUPPLY_PRESENT=1
-            if grep -q 1 $x/online ; then
-                ONLINE_POWER_SUPPLY_PRESENT=1
-            fi
-        done
-
-        for x in /proc/acpi/ac_adapter/*; do
-            if [ -d "$x" ] ; then
-                POWER_SUPPLY_PRESENT=1
-                if grep -q on-line $x/state ; then
-                    ONLINE_POWER_SUPPLY_PRESENT=1
-                fi
-            fi
-        done
-        if [ $POWER_SUPPLY_PRESENT = 1 ] && [ $ONLINE_POWER_SUPPLY_PRESENT = 0 ] ; then
-		STATE="BATTERY";
+        /usr/bin/on_ac_power
+        if [ $? -eq 1 ]; then
+                STATE=BATTERY
         else
-                STATE="AC"
+                STATE=AC
         fi
 }
-        
+
 #check our state has actually changed
 checkStateChanged() {
+	local OLDSTATE
+
 # do we have our state stashed?
+# XXX:	if vaiable STATE is unset, set it to the null string
+	: ${STATE=${STATE:-}}
+# XXX:	make sure variable STATE has a non-null value
+	[ "$STATE" ] || getState
         if [ -f "$POWERSTATE" ]; then
-                OLDSTATE=$(cat $POWERSTATE) 
+# XXX:	unset or empty variable STATE and an existing but empty POWERSTATE file
+#	and the function will probably have undesired side effects
+                read OLDSTATE <$POWERSTATE || :
                 if [ "$STATE" = "$OLDSTATE" ]; then
                        exit 0
                 else
 #stash the new state
+# XXX:	unset or empty variable STATE, will create an empty POWERSTATE file
                         echo "$STATE" > $POWERSTATE
                 fi
         else
 #we need to stash the new state
+# XXX:	unset or empty variable STATE, will create an empty POWERSTATE file
                 echo "$STATE" > $POWERSTATE
         fi
 }
 
 HDPARM='/sbin/hdparm -q'
 
-LIDSTATE='/var/lib/acpi-support/lidstate'
+LIDSTATE=/var/lib/acpi-support/lidstate

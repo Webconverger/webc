@@ -345,6 +345,28 @@ dicts to try finding a match for \"LC_ALL\" or \"LANG\"."
       (debian-ispell-try-lang-equiv (getenv "LANG")   debian-hunspell-equivs-alist)))
 
 ;; ---------------------------------------------------------------------------
+;; Make sure otherchars are read as chars in proper encoding. ispell.el may
+;; change later casechars and not-casechars to 'utf8 and we need to do this.
+;; This function will be called from (debian-ispell-initialize-dicts-alist),
+;; run from 'ispell-initialize-spellchecker-hook. We cannot do the filtering
+;; from this file, on startup it is read before dictionaries alists.
+;; ---------------------------------------------------------------------------
+(defun debian-ispell-preprocess-dicts-alist (dicts-alist)
+  (let (tmp-dicts-alist)
+    (dolist (adict dicts-alist)
+      (add-to-list 'tmp-dicts-alist
+		   (list
+		    (nth 0 adict)  ; dict name
+		    (nth 1 adict)  ; casechars
+		    (nth 2 adict)  ; not-casechars
+		    (decode-coding-string (nth 3 adict) (nth 7 adict)) ; otherchars
+		    (nth 4 adict)  ; many-otherchars-p
+		    (nth 5 adict)  ; ispell-args
+		    (nth 6 adict)  ; extended-character-mode
+		    (nth 7 adict))))
+    tmp-dicts-alist))
+
+;; ---------------------------------------------------------------------------
 ;; Make sure the correct installed dicts alist is used for each spellchecker
 ;; This hook will be run after each change in `ispell-program-name'
 ;; ---------------------------------------------------------------------------
@@ -374,11 +396,12 @@ dicts to try finding a match for \"LC_ALL\" or \"LANG\"."
 	       ispell-dictionary))
 
     (setq ispell-base-dicts-override-alist
-	  (if really-aspell
-	      debian-aspell-only-dictionary-alist
-	    (if really-hunspell
-		debian-hunspell-only-dictionary-alist
-	      debian-ispell-only-dictionary-alist)))
+	  (debian-ispell-preprocess-dicts-alist
+	   (if really-aspell
+	       debian-aspell-only-dictionary-alist
+	     (if really-hunspell
+		 debian-hunspell-only-dictionary-alist
+	       debian-ispell-only-dictionary-alist))))
     (setq debian-ispell-valid-dictionary-list
 	  (mapcar 'car ispell-base-dicts-override-alist))
     (debian-ispell-set-startup-menu 'force)))

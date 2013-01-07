@@ -20,7 +20,7 @@ BEGIN {
 	no warnings;
 	eval q{ use Text::WrapI18N; use Text::CharWidth };
 	use warnings;
-	if (! $@) {
+	if (! $@ && Text::CharWidth::mblen("a") == 1) {
 		*wrap = *Text::WrapI18N::wrap;
 		*columns = *Text::WrapI18N::columns;
 		*width = *Text::CharWidth::mbswidth;

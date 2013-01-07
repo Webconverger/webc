@@ -10,16 +10,28 @@
 RUN="no"
 
 if [ "$RUN" = "yes" ]; then
-	echo `date`: entering dhclient-exit-hooks.d, dumping variables. \
+	echo $(date): entering ${0%/*}, dumping variables. \
 		>> /tmp/dhclient-script.debug
 
-	for i in reason interface medium alias_ip_address new_ip_address \
-			new_subnet_mask new_domain_name new_domain_search \
-			new_domain_name_servers new_routers new_static_routes \
-			old_ip_address old_subnet_mask old_domain_name \
-			old_domain_search old_domain_name_servers old_routers \
-			old_static_routes; do
-		echo $i=\'${!i}\' >> /tmp/dhclient-script.debug
+	# loop over the 4 possible prefixes: (empty), cur_, new_, old_
+	for prefix in '' 'cur_' 'new_' 'old_'; do
+		# loop over the DHCP variables passed to dhclient-script
+		for basevar in reason interface medium alias_ip_address \
+			       ip_address host_name network_number subnet_mask \
+			       broadcast_address routers static_routes \
+			       rfc3442_classless_static_routes \
+			       domain_name domain_search domain_name_servers \
+			       netbios_name_servers netbios_scope \
+			       ntp_servers \
+			       ip6_address ip6_prefix ip6_prefixlen \
+			       dhcp6_domain_search dhcp6_name_servers ; do
+			var="${prefix}${basevar}"
+
+			# show only variables with values set
+			if [ -n "${!var}" ]; then
+				echo "$var='${!var}'" >> /tmp/dhclient-script.debug
+			fi
+		done
 	done
 
 	echo '--------------------------' >> /tmp/dhclient-script.debug

@@ -2,7 +2,7 @@
 ### BEGIN INIT INFO
 # Provides:             keymap
 # Required-Start:       mountdevsubfs
-# Required-Stop:     
+# Required-Stop:        
 # Default-Start:        S
 # Default-Stop:
 # X-Interactive:	true
@@ -16,13 +16,6 @@ if type setupcon >/dev/null 2>&1; then
 fi
 
 . /lib/lsb/init-functions
-
-# Avoid messing with splashy boot
-# Thanks to John Hughes and Marc Haber for suggestions
-pidof splashy >/dev/null &&
-   mkdir -p /lib/init/rw/splashy/ &&
-   touch /lib/init/rw/splashy/splashy-stopped-keymap &&
-   exit 0
 
 #
 # Load the keymaps *as soon as possible*
@@ -134,8 +127,12 @@ if [ ! $QUIT = '1' ] ; then
     stop)
 	;;
 
+    status)
+	exit 0
+	;;
+
     *)
-	log_warning_msg "Usage: $0 {start|stop|restart|reload|force-reload}"
+	log_warning_msg "Usage: $0 {start|stop|restart|reload|force-reload|status}"
 	;;
   esac
 

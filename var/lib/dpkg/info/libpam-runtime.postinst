@@ -2,17 +2,6 @@
 
 . /usr/share/debconf/confmodule
 
-# pam-auth-update is introduced in 1.0.1-6
-# Between 1.0.1-6 and 1.0.1-10 it is possible to get empty profiles
-if [ "x$2" != "x" ] ;then
-    if dpkg --compare-versions $2 lt 1.0.1-10 && dpkg --compare-versions $2 ge 1.0.1-6 ; then
-	db_get libpam-runtime/profiles
-	if [ "x$RET" = "x" ] ; then
-	    UHOH=1
-	fi
-    fi
-fi
-
 calculate_md5sum()
 {
 	configfile="$1"
@@ -51,11 +40,6 @@ elif dpkg --compare-versions "$2" lt-nl 1.1.0-1 \
         && [ ! -e /etc/pam.d/common-session-noninteractive ]
 then
 	cp -a /etc/pam.d/common-session /etc/pam.d/common-session-noninteractive
-fi
-
-if [ -n "$UHOH" ]; then
-	db_input critical libpam-runtime/you-had-no-auth || true
-	db_go
 fi
 
 

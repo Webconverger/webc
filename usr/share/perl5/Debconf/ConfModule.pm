@@ -112,13 +112,16 @@ sub process_command {
 	my $this=shift;
 	
 	debug developer => "<-- $_";
-	return 1 unless defined && ! /^\s*#/; # Skip blank lines, comments.
 	chomp;
 	my ($command, @params);
 	if (defined $this->client_capb and grep { $_ eq 'escape' } @{$this->client_capb}) {
 		($command, @params)=unescape_split($_);
 	} else {
 		($command, @params)=split(' ', $_);
+	}
+	if (! defined $command) {
+		return $codes{syntaxerror}.' '.
+			"Bad line \"$_\" received from confmodule.";
 	}
 	$command=lc($command);
 	if (lc($command) eq "stop") {
@@ -247,7 +250,11 @@ sub command_version {
 sub command_capb {
 	my $this=shift;
 	$this->client_capb([@_]);
-	$this->frontend->capb_backup(1) if grep { $_ eq 'backup' } @_;
+	if (grep { $_ eq 'backup' } @_) {
+		$this->frontend->capb_backup(1);
+	} else {
+		$this->frontend->capb_backup('');
+	}
 	my @capb=('multiselect', 'escape');
 	push @capb, $this->frontend->capb;
 	return $codes{success}, @capb;

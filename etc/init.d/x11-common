@@ -2,17 +2,17 @@
 # /etc/init.d/x11-common: set up the X server and ICE socket directories
 ### BEGIN INIT INFO
 # Provides:          x11-common
-# Required-Start:    $local_fs
-# Required-Stop:     $local_fs
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
 # Default-Start:     S
 # Default-Stop:
 ### END INIT INFO
 
 set -e
 
-PATH=/bin:/sbin
-SOCKET_DIR=/tmp/.X11-unix
-ICE_DIR=/tmp/.ICE-unix
+PATH=/usr/bin:/usr/sbin:/bin:/sbin
+SOCKET_DIR=.X11-unix
+ICE_DIR=.ICE-unix
 
 . /lib/lsb/init-functions
 if [ -f /etc/default/rcS ]; then
@@ -26,36 +26,60 @@ do_restorecon () {
   fi
 }
 
-set_up_socket_dir () {
-  if [ "$VERBOSE" != no ]; then
-    log_begin_msg "Setting up X server socket directory $SOCKET_DIR..."
-  fi
-  if [ -e $SOCKET_DIR ] && [ ! -d $SOCKET_DIR ]; then
-    mv $SOCKET_DIR $SOCKET_DIR.$$
-  fi
-  mkdir -p $SOCKET_DIR
-  chown root:root $SOCKET_DIR
-  chmod 1777 $SOCKET_DIR
-  do_restorecon $SOCKET_DIR
-  [ "$VERBOSE" != no ] && log_end_msg 0 || return 0
-}
+# create a directory in /tmp.
+# assumes /tmp has a sticky bit set (or is only writeable by root)
+set_up_dir () {
+  DIR="/tmp/$1"
 
-set_up_ice_dir () {
   if [ "$VERBOSE" != no ]; then
-    log_begin_msg "Setting up ICE socket directory $ICE_DIR..."
+    log_progress_msg "$DIR"
   fi
-  if [ -e $ICE_DIR ] && [ ! -d $ICE_DIR ]; then
-    mv $ICE_DIR $ICE_DIR.$$
+  # if $DIR exists and isn't a directory, move it aside
+  if [ -e $DIR ] && ! [ -d $DIR ] || [ -h $DIR ]; then
+    mv "$DIR" "$(mktemp -d $DIR.XXXXXX)"
   fi
-  mkdir -p $ICE_DIR
-  chown root:root $ICE_DIR
-  chmod 1777 $ICE_DIR
-  do_restorecon $ICE_DIR
-  [ "$VERBOSE" != no ] && log_end_msg 0 || return 0
+
+  error=0
+  while :; do
+    if [ $error -ne 0 ] ; then
+      # an error means the file-system is readonly or an attacker
+      # is doing evil things, distinguish by creating a temporary file,
+      # but give up after a while.
+      if [ $error -gt 5 ]; then
+        log_failure_msg "failed to set up $DIR"
+        return 1
+      fi
+      fn="$(mktemp /tmp/testwriteable.XXXXXXXXXX)" || return 1
+      rm "$fn"
+    fi
+    mkdir -p -m 01777 "$DIR" || { rm "$DIR" || error=$((error + 1)) ; continue ; }
+    case "$(LC_ALL=C stat -c '%u %g %a %F' "$DIR")" in
+      "0 0 1777 directory")
+        # everything as it is supposed to be
+        break
+        ;;
+      "0 0 "*" directory")
+        # as it is owned by root, cannot be replaced with a symlink:
+        chmod 01777 "$DIR"
+        break
+        ;;
+      *" directory")
+        # if the chown succeeds, the next step can change it savely
+        chown -h root:root "$DIR" || error=$((error + 1))
+        continue
+        ;;
+      *)
+        log_failure_msg "failed to set up $DIR"
+        return 1
+        ;;
+    esac
+  done
+
+  return 0
 }
 
 do_status () {
-    if [ -d $ICE_DIR ] && [ -d $SOCKET_DIR ]; then
+    if [ -d "/tmp/$ICE_DIR" ] && [ -d "/tmp/$SOCKET_DIR" ]; then
       return 0
     else
       return 4
@@ -64,8 +88,14 @@ do_status () {
 
 case "$1" in
   start)
-    set_up_socket_dir
-    set_up_ice_dir
+    if [ "$VERBOSE" != no ]; then
+      log_begin_msg "Setting up X socket directories..."
+    fi
+    set_up_dir "$SOCKET_DIR"
+    set_up_dir "$ICE_DIR"
+    if [ "$VERBOSE" != no ]; then
+      log_end_msg 0
+    fi
   ;;
 
   restart|reload|force-reload)

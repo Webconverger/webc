@@ -77,6 +77,10 @@ if [ $# -eq 1 ] ; then
 
 		# Decode file for less
 		case `echo "$1" | tr '[:upper:]' '[:lower:]'` in
+			*.a)
+				if [ -x "`which ar`" ]; then ar tv "$1"
+				else echo "No ar available"; fi ;;
+
 			*.arj)
 				if [ -x "`which unarj`" ]; then unarj l "$1"
 				else echo "No unarj available"; fi ;;
@@ -143,6 +147,18 @@ if [ $# -eq 1 ] ; then
 				if [ -x "`which lha`" ]; then lha v "$1"
 				else echo "No lha available"; fi ;;
 
+			*.tar.lz|*.tlz)
+				if [ -x "`which lzip`" ]; then
+					lzip -dc "$1" | tar tvvf -
+				elif [ -x "`which lunzip`" ]; then
+					lunzip -dc "$1" | tar tvvf -
+				else echo "No lzip or lunzip available"; fi ;;
+
+			*.lz)
+				if [ -x "`which lzip`" ]; then lzip -dc "$1"
+				elif [ -x "`which lunzip`" ]; then lunzip -dc "$1"
+				else echo "No lzip or lunzip available"; fi ;;
+
 			*.tar.lzma)
 				if [ -x "`which lzma`" ]; then
 					lzma -dc "$1" | tar tfvv -
@@ -160,7 +176,7 @@ if [ $# -eq 1 ] ; then
 				;;
 
 			*.pdf)
-				if [ -x "`which pdftotext`" ]; then pdftotext "$1" -
+				if [ -x "`which pdftotext`" ]; then pdftotext -layout "$1" -
 				else echo "No pdftotext available"; fi ;;
 
 			*.rar|*.r[0-9][0-9])
@@ -180,6 +196,22 @@ if [ $# -eq 1 ] ; then
 				tar tzvf "$1" --force-local
 				;;
 
+			*.tar.xz)
+				if [ -x "`which xz`" ]; then
+					xz -dc "$1" | tar tfvv -
+				else
+					echo "No xz available"
+				fi
+				;;
+
+			*.xz)
+				if [ -x "`which xz`" ]; then
+					xz -dc "$1"
+				else
+					echo "No xz available"
+				fi
+				;;
+
 			# Note that this is out of alpha order so that we don't catch
 			# the gzipped tar files.
 			*.gz|*.z|*.dz)
@@ -197,7 +229,8 @@ if [ $# -eq 1 ] ; then
 
 			*.7z)
 				if [ -x "`which 7za`" ]; then 7za l "$1";
-				else echo "No 7za available"; fi ;;
+                                elif [ -x "`which 7zr`" ]; then 7zr l "$1";
+				else echo "No 7za or 7zr available"; fi ;;
 
 			*.zoo)
 				if [ -x "`which zoo`" ]; then zoo v "$1";

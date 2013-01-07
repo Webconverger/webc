@@ -25,9 +25,16 @@ install_directory() {
   fi
 }
 
+migrate_directory() {
+  if [ ! -L $1 ]; then
+    rmdir $1
+    ln -s $2 $1
+  fi
+}
+
 if [ ! -e /etc/dpkg/origins/default ]; then
-  if [ -e /etc/dpkg/origins/progress-linux ]; then
-    ln -sf progress-linux /etc/dpkg/origins/default
+  if [ -e /etc/dpkg/origins/debian ]; then
+    ln -sf debian /etc/dpkg/origins/default
   fi
 fi
 
@@ -48,6 +55,9 @@ if [ "$1" = "configure" ] && [ "$2" = "" ]; then
   if [ ! -L /var/spool/mail ]; then
     ln -s ../mail /var/spool/mail
   fi
+  install_directory run/lock 1777 root
+  migrate_directory /var/run /run
+  migrate_directory /var/lock /run/lock
 
   install_local_dir /usr/local
   install_local_dir /usr/local/share
@@ -102,7 +112,7 @@ if [ "$1" = "configure" ] && [ "$2" != "" ]; then
     if grep -q "$md5" /usr/share/base-files/profile.md5sums; then
       if ! cmp -s /usr/share/base-files/profile /etc/profile; then
         cp -p /usr/share/base-files/profile /etc/profile
-        echo Updating unmodified /etc/profile to current default.
+        echo Updating /etc/profile to current default.
       fi
     fi
   fi

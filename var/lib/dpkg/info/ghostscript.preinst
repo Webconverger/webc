@@ -4,6 +4,12 @@ set -e
 
 case "$1" in
     install|upgrade)
+       # Make sure the /etc/gs-gpl/ files are actually gone
+       # (they might have stayed around during a Etch-Lenny dist-upgrade).
+       if dpkg --compare-versions "$2" lt-nl "9.05~dfsg-6.2"; then
+               rm -rf /etc/gs-gpl/
+       fi
+
 	# Do away with update-alternative for /usr/bin/gs, we have one
 	# grand unified Ghostscript now!
 	if dpkg --compare-versions "$2" lt-nl "8.63.dfsg.1-1"; then
@@ -23,6 +29,11 @@ case "$1" in
 	  rm -f /etc/defoma/ghostscript.subst-rule
 	  rm -f /etc/defoma/ghostscript.subst-rule~
 	  rm -f /var/lib/defoma/ghostscript.subst-cache
+	fi
+
+	# Purge obsolete defoma cruft to silence warnings
+	if dpkg --compare-versions "$2" lt-nl "8.71.dfsg.2-1"; then
+	    defoma-app purge gs 2>/dev/null || true
 	fi
 	;;
     abort-upgrade)

@@ -1,6 +1,5 @@
 #!/bin/sh
-# hwclock.sh	Set and adjust the CMOS clock, according to the UTC
-#		setting in /etc/default/rcS (see also rcS(5)).
+# hwclock.sh	Set and adjust the CMOS clock.
 #
 # Version:	@(#)hwclock.sh  2.00  14-Dec-1998  miquels@cistron.nl
 #
@@ -11,6 +10,10 @@
 #		   during startup/shutdown.
 #		 - Added comments to alert users of hwclock issues
 #		   and discourage tampering without proper doc reading.
+#               2012-02-16 Roger Leigh <rleigh@debian.org>
+#                - Use the UTC/LOCAL setting in /etc/adjtime rather than
+#                  the UTC setting in /etc/default/rcS.  Additionally
+#                  source /etc/default/hwclock to permit configuration.
 
 # WARNING:	Please read /usr/share/doc/util-linux/README.Debian.hwclock
 #		before changing this file. You risk serious clock
@@ -18,21 +21,22 @@
 
 ### BEGIN INIT INFO
 # Provides:          hwclock
-# Required-Start:    checkroot
+# Required-Start:    mountdevsubfs
 # Required-Stop:     $local_fs
 # Default-Start:     S
+# X-Start-Before:    checkroot
 # Default-Stop:      0 6
 ### END INIT INFO
 
-FIRST=no	# debian/rules sets this to 'yes' when creating hwclockfirst.sh
-
-# Set this to any options you might need to give to hwclock, such
-# as machine hardware clock type for Alphas.
+# These defaults are user-overridable in /etc/default/hwclock
+BADYEAR=no
+HWCLOCKACCESS=yes
 HWCLOCKPARS=
-
-# Set this to the hardware clock device you want to use, it should
-# probably match the CONFIG_RTC_HCTOSYS_DEVICE kernel config option.
 HCTOSYS_DEVICE=rtc0
+
+# We only want to use the system timezone or else we'll get
+# potential inconsistency at startup.
+unset TZ
 
 hwclocksh()
 {
@@ -43,23 +47,6 @@ hwclocksh()
     . /lib/lsb/init-functions
     verbose_log_action_msg() { [ "$VERBOSE" = no ] || log_action_msg "$@"; }
 
-    [ "$GMT" = "-u" ] && UTC="yes"
-    case "$UTC" in
-       no|"")	GMT="--localtime"
-		UTC=""
-		if [ "X$FIRST" = "Xyes" ] && [ ! -r /etc/localtime ]; then
-		    if [ -z "$TZ" ]; then
-			log_action_msg "System clock was not updated at this time"
-			return 1
-		    fi
-		fi
-		;;
-       yes)	GMT="--utc"
-		UTC="--utc"
-		;;
-       *)	log_action_msg "Unknown UTC setting: \"$UTC\""; return 1 ;;
-    esac
-
     case "$BADYEAR" in
        no|"")	BADYEAR="" ;;
        yes)	BADYEAR="--badyear" ;;
@@ -68,52 +55,29 @@ hwclocksh()
 
     case "$1" in
 	start)
+	    # If the admin deleted the hwclock config, create a blank
+	    # template with the defaults.
+	    if [ -w /etc ] && [ ! -f /etc/adjtime ] && [ ! -e /etc/adjtime ]; then
+	        printf "0.0 0 0.0\n0\nUTC" > /etc/adjtime
+	    fi
+
 	    if [ -d /run/udev ] || [ -d /dev/.udev ]; then
 		return 0
-	    fi
-
-	    if [ -w /etc ] && [ ! -f /etc/adjtime ] && [ ! -e /etc/adjtime ]; then
-		echo "0.0 0 0.0" > /etc/adjtime
-	    fi
-
-	    if [ ! -w /etc/adjtime ]; then
-		NOADJ="--noadjfile"
-	    else
-	    	NOADJ=""
-	    fi
-
-	    if [ "$FIRST" != yes ]; then
-		# Uncomment the hwclock --adjust line below if you want
-		# hwclock to try to correct systematic drift errors in the
-		# Hardware Clock.
-		#
-		# WARNING: If you uncomment this option, you must either make
-		# sure *nothing* changes the Hardware Clock other than
-		# hwclock --systohc, or you must delete /etc/adjtime
-		# every time someone else modifies the Hardware Clock.
-		#
-		# Common "vilains" are: ntp, MS Windows, the BIOS Setup
-		# program.
-		#
-		# WARNING: You must remember to invalidate (delete)
-		# /etc/adjtime if you ever need to set the system clock
-		# to a very different value and hwclock --adjust is being
-		# used.
-		#
-		# Please read /usr/share/doc/util-linux/README.Debian.hwclock
-		# before enabling hwclock --adjust.
-
-		#/sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --adjust $GMT $BADYEAR
-		:
 	    fi
 
 	    if [ "$HWCLOCKACCESS" != no ]; then
 		log_action_msg "Setting the system clock"
 
+		# Just for reporting.
+		if head -n 3 /etc/adjtime | tail -n 1 | grep -q '^UTC$' ; then
+		    UTC="--utc"
+		else
+		    UTC=
+		fi
 		# Copies Hardware Clock time to System Clock using the correct
 		# timezone for hardware clocks in local time, and sets kernel
 		# timezone. DO NOT REMOVE.
-		if /sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --hctosys $GMT $HWCLOCKPARS $BADYEAR $NOADJ; then
+		if /sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --hctosys $HWCLOCKPARS $BADYEAR; then
 		    #	Announce the local time.
 		    verbose_log_action_msg "System Clock set to: `date $UTC`"
 		else
@@ -131,18 +95,10 @@ hwclocksh()
 	    # WARNING: If you disable this, any changes to the system
 	    #          clock will not be carried across reboots.
 	    #
-	    if [ ! -w /etc/adjtime ]; then
-		NOADJ="--noadjfile"
-	    else
-	    	NOADJ=""
-	    fi
 
 	    if [ "$HWCLOCKACCESS" != no ]; then
 		log_action_msg "Saving the system clock"
-		if [ "$GMT" = "-u" ]; then
-		    GMT="--utc"
-		fi
-		if /sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --systohc $GMT $HWCLOCKPARS $BADYEAR $NOADJ; then
+		if /sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --systohc $HWCLOCKPARS $BADYEAR; then
 		    verbose_log_action_msg "Hardware Clock updated to `date`"
 		fi
 	    else
@@ -150,14 +106,8 @@ hwclocksh()
 	    fi
 	    ;;
 	show)
-	    if [ ! -w /etc/adjtime ]; then
-		NOADJ="--noadjfile"
-	    else
-	    	NOADJ=""
-	    fi
-
 	    if [ "$HWCLOCKACCESS" != no ]; then
-		/sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --show $GMT $HWCLOCKPARS $BADYEAR $NOADJ
+		/sbin/hwclock --rtc=/dev/$HCTOSYS_DEVICE --show $HWCLOCKPARS $BADYEAR
 	    fi
 	    ;;
 	*)

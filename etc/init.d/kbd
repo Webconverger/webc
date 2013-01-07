@@ -62,15 +62,6 @@ then
     UNICODE_MODE=yes
 fi
 
-reset_vga_palette ()
-{
-    if [ -f /proc/fb ]; then
-        # They have a framebuffer device.
-        # That means we have work to do...
-        echo -n "]R"
-    fi
-}
-
 unicode_start_stop ()
 {
     vc=$1
@@ -99,7 +90,6 @@ setup ()
         readlink /proc/self/fd/0 | grep -q -e /dev/vc -e '/dev/tty[^p]' -e /dev/console
         if [ $? -eq 0 ]; then
             VT="yes"
-            reset_vga_palette
         fi
     fi
 
@@ -121,7 +111,7 @@ setup ()
     fi
 
     # Global default font+map
-    if [ -z "${HAVE_SETUPCON}" -a "${CONSOLE_FONT}" ]; then
+    if [ -z "${HAVE_SETUPCON}" -a "${CONSOLE_FONT}${CONSOLE_MAP}${FONT_MAP}" ]; then
         [ "$VERBOSE" != "no" ] && log_action_begin_msg "Setting up general console font"
         sfm="${FONT_MAP}" && [ "$sfm" ] && sfm="-u $sfm"
         acm="${CONSOLE_MAP}" && [ "$acm" ] && acm="-m $acm"
@@ -249,6 +239,8 @@ case "$1" in
 	[ -z "$HAVE_SETUPCON" ] || log_action_msg "Skipping font and keymap setup (handled by console-setup)"
         ;;
     stop)
+        ;;
+    status)
         ;;
     *)
         setup

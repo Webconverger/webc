@@ -306,14 +306,14 @@ Description-ru.UTF-8: Было найдено неверное значение 
  Чтобы исправить эту ошибку, переустановите (или поставьте) пакет, содержащий недостающее значение. Затем, если вам этот пакет не нужен, удалите его; этим вы заодно уберёте и все значения debconf. Диалог, показанный после этого сообщения, попытается оставить систему в работоспособном состоянии, пока не будет исправлена ошибка.
  .
  Это сообщение об ошибке может также появиться во время переименования словаря ispell или списка слов (например, wenglish -> wamerican). В этом случае оно безвредно и ошибка будет исправлена после того, как вы выберете ваше значение по умолчанию в меню показанном после этого сообщения.
-Description-sk.UTF-8: Bola nájdená neplatná debconf hodnota [${value}]
- Nezodpovedá to žiadnemu inštalovanému balíku v systéme.
+Description-sk.UTF-8: Bola nájdená neplatná hodnota debconf [${value}]
+ Nezodpovedá žiadnemu nainštalovanému balíku v systéme.
  .
- Toto je zvyčajne zapríčinené nejakými problémami počas inštalácie balíkov, kedy si balík pripravený na inštaláciu pripravuje hodnotu [${value}], ale nakoniec sa nenainštaluje kvôli chybám v iných balíkoch.
+ Toto je zvyčajne zapríčinené nejakými problémami počas inštalácie balíkov, keď bol vybraný na inštaláciu balík poskytujúci hodnotu [${value}], ale nakoniec sa nenainštaloval kvôli chybám v iných balíkoch.
  .
- Na opravu tejto chyby preinštalujte alebo nainštalujte balík, ktorému patrí chýbajúca hodnota. Ak tento balík vo vašom systéme nepotrebujete, spolu s jeho neskorším odstránením sa zrušia aj jeho debconf položky. Menu, ktoré sa zobrazí po tejto správe, sa pokúsi ponechať systém vo funkčnom stave.
+ Aby ste túto chybu opravili, preinštalujte alebo nainštalujte balík, ktorému patrí chýbajúca hodnota. Ak tento balík vo vašom systéme nepotrebujete, odstráňte ho, čo tiež odstráni aj jeho položky debconf. Menu, ktoré sa zobrazí po tejto správe, sa pokúsi dovtedy ponechať systém vo funkčnom stave.
  .
- Táto chybová správa sa môže objaviť aj počas premenovania ispell alebo wordlist slovníka (napr. wenglish-> wamerican). V takomto prípade je to neškodné a všetko sa upraví po výbere predvolenej hodnoty v menu zobrazenom po tejto správe.
+ Táto chybová správa sa môže objaviť aj počas premenovania slovníka ispell alebo zoznamu slov (napr. wenglish-> wamerican). V takomto prípade je to neškodné a všetko sa upraví po výbere predvolenej hodnoty v menu zobrazenom po tejto správe.
 Description-sq.UTF-8: U gjet një vlerë debconf [${value}] e pavlefshme
  Nuk i korrespondon asnjë paketi të instaluar në sistem.
  .
@@ -418,7 +418,7 @@ Choices-fr.UTF-8: ${echoices}, Gestion manuelle des liens symboliques
 Choices-gl.UTF-8: ${echoices}, Configuración manual
 Choices-he.UTF-8: ${echoices}, קביעת ידנית של קישורים
 Choices-hu.UTF-8: ${echoices}, jelképes láncok kézi beállítása
-Choices-id.UTF-8: ${echoices}, menyetel symlinks manual
+Choices-id.UTF-8: ${echoices}, Menyetel symlinks manual
 Choices-it.UTF-8: ${echoices}, Impostazione manuale dei collegamenti
 Choices-ja.UTF-8: ${echoices}, 手動でのシンボリックリンク設定
 Choices-km.UTF-8: ${echoices}, ការកំណត់ symlinks ដោយដៃ
@@ -435,7 +435,7 @@ Choices-pt.UTF-8: ${echoices}, Configuração manual dos atalhos simbólicos
 Choices-pt_BR.UTF-8: ${echoices}, Configuração manual de ligações simbólicas
 Choices-ro.UTF-8: ${echoices}, Setare manuală de legături simbolice
 Choices-ru.UTF-8: ${echoices}, настройка символьных ссылок вручную
-Choices-sk.UTF-8: ${echoices}, Manuálne nastavenie symbolických liniek
+Choices-sk.UTF-8: ${echoices}, Manuálne nastavenie symbolických odkazov
 Choices-sq.UTF-8: ${echoices}, Rregullimet manuale të lidhjeve simbolike
 Choices-sv.UTF-8: ${echoices}, Manuell inställning av symlänkar
 Choices-ta.UTF-8: ${echoices}, கைமுறை சிம்லிங்க் அமைப்பு
@@ -516,6 +516,14 @@ Description-fr.UTF-8: Dictionnaire ispell à utiliser par défaut :
  Si vous choisissez « Gestion manuelle des liens symboliques », vous devrez gérer les liens symboliques vous-même. De même, ispell n'utilisera alors aucun dictionnaire par défaut avec ispell-wrapper et Emacs.
  .
  Il est possible de changer le dictionnaire utilisé par ispell à n'importe quel moment avec la commande « select-default-ispell ».
+Description-id.UTF-8: Kamus ispell mana yang akan digunakan sistem secara bawaan?
+ Mohon tunjukkan kamus ispell mana yang akan digunakan oleh bawaan system-utama ketika tidak ada kamus pengecek spell yang ditentukan.
+ .
+ Ini akan men-setup-up symblink /usr/lib/ispell/default/aff dan /usr/lib/ispell/default.hash, serta global ispell bawaan ispell-wrapper dan Emacs.
+ .
+ Gunakan "Pengaturan manual symlink" jika anda ingin mengatur symlink sendiri. Dalam kasus ini ispell tidak akan mempunyai ispell-wrapper global atau default Emacs.
+ .
+ Kamus bawaan ispell dapat diubah sewaktu-waktu dengan menjalankan "select-default-ispell".
 Description-it.UTF-8: Quale dizionario ispell dovrebbe essere il predefinito del sistema?
  Indicare quale dizionario debba essere selezionato da ispell per l'intero sistema nel caso che non ne sia specificato nessuno.
  .
@@ -572,6 +580,14 @@ Description-ru.UTF-8: Системный словарь ispell по умолча
  Выберите «Настройка символьных ссылок вручную», если хотите самостоятельно настроить символьные ссылки. В этом случае ispell не будет доступен через системный ispell-wrapper или настройки по умолчанию в Emacs.
  .
  Словарь по умолчанию ispell можно изменить в любой момент, запустив команду «select-default-ispell».
+Description-sk.UTF-8: Predvolený slovník ispell na tomto systéme:
+ Prosím, vyberte, ktorý slovník ispell sa má použiť ako predvolený v systéme, keď sa neurčí žiaden iný slovník na kontrolu pravopisu.
+ .
+ Toto nastaví symbolické odkazy /usr/lib/ispell/default.aff a /usr/lib/ispell/default.hash ako aj globálny wrapper ispell-wrapper  pre ispell a predvoľby Emacs.
+ .
+ Použite „Manuálne nastavenie symbolických odkazov“ ak sa chcete postarať o symbolické odkazy sami. V tomto prípade nebude mať ispell globálny ispell-wrapper ani predvoľby Emacs.
+ .
+ Predvolený slovník ispell môžete kedykoľvek zmeniť pomocou príkazu „select-default-ispell“.
 Description-sv.UTF-8: Vilket ispell-lexikon skall vara standard på systemet?
  Ange vilket lexikon ispell ska använda som standard på systemet när inga andra lexikon är specificerade.
  .
@@ -620,7 +636,7 @@ Choices-fr.UTF-8: ${echoices}, Gestion manuelle des liens symboliques
 Choices-gl.UTF-8: ${echoices}, Configuración manual
 Choices-he.UTF-8: ${echoices}, קביעת ידנית של קישורים
 Choices-hu.UTF-8: ${echoices}, jelképes láncok kézi beállítása
-Choices-id.UTF-8: ${echoices}, menyetel symlinks manual
+Choices-id.UTF-8: ${echoices}, Menyetel symlinks manual
 Choices-it.UTF-8: ${echoices}, Impostazione manuale dei collegamenti
 Choices-ja.UTF-8: ${echoices}, 手動でのシンボリックリンク設定
 Choices-km.UTF-8: ${echoices}, ការកំណត់ symlinks ដោយដៃ
@@ -637,7 +653,7 @@ Choices-pt.UTF-8: ${echoices}, Configuração manual dos atalhos simbólicos
 Choices-pt_BR.UTF-8: ${echoices}, Configuração manual de ligações simbólicas
 Choices-ro.UTF-8: ${echoices}, Setare manuală de legături simbolice
 Choices-ru.UTF-8: ${echoices}, настройка символьных ссылок вручную
-Choices-sk.UTF-8: ${echoices}, Manuálne nastavenie symbolických liniek
+Choices-sk.UTF-8: ${echoices}, Manuálne nastavenie symbolických odkazov
 Choices-sq.UTF-8: ${echoices}, Rregullimet manuale të lidhjeve simbolike
 Choices-sv.UTF-8: ${echoices}, Manuell inställning av symlänkar
 Choices-ta.UTF-8: ${echoices}, கைமுறை சிம்லிங்க் அமைப்பு
@@ -684,6 +700,10 @@ Description-fr.UTF-8: Quel dictionnaire de type « liste de mots » faut-il ut
  Veuillez indiquer la liste de mots que le lien symbolique /usr/share/dict/words doit utiliser. Cette liste est une simple liste de mots utilisée pour de la vérification orthographique de base et de la recherche de mots. Vous pouvez choisir « Gestion manuelle des liens symboliques » pour gérer ce lien vous-même.
  .
  La liste de mots par défaut peut être modifiée à tout moment avec la commande « select-default-wordlist ».
+Description-id.UTF-8: Daftar kata mana yang sebaiknya menjadi bawaan sistem?
+ Silakan menunjukkan mana daftar-kata "/usr/share/dict/words" yang akandi link kan. Hal ini akan memberikan daftar kata-kata sederhana untuk memeriksa ejaan dasardan pencarian kata. Gunakan "Pengaturan manual link" jika anda ingin menangani link ini sendiri
+ .
+ Anda dapat daftar kata bawaan setiap saat dengan menjalankan "select-default-wordlist".
 Description-it.UTF-8: Quale «wordlist» dovrà essere predefinita su questa macchina?
  Indicare quale «wordlist» debba essere puntata da «/usr/share/dict/words». Questo fornisce un elenco di parole per un controllo ortografico semplificato e per delle ricerche di parole. Selezionare «impostazione manuale dei collegamenti» se si preferisce impostarlo in altro modo.
  .
@@ -712,6 +732,10 @@ Description-ru.UTF-8: Системный список слов по умолча
  Укажите на какой список слов должна указывать символьная ссылка «/usr/share/dict/words». Данный список словарных слов будет использован для простой проверки орфографии и при поиске слов. Выберите «Настройка символьных ссылок вручную», если хотите самостоятельно настроить эту символьную ссылку.
  .
  Список слов по умолчанию можно изменить в любой момент, запустив команду «select-default-wordlist».
+Description-sk.UTF-8: Ktorý wordlist slovník bude na tomto systéme predvolený?
+ Prosím, vyberte na ktorý zoznam slov má symbolický odkaz „/usr/share/dict/words“ odkazovať. Ten poskytne jednoduchý zoznam slov slovníka na základnú kontrolu pravopisu a hľadanie slov. Použite „Manuálne nastavenie symbolických odkazov“ ak sa chcete postarať o symbolické odkazy sami.
+ .
+ Predvolený zoznam slov môžete kedykoľvek zmeniť pomocou príkazu „select-default-wordlist“.
 Description-sv.UTF-8: Vilken ordlista skall vara standard på systemet?
  Ange vilken ordlistan som symlänken "/usr/share/dict/words" ska peka på. Denna kommer att tillhandahålla en enkel lista med uppslagsord för enkel rättstavning och för att leta efter ord. Använd "Manuell inställning av symlänkar" om du vill hantera denna symlänk själv.
  .
@@ -881,10 +905,10 @@ Description-ru.UTF-8: Перенести словари из нестандар�
  Некоторые словари в /usr/dict не являются символьными ссылками на /usr/share/dict. Согласно FHS (стандарт файловой системы, File Hierarchy Standard) эти файлы должны находиться в /usr/share/dict. Всё, что находится в /usr/dict, может быть перенесено в /usr/dict-pre-FHS, а /usr/dict быть заменён символьной ссылкой на /usr/share/dict.
  .
  Несмотря на то, что в Debian на данный момент нет ни одного пакета, использующего /usr/dict, символьная ссылке тем не менее необходима, так как иначе могут не сработать старые программы, которые использовали этот каталог, так что желательно переместить файлы и поставить символьную ссылку.
-Description-sk.UTF-8: Môžem presunúť nie-FHS veci z /usr/dict do /usr/dict-pre-FHS?
- Na vašom systéme boli v /usr/dict zistené nejaké veci, ktoré nie sú symbolickým odkazom do /usr/share/dict. Pre takéto súbory je odteraz /usr/share/dict FHS umiestnením. Všetko z /usr/dict sa môže presunúť do /usr/dict-pre-FHS a potom sa môže nastaviť symbolický odkaz /usr/dict -> /usr/share/dict.
+Description-sk.UTF-8: Presunúť veci nezodpovedajúce FHS z /usr/dict do /usr/dict-pre-FHS?
+ Na vašom systéme boli v /usr/dict zistené nejaké veci, ktoré nie sú symbolickým odkazom do /usr/share/dict. Pre takéto súbory je odteraz /usr/share/dict umiestnením podľa FHS. Všetko z /usr/dict sa môže presunúť do /usr/dict-pre-FHS a potom sa môže nastaviť symbolický odkaz /usr/dict -> /usr/share/dict.
  .
- Hoci žiaden súčasný balík Debianu nepoužíva zastaralé umiestnenie /usr/dict, neprítomnosť tohto symbolického odkazu môže narušiť funkčnosť niektorých vašich starších programov, ktoré to stále používajú. Je preto odporúčané, aby ste presunuli súbory a vytvorili symbolický odkaz.
+ Hoci žiaden súčasný balík Debianu nepoužíva zastaralé umiestnenie /usr/dict, neprítomnosť tohto symbolického odkazu môže narušiť funkčnosť niektorých vašich starších programov, ktoré to stále používajú. Preto sa odporúčan, aby ste presunuli súbory a vytvorili symbolický odkaz.
 Description-sq.UTF-8: Ti lëviz të dhënat jo-FHS nën /usr/dict për tek /usr/dict-pre-FHS?
  U zbuluan disa të dhëna nën /usr/dict i cili nuk është lidhje simbolike (symlink) për tek /usr/share/dict. /usr/share/dict është tani vendndodhja FHS për ato skedarë. Çdo gjë nën /usr/dict mund të spostohet në /usr/dict-pre-FHS  dhe u vendos një lidhje simbolike /usr/dict -> /usr/share/dict.
  .
@@ -1081,10 +1105,10 @@ Description-ru.UTF-8: Убрать устаревшую ссылку /etc/dictio
  В вашей системе присутствует ссылка /etc/dictionary. Она давно устарела и больше ни на что не влияет. Настоятельно рекомендуется убрать эту ссылку.
  .
  Вам будет предложено явно указать используемый по умолчанию список слов при установке пакетов их содержащими. Этот выбор вы можете изменить в любой момент, запустив «select-default-wordlist».
-Description-sk.UTF-8: Odstrániť zastaralý odkaz /etc/dictionary?
- Na vašom systéme jestvuje odkaz /etc/dictionary, ktorý je už zastaralý a nepotrebný. Je silne odporúčané povoliť jeho odstránenie.
+Description-sk.UTF-8: Odstrániť zastaraný odkaz /etc/dictionary?
+ Na vašom systéme jestvuje odkaz /etc/dictionary, ktorý je už zastaraný a nepotrebný. Dôrazne sa odporúča povoliť jeho odstránenie.
  .
- Počas inštalácie wordlist slovníkov budete požiadaní o určenie predvoleného slovníka. Vašu voľbu môžete hocikedy zmeniť spustením 'select-default-wordlist'.
+ Počas inštalácie zoznamov slov budete požiadaní o určenie predvoleného slovníka. Vašu voľbu môžete kedykoľvek zmeniť spustením „select-default-wordlist“.
 Description-sq.UTF-8: Ta fshij lidhjen e vjetër /etc/dictionary?
  Gjendet një lidhje /etc/dictionary në sistemin tënd. Kjo është e vjetër dhe nuk ka më kuptim. Këshillohet ta lejosh heqjen e asaj lidhjeje.
  .
@@ -1353,12 +1377,12 @@ Description-ru.UTF-8: Проблемы с пересозданием хэш-фа
  Эта ошибка возникла из-за пакета предоставляющего «${hashfile}», хотя это могло произойти из-за ошибки в сценарии postinst другого пакета. Пожалуйста, сообщите сопровождающему пакета, предоставившему «${hashfile}».
  .
  Пока эту проблему не исправят, вы не сможете использовать ${xxpell} с «${hashfile}».
-Description-sk.UTF-8: Nastali problémy pri prebudovávaní hash súboru (${hashfile}) pre ${xxpell}. 
+Description-sk.UTF-8: Nastali problémy pri znovuzostavovaní hašového súboru (${hashfile}) pre ${xxpell}. 
  ** Chyba: ${errormsg}
  .
- Táto chyba bola zapríčinená balíkom obsahujúcim '${hashfile}', hoci na prvý pohľad to vyzerá tak, že sa to stalo po inštalácii iného balíka. Nahláste to, prosím, správcovi balíka obsahujúceho '${hashfile}'.
+ Táto chyba bola zapríčinená balíkom obsahujúcim „${hashfile}“, hoci na prvý pohľad to vyzerá tak, že sa to stalo po inštalácii iného balíka. Prosím, nahláste to, správcovi balíka obsahujúceho „${hashfile}“.
  .
- Kým sa neodstráni tento problém, nebudete môcť používať ${xxpell} s '${hashfile}'.
+ Kým sa neodstráni tento problém, nebudete môcť používať ${xxpell} s „${hashfile}“.
 Description-sq.UTF-8: Probleme në rikrijimin e skedarit hash (${hashfile}) për ${xxpell}
  ** Gabim: ${errormsg}
  .
@@ -1575,10 +1599,10 @@ Description-ru.UTF-8: Удалить устаревшую символьную �
  Найдена символьная ссылка /usr/dict, не соответствующая стандарту FHS. Так как она является устаревшей, ни один пакет Debian не использует её и ни одна из ваших программ не должна полагаться на её существование, поэтому настоятельно советуем разрешить удаление.
  .
  Если по какой-то причине вам всё же нужна эта символьная ссылка, создайте её самостоятельно, но было бы лучше исправить ваши старые программы, чтобы они использовали новую ссылку /usr/share/dict.
-Description-sk.UTF-8: Odstrániť zastaralý symbolický odkaz /usr/dict?
- Bol nájdený nie-FHS symboický odkaz /usr/dict. Pretože je zastaralý, žiaden súčasný balík Debianu nepoužíva toto umiestnenie a nemal by na ňom závisieť žiaden z vašich programov. Silne sa odporúča povoliť jeho odstránenie.
+Description-sk.UTF-8: Odstrániť zastaraný symbolický odkaz /usr/dict?
+ Bol nájdený symbolický odkaz /usr/dict, ktorý nezodpovedá FHS. Pretože je zastaraný, žiaden súčasný balík Debianu nepoužíva toto umiestnenie a nemal by na ňom závisieť žiaden z vašich programov. Dôrazne sa odporúča povoliť jeho odstránenie.
  .
- Ak z akejkoľvek príčiny potrebujete tento symbolický odkaz, môžete ho znovu vytvoriť, ale lepšie by bolo opraviť vaše staré programy tak, aby používali aktuálne umiestnenie /usr/share/dict.
+ Ak z akéhokoľvek dôvodu potrebujete tento symbolický odkaz, môžete ho znovu vytvoriť, ale lepšie by bolo opraviť vaše staré programy tak, aby používali aktuálne umiestnenie /usr/share/dict.
 Description-sq.UTF-8: Ta heq lidhjen e vjetër simbolike /usr/dict?
  Një lidhje simbolike jo FHS /usr/dict u gjet. Meqë është e vjetër,  asnjë paket Debian nuk e përdor më atë vendndodhje dhe asnjë nga programet  nuk duhet të mbështetet në të, kështu që këshillohet heqja e menjëhershme e saj.
  .
@@ -1772,10 +1796,10 @@ Description-ru.UTF-8: Словарь/список слов по умолчани
  Командой «dpkg-reconfigure dictionaries-common» нельзя настроить словарь/список слов по умолчанию для ispell. Командой «dpkg-reconfigure ispell» нельзя задать словарь по умолчанию для ispell.
  .
  Для этого используйте сценарии «select-default-ispell» или «select-default-wordlist».
-Description-sk.UTF-8: Nie sú tu nastavené predvolené hodnoty pre ispell/wordlist slovníky.
- Spustenie príkazu 'dpkg-reconfigure dictionaries-common' nenastaví predvolené hodnoty pre ispell/wordlist slovníky. Spustenie príkazu 'dpkg-reconfigure ispell' nenastaví predvolený ispell slovník.
+Description-sk.UTF-8: Nie sú tu nastavené predvolené hodnoty pre slovníky ispell a zoznamy slov.
+ Spustenie príkazu „dpkg-reconfigure dictionaries-common“ nenastaví predvolené hodnoty pre slovníky ispell a zoznamy slov. Spustenie príkazu „dpkg-reconfigure ispell“ nenastaví predvolený ispell slovník.
  .
- Namiesto toho použijte 'select-default-ispell' alebo 'select-default-wordlist'.
+ Namiesto toho použite „select-default-ispell“ alebo „select-default-wordlist“.
 Description-sq.UTF-8: Vlerat e prezgjedhur për fjalorin ispell/listën e fjalëve nuk caktohen këtu.
  Duke ekzekutuar 'dpkg-reconfigure dictionaries-common' nuk do caktojë vlerat e prezgjedhura për fjalorin ispell/listën e fjalëve. Duke ekzekutuar 'dpkg-reconfigure ispell' nuk do caktojë fjalorin e prezgjedhur ispell.
  .

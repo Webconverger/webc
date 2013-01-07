@@ -1,32 +1,31 @@
-TARGETS = live-config mountkernfs.sh udev keymap.sh keyboard-setup console-setup mountall.sh mountoverflowtmp mountnfs.sh mountnfs-bootclean.sh hwclock.sh urandom networking ifupdown ifupdown-clean live-boot bootmisc.sh alsa-utils checkroot.sh hostname.sh procps module-init-tools mtab.sh mountdevsubfs.sh udev-mtab hwclockfirst.sh kbd checkfs.sh x11-common mountall-bootclean.sh bootlogd stop-bootlogd-single
-INTERACTIVE = udev keymap.sh keyboard-setup console-setup checkroot.sh kbd checkfs.sh
+TARGETS = live-config mountkernfs.sh udev mountdevsubfs.sh keymap.sh keyboard-setup console-setup live bootmisc.sh mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh hwclock.sh urandom alsa-utils checkroot.sh live-boot hostname.sh bootlogd procps udev-mtab kbd stop-bootlogd-single tmp-noexec checkfs.sh checkroot-bootclean.sh kmod mtab.sh x11-common
+INTERACTIVE = udev keymap.sh keyboard-setup console-setup live checkroot.sh kbd checkfs.sh
+mountkernfs.sh: live-config
 udev: mountkernfs.sh
-keymap.sh: bootlogd mountdevsubfs.sh
-keyboard-setup: mountkernfs.sh keymap.sh udev bootlogd
-console-setup: mountall.sh mountoverflowtmp mountnfs.sh mountnfs-bootclean.sh kbd
-mountall.sh: checkfs.sh
-mountoverflowtmp: mountall-bootclean.sh
-mountnfs.sh: mountall.sh mountoverflowtmp networking ifupdown
-mountnfs-bootclean.sh: mountall.sh mountoverflowtmp mountnfs.sh
-hwclock.sh: checkroot.sh bootlogd
-urandom: mountall.sh mountoverflowtmp
-networking: mountkernfs.sh mountall.sh mountoverflowtmp ifupdown
-ifupdown: ifupdown-clean
-ifupdown-clean: mountdevsubfs.sh hostname.sh
-live-boot: bootmisc.sh mountall.sh mountoverflowtmp
-bootmisc.sh: mountall.sh mountoverflowtmp mountnfs.sh mountnfs-bootclean.sh udev
-alsa-utils: mountall.sh mountoverflowtmp mountnfs.sh mountnfs-bootclean.sh udev
-checkroot.sh: hwclockfirst.sh mountdevsubfs.sh hostname.sh keymap.sh bootlogd keyboard-setup
-hostname.sh: bootlogd
-procps: mountkernfs.sh mountall.sh mountoverflowtmp udev module-init-tools bootlogd
-module-init-tools: checkroot.sh
-mtab.sh: checkroot.sh
 mountdevsubfs.sh: mountkernfs.sh udev
-udev-mtab: udev mountall.sh mountoverflowtmp
-hwclockfirst.sh: mountdevsubfs.sh bootlogd
-kbd: mountall.sh mountoverflowtmp mountnfs.sh mountnfs-bootclean.sh
-checkfs.sh: checkroot.sh mtab.sh
-x11-common: mountall.sh mountoverflowtmp
+keymap.sh: bootlogd mountdevsubfs.sh
+keyboard-setup: bootlogd mountkernfs.sh keymap.sh udev
+console-setup: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh kbd
+live: bootmisc.sh mountall.sh mountall-bootclean.sh
+bootmisc.sh: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh udev checkroot-bootclean.sh
+mountall.sh: checkfs.sh checkroot-bootclean.sh
 mountall-bootclean.sh: mountall.sh
+mountnfs.sh: mountall.sh mountall-bootclean.sh
+mountnfs-bootclean.sh: mountall.sh mountall-bootclean.sh mountnfs.sh
+hwclock.sh: mountdevsubfs.sh bootlogd
+urandom: mountall.sh mountall-bootclean.sh hwclock.sh
+alsa-utils: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh
+checkroot.sh: hwclock.sh keyboard-setup mountdevsubfs.sh hostname.sh keymap.sh bootlogd
+live-boot: bootmisc.sh mountall.sh mountall-bootclean.sh
+hostname.sh: bootlogd
 bootlogd: mountdevsubfs.sh
-stop-bootlogd-single: mountall.sh mountoverflowtmp udev keymap.sh keyboard-setup console-setup mountnfs.sh mountnfs-bootclean.sh hwclock.sh urandom networking mountkernfs.sh ifupdown ifupdown-clean live-boot bootmisc.sh alsa-utils checkroot.sh hostname.sh procps module-init-tools mtab.sh mountdevsubfs.sh live-config udev-mtab hwclockfirst.sh kbd checkfs.sh x11-common mountall-bootclean.sh bootlogd
+procps: bootlogd mountkernfs.sh mountall.sh mountall-bootclean.sh udev
+udev-mtab: udev mountall.sh mountall-bootclean.sh
+kbd: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh
+stop-bootlogd-single: mountall.sh mountall-bootclean.sh udev keymap.sh keyboard-setup console-setup live bootmisc.sh mountnfs.sh mountnfs-bootclean.sh hwclock.sh urandom mountkernfs.sh alsa-utils mountdevsubfs.sh checkroot.sh live-boot hostname.sh bootlogd procps udev-mtab live-config kbd tmp-noexec checkfs.sh checkroot-bootclean.sh kmod mtab.sh x11-common
+tmp-noexec: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh
+checkfs.sh: checkroot.sh mtab.sh
+checkroot-bootclean.sh: checkroot.sh
+kmod: checkroot.sh
+mtab.sh: checkroot.sh
+x11-common: mountall.sh mountall-bootclean.sh mountnfs.sh mountnfs-bootclean.sh

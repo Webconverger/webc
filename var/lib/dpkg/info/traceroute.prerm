@@ -6,14 +6,14 @@ case "${1}" in
 	remove|upgrade|deconfigure)
 		update-alternatives --remove traceroute /usr/bin/traceroute.db
 
-		for ALTERNATIVE in traceroute6 lft traceproto
+		for _ALTERNATIVE in traceroute6 lft traceproto
 		do
-			update-alternatives --remove ${ALTERNATIVE} /usr/bin/${ALTERNATIVE}.db
+			update-alternatives --remove ${_ALTERNATIVE} /usr/bin/${_ALTERNATIVE}.db
 		done
 
-		for ALTERNATIVE in tcptraceroute
+		for _ALTERNATIVE in tcptraceroute
 		do
-			update-alternatives --remove ${ALTERNATIVE} /usr/sbin/${ALTERNATIVE}.db
+			update-alternatives --remove ${_ALTERNATIVE} /usr/sbin/${_ALTERNATIVE}.db
 		done
 		;;
 

@@ -22,20 +22,20 @@
 
 # Instead of unsetting XZ_OPT, just make sure that xz will use file format
 # autodetection. This way memory usage limit and thread limit can be
-# specified via XZ_OPT. With gzip and bzip2 it's OK to just unset the
+# specified via XZ_OPT. With gzip, bzip2, and lzop it's OK to just unset the
 # environment variables.
 xz='xz --format=auto'
-unset GZIP BZIP BZIP2
+unset GZIP BZIP BZIP2 LZOP
 
-case ${0##/*} in
+case ${0##*/} in
   *egrep*) prog=xzegrep; grep=${GREP:-egrep};;
   *fgrep*) prog=xzfgrep; grep=${GREP:-fgrep};;
   *)       prog=xzgrep; grep=${GREP:-grep};;
 esac
 
-version="$prog (XZ Utils) 5.0.0"
+version="$prog (XZ Utils) 5.1.0alpha"
 
-usage="Usage: ${0##/*} [OPTION]... [-e] PATTERN [FILE]...
+usage="Usage: ${0##*/} [OPTION]... [-e] PATTERN [FILE]...
 Look for instances of PATTERN in the input FILEs, using their
 uncompressed contents if they are compressed.
 
@@ -126,6 +126,10 @@ while test $# -ne 0; do
   grep="$grep $option$optarg"
 done
 
+if test $files_with_matches -eq 1 || test $files_without_matches -eq 1; then
+  grep="$grep -q"
+fi
+
 eval "set -- $operands "'${1+"$@"}'
 
 if test $have_pat -eq 0; then
@@ -149,6 +153,7 @@ for i; do
   case $i in
     *[-.][zZ] | *_z | *[-.]gz | *.t[ag]z) uncompress="gzip -cdfq";;
     *[-.]bz2 | *[-.]tbz | *.tbz2) uncompress="bzip2 -cdfq";;
+    *[-.]lzo | *[-.]tzo) uncompress="lzop -cdfq";;
     *) uncompress="$xz -cdfq";;
   esac
   # Fail if xz or grep (or sed) fails.
@@ -156,9 +161,9 @@ for i; do
     exec 5>&1
     ($uncompress -- "$i" 5>&-; echo $? >&5) 3>&- |
     if test $files_with_matches -eq 1; then
-      eval "$grep" -q && { printf '%s\n' "$i" || exit 2; }
+      eval "$grep" && { printf '%s\n' "$i" || exit 2; }
     elif test $files_without_matches -eq 1; then
-      eval "$grep" -q || {
+      eval "$grep" || {
         r=$?
         if test $r -eq 1; then
           printf '%s\n' "$i" || r=2
@@ -190,7 +195,8 @@ for i; do
     fi >&3 5>&-
   )
   r=$?
-  test "$xz_status" -eq 0 || test "$xz_status" -eq 2 || r=2
+  test "$xz_status" -eq 0 || test "$xz_status" -eq 2 \
+      || test "$(kill -l "$xz_status" 2> /dev/null)" = "PIPE" || r=2
   test $res -lt $r && res=$r
 done
 exit $res

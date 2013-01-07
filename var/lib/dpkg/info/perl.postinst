@@ -7,15 +7,22 @@ then
     docs=/usr/share/doc
     if [ -L $docs/perl ] && [ ! -L $docs/perl-base ] && [ -d $docs/perl-base ]
     then
-	rm -f $docs/perl
-	mv $docs/perl-base $docs/perl
-	ln -s perl $docs/perl-base
+    rm -f $docs/perl
+    mv $docs/perl-base $docs/perl
+    ln -s perl $docs/perl-base
     fi
 
     # util-linux has an alternate rename
     update-alternatives --install /usr/bin/rename rename /usr/bin/prename 60 \
-	--slave /usr/share/man/man1/rename.1.gz rename.1.gz \
-		/usr/share/man/man1/prename.1.gz
+    --slave /usr/share/man/man1/rename.1.gz rename.1.gz \
+        /usr/share/man/man1/prename.1.gz
+
+    if which dpkg-trigger >/dev/null 2>&1 && \
+       [ -n "$2" ] && \
+       dpkg --compare-versions "$2" lt 5.14.0
+    then
+        dpkg-trigger perl-major-upgrade
+    fi
 fi
 
 exit 0

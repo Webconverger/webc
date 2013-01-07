@@ -2,54 +2,43 @@
 
 set -e
 
-mv_conffile() {
-  local package='alsa-base'
-  local name="$1"
-  local newname="$2"
+if [ "$1" = "upgrade" ]; then
+	# Remove apm symlinks (legacy, no longer installed since 1.0.25+1)
+	rm -f \
+		/etc/apm/suspend.d/??alsa \
+		/etc/apm/resume.d/??alsa
+	[ -d /etc/apm/suspend.d ] && rmdir --ignore-fail-on-non-empty /etc/apm/suspend.d
+	[ -d /etc/apm/resume.d ]  && rmdir --ignore-fail-on-non-empty /etc/apm/resume.d
+	[ -d /etc/apm ]           && rmdir --ignore-fail-on-non-empty /etc/apm
+fi
 
-  [ -e "$name" ] || return 0
-
-  local md5="$(md5sum $name | sed -e 's/ .*//')"
-  oldmd5="$(dpkg-query -W -f='${Conffiles}' $package | \
-    sed -n -e "\' $name ' { s/ obsolete$//; s/.* //; p }")"
-
-  if [ "$md5" = "$oldmd5" ]; then
-    rm -f "$name"
-  else
-    mv "$name" "$newname"
-  fi
-}
-
-rm_conffile() {
-  mv_conffile "$1" "$1.dpkg-bak"
-}
-
-case "$1" in
-  install|upgrade)
-	# The following must be deleted at preinst time
-	# so that dpkg can remove their parent directories
-	# Delete obsolete dev.d symlinks
-	for N in 0 1 2 3 4 5 6 7 ; do
-		D="/etc/dev.d/snd/controlC$N"
-		if [ -d "$D" ] ; then
-			L="$D/alsa-base.dev"
-			rm -f "$L"
+# Automatically added by dh_installmodules
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	if [ -e "/etc/modprobe.d/alsa-base" ]; then
+		if [ "`md5sum \"/etc/modprobe.d/alsa-base\" | sed -e \"s/ .*//\"`" = \
+		     "`dpkg-query -W -f='${Conffiles}' alsa-base | sed -n -e \"\\\\' /etc/modprobe.d/alsa-base '{s/ obsolete$//;s/.* //p}\"`" ]
+		then
+			rm -f "/etc/modprobe.d/alsa-base"
 		fi
-	done
-	# Delete obsolete dev.d script
-	rm_conffile /etc/alsa/dev.d/alsa-base
-	# Delete obsolete init script
-	rm_conffile /etc/init.d/alsa
-	# Move blacklist without .conf extension
-	mv_conffile /etc/modprobe.d/alsa-base-blacklist /etc/modprobe.d/alsa-base-blacklist.conf
-	mv_conffile /etc/modprobe.d/alsa-base /etc/modprobe.d/alsa-base.conf
-	mv_conffile /etc/modprobe.d/linux-sound-base_noOSS /etc/modprobe.d/linux-sound-base_noOSS.conf
-	mv_conffile /etc/modprobe.d/linux-sound-base_noALSA /etc/modprobe.d/linux-sound-base_noALSA.conf
-	# Remove this obsolete modprobe.d file.
-	rm_conffile /etc/modprobe.d/alsa.conf
-	# In lenny one can have /etc/modprobe.d/alsa so removed as well
-	rm_conffile /etc/modprobe.d/alsa
-	;;
-esac
-
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/apm/scripts.d/alsa 1.0.25+2~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/alsa-base-blacklist /etc/modprobe.d/alsa-base-blacklist.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/alsa-base /etc/modprobe.d/alsa-base.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/linux-sound-base_noOSS /etc/modprobe.d/linux-sound-base_noOSS.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/linux-sound-base_noALSA /etc/modprobe.d/linux-sound-base_noALSA.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/alsa.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
+# End automatically added section
 

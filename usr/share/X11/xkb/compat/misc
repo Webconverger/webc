@@ -1,10 +1,3 @@
-// $XdotOrg: xc/programs/xkbcomp/compat/misc,v 1.1.4.4 2004/03/05 13:41:28 eich Exp $
-// $Xorg: misc,v 1.3 2000/08/17 19:54:34 cpqbld Exp $
-//
-//
-//
-// $XFree86: xc/programs/xkbcomp/compat/misc,v 1.4 2003/05/15 13:31:57 pascal Exp $
-
 default partial xkb_compatibility "misc"  {
 
     virtual_modifiers	Alt,Meta,Super,Hyper,ScrollLock;
@@ -114,4 +107,16 @@ default partial xkb_compatibility "misc"  {
     };
 
     include "ledscroll"
+	
+    include "misc(assign_shift_left_action)"
+};
+
+partial xkb_compatibility "assign_shift_left_action"  {
+    // Because of the irrevertable modifier mapping in symbols/pc <LFSH> is 
+    // getting bound to the Lock modifier when using 
+    // symbols/shift(both_capslock), creating unwanted behaviour. 
+    // This is a quirk, to circumvent the problem.
+    interpret Shift_L {
+        action = SetMods(modifiers = Shift);
+    };
 };

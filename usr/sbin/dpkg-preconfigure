@@ -13,11 +13,16 @@ BEGIN {
 		use Debconf::Config;
 		use Debconf::AutoSelect qw(:all);
 		use Debconf::Gettext;
+		use Debconf::Path;
 	};
 	if ($@) {
 		print STDERR "debconf: Perl may be unconfigured ($@) -- aborting\n";
 		exit 0;
 	}
+}
+
+if (exists $ENV{DEBCONF_USE_CDEBCONF} and $ENV{DEBCONF_USE_CDEBCONF} ne '') {
+    exec "/usr/lib/cdebconf/dpkg-preconfigure", @ARGV;
 }
 
 Debconf::Db->load;
@@ -51,7 +56,7 @@ elsif (! @debs) {
 	exit(1);
 }
 
-if (! -x "/usr/bin/apt-extracttemplates") {
+if (! Debconf::Path::find("apt-extracttemplates")) {
 	warn gettext("delaying package configuration, since apt-utils is not installed");
 	exit;
 }

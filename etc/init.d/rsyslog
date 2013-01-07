@@ -75,7 +75,7 @@ do_rotate() {
 create_xconsole() {
 	XCONSOLE=/dev/xconsole
 	if [ "$(uname -s)" != "Linux" ]; then
-		XCONSOLE=/var/run/xconsole
+		XCONSOLE=/run/xconsole
 		ln -sf $XCONSOLE /dev/xconsole
 	fi
 	if [ ! -e $XCONSOLE ]; then
@@ -86,7 +86,7 @@ create_xconsole() {
 }
 
 sendsigs_omit() {
-	OMITDIR=/lib/init/rw/sendsigs.omit.d
+	OMITDIR=/run/sendsigs.omit.d
 	mkdir -p $OMITDIR
 	ln -sf $RSYSLOGD_PIDFILE $OMITDIR/rsyslog
 }

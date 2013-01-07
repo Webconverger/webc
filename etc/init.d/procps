@@ -34,7 +34,7 @@ fi
 set -e
 
 case "$1" in
-	start|restart|force-reload)
+	start|restart|force-reload|reload)
 		log_action_begin_msg "Setting kernel variables "
 		STATUS=0
 		for file in /etc/sysctl.conf /etc/sysctl.d/*.conf ; do
@@ -42,15 +42,17 @@ case "$1" in
 				if [ "$VERBOSE" = "yes" ] ; then
 					log_action_cont_msg " $file"
 				fi
-				$SYSCTL $QUIET_SYSCTL -p "$file" || STATUS=$?
+				$SYSCTL $QUIET_SYSCTL --load="$file" || STATUS=$?
 			fi
 		done
 		log_action_end_msg $STATUS
 		;;
 	stop)
 		;;
+    status)
+        ;;
 	*)
-		echo "Usage: /etc/init.d/procps {start|stop|restart|force-reload}" >&2
+		echo "Usage: /etc/init.d/procps {start|stop|restart|reload|force-reload|status}" >&2
 		exit 3
 		;;
 esac

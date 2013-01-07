@@ -22,6 +22,13 @@ set -e
 
 test -f /bin/setupcon || exit 0
 
+if [ -f /etc/default/locale ]; then
+    # In order to permit auto-detection of the charmap when
+    # console-setup-mini operates without configuration file.
+    . /etc/default/locale
+    export LANG
+fi
+
 if [ -f /lib/lsb/init-functions ]; then
     . /lib/lsb/init-functions
 else
@@ -39,27 +46,21 @@ else
 fi
 
 case "$1" in
-    stop)
+    stop|status)
         # keyboard-setup isn't a daemon
         ;;
     start|force-reload|restart|reload)
-	case `readlink /proc/self/fd/2` in
-	    /dev/tty[0-9]*|/dev/vc/[0-9]*|/dev/console)
-	        log_action_begin_msg "Setting preliminary keymap"
-		if setupcon -k; then
-		    log_action_end_msg 0
-		else
-		    log_action_end_msg $?
-		fi
-		;;
-	    *)
-		exit 0 
-		;;
-	esac
+	log_action_begin_msg "Setting preliminary keymap"
+	if setupcon -k 2>/dev/null; then
+	    log_action_end_msg 0
+	else
+	    log_action_end_msg $?
+	fi
 	;;
     *)
-        echo 'Usage: /etc/init.d/keyboard-setup {start|reload|restart|force-reload|stop}'
+        echo 'Usage: /etc/init.d/keyboard-setup {start|reload|restart|force-reload|stop|status}'
         exit 1
         ;;
 esac
 
+exit 0

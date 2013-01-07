@@ -1,39 +1,63 @@
+# set classless routes based on the format specified in RFC3442
+# e.g.:
+#   new_rfc3442_classless_static_routes='24 192 168 10 192 168 1 1 8 10 10 17 66 41'
+# specifies the routes:
+#   192.168.10.0/24 via 192.168.1.1
+#   10.0.0.0/8 via 10.10.17.66.41
+
 RUN="yes"
 
 
 if [ "$RUN" = "yes" ]; then
-        if [ "$new_rfc3442_classless_static_routes" != "" ]; then
-                if [ "$reason" = "BOUND" ] || [ "$reason" = "REBOOT" ]; then
-                        rfc_routes=($new_rfc3442_classless_static_routes)
+	if [ -n "$new_rfc3442_classless_static_routes" ]; then
+		if [ "$reason" = "BOUND" ] || [ "$reason" = "REBOOT" ]; then
 
-                        for(( i=0; i < ${#rfc_routes[@]}; )); do
-                                net_length=${rfc_routes[$i]}
+			set -- $new_rfc3442_classless_static_routes
 
-                                ((i++))
+			while [ $# -gt 0 ]; do
+				net_length=$1
+				via_arg=''
 
-                                net_address=(0 0 0 0)
-                                for(( j=0; j < $[$net_length / 8 + \
-                                    ($net_length % 8 ? 1 : 0)]; j++, i++)); do
+				case $net_length in
+					32|31|30|29|28|27|26|25)
+						net_address="${2}.${3}.${4}.${5}"
+						gateway="${6}.${7}.${8}.${9}"
+						shift 9
+						;;
+					24|23|22|21|20|19|18|17)
+						net_address="${2}.${3}.${4}.0"
+						gateway="${5}.${6}.${7}.${8}"
+						shift 8
+						;;
+					16|15|14|13|12|11|10|9)
+						net_address="${2}.${3}.0.0"
+						gateway="${4}.${5}.${6}.${7}"
+						shift 7
+						;;
+					8|7|6|5|4|3|2|1)
+						net_address="${2}.0.0.0"
+						gateway="${3}.${4}.${5}.${6}"
+						shift 6
+						;;
+					0)	# default route
+						net_address="0.0.0.0"
+						gateway="${2}.${3}.${4}.${5}"
+						shift 5
+						;;
+					*)	# error
+						return 1
+						;;
+				esac
 
-                                        net_address[$j]=${rfc_routes[$i]}
-                                done
+				# take care of link-local routes
+				if [ "${gateway}" != '0.0.0.0' ]; then
+					via_arg="via ${gateway}"
+				fi
 
-                                gateway=(0 0 0 0)
-                                for (( j=0; j < 4; j++, i++ )); do
-                                        gateway[$j]=${rfc_routes[$i]}
-                                done
-
-                                old_IFS="$IFS"
-                                IFS='.'
-
-                                if [ "$net_length" == "32" ]; then
-                                        /sbin/route add -host "${net_address[*]}" gw "${gateway[*]}"
-                                else
-                                        /sbin/route add -net "${net_address[*]}/$net_length" gw "${gateway[*]}"
-                                fi
-                                IFS="$old_IFS"
-
-                        done
-                fi
-        fi
+				# set route (ip detects host routes automatically)
+				ip -4 route add "${net_address}/${net_length}" \
+					${via_arg} dev "${interface}" >/dev/null 2>&1
+			done
+		fi
+	fi
 fi

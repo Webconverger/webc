@@ -19,30 +19,23 @@ TTYGRP=5
 TTYMODE=620
 [ -f /etc/default/devpts ] && . /etc/default/devpts
 
-TMPFS_SIZE=
-[ -f /etc/default/tmpfs ] && . /etc/default/tmpfs
-
 KERNEL="$(uname -s)"
+
+. /lib/init/vars.sh
+. /lib/init/tmpfs.sh
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
 
-do_start () {
-	#
-	# Mount a tmpfs on /dev/shm
-	#
-	if [ ! -d /dev/shm ]
-	then
-		mkdir --mode=755 /dev/shm
-		[ -x /sbin/restorecon ] && /sbin/restorecon /dev/shm
-	fi
-	SHM_OPT=
-	[ "${SHM_SIZE:=$TMPFS_SIZE}" ] && SHM_OPT=",size=$SHM_SIZE"
-	domount tmpfs shmfs /dev/shm tmpfs -onosuid,nodev$SHM_OPT
+# May be run several times, so must be idempotent.
+# $1: Mount mode, to allow for remounting and mtab updating
+mount_filesystems () {
+	MNTMODE="$1"
 
-	#
+	# Mount a tmpfs on /run/shm
+	mount_shm "$MNTMODE"
+
 	# Mount /dev/pts
-	#
 	if [ "$KERNEL" = Linux ]
 	then
 		if [ ! -d /dev/pts ]
@@ -50,21 +43,23 @@ do_start () {
 			mkdir --mode=755 /dev/pts
 			[ -x /sbin/restorecon ] && /sbin/restorecon /dev/pts
 		fi
-		domount devpts "" /dev/pts devpts -onoexec,nosuid,gid=$TTYGRP,mode=$TTYMODE
+		domount "$MNTMODE" devpts "" /dev/pts devpts "-onoexec,nosuid,gid=$TTYGRP,mode=$TTYMODE"
 	fi
 }
 
 case "$1" in
   "")
 	echo "Warning: mountdevsubfs should be called with the 'start' argument." >&2
-	do_start
+	mount_filesystems mount_noupdate
 	;;
   start)
-	do_start
+	mount_filesystems mount_noupdate
+	;;
+  mtab)
+	mount_filesystems mtab
 	;;
   restart|reload|force-reload)
-	echo "Error: argument '$1' not supported" >&2
-	exit 3
+	mount_filesystems remount
 	;;
   stop)
 	# No-op

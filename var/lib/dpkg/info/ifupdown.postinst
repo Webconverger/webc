@@ -10,49 +10,18 @@ report_err() { report "Error: $*" >&2 ; }
 # Create /etc/network/run 
 if [ "$1" = configure -a ! -d /etc/network/run ]; then
   if [ -e /etc/network/run -o -L /etc/network/run ]; then
-    echo "Renaming non-directory /etc/network/run to run.dpkg-old..."
-    mv /etc/network/run /etc/network/run.dpkg-old
+    echo "Removing non-directory /etc/network/run..."
+    rm -f /etc/network/run
   fi
 
-  # The best choice is to use /dev/shm/network
-  #
-  # If we can't use that, we'll just make /etc/network/run a directory,
-  # unless we're upgrading, in which case we'll just keep ifstate where it
-  # is, by making /etc/network/run a symlink to /etc/network.
+  # The best choice is to use /run/network
+  # That must be supported everywhere
 
-  WHAT_TO_USE=devshm
-
-  if [ ! -d /dev/shm -o ! -w /dev/shm -o ! -r /proc/mounts ]; then
-    WHAT_TO_USE=owndir
-  elif ! grep -qs "^tmpfs[[:space:]]\+/dev/shm[[:space:]]\+tmpfs[[:space:]]\+\([^[:space:]]\+,\)\?rw" /proc/mounts
-  then
-    WHAT_TO_USE=owndir
-  elif grep -qs '[[:space:]]/dev[[:space:]]devfs[[:space:]]' /proc/mounts; then
-    WHAT_TO_USE=owndir
-  fi
-
-  # Check for available space if we are using devshm
-  if [ "$WHAT_TO_USE" = devshm ]; then
-    SPACE=`df -k /dev/shm | tail -1 | awk '{if ($4 ~ /%/) { print $3 } else { print $4 } }'`
-    if [ "$SPACE" -le 0 ]; then
-      WHAT_TO_USE=owndir
-    fi
-  fi
-
-  if [ "$WHAT_TO_USE" = owndir -a -e /etc/network/ifstate ]; then
-    WHAT_TO_USE=etcnetwork
-  fi
-
-  if [ "$WHAT_TO_USE" = devshm ]
-  then
-    [ -d /dev/shm/network ] || mkdir /dev/shm/network
-    ln -s /dev/shm/network /etc/network/run
-  elif [ "$WHAT_TO_USE" = "owndir" ]; then
-    mkdir /etc/network/run
-  else
-    ln -s . /etc/network/run
-  fi
+  [ -d /run/network ] || mkdir -p /run/network
+  ln -s /run/network /etc/network/run
 fi 
+
+[ -L /etc/network/run.dpkg-old ] && echo "Removing old symlink /etc/network/run.dpkg-old..." && rm -f /etc/network/run.dpkg-old
 
 # Move /etc/network/ifstate to /etc/network/run/ifstate
 if [ "$1" = configure -a "$2" != "" -a -e /etc/network/ifstate ] &&
@@ -69,7 +38,34 @@ then
     fi
   fi
 fi
-   
+
+l=$(readlink /etc/network/run || echo /etc/network/run)
+
+# Migrate /etc/network/run to /run/network
+if [ "$1" = configure -a "$2" != "" -a -e /etc/network/run -a "$l" != "/run/network" ]
+then
+  echo "Migrating network state directory from $l to /run/network..."
+  [ -d /run/network ] || mkdir /run/network
+  if [ -e /etc/network/run/ifstate ]
+  then
+    echo "Moving /etc/network/run/ifstate to /run/network/ifstate"
+    if [ ! -L /etc/network/run/ifstate ]; then
+      mv -f /etc/network/run/ifstate /run/network/ifstate
+    else
+      # we do this thing with .dpkg-new just so we don't truncate the
+      # state file in the case of crazy symlinked or mount-bound setup
+      cat /etc/network/run/ifstate >/run/network/ifstate.dpkg-new
+      mv -f /etc/network/run/ifstate /run/network/ifstate.dpkg-old
+      mv -f /run/network/ifstate.dpkg-new /run/network/ifstate
+    fi
+  fi
+  mv -f /etc/network/run /etc/network/run.dpkg-old || true
+  ln -s /run/network /etc/network/run
+  [ -L /etc/network/run.dpkg-old ] && rm -f /etc/network/run.dpkg-old || true
+  [ -d /etc/network/run.dpkg-old ] && rmdir /etc/network/run.dpkg-old 2>/dev/null || report_warn "Not removing the old contents of /etc/network/run: directory not empty; renamed into /etc/network/run.dpkg-old."
+fi
+
+
 if [ "$1" = "configure" -a "$2" != "" ] &&
      dpkg --compare-versions "$2" le "0.6.4-4.1" &&
      [ -f /etc/network/run/ifstate -a -x /sbin/dhclient ]
@@ -103,10 +99,10 @@ if [ "$1" = "configure" ] ; then
   if [ -f /etc/network/interfaces ] ; then
     # TODO: This should be handled with debconf and the script
     # could introduce the line there directly
-    if ! grep -q "^[[:space:]]*iface[[:space:]]\+lo[[:space:]]\+inet[[:space:]]\+loopback\>" /etc/network/interfaces ; then
+    if ! grep -q "^[[:space:]]*iface[[:space:]]\+lo0\?[[:space:]]\+inet[[:space:]]\+loopback\>" /etc/network/interfaces ; then
       report_warn "No 'iface lo' definition found in /etc/network/interfaces"
     fi
-    if ! grep -q "^[[:space:]]*auto[[:space:]].*\<lo\>" /etc/network/interfaces ; then
+    if ! grep -q "^[[:space:]]*\(allow-\|\)auto[[:space:]]\+\(.*[[:space:]]\+\|\)lo0\?\([[:space:]]\+\|$\)" /etc/network/interfaces ; then
       report_warn "No 'auto lo' statement found in /etc/network/interfaces"
     fi
   else  # ! -f /etc/network/interfaces
@@ -117,14 +113,23 @@ if [ "$1" = "configure" ] ; then
   fi
 fi
 
+if dpkg --compare-versions "$2" lt "0.7" ; then
+    update-rc.d -f ifupdown remove >/dev/null || true
+    update-rc.d -f ifupdown-clean remove >/dev/null || true
+fi
+
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/ifupdown-clean" ]; then
-	update-rc.d ifupdown-clean start 18 S . >/dev/null || exit $?
+if [ -x "/etc/init.d/networking" ]; then
+	update-rc.d networking start 40 S . start 35 0 6 . >/dev/null || exit $?
 fi
 # End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/ifupdown" ]; then
-	update-rc.d ifupdown start 39 S . start 36 0 6 . >/dev/null || exit $?
-fi
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/ifupdown 0.7~+ ifupdown -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/ifupdown 0.7~+ ifupdown -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/ifupdown-clean 0.7~beta1 ifupdown -- "$@"
 # End automatically added section
 

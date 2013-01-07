@@ -14,7 +14,7 @@ if [ "$NTPDATE_USE_NTP_CONF" = yes ]; then
 		fi
 	done
 	if [ -n "$file" ]; then
-		NTPSERVERS=$(sed -rne 's/^(servers?|peer) ([-_.:[:alnum:]]+).*$/\2/p' "$file" | grep -v '^127\.127\.') || [ $? -le 1 ]
+		NTPSERVERS=$(sed -rne 's/^(servers?|peer)[[:space:]]+(-[46][[:space:]]+)?([-_.:[:alnum:]]+).*$/\3/p' "$file" | grep -v '^127\.127\.') || [ $? -le 1 ]
 	fi
 elif [ -r /var/lib/ntpdate/default.dhcp ]; then
 	. /var/lib/ntpdate/default.dhcp

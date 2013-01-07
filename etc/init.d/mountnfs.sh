@@ -14,51 +14,48 @@
 ### END INIT INFO
 
 . /lib/init/vars.sh
+. /lib/init/mount-functions.sh
 . /lib/lsb/init-functions
 
 do_wait_async_mount() {
-	[ -f /etc/fstab ] || return
-	#
 	# Read through fstab line by line. If it is NFS, set the flag
 	# for mounting NFS file systems. If any NFS partition is found
 	# then wait around for it.
-	#
-
-	exec 9<&0 </etc/fstab
 
 	waitnfs=
-	while read DEV MTPT FSTYPE OPTS REST
-	do
-		case "$DEV" in
-		  ""|\#*)
-			continue
-			;;
-		esac
-		case "$OPTS" in
-		  noauto|*,noauto|noauto,*|*,noauto,*)
-			continue
-			;;
-		esac
-		case "$FSTYPE" in
-		  nfs|nfs4|smbfs|cifs|coda|ncp|ncpfs|ocfs2|gfs)
-			;;
-		  *)
-			continue
-			;;
-		esac
-		case "$MTPT" in
-		  /usr/local|/usr/local/*)
-			;;
-		  /usr|/usr/*)
-			waitnfs="$waitnfs $MTPT"
-			;;
-		  /var|/var/*)
-			waitnfs="$waitnfs $MTPT"
-			;;
-		esac
+	for file in "$(eval ls $(fstab_files))"; do
+		if [ -f "$file" ]; then
+			while read DEV MTPT FSTYPE OPTS REST; do
+				case "$DEV" in
+				  ""|\#*)
+					continue
+					;;
+				esac
+				case "$OPTS" in
+				  noauto|*,noauto|noauto,*|*,noauto,*)
+					continue
+					;;
+				esac
+				case "$FSTYPE" in
+				  nfs|nfs4|smbfs|cifs|coda|ncp|ncpfs|ocfs2|gfs|ceph)
+					;;
+				  *)
+					continue
+					;;
+				esac
+				case "$MTPT" in
+				  /usr/local|/usr/local/*)
+					;;
+				  /usr|/usr/*)
+					waitnfs="$waitnfs $MTPT"
+					;;
+				  /var|/var/*)
+					waitnfs="$waitnfs $MTPT"
+					;;
+				esac
+			done < "$file"
+		fi
 	done
-
-	exec 0<&9 9<&-
 
 	# Wait for each path, the timeout is for all of them as that's
 	# really the maximum time we have to wait anyway

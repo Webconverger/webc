@@ -16,10 +16,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 . /lib/init/vars.sh
 
 do_start () {
-	# Update motd
-	uname -snrvm > /var/run/motd
-	[ -f /etc/motd.tail ] && cat /etc/motd.tail >> /var/run/motd
-
 	# Save kernel messages in /var/log/dmesg
 	if which dmesg >/dev/null 2>&1
 	then
@@ -34,22 +30,10 @@ do_start () {
 		kill $!
 		[ -f /var/log/dmesg ] && { chgrp adm /var/log/dmesg || : ; }
 	fi
-
-	#
-	#	Save udev log in /var/log/udev
-	#
-	if [ -e /dev/.udev.log ]
-	then
-		mv -f /dev/.udev.log /var/log/udev
-	fi
 }
 
 do_status () {
-	if [ -f /var/run/motd ] && [ ! -f /dev/.udev.log ] ; then
-		return 0
-	else
-		return 4
-	fi
+	return 0
 }
 
 case "$1" in

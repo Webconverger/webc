@@ -27,9 +27,7 @@ report_unkillable() {
 do_stop () {
 	OMITPIDS=
 
-	# The /var/run/sendsigs.omit file is used to be compatible
-	# with Ubuntu.
-	for omitfile in /var/run/sendsigs.omit /lib/init/rw/sendsigs.omit; do
+	for omitfile in /run/sendsigs.omit; do
 		if [ -e $omitfile ]; then
 			for pid in $(cat $omitfile); do
 				OMITPIDS="${OMITPIDS:+$OMITPIDS }-o $pid"
@@ -40,14 +38,16 @@ do_stop () {
 	# Load sendsigs.omit.d/packagename files too, to make it
 	# possible for scripts that need to modify the list of pids at
 	# run time without race conditions.
-	if [ -d /lib/init/rw/sendsigs.omit.d/ ]; then
-		for pidfile in /lib/init/rw/sendsigs.omit.d/*; do
-			[ -f "$pidfile" ] || continue
-			for pid in $(cat $pidfile); do
-				OMITPIDS="${OMITPIDS:+$OMITPIDS }-o $pid"
+	for omitdir in /run/sendsigs.omit.d; do
+		if [ -d "${omitdir}" ]; then
+			for pidfile in "${omitdir}/"*; do
+				[ -f "$pidfile" ] || continue
+				for pid in $(cat $pidfile); do
+					OMITPIDS="${OMITPIDS:+$OMITPIDS }-o $pid"
+				done
 			done
-		done
-	fi
+		fi
+	done
 
 	# Upstart jobs have their own "stop on" clauses that sends
 	# SIGTERM/SIGKILL just like this, so if they're still running,
@@ -101,7 +101,7 @@ do_stop () {
 	    killall5 -9 $OMITPIDS # SIGKILL
 	    log_action_end_msg 1
 	else
-	    log_action_begin_msg "All processes ended within $seq seconds."
+	    log_action_begin_msg "All processes ended within $seq seconds"
 	    log_action_end_msg 0
 	fi
 }

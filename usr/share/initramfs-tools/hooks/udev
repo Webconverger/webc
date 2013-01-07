@@ -22,9 +22,6 @@ root_over_the_network() {
 
 . /usr/share/initramfs-tools/hook-functions
 
-# udevd uses unix domain sockets for communication
-force_load unix
-
 copy_exec /sbin/udevd      /sbin
 copy_exec /sbin/udevadm    /sbin
 
@@ -61,7 +58,7 @@ YES|yes|Yes|Y|y)
 esac
 
 cp /lib/udev/hotplug.functions $DESTDIR/lib/udev/
-for program in firmware.agent ata_id edd_id path_id scsi_id usb_id; do
+for program in firmware.agent ata_id edd_id scsi_id; do
   copy_exec /lib/udev/$program /lib/udev
 done
 copy_exec /sbin/blkid /sbin

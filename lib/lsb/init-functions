@@ -27,21 +27,16 @@
 #OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 #EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# only show errors
-. /etc/webc/functions.sh
-. /etc/webc/webc.conf
-cmdline | grep -qs quiet && exec >/dev/null
-
 start_daemon () {
-    local force nice pidfile exec i args
-    force=0
+    local force nice pidfile exec args OPTIND
+    force=""
     nice=0
     pidfile=/dev/null
 
     OPTIND=1
     while getopts fn:p: opt ; do
         case "$opt" in
-            f)  force=1;;
+            f)  force="force";;
             n)  nice="$OPTARG";;
             p)  pidfile="$OPTARG";;
         esac
@@ -55,24 +50,28 @@ start_daemon () {
     exec="$1"; shift
 
     args="--start --nicelevel $nice --quiet --oknodo"
-    if [ $force = 1 ]; then
-        /sbin/start-stop-daemon $args --chdir "$PWD" --startas $exec --pidfile /dev/null -- "$@"
+    if [ "$force" ]; then
+        /sbin/start-stop-daemon $args \
+	    --chdir "$PWD" --startas $exec --pidfile /dev/null -- "$@"
     elif [ $pidfile ]; then
-        /sbin/start-stop-daemon $args --chdir "$PWD" --exec $exec --oknodo --pidfile "$pidfile" -- "$@"
+        /sbin/start-stop-daemon $args \
+	    --chdir "$PWD" --exec $exec --oknodo --pidfile "$pidfile" -- "$@"
     else
         /sbin/start-stop-daemon $args --chdir "$PWD" --exec $exec -- "$@"
     fi
 }
 
 pidofproc () {
-    local pidfile line i pids= status specified pid
+    local pidfile base status specified pid OPTIND
     pidfile=
     specified=
     
     OPTIND=1
     while getopts p: opt ; do
         case "$opt" in
-            p)  pidfile="$OPTARG"; specified=1;;
+            p)  pidfile="$OPTARG"
+                specified="specified"
+		;;
         esac
     done
     shift $(($OPTIND - 1))
@@ -82,37 +81,49 @@ pidofproc () {
         pidfile="/var/run/$base.pid"
     fi
 
-    if [ -n "${pidfile:-}" -a -r "$pidfile" ]; then
+    if [ -n "${pidfile:-}" ]; then
+     if [ -e "$pidfile" ]; then
+      if [ -r "$pidfile" ]; then
         read pid < "$pidfile"
         if [ -n "${pid:-}" ]; then
             if $(kill -0 "${pid:-}" 2> /dev/null); then
-                echo "$pid"
+                echo "$pid" || true
                 return 0
             elif ps "${pid:-}" >/dev/null 2>&1; then
-                echo "$pid"
+                echo "$pid" || true
                 return 0 # program is running, but not owned by this user
             else
                 return 1 # program is dead and /var/run pid file exists
             fi
         fi
+      else
+        return 4 # pid file not readable, hence status is unknown.
+      fi
+     else
+       # pid file doesn't exist, try to find the pid nevertheless
+       if [ -x /bin/pidof ] && [ ! "$specified" ]; then
+         status="0"
+         /bin/pidof -o %PPID -x $1 || status="$?"
+         if [ "$status" = 1 ]; then
+             return 3 # program is not running
+         fi
+         return 0
+       fi
+       return 3 # specified pid file doesn't exist, program probably stopped
+     fi
     fi
-    if [ -x /bin/pidof -a ! "$specified" ]; then
-        status="0"
-        /bin/pidof -o %PPID -x $1 || status="$?"
-        if [ "$status" = 1 ]; then
-            return 3 # program is not running
-        fi
-        return 0
+    if [ "$specified" ]; then
+        return 3 # almost certain it's not running
     fi
     return 4 # Unable to determine status
 }
 
 # start-stop-daemon uses the same algorithm as "pidofproc" above.
 killproc () {
-    local pidfile sig status base i name_param is_term_sig
+    local pidfile sig status base name_param is_term_sig OPTIND
     pidfile=
     name_param=
-    is_term_sig=no
+    is_term_sig=
 
     OPTIND=1
     while getopts p: opt ; do
@@ -131,27 +142,31 @@ killproc () {
 
     sig=$(echo ${2:-} | sed -e 's/^-\(.*\)/\1/')
     sig=$(echo $sig | sed -e 's/^SIG\(.*\)/\1/')
-    if [ -z "$sig" -o "$sig" = 15 -o "$sig" = TERM ]; then
-        is_term_sig=yes
+    if [ "$sig" = 15 ] || [ "$sig" = TERM ]; then
+        is_term_sig="terminate_signal"
     fi
     status=0
-    if [ ! "$is_term_sig" = yes ]; then
+    if [ ! "$is_term_sig" ]; then
         if [ -n "$sig" ]; then
-            /sbin/start-stop-daemon --stop --signal "$sig" --quiet $name_param || status="$?"
+            /sbin/start-stop-daemon --stop --signal "$sig" \
+		--quiet $name_param || status="$?"
         else
-            /sbin/start-stop-daemon --stop --quiet $name_param || status="$?"
+            /sbin/start-stop-daemon --stop \
+		--retry 5 \
+		--quiet $name_param || status="$?"
         fi
     else
-        /sbin/start-stop-daemon --stop --quiet --oknodo $name_param || status="$?"
+        /sbin/start-stop-daemon --stop --quiet \
+	    --oknodo $name_param || status="$?"
     fi
     if [ "$status" = 1 ]; then
-        if [ -n "$sig" ]; then
+        if [ -z "$sig" ]; then
             return 0
         fi
         return 3 # program is not running
     fi
 
-    if [ "$status" = 0 -a "$is_term_sig" = yes -a "$pidfile" ]; then
+    if [ "$status" = 0 ] && [ "$is_term_sig" ] && [ "$pidfile" ]; then
         pidofproc -p "$pidfile" "$1" >/dev/null || rm -f "$pidfile"
     fi
     return 0
@@ -159,7 +174,7 @@ killproc () {
 
 # Return LSB status
 status_of_proc () {
-    local pidfile daemon name status
+    local pidfile daemon name status OPTIND
 
     pidfile=
     OPTIND=1
@@ -193,7 +208,13 @@ status_of_proc () {
 log_use_fancy_output () {
     TPUT=/usr/bin/tput
     EXPR=/usr/bin/expr
-    if [ -t 1 ] && [ "x${TERM:-}" != "x" ] && [ "x${TERM:-}" != "xdumb" ] && [ -x $TPUT ] && [ -x $EXPR ] && $TPUT hpa 60 >/dev/null 2>&1 && $TPUT setaf 1 >/dev/null 2>&1; then
+    if  [ -t 1 ] &&
+	[ "x${TERM:-}" != "x" ] &&
+	[ "x${TERM:-}" != "xdumb" ] &&
+	[ -x $TPUT ] && [ -x $EXPR ] &&
+	$TPUT hpa 60 >/dev/null 2>&1 &&
+	$TPUT setaf 1 >/dev/null 2>&1
+    then
         [ -z $FANCYTTY ] && FANCYTTY=1 || true
     else
         FANCYTTY=0
@@ -238,12 +259,25 @@ get_lsb_header_val () {
         sed -n "/$LSB_S/,/$LSB_E/ s/# $2: \(.*\)/\1/p" $1
 }
 
+# If the currently running init daemon is upstart, return zero; if the
+# calling init script belongs to a package which also provides a native
+# upstart job, it should generally exit non-zero in this case.
+init_is_upstart()
+{
+   if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | /bin/grep -q upstart; then
+       return 0
+   fi
+   return 1
+}
+
 # int log_begin_message (char *message)
 log_begin_msg () {
+    log_begin_msg_pre "$@"
     if [ -z "${1:-}" ]; then
         return 1
     fi
-    echo -n "$@"
+    /bin/echo -n "$@" || true
+    log_begin_msg_post "$@"
 }
 
 # Sample usage:
@@ -267,11 +301,11 @@ log_daemon_msg () {
     log_daemon_msg_pre "$@"
 
     if [ -z "${2:-}" ]; then
-        echo -n "$1:"
+        /bin/echo -n "$1:" || true
         return
     fi
     
-    echo -n "$1: $2"
+    /bin/echo -n "$1: $2" || true
     log_daemon_msg_post "$@"
 }
 
@@ -294,7 +328,7 @@ log_progress_msg () {
     if [ -z "${1:-}" ]; then
         return 1
     fi
-    echo -n " $@"
+    /bin/echo -n " $@" || true
 }
 
 
@@ -305,6 +339,7 @@ log_end_msg () {
         return 1
     fi
 
+    local retval
     retval=$1
 
     log_end_msg_pre "$@"
@@ -312,9 +347,9 @@ log_end_msg () {
     # Only do the fancy stuff if we have an appropriate terminal
     # and if /usr is already mounted
     if log_use_fancy_output; then
-        RED=`$TPUT setaf 1`
-        YELLOW=`$TPUT setaf 3`
-        NORMAL=`$TPUT op`
+        RED=$( $TPUT setaf 1)
+        YELLOW=$( $TPUT setaf 3)
+        NORMAL=$( $TPUT op)
     else
         RED=''
         YELLOW=''
@@ -322,29 +357,34 @@ log_end_msg () {
     fi
 
     if [ $1 -eq 0 ]; then
-        echo "."
+        echo "." || true
     elif [ $1 -eq 255 ]; then
-        /bin/echo -e " ${YELLOW}(warning).${NORMAL}"
+        /bin/echo -e " ${YELLOW}(warning).${NORMAL}" || true
     else
-        /bin/echo -e " ${RED}failed!${NORMAL}"
+        /bin/echo -e " ${RED}failed!${NORMAL}" || true
     fi
     log_end_msg_post "$@"
     return $retval
 }
 
 log_action_msg () {
-    echo "$@."
+    log_action_msg_pre "$@"
+    echo "$@." || true
+    log_action_msg_post "$@"
 }
 
 log_action_begin_msg () {
-    echo -n "$@..."
+    log_action_begin_msg_pre "$@"
+    /bin/echo -n "$@..." || true
+    log_action_begin_msg_post "$@"
 }
 
 log_action_cont_msg () {
-    echo -n "$@..."
+    /bin/echo -n "$@..." || true
 }
 
 log_action_end_msg () {
+    local end
     log_action_end_msg_pre "$@"
     if [ -z "${2:-}" ]; then
         end="."
@@ -353,26 +393,37 @@ log_action_end_msg () {
     fi
 
     if [ $1 -eq 0 ]; then
-        echo "done${end}"
+        echo "done${end}" || true
     else
         if log_use_fancy_output; then
-            RED=`$TPUT setaf 1`
-            NORMAL=`$TPUT op`
-            echo -e "${RED}failed${end}${NORMAL}"
+            RED=$( $TPUT setaf 1)
+            NORMAL=$( $TPUT op)
+            /bin/echo -e "${RED}failed${end}${NORMAL}" || true
         else
-            echo "failed${end}"
+            echo "failed${end}" || true
         fi
     fi
     log_action_end_msg_post "$@"
 }
 
-# Hooks for /etc/lsb-base-logging.sh
+# Pre&Post empty function declaration, to be overriden from /lib/lsb/init-functions.d/*
 log_daemon_msg_pre () { :; }
 log_daemon_msg_post () { :; }
+log_begin_msg_pre () { :; }
+log_begin_msg_post () { :; }
 log_end_msg_pre () { :; }
 log_end_msg_post () { :; }
+log_action_msg_pre () { :; }
+log_action_msg_post () { :; }
+log_action_begin_msg_pre () { :; }
+log_action_begin_msg_post () { :; }
 log_action_end_msg_pre () { :; }
 log_action_end_msg_post () { :; }
+
+# Include hooks from other packages in /lib/lsb/init-functions.d
+for hook in $(run-parts --lsbsysinit --list /lib/lsb/init-functions.d 2>/dev/null); do
+    [ -r $hook ] && . $hook || true
+done
 
 FANCYTTY=
 [ -e /etc/lsb-base-logging.sh ] && . /etc/lsb-base-logging.sh || true

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#     ckbcomp -- compile XKB keyboard definitions to loadkeys format
+#     ckbcomp -- translate XKB layout to loadkeys or kbdcontrol format
 #     Copyright © 2005,2006 Anton Zinoviev <anton@lml.bas.bg>
 
 #     This program is free software; you can redistribute it and/or modify
@@ -39,10 +39,22 @@ my $acm;
 
 my $verbosity = 0;
 
+my $installdir=$0;
+$installdir =~ s|/[^/]*$||g;
+if ($installdir =~ m|/bin$|) {
+    $installdir =~ s|/bin$||;
+} else {
+    $installdir .= "/..";
+}
+if ( $installdir eq '' || ! -d "$installdir/bin") {
+    $installdir = '/usr';
+}
+
 my @xdirs = ('/etc/console-setup/ckb',
+             "$installdir/etc/console-setup/ckb",
+	     '/usr/local/share/X11/xkb',
 	     '/usr/share/X11/xkb',
-	     '/etc/X11/xkb',
-	     '/usr/X11R6/lib/X11/xkb');
+	     '/etc/X11/xkb');
 
 my $keycodes;
 my $symbols;
@@ -53,6 +65,8 @@ my @layouts;
 my @variants = ();
 my @options = ();
 my $compact = 0;
+my $backspace = '';
+my $freebsd = 0;
 
 while (@ARGV) {
     $_ = shift @ARGV;
@@ -135,10 +149,20 @@ Where legal args are:
 -v[erbose] [<lvl>]  Sets verbosity (1..10).  Higher values yield
                     more messages
 -compact            Generate compact keymap
+-freebsd            Generate keymap for FreeBSD
+-backspace bs|del   Backspace is BS (^h) or DEL (^?)
 EOT
             exit 0;
 	} elsif (/^compact$/) {
 	    $compact = 1;
+	} elsif (/^freebsd$/) {
+	    $freebsd = 1;
+	} elsif (/^backspace$/) {
+	    $backspace = $ARGV[0];
+            if ($backspace ne 'del' && $backspace ne 'bs') {
+                die "$0: Option -backspace accepts either del or bs\n";
+            }
+            shift @ARGV;
 	} else {
 	    die "$0: Unknown option -$_\n";
 	}
@@ -160,6 +184,7 @@ EOT
 
 $rules = 'xorg' if (! $rules);
 $model = 'pc104' if (! $model);
+$backspace = $freebsd ? 'bs' : 'del' if (! $backspace);
 
 ########### GLOBAL VARIABLES #########################################
 
@@ -194,22 +219,44 @@ my $stream = '';    # The contents of $filename that still has not been parsed
 my $method = $override_method; # The current method (by default "override")
 my $base_group = 0; # The base group to include in (for "symbols" files only)
 
-my %kernel_modifiers = ('Shift' => 0x01,
-			'Shift_Lock' => 0x01,
-			'AltGr' => 0x02,
-			'AltGr_Lock' => 0x02,
-			'Control' => 0x04,
-			'Control_Lock' => 0x04,
-			'Alt' => 0x08,
-			'Alt_Lock' => 0x08,
-			'ShiftL' => 0x10,
-			'ShiftL_Lock' => 0x10,
-			'ShiftR' => 0x20,
-			'ShiftR_Lock' => 0x20,
-			'CtrlL' => 0x40,
-			'CtrlL_Lock' => 0x40,
-			'CtrlR' => 0x80,
-			'CtrlR_Lock' => 0x80);
+my %kernel_modifiers = ( # Linux
+                         'Shift' => 0x01,
+                         'Shift_Lock' => 0x01,
+                         'AltGr' => 0x02,
+                         'AltGr_Lock' => 0x02,
+                         'Control' => 0x04,
+                         'Control_Lock' => 0x04,
+                         'Alt' => 0x08,
+                         'Alt_Lock' => 0x08,
+                         'ShiftL' => 0x10,
+                         'ShiftL_Lock' => 0x10,
+                         'ShiftR' => 0x20,
+                         'ShiftR_Lock' => 0x20,
+                         'CtrlL' => 0x40,
+                         'CtrlL_Lock' => 0x40,
+                         'CtrlR' => 0x80,
+                         'CtrlR_Lock' => 0x80,
+                         # FreeBSD
+                         'lshift' => 0x01,
+                         'rshift' => 0x01,
+                         'shifta' => 0x01, # is this correct ?
+                         'lshifta' => 0x01, # is this correct ?
+                         'rshifta' => 0x01, # is this correct ?
+                         'alt' => 0x02,
+                         'lalt' => 0x02,
+                         'ralt' => 0x02,
+                         'alta' => 0x02, # is this correct ?
+                         'lalta' => 0x02, # is this correct ?
+                         'ralta' => 0x02, # is this correct ?
+                         'ctrl' => 0x04,
+                         'lctrl' => 0x04,
+                         'rctrl' => 0x04,
+                         'ctrla' => 0x04, # is this correct ?
+                         'lctrla' => 0x04, # is this correct ?
+                         'rctrla' => 0x04, # is this correct ?
+                         'alock' => 0x10,
+                         'ashift' => 0x10,
+    );
 
 my @modifier_combinations = ('plain',
                              'shift',
@@ -352,13 +399,6 @@ my %forbidden;
 }
 
 my %xkbsym_table = (
-# Control symbols
-    'BackSpace' => 'Delete',  # 0008
-    'Tab' => 'Tab',           # 0009
-    'Linefeed' => 'Linefeed', # 000a
-    'Return' => 'Return',     # 000d
-    'Escape' => 'Escape',     # 001b
-# Alphanumeric symbols
     'space' => '0020',
     'exclam' => '0021',
     'quotedbl' => '0022',
@@ -794,6 +834,7 @@ my %xkbsym_table = (
     'Cyrillic_DE' => '0414',
     'Cyrillic_IE' => '0415',
     'Cyrillic_ZHE' => '0416',
+    'Cyrillic_ZH' => '0416',
     'Cyrillic_ZE' => '0417',
     'Cyrillic_I' => '0418',
     'Cyrillic_SHORTI' => '0419',
@@ -801,6 +842,7 @@ my %xkbsym_table = (
     'Cyrillic_EL' => '041b',
     'Cyrillic_EM' => '041c',
     'Cyrillic_EN' => '041d',
+    'Cyrillic_N' => '041d',
     'Cyrillic_O' => '041e',
     'Cyrillic_PE' => '041f',
     'Cyrillic_ER' => '0420',
@@ -808,6 +850,7 @@ my %xkbsym_table = (
     'Cyrillic_TE' => '0422',
     'Cyrillic_U' => '0423',
     'Cyrillic_EF' => '0424',
+    'Cyrillic_F' => '0424',
     'Cyrillic_HA' => '0425',
     'Cyrillic_TSE' => '0426',
     'Cyrillic_CHE' => '0427',
@@ -815,6 +858,7 @@ my %xkbsym_table = (
     'Cyrillic_SHCHA' => '0429',
     'Cyrillic_HARDSIGN' => '042a',
     'Cyrillic_YERU' => '042b',
+    'Cyrillic_UI' => '042b',
     'Cyrillic_SOFTSIGN' => '042c',
     'Cyrillic_E' => '042d',
     'Cyrillic_YU' => '042e',
@@ -826,6 +870,7 @@ my %xkbsym_table = (
     'Cyrillic_de' => '0434',
     'Cyrillic_ie' => '0435',
     'Cyrillic_zhe' => '0436',
+    'Cyrillic_zh' => '0436',
     'Cyrillic_ze' => '0437',
     'Cyrillic_i' => '0438',
     'Cyrillic_shorti' => '0439',
@@ -833,6 +878,7 @@ my %xkbsym_table = (
     'Cyrillic_el' => '043b',
     'Cyrillic_em' => '043c',
     'Cyrillic_en' => '043d',
+    'Cyrillic_n' => '043d',
     'Cyrillic_o' => '043e',
     'Cyrillic_pe' => '043f',
     'Cyrillic_er' => '0440',
@@ -840,6 +886,7 @@ my %xkbsym_table = (
     'Cyrillic_te' => '0442',
     'Cyrillic_u' => '0443',
     'Cyrillic_ef' => '0444',
+    'Cyrillic_f' => '0444',
     'Cyrillic_ha' => '0445',
     'Cyrillic_tse' => '0446',
     'Cyrillic_che' => '0447',
@@ -847,6 +894,7 @@ my %xkbsym_table = (
     'Cyrillic_shcha' => '0449',
     'Cyrillic_hardsign' => '044a',
     'Cyrillic_yeru' => '044b',
+    'Cyrillic_ui' => '044b',
     'Cyrillic_softsign' => '044c',
     'Cyrillic_e' => '044d',
     'Cyrillic_yu' => '044e',
@@ -1579,7 +1627,6 @@ my %xkbsym_table = (
     'ballotcross' => '2717',
     'latincross' => '271d',
     'maltesecross' => '2720',
-    'braille_blank' => '2800',
     'braille_dots_1' => '2801',
     'braille_dots_2' => '2802',
     'braille_dots_12' => '2803',
@@ -1959,410 +2006,872 @@ my %xkbsym_table = (
     'Hangul_YeorinHieuh' => '3186',
     'Hangul_AraeA' => '318d',
     'Hangul_AraeAE' => '318e',
-# Keypad keys
-    'KP_Multiply' => 'KP_Multiply',
-    'KP_Add' => 'KP_Add',
-    'KP_Seprator' => 'KP_Comma', # Is this recognised by X ?
-    'KP_Separator' => 'KP_Comma',
-    'KP_Subtract' => 'KP_Subtract',
-    'KP_Decimal' => 'KP_Period',
-    'KP_Divide' => 'KP_Divide',
-    'KP_0' => 'KP_0',
-    'KP_1' => 'KP_1',
-    'KP_2' => 'KP_2',
-    'KP_3' => 'KP_3',
-    'KP_4' => 'KP_4',
-    'KP_5' => 'KP_5',
-    'KP_6' => 'KP_6',
-    'KP_7' => 'KP_7',
-    'KP_8' => 'KP_8',
-    'KP_9' => 'KP_9',
-    'KP_Enter' => 'KP_Enter',
-# Keypad keys (alternate level)
-    'KP_Home' => 'KP_7',
-    'KP_Left' => 'KP_4',
-    'KP_Up' => 'KP_8',
-    'KP_Right' => 'KP_6',
-    'KP_Down' => 'KP_2',
-    'KP_Prior' => 'KP_9',
-    'KP_Page_Up' => 'KP_9',
-    'KP_Next' => 'KP_3',
-    'KP_Page_Down' => 'KP_3',
-    'KP_End' => 'KP_1',
-    'KP_Begin' => 'VoidSymbol', # What does correspond to this?
-    'KP_Insert' => 'KP_0',
-    'KP_Delete' => 'VoidSymbol', # has to be 'KP_Period' or 'KP_Decimal'
-# Keypad keys with missing support in the kernel
-    'KP_Space' => 'space',
-    'KP_Equal' => 'equal',
-    'KP_Tab' => 'Tab',
-    'KP_F1' => 'F1',
-    'KP_F2' => 'F2',
-    'KP_F3' => 'F3',
-    'KP_F4' => 'F4',
-# Dead symbols
-    'dead_grave' => 'dead_grave',
-    'SunFA_Grave' => 'dead_grave', # Is this recognised by X ?
-    'dead_acute' => 'dead_acute',
-    'SunFA_Acute' => 'dead_acute', # Is this recognised by X ?
-    'dead_circumflex' => 'dead_circumflex',
-    'SunFA_Circum' => 'dead_circumflex', # Is this recognised by X ?
-    'dead_tilde' => 'dead_tilde',
-    'SunFA_Tilde' => 'dead_tilde',
-    'dead_breve' => 'dead_breve',
-    'dead_diaeresis' => 'dead_diaeresis',
-    'SunFA_Diaeresis' => 'dead_diaeresis', # Is this recognised by X ?
-    'dead_doubleacute' => 'dead_doubleacute',
-    'dead_caron' => 'dead_caron',
-    'dead_cedilla' => 'dead_cedilla',
-    'SunFA_Cedilla' => 'dead_cedilla', # Is this recognised by X ?
-    'dead_ogonek' => 'dead_ogonek',
-# Dead symbols with no support in the kernel
-    'dead_macron' => '005f',         # underscore
-    'dead_abovedot' => '002e',       # period
-    'dead_abovering' => '002a',      # asterisk
-    'dead_stroke' => '002d',         # hyphen
-    'dead_belowdot' => '0323',       # ???? Vietnamese
-    'dead_hook' => '0309',           # ???? Vietnamese
-    'dead_iota' => '03b9',           # ???? Greek
-    'dead_horn' => '031b',           # ???? Greek
-    'dead_psili' => 'VoidSymbol',    # ???? Greek
-    'dead_dasia' => 'VoidSymbol',    # ???? Greek
-# Modifiers
-    'Multi_key' => 'Compose',
-    'Mode_switch' => 'ShiftL',
-    'script_switch' => 'VoidSymbol',
-    'Shift_L' => 'Shift',
-    'Shift_R' => 'Shift',
-    'Control_L' => 'Control',
-    'Control_R' => 'Control',
-    'Caps_Lock' => 'Caps_Lock',
-    'Shift_Lock' => 'Shift_Lock',
-    'Meta_L' => 'Alt',
-    'Meta_R' => 'Alt',
-    'Alt_L' => 'Alt',
-    'Alt_R' => 'Alt',
-    'Super_L' => 'Alt',
-    'Super_R' => 'Alt',
-    'Hyper_L' => 'Alt',
-    'Hyper_R' => 'Alt',
-    'ISO_Lock' => 'Caps_Lock',
-    'ISO_Level2_Latch' => 'Shift',
-    'ISO_Level3_Shift' => 'AltGr',
-    'ISO_Level3_Latch' => 'AltGr',
-    'ISO_Level3_Lock' => 'AltGr_Lock',
-    'ISO_Group_Shift' => 'ShiftL',
-    'ISO_Group_Latch' => 'ShiftL',
-    'ISO_Group_Lock' => 'ShiftL_Lock',
-    'ISO_Next_Group' => 'ShiftL_Lock',
-    'ISO_Next_Group_Lock' => 'ShiftL_Lock',
-    'ISO_Prev_Group' => 'ShiftL_Lock',
-    'ISO_Prev_Group_Lock' => 'ShiftL_Lock',
-    'ISO_First_Group' => 'ShiftL_Lock',
-    'ISO_First_Group_Lock' => 'ShiftL_Lock',
-    'ISO_Last_Group' => 'ShiftL_Lock',
-    'ISO_Last_Group_Lock' => 'ShiftL_Lock',
-# Other symbols
-    'NoAction' => 'NoSymbol', # Is this recognised by X ?
-    'nosymbol' => 'NoSymbol', # Is this recognised by X ?
-    'Nosymbol' => 'NoSymbol', # Is this recognised by X ?
-    'noSymbol' => 'NoSymbol', # Is this recognised by X ?
-    'NoSymbol' => 'NoSymbol',
-    'any' => 'NoSymbol', # Is this recognised by X ?
-    'VoidSymbol' => 'VoidSymbol',
-    'voidsymbol' => 'VoidSymbol', # Is this recognised by X ?
-    'ISO_Left_Tab' => 'Tab',
-    'Clear' => 'VoidSymbol',
-    'Pause' => 'Pause',
-    'Scroll_Lock' => 'Scroll_Lock',
-    'Sys_Req' => 'VoidSymbol',
-    'Delete' => 'Remove',
-    'Codeinput' => 'VoidSymbol',
-    'SingleCandidate' => 'VoidSymbol',
-    'MultipleCandidate' => 'VoidSymbol',
-    'PreviousCandidate' => 'VoidSymbol',
-    'Home' => 'Home',
-    'Left' => 'Left',
-    'Up' => 'Up',
-    'Right' => 'Right',
-    'Down' => 'Down',
-    'Prior' => 'Prior',
-    'Page_Up' => 'PageUp',
-    'Next' => 'Next',
-    'Page_Down' => 'PageDown',
-    'End' => 'End',
-    'Begin' => 'VoidSymbol',
-    'Select' => 'Select',
-    'Print' => 'VoidSymbol',
-    'Execute' => 'VoidSymbol',
-    'Insert' => 'Insert',
-    'Undo' => 'VoidSymbol',
-    'Redo' => 'VoidSymbol',
-    'Menu' => 'VoidSymbol',
-    'Find' => 'Find',
-    'Cancel' => 'VoidSymbol',
-    'Help' => 'Help',
-    'Break' => 'Pause',
-    'Num_Lock' => 'Num_Lock',
-    'F1' => 'F1',
-    'F2' => 'F2',
-    'F3' => 'F3',
-    'F4' => 'F4',
-    'F5' => 'F5',
-    'F6' => 'F6',
-    'F7' => 'F7',
-    'F8' => 'F8',
-    'F9' => 'F9',
-    'F10' => 'F10',
-    'F11' => 'F11',
-    'L1' => 'F11',
-    'F12' => 'F12',
-    'L2' => 'F12',
-    'F13' => 'F13',
-    'L3' => 'F13',
-    'F14' => 'F14',
-    'L4' => 'F14',
-    'F15' => 'F15',
-    'L5' => 'F15',
-    'F16' => 'F16',
-    'L6' => 'F16',
-    'F17' => 'F17',
-    'L7' => 'F17',
-    'F18' => 'F18',
-    'L8' => 'F18',
-    'F19' => 'F19',
-    'L9' => 'F19',
-    'F20' => 'F20',
-    'L10' => 'F20',
-    'F21' => 'F21',
-    'R1' => 'F21',
-    'F22' => 'F22',
-    'R2' => 'F22',
-    'F23' => 'F23',
-    'R3' => 'F23',
-    'F24' => 'F24',
-    'R4' => 'F24',
-    'F25' => 'F25',
-    'R5' => 'F25',
-    'F26' => 'F26',
-    'R6' => 'F26',
-    'F27' => 'F27',
-    'R7' => 'F27',
-    'F28' => 'F28',
-    'R8' => 'F28',
-    'F29' => 'F29',
-    'R9' => 'F29',
-    'F30' => 'F30',
-    'R10' => 'F30',
-    'F31' => 'F31',
-    'R11' => 'F31',
-    'F32' => 'F32',
-    'R12' => 'F32',
-    'F33' => 'F33',
-    'R13' => 'F33',
-    'F34' => 'F34',
-    'R14' => 'F34',
-    'F35' => 'F35',
-    'R15' => 'F35',
-    'Terminate_Server' => 'VoidSymbol',
-    'Pointer_EnableKeys' => 'VoidSymbol',
-    'XF86_Switch_VT_1' => 'Console_1',
-    'XF86_Switch_VT_2' => 'Console_2',
-    'XF86_Switch_VT_3' => 'Console_3',
-    'XF86_Switch_VT_4' => 'Console_4',
-    'XF86_Switch_VT_5' => 'Console_5',
-    'XF86_Switch_VT_6' => 'Console_6',
-    'XF86_Switch_VT_7' => 'Console_7',
-    'XF86_Switch_VT_8' => 'Console_8',
-    'XF86_Switch_VT_9' => 'Console_9',
-    'XF86_Switch_VT_10' => 'Console_10',
-    'XF86_Switch_VT_11' => 'Console_11',
-    'XF86_Switch_VT_12' => 'Console_12',
-    'XF86_ClearGrab' => 'VoidSymbol',
-    'XF86_Ungrab' => 'VoidSymbol',
-    'XF86_Next_VMode' => 'VoidSymbol',
-    'XF86_Prev_VMode' => 'VoidSymbol',
-    'XF86Copy' => 'VoidSymbol',
-    'XF86Cut' => 'VoidSymbol',
-    'XF86Paste' => 'VoidSymbol',
-    'XF86AudioLowerVolume' => 'VoidSymbol',
-    'XF86AudioRaiseVolume' => 'VoidSymbol',
-    'XF86AudioMute' => 'VoidSymbol',
-    'XF86PowerOff' => 'VoidSymbol',
-    'XF86AudioForward' => 'VoidSymbol',
-    'XF86AudioMedia' => 'VoidSymbol',
-    'XF86AudioNext' => 'VoidSymbol',
-    'XF86AudioPause' => 'VoidSymbol',
-    'XF86AudioPlay' => 'VoidSymbol',
-    'XF86AudioPrev' => 'VoidSymbol',
-    'XF86AudioRecord' => 'VoidSymbol',
-    'XF86AudioRewind' => 'VoidSymbol',
-    'XF86AudioStop' => 'VoidSymbol',
-    'XF86Back' => 'VoidSymbol',
-    'XF86Battery' => 'VoidSymbol',
-    'XF86Bluetooth' => 'VoidSymbol',
-    'XF86Calculator' => 'VoidSymbol',
-    'XF86Close' => 'VoidSymbol',
-    'XF86Display' => 'VoidSymbol',
-    'XF86Documents' => 'VoidSymbol',
-    'XF86DOS' => 'VoidSymbol',
-    'XF86Eject' => 'VoidSymbol',
-    'XF86Explorer' => 'VoidSymbol',
-    'XF86Favorites' => 'VoidSymbol',
-    'XF86Finance' => 'VoidSymbol',
-    'XF86Forward' => 'VoidSymbol',
-    'XF86HomePage' => 'VoidSymbol',
-    'XF86KbdBrightnessDown' => 'VoidSymbol',
-    'XF86KbdBrightnessUp' => 'VoidSymbol',
-    'XF86KbdLightOnOff' => 'VoidSymbol',
-    'XF86Launch1' => 'VoidSymbol',
-    'XF86Launch2' => 'VoidSymbol',
-    'XF86Launch3' => 'VoidSymbol',
-    'XF86Launch4' => 'VoidSymbol',
-    'XF86Mail' => 'VoidSymbol',
-    'XF86MailForward' => 'VoidSymbol',
-    'XF86MenuKB' => 'VoidSymbol',
-    'XF86MonBrightnessDown' => 'VoidSymbol',
-    'XF86MonBrightnessUp' => 'VoidSymbol',
-    'XF86MyComputer' => 'VoidSymbol',
-    'XF86New' => 'VoidSymbol',
-    'XF86Phone' => 'VoidSymbol',
-    'XF86Reload' => 'VoidSymbol',
-    'XF86Reply' => 'VoidSymbol',
-    'XF86RotateWindows' => 'VoidSymbol',
-    'XF86Save' => 'VoidSymbol',
-    'XF86ScreenSaver' => 'VoidSymbol',
-    'XF86ScrollDown' => 'VoidSymbol',
-    'XF86ScrollUp' => 'VoidSymbol',
-    'XF86Search' => 'VoidSymbol',
-    'XF86Send' => 'VoidSymbol',
-    'XF86Shop' => 'VoidSymbol',
-    'XF86Sleep' => 'VoidSymbol',
-    'XF86Suspend' => 'VoidSymbol',
-    'XF86Tools' => 'VoidSymbol',
-    'XF86TouchpadToggle' => 'VoidSymbol',
-    'XF86WakeUp' => 'VoidSymbol',
-    'XF86WebCam' => 'VoidSymbol',
-    'XF86WLAN' => 'VoidSymbol',
-    'XF86WWW' => 'VoidSymbol',
-    'XF86Xfer' => 'VoidSymbol',
-    'braille_dot_1' => 'Brl_dot1',
-    'braille_dot_2' => 'Brl_dot2',
-    'braille_dot_3' => 'Brl_dot3',
-    'braille_dot_4' => 'Brl_dot4',
-    'braille_dot_5' => 'Brl_dot5',
-    'braille_dot_6' => 'Brl_dot6',
-    'braille_dot_7' => 'Brl_dot7',
-    'braille_dot_8' => 'Brl_dot8',
-    'braille_dot_9' => 'Brl_dot9',
-    'braille_dot_10' => 'Brl_dot10',
-# I do not know the Unicodes of these
-    '0x1000' => 'VoidSymbol', # Special symbol for X or syntax error?
-    '0x13a4' => 'VoidSymbol', # Special symbol for X or syntax error?
-    '0xfe11' => 'VoidSymbol', # Special symbol for X or syntax error?
-    'leftcaret' => 'VoidSymbol', # Is this recognised by X ?
-    'guj_rra' => 'VoidSymbol', # Is this recognised by X ?
-    'guj_nnna' => 'VoidSymbol', # Is this recognised by X ?
-    'guj_llla' => 'VoidSymbol', # Is this recognised by X ?
-    'gur_visarga' => 'VoidSymbol', # Is this recognised by X ?
-    'gur_v_r' => 'VoidSymbol', # Is this recognised by X ?
-    'gur_v_r_s' => 'VoidSymbol', # Is this recognised by X ?
-    'Eisu_toggle' => 'VoidSymbol', # Is this recognised by X ?
-    'Zenkaku_Hankaku' => 'VoidSymbol', # Is this recognised by X ?
-    'Kanji' => 'VoidSymbol', # Is this recognised by X ?
-    'Hangul' => 'VoidSymbol', # Is this recognised by X ?
-    'Hangul_Hanja' => 'VoidSymbol', # Is this recognised by X ?
-    'Henkan' => 'VoidSymbol',
-    'Hiragana' => 'VoidSymbol',
-    'Hiragana_Katakana' => 'VoidSymbol',
-    'Katakana' => 'VoidSymbol',
-    'Muhenkan' => 'VoidSymbol',
-# XFree86 does not recognise these
-    'SunAudioLowerVolume' => 'VoidSymbol',
-    'SunAudioRaiseVolume' => 'VoidSymbol',
-    'SunAudioMute' => 'VoidSymbol',
-    'SunCopy' => 'VoidSymbol',
-    'SunCut' => 'VoidSymbol',
-    'SunPaste' => 'VoidSymbol',
-    'SunAgain' => 'VoidSymbol',
-    'SunUndo' => 'VoidSymbol',
-    'SunFind' => 'VoidSymbol',
-    'SunStop' => 'VoidSymbol',
-    'SunF36' => 'VoidSymbol',
-    'SunF37' => 'VoidSymbol',
-    'SunFront' => 'VoidSymbol',
-    'SunOpen' => 'VoidSymbol',
-    'SunPowerSwitch' => 'VoidSymbol',
-    'SunPowerSwitchShift' => 'VoidSymbol',
-    'SunProps' => 'VoidSymbol',
-    'SunSys_Req' => 'VoidSymbol',
-    'SunVideoDegauss' => 'VoidSymbol',
-    'SunVideoLowerBrightness' => 'VoidSymbol',
-    'SunVideoRaiseBrightness' => 'VoidSymbol',
 );
 
-if ($compact) {
-    $xkbsym_table{'Mode_switch'} = 'AltGr';
-    $xkbsym_table{'ISO_Group_Shift'} = 'AltGr';
-    $xkbsym_table{'ISO_Group_Latch'} = 'AltGr';
-    $xkbsym_table{'ISO_Group_Lock'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Next_Group'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Next_Group_Lock'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Prev_Group'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Prev_Group_Lock'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_First_Group'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_First_Group_Lock'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Last_Group'} = 'AltGr_Lock';
-    $xkbsym_table{'ISO_Last_Group_Lock'} = 'AltGr_Lock';
+if ($freebsd) {
+    %xkbsym_table = 
+        (%xkbsym_table,
+# Control symbols
+         'BackSpace' => 'bs',      # 0008
+         'Tab' => 'ht',            # 0009
+         'Linefeed' => 'nl',       # 000a
+         'Return' => 'cr',         # 000d
+         'Escape' => 'esc',        # 001b
+# Keypad keys
+         'KP_Multiply' => '\'*\'',
+         'KP_Add' => 'fkey56',
+         'KP_Seprator' => '\',\'', # Is this recognised by X ?
+         'KP_Separator' => '\',\'',
+         'KP_Subtract' => 'fkey52',
+         'KP_Decimal' => '\'.\'',
+         'KP_Divide' => '\'/\'',
+         'KP_0' => '\'0\'',
+         'KP_1' => '\'1\'',
+         'KP_2' => '\'2\'',
+         'KP_3' => '\'3\'',
+         'KP_4' => '\'4\'',
+         'KP_5' => '\'5\'',
+         'KP_6' => '\'6\'',
+         'KP_7' => '\'7\'',
+         'KP_8' => '\'8\'',
+         'KP_9' => '\'9\'',
+         'KP_Enter' => 'cr',
+         'KP_Home' => 'fkey49',
+         'KP_Left' => 'fkey53',
+         'KP_Up' => 'fkey50',
+         'KP_Right' => 'fkey55',
+         'KP_Down' => 'fkey58',
+         'KP_Prior' => 'fkey51',
+         'KP_Page_Up' => 'fkey51',
+         'KP_Next' => 'fkey59',
+         'KP_Page_Down' => 'fkey59',
+         'KP_End' => 'fkey57',
+         'KP_Begin' => 'fkey54',
+         'KP_Insert' => 'fkey60',
+         'KP_Delete' => 'del',
+         'KP_Space' => 'sp',
+         'KP_Equal' => '\'=\'',
+         'KP_Tab' => 'ht',
+         'KP_F1' => 'fkey01',
+         'KP_F2' => 'fkey02',
+         'KP_F3' => 'fkey03',
+         'KP_F4' => 'fkey04',
+# Dead symbols
+         'dead_grave' => 'dgra',
+         'SunFA_Grave' => 'dgra_grave', # Is this recognised by X ?
+         'dead_acute' => 'dacu',
+         'SunFA_Acute' => 'dacu', # Is this recognised by X ?
+         'dead_circumflex' => 'dcir',
+         'SunFA_Circum' => 'dcir', # Is this recognised by X ?
+         'dead_tilde' => 'dtil',
+         'SunFA_Tilde' => 'dtil',
+         'dead_breve' => 'dbre',
+         'dead_diaeresis' => 'ddia',
+         'SunFA_Diaeresis' => 'ddia', # Is this recognised by X ?
+         'dead_doubleacute' => 'ddac',
+         'dead_caron' => 'dcar',
+         'dead_V' => 'dcar', # Is this correct?
+         'dead_cedilla' => 'dced',
+         'SunFA_Cedilla' => 'dced', # Is this recognised by X ?
+         'dead_ogonek' => 'dogo',
+         'dead_macron' => 'dmac',
+         'dead_abovedot' => 'ddot',
+         'dead_abovering' => 'drin',
+         'dead_stroke' => 'nop',
+         'dead_belowdot' => '0323',       # ???? Vietnamese
+         'dead_hook' => 'dsla',           # ???? Vietnamese
+         'dead_belowcomma' => 'nop',
+         'dead_currency' => 'nop',
+         'dead_doublegrave' => 'nop',
+         'dead_invertedbreve' => 'nop',
+         'dead_iota' => '03b9',           # ???? Greek
+         'dead_horn' => '031b',           # ???? Greek
+         'dead_psili' => 'nop',           # ???? Greek
+         'dead_dasia' => 'nop',           # ???? Greek
+# Modifiers
+         'Multi_key' => 'nop',
+         'Mode_switch' => 'ashift',
+         'script_switch' => 'nop',
+         'Shift_L' => 'lshift',
+         'Shift_R' => 'rshift',
+         'Control_L' => 'lctrl',
+         'Control_R' => 'rctrl',
+         'Caps_Lock' => 'clock',
+         'Shift_Lock' => 'clock',
+         'Meta_L' => 'meta',
+         'Meta_R' => 'meta',
+         'Alt_L' => 'lalt',
+         'Alt_R' => 'ralt',
+         'Super_L' => 'fkey62',
+         'Super_R' => 'fkey63',
+         'Hyper_L' => 'meta',
+         'Hyper_R' => 'meta',
+         'ISO_Lock' => 'clock',
+         'ISO_Level2_Latch' => 'lshift',
+         'ISO_Level3_Shift' => 'alt',
+         'ISO_Level3_Latch' => 'alt',
+         'ISO_Level3_Lock' => 'alta',
+         'ISO_Level5_Shift' => 'alt',
+         'ISO_Level5_Latch' => 'alt',
+         'ISO_Level5_Lock' => 'alta',
+         'ISO_Group_Shift' => 'ashift',
+         'ISO_Group_Latch' => 'ashift',
+         'ISO_Group_Lock' => 'alock',
+         'ISO_Next_Group' => 'alock',
+         'ISO_Next_Group_Lock' => 'alock',
+         'ISO_Prev_Group' => 'alock',
+         'ISO_Prev_Group_Lock' => 'alock',
+         'ISO_First_Group' => 'alock',
+         'ISO_First_Group_Lock' => 'alock',
+         'ISO_Last_Group' => 'alock',
+         'ISO_Last_Group_Lock' => 'alock',
+# Other symbols
+         'NoAction' => 'NoSymbol', # Is this recognised by X ?
+         'nosymbol' => 'NoSymbol', # Is this recognised by X ?
+         'Nosymbol' => 'NoSymbol', # Is this recognised by X ?
+         'noSymbol' => 'NoSymbol', # Is this recognised by X ?
+         'NoSymbol' => 'NoSymbol',
+         'any' => 'NoSymbol', # Is this recognised by X ?
+         'VoidSymbol' => 'nop',
+         'voidsymbol' => 'nop', # Is this recognised by X ?
+         'ISO_Left_Tab' => 'ht',
+         'Clear' => 'nop',
+         'Pause' => 'saver',
+         'Scroll_Lock' => 'slock',
+         'Sys_Req' => 'nop',
+         'Delete' => 'fkey61',
+         'Codeinput' => 'nop',
+         'SingleCandidate' => 'nop',
+         'MultipleCandidate' => 'nop',
+         'PreviousCandidate' => 'nop',
+         'Home' => 'fkey49',
+         'Left' => 'fkey53',
+         'Up' => 'fkey50',
+         'Right' => 'fkey55',
+         'Down' => 'fkey58',
+         'Prior' => 'fkey51',
+         'Page_Up' => 'fkey51',
+         'Next' => 'fkey59',
+         'Page_Down' => 'fkey59',
+         'End' => 'fkey57',
+         'Begin' => 'fkey54',
+         'Select' => 'fkey57',
+         'Print' => 'nscr',
+         'Execute' => 'nop',
+         'Insert' => 'fkey60',
+         'Undo' => 'nop',
+         'Redo' => 'nop',
+         'Menu' => 'fkey64',
+         'Find' => 'fkey49',
+         'Cancel' => 'nop',
+         'Help' => 'slock', # Is this correct?
+         'Break' => 'nop',
+         'Num_Lock' => 'nlock',
+         'F1' => 'fkey01',
+         'F2' => 'fkey02',
+         'F3' => 'fkey03',
+         'F4' => 'fkey04',
+         'F5' => 'fkey05',
+         'F6' => 'fkey06',
+         'F7' => 'fkey07',
+         'F8' => 'fkey08',
+         'F9' => 'fkey09',
+         'F10' => 'fkey10',
+         'F11' => 'fkey11',
+         'L1' => 'fkey11',
+         'F12' => 'fkey12',
+         'L2' => 'fkey12',
+         'F13' => 'fkey13',
+         'L3' => 'fkey13',
+         'F14' => 'fkey14',
+         'L4' => 'fkey14',
+         'F15' => 'fkey15',
+         'L5' => 'fkey15',
+         'F16' => 'fkey16',
+         'L6' => 'fkey16',
+         'F17' => 'fkey17',
+         'L7' => 'fkey17',
+         'F18' => 'fkey18',
+         'L8' => 'fkey18',
+         'F19' => 'fkey19',
+         'L9' => 'fkey19',
+         'F20' => 'fkey20',
+         'L10' => 'fkey20',
+         'F21' => 'fkey21',
+         'R1' => 'fkey21',
+         'F22' => 'fkey22',
+         'R2' => 'fkey22',
+         'F23' => 'fkey23',
+         'R3' => 'fkey23',
+         'F24' => 'fkey24',
+         'R4' => 'fkey24',
+         'F25' => 'fkey25',
+         'R5' => 'fkey25',
+         'F26' => 'fkey26',
+         'R6' => 'fkey26',
+         'F27' => 'fkey27',
+         'R7' => 'fkey27',
+         'F28' => 'fkey28',
+         'R8' => 'fkey28',
+         'F29' => 'fkey29',
+         'R9' => 'fkey29',
+         'F30' => 'fkey30',
+         'R10' => 'fkey30',
+         'F31' => 'fkey31',
+         'R11' => 'fkey31',
+         'F32' => 'fkey32',
+         'R12' => 'fkey32',
+         'F33' => 'fkey33',
+         'R13' => 'fkey33',
+         'F34' => 'fkey34',
+         'R14' => 'fkey34',
+         'F35' => 'fkey35',
+         'R15' => 'fkey35',
+         'Terminate_Server' => 'nop',
+         'Pointer_EnableKeys' => 'nop',
+         'XF86_Switch_VT_1' => 'scr01',
+         'XF86_Switch_VT_2' => 'scr02',
+         'XF86_Switch_VT_3' => 'scr03',
+         'XF86_Switch_VT_4' => 'scr04',
+         'XF86_Switch_VT_5' => 'scr05',
+         'XF86_Switch_VT_6' => 'scr06',
+         'XF86_Switch_VT_7' => 'scr07',
+         'XF86_Switch_VT_8' => 'scr08',
+         'XF86_Switch_VT_9' => 'scr09',
+         'XF86_Switch_VT_10' => 'scr10',
+         'XF86_Switch_VT_11' => 'scr11',
+         'XF86_Switch_VT_12' => 'scr12',
+         'XF86_ClearGrab' => 'nop',
+         'XF86_Ungrab' => 'nop',
+         'XF86_Next_VMode' => 'nop',
+         'XF86_Prev_VMode' => 'nop',
+         'XF86Copy' => 'nop',
+         'XF86Cut' => 'nop',
+         'XF86Paste' => 'nop',
+         'XF86AudioLowerVolume' => 'nop',
+         'XF86AudioRaiseVolume' => 'nop',
+         'XF86AudioMute' => 'nop',
+         'XF86PowerOff' => 'nop',
+         'XF86AudioForward' => 'nop',
+         'XF86AudioMedia' => 'nop',
+         'XF86AudioNext' => 'nop',
+         'XF86AudioPause' => 'nop',
+         'XF86AudioPlay' => 'nop',
+         'XF86AudioPrev' => 'nop',
+         'XF86AudioRecord' => 'nop',
+         'XF86AudioRewind' => 'nop',
+         'XF86AudioStop' => 'nop',
+         'XF86Back' => 'nop',
+         'XF86Battery' => 'nop',
+         'XF86Bluetooth' => 'nop',
+         'XF86Calculator' => 'nop',
+         'XF86Close' => 'nop',
+         'XF86Display' => 'nop',
+         'XF86Documents' => 'nop',
+         'XF86DOS' => 'nop',
+         'XF86Eject' => 'nop',
+         'XF86Explorer' => 'nop',
+         'XF86Favorites' => 'nop',
+         'XF86Finance' => 'nop',
+         'XF86Forward' => 'nop',
+         'XF86HomePage' => 'nop',
+         'XF86KbdBrightnessDown' => 'nop',
+         'XF86KbdBrightnessUp' => 'nop',
+         'XF86KbdLightOnOff' => 'nop',
+         'XF86Launch1' => 'nop',
+         'XF86Launch2' => 'nop',
+         'XF86Launch3' => 'nop',
+         'XF86Launch4' => 'nop',
+         'XF86Mail' => 'nop',
+         'XF86MailForward' => 'nop',
+         'XF86MenuKB' => 'nop',
+         'XF86MonBrightnessDown' => 'nop',
+         'XF86MonBrightnessUp' => 'nop',
+         'XF86MyComputer' => 'nop',
+         'XF86New' => 'nop',
+         'XF86Phone' => 'nop',
+         'XF86Reload' => 'nop',
+         'XF86Reply' => 'nop',
+         'XF86RotateWindows' => 'nop',
+         'XF86Save' => 'nop',
+         'XF86ScreenSaver' => 'nop',
+         'XF86ScrollDown' => 'nop',
+         'XF86ScrollUp' => 'nop',
+         'XF86Search' => 'nop',
+         'XF86Send' => 'nop',
+         'XF86Shop' => 'nop',
+         'XF86Sleep' => 'nop',
+         'XF86Suspend' => 'nop',
+         'XF86Tools' => 'nop',
+         'XF86TouchpadToggle' => 'nop',
+         'XF86WakeUp' => 'nop',
+         'XF86WebCam' => 'nop',
+         'XF86WLAN' => 'nop',
+         'XF86WWW' => 'nop',
+         'XF86Xfer' => 'nop',
+         'braille_blank' => '2800', # What does correspond to these?
+         'braille_dot_1' => 'nop', 
+         'braille_dot_2' => 'nop',
+         'braille_dot_3' => 'nop',
+         'braille_dot_4' => 'nop',
+         'braille_dot_5' => 'nop',
+         'braille_dot_6' => 'nop',
+         'braille_dot_7' => 'nop',
+         'braille_dot_8' => 'nop',
+         'braille_dot_9' => 'nop',
+         'braille_dot_10' => 'nop',
+# I do not know the Unicodes of these
+         '0x1000' => 'nop', # Special symbol for X or syntax error?
+         '0x13a4' => 'nop', # Special symbol for X or syntax error?
+         '0xfe11' => 'nop', # Special symbol for X or syntax error?
+         'leftcaret' => 'nop', # Is this recognised by X ?
+         'guj_rra' => 'nop', # Is this recognised by X ?
+         'guj_nnna' => 'nop', # Is this recognised by X ?
+         'guj_llla' => 'nop', # Is this recognised by X ?
+         'gur_visarga' => 'nop', # Is this recognised by X ?
+         'gur_v_r' => 'nop', # Is this recognised by X ?
+         'gur_v_r_s' => 'nop', # Is this recognised by X ?
+         'Eisu_toggle' => 'nop', # Is this recognised by X ?
+         'Zenkaku_Hankaku' => 'nop', # Is this recognised by X ?
+         'Kanji' => 'nop', # Is this recognised by X ?
+         'Hangul' => 'nop', # Is this recognised by X ?
+         'Hangul_Hanja' => 'nop', # Is this recognised by X ?
+         'Henkan' => 'nop',
+         'Hiragana' => 'nop',
+         'Hiragana_Katakana' => 'nop',
+         'Katakana' => 'nop',
+         'Muhenkan' => 'nop',
+# XFree86 does not recognise these
+         'SunAudioLowerVolume' => 'nop',
+         'SunAudioRaiseVolume' => 'nop',
+         'SunAudioMute' => 'nop',
+         'SunCopy' => 'nop',
+         'SunCut' => 'nop',
+         'SunPaste' => 'nop',
+         'SunAgain' => 'nop',
+         'SunUndo' => 'nop',
+         'SunFind' => 'nop',
+         'SunStop' => 'nop',
+         'SunF36' => 'nop',
+         'SunF37' => 'nop',
+         'SunFront' => 'nop',
+         'SunOpen' => 'nop',
+         'SunPowerSwitch' => 'nop',
+         'SunPowerSwitchShift' => 'nop',
+         'SunProps' => 'nop',
+         'SunSys_Req' => 'nop',
+         'SunVideoDegauss' => 'nop',
+         'SunVideoLowerBrightness' => 'nop',
+         'SunVideoRaiseBrightness' => 'nop',
+        );
+    if ($backspace eq 'del') {
+        $xkbsym_table{'BackSpace'} = 'del';
+        $xkbsym_table{'Delete'} = 'fkey70';
+        $xkbsym_table{'KP_Delete'} = 'fkey70';
+    }
+} else {
+    %xkbsym_table = 
+        (%xkbsym_table,
+# Control symbols
+         'BackSpace' => 'Delete',  # 0008
+         'Tab' => 'Tab',           # 0009
+         'Linefeed' => 'Linefeed', # 000a
+         'Return' => 'Return',     # 000d
+         'Escape' => 'Escape',     # 001b
+# Keypad keys
+         'KP_Multiply' => 'KP_Multiply',
+         'KP_Add' => 'KP_Add',
+         'KP_Seprator' => 'KP_Comma', # Is this recognised by X ?
+         'KP_Separator' => 'KP_Comma',
+         'KP_Subtract' => 'KP_Subtract',
+         'KP_Decimal' => 'KP_Period',
+         'KP_Divide' => 'KP_Divide',
+         'KP_0' => 'KP_0',
+         'KP_1' => 'KP_1',
+         'KP_2' => 'KP_2',
+         'KP_3' => 'KP_3',
+         'KP_4' => 'KP_4',
+         'KP_5' => 'KP_5',
+         'KP_6' => 'KP_6',
+         'KP_7' => 'KP_7',
+         'KP_8' => 'KP_8',
+         'KP_9' => 'KP_9',
+         'KP_Enter' => 'KP_Enter',
+# Keypad keys (alternate level)
+         'KP_Home' => 'KP_7',
+         'KP_Left' => 'KP_4',
+         'KP_Up' => 'KP_8',
+         'KP_Right' => 'KP_6',
+         'KP_Down' => 'KP_2',
+         'KP_Prior' => 'KP_9',
+         'KP_Page_Up' => 'KP_9',
+         'KP_Next' => 'KP_3',
+         'KP_Page_Down' => 'KP_3',
+         'KP_End' => 'KP_1',
+         'KP_Begin' => 'VoidSymbol', # What does correspond to this?
+         'KP_Insert' => 'KP_0',
+         'KP_Delete' => 'VoidSymbol', # has to be 'KP_Period' or 'KP_Decimal'
+# Keypad keys with missing support in the kernel
+         'KP_Space' => 'space',
+         'KP_Equal' => 'equal',
+         'KP_Tab' => 'Tab',
+         'KP_F1' => 'F1',
+         'KP_F2' => 'F2',
+         'KP_F3' => 'F3',
+         'KP_F4' => 'F4',
+# Dead symbols
+         'dead_grave' => 'dead_grave',
+         'SunFA_Grave' => 'dead_grave', # Is this recognised by X ?
+         'dead_acute' => 'dead_acute',
+         'SunFA_Acute' => 'dead_acute', # Is this recognised by X ?
+         'dead_circumflex' => 'dead_circumflex',
+         'SunFA_Circum' => 'dead_circumflex', # Is this recognised by X ?
+         'dead_tilde' => 'dead_tilde',
+         'SunFA_Tilde' => 'dead_tilde',
+         'dead_breve' => 'dead_breve',
+         'dead_diaeresis' => 'dead_diaeresis',
+         'SunFA_Diaeresis' => 'dead_diaeresis', # Is this recognised by X ?
+         'dead_doubleacute' => 'dead_doubleacute',
+         'dead_caron' => 'dead_caron',
+         'dead_V' => 'dead_caron', # Is this correct?
+         'dead_cedilla' => 'dead_cedilla',
+         'SunFA_Cedilla' => 'dead_cedilla', # Is this recognised by X ?
+         'dead_ogonek' => 'dead_ogonek',
+# Dead symbols with no support in the kernel
+         'dead_macron' => '005f',         # underscore
+         'dead_abovedot' => '002e',       # period
+         'dead_abovering' => '00b0',      # degree
+         'dead_stroke' => '002d',         # hyphen
+         'dead_belowdot' => '0323',       # ???? Vietnamese or Romanian cedilla
+         'dead_hook' => '0309',           # ???? Vietnamese
+         'dead_belowcomma' => 'VoidSymbol',
+         'dead_currency' => 'VoidSymbol',
+         'dead_doublegrave' => 'VoidSymbol',
+         'dead_invertedbreve' => 'VoidSymbol',
+         'dead_iota' => '03b9',           # ???? Greek
+         'dead_horn' => '031b',           # ???? Greek
+         'dead_psili' => 'VoidSymbol',    # ???? Greek
+         'dead_dasia' => 'VoidSymbol',    # ???? Greek
+# Modifiers
+         'Multi_key' => 'Compose',
+         'Mode_switch' => 'ShiftL',
+         'script_switch' => 'VoidSymbol',
+         'Shift_L' => 'Shift',
+         'Shift_R' => 'Shift',
+         'Control_L' => 'Control',
+         'Control_R' => 'Control',
+         'Caps_Lock' => 'Caps_Lock',
+         'Shift_Lock' => 'Shift_Lock',
+         'Meta_L' => 'Alt',
+         'Meta_R' => 'Alt',
+         'Alt_L' => 'Alt',
+         'Alt_R' => 'Alt',
+         'Super_L' => 'Alt',
+         'Super_R' => 'Alt',
+         'Hyper_L' => 'Alt',
+         'Hyper_R' => 'Alt',
+         'ISO_Lock' => 'Caps_Lock',
+         'ISO_Level2_Latch' => 'Shift',
+         'ISO_Level3_Shift' => 'AltGr',
+         'ISO_Level3_Latch' => 'AltGr',
+         'ISO_Level3_Lock' => 'AltGr_Lock',
+         'ISO_Level5_Shift' => 'AltGr',
+         'ISO_Level5_Latch' => 'AltGr',
+         'ISO_Level5_Lock' => 'AltGr_Lock',
+         'ISO_Group_Shift' => 'ShiftL',
+         'ISO_Group_Latch' => 'ShiftL',
+         'ISO_Group_Lock' => 'ShiftL_Lock',
+         'ISO_Next_Group' => 'ShiftL_Lock',
+         'ISO_Next_Group_Lock' => 'ShiftL_Lock',
+         'ISO_Prev_Group' => 'ShiftL_Lock',
+         'ISO_Prev_Group_Lock' => 'ShiftL_Lock',
+         'ISO_First_Group' => 'ShiftL_Lock',
+         'ISO_First_Group_Lock' => 'ShiftL_Lock',
+         'ISO_Last_Group' => 'ShiftL_Lock',
+         'ISO_Last_Group_Lock' => 'ShiftL_Lock',
+# Other symbols
+         'NoAction' => 'NoSymbol', # Is this recognised by X ?
+         'nosymbol' => 'NoSymbol', # Is this recognised by X ?
+         'Nosymbol' => 'NoSymbol', # Is this recognised by X ?
+         'noSymbol' => 'NoSymbol', # Is this recognised by X ?
+         'NoSymbol' => 'NoSymbol',
+         'any' => 'NoSymbol', # Is this recognised by X ?
+         'VoidSymbol' => 'VoidSymbol',
+         'voidsymbol' => 'VoidSymbol', # Is this recognised by X ?
+         'ISO_Left_Tab' => 'Tab',
+         'Clear' => 'VoidSymbol',
+         'Pause' => 'Pause',
+         'Scroll_Lock' => 'Scroll_Lock',
+         'Sys_Req' => 'Last_Console',
+         'Delete' => 'Remove',
+         'Codeinput' => 'VoidSymbol',
+         'SingleCandidate' => 'VoidSymbol',
+         'MultipleCandidate' => 'VoidSymbol',
+         'PreviousCandidate' => 'VoidSymbol',
+         'Home' => 'Home',
+         'Left' => 'Left',
+         'Up' => 'Up',
+         'Right' => 'Right',
+         'Down' => 'Down',
+         'Prior' => 'Prior',
+         'Page_Up' => 'PageUp',
+         'Next' => 'Next',
+         'Page_Down' => 'PageDown',
+         'End' => 'End',
+         'Begin' => 'VoidSymbol',
+         'Select' => 'Select',
+         'Print' => 'Control_backslash',
+         'Execute' => 'VoidSymbol',
+         'Insert' => 'Insert',
+         'Undo' => 'VoidSymbol',
+         'Redo' => 'VoidSymbol',
+         'Menu' => 'VoidSymbol',
+         'Find' => 'Find',
+         'Cancel' => 'VoidSymbol',
+         'Help' => 'Help',
+         'Break' => 'Break',
+         'Num_Lock' => 'Num_Lock',
+         'F1' => 'F1',
+         'F2' => 'F2',
+         'F3' => 'F3',
+         'F4' => 'F4',
+         'F5' => 'F5',
+         'F6' => 'F6',
+         'F7' => 'F7',
+         'F8' => 'F8',
+         'F9' => 'F9',
+         'F10' => 'F10',
+         'F11' => 'F11',
+         'L1' => 'F11',
+         'F12' => 'F12',
+         'L2' => 'F12',
+         'F13' => 'F13',
+         'L3' => 'F13',
+         'F14' => 'F14',
+         'L4' => 'F14',
+         'F15' => 'F15',
+         'L5' => 'F15',
+         'F16' => 'F16',
+         'L6' => 'F16',
+         'F17' => 'F17',
+         'L7' => 'F17',
+         'F18' => 'F18',
+         'L8' => 'F18',
+         'F19' => 'F19',
+         'L9' => 'F19',
+         'F20' => 'F20',
+         'L10' => 'F20',
+         'F21' => 'F21',
+         'R1' => 'F21',
+         'F22' => 'F22',
+         'R2' => 'F22',
+         'F23' => 'F23',
+         'R3' => 'F23',
+         'F24' => 'F24',
+         'R4' => 'F24',
+         'F25' => 'F25',
+         'R5' => 'F25',
+         'F26' => 'F26',
+         'R6' => 'F26',
+         'F27' => 'F27',
+         'R7' => 'F27',
+         'F28' => 'F28',
+         'R8' => 'F28',
+         'F29' => 'F29',
+         'R9' => 'F29',
+         'F30' => 'F30',
+         'R10' => 'F30',
+         'F31' => 'F31',
+         'R11' => 'F31',
+         'F32' => 'F32',
+         'R12' => 'F32',
+         'F33' => 'F33',
+         'R13' => 'F33',
+         'F34' => 'F34',
+         'R14' => 'F34',
+         'F35' => 'F35',
+         'R15' => 'F35',
+         'Terminate_Server' => 'VoidSymbol',
+         'Pointer_EnableKeys' => 'VoidSymbol',
+         'XF86_Switch_VT_1' => 'Console_1',
+         'XF86_Switch_VT_2' => 'Console_2',
+         'XF86_Switch_VT_3' => 'Console_3',
+         'XF86_Switch_VT_4' => 'Console_4',
+         'XF86_Switch_VT_5' => 'Console_5',
+         'XF86_Switch_VT_6' => 'Console_6',
+         'XF86_Switch_VT_7' => 'Console_7',
+         'XF86_Switch_VT_8' => 'Console_8',
+         'XF86_Switch_VT_9' => 'Console_9',
+         'XF86_Switch_VT_10' => 'Console_10',
+         'XF86_Switch_VT_11' => 'Console_11',
+         'XF86_Switch_VT_12' => 'Console_12',
+         'XF86_ClearGrab' => 'VoidSymbol',
+         'XF86_Ungrab' => 'VoidSymbol',
+         'XF86_Next_VMode' => 'VoidSymbol',
+         'XF86_Prev_VMode' => 'VoidSymbol',
+         'XF86Copy' => 'VoidSymbol',
+         'XF86Cut' => 'VoidSymbol',
+         'XF86Paste' => 'VoidSymbol',
+         'XF86AudioLowerVolume' => 'VoidSymbol',
+         'XF86AudioRaiseVolume' => 'VoidSymbol',
+         'XF86AudioMute' => 'VoidSymbol',
+         'XF86PowerOff' => 'VoidSymbol',
+         'XF86AudioForward' => 'VoidSymbol',
+         'XF86AudioMedia' => 'VoidSymbol',
+         'XF86AudioNext' => 'VoidSymbol',
+         'XF86AudioPause' => 'VoidSymbol',
+         'XF86AudioPlay' => 'VoidSymbol',
+         'XF86AudioPrev' => 'VoidSymbol',
+         'XF86AudioRecord' => 'VoidSymbol',
+         'XF86AudioRewind' => 'VoidSymbol',
+         'XF86AudioStop' => 'VoidSymbol',
+         'XF86Back' => 'VoidSymbol',
+         'XF86Battery' => 'VoidSymbol',
+         'XF86Bluetooth' => 'VoidSymbol',
+         'XF86Calculator' => 'VoidSymbol',
+         'XF86Close' => 'VoidSymbol',
+         'XF86Display' => 'VoidSymbol',
+         'XF86Documents' => 'VoidSymbol',
+         'XF86DOS' => 'VoidSymbol',
+         'XF86Eject' => 'VoidSymbol',
+         'XF86Explorer' => 'VoidSymbol',
+         'XF86Favorites' => 'VoidSymbol',
+         'XF86Finance' => 'VoidSymbol',
+         'XF86Forward' => 'VoidSymbol',
+         'XF86HomePage' => 'VoidSymbol',
+         'XF86KbdBrightnessDown' => 'VoidSymbol',
+         'XF86KbdBrightnessUp' => 'VoidSymbol',
+         'XF86KbdLightOnOff' => 'VoidSymbol',
+         'XF86Launch1' => 'VoidSymbol',
+         'XF86Launch2' => 'VoidSymbol',
+         'XF86Launch3' => 'VoidSymbol',
+         'XF86Launch4' => 'VoidSymbol',
+         'XF86Mail' => 'VoidSymbol',
+         'XF86MailForward' => 'VoidSymbol',
+         'XF86MenuKB' => 'VoidSymbol',
+         'XF86MonBrightnessDown' => 'VoidSymbol',
+         'XF86MonBrightnessUp' => 'VoidSymbol',
+         'XF86MyComputer' => 'VoidSymbol',
+         'XF86New' => 'VoidSymbol',
+         'XF86Phone' => 'VoidSymbol',
+         'XF86Reload' => 'VoidSymbol',
+         'XF86Reply' => 'VoidSymbol',
+         'XF86RotateWindows' => 'VoidSymbol',
+         'XF86Save' => 'VoidSymbol',
+         'XF86ScreenSaver' => 'VoidSymbol',
+         'XF86ScrollDown' => 'VoidSymbol',
+         'XF86ScrollUp' => 'VoidSymbol',
+         'XF86Search' => 'VoidSymbol',
+         'XF86Send' => 'VoidSymbol',
+         'XF86Shop' => 'VoidSymbol',
+         'XF86Sleep' => 'VoidSymbol',
+         'XF86Suspend' => 'VoidSymbol',
+         'XF86Tools' => 'VoidSymbol',
+         'XF86TouchpadToggle' => 'VoidSymbol',
+         'XF86WakeUp' => 'VoidSymbol',
+         'XF86WebCam' => 'VoidSymbol',
+         'XF86WLAN' => 'VoidSymbol',
+         'XF86WWW' => 'VoidSymbol',
+         'XF86Xfer' => 'VoidSymbol',
+         'braille_blank' => 'Brl_blank',
+         'braille_dot_1' => 'Brl_dot1',
+         'braille_dot_2' => 'Brl_dot2',
+         'braille_dot_3' => 'Brl_dot3',
+         'braille_dot_4' => 'Brl_dot4',
+         'braille_dot_5' => 'Brl_dot5',
+         'braille_dot_6' => 'Brl_dot6',
+         'braille_dot_7' => 'Brl_dot7',
+         'braille_dot_8' => 'Brl_dot8',
+         'braille_dot_9' => 'Brl_dot9',
+         'braille_dot_10' => 'Brl_dot10',
+# I do not know the Unicodes of these
+         '0x1000' => 'VoidSymbol', # Special symbol for X or syntax error?
+         '0x13a4' => 'VoidSymbol', # Special symbol for X or syntax error?
+         '0xfe11' => 'VoidSymbol', # Special symbol for X or syntax error?
+         'leftcaret' => 'VoidSymbol', # Is this recognised by X ?
+         'guj_rra' => 'VoidSymbol', # Is this recognised by X ?
+         'guj_nnna' => 'VoidSymbol', # Is this recognised by X ?
+         'guj_llla' => 'VoidSymbol', # Is this recognised by X ?
+         'gur_visarga' => 'VoidSymbol', # Is this recognised by X ?
+         'gur_v_r' => 'VoidSymbol', # Is this recognised by X ?
+         'gur_v_r_s' => 'VoidSymbol', # Is this recognised by X ?
+         'Eisu_toggle' => 'VoidSymbol', # Is this recognised by X ?
+         'Zenkaku_Hankaku' => 'VoidSymbol', # Is this recognised by X ?
+         'Kanji' => 'VoidSymbol', # Is this recognised by X ?
+         'Hangul' => 'VoidSymbol', # Is this recognised by X ?
+         'Hangul_Hanja' => 'VoidSymbol', # Is this recognised by X ?
+         'Henkan' => 'VoidSymbol',
+         'Hiragana' => 'VoidSymbol',
+         'Hiragana_Katakana' => 'VoidSymbol',
+         'Katakana' => 'VoidSymbol',
+         'Muhenkan' => 'VoidSymbol',
+# XFree86 does not recognise these
+         'SunAudioLowerVolume' => 'VoidSymbol',
+         'SunAudioRaiseVolume' => 'VoidSymbol',
+         'SunAudioMute' => 'VoidSymbol',
+         'SunCopy' => 'VoidSymbol',
+         'SunCut' => 'VoidSymbol',
+         'SunPaste' => 'VoidSymbol',
+         'SunAgain' => 'VoidSymbol',
+         'SunUndo' => 'VoidSymbol',
+         'SunFind' => 'VoidSymbol',
+         'SunStop' => 'VoidSymbol',
+         'SunF36' => 'VoidSymbol',
+         'SunF37' => 'VoidSymbol',
+         'SunFront' => 'VoidSymbol',
+         'SunOpen' => 'VoidSymbol',
+         'SunPowerSwitch' => 'VoidSymbol',
+         'SunPowerSwitchShift' => 'VoidSymbol',
+         'SunProps' => 'VoidSymbol',
+         'SunSys_Req' => 'VoidSymbol',
+         'SunVideoDegauss' => 'VoidSymbol',
+         'SunVideoLowerBrightness' => 'VoidSymbol',
+         'SunVideoRaiseBrightness' => 'VoidSymbol',
+        );
+
+    if ($compact) {
+        $xkbsym_table{'Mode_switch'} = 'AltGr';
+        $xkbsym_table{'ISO_Group_Shift'} = 'AltGr';
+        $xkbsym_table{'ISO_Group_Latch'} = 'AltGr';
+        $xkbsym_table{'ISO_Group_Lock'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Next_Group'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Next_Group_Lock'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Prev_Group'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Prev_Group_Lock'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_First_Group'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_First_Group_Lock'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Last_Group'} = 'AltGr_Lock';
+        $xkbsym_table{'ISO_Last_Group_Lock'} = 'AltGr_Lock';
+    }
+    if ($backspace eq 'bs') {
+        $xkbsym_table{'BackSpace'} = 'BackSpace';
+        $xkbsym_table{'Delete'} = 'Delete';
+    }
 }
+
+my $voidsymbol = $freebsd ? 'nop' : 'VoidSymbol';
 
 my @controlsyms;
 my @metasyms;
 my @metacontrolsyms;
+my %controlsyms_hash;
 
 {
-    my %controlsyms_hash = (
-	'@' => 'nul',
-	'h' => 'BackSpace',
-	'i' => 'Tab',
-	'j' => 'Linefeed',
-	'[' => 'Escape',
-	'\\' => 'Control_backslash',
-	']' => 'Control_bracketright',
-	'^' => 'Control_asciicircum',
-	'_' => 'Control_underscore',
-	chr(0x08) => 'BackSpace',
-	chr(0x09) => 'Tab',
-	chr(0x0a) => 'Linefeed',
-	chr(0x0d) => 'Control_m',
-	chr(0x1b) => 'Escape',
-	chr(0x7f) => 'BackSpace', # instead of 'Delete'
-# The following are Linux specific
-	'2' => 'nul',
-	'3' => 'Escape',
-	'4' => 'Control_backslash',
-	'5' => 'Control_bracketright',
-	'6' => 'Control_asciicircum',
-	'7' => 'Control_underscore',
-	'8' => 'Delete',
-	'\'' => 'Control_g', # apostrophe
-	'`' => 'nul', # grave
-	'.' => 'Compose',
-	'?' => 'Delete',
-	' ' => 'nul',
-    );
-    for my $code (0 .. 255) {
-	my $sym = chr ((0x41 <= $code && 0x5a >= $code) ? $code + 0x20 : $code);
-	if (defined (my $special = $controlsyms_hash{$sym})) {
-	    $controlsyms[$code + 1] = $special;
-	} elsif (0x40 <= $code && 0x5f >= $code      
-	    || 0x61 <= $code && 0x7a >= $code) {
-	    $controlsyms[$code + 1] = "Control_". $sym;
-	} else {
-	    $controlsyms[$code + 1] = 'VoidSymbol';
-	}
+    if ($freebsd) {
+
+        %controlsyms_hash = (
+            'nul' => 0x00,
+            'soh' => 0x01,
+            'stx' => 0x02,
+            'etx' => 0x03,
+            'eot' => 0x04,
+            'enq' => 0x05,
+            'ack' => 0x06,
+            'bel' => 0x07,
+            'bs' => 0x08,
+            'ht' => 0x09,
+            'nl' => 0x0a,
+            'vt' => 0x0b,
+            'ff' => 0x0c,
+            'cr' => 0x0d,
+            'so' => 0x0e,
+            'si' => 0x0f,
+            'dle' => 0x10,
+            'dc1' => 0x11,
+            'dc2' => 0x12,
+            'dc3' => 0x13,
+            'dc4' => 0x14,
+            'nak' => 0x15,
+            'syn' => 0x16,
+            'etb' => 0x17,
+            'can' => 0x18,
+            'em' => 0x19,
+            'sub' => 0x1a,
+            'esc' => 0x1b,
+            'fs' => 0x1c,
+            'gs' => 0x1d,
+            'rs' => 0x1e,
+            'us' => 0x1f,
+            'del' => 0x7f,
+            );
+    } else {
+        %controlsyms_hash = (
+            'nul' => 0x00,
+            'Control_a' => 0x01,
+            'Control_b' => 0x02,
+            'Control_c' => 0x03,
+            'Control_d' => 0x04,
+            'Control_e' => 0x05,
+            'Control_f' => 0x06,
+            'Control_g' => 0x07,
+            'BackSpace' => 0x08,
+            'Tab' => 0x09,
+            'Linefeed' => 0x0a,
+            'Control_k' => 0x0b,
+            'Control_l' => 0x0c,
+            'Return' => 0x0d,
+            'Control_n' => 0x0e,
+            'Control_o' => 0x0f,
+            'Control_p' => 0x10,
+            'Control_q' => 0x11,
+            'Control_r' => 0x12,
+            'Control_s' => 0x13,
+            'Control_t' => 0x14,
+            'Control_u' => 0x15,
+            'Control_v' => 0x16,
+            'Control_w' => 0x17,
+            'Control_x' => 0x18,
+            'Control_y' => 0x19,
+            'Control_z' => 0x1a,
+            'Escape' => 0x1b,
+            'Control_backslash' => 0x1c,
+            'Control_bracketright' => 0x1d,
+            'Control_asciicircum' => 0x1e,
+            'Control_underscore' => 0x1f,
+            'Delete' => 0x7f,
+            );
+    }        
+    for my $special (keys %controlsyms_hash) {
+        $controlsyms[$controlsyms_hash{$special}] = $special;
     }
-    $controlsyms[0] = 'NoSymbol';
+    for my $code (0 .. 255) {
+        if (! defined $controlsyms[$code]) {
+            if ($code >= 64 && $code <= 127
+                && defined (my $special = $controlsyms[$code % 32])) {
+                $controlsyms[$code] = $special;
+            } else {
+                $controlsyms[$code] = $voidsymbol;
+            }
+        }
+    }
+# Ctrl + BS = DEL, Ctrl + DEL = BS
+    if ($freebsd) {
+        $controlsyms[0x08] = 'del';
+        $controlsyms[0x7f] = 'bs';
+    } else {
+        $controlsyms[0x08] = 'Delete';
+        $controlsyms[0x7f] = 'BackSpace';
+    }
+# Some particularities of FreeBSD and Linux
+    if ($freebsd) {
+        $controlsyms[0x0d] = 'nl';                     # Ctrl+m = ^J
+        $controlsyms[0x20] = 'nul';                    # Ctrl+space = ^@
+        $controlsyms[0x3f] = 'del';                    # Ctrl+? = ^?
+    } else {
+        $controlsyms[0x0d] = 'Control_m';              # I don't know
+        $controlsyms[0x20] = 'nul';                    # Ctrl+space = ^@
+        $controlsyms[0x2e] = 'Compose';                # Ctrl+. = Compose
+        $controlsyms[0x3f] = 'Delete';                 # Ctrl+? = ^?
+# I suppose these are not necessary:
+        # $controlsyms[0x27] = 'Control_g';              # Ctrl+' = ^G
+        # $controlsyms[0x32] = 'nul';                    # 2
+        # $controlsyms[0x33] = 'Escape';                 # 3
+        # $controlsyms[0x34] = 'Control_backslash';      # 4
+        # $controlsyms[0x35] = 'Control_bracketright';   # 5
+        # $controlsyms[0x36] = 'Control_asciicircum';    # 6
+        # $controlsyms[0x37] = 'Control_underscore';     # 7
+        # $controlsyms[0x38] = 'Delete';                 # 8
+    }
 
     my %metasyms_hash = (
 	' ' => 'space',
@@ -2413,6 +2922,7 @@ my @metacontrolsyms;
 	chr(0x0a) => 'Linefeed',
 	chr(0x0d) => 'Control_m',
 	chr(0x1b) => 'Escape',
+        chr(0x1c) => 'Control_backslash',
 	chr(0x7f) => 'Delete',
     );
     
@@ -2421,15 +2931,15 @@ my @metacontrolsyms;
 	if (defined (my $special = $metasyms_hash{$sym})) {
 	    $sym = $special;
 	}
-	$metasyms[$code + 1] = "Meta_". $sym;
+	$metasyms[$code] = "Meta_". $sym;
     }
 
-    $metasyms[0] = 'NoSymbol';
-
-    for my $code (1 .. 256) {
+    for my $code (0 .. 255) {
 	my $control = $controlsyms[$code];
 	if ($control eq 'Compose') {
 	    $metacontrolsyms[$code] = 'Compose';
+	} elsif ($control eq 'Return') {
+	    $metacontrolsyms[$code] = 'Meta_Control_m';
 	} elsif ($control eq 'NoSymbol') {
 	    $metacontrolsyms[$code] = 'NoSymbol';
 	} elsif ($control eq 'VoidSymbol') {
@@ -2438,9 +2948,6 @@ my @metacontrolsyms;
 	    $metacontrolsyms[$code] = 'Meta_'. $control;
 	}
     }
-
-    $metacontrolsyms[0] = 'NoSymbol';
-
 }
 
 ############ GLOBAL FUNCTIONS #########################################
@@ -2480,7 +2987,7 @@ sub matches_pattern {
 	if ($pattern eq '*') {
 	    return $string ne '';
 	}
-	if ($pattern =~ /^\$([a-zA-Z0-9]+)$/) {
+	if ($pattern =~ /^\$([a-zA-Z0-9_]+)$/) {
 	    for my $member (@{$rules_variables{$1}}) {
 		if ($string eq $member) {
 		    return 1;
@@ -2523,7 +3030,7 @@ if (@layouts) {
 	    $oldline = $_;
 	    next;
 	}
-	if (/^! ?\$([a-zA-Z0-9]+) ?= ?(.+)$/) {
+	if (/^! ?\$([a-zA-Z0-9_]+) ?= ?(.+)$/) {
 	    $rules_variables{$1} = [ split ' ', $2 ];
 	    next;
 	}
@@ -2555,7 +3062,9 @@ if (@layouts) {
 			 || $antecedents[$i] eq 'variant') {
 		    $antecedents[$i] = '';
 		} else {
-		    die "Unknown name $antecedents[$i]\n";
+                    warning "Unknown name \"$antecedents[$i]\" in the following line in \"rules/$rules\":\n";
+                    warning "$_\n";
+		    $antecedents[$i] = '';
 		}
 		if (! defined $antecedents[$i]) {
 		    $antecedents[$i] = '';
@@ -2568,8 +3077,11 @@ if (@layouts) {
 	    next if ($match_found);
 	    my @antecedent_patterns = split ' ', $1;
 	    my $consequent_str = $2;
-	    @antecedent_patterns == @antecedents 
-		or die "Bad number of antecedents";
+	    if (@antecedent_patterns != @antecedents ) {
+		warning "Bad number of antecedents in the following line in \"rules/$rules\":\n";
+                warning "$_\n";
+                next;
+            }
 	    my $matches = 1;
 	    for my $i (0 .. $#antecedents) {
 		if (! matches_pattern ($antecedents[$i], 
@@ -2581,10 +3093,10 @@ if (@layouts) {
 	    if ($matches) {
 		$match_found = $antecedents[0] ne 'OPTIONS';
 		my @consequent_values = split ' ', $2;
-		@consequent_values == @consequents
-		    or die sprintf ("Bad number of consequents: %d != %d",
-				    scalar (@consequent_values),
-				    scalar (@consequents));
+                if (@consequent_values != @consequents) {
+                    warning "Bad number of consequents in the following line in \"rules/$rules\":\n";
+                    warning "$_\n";
+                }
 		for my $i (0 .. $#consequents) {
                     # The purpose of the semicolons is to make %(v) and %_v
                     # empty strings if %v is an empty string
@@ -2628,7 +3140,9 @@ if (@layouts) {
 	    }
 	    next;
 	}    
-	die "Syntax error in the rules file: $_\n";
+	warning "Syntax error in the following line in \"rules/$rules\":\n";
+        warning "$_\n";
+        die;
     }
     close RULES;
 
@@ -2670,13 +3184,15 @@ if ($keycodes =~ /(^|\+|\|)macintosh\(old\)($|\+|\|)/) {
 ########### READ ACM ###############################################
 
 if ($charmap) {
-    for my $acmfile ("${charmap}", "${charmap}.gz",
-		     "${charmap}.acm", "${charmap}.acm.gz",
-		     "/usr/share/consoletrans/${charmap}",
-		     "/usr/share/consoletrans/${charmap}.gz",
-		     "/usr/share/consoletrans/${charmap}.acm",
-		     "/usr/share/consoletrans/${charmap}.acm.gz",
-		     "acm/${charmap}.acm") {
+    for my $acmfile ("$installdir/share/consoletrans/${charmap}",
+                     "$installdir/share/consoletrans/${charmap}.gz",
+                     "$installdir/share/consoletrans/${charmap}.acm",
+                     "$installdir/share/consoletrans/${charmap}.acm.gz",
+                     "/usr/share/consoletrans/${charmap}",
+                     "/usr/share/consoletrans/${charmap}.gz",
+                     "/usr/share/consoletrans/${charmap}.acm",
+                     "/usr/share/consoletrans/${charmap}.acm.gz",
+                     "${charmap}") {
 	if (-f $acmfile) {
 	    $acm = $acmfile;
 	    last;
@@ -2730,13 +3246,13 @@ sub file_to_string {
     my $normalized = '';
     my $final_letter = 0;
     while ($string) {
-	if ($string =~ s/^\s+// && $final_letter && $string =~ /^[a-zA-Z0-9]/) {
+	if ($string =~ s/^\s+// && $final_letter && $string =~ /^[a-zA-Z0-9_]/) {
 	    $normalized = $normalized .' ';
 	    $final_letter = 0;
 	}
 	if ($string =~ s/^([^\"\s]+)//) {
 	    $normalized = $normalized . $1;
-	    $final_letter = ($1 =~ /[a-zA-Z0-9]$/);
+	    $final_letter = ($1 =~ /[a-zA-Z0-9_]$/);
 	    next;
 	}
 	if ($string =~ s/^(\"[^\"]*(\"|$))//) {
@@ -2944,14 +3460,17 @@ sub xkb_key {
 		    }
 		    next;
 		}
-		# abracadabra
-		# abracadabra = abra<cad>abra
+                # virtualMods = AltGr
+                # overlay1=<KO7>
 		next if ($list =~ s/^[a-zA-Z0-9_]+(=[a-zA-Z0-9_<>]+)?,
                                    (.*)/$2/x);
-		# abracadabra = "...."
+		# type = "CTRL+ALT"
 		next if ($list =~ s/^[a-zA-Z0-9_]+=\"[^\"]+\",(.*)/$1/);
 		# type[...] = "..."
 		next if ($list =~ s/^type\[[a-zA-Z0-9_]+\]=\"[^\"]+\",
+                                    (.*)/$1/x);
+		# actions[...] = [ ... ]
+		next if ($list =~ s/^actions\[[a-zA-Z0-9_]+\]=\[[^\]]*?\],
                                     (.*)/$1/x);
 		die "$0: garbage in a key definition: \"$list\""
 		    ." in $filename.\n";
@@ -2980,7 +3499,7 @@ sub xkb_symbols_definitions {
 	$method = xkb_method ();
 
 	if ($stream =~ /^name/i) {
-	    $stream =~ s/^name\[[a-zA-Z0-9]+\]=\"[^\"]*\";(.*)/$1/i
+	    $stream =~ s/^name\[[a-zA-Z0-9_]+\]=\"[^\"]*\";(.*)/$1/i
 		or syntax_error "group name";
 	    next;
 	}
@@ -2990,11 +3509,11 @@ sub xkb_symbols_definitions {
 	    next;
 	}
 	
-	if ($stream =~ s/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+=.*?;(.*)/$1/i) {
+	if ($stream =~ s/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+=.*?;(.*)/$1/i) {
 	    next;
 	}
 
-	if ($stream =~ s/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\[[a-zA-Z0-9]+\]
+	if ($stream =~ s/^[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+\[[a-zA-Z0-9_]+\]
                        =.*?;(.*)/$1/ix) {
 	    next;
 	}
@@ -3161,6 +3680,20 @@ foreach my $alias (keys %aliases) {
 
 include_xkb_file 'symbols', $symbols;
 
+if ($arch eq 'at' || $arch eq 'evdev') {
+# Pause - 110, Break - 114, PrintScreen - 111, SysRq - 92
+    for my $group (0 .. 3) {
+        # no separate Break key on AT keyboards.  Break = Ctrl+Pause
+        if (defined $symbols_table{110}[$group][1]) {
+            $symbols_table{114}[$group] = [$symbols_table{110}[$group][1]];
+        }
+        # no separate SysRq key on AT keyboards.  SysRq = Alt+PrintScreen
+        if (defined $symbols_table{111}[$group][1]) {
+            $symbols_table{92}[$group] = [$symbols_table{111}[$group][1]];
+        }
+    }
+}
+
 foreach my $key (keys %symbols_table) {
     foreach my $group (0 .. $#{$symbols_table{$key}}) {
 	if (! defined $symbols_table{$key}[$group]) {
@@ -3178,31 +3711,27 @@ foreach my $key (keys %symbols_table) {
     }
 }
 
-# later we use that the distance is an even number less than 1000000
-sub distance {
-    my $x = $_[0];
-    my $y = $_[1];
-    my $bottom = $x & $y;
-    # If groups differ prefer the zero group
-    if (($x | 0x0f) != ($y | 0x0f)) {
-	$bottom = $bottom & 0x0f;
-    }
-    return  ((($y - $bottom) << 6) | ($x - $bottom)) << 1;
-}
-
 sub uni_to_legacy {
     my $uni = $_[0];
     if ($acm) {
 	if ($uni <= 0x7f) {
-	    return sprintf "0x%02x", $uni;
+            if ($freebsd && $uni >= 0x20 && $uni <= 0x7e) {
+                return sprintf "\'%c\'", $uni;
+            } else {
+                return sprintf "0x%02x", $uni;
+            }
 	} elsif (defined $acmtable{$uni}) {
-	    return sprintf "0x%02x", $acmtable{$uni};
+            if ($freebsd) {
+                return sprintf "%i", $acmtable{$uni};
+            } else {
+                return sprintf "0x%02x", $acmtable{$uni};
+            }
 	} else {
 	    if ($verbosity >= 8) {
 		warning sprintf ("Unicode U+%04x does not exist "
 				 ."in the legacy encoding\n", $uni);
 	    }
-	    return 'VoidSymbol';
+	    return $voidsymbol;
 	}
     } else {
 	return 'U+'. sprintf ("%04x", $uni);
@@ -3213,12 +3742,12 @@ sub x_to_kernelsym {
     my $xkeysym = $_[0];
     my $kernelkeysym = $xkbsym_table{$xkeysym};
     if (defined $kernelkeysym) {
-        if ($kernelkeysym !~ /^[0-9a-fA-F]{4}$/) {
+        if ($kernelkeysym !~ /^[0-9][0-9a-fA-F]{3}$/) {
 	    return $kernelkeysym;
 	}
     } else {
-	$kernelkeysym = ($xkeysym =~ /^0x0?100([0-9a-fA-F]{4})$/
-			 ? $1
+	$kernelkeysym = ($xkeysym =~ /^0x0*(100)?([0-9a-fA-F]{4})$/
+			 ? $2
 			 : ($xkeysym =~ /^U([0-9a-fA-F]+)$/
 			    ? $1 
 			    : undef));
@@ -3226,25 +3755,27 @@ sub x_to_kernelsym {
     if (defined $kernelkeysym) {
 	my $uni = hex ($kernelkeysym);
 	if (defined $forbidden{$uni}) {
-#	    warning "Forbidden Unicode \"U+$kernelkeysym\"\n";
-	    return 'VoidSymbol';
+            if ($verbosity >= 8) {
+                warning "Forbidden Unicode \"U+$kernelkeysym\"\n";
+            }
+	    return $voidsymbol;
 	} else {
 	    if (pack("U", $uni) =~ /\p{IsAlpha}/) {
 		my $legacy = uni_to_legacy ($uni);
-		if ($legacy ne 'VoidSymbol') {
-		    return '+'. $legacy;
+		if ($legacy ne $voidsymbol) {
+		    return '+'. $legacy; # further processed for FreeBSD
 		} else {
 		    return $legacy;
 		}
 	    } elsif ($uni <= 0x1f) {
-		return $controlsyms[$uni + 1];
+		return $controlsyms[$uni];
 	    } else {
 		return uni_to_legacy ($uni);
 	    }
 	}
     } else {
 	warning "Unknown X keysym \"$xkeysym\"\n";
-	return 'VoidSymbol';
+	return $voidsymbol;
     }
 }
 
@@ -3252,27 +3783,15 @@ sub x_to_ascii {
     my $xkeysym = $_[0];
     my $kernelkeysym = $xkbsym_table{$xkeysym};
     if (defined $kernelkeysym) {
-	if ($kernelkeysym eq 'Delete') {
-	    return 0x7f;
-	} elsif ($kernelkeysym eq 'BackSpace') {
-	    return 0x08;
-	} elsif ($kernelkeysym eq 'Tab') {
-	    return 0x09;
-	} elsif ($kernelkeysym eq 'Linefeed') {
-	    return 0x0a;
-	} elsif ($kernelkeysym eq 'Return') {
-	    return 0x0d;
-	} elsif ($kernelkeysym eq 'Escape') {
-	    return 0x1b;
-	} elsif ($kernelkeysym eq 'NoSymbol') {
-	    return -1;
-	} elsif ($kernelkeysym !~ /^[0-9a-fA-F]{4}$/) {
+        if (defined $controlsyms_hash{$kernelkeysym}) {
+            return $controlsyms_hash{$kernelkeysym};
+	} elsif ($kernelkeysym !~ /^[0-9][0-9a-fA-F]{3}$/) {
 	    return undef;
 	}
     } else {
-	$kernelkeysym = ($xkeysym =~ /^0x0?100([0-9a-fA-F]{4})/
-			 ? $1
-			 : ($xkeysym =~ /^U([0-9a-fA-F]+)/
+	$kernelkeysym = ($xkeysym =~ /^0x0*(100)?([0-9a-fA-F]{4})$/
+			 ? $2
+			 : ($xkeysym =~ /^U([0-9a-fA-F]+)$/
 			    ? $1 
 			    : undef));
     }
@@ -3287,6 +3806,8 @@ sub x_to_ascii {
 
 # A vector of symbol codes for a key
 my @vector;
+# $numlockable[group] -> whether the group is numlockable
+my @numlockable;
 # A vector with same length as @vector.  Measures how well each element of
 # @vector represents the xkb symbol for the particular key.  Bigger values
 # mean lower quality.
@@ -3296,9 +3817,8 @@ sub approximate {
     my ($coord, $new_sym, $new_quality) = @_;
     # $new_sym represents the xkb symbol for position $coord in @vector
     # with quality $new_quality
-    if ((! defined $quality[$coord] 
-	 || $quality[$coord] > $new_quality)
-	&& $new_sym ne 'VoidSymbol') {
+    if ((! defined $quality[$coord] || $quality[$coord] > $new_quality)
+	&& $new_sym ne $voidsymbol) {
 	$vector[$coord] = $new_sym;
 	$quality[$coord] = $new_quality;
     }
@@ -3319,6 +3839,7 @@ sub flatten {
     my $key = $_[0];
     @vector = ();
     @quality = ();
+    @numlockable = (0,0,0,0);
     my @real_group_table = ([-1, -1, -1, -1],
 			    [0, 0, 0, 0], # gr1 -> gr1 -> gr1 -> gr1
 			    [0, 1, 1, 0], # gr1 -> gr2 -> gr1 -> gr2
@@ -3326,33 +3847,40 @@ sub flatten {
 			    [0, 1, 3, 2]);# gr1 -> gr2 -> gr3 -> gr4
     for my $group (0..3) {
 	my $real_group = $real_group_table[1+$#{$symbols_table{$key}}][$group];
+        my $last_level;
+        while ($real_group >= 0
+               && ($last_level = $#{$symbols_table{$key}[$real_group]}) < 0) {
+            $real_group = $real_group - 1;
+        }
 	next if ($real_group < 0);
 	for my $level (0..3) {
 	    my $real_level = $level;
 	    if ($types_table{$key} eq 'ONE_LEVEL') {
 		$real_level = 0;
 	    } elsif ($types_table{$key} eq 'TWO_LEVEL') {
-		if ($real_level > 1) {
-		    $real_level = 1;
-		}
+                $real_level = $real_level % 2;
 	    } elsif ($types_table{$key} eq 'THREE_LEVEL') {
 		if ($real_level > 2) {
 		    $real_level = 2;
 		}
 	    }
-	    while ($real_level > $#{$symbols_table{$key}[$real_group]}) {
-		if ($real_level == 2) {
-		    $real_level = $real_level - 2;
-		} else {
-		    $real_level = $real_level - 1;
-		}
-	    }
-	    next if ($real_level < 0);
+            if ($last_level == -1) {
+                next;
+            } elsif ($last_level == 0) {
+                $real_level = 0;
+            } elsif ($last_level == 1) {
+                $real_level = $real_level % 2;
+            } elsif ($last_level == 2 && $real_level == 3) {
+                $real_level = 2;
+            } elsif ($real_level > $last_level) {
+                $real_level = $last_level;
+            }
 	    my $coord;
 	    for ($types_table{$key}) {
 		if (/^(DEFAULT|ONE_LEVEL|TWO_LEVEL
                       |THREE_LEVEL|ALPHABETIC
                       |EIGHT_LEVEL|EIGHT_LEVEL_ALPHABETIC
+                      |EIGHT_LEVEL_SEMIALPHABETIC
                       |FOUR_LEVEL|FOUR_LEVEL_ALPHABETIC
                       |FOUR_LEVEL_SEMIALPHABETIC
                       |SEPARATE_CAPS_AND_SHIFT_ALPHABETIC
@@ -3360,15 +3888,15 @@ sub flatten {
 		      |FOUR_LEVEL_KEYPAD|LOCAL_EIGHT_LEVEL
                       |FOUR_LEVEL_PLUS_LOCK
                       )$/x) {
-		    # Level1: plain
-		    # Level2: shift
-		    # Level3: altgr
-		    # Level4: shift+altgr
+		    # Level0: plain
+		    # Level1: shift
+		    # Level2: altgr
+		    # Level3: shift+altgr
 		    $coord = ($group << 4) + $level;
 		} elsif (/^(PC_BREAK|PC_CONTROL_LEVEL2
                            |PC_LCONTROL_LEVEL2|PC_RCONTROL_LEVEL2)$/x) {
-		    # Level1: plain
-		    # Level2: control
+		    # Level0: plain
+		    # Level1: control
 		    if ($level == 0 || $level == 2) {
 			$coord = ($group << 4) + $level;
 		    } else {
@@ -3376,8 +3904,8 @@ sub flatten {
 		    }
 		} elsif (/^(PC_SYSRQ|PC_ALT_LEVEL2
                            |PC_LALT_LEVEL2|PC_RALT_LEVEL2)$/x) {
-		    # Level1: plain
-		    # Level2: alt
+		    # Level0: plain
+		    # Level1: alt
 		    if ($level == 0 || $level == 2) {
 			$coord = ($group << 4) + $level;
 		    } else {
@@ -3385,16 +3913,16 @@ sub flatten {
 			$coord = ($group << 4) + $level + 7;
 		    }
 		} elsif (/^SHIFT\+ALT$/) {
-		    # Level1: plain
-		    # Level2: shift+alt
+		    # Level0: plain
+		    # Level1: shift+alt
 		    if ($level == 0 || $level == 2) {
 			$coord = ($group << 4) + $level;
 		    } else {
 			$coord = ($group << 4) + $level + 8;
 		    }
 		} elsif (/^CTRL\+ALT$/) {
-		    # Level1: plain
-		    # Level2: control+alt
+		    # Level0: plain
+		    # Level1: control+alt
 		    if ($level == 0 || $level == 2) {
 			$coord = ($group << 4) + $level;
 		    } else {
@@ -3406,53 +3934,55 @@ sub flatten {
 		}
 	    }
 	    my $xkeysym = $symbols_table{$key}[$real_group][$real_level];
+	    if ($xkeysym =~ /^KP_/) {
+                $numlockable[$group] = 1;
+	    }
 	    my $is_special = ($xkeysym !~ /^U[0-9a-fA-F]+$/
 			      && defined $xkbsym_table{$xkeysym}
 			      && ($xkbsym_table{$xkeysym}
-				  !~ /^[0-9a-fA-F]{4}$/));
+				  !~ /^[0-9][0-9a-fA-F]{3}$/));
 	    my $kernelkeysym = x_to_kernelsym ($xkeysym);
-	    my $ascii = x_to_ascii ($xkeysym);
 	    approximate ($coord, $kernelkeysym, 0);
-	    for my $approximated_group (0 .. 3) {
-		for my $approximated_level (0 .. 3) {
-		    my $approximated_coord = ($approximated_level
-					      + ($approximated_group << 4));
-		    my $distance = distance ($approximated_coord, $coord);
-		    approximate ($approximated_coord,
-				 $kernelkeysym, $distance);
-		    if (defined $ascii) {
-			approximate (($approximated_coord | 0x08), 
-				     $metasyms[$ascii + 1], $distance + 1);
-			approximate (($approximated_coord | 0x04), 
-				     $controlsyms[$ascii + 1], $distance + 1);
-			approximate (($approximated_coord | 0x0c), 
-				     $metacontrolsyms[$ascii + 1], 
-				     $distance + 1);
-		    } elsif ($is_special) {
-			approximate (($approximated_coord | 0x08), 
-				     $kernelkeysym, $distance + 1);
-			approximate (($approximated_coord | 0x04), 
-				     $kernelkeysym, $distance + 1);
-			approximate (($approximated_coord | 0x0c), 
-				     $kernelkeysym, $distance + 1);
-		    }
-		}
-	    }
+            if (defined (my $ascii = x_to_ascii ($xkeysym))) {
+                approximate (($coord | 0x08), $metasyms[$ascii], 1);
+                approximate (($coord | 0x04), $controlsyms[$ascii], 1);
+                approximate (($coord | 0x0c), $metacontrolsyms[$ascii], 1);
+            } elsif ($is_special) { # this includes being 'NoSymbol'
+                approximate (($coord | 0x08), $kernelkeysym, 2);
+                approximate (($coord | 0x04), $kernelkeysym, 2);
+                approximate (($coord | 0x0c), $kernelkeysym, 2);
+            }
 	}
+    }
+    for my $x (0..1) {
+        my $mask = 1 << $x;
+        for my $coord (0..63) {
+            next if (! defined $vector[$coord]);
+            approximate($coord ^ $mask, $vector[$coord],
+                        $quality[$coord] + $mask << 2);
+        }
+    }
+    for my $coord (0..16) {
+        next if (! defined $vector[$coord]);
+        for my $x (1..3) {
+            my $mask = $x << 4;
+            approximate($coord | $mask, $vector[$coord],
+                        $quality[$coord] + 1 << 6);
+        }
     }
     for my $coord (0 .. 63) {
 	if (! defined $vector[$coord]) {
-	    $vector[$coord] = 'VoidSymbol';
+	    $vector[$coord] = $voidsymbol;
 	}
     }
 
     for my $coord (0 .. 63) {
-	next if ($coord & 0x0c); # If Control and/or Alt
+	next if ($coord & 0x0c); # next if Control and/or Alt
 	my $mask = $kernel_modifiers{$vector[$coord]};
 	next unless (defined $mask);
 	for my $mod (4, 8, 12) {
-	    if ($vector[$coord + $mod] eq 'VoidSymbol'
-		&& ($vector[($coord + $mod) ^ $mask] eq 'VoidSymbol')) {
+	    if ($vector[$coord + $mod] eq $voidsymbol
+		&& ($vector[($coord + $mod) ^ $mask] eq $voidsymbol)) {
 		$vector[$coord + $mod] = $vector[$coord];
 	    }
 	}
@@ -3464,7 +3994,8 @@ sub flatten {
 	my $mask = $kernel_modifiers{$vector[$coord]};
 	if (defined $mask) {
 	    $vector[$coord ^ $mask] = $vector[$coord];
-	    if ($compact) {
+	    if ($compact && ! $freebsd) {
+                # In non-Latin layouts AltGr=ShiftL
 		# AltGr = 0x02,  ShiftL = 0x10
 		if (($mask & 0x02) && ($mask & 0x10)) {
 		    $vector[$coord ^ $mask ^ 0x02] = $vector[$coord];
@@ -3480,10 +4011,10 @@ sub flatten {
 	}
     }
     
-    if (! $compact) {
+    if ($freebsd || ! $compact) {
 	for my $coord (16 .. 63) {
-	    if ($vector[$coord] =~ /^(ShiftL|ShiftL_Lock)$/) {
-		$vector[$coord] = 'VoidSymbol';
+	    if ($vector[$coord] =~ /^(ShiftL|ShiftL_Lock|ashift|alock)$/) {
+		$vector[$coord] = $voidsymbol;
 	    }
 	}
 	for my $coord (0 .. 15) {
@@ -3491,27 +4022,23 @@ sub flatten {
 		$vector[$coord + 16] = 'ShiftR_Lock'; # 16 => 48
 		$vector[$coord + 32] = 'ShiftR_Lock'; # 32 => 0
 		$vector[$coord + 48] = 'ShiftL_Lock'; # 48 => 32
-	    } elsif ($vector[$coord] eq 'ShiftL') {
-		$vector[$coord + 16] = 'ShiftL';
-		$vector[$coord + 32] = 'ShiftL';
-		$vector[$coord + 48] = 'ShiftL';
+	    } elsif ($vector[$coord] =~ /^(ShiftL|ashift|alock)$/) {
+		$vector[$coord + 16] = $vector[$coord];
+		$vector[$coord + 32] = $vector[$coord];
+		$vector[$coord + 48] = $vector[$coord];
 	    }
 	}
     } else {
 	for my $coord (16 .. 63) {
 	    if ($vector[$coord] =~ /^(AltGr|AltGr_Lock)$/) {
-		$vector[$coord] = 'VoidSymbol';
+		$vector[$coord] = $voidsymbol;
 	    }
 	}
 	for my $coord (0 .. 15) {
-	    if ($vector[$coord] eq 'AltGr_Lock') {
-		$vector[$coord + 16] = 'AltGr_Lock';
-		$vector[$coord + 32] = 'AltGr_Lock';
-		$vector[$coord + 48] = 'AltGr_Lock';
-	    } elsif ($vector[$coord] eq 'AltGr') {
-		$vector[$coord + 16] = 'AltGr';
-		$vector[$coord + 32] = 'AltGr';
-		$vector[$coord + 48] = 'AltGr';
+            if ($vector[$coord] =~ /^(AltGr_Lock|AltGr)$/) {
+		$vector[$coord + 16] = $vector[$coord];
+		$vector[$coord + 32] = $vector[$coord];
+		$vector[$coord + 48] = $vector[$coord];
 	    }
 	}
     }
@@ -3530,8 +4057,9 @@ sub flatten {
 		                    |FOUR_LEVEL_KEYPAD)$/x
 	    && ! defined $kp) {
 	    $kp = 'VoidSymbol';
+            $numlockable[$group] = 1;
 	}
-	if ($kp) {
+	if ($kp && ! $freebsd) {
 	    for my $x (0 .. 15) {
 		my $coord = 16 * $group + $x;
 		for ($vector[$coord]) {
@@ -3599,7 +4127,57 @@ sub flatten {
     for my $group (0 .. 3) {
 	my $coord = $group << 4;
 	my $mainsym = $vector[$coord];
-	if ($mainsym =~ /^F([0-9]+)$/) {
+	if ($mainsym =~ /^fkey([0-9]+)$/) {
+	    my $num = $1;
+            if (1 <= $num && $num <= 12) {
+                $vector[$coord + 1] = 'fkey'. ($num+12); # shift
+                $vector[$coord + 4] = 'fkey'. ($num+24); # control
+                $vector[$coord + 5] = 'fkey'. ($num+36); # control + shift
+                $vector[$coord + 2] = 'scr'. sprintf("%02i", $num); #altgr
+                my $x = sprintf("%02i", ($num <= 6) ? $num+10 : $num);
+                $vector[$coord + 3] = 'scr'. $x; # altgr + shift
+                $vector[$coord + 6] = 'scr'. sprintf("%02i", $num); # altgr+ctrl
+                $vector[$coord + 7] = 'scr'. $x; # altgr + control + shift
+            } elsif ($num == 52 || $num == 56) {
+                my $sym = $num == 52 ? '\'-\'' : '\'+\'';
+                for my $i ($coord .. $coord+15) {
+                    if ($vector[$i] eq $mainsym && $vector[$i^1] eq $mainsym) {
+                        $vector[$i | 1] = $sym;
+                    }
+                }
+            } elsif ($num == 60 && $vector[$coord + 1] eq 'fkey60') {
+                $vector[$coord + 1] = 'paste';
+            }
+        } elsif ($mainsym =~ /^esc$/) {
+            $vector[$coord + 6] = 'debug';
+            $vector[$coord + 7] = 'debug';
+        } elsif ($mainsym =~ /^saver$/) { # 'Pause' key
+            $vector[$coord] = 'slock';
+            $vector[$coord + 1] = 'saver'; # shift
+            $vector[$coord + 2] = 'susp';  # altgr
+            $vector[$coord + 3] = 'susp';  # altgr + shift
+            $vector[$coord + 4] = 'slock'; # ctrl
+            $vector[$coord + 5] = 'saver'; # ctrl + shift
+            $vector[$coord + 6] = 'susp';  # ctrl + altgr
+            $vector[$coord + 7] = 'susp';  # ctrl + altgr + shift
+        } elsif ($freebsd && $mainsym =~ /^\' \'$/) {
+            $vector[$coord + 6] = 'susp';
+            $vector[$coord + 7] = 'susp';
+        } elsif ($mainsym =~ /^ht$/) {
+            for my $i ($coord .. $coord+15) {
+                if ($vector[$i] eq 'ht' && $vector[$i ^ 1] eq 'ht') {
+                    $vector[$i | 1] = 'btab';
+                }
+            }
+        } elsif ($mainsym =~ /^nscr$/) {
+            for my $i ($coord .. $coord+15) {
+                if ($vector[$i] eq 'nscr' && $vector[$i ^ 1] eq 'nscr') {
+                    $vector[$i | 1] = 'pscr';
+                }
+            }
+            $vector[$coord + 4] = 'debug';
+            $vector[$coord + 5] = 'debug';
+	} elsif ($mainsym =~ /^F([0-9]+)$/) {
 	    my $num = $1;
 	    $vector[$coord + 1] = 'F'. ($num + 12); # shift
 	    $vector[$coord + 2] = 'Console_'. ($num + 12); # altgr
@@ -3660,19 +4238,42 @@ sub print_vector {
     my $only_VoidSymbol = 1;
     my $no_NoSymbol = 1;
     for my $mask (0 .. 63) {
-	if ($vector[$mask] ne 'VoidSymbol' && $vector[$mask] ne 'NoSymbol') {
+	if ($vector[$mask] ne $voidsymbol && $vector[$mask] ne 'NoSymbol') {
 	    $only_VoidSymbol = 0;
 	    last;
 	}
     }
-    return if ($only_VoidSymbol);
+    return if ($only_VoidSymbol && $compact);
     for my $mask (0 .. 63) {
 	if ($vector[$mask] eq 'NoSymbol') {
 	    $no_NoSymbol = 0;
 	    last;
 	}
     }
-    if ($compact) {
+    if ($freebsd) {
+        my @capslockable = (0,0,0,0);
+	for my $group (0 .. 3) {
+	    if ($vector[$group * 16] =~ /^\+/) {
+                $capslockable[$group] = 1;
+                last;
+            }
+        }
+	for my $mask (0 .. 63) {
+	    $vector[$mask] =~ s/^\+//;
+	    $vector[$mask] =~ s/^NoSymbol$/nop/;
+        }
+        for my $group (0 .. 1) {
+            next if ($group && $symbols !~ /:2/);
+            my $lockstate = ($capslockable[$group] ? 
+                             ($numlockable[$group] ? 'B' : 'C')
+                             : ($numlockable[$group] ? 'N' : 'O'));
+            $KEYMAP .= sprintf "  %03i   ", $kernel_code + 128*$group;
+            for my $mask (0, 1, 4, 5, 2, 3, 6, 7) {
+                $KEYMAP .= sprintf "%-6s ", $vector[$mask + 16*$group];
+            }
+            $KEYMAP .= " $lockstate\n";
+        }
+    } elsif ($compact) {
 	my $line = ($symbols =~ /:2/ # true if the keymap is non-latin
 		    ? "@vector[0, 1, 16, 17, 4, 20, 8, 24, 12, 28]"
 		    : "@vector[0, 1, 2, 3, 4, 6, 8, 10, 12, 14]");
@@ -3839,42 +4440,187 @@ my %at_scancodes = (
     208 => -1,  # Japanese
     209 => -1,  # Korean
     210 => -1,  # Korean
-    211 => 89,  # Brasilian ABNT2
+    211 => 89,  # Brasilian ABNT2, Japanese
     214 => -1,  # alternate between internal and multimedia display
     215 => -1,  # turn light on/of
     216 => -1,  # brightness down
     217 => -1,  # brightness up
 );
 
-if ($compact) {
+my %freebsd_scancodes = (
+    9 => 1,
+    10 => 2,
+    11 => 3,
+    12 => 4,
+    13 => 5,
+    14 => 6,
+    15 => 7,
+    16 => 8,
+    17 => 9,
+    18 => 10,
+    19 => 11,
+    20 => 12,
+    21 => 13,
+    22 => 14,
+    23 => 15,
+    24 => 16,
+    25 => 17,
+    26 => 18,
+    27 => 19,
+    28 => 20,
+    29 => 21,
+    30 => 22,
+    31 => 23,
+    32 => 24,
+    33 => 25,
+    34 => 26,
+    35 => 27,
+    36 => 28,
+    37 => 29,
+    38 => 30,
+    39 => 31,
+    40 => 32,
+    41 => 33,
+    42 => 34,
+    43 => 35,
+    44 => 36,
+    45 => 37,
+    46 => 38,
+    47 => 39,
+    48 => 40,
+    49 => 41,
+    50 => 42,
+    51 => 43,
+    52 => 44,
+    53 => 45,
+    54 => 46,
+    55 => 47,
+    56 => 48,
+    57 => 49,
+    58 => 50,
+    59 => 51,
+    60 => 52,
+    61 => 53,
+    62 => 54,
+    63 => 55,
+    64 => 56,
+    65 => 57,
+    66 => 58,
+    67 => 59,
+    68 => 60,
+    69 => 61,
+    70 => 62,
+    71 => 63,
+    72 => 64,
+    73 => 65,
+    74 => 66,
+    75 => 67,
+    76 => 68,
+    77 => 69,
+    78 => 70,
+    79 => 71,
+    80 => 72,
+    81 => 73,
+    82 => 74,
+    83 => 75,
+    84 => 76,
+    85 => 77,
+    86 => 78,
+    87 => 79,
+    88 => 80,
+    89 => 81,
+    90 => 82,
+    91 => 83,
+    92 => 84,
+    93 => -1, # fake key (KP_Equal)
+    94 => 86,
+    95 => 87,
+    96 => 88,
+    97 => 94,
+    98 => 95,
+    99 => 96,
+    100 => 97,
+    102 => 98,
+    103 => 99,
+    104 => 100,
+    105 => 101,
+    106 => 102,
+    107 => 103,
+    108 => 89,
+    109 => 90,
+    110 => 104,
+    111 => 92,
+    112 => 91,
+    113 => 93,
+    114 => 108,
+    115 => 105,
+    116 => 106,
+    117 => 107,
+    118 => -1,  # Japanese
+    119 => -1,  # Japanese
+    120 => -1,  # Japanese
+    123 => -1,
+    124 => -1,  # fake key
+    125 => -1,  # fake key
+    126 => -1,  # fake key
+    127 => -1,  # fake key
+    128 => -1,  # fake key
+    129 => -1,  # Japanese
+    131 => -1,  # Japanese
+    133 => 125, # Japanese
+    134 => 126, # Brasilian ABNT2
+    144 => -1,  # Japanese
+    156 => -1,  # fake key
+    208 => -1,  # Japanese
+    209 => -1,  # Korean
+    210 => -1,  # Korean
+    211 => 115,  # Brasilian ABNT2, Japanese
+    214 => -1,  # alternate between internal and multimedia display
+    215 => -1,  # turn light on/of
+    216 => -1,  # brightness down
+    217 => -1,  # brightness up
+);
+
+if ($freebsd) {
+    $KEYMAP .= 
+"#                                                         alt\n".
+"# scan                       cntrl          alt    alt   cntrl lock\n".
+"# code  base   shift  cntrl  shift  alt    shift  cntrl  shift state\n".
+"# ------------------------------------------------------------------\n";
+#"  000   nop    nop    nop    nop    nop    nop    nop    nop     O\n";
+} elsif ($compact) {
     $KEYMAP .= "keymaps 0-4,6,8,10,12,14\n";
 } else {
     $KEYMAP .= "keymaps 0-127\n";
 }
-if ($arch eq 'at' || $arch eq 'evdev') {
+
+if ($freebsd) {
+    foreach my $key (sort {$a <=> $b} (keys %symbols_table)) {
+	my $kernel_code = $freebsd_scancodes{$key};
+	next if (! defined $kernel_code || $kernel_code < 0);
+	@vector = flatten ($key);
+	if ($kernel_code == 83 || $kernel_code == 103) {
+	    for my $coord (0+6, 0+7, 16+6, 16+7, 32+6, 32+7, 48+6, 48+7,) {
+		$vector[$coord] = 'boot';
+	    }
+        }
+	print_vector $kernel_code;
+    }
+} elsif ($arch eq 'at' || $arch eq 'evdev') {
     foreach my $key (sort {$a <=> $b} (keys %symbols_table)) {
 	my $kernel_code = (($arch eq 'at') ? $at_scancodes{$key} : $key - 8);
 	next if (! defined $kernel_code || $kernel_code < 0);
- 	if ($kernel_code == 84) {
- 	    @vector = ('Last_Console') x 64;
- 	} elsif ($kernel_code == 99) {
- 	    @vector = ('Control_backslash') x 64;
-	    for my $coord (0, 16, 32, 48) {
+        @vector = flatten ($key);
+        if ($kernel_code == 99) {
+	    for my $coord (0, 1, 16, 17, 32, 33, 48, 49) {
 		$vector[$coord] = 'VoidSymbol';
-		$vector[$coord + 1] = 'VoidSymbol';
 	    }
- 	} elsif ($kernel_code == 101) {
- 	    @vector = ('Break') x 64;
- 	} elsif ($kernel_code == 119) {
- 	    @vector = ('Pause') x 64;
- 	} else {
- 	    @vector = flatten ($key);
- 	}
-	if ($kernel_code == 83 || $kernel_code == 111) {
-	    for my $coord (0, 16, 32, 48) {
-		$vector[$coord + 6] = 'Boot';
-		$vector[$coord + 12] = 'Boot';
-		$vector[$coord + 14] = 'Boot';
+ 	} elsif ($kernel_code == 83 || $kernel_code == 111) {
+	    for my $coord (0+6, 0+12, 0+14, 
+                           16+6, 16+12, 16+14,
+                           32+6, 32+12, 32+14, 
+                           48+6, 48+12, 48+14) {
+		$vector[$coord] = 'Boot';
 	    }
 	}
 	print_vector $kernel_code;
@@ -3901,10 +4647,11 @@ keycode 127 =
 	    @vector = flatten ($key);
 	}
 	if ($kernel_code == 83 || $kernel_code == 113) {
-	    for my $coord (0, 16, 32, 48) {
-		$vector[$coord + 6] = 'Boot';
-		$vector[$coord + 12] = 'Boot';
-		$vector[$coord + 14] = 'Boot';
+	    for my $coord (0+6, 0+12, 0+14, 
+                           16+6, 16+12, 16+14,
+                           32+6, 32+12, 32+14, 
+                           48+6, 48+12, 48+14) {
+		$vector[$coord] = 'Boot';
 	    }
 	}
 	print_vector $kernel_code;
@@ -3914,10 +4661,11 @@ keycode 127 =
 	my $kernel_code = $key - 8;
 	@vector = flatten ($key);
 	if ($kernel_code == 60) {
-	    for my $coord (0, 16, 32, 48) {
-		$vector[$coord + 6] = 'Boot';
-		$vector[$coord + 12] = 'Boot';
-		$vector[$coord + 14] = 'Boot';
+	    for my $coord (0+6, 0+12, 0+14, 
+                           16+6, 16+12, 16+14,
+                           32+6, 32+12, 32+14, 
+                           48+6, 48+12, 48+14) {
+		$vector[$coord] = 'Boot';
 	    }
 	}
 	print_vector $kernel_code;
@@ -3927,10 +4675,11 @@ keycode 127 =
 	my $kernel_code = $key - 7;
 	@vector = flatten ($key);
 	if ($kernel_code == 50) {
-	    for my $coord (0, 16, 32, 48) {
-		$vector[$coord + 6] = 'Boot';
-		$vector[$coord + 12] = 'Boot';
-		$vector[$coord + 14] = 'Boot';
+	    for my $coord (0+6, 0+12, 0+14, 
+                           16+6, 16+12, 16+14,
+                           32+6, 32+12, 32+14, 
+                           48+6, 48+12, 48+14) {
+		$vector[$coord] = 'Boot';
 	    }
 	}
 	print_vector $kernel_code;
@@ -3945,14 +4694,35 @@ if ($broken_caps) {
 
 print $KEYMAP;
 
-print "strings as usual\n";
+if ($freebsd) {
+    if ($charmap) {
+        my $file1 = "/etc/console-setup/dkey.${charmap}.inc";
+        my $file2 = "$installdir/etc/console-setup/dkey.${charmap}.inc";
+        if (-f $file1) {
+            system("cat $file1");
+        } elsif (-f $file2) {
+            system("cat $file2");
+        }
+    }
+} else {
+    print "strings as usual\n";
 
-if ($charmap && -f "/etc/console-setup/compose.${charmap}.inc") {
-    system("cat /etc/console-setup/compose.${charmap}.inc");
+    if ($charmap) {
+        my $file1 = "/etc/console-setup/compose.${charmap}.inc";
+        my $file2 = "$installdir/etc/console-setup/compose.${charmap}.inc";
+        if (-f $file1) {
+            system("cat $file1");
+        } elsif (-f $file2) {
+            system("cat $file2");
+        }
+    }
 }
-
-if (! $compact && -f "/etc/console-setup/remap.inc") {
-    system("cat /etc/console-setup/remap.inc");
+my $file1 = "/etc/console-setup/remap.inc";
+my $file2 = "$installdir/etc/console-setup/remap.inc";
+if (-f $file1) {
+    system("cat $file1");
+} elsif (-f $file2) {
+    system("cat $file2");
 }
 
 exit 0;

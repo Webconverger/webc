@@ -33,16 +33,10 @@ do_start () {
 		chgrp utmp /var/run/utmp
 	fi
 
-	# Set pseudo-terminal access permissions.
-	if [ ! -e /dev/.udev ] && [ -c /dev/ttyp0 ]
-	then
-		chmod -f 666 /dev/tty[p-za-e][0-9a-f]
-		chown -f root:tty /dev/tty[p-za-e][0-9a-f]
-	fi
-
 	# Remove bootclean's flag files.
 	# Don't run bootclean again after this!
-	rm -f /tmp/.clean /var/run/.clean /var/lock/.clean
+	rm -f /tmp/.clean /lib/init/rw/.clean /run/.clean /run/lock/.clean
+	rm -f /tmp/.tmpfs /lib/init/rw/.tmpfs /run/.tmpfs /run/lock/.tmpfs
 }
 
 case "$1" in

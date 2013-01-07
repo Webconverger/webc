@@ -21,6 +21,23 @@ if [ -r /etc/default/locale ] ; then
   . /etc/default/locale
 fi
 
+Help ()
+{
+    echo "\
+SYNOPSIS: update-info-dir [-h,--help] [info-directory]
+
+(re-)creates the index of available documentation in info format
+(the file /usr/share/info/dir) which is usually presented by info browsers
+on startup."
+
+    exit 0
+}
+
+
+if [ "$1" = "-h" ] || [ "$1" == "--help" ]; then
+    Help
+fi
+
 if [ -n "$1" ] ; then
   INFODIR="$1"
 fi

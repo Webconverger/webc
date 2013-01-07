@@ -2,7 +2,7 @@
 
 # deluser -- a utility to remove users from the system
 # delgroup -- a utilty to remove groups from the system
-my $version = "3.112+nmu2";
+my $version = "3.113+nmu3";
 
 # Copyright (C) 2000 Roland Bauerschmidt <rb@debian.org>
 # Based on 'adduser' as pattern by
@@ -175,7 +175,7 @@ apt-get install perl-modules.\n"));
  
 my ($pw_uid, $pw_gid, $pw_homedir, $gr_gid, $maingroup);
 
-if($user) {
+if(defined($user)) {
     my @passwd = getpwnam($user);
     $pw_uid = $passwd[2];
     $pw_gid = $passwd[3];
@@ -183,7 +183,7 @@ if($user) {
     
     $maingroup = $pw_gid ? getgrgid($pw_gid) : "";
 }
-if($group) {
+if(defined($group)) {
     #($gr_name,$gr_passwd,$gr_gid,$gr_members) = getgrnam($group);
     my @group = getgrnam($group);
     $gr_gid = $group[2];
@@ -300,8 +300,8 @@ if($action eq "deluser") {
 	      (
 		($File::Find::name =~ /^\/proc\// && ($File::Find::prune = 1)) ||
 		(-f $File::Find::name && push(@files, $File::Find::name)) ||
+                (-l $File::Find::name && push(@files, $File::Find::name)) ||
 		(-d $File::Find::name && push(@dirs, $File::Find::name)) ||
-                (-l $File::Find::name && push(@dirs, $File::Find::name)) ||
                 (-S $File::Find::name && push(@dirs, $File::Find::name)) || 
                 (-p $File::Find::name && push(@dirs, $File::Find::name))
 	      );
@@ -318,7 +318,7 @@ if($action eq "deluser") {
 	 my $filesfile = new File::Temp(TEMPLATE=>"deluser.XXXXX", DIR=>"/tmp");
 	 my $filesfilename = $filesfile->filename;
 	 my $backup_name = $config{"backup_to"} . "/$user.tar";
-	 print "backup_name = $backup_name";
+	 print "backup_name = $backup_name\n";
 	 print $filesfile join("\n",@files);
 	 $filesfile->close();
          my $tar = &which('tar');

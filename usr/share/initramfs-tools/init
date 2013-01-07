@@ -323,7 +323,7 @@ mount -n -o move /proc ${rootmnt}/proc
 if command -v switch_root >/dev/null 2>&1; then
 	exec switch_root ${rootmnt} ${init} ${init_option} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
 elif command -v run-init >/dev/null 2>&1; then
-	exec run-init ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
+	exec run-init ${rootmnt} ${init} ${init_option} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
 fi
 echo "Something went badly wrong in the initramfs."
 panic "Please file a bug on initramfs-tools."

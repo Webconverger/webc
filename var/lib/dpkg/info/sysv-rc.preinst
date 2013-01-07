@@ -11,13 +11,8 @@ set -e
 
 case "$1" in
     upgrade)
-	# Remain in legacy mode during upgrades, unless insserv is
-	# already activated.
-	if [ ! -f /var/lib/insserv/using-insserv ] &&
-	    dpkg --compare-versions "$2" lt 2.87dsf-3 ; then
-	    touch /etc/init.d/.legacy-bootordering
-	fi
-        echo "$2" > /var/run/sysv-rc.upgrade
+	# Remove the recorded update-rc.d
+	rm -f /var/lib/update-rc.d/*
     	;;
     install)
     	;;

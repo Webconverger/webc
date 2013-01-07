@@ -17,9 +17,9 @@ case "$1" in
 esac
 
 # copy the rules generated before / was mounted read-write
-for file in /dev/.udev/tmp-rules--*; do
+for file in /dev/.udev/tmp-rules--* /run/udev/tmp-rules--*; do
   dest=${file##*tmp-rules--}
-  [ "$dest" = '*' ] && break
+  [ "$dest" = '*' ] && continue
   cat $file >> /etc/udev/rules.d/$dest
   rm -f $file
 done

@@ -5,7 +5,6 @@
 # Required-Stop:     
 # Default-Start:     S
 # Default-Stop:
-# X-Interactive:     true
 # Short-Description: Start udevd, populate /dev and load drivers.
 ### END INIT INFO
 
@@ -28,7 +27,7 @@ mount_tmpfs() {
   fi
 
   if ! mount -n -o $dev_mount_options -t tmpfs tmpfs /dev; then
-    log_failure_msg "udev requires tmpfs support, not started."
+    log_failure_msg "udev requires tmpfs support, not started"
     log_end_msg 1
   fi
 
@@ -43,11 +42,22 @@ create_dev_makedev() {
   fi
 }
 
+# If the initramfs does not have /run, the initramfs udev database must
+# be migrated from /dev/.udev/ to /run/udev/.
+move_udev_database() {
+  [ -e "$udev_root/.udev/" ] || return 0
+  [ ! -e /run/udev/ ] || return 0
+  [ -e /run/ ] || return 0
+  mountpoint -q /run/ || return 0
+
+  mv $udev_root/.udev/ /run/udev/ || true
+}
+
 supported_kernel() {
   case "$(uname -r)" in
     2.[012345].*|2.6.[0-9]|2.6.[0-9][!0-9]*) return 1 ;;
-    2.6.1[0-9]|2.6.1[0-9][!0-9]*) return 1 ;;
-    2.6.2[0-5]|2.6.2[0-5][!0-9]*) return 1 ;;
+    2.6.[12][0-9]|2.6.[12][0-9][!0-9]*) return 1 ;;
+    2.6.3[0-1]|2.6.3[0-1][!0-9]*) return 1 ;;
   esac
   return 0
 }
@@ -77,19 +87,6 @@ warn_if_interactive() {
   sleep 60
 }
 
-create_dev_root_rule() {
-  local udevroot="$1"
-  [ -e $udevroot/rules.d/61-dev-root-link.rules ] && return 0
-
-  eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/ \
-    || true)
-  [ "$ROOT_MAJOR" -a "$ROOT_MINOR" ] || return 0
-
-  echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' \
-    > $udevroot/root-link-rule
-  mv $udevroot/root-link-rule $udevroot/rules.d/61-dev-root-link.rules
-}
-
 ##############################################################################
 
 [ -x /sbin/udevd ] || exit 0
@@ -107,33 +104,40 @@ fi
 . /lib/lsb/init-functions
 
 if ! supported_kernel; then
-  log_failure_msg "udev requires a kernel >= 2.6.26, not started."
+  log_failure_msg "udev requires a kernel >= 2.6.32, not started"
   log_end_msg 1
 fi
 
 if [ ! -e /proc/filesystems ]; then
-  log_failure_msg "udev requires a mounted procfs, not started."
+  log_failure_msg "udev requires a mounted procfs, not started"
   log_end_msg 1
 fi
 
 if ! grep -q '[[:space:]]tmpfs$' /proc/filesystems; then
-  log_failure_msg "udev requires tmpfs support, not started."
+  log_failure_msg "udev requires tmpfs support, not started"
   log_end_msg 1
 fi
 
 if [ ! -d /sys/class/ ]; then
-  log_failure_msg "udev requires a mounted sysfs, not started."
+  log_failure_msg "udev requires a mounted sysfs, not started"
   log_end_msg 1
 fi
 
 if [ ! -e /sys/kernel/uevent_helper ]; then
-  log_failure_msg "udev requires hotplug support, not started."
+  log_failure_msg "udev requires hotplug support, not started"
   log_end_msg 1
 fi
 
 if ! ps --no-headers --format args ax | egrep -q '^\['; then
   log_warning_msg "udev does not support containers, not started"
   exit 0
+fi
+
+if [ -d /sys/class/mem/null -a ! -L /sys/class/mem/null ] || \
+   [ -e /sys/block -a ! -e /sys/class/block ]; then
+  log_warning_msg "CONFIG_SYSFS_DEPRECATED must not be selected"
+  log_warning_msg "Booting will continue in 30 seconds but many things will be broken"
+  sleep 30
 fi
 
 ##############################################################################
@@ -156,13 +160,9 @@ if [ "$udev_root" != "/dev" ]; then
 
 case "$1" in
     start)
-    if [ -e "$udev_root/.udev/" ]; then
-	if mountpoint -q $udev_root/; then
-	    log_failure_msg "udev is already active on $udev_root."
-	    log_end_msg 1
-	else
-	    log_warning_msg ".udev/ already exists on the static $udev_root!"
-	fi
+    if mountpoint -q $udev_root/; then
+	log_failure_msg "$udev_root is already mounted"
+	log_end_msg 1
     fi
 
     echo > /sys/kernel/uevent_helper
@@ -173,13 +173,14 @@ case "$1" in
     if udevd --daemon; then
 	log_end_msg $?
     else
-	log_end_msg $?
+	log_warning_msg $?
+	log_warning_msg "Waiting 15 seconds and trying to continue anyway"
+	sleep 15
     fi
 
-    mkdir -p $udev_root/.udev/rules.d/
-    create_dev_root_rule $udev_root/.udev/
+    /lib/udev/write_dev_root_rule
 
-    log_action_begin_msg "Synthesizing initial hotplug events"
+    log_action_begin_msg "Synthesizing the initial hotplug events"
     if udevadm trigger --action=add; then
 	log_action_end_msg $?
     else
@@ -189,7 +190,7 @@ case "$1" in
     ;;
     stop)
     log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
-    if start-stop-daemon --stop --name udevd --quiet --oknodo --retry 5; then
+    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
 	log_end_msg $?
     else
 	log_end_msg $?
@@ -205,16 +206,31 @@ case "$1" in
     ;;
 
     restart)
-    $0 stop
-    $0 start
+    log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
+    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
+	log_end_msg $?
+    else
+	log_end_msg $? || true
+    fi
+
+    log_daemon_msg "Starting the hotplug events dispatcher" "udevd"
+    if udevd --daemon; then
+	log_end_msg $?
+    else
+	log_end_msg $?
+    fi
     ;;
 
     reload|force-reload)
     udevadm control --reload-rules
     ;;
 
+    status)
+    status_of_proc /sbin/udevd udevd && exit 0 || exit $?
+    ;;
+
     *)
-    echo "Usage: /etc/init.d/udev {start|stop|restart|reload|force-reload}"
+    echo "Usage: /etc/init.d/udev {start|stop|restart|reload|force-reload|status}" >&2
     exit 1
     ;;
 esac
@@ -230,26 +246,28 @@ fi # udev_root != /dev
 
 case "$1" in
     start)
-    if [ -e "$udev_root/.udev/" ]; then
-	if mountpoint -q $udev_root/; then
-	    TMPFS_MOUNTED=1
-	else
-	    log_warning_msg ".udev/ already exists on the static $udev_root!"
-	fi
-    else
+    if mountpoint -q $udev_root/; then
+	TMPFS_MOUNTED=1
+    elif [ -e "$udev_root/.udev/" ]; then
+	log_warning_msg ".udev/ already exists on the static $udev_root"
+    fi
+
+    if [ ! -e "$udev_root/.udev/" -a ! -e "/run/udev/" ]; then
 	warn_if_interactive
     fi
 
     echo > /sys/kernel/uevent_helper
 
+    move_udev_database
+
     if [ -z "$TMPFS_MOUNTED" ]; then
 	unmount_devpts
 	mount_tmpfs
 	[ -d /proc/1 ] || mount -n /proc
-    else
-	# and clean up the database of the initramfs udev
-	rm -rf /dev/.udev/
     fi
+
+    # clean up parts of the database created by the initramfs udev
+    udevadm info --cleanup-db
 
     # set the SELinux context for devices created in the initramfs
     [ -x /sbin/restorecon ] && /sbin/restorecon -R /dev
@@ -261,11 +279,12 @@ case "$1" in
     if udevd --daemon; then
 	log_end_msg $?
     else
-	log_end_msg $?
+	log_warning_msg $?
+	log_warning_msg "Waiting 15 seconds and trying to continue anyway"
+	sleep 15
     fi
 
-    mkdir -p /dev/.udev/rules.d/
-    create_dev_root_rule /dev/.udev/
+    /lib/udev/write_dev_root_rule
 
     log_action_begin_msg "Synthesizing the initial hotplug events"
     if udevadm trigger --action=add; then
@@ -287,7 +306,7 @@ case "$1" in
 
     stop)
     log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
-    if start-stop-daemon --stop --name udevd --quiet --oknodo --retry 5; then
+    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
 	log_end_msg $?
     else
 	log_end_msg $?
@@ -296,7 +315,7 @@ case "$1" in
 
     restart)
     log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
-    if start-stop-daemon --stop --name udevd --quiet --oknodo --retry 5; then
+    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
 	log_end_msg $?
     else
 	log_end_msg $? || true
@@ -314,8 +333,12 @@ case "$1" in
     udevadm control --reload-rules
     ;;
 
+    status)
+    status_of_proc /sbin/udevd udevd && exit 0 || exit $?
+    ;;
+
     *)
-    echo "Usage: /etc/init.d/udev {start|stop|restart|reload|force-reload}"
+    echo "Usage: /etc/init.d/udev {start|stop|restart|reload|force-reload|status}" >&2
     exit 1
     ;;
 esac

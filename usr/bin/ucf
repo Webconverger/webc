@@ -634,7 +634,7 @@ if [ -e /usr/share/debconf/confmodule ]; then
 	# not been loaded or the Debconf DB lost or corrupted
 	# since then, but only if it is OK to use debconf.
         if [ "$DEBCONF_OK" = 'YES' ]; then
-            db_x_loadtemplatefile /var/lib/dpkg/info/ucf.templates ucf
+            db_x_loadtemplatefile "$(dpkg-query --control-path ucf templates)" ucf
         fi
     else
         echo >&2 "$progname: Not loading confmodule, since we are not running as root."

@@ -20,8 +20,8 @@ which () {
 }
 
 # In d-i the config script is not executed automatically
-if [ -f /usr/share/console-setup-mini/keyboard-configuration.config ]; then
-    /usr/share/console-setup-mini/keyboard-configuration.config || exit $?
+if [ -f /usr/share/console-setup/keyboard-configuration.config ]; then
+    /usr/share/console-setup/keyboard-configuration.config || exit $?
 fi
 
 
@@ -73,7 +73,7 @@ keyboard_present () {
 
 CONFIGFILE=/etc/default/keyboard
 
-if [ "$1" = "configure" ]; then
+if [ "$1" = "configure" -a ! -L "$CONFIGFILE" ]; then
     
     db_get keyboard-configuration/modelcode
     model="$RET"
@@ -89,7 +89,6 @@ if [ "$1" = "configure" ]; then
 
     if [ ! -e $CONFIGFILE ]; then
 	cat /usr/share/console-setup/keyboard \
-	    /usr/share/console-setup-mini/keyboard \
 	    2>/dev/null >$CONFIGFILE || true
     fi
 
@@ -98,7 +97,7 @@ if [ "$1" = "configure" ]; then
 
     # If the admin deleted or commented some variables but then set
     # them via debconf, (re-)add them to the conffile.
-    for var in XKBMODEL XKBLAYOUT XKBVARIANT XKBOPTIONS; do
+    for var in XKBMODEL XKBLAYOUT XKBVARIANT XKBOPTIONS BACKSPACE; do
         if ! grep "^ *${var}=" $CONFIGFILE >/dev/null; then
 	    echo "${var}=" >>$CONFIGFILE
 	fi
@@ -109,6 +108,7 @@ if [ "$1" = "configure" ]; then
 	-e "s|^ *XKBLAYOUT=.*|XKBLAYOUT=\"$layout\"|" \
 	-e "s|^ *XKBVARIANT=.*|XKBVARIANT=\"$variant\"|" \
 	-e "s|^ *XKBOPTIONS=.*|XKBOPTIONS=\"$options\"|" \
+	-e "s|^ *BACKSPACE=.*|BACKSPACE=\"${BACKSPACE:-guess}\"|" \
 	<$CONFIGFILE >$CONFIGFILE.tmp
     
     mv -f $CONFIGFILE.tmp $CONFIGFILE
@@ -122,7 +122,13 @@ then
     if [ "$DISPLAY" ] && which setxkbmap >/dev/null; then
 	setxkbmap -option '' -model "$model" "$layout" "$variant" "$options"
     else
-	setupcon --force --save
+	OS=`udpkg --print-os`
+	if [ "$OS" = hurd ]
+	then
+	    kill `cat /var/run/hurd-console.pid`
+	else
+	    setupcon --force --save
+	fi
     fi
 fi
 

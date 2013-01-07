@@ -1,15 +1,12 @@
-#!/bin/sh
-#
 # bootclean
 #
-# Clean /tmp.  Clean /var/run and /var/lock if not mounted as tmpfs
+# Clean /tmp, /run and /var/lock if not mounted as tmpfs
 #
 # DO NOT RUN AFTER S:55bootmisc.sh and do not run this script directly
 # in runlevel S. Instead write an initscript to call it.
 #
 
 . /lib/init/vars.sh
-
 . /lib/lsb/init-functions
 
 # Should be called outside verbose message block
@@ -18,14 +15,54 @@ mkflagfile()
 	# Prevent symlink attack  (See #264234.)
 	[ -L "$1" ] && log_warning_msg "bootclean: Deleting symbolic link '$1'."
 	rm -f "$1" || { log_failure_msg "bootclean: Failure deleting '$1'." ; return 1 ; }
-	# No user processes should be running, so no one should be able to introduce
-	# a symlink here.  As an extra precaution, set noclobber.
+	# No user processes should be running, so no one should be
+	# able to introduce a symlink here.  As an extra precaution,
+	# set noclobber.
 	set -o noclobber
 	:> "$1" || { log_failure_msg "bootclean: Failure creating '$1'." ; return 1 ; }
 	return 0
 }
 
+checkflagfile()
+{
+	if [ -f $1/.clean ]
+	then
+		which stat >/dev/null 2>&1 && cleanuid="$(stat -c %u $1/.clean)"
+		# Poor's man stat %u, since stat (and /usr) might not
+		# be available in some bootup stages
+		[ "$cleanuid" ] || cleanuid="$(find $1/.clean -printf %U)"
+		[ "$cleanuid" ] || { log_failure_msg "bootclean: Could not stat '$1/.clean'." ; return 1 ; }
+		if [ "$cleanuid" -ne 0 ]
+		then
+			rm -f $1/.clean || { log_failure_msg "bootclean: Could not delete '$1/.clean'." ; return 1 ; }
+		fi
+	fi
+	return 0
+}
+
+	report_err()
+	{
+		dir="$1"
+		if [ "$VERBOSE" = no ]
+		then
+			log_failure_msg "bootclean: Failure cleaning ${dir}."
+		else
+			log_action_end_msg 1 "bootclean: Failure cleaning ${dir}"
+		fi
+	}
+
 clean_tmp() {
+	# Does not exist
+	[ -d /tmp ] || return 1
+	# tmpfs does not require cleaning
+	[ -f /tmp/.tmpfs ] && return 0
+	# Can clean?
+	checkflagfile /tmp || return 0
+	# Already cleaned
+	[ -f /tmp/.clean ] && return 0
+	# Can't clean yet?
+	which find >/dev/null 2>&1 || return 1
+
 	cd /tmp || { log_failure_msg "bootclean: Could not cd to /tmp." ; return 1 ; }
 
 	#
@@ -64,7 +101,7 @@ clean_tmp() {
 	# at all, so we can also delete files with timestamps
 	# in the future!
 	#
-	if [ "$TMPTIME" = 0 ] 
+	if [ "$TMPTIME" = 0 ]
 	then
 		TEXPR=""
 		DEXPR=""
@@ -85,106 +122,63 @@ clean_tmp() {
 
 	mkflagfile /tmp/.clean || return 1
 
-	report_err()
-	{
-		if [ "$VERBOSE" = no ]
-		then
-			log_failure_msg "bootclean: Failure cleaning /tmp."
-		else
-			log_action_end_msg 1 "bootclean: Failure cleaning /tmp"
-		fi
-	}
-
 	#
 	# First remove all old files...
 	#
 	find . -depth -xdev $TEXPR $EXCEPT ! -type d -delete \
-		|| { report_err ; return 1 ; }
+		|| { report_err "/tmp"; return 1 ; }
 
 	#
 	# ...and then all empty directories
 	#
 	find . -depth -xdev $DEXPR $EXCEPT -type d -empty -delete \
-		|| { report_err ; return 1 ; }
+		|| { report_err "/tmp"; return 1 ; }
 
 	[ "$VERBOSE" = no ] || log_action_end_msg 0
+	log_progress_msg "/tmp"
 	return 0
 }
 
-clean_lock() {
-	if [ yes = "$RAMLOCK" ] ; then
-	    return 0
-	fi
+clean() {
+	dir="$1"
+	findopts="$2"
 
-	cd /var/lock || { log_failure_msg "bootclean: Could not cd to /var/lock." ; return 1 ; }
+	# Does not exist
+	[ -d "$dir" ] || return 1
+	# tmpfs does not require cleaning
+	[ -f "$dir/.tmpfs" ] && return 0
+	# Can clean?
+	checkflagfile "$dir" || return 0
+	# Already cleaned
+	[ -f "${dir}/.clean" ] && return 0
+	# Can't clean yet?
+	which find >/dev/null 2>&1 || return 1
 
-	[ "$VERBOSE" = no ] || log_action_begin_msg "Cleaning /var/lock"
-	report_err()
-	{
-		if [ "$VERBOSE" = no ]
-		then
-			log_failure_msg "bootclean: Failure cleaning /var/lock."
-		else
-			log_action_end_msg 1 "bootclean: Failure cleaning /var/lock"
-		fi
-	}
-	find . ! -type d -delete \
-		|| { report_err ; return 1 ; }
+	cd "$dir" || { log_action_end_msg 1 "bootclean: Could not cd to ${dir}." ; return 1 ; }
+
+	[ "$VERBOSE" = no ] || log_action_begin_msg "Cleaning $dir"
+
+	find . $findopts -delete \
+		|| { report_err "$dir"; return 1 ; }
 	[ "$VERBOSE" = no ] || log_action_end_msg 0
-	mkflagfile /var/lock/.clean || return 1
+	mkflagfile "${dir}/.clean" || return 1
+	log_progress_msg "$dir"
 	return 0
 }
 
-clean_run() {
-	if [ yes = "$RAMRUN" ] ; then
-	    return 0
-	fi
-
-	cd /var/run || { log_action_end_msg 1 "bootclean: Could not cd to /var/run." ; return 1 ; }
-
-	[ "$VERBOSE" = no ] || log_action_begin_msg "Cleaning /var/run"
-	report_err()
-	{
-		if [ "$VERBOSE" = no ]
-		then
-			log_failure_msg "bootclean: Failure cleaning /var/run."
-		else
-			log_action_end_msg 1 "bootclean: Failure cleaning /var/run"
-		fi
-	}
-	find . ! -xtype d ! -name utmp ! -name innd.pid -delete \
-		|| { report_err ; return 1 ; }
-	[ "$VERBOSE" = no ] || log_action_end_msg 0
-	mkflagfile /var/run/.clean || return 1
-	return 0
+clean_all()
+{
+	which find >/dev/null 2>&1 || return 0
+	log_begin_msg "Cleaning up temporary files..."
+	ES=0
+	clean_tmp || ES=1
+	# /lib/init/rw is not expected to exist since it's removed.
+	# So failure is expected; it's only here to force cleanup.
+	clean /lib/init/rw "! -type d" || true
+	clean /run "! -xtype d ! -name utmp ! -name innd.pid" || ES=1
+	clean /run/lock "! -type d" || ES=1
+	clean /run/shm "! -type d" || ES=1
+	log_end_msg $ES
+	return $ES
 }
 
-which find >/dev/null 2>&1 || exit 1
-log_begin_msg "Cleaning up temporary files..."
-
-# If there are flag files that have not been created by root
-# then remove them
-for D in /tmp /var/run /var/lock
-do
-	if [ -f $D/.clean ]
-	then
-		which stat >/dev/null 2>&1 && cleanuid="$(stat -c %u $D/.clean)"
-		# Poor's man stat %u, since stat (and /usr) might not be
-		# available in some bootup stages
-		[ "$cleanuid" ] || cleanuid="$(find $D/.clean -printf %U)"
-		[ "$cleanuid" ] || { log_failure_msg "bootclean: Could not stat '$D/.clean'." ; exit 1 ; }
-		if [ "$cleanuid" -ne 0 ]
-		then
-			rm -f $D/.clean || { log_failure_msg "bootclean: Could not delete '$D/.clean'." ; exit 1 ; }
-		fi
-	fi
-done
-
-[ -f /tmp/.clean ] && [ -f /var/run/.clean ] && [ -f /var/lock/.clean ] && { log_end_msg 0 ; exit 0 ; }
-
-ES=0
-[ -d /tmp ] && ! [ -f /tmp/.clean ] && { clean_tmp || ES=1 ; }
-[ -d /var/run ] && ! [ -f /var/run/.clean ] && { clean_run || ES=1 ; }
-[ -d /var/lock ] && ! [ -f /var/lock/.clean ] && { clean_lock || ES=1 ; }
-log_end_msg $ES
-exit $ES

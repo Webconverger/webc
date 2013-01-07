@@ -10,15 +10,19 @@ fi
 
 if [ -f /etc/default/rcS ] ; then
     . /etc/default/rcS
-fi	
+fi
+
+# These defaults are user-overridable in /etc/default/hwclock
+BADYEAR=no
+HWCLOCKACCESS=yes
+HWCLOCKPARS=
+HCTOSYS_DEVICE=rtc0
 if [ -f /etc/default/hwclock ] ; then
     . /etc/default/hwclock
 fi
 
-if [ yes != "$UTC" ] ; then
-    if [ yes = "$BADYEAR" ] ; then
-	/sbin/hwclock --rtc=$dev --systz --localtime --noadjfile --badyear
-    else
-	/sbin/hwclock --rtc=$dev --systz --localtime --noadjfile
-    fi
+if [ yes = "$BADYEAR" ] ; then
+    /sbin/hwclock --rtc=$dev --systz --badyear
+else
+    /sbin/hwclock --rtc=$dev --systz
 fi

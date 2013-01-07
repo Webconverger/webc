@@ -48,48 +48,56 @@ Each line begins with a standard prefix:
 <dl>
 <dt>ALERT: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "alert" log level.
 
 </dd>
 <dt>ATTR: attribute=value [attribute=value]
 </dt>
+<dd></dd>
 <dd>Sets the named job attribute(s). Typically this will be used to
 set the job-remote-id attribute.
 
 </dd>
 <dt>CRIT: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "critical" log level.
 
 </dd>
 <dt>DEBUG: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "debug" log level.
 
 </dd>
 <dt>DEBUG2: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "debug2" log level.
 
 </dd>
 <dt>EMERG: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "emergency" log level.
 
 </dd>
 <dt>ERROR: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "error" log level.
 
 </dd>
 <dt>INFO: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute. If the current <i>LogLevel</i>
 is set to "debug2", also adds the specified message to the
 current <i>ErrorLog</i> using the "info" log level.
@@ -97,14 +105,17 @@ current <i>ErrorLog</i> using the "info" log level.
 </dd>
 <dt>NOTICE: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "notice" log level.
 
 </dd>
 <dt>PAGE: page-number #-copies
 </dt>
+<dd></dd>
 <dt>PAGE: total #-pages
 </dt>
+<dd></dd>
 <dd>Adds an entry to the current <i>PageLog</i>. The first form adds
 #-copies to the job-media-sheets-completed attribute. The second
 form sets the job-media-sheets-completed attribute to #-pages.
@@ -112,6 +123,7 @@ form sets the job-media-sheets-completed attribute to #-pages.
 </dd>
 <dt>PPD: Keyword=Value ... KeywordN=Value
 </dt>
+<dd></dd>
 <dd>Sets the named keywords in the printer's PPD file. This is typically
 used to update default option keywords such as DefaultPageSize and
 the various installable options in the PPD file.
@@ -119,10 +131,13 @@ the various installable options in the PPD file.
 </dd>
 <dt>STATE: printer-state-reason [printer-state-reason ...]
 </dt>
+<dd></dd>
 <dt>STATE: + printer-state-reason [printer-state-reason ...]
 </dt>
+<dd></dd>
 <dt>STATE: - printer-state-reason [printer-state-reason ...]
 </dt>
+<dd></dd>
 <dd>Sets, adds, or removes printer-state-reason keywords to the
 current queue. Typically this is used to indicate media, ink, and
 toner conditions on a printer.
@@ -130,6 +145,7 @@ toner conditions on a printer.
 </dd>
 <dt>WARNING: message
 </dt>
+<dd></dd>
 <dd>Sets the printer-state-message attribute and adds the specified
 message to the current <i>ErrorLog</i> using the "warning" log level.
 
@@ -142,11 +158,13 @@ server when executing the filter:
 <dl>
 <dt>CHARSET
 </dt>
+<dd></dd>
 <dd>The default text character set, typically utf-8.
 
 </dd>
 <dt>CLASS
 </dt>
+<dd></dd>
 <dd>When a job is submitted to a printer class, contains the name of
 the destination printer class. Otherwise this environment
 variable will not be set.
@@ -154,82 +172,97 @@ variable will not be set.
 </dd>
 <dt>CONTENT_TYPE
 </dt>
+<dd></dd>
 <dd>The MIME type associated with the file (e.g.
 application/postscript).
 
 </dd>
 <dt>CUPS_CACHEDIR
 </dt>
+<dd></dd>
 <dd>The directory for semi-persistent cache files can be found.
 
 </dd>
 <dt>CUPS_DATADIR
 </dt>
+<dd></dd>
 <dd>The directory where data files can be found.
 
 </dd>
 <dt>CUPS_FILETYPE
 </dt>
+<dd></dd>
 <dd>The type of file being printed: "job-sheet" for a banner page and "document"
 for a regular print file.
 
 </dd>
 <dt>CUPS_SERVERROOT
 </dt>
+<dd></dd>
 <dd>The root directory of the server.
 
 </dd>
 <dt>DEVICE_URI
 </dt>
+<dd></dd>
 <dd>The device-uri associated with the printer.
 
 </dd>
 <dt>FINAL_CONTENT_TYPE
 </dt>
+<dd></dd>
 <dd>The MIME type associated with the printer (e.g.
 application/vnd.cups-postscript).
 
 </dd>
 <dt>LANG
 </dt>
+<dd></dd>
 <dd>The default language locale (typically C or en).
 
 </dd>
 <dt>PATH
 </dt>
+<dd></dd>
 <dd>The standard execution path for external programs that may be run by
 the filter.
 
 </dd>
 <dt>PPD
 </dt>
+<dd></dd>
 <dd>The full pathname of the PostScript Printer Description (PPD)
 file for this printer.
 
 </dd>
 <dt>PRINTER
 </dt>
+<dd></dd>
 <dd>The name of the printer.
 
 </dd>
 <dt>RIP_CACHE
 </dt>
+<dd></dd>
 <dd>The recommended amount of memory to use for Raster Image
 Processors (RIPs).
 
 </dd>
 <dt>SOFTWARE
 </dt>
+<dd></dd>
 <dd>The name and version number of the server (typically CUPS/1.2).
 
 </dd>
 <dt>TZ
 </dt>
+<dd></dd>
 <dd>The timezone of the server.
 
 </dd>
 <dt>USER
 </dt>
+<dd></dd>
 <dd>The user executing the filter, typically "lp" or "root"; consult the
 <a href='man-cupsd.conf.html?TOPIC=Man+Pages'>cupsd.conf(5)</a> file for the current setting.
 
@@ -245,7 +278,7 @@ only filter.  Typically the interface script will be provided via the
 <br>
 <a href='http://localhost:631/help'>http://localhost:631/help</a>
 <h2 class="title"><a name="COPYRIGHT">Copyright</a></h2>
-Copyright 2007-2009 by Apple Inc.
+Copyright 2007-2011 by Apple Inc.
 
 </body>
 </html>

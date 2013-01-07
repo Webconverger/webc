@@ -18,130 +18,33 @@
 
 PATH=/sbin:/bin
 . /lib/init/vars.sh
+. /lib/init/tmpfs.sh
 
 TTYGRP=5
 TTYMODE=620
 [ -f /etc/default/devpts ] && . /etc/default/devpts
-
-TMPFS_SIZE=
-[ -f /etc/default/tmpfs ] && . /etc/default/tmpfs
 
 KERNEL="$(uname -s)"
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
 
-# $1 - fstype
-# $2 - mount point
-# $3 - mount name/device
-# $4 - mount options
-domtab ()
-{
-	# Directory present?
-	if [ ! -d $2 ]
-	then
-		return
-	fi
-
-	# Not mounted?
-	if ! mountpoint -q $2 < /dev/null
-	then
-		return
-	fi
-
-	if [ -n "$3" ]
-	then
-		NAME="$3"
-	else
-		NAME="$1"
-	fi
-
-	# Already recorded?
-	if ! grep -E -sq "^([^ ]+) +$2 +" /etc/mtab < /dev/null
-	then
-		mount -f -t $1 $OPTS $4 $NAME $2 < /dev/null
-	fi
-}
-
 do_start () {
-	DO_MTAB=""
-	MTAB_PATH="$(readlink -f /etc/mtab || :)"
-	case "$MTAB_PATH" in
-	  /proc/*)
-		# Assume that /proc/ is not writable
-		;;
-	  /*)
-		# Only update mtab if it is known to be writable
-		# Note that the touch program is in /usr/bin
-		#if ! touch "$MTAB_PATH" >/dev/null 2>&1
-		#then
-		#	return
-		#fi
-		;;
-	  "")
-		[ -L /etc/mtab ] && MTAB_PATH="$(readlink /etc/mtab)"
-		if [ "$MTAB_PATH" ]
-		then
-			log_failure_msg "Cannot initialize ${MTAB_PATH}."
-		else
-			log_failure_msg "Cannot initialize /etc/mtab."
-		fi
-		;;
-	  *)
-		log_failure_msg "Illegal mtab location '${MTAB_PATH}'."
-		;;
-	esac
+	# Note that mtab should have been previously initialised by
+	# checkroot.sh.
 
-	#
-	# Initialize mtab file if necessary
-	#
-	if [ ! -f /etc/mtab ]
-	then
-		:> /etc/mtab
-		chmod 644 /etc/mtab
-	fi
-	if selinux_enabled && [ -x /sbin/restorecon ] && [ -r /etc/mtab ]
-	then
-		restorecon /etc/mtab
-	fi
-
-	# S02mountkernfs.sh
-	RW_OPT=
-	[ "${RW_SIZE:=$TMPFS_SIZE}" ] && RW_OPT=",size=$RW_SIZE"
-	domtab tmpfs /lib/init/rw tmpfs -omode=0755,nosuid$RW_OPT
-
-	domtab proc /proc "proc" -onodev,noexec,nosuid
-	if grep -E -qs "sysfs\$" /proc/filesystems
-	then
-		domtab sysfs /sys sysfs -onodev,noexec,nosuid
-	fi
-	if [ yes = "$RAMRUN" ] ; then
-		RUN_OPT=
-		[ "${RUN_SIZE:=$TMPFS_SIZE}" ] && RUN_OPT=",size=$RUN_SIZE"
-		domtab tmpfs /var/run "varrun" -omode=0755,nosuid$RUN_OPT
-	fi
-	if [ yes = "$RAMLOCK" ] ; then
-		LOCK_OPT=
-		[ "${LOCK_SIZE:=$TMPFS_SIZE}" ] && LOCK_OPT=",size=$LOCK_SIZE"
-		domtab tmpfs /var/lock "varlock" -omode=1777,nodev,noexec,nosuid$LOCK_OPT
-	fi
-	if [ -d /proc/bus/usb ]
-	then
-		domtab usbfs /proc/bus/usb "procbususb"
-	fi
-
+	# Add entries for mounts created in early boot
+	# S01mountkernfs.sh
+	/etc/init.d/mountkernfs.sh mtab
+	/etc/init.d/mountkernfs.sh reload
 	# S03udev
-	domtab tmpfs /dev "udev" -omode=0755
-
-	# S04mountdevsubfs
-	SHM_OPT=
-	[ "${SHM_SIZE:=$TMPFS_SIZE}" ] && SHM_OPT=",size=$SHM_SIZE"
-	domtab tmpfs /dev/shm tmpfs -onosuid,nodev$SHM_OPT
-	domtab devpts /dev/pts "devpts" -onoexec,nosuid,gid=$TTYGRP,mode=$TTYMODE
+	domount mtab tmpfs "" /dev "udev" "-omode=0755"
+	# S03mountdevsubfs.sh
+	/etc/init.d/mountdevsubfs.sh mtab
+	/etc/init.d/mountdevsubfs.sh reload
 
 	# Add everything else in /proc/mounts into /etc/mtab, with
 	# special exceptions.
-	exec 9<&0 0</proc/mounts
 	while read FDEV FDIR FTYPE FOPTS REST
 	do
 		case "$FDIR" in
@@ -155,9 +58,8 @@ do_start () {
 				continue
 				;;
 		esac
-		domtab "$FTYPE" "$FDIR" "$FDEV" "-o$FOPTS"
-	done
-	exec 0<&9 9<&-
+		domount mtab "$FTYPE" "" "$FDIR" "$FDEV" "-o$FOPTS"
+	done < /proc/mounts
 }
 
 case "$1" in

@@ -17,9 +17,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 umask 022
 
 do_stop () {
-	exec 9<&0 </proc/mounts
-
-	PROTECTED_MOUNTS="$(sed -n '0,/^\/[^ ]* \/ /p' /proc/mounts)"
+	PROTECTED_MOUNTS="$(sed -n ':a;/^[^ ]* \/ /!{H;n;ba};{H;s/.*//;x;s/\n//;p}' /proc/mounts)"
 	WEAK_MTPTS="" # be gentle, don't use force
 	REG_MTPTS=""
 	TMPFS_MTPTS=""
@@ -27,21 +25,11 @@ do_stop () {
 	do
 		echo "$PROTECTED_MOUNTS" | grep -qs "^$DEV $MTPT " && continue
 		case "$MTPT" in
-		  /|/proc|/dev|/.dev|/dev/pts|/dev/shm|/dev/.static/dev|/proc/*|/sys|/sys/*|/lib/init/rw)
+		  /|/proc|/dev|/.dev|/dev/pts|/dev/shm|/dev/.static/dev|/proc/*|/sys|/sys/*|/run|/run/*)
 			continue
 			;;
-		  /var/run)
-			if [ yes = "$RAMRUN" ] ; then
-				continue
-			fi
-			;;
-		  /var/lock)
-			if [ yes = "$RAMLOCK" ] ; then
-				continue
-			fi
-			;;
 		esac
-		case "$FSTYPE" in 
+		case "$FSTYPE" in
 		  proc|procfs|linprocfs|sysfs|usbfs|usbdevfs|devpts)
 			continue
 			;;
@@ -56,10 +44,8 @@ do_stop () {
 			fi
 			;;
 		esac
-	done
+	done < /proc/mounts
 
-	exec 0<&9 9<&-
-	
 	#
 	# Make sure tmpfs file systems are umounted before turning off
 	# swap, to avoid running out of memory if the tmpfs filesystems

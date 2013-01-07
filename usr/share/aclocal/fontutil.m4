@@ -1,6 +1,29 @@
 dnl fontutil.m4.  Generated from fontutil.m4.in by configure.
 dnl
-dnl This file comes from X.Org's font-util 1.1.1
+dnl This file comes from X.Org's font-util 1.3.0
+dnl
+dnl Copyright (c) 2009, Oracle and/or its affiliates. All rights reserved.
+dnl
+dnl Permission is hereby granted, free of charge, to any person obtaining a
+dnl copy of this software and associated documentation files (the "Software"),
+dnl to deal in the Software without restriction, including without limitation
+dnl the rights to use, copy, modify, merge, publish, distribute, sublicense,
+dnl and/or sell copies of the Software, and to permit persons to whom the
+dnl Software is furnished to do so, subject to the following conditions:
+dnl
+dnl The above copyright notice and this permission notice (including the next
+dnl paragraph) shall be included in all copies or substantial portions of the
+dnl Software.
+dnl
+dnl THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+dnl IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+dnl FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+dnl THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+dnl LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+dnl FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+dnl DEALINGS IN THE SOFTWARE.
+dnl
+dnl --------------------------------------------------------------------
 dnl
 dnl Copyright 2005 Red Hat, Inc
 dnl
@@ -25,35 +48,6 @@ dnl Except as contained in this notice, the name of the copyright holders shall
 dnl not be used in advertising or otherwise to promote the sale, use or
 dnl other dealings in this Software without prior written authorization
 dnl from the copyright holders.
-dnl
-dnl --------------------------------------------------------------------
-dnl
-dnl Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
-dnl
-dnl Permission is hereby granted, free of charge, to any person obtaining a
-dnl copy of this software and associated documentation files (the
-dnl "Software"), to deal in the Software without restriction, including
-dnl without limitation the rights to use, copy, modify, merge, publish,
-dnl distribute, and/or sell copies of the Software, and to permit persons
-dnl to whom the Software is furnished to do so, provided that the above
-dnl copyright notice(s) and this permission notice appear in all copies of
-dnl the Software and that both the above copyright notice(s) and this
-dnl permission notice appear in supporting documentation.
-dnl
-dnl THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-dnl OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-dnl MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
-dnl OF THIRD PARTY RIGHTS. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-dnl HOLDERS INCLUDED IN THIS NOTICE BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL
-dnl INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING
-dnl FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-dnl NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
-dnl WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-dnl
-dnl Except as contained in this notice, the name of a copyright holder
-dnl shall not be used in advertising or otherwise to promote the sale, use
-dnl or other dealings in this Software without prior written authorization
-dnl of the copyright holder.
 
 # XORG_FONT_MACROS_VERSION(required-version)
 # ------------------------------------------
@@ -71,7 +65,7 @@ dnl of the copyright holder.
 # See the "minimum version" comment for each macro you use to see what
 # version you require.
 m4_defun([XORG_FONT_MACROS_VERSION],[
-m4_define([vers_have], [1.1.1])
+m4_define([vers_have], [1.3.0])
 m4_define([maj_have], m4_substr(vers_have, 0, m4_index(vers_have, [.])))
 m4_define([maj_needed], m4_substr([$1], 0, m4_index([$1], [.])))
 m4_if(m4_cmp(maj_have, maj_needed), 0,,
@@ -120,7 +114,7 @@ AC_DEFUN([XORG_FONT_CHECK_ENCODING],[
 	AC_ARG_ENABLE(m4_tolower($1),
 		AS_HELP_STRING(m4_join([-], [--disable], m4_tolower($1)),
 				[Build $1 fonts (default: yes)]),
-		[AS_TR_SH($1)=$enableval], [AS_TR_SH($1)=yes])
+		[AS_TR_SH($1)=$enableval])
 	AC_MSG_CHECKING([whether to build $1 fonts])
 	AC_MSG_RESULT($[AS_TR_SH($1)])
 	AM_CONDITIONAL(AS_TR_SH($1), [test "x$AS_TR_SH($1)" = xyes])
@@ -129,9 +123,19 @@ AC_DEFUN([XORG_FONT_CHECK_ENCODING],[
 # XORG_FONT_CHECK_ENCODING_LIST(encoding1 encoding2....)
 # -----------------------------------------------------
 # Minimum version: 1.1.0
-# Call XORG_FONT_CHECK_ENCODING for multiple encodings at once
+# Call XORG_FONT_CHECK_ENCODING for multiple encodings at once.
+# Add a shorthand --enable/disable-all-encodings option.
 
 AC_DEFUN([XORG_FONT_CHECK_ENCODING_LIST],[
+	AC_ARG_ENABLE([all-encodings],
+		AS_HELP_STRING([--disable-all-encodings],
+				[Disable building of all font encodings]),
+		[m4_foreach_w([enc], [$1], [
+			AS_TR_SH(enc)=$enableval
+		])],
+		[m4_foreach_w([enc], [$1], [
+			AS_TR_SH(enc)=yes
+		])])
 	m4_foreach_w([enc], [$1], [XORG_FONT_CHECK_ENCODING(enc)])
 ]) # XORG_FONT_CHECK_ENCODING_LIST
 
@@ -144,7 +148,7 @@ AC_DEFUN([XORG_FONT_CHECK_ENCODING_LIST],[
 
 AC_DEFUN([XORG_FONT_REQUIRED_PROG],[
 	AC_PATH_PROG($1, $2)
-	if test x"$1" = x; then
+	if test x"$$1" = x; then
 		AC_MSG_ERROR([$2 is required to build $PACKAGE_NAME.])
 	fi
 ])
@@ -156,15 +160,16 @@ AC_DEFUN([XORG_FONT_REQUIRED_PROG],[
 #
 # Set FCCACHE to path to fc-cache (fontconfig cache builder) if found
 # Set RUN_FCCACHE to a rule suitable for substituting into a makefile
-# to run fc-cache if found and not installing to $DESTDIR
+# to run fc-cache if found and not installing to $DESTDIR and not
+# cross-compiling
 #
 # fc-cache is optional, not required, and should be skipped when making
-# packages (installing to $DESTDIR).
+# packages (installing to $DESTDIR) or cross-compiling
 #
 AC_DEFUN([XORG_FONT_FCCACHE],[
 	AC_PATH_PROG(FCCACHE, fc-cache)
 	FCCACHE_WARN='echo "** Warning: fonts.cache not built" ; echo "** Generate this file manually on host system using fc-cache"'
-	if test x"$FCCACHE" = x ; then
+	if test x"$FCCACHE" = x || test x"$cross_compiling" != x"no" ; then
 		RUN_FCCACHE="${FCCACHE_WARN}"
 	else
 		RUN_FCCACHE='@(if test -z "$(DESTDIR)"; then echo $(FCCACHE) $(fontdir); $(FCCACHE) $(fontdir); else'
@@ -173,6 +178,31 @@ AC_DEFUN([XORG_FONT_FCCACHE],[
 	AC_SUBST([RUN_FCCACHE])
 ])
 
+# XORG_FONT_MKFONTDIR()
+# -------------------
+# Minimum version: 1.3.0
+#
+# Set MKFONTDIR to path to mkfontdir.
+#
+# If cross-compiling, and if mkdir is not found, use a shell command
+# which warns mkfontdir needs to be run on the target
+#
+# If not cross-compiling, mkfontdir must be found
+#
+AC_DEFUN([XORG_FONT_MKFONTDIR],[
+	if test x"$cross_compiling" != x"no" ; then
+		AC_PATH_PROG(MKFONTDIR, mkfontdir, "")
+		MKFONTDIR_WARN='echo "** Warning: mkfontdir not run" ; echo "** Run mkfontdir manually on host system"'
+
+		if test x"$MKFONTDIR" = x; then
+			MKFONTDIR="${MKFONTDIR_WARN} ; echo '** mkfontdir'"
+		fi
+	else
+		XORG_FONT_REQUIRED_PROG(MKFONTDIR, mkfontdir)
+	fi
+
+	AC_SUBST([MKFONTDIR])
+])
 
 # XORG_FONT_COMMON_UTILS()
 # ------------------------
@@ -182,7 +212,7 @@ AC_DEFUN([XORG_FONT_FCCACHE],[
 
 AC_DEFUN([XORG_FONT_COMMON_UTILS],[
 	XORG_FONT_FCCACHE
-	XORG_FONT_REQUIRED_PROG(MKFONTDIR, mkfontdir)
+	XORG_FONT_MKFONTDIR
 ])
 
 # XORG_FONT_SCALED_UTILS()
@@ -258,6 +288,40 @@ AC_DEFUN([XORG_FONT_UCS2ANY],[
 	MAPFILES_PATH=`pkg-config --variable=mapdir fontutil`
 	AC_SUBST(MAPFILES_PATH)
 	AC_MSG_RESULT([${MAPFILES_PATH}])
+])
+
+
+
+# XORG_FONT_FC_CONFDIR()
+# --------------------
+# Minimum version: 1.2.0
+#
+# Sets FC_CONFDIR to the fontconfig config directory
+# (which should be --with-confdir=... when building fontconfig)
+# found from:
+#	--with-fc-confdir=...
+#	pkg-config --variable=confdir fontconfig
+#	${sysconfdir}/fonts
+
+AC_DEFUN([XORG_FONT_FC_CONFDIR],[
+	dnl Ensure $PKG_CONFIG is set first
+	AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+
+	AC_MSG_CHECKING([for fontconfig's configuration directory])
+	AC_ARG_WITH(fc-confdir,
+		    AS_HELP_STRING([--with-fc-confdir=DIR],
+			   [Path to fontconfig's configuration directory]),
+		    [FC_CONFDIR="$withval"])
+	# if --with-fc-confdir was not specified
+	if test "x${FC_CONFDIR}" = "x"; then
+		FC_CONFDIR=`$PKG_CONFIG --variable=confdir fontconfig`
+	fi
+	# ...and if pkg-config didn't find confdir in fontconfig.pc...
+	if test "x${FC_CONFDIR}" = "x"; then
+		FC_CONFDIR="${sysconfdir}/fonts"
+	fi
+	AC_SUBST(FC_CONFDIR)
+	AC_MSG_RESULT([${FC_CONFDIR}])
 ])
 
 

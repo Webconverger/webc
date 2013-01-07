@@ -21,10 +21,11 @@ FSCK_LOGFILE=/var/log/fsck/checkroot
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
-. /lib/init/splash-functions-base
-. /lib/init/usplash-fsck-functions.sh
 
 do_start () {
+	# Trap SIGINT so that we can handle user interrupt of fsck.
+	trap "" INT
+
 	#
 	# Set SULOGIN in /etc/default/rcS to yes if you want a sulogin to
 	# be spawned from this script *before anything else* with a timeout,
@@ -35,63 +36,7 @@ do_start () {
 	KERNEL="$(uname -s)"
 	MACHINE="$(uname -m)"
 
-	#
-	# Read /etc/fstab, looking for:
-	# 1) The root filesystem, resolving LABEL=*|UUID=* entries to the
-	# 	device node,
-	# 2) Swap that is on a md device or a file that may be on a md 
-	# 	device,
-	#
-
-	exec 9<&0 </etc/fstab
-
-	fstabroot=/dev/root
-	rootdev=none
-	roottype=none
-	rootopts=defaults
-	rootmode=rw
-	rootcheck=no
-	swap_on_lv=no
-	swap_on_file=no
-
-	while read DEV MTPT FSTYPE OPTS DUMP PASS JUNK
-	do
-		case "$DEV" in
-		  ""|\#*)
-			continue;
-			;;
-		  /dev/mapper/*)
-			[ "$FSTYPE" = "swap" ] && swap_on_lv=yes
-			;;
-		  /dev/*)
-			;;
-		  LABEL=*|UUID=*)
-			if [ "$MTPT" = "/" ] && [ -x /sbin/findfs ]
-			then
-				DEV="$(findfs "$DEV")"
-			fi
-			;;
-		  /*)
-			[ "$FSTYPE" = "swap" ] && swap_on_file=yes
-			;;
-		  *)
-			;;
-		esac
-		[ "$MTPT" != "/" ] && continue
-		rootdev="$DEV"
-		fstabroot="$DEV"
-		rootopts="$OPTS"
-		roottype="$FSTYPE"
-		( [ "$PASS" != 0 ] && [ "$PASS" != "" ]   ) && rootcheck=yes
-		( [ "$FSTYPE" = "nfs" ] || [ "$FSTYPE" = "nfs4" ] ) && rootcheck=no
-		case "$OPTS" in
-		  ro|ro,*|*,ro|*,ro,*)
-			rootmode=ro
-			;;
-		esac
-	done
-
-	exec 0<&9 9<&-
+	read_fstab
 
 	#
 	# Activate the swap device(s) in /etc/fstab. This needs to be done
@@ -137,7 +82,7 @@ do_start () {
 	#
 	# Does the root device in /etc/fstab match with the actual device ?
 	# If not we try to use the /dev/root alias device, and if that
-	# fails we create a temporary node in /lib/init/rw.
+	# fails we create a temporary node in /run.
 	#
 	if [ "$rootcheck" = yes ]
 	then
@@ -150,11 +95,11 @@ do_start () {
 				rootdev=/dev/root
 			else
 				if \
-					rm -f /lib/init/rw/rootdev \
-					&& mknod -m 600 /lib/init/rw/rootdev b ${rdev%:*} ${rdev#*:} \
-					&& [ -e /lib/init/rw/rootdev ]
+					rm -f /run/rootdev \
+					&& mknod -m 600 /run/rootdev b ${rdev%:*} ${rdev#*:} \
+					&& [ -e /run/rootdev ]
 				then
-					rootdev=/lib/init/rw/rootdev
+					rootdev=/run/rootdev
 				else
 					rootfatal=yes
 				fi
@@ -169,7 +114,7 @@ do_start () {
 	then
 		log_failure_msg "The device node $rootdev for the root filesystem is missing or incorrect 
 or there is no entry for the root filesystem listed in /etc/fstab. 
-The system is also unable to create a temporary node in /lib/init/rw. 
+The system is also unable to create a temporary node in /run. 
 This means you have to fix the problem manually."
 		log_warning_msg "A maintenance shell will now be started. 
 CONTROL-D will terminate this shell and restart the system."
@@ -258,8 +203,8 @@ Will restart in 5 seconds."
 		  dumb|network|unknown|"")
 			spinner="" ;;
 		esac
-		# This Linux/s390 special case should go away.
-		if [ "${KERNEL}:${MACHINE}" = Linux:s390 ]
+		# This Linux/s390x special case should go away.
+		if [ "${KERNEL}:${MACHINE}" = Linux:s390x ]
 		then
 			spinner=""
 		fi
@@ -267,19 +212,8 @@ Will restart in 5 seconds."
 		if [ "$VERBOSE" = no ]
 		then
 			log_action_begin_msg "Checking root file system"
-			if [ "$roottype" = "ext2" -o "$roottype" = "ext3" -o "$roottype" = "ext4" ] && usplash_running; then
-			    PROGRESS_FILE=`mktemp -p /lib/init/rw` || PROGRESS_FILE=/lib/init/rw/checkroot_fsck
-			    set -m
-			    logsave -s $FSCK_LOGFILE fsck -C3 $force $fix -t $roottype $rootdev >/dev/console 2>&1 3>$PROGRESS_FILE &
-			    set +m
-			    usplash_progress "$PROGRESS_FILE"
-			    rm -f $PROGRESS_FILE
-			else
-			    splash_start_indefinite
-			    logsave -s $FSCK_LOGFILE fsck $spinner $force $fix -t $roottype $rootdev
-			    FSCKCODE=$?
-			    splash_stop_indefinite
-			fi
+			logsave -s $FSCK_LOGFILE fsck $spinner $force $fix -t $roottype $rootdev
+			FSCKCODE=$?
 			if [ "$FSCKCODE" = 0 ]
 			then
 				log_action_end_msg 0
@@ -287,12 +221,10 @@ Will restart in 5 seconds."
 				log_action_end_msg 1 "code $FSCKCODE"
 			fi
 		else
-			splash_start_indefinite
 			log_daemon_msg "Will now check root file system"
 			logsave -s $FSCK_LOGFILE fsck $spinner $force $fix -V -t $roottype $rootdev
 			FSCKCODE=$?
 			log_end_msg $FSCKCODE
-			splash_stop_indefinite
 		fi
 	fi
 
@@ -304,7 +236,10 @@ Will restart in 5 seconds."
 	# errors were corrected but that the boot may proceed. A return
 	# code of 2 or 3 indicates that the system should immediately reboot.
 	#
-	if [ "$FSCKCODE" -gt 3 ]
+	if [ "$FSCKCODE" -eq 32 ]
+	then
+		log_warning_msg "File system check was interrupted by user"
+	elif [ "$FSCKCODE" -gt 3 ]
 	then
 		# Surprise! Re-directing from a HERE document (as in "cat << EOF")
 		# does not work because the root is currently read-only.
@@ -346,6 +281,13 @@ but requested that the system be restarted."
 		mount -n -o remount,$rootopts,$rootmode /
 	fi
 
+	# If possible, migrate /etc/mtab to be a symlink to
+	# /proc/mounts.  Note that not all systems e.g. Hurd currently
+	# support this.
+	if [ "$rootmode" != "ro" ]; then
+		mtab_migrate
+	fi
+
 	#
 	# We only create/modify /etc/mtab if the location where it is
 	# stored is writable. If /etc/mtab is a symlink into /proc/
@@ -355,11 +297,14 @@ but requested that the system be restarted."
 	MTAB_PATH="$(readlink -f /etc/mtab || :)"
 	case "$MTAB_PATH" in
 	  /proc/*)
+		# Assume that /proc/ is not writable (do nothing)
 		;;
 	  /*)
+		# Common case for file or symlink (initialise)
 		if touch "$MTAB_PATH" >/dev/null 2>&1
 		then
 			:> "$MTAB_PATH"
+			chmod 644 /etc/mtab
 			rm -f ${MTAB_PATH}~
 			INIT_MTAB_FILE=yes
 		fi
@@ -378,6 +323,11 @@ but requested that the system be restarted."
 		;;
 	esac
 
+	if selinux_enabled && [ -x /sbin/restorecon ] && [ -r /etc/mtab ]
+	then
+		restorecon /etc/mtab
+	fi
+
 	if [ "$INIT_MTAB_FILE" = yes ]
 	then
 		[ "$roottype" != none ] &&
@@ -385,9 +335,9 @@ but requested that the system be restarted."
 	fi
 
 	#
-	# Remove /lib/init/rw/rootdev if we created it.
+	# Remove /run/rootdev if we created it.
 	#
-	rm -f /lib/init/rw/rootdev
+	rm -f /run/rootdev
 }
 
 do_status () {

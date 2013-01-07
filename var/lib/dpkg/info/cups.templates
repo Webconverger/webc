@@ -104,6 +104,12 @@ Description-no.UTF-8: Vil du at CUPS skal skrive ut ukjente jobber som rå utskr
  CUPS kan behandle alle slike jobber som «rå» utskrift, noe som gjør at de sendes direkte til skriveren uten behandling.
  .
  Hvis tjeneren kommer til å behandle utskriftsjobber fra Windows-maskiner eller Samba-tjenere anbefales det at dette slås på.
+Description-pl.UTF-8: Czy CUPS powinien drukować nieznane zadania jako zadania "surowe"?
+ Internet Printing Protocol (IPP), czyli internetowy protokół drukowania, wymusza typ MIME na wszystkich zadaniach druku. Ponieważ nie każde źródło może dołączyć odpowiedni typ, wiele zadań jest wysyłanych jako typ MIME application/octet-stream i może zostać odrzuconych przez CUPS, jeśli nie uda się mu odgadnąć właściwego formatu zadania.
+ .
+ CUPS może obsługiwać wszystkie tego typu zadania jako zadania "surowe", wysyłając je do drukarki bez żadnej obróbki.
+ .
+ Zaleca się wybranie tej opcji, jeśli serwer będzie akceptował zadania druku z komputerów z Windowsem lub z serwerów Samba.
 Description-pt.UTF-8: Deseja que o CUPS imprima trabalhos desconhecidos como trabalhos 'raw'?
  O Internet Printing Protocol (IPP) adopta um tipo MIME para todos os trabalhos de impressão. Como nem todas as fontes de trabalhos de impressão podem anexar o tipo apropriado, muitos trabalhos são submetidos com do tipo MIME application/octet-stream e podem ser rejeitados se o CUPS não puder adivinhar o formato do trabalho.
  .
@@ -134,6 +140,18 @@ Description-sk.UTF-8: Chcete, aby CUPS obsluhoval neznáme úlohy ako nespracova
  CUPS dokáže s takými úlohami pracovať v „nespracovanom” (raw) formáte, čo spôsobí ich odoslanie priamo na tlačiareň bez spracovania.
  .
  Odporúča sa túto voľbu zapnúť ak bude server prijímať tlačové úlohy od počítačov s Windows alebo od Samba serverov.
+Description-sr.UTF-8: Желите ли да (CUPS) штампа непознате радње као (raw) радње?
+ (Internet Printing Protocol (IPP)) примјењује (MIME) тип за сва штампања.Како сви извори штампања не могу придодати одговарајући тип, многе радњепопримају (MIME) тип апликација и могу бити одбијене ако (CUPS) не препознаформат радње.
+ .
+ (CUPS) може да обавља све радње као ("raw") радње, што значи да их шаље директно штампачу без провјере.
+ .
+ Препоручује се одабирање ове опције ако ће сервер примати захтеве за штампање од (Windows) рачунара или Самба сервера.
+Description-sr@latin.UTF-8: elite li da CUPS štampa nepoznate radnje kao raw radnje?
+ Internet Printing Protocol IPP primjenjuje MIME tip za sva štampanja.Kako svi izvori štampanja ne mogu pridodati odgovarajući tip, mnoge radnjepoprimaju MIME tip aplikacija i mogu biti odbijene ako CUPS ne prepoznaformat radnje.
+ .
+ CUPS može da obavlja sve radnje kao "raw" radnje, što znači da ih šaljedirektno štampaču bez provjere.
+ .
+ Preporučuje se odabiranje ove opcije ako će server primati zahteve za štampanjeod Windows računara ili Samba servera.
 Description-sv.UTF-8: Vill du att CUPS ska skriva ut okända jobb som råjobb?
  Internet Printing Protocol (IPP) använder en MIME-typ för alla sorters utskriftsjobb. Eftersom inte alla källor för utskriftsjobb kan skicka med en lämplig typ blir många jobb skickade som MIME-typen "application/octet-stream" och kan bli nekade om CUPS inte kan gissa jobbtypen.
  .
@@ -155,30 +173,34 @@ Description-vi.UTF-8: Bạn có muốn CUPS in việc in lạ như là việc th
 
 Template: cupsys/backend
 Type: multiselect
-Choices: ipp, lpd, parallel, scsi, serial, socket, usb, snmp, dnssd
-Choices-cs.UTF-8: ipp, lpd, paralelní, scsi, sériový, socket, usb, snmp, dnssd
-Choices-da.UTF-8: ipp, lpd, parallel, scsi, seriel, sokkel, usb, snmp, dnssd
-Choices-de.UTF-8: IPP, lpd, parallel, SCSI, seriell, Socket, USB, SNMP, dnssd
-Choices-es.UTF-8: ipp, lpd, paralelo, scsi, serie, socket, usb, snmp, dnssd
-Choices-eu.UTF-8: ipp, lds, paraleloa, scsi, seriea, socket, usb, snmp, dnssd
-Choices-fi.UTF-8: ipp, lpd, rinnakkainen, scsi, sarjallinen, pistoke, usb, snmp, dnssd
-Choices-fr.UTF-8: IPP, lpd, parallèle, SCSI, série, socket, USB, SNMP, dnssd
-Choices-gl.UTF-8: ipp, lpd, paralelo, scsi, serie, socket, usb, snmp, dnssd
-Choices-it.UTF-8: ipp, lpd, parallela, scsi, seriale, socket, usb, snmp, dnssd
-Choices-ja.UTF-8: IPP, LPD, パラレル, SCSI, シリアル, ソケット, USB, SNMP, dnssd
-Choices-ml.UTF-8: ipp, lpd, parallel, scsi, serial, socket, usb, snmp, dnssd
-Choices-nb.UTF-8: ipp, lpd, parallell, scsi, seriell, sokkel, usb, snmp, dnssd
-Choices-nl.UTF-8: ipp, lpd, parallel, scsi, serieel, socket, usb, snmp, dnssd
-Choices-no.UTF-8: ipp, lpd, parallell, scsi, seriell, sokkel, usb, snmp, dnssd
-Choices-pt.UTF-8: ipp, lpd, paralela, scsi, série, socket, usb, snmp, dnssd
-Choices-pt_BR.UTF-8: ipp, lpd, paralelo, scsi, serial, socket, usb, snmp, dnssd
-Choices-ro.UTF-8: ipp, lpd, portul paralel, scsi, portul serial, socket, usb, snmp, dnssd
-Choices-ru.UTF-8: ipp, lpd, parallel, scsi, serial, socket, usb, snmp, dnssd
-Choices-sk.UTF-8: ipp, lpd, paralelný, scsi, sériový, socket, usb, snmp, dnssd
-Choices-sv.UTF-8: ipp, lpd, parallell, scsi, seriell, uttag, usb, snmp, dnssd
-Choices-tr.UTF-8: ipp, lpd, paralel, scsi, seri, soket, usb, snmp, dnssd
-Choices-vi.UTF-8: ipp, lpd, song song, scsi, nối tiếp, ổ cắm, usb, snmp, dnssd
-Default: ipp, lpd, parallel, scsi, serial, socket, usb, snmp, dnssd
+Choices: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-ca.UTF-8: ipp, ipp14, lpd, sòcol, usb, snmp, dnssd
+Choices-cs.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-da.UTF-8: ipp, ipp14, lpd, sokkel, usb, snmp, dnssd
+Choices-de.UTF-8: IPP, ipp14, lpd, Socket, USB, SNMP, dnssd
+Choices-es.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-eu.UTF-8: ipp, ipp14, lds, socket, usb, snmp, dnssd
+Choices-fi.UTF-8: ipp, ipp14, lpd, pistoke, usb, snmp, dnssd
+Choices-fr.UTF-8: IPP, IPP14, lpd, socket, USB, SNMP, dnssd
+Choices-gl.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-it.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-ja.UTF-8: IPP, IPP14, LPD, ソケット, USB, SNMP, dnssd
+Choices-ml.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-nb.UTF-8: ipp, ipp14, lpd, sokkel, usb, snmp, dnssd
+Choices-nl.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-no.UTF-8: ipp, ipp14, lpd, sokkel, usb, snmp, dnssd
+Choices-pl.UTF-8: ipp, ipp14, lpd, gniazdo, usb, snmp, dnssd
+Choices-pt.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-pt_BR.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-ro.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-ru.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-sk.UTF-8: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Choices-sr.UTF-8: (ipp), ipp14, (lpd), (socket), (usb), (snmp), (dnssd)
+Choices-sr@latin.UTF-8: ipp, ipp14, lpd, (socket), usb, snmp, dnssd
+Choices-sv.UTF-8: ipp, ipp14, lpd, uttag, usb, snmp, dnssd
+Choices-tr.UTF-8: ipp, ipp14, lpd, soket, usb, snmp, dnssd
+Choices-vi.UTF-8: ipp, ipp14, lpd, ổ cắm, usb, snmp, dnssd
+Default: ipp, lpd, socket, usb, snmp, dnssd
 Description: Printer communication backends:
  CUPS uses backend programs to communicate with the printer device or port.
  .
@@ -190,7 +212,7 @@ Description: Printer communication backends:
 Description-ca.UTF-8: Mecanisme de comunicació amb la impressora:
  CUPS utilitza programes externs per comunicar-se amb el dispositiu o port d'impressora.
  .
- Malauradament, alguns d'aquests programes poden ser problemàtics. (Per exemple, algun nucli PPC falla si s'utilitza el port paral·lel.)
+ Malauradament, alguns d'aquests programes poden ser problemàtics. (Per exemple, algun nucli PPC falla si s'utilitza el port paraŀlel.)
  .
  Si us plau, trieu el programa que CUPS hauria d'utilitzar per comunicar-se amb la impressora. L'opció predeterminada és vàlida en la majoria d'entorns.
 Description-cs.UTF-8: Ovladače pro komunikaci s tiskárnou:
@@ -277,6 +299,12 @@ Description-no.UTF-8: Kommunikasjonsmotorer for skriver:
  Dessverre lager noen motorer vanskeligheter. Noen PPD-kjerner, for eksempel, krasjer med parallell-motoren.
  .
  Velg motor-program som CUPS skal bruke. Standardvalget passer antakelig i de vanligste miljøene.
+Description-pl.UTF-8: Backend komunikacji drukarki:
+ CUPS używa programów typu "backend" do komunikacji z urządzeniem lub portem drukarki.
+ .
+ Niestety, niektóre backendy mogą sprawiać problemy. Niektóre jądra PowerPC przestają działać z backendem "równoległym".
+ .
+ Proszę wybrać backend, który ma być używany przez CUPS. Domyślny wybór jest odpowiedni w większości przypadków.
 Description-pt.UTF-8: 'Backends' de comunicação com a impressora
  O CUPS usa programas de 'backend' para comunicar com a porta ou dispositivo da impressora.
  .
@@ -307,6 +335,18 @@ Description-sk.UTF-8: Backendy pre komunikáciu s tlačiarňou:
  Bohužiaľ niektoré pomocné programy pravdepodobne spôsobia isté problémy. Napríklad niektoré jadrá PPC havarujú pri použití programu pre paralelný port.
  .
  Prosím, vyberte, ktorý pomocný program má CUPS používať. Štandardná voľba by mala vyhovovať väčšine bežných prostredí.
+Description-sr.UTF-8: Комуникациона системска подршка за штампач:
+ (CUPS) користи програме за системску подршку да би комуницирао са штампачем или портом.
+ .
+ Нажалост, неки програми за системску подршку могу проузрочити проблеме. Напримјер, нека (PPC) језгра крахирају на паралелној системској подршци.
+ .
+ Молимо вас одаберите програм за системску подршку који ће (CUPS) користити. Подразумијевана опција подржава већину окружења.
+Description-sr@latin.UTF-8: Komunikaciona sistemska podrška za štampač:
+ CUPS koristi programe za sistemsku podršku da bi komunicirao sa štampačem ili portom.
+ .
+ Nažalost, neki programi za sistemsku podršku mogu prouzrokovati probleme. Naprimjer, neka (PPC) jezgra krahiraju na paralelnoj sistemskoj podršci.
+ .
+ Molimo vas odaberite program za sistemsku podršku koju će CUPS koristiti.Podrazumijevana opcija podržava većinu okruženja.
 Description-sv.UTF-8: Bakändar för skrivarkommunikation:
  CUPS använder bakändesprogram för att kommunicera med skrivarenheten eller porten.
  .

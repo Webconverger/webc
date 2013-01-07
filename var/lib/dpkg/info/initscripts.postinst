@@ -5,6 +5,16 @@
 
 set -e
 
+. /lib/init/vars.sh
+. /lib/init/tmpfs.sh
+. /lib/init/mount-functions.sh
+
+# Set this as a variable to hide from lintian the fact that we're removing
+# it; otherwise, a wrong lintian check + ftp fatal autoreject prevents us
+# from uploading this legitimate code, even though the previous upload was
+# accepted without incident.
+devshm=/dev/shm
+
 case "$1" in
   configure)
 	PREV_VER=$2
@@ -16,11 +26,36 @@ esac
 
 umask 022
 
-chrooted() {
-  if [ -r /proc/1/root ]; then
-    return 1
-  fi
-  return 0
+compat_link () {
+	SRC=$1
+	DEST=$2
+
+	ssrc="$(/usr/bin/stat -L --format="%d %i" "$SRC" 2>/dev/null || :)"
+	sdest="$(/usr/bin/stat -L --format="%d %i" "$DEST" 2>/dev/null || :)"
+
+	if [ -n "$ssrc" ] && [ "$ssrc" != "$sdest" ]; then
+		echo "guest environment detected: Linking $DEST to $SRC"
+		(
+			if [ -e $DEST ]; then
+				if [ -L $DEST ]; then
+					echo "$DEST is already a symlink; not replacing with link to $SRC"
+					exit 0
+				elif [ -d $DEST ]; then
+					rmdir $DEST || exit 1
+				else
+					echo "$DEST isn't a directory or a symlink"
+					exit 1
+				fi
+			fi
+			ln -fs $SRC $DEST
+		) || {
+			echo "Can't symlink $DEST to $SRC; please fix manually."
+			return 1
+		}
+		[ -x /sbin/restorecon ] && /sbin/restorecon "$DEST"
+	fi
+
+	return 0
 }
 
 #
@@ -62,6 +97,22 @@ fi
 if dpkg --compare-versions "$PREV_VER" lt "2.87dsf-2" ; then
 	update-rc.d -f mountoverflowtmp remove >/dev/null
 fi
+# In 2.88dsf-23 the "mountoverflowtmp" script was dropped entirely.
+if dpkg --compare-versions "$PREV_VER" lt "2.88dsf-23" ; then
+        update-rc.d -f mountoverflowtmp remove >/dev/null
+fi
+
+# Comment out obsolete options in rcS.
+if dpkg --compare-versions "$PREV_VER" lt "2.88dsf-23" ; then
+    if [ -f /etc/default/rcS ]; then
+	sed -i \
+-e 's:^\(RAMRUN=.*\)$:#\1 # OBSOLETE; see /etc/default/tmpfs and tmpfs(5).:' \
+-e 's:^\(RAMLOCK=.*\)$:#\1 # OBSOLETE; see /etc/default/tmpfs and tmpfs(5).:' \
+-e ':^RAMSHM=:i# OBSOLETE; see /etc/default/tmpfs and tmpfs(5).' \
+-e ':^RAMTMP=:i# OBSOLETE; see /etc/default/tmpfs and tmpfs(5).' \
+-e 's:^\(EDITMOTD=.*\)$:#\1 # OBSOLETE.:' /etc/default/rcS
+    fi
+fi
 
 #
 # Okay, we could do this with update-rc.d, but that would probably
@@ -70,41 +121,90 @@ fi
 #
 # Links in runlevel S
 #
+if [ -x /etc/init.d/mountkernfs.sh ]; then
 update-rc.d mountkernfs.sh         start 02 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/hostname.sh ]; then
 update-rc.d hostname.sh            start 02 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mountdevsubfs.sh ]; then
 update-rc.d mountdevsubfs.sh       start 04 S . >/dev/null || exit $?
-update-rc.d bootlogd               start 05 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/checkroot.sh ]; then
 update-rc.d checkroot.sh           start 10 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mtab.sh ]; then
 update-rc.d mtab.sh                start 12 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/checkroot-bootclean.sh ]; then
+update-rc.d checkroot-bootclean.sh start 13 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/checkfs.sh ]; then
 update-rc.d checkfs.sh             start 30 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mountall.sh ]; then
 update-rc.d mountall.sh            start 35 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mountall-bootclean.sh ]; then
 update-rc.d mountall-bootclean.sh  start 36 S . >/dev/null || exit $?
-update-rc.d mountoverflowtmp       start 37 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mountnfs.sh ]; then
 update-rc.d mountnfs.sh            start 45 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/mountnfs-bootclean.sh ]; then
 update-rc.d mountnfs-bootclean.sh  start 46 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/bootmisc.sh ]; then
 update-rc.d bootmisc.sh            start 55 S . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/urandom ]; then
 update-rc.d urandom                start 55 S . start 30 0 6 . >/dev/null || exit $?
+fi
+
 #
 # Links in runlevels other than S
 #
+if [ -x /etc/init.d/halt ]; then
 update-rc.d halt                   start 90 0 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/reboot ]; then
 update-rc.d reboot                 start 90 6 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/umountroot ]; then
 update-rc.d umountroot             start 60 0 6 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/umountfs ]; then
 update-rc.d umountfs               start 40 0 6 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/umountnfs.sh ]; then
 update-rc.d umountnfs.sh           start 31 0 6 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/sendsigs ]; then
 update-rc.d sendsigs               start 20 0 6 . >/dev/null || exit $?
+fi
 
+if [ -x /etc/init.d/killprocs ]; then
 update-rc.d killprocs              start 30 1 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/single ]; then
 update-rc.d single                 start 90 1 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/motd ]; then
+update-rc.d motd                   start 70 1 2 3 4 5 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/bootlogs ]; then
 update-rc.d bootlogs               start 70 1 2 3 4 5 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/rc.local ]; then
 update-rc.d rc.local               start 99 2 3 4 5 . >/dev/null || exit $?
+fi
+if [ -x /etc/init.d/rmnologin ]; then
 update-rc.d rmnologin              start 99 2 3 4 5 . >/dev/null || exit $?
-update-rc.d stop-bootlogd-single   start 99 S . >/dev/null || exit $?
-update-rc.d stop-bootlogd          start 99 2 3 4 5 . >/dev/null || exit $?
+fi
 
 #
 # Remove scripts that were left behind by older glibc (<< 2.3.2.ds1-12)
-# versions. We have the same functionality in mount{kern,devsub}fs.sh 
+# versions. We have the same functionality in mount{kern,devsub}fs.sh
 #
 #
 # In 2.86.ds1-10 the "mountvirtfs" script was replaced by
@@ -118,38 +218,265 @@ do
 done
 
 #
-# Create /var/run and /var/lock on the root partition to make sure
-# they are available when RAMRUN or RAMLOCK is enabled.
-# If mount fail (like in a vserver environment), just clean up and ignore
-# it.  The admins enabling RAMRUN and RAMLOCK will have to create the
-# directories themselves in this case.
+# Setup /run if not already in use.  Note that the intent here is to
+# make the existing /var/run and /var/lock available as /run,
+# /run/lock, respectively.  When the system is next restarted, a
+# proper /run tmpfs will be set up.  The bind mounts set up here are
+# intended to recreate the directory hierarchy using the existing
+# locations in order that packages may transition to using /run
+# without a system restart.
 #
-if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-22" && ! chrooted
-then
-	# We need to quickly bind / to another location so we can make them
-	# just in case /var is a mountpoint or a symlink to one.
-	mkdir -p /.root
-	if mount -n --bind / /.root ; then
-		if [ -L /.root/var ] && [ ! -d /.root/var ] ; then
-			# No use trying if /var is a relative symlink.  It is not
-			# going to work.
-			:
-		else
-			mkdir -p /.root/var/run /.root/var/lock
+
+# If in a chroot or vserver environment (i.e. a guest, which does not
+# run rcS scripts), do not do any messing around with mounts, and
+# don't migrate /var/run, /var/lock or /dev/shm.  Bind mounting would
+# not work in a chroot, because the migration would only be
+# temporary--the rcS scripts are not guaranteed to run, so we must do
+# the migration by hand at this point.  We create symlinks from the
+# new locations to the old locations, which should be safe.  The
+# sysadmin should, if they care, move the old locations to the new
+# locations and create compatibilty symlinks at their convenience
+# following the upgrade.
+
+# chroot upgrade scenarios (from vorlon):
+#
+# - /dev is not bind mounted. sysvshm should be mounted *somewhere*
+#   within the chroot, but we don't know where this will be done and
+#   we're not going to do it ourselves. So dictate that this should be
+#   /run/shm, and make /dev/shm a symlink there.
+#
+# - /dev is bind mounted, and /dev/shm is a symlink to /run/shm
+#   (because the parent environment is also a recent Debian/Ubuntu
+#   release). Make the /run/shm directory.
+#
+# - /dev is bind mounted, and /dev/shm is also bind mounted. This is
+#   not a good situation to be in, because it means that the future
+#   correctness of the chroot is dependent on the setup remaining the
+#   same on the host system - which it won't if the host system is an
+#   older Debian/Ubuntu release that is later upgraded. But we do the
+#   best we can for now, and make /run/shm a symlink to /dev/shm.
+#
+# - /dev/ is bind mounted, and /dev/shm is a non-bind-mounted
+#   directory. We can't fix this, so we should just create the
+#   /run/shm directory and leave /dev/shm alone.
+#
+# State /dev  /dev/shm /run  /run/shm   Action                                          Test
+# mmmm  mount mount    mount mount      WARN                                            ✓
+# mmmd  mount mount    mount dir        WARN                                            ✓
+# mmml  mount mount    mount link       NO ACTION; WARN if link invalid                 ✓
+# mmdm  mount mount    dir†  mount      WARN                                            ✓
+# mmdd  mount mount    dir†  dir        link /run to /dev/shm                           ✓
+# mmdl  mount mount    dir†  link       NO ACTION; recreate link if invalid             ✓
+# mdmm  mount dir      mount mount      WARN                                            ✓
+# mdmd  mount dir      mount dir        WARN                                            ✓
+# mdml  mount dir      mount link       NO ACTION; WARN if link invalid                 ✓
+# mddm  mount dir      dir†  mount      WARN                                            ✓
+# mddd  mount dir      dir†  dir        link /run to /dev/shm                           ✓
+# mddl  mount dir      dir†  link       NO ACTION; recreate link if invalid             ✓
+# mlmm  mount link     mount mount      NO ACTION; WARN if link invalid                 ✓
+# mlmd  mount link     mount dir        NO ACTION; WARN if link invalid                 ✓
+# mlml  mount link     mount link       WARN                                            ✓
+# mldm  mount link     dir†  mount      NO ACTION; WARN if link invalid                 ✓
+# mldd  mount link     dir†  dir        NO ACTION; WARN if link invalid                 ✓
+# mldl  mount link     dir†  link       make /run a directory                           ✓
+# dmmm  dir   mount    mount mount      WARN                                            ✓
+# dmmd  dir   mount    mount dir        WARN                                            ✓
+# dmml  dir   mount    mount link       NO ACTION; WARN if link invalid                 ✓
+# dmdm  dir   mount    dir†  mount      WARN                                            ✓
+# dmdd  dir   mount    dir†  dir        link /run to /dev/shm                           ✓
+# dmdl  dir   mount    dir†  link       NO ACTION; recreate link if invalid             ✓
+# ddmm  dir   dir      mount mount      link /dev/shm to /run                           ✓
+# ddmd  dir   dir      mount dir        link /dev/shm to /run                           ✓
+# ddml  dir   dir      mount link       NO ACTION; WARN if link invalid                 ✓
+# dddm  dir   dir      dir†  mount      link /dev/shm to /run                           ✓
+# dddd  dir   dir      dir†  dir        link /dev/shm to /run                           ✓
+# dddl  dir   dir      dir†  link       NO ACTION; recreate link if invalid             ✓
+# dlmm  dir   link     mount mount      NO ACTION; recreate link if invalid             ✓
+# dlmd  dir   link     mount dir        NO ACTION; recreate link if invalid             ✓
+# dlml  dir   link     mount link       make /dev a directory; WARN if link invalid     ✓
+# dldm  dir   link     dir†  mount      NO ACTION; recreate link if invalid             ✓
+# dldd  dir   link     dir†  dir        NO ACTION; recreate link if invalid             ✓
+# dldl  dir   link     dir†  link       make /run a directory; recreate link if invalid ✓
+# † Treat /run symlink as equivalent to dir here
+# Note that link is only to /dev/shm or /run/shm; links to other
+# targets will be replaced with a correct link by compat_link (where
+# possible).  In some corner cases, files will be migrated from
+# /dev/shm to /run/shm (or vice versa), but only when there is no
+# alternative; a symlink will be made to avoid moving wherever
+# possible.
+
+if ischroot; then
+	# Symlink /var/run from /run
+        # Note var/run is relative
+	if compat_link /var/run /run; then
+		# Symlink /var/lock from /run/lock
+		# Note that it's really /var/run/lock
+		compat_link /var/lock /run/lock
+
+		# Symlink /dev/shm from /run/shm
+		# Note that it's really /var/run/shm
+		if [ ! -e /run/shm ] && [ ! -L /run/shm ]; then
+			mkdir /run/shm
 		fi
-		umount /.root
+
+		# Note trailing slash for mountpoint dir needed to
+		# resolve mountpoints where the dir is a symlink.
+		DEV=d
+		DEVSHM=d
+		RUN=d
+		RUNSHM=d
+		if mountpoint -q /dev/; then
+		    DEV=m
+		fi
+		if mountpoint -q /dev/shm/; then
+		    DEVSHM=m
+		fi
+		if [ -L /dev/shm ]; then
+		    DEVSHM=l
+		fi
+		if mountpoint -q /run/; then
+		    RUN=m
+		fi
+		if mountpoint -q /run/shm/; then
+		    RUNSHM=m
+		fi
+		if [ -L /run/shm ]; then
+		    RUNSHM=l
+		fi
+
+		RUNSTATE="${DEV}${DEVSHM}${RUN}${RUNSHM}"
+		RUNACTION="NONE"
+		case "$RUNSTATE" in
+		    mmmm|mmmd|mlml|mdmm|mdmd|dmmm|dmmd|mmdm|mddm|dmdm)
+			# FAIL
+			echo "Due to mounts in the chroot, /dev/shm can't be safely symlinked to /run/shm.  Please correct this problem manually."
+			;;
+		    mlmd|mlmm|mldd|mldm)
+		        # NO ACTION; FAIL if /dev/shm link invalid
+			if [ "$(readlink /dev/shm)" != "/run/shm" ]; then
+			    echo "Due to mounts in the chroot, /dev/shm can't be safely symlinked to /run/shm (the existing symlink is invalid).  Please correct this problem manually."
+			fi
+			;;
+		    mmml|mdml|dmml|ddml)
+			# NO ACTION; FAIL if /run/shm link invalid
+			if [ "$(readlink /run/shm)" != "/dev/shm" ]; then
+			    echo "Due to mounts in the chroot, /dev/shm can't be safely symlinked to /run/shm or vice versa (the existing symlink is invalid).  Please correct this problem manually."
+			fi
+			;;
+		    dldd|dldm|dlmm|dlmd)
+			# NO ACTION; recreate /dev/shm link if invalid
+			if [ "$(readlink /dev/shm)" != "/run/shm" ]; then
+			    echo "The existing /dev/shm symlink is invalid."
+			    rm $devshm
+			    RUNACTION="LINKRUN"
+			fi
+			;;
+		    mmdl|mddl|dmdl|dddl)
+			# NO ACTION; recreate /run/shm link if invalid
+			if [ "$(readlink /run/shm)" != "/dev/shm" ]; then
+			    echo "The existing /run/shm symlink is invalid."
+			    rm /run/shm
+			    RUNACTION="LINKDEV"
+			fi
+			;;
+		    dlml)
+			# check symlink is valid
+			if [ "$(readlink /run/shm)" != "/dev/shm" ]; then
+			    echo "Due to mounts in the chroot, /dev/shm can't be safely symlinked to /run/shm (the existing symlink is invalid).  Please correct this problem manually."
+			fi
+			# make /run/shm a directory
+			rm $devshm
+			mkdir /dev/shm
+			;;
+		    mldl)
+			# check symlink is valid
+			if [ "$(readlink /dev/shm)" != "/run/shm" ]; then
+			    echo "Due to mounts in the chroot, /dev/shm can't be safely symlinked to /run/shm (the existing symlink is invalid).  Please correct this problem manually."
+			fi
+			# make /run/shm a directory
+			rm /run/shm
+			mkdir /run/shm
+			;;
+		    dldl)
+			# check symlink is valid
+			if [ "$(readlink /dev/shm)" != "/run/shm" ]; then
+			    echo "The existing /dev/shm symlink is invalid."
+			    rm $devshm
+			    RUNACTION="LINKRUN"
+			fi
+			# make /run/shm a directory
+			rm /run/shm
+			mkdir /run/shm
+			;;
+		    mmdd|mddd|dmdd)
+			# link /run to /dev/shm
+			if [ "$(ls -A /run/shm 2> /dev/null)" != "" ]; then
+			    mv /run/shm/* /dev/shm
+			fi
+			rm -rf /run/shm
+			RUNACTION="LINKDEV"
+			;;
+		    ddmm|ddmd|dddm|dddd)
+			# link /dev/shm to /run
+			if [ "$(ls -A /dev/shm 2> /dev/null)" != "" ]; then
+			    mv /dev/shm/* /run/shm
+			fi
+			rm -rf $devshm
+			RUNACTION="LINKRUN"
+			;;
+		esac
+
+		case "$RUNACTION" in
+		    LINKRUN)
+			compat_link /run/shm /dev/shm
+			;;
+		    LINKDEV)
+			compat_link /dev/shm /run/shm
+			;;
+		esac
 	fi
-	rmdir /.root
+
+# Host system, not a chroot.
+
+# non-chroot upgrade scenarios (from vorlon):
+#
+# - /dev/shm is bind mounted to /run/shm, with the reboot script
+#   handling the fix-up to make /dev/shm a symlink to /run/shm before
+#   next boot.
+else
+	# Cater for broken systems where /run is symlinked to
+	# /var/run.  It will be fixed up with the bind_mount calls.
+	if [ -L /run ]; then
+		if [ "$(readlink /run)" = "/var/run" ]; then
+			rm -f /run
+			mkdir /run
+		fi
+	fi
+
+	if bind_mount /var/run /run; then
+		bind_mount /var/lock /run/lock
+		bind_mount /dev/shm /run/shm
+	fi
 fi
 
+# Ensure presence of /run/sendsigs.omit.d
+[ -d /run/sendsigs.omit.d ] || { mkdir --mode=755 /run/sendsigs.omit.d ; chown root:root /run/sendsigs.omit.d || [ "$FAKECHROOT" = true ]; }
+
+# In wheezy+1, remove /lib/init/rw
+#if dpkg --compare-versions "$PREV_VER" le "2.88dsf-14" \
+# && [ -d /lib/init/rw ]; then
+#	umount -f -r -d /lib/init/rw
+#	rmdir /lib/init/rw
+#fi
+
 #
-# When installing for the first time or upgrading from version before
-# 2.86.ds1-27, a reboot is needed to make the /lib/init/rw/ tmpfs
-# available.  Flag this using notify-reboot-required.  Not mounting it
-# here as it creates problem for debootstrap, vservers, pbuilder and
-# cowbuilder.
+# When installing for the first time or upgrading from a version
+# before or equal to 2.88dsf-14, a reboot is needed to make the /run
+# tmpfs available.  Flag this using notify-reboot-required.  /run is
+# available in some form before the reboot, so the need for a reboot
+# isn't particularly urgent.
 #
-if dpkg --compare-versions "$PREV_VER" lt "2.86.ds1-27" \
+if dpkg --compare-versions "$PREV_VER" le "2.88dsf-13.3" \
  && [ -x /usr/share/update-notifier/notify-reboot-required ]; then
 	/usr/share/update-notifier/notify-reboot-required
 fi
@@ -158,7 +485,7 @@ fi
 # Create initial log files
 #
 [ "$PREV_VER" ] || chmod 755 /var/log/fsck || :
-for F in /var/log/dmesg /var/log/boot /var/log/fsck/checkroot /var/log/fsck/checkfs
+for F in /var/log/dmesg /var/log/fsck/checkroot /var/log/fsck/checkfs
 do
 	if [ ! -f "$F" ] && touch "$F" >/dev/null 2>&1
 	then
@@ -179,35 +506,21 @@ then
 fi
 
 #
-# Set up motd stuff, putting variable file in /var/run/
+# Revert motd stuff.  initscripts now lets pam_motd handle
+# everything.  /etc/motd is just a regular file.
 #
-if [ ! -f /etc/motd.tail ]
-then
-	if [ -f /etc/motd ]
-	then
-		sed 1d /etc/motd > /etc/motd.tail
-		[ -s /etc/motd.tail ] || rm -f /etc/motd.tail
+if dpkg --compare-versions "$PREV_VER" lt "2.88dsf-24" ; then
+    if [ ! -f /var/run/motd.dynamic ]; then
+	uname -snrvm > /var/run/motd.dynamic
+    fi
+    if [ -L /etc/motd ] && [ "$(readlink /etc/motd)" = "/var/run/motd"  ]; then
+	if [ -f /etc/motd.tail ]; then
+	# Move motd.tail back to motd.
+	    rm /etc/motd
+	    mv /etc/motd.tail /etc/motd
 	fi
-fi
-if [ ! -f /var/run/motd ]
-then
-	if [ -f /etc/motd ]
-	then
-		cat /etc/motd > /var/run/motd
-	else
-		:>/var/run/motd
-	fi
-fi
-if [ ! -L /etc/motd ]
-then
-	[ -f /etc/default/rcS ] && . /etc/default/rcS
-	if [ "$EDITMOTD" = no ]
-	then
-		cat /var/run/motd > /etc/motd.static
-		ln -sf motd.static /etc/motd
-	else
-		ln -sf /var/run/motd /etc/motd
-	fi
+    fi
+    rm -f /var/run/motd
 fi
 
 #
@@ -241,6 +554,16 @@ then
 	then
 		[ -d /dev/pts ] || { mkdir --mode=755 /dev/pts ; chown root:root /dev/pts || [ "$FAKECHROOT" = true ]; }
 		[ -d /dev/shm ] || { mkdir --mode=755 /dev/shm ; chown root:root /dev/shm || [ "$FAKECHROOT" = true ]; }
+	fi
+fi
+
+# Ensure we have a random seed on first boot.
+if [ "$PREV_VER" = "" ]; then
+	if which invoke-rc.d >/dev/null 2>&1
+	then
+		invoke-rc.d urandom.sh start || true
+	else
+		/etc/init.d/urandom.sh start || true
 	fi
 fi
 

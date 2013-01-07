@@ -1,7 +1,7 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          urandom
-# Required-Start:    $local_fs
+# Required-Start:    $local_fs $time
 # Required-Stop:     $local_fs
 # Default-Start:     S
 # Default-Stop:      0 6
@@ -10,12 +10,24 @@
 #                    It is called from the boot, halt and reboot scripts.
 ### END INIT INFO
 
+## Assumption 1:  We assume $SAVEDFILE is a file (or a symlink
+## to a file) that resides on a non-volatile medium that persists
+## across reboots.
+## Case 1a: Ideally, it is readable and writeable.  Its is unshared,
+## i.e. its contents are unique to this machine.  It is protected so
+## that its contents are not known to attackers.
+## Case 1b: Less than ideally, it is read-only.  Its contents are
+## unique to this machine and not known to attackers.
+SAVEDFILE=/var/lib/urandom/random-seed
+
 [ -c /dev/urandom ] || exit 0
 
 PATH=/sbin:/bin
-SAVEDFILE=/var/lib/urandom/random-seed
-POOLSIZE=512
-[ -f /proc/sys/kernel/random/poolsize ] && POOLSIZE="$(cat /proc/sys/kernel/random/poolsize)"
+if ! POOLBYTES=$((
+  ($(cat /proc/sys/kernel/random/poolsize 2>/dev/null) + 7) / 8
+)) ; then
+  POOLBYTES=512
+fi
 . /lib/init/vars.sh
 
 . /lib/lsb/init-functions
@@ -31,34 +43,49 @@ do_status () {
 case "$1" in
   start|"")
 	[ "$VERBOSE" = no ] || log_action_begin_msg "Initializing random number generator"
-	# Load and then save $POOLSIZE bytes,
-	# which is the size of the entropy pool
-	if [ -f "$SAVEDFILE" ]
-	then
-		# Handle locally increased pool size
-		set -- $(LC_ALL=C ls -l "$SAVEDFILE")
-		SAVEDSIZE="$5"
-		if [ "$SAVEDSIZE" -gt "$POOLSIZE" ]
-		then
-			[ -w /proc/sys/kernel/random/poolsize ] && echo $POOLSIZE > /proc/sys/kernel/random/poolsize
-			POOLSIZE=$SAVEDSIZE
-		fi
-		cat "$SAVEDFILE" >/dev/urandom
-	fi
-	rm -f $SAVEDFILE
-	# Hm, why is the saved pool re-created at boot? [pere 2009-09-03]
+	# Seed the RNG with date and time.
+	# This is helpful in the less-than-ideal case where $SAVEDFILE
+	# is read-only.
+	# The value of this is greatly reduced if $SAVEDFILE is missing,
+	# or its contents are shared machine-to-machine or known to
+	# attackers (since they might well know at what time this
+	# machine booted up).
+	(
+	  date +%s.%N
+
+	  # Load and then save $POOLBYTES bytes,
+	  # which is the size of the entropy pool
+	  if [ -f "$SAVEDFILE" ]
+	  then
+		  cat "$SAVEDFILE"
+	  fi
+	# Redirect output of subshell (not individual commands)
+	# to cope with a misfeature in the FreeBSD (not Linux)
+	# /dev/random, where every superuser write/close causes
+	# an explicit reseed of the yarrow.
+	) >/dev/urandom
+
+	# Write a new seed into $SAVEDFILE because re-using a seed
+	# compromises security.  Each time we re-seed, we want the
+	# seed to be as different as possible.
+	# Write it now, in case the machine crashes without doing
+	# an orderly shutdown.
+	# The write will fail if $SAVEDFILE is read-only, but it
+	# doesn't hurt to try.
 	umask 077
-	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLSIZE count=1 >/dev/null 2>&1
+	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLBYTES count=1 >/dev/null 2>&1
 	ES=$?
 	umask 022
 	[ "$VERBOSE" = no ] || log_action_end_msg $ES
 	;;
   stop)
 	# Carry a random seed from shut-down to start-up;
+	# Write it on shutdown, in case the one written at startup
+	# has been lost, snooped, or otherwise compromised.
 	# see documentation in linux/drivers/char/random.c
 	[ "$VERBOSE" = no ] || log_action_begin_msg "Saving random seed"
 	umask 077
-	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLSIZE count=1 >/dev/null 2>&1
+	dd if=/dev/urandom of=$SAVEDFILE bs=$POOLBYTES count=1 >/dev/null 2>&1
 	ES=$?
 	[ "$VERBOSE" = no ] || log_action_end_msg $ES
 	;;

@@ -17,14 +17,17 @@
 # Short-Description:	Debian Live - System Configuration Scripts
 # Description:		live-config contains the scripts that configure a Debian
 #			Live system during the boot process (late userspace).
-# X-Start-Before:
+# X-Start-Before:	mountkernfs
 # X-Stop-After:
 # X-Interactive:	true
 ### END INIT INFO
 
 case "${1}" in
 	start)
-		/lib/live/config.sh
+		if [ -e /lib/live/config.sh ]
+		then
+			/lib/live/config.sh ${@}
+		fi
 		;;
 
 	force-reload|restart|stop)

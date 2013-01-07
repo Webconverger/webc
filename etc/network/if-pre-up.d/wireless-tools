@@ -66,6 +66,14 @@ apply_settings()
 		eval $IWCONFIG "$IFACE" enc $IF_WIRELESS_ENC && IF_WIRELESS_ENC= || FAIL=true
 	fi
 
+	if [ -n "$IF_WIRELESS_DEFAULTKEY" ]; then
+		$IWCONFIG "$IFACE" key ["$IF_WIRELESS_DEFAULTKEY"] && IF_WIRELESS_DEFAULTKEY= || FAIL=true
+	fi
+
+	if [ -n "$IF_WIRELESS_KEYMODE" ]; then
+		$IWCONFIG "$IFACE" key "$IF_WIRELESS_KEYMODE" && IF_WIRELESS_KEYMODE= || FAIL=true
+	fi
+
 	if [ -n "$IF_WIRELESS_KEY" ]; then
 		eval $IWCONFIG "$IFACE" key $IF_WIRELESS_KEY && IF_WIRELESS_KEY= || FAIL=true
 	fi
@@ -84,14 +92,6 @@ apply_settings()
 
 	if [ -n "$IF_WIRELESS_KEY4" ]; then
 		$IWCONFIG "$IFACE" key [4] "$IF_WIRELESS_KEY4" && IF_WIRELESS_KEY4= || FAIL=true
-	fi
-
-	if [ -n "$IF_WIRELESS_DEFAULTKEY" ]; then
-		$IWCONFIG "$IFACE" key ["$IF_WIRELESS_DEFAULTKEY"] && IF_WIRELESS_DEFAULTKEY= || FAIL=true
-	fi
-
-	if [ -n "$IF_WIRELESS_KEYMODE" ]; then
-		$IWCONFIG "$IFACE" key "$IF_WIRELESS_KEYMODE" && IF_WIRELESS_KEYMODE= || FAIL=true
 	fi
 
 	if [ -n "$IF_WIRELESS_FREQ" ]; then

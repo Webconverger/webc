@@ -5,7 +5,16 @@ unset GREP_OPTIONS
 
 # We don't use a secret keyring, of course, but gpg panics and
 # implodes if there isn't one available
-GPG_CMD="gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring /etc/apt/secring.gpg --trustdb-name /etc/apt/trustdb.gpg"
+SECRETKEYRING="$(mktemp)"
+trap "rm -f '${SECRETKEYRING}'" 0 HUP INT QUIT ILL ABRT FPE SEGV PIPE TERM
+GPG_CMD="gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring ${SECRETKEYRING}"
+
+if [ "$(id -u)" -eq 0 ]; then
+	# we could use a tmpfile here too, but creation of this tends to be time-consuming
+	eval $(apt-config shell TRUSTDBDIR Dir::Etc/d)
+	GPG_CMD="$GPG_CMD --trustdb-name ${TRUSTDBDIR}/trustdb.gpg"
+fi
+
 GPG="$GPG_CMD"
 
 MASTER_KEYRING=""
@@ -15,6 +24,13 @@ ARCHIVE_KEYRING_URI=""
 
 ARCHIVE_KEYRING=/usr/share/keyrings/debian-archive-keyring.gpg
 REMOVED_KEYS=/usr/share/keyrings/debian-archive-removed-keys.gpg
+
+requires_root() {
+	if [ "$(id -u)" -ne 0 ]; then
+		echo >&1 "ERROR: This command can only be used by root."
+		exit 1
+	fi
+}
 
 add_keys_with_verify_against_master_keyring() {
     ADD_KEYRING=$1
@@ -54,13 +70,14 @@ add_keys_with_verify_against_master_keyring() {
 # (otherwise it does not make sense from a security POV)
 net_update() {
     if [ -z "$ARCHIVE_KEYRING_URI" ]; then
-	echo "ERROR: no location for the archive-keyring given"
+	echo >&2 "ERROR: Your distribution is not supported in net-update as no uri for the archive-keyring is set"
 	exit 1
     fi
+    requires_root
     # in theory we would need to depend on wget for this, but this feature
     # isn't useable in debian anyway as we have no keyring uri nor a master key
     if ! which wget >/dev/null 2>&1; then
-	echo "ERROR: an installed wget is required for a network-based update"
+	echo >&2 "ERROR: an installed wget is required for a network-based update"
 	exit 1
     fi
     if [ ! -d /var/lib/apt/keyrings ]; then
@@ -88,6 +105,7 @@ update() {
 	echo >&2 "Is the debian-archive-keyring package installed?"
 	exit 1
     fi
+    requires_root
 
     # add new keys from the package;
 
@@ -135,7 +153,7 @@ if [ "$1" = "--keyring" ]; then
         #echo "keyfile given"
 	shift
 	TRUSTEDFILE="$1"
-	if [ -r "$TRUSTEDFILE" ]; then
+	if [ -r "$TRUSTEDFILE" ] || [ "$2" = 'add' ]; then
 		GPG="$GPG --keyring $TRUSTEDFILE --primary-keyring $TRUSTEDFILE"
 	else
 		echo >&2 "Error: The specified keyring »$TRUSTEDFILE« is missing or not readable"
@@ -179,10 +197,12 @@ fi
 
 case "$command" in
     add)
+        requires_root
         $GPG --quiet --batch --import "$1"
         echo "OK"
         ;;
     del|rm|remove)
+        requires_root
         $GPG --quiet --batch --delete-key --yes "$1"
         echo "OK"
         ;;

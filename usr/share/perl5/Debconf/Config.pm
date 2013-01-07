@@ -213,7 +213,7 @@ sub priority {
 		my $newpri=shift;
 		if (! priority_valid($newpri)) {
 			warn(sprintf(gettext("Ignoring invalid priority \"%s\""), $newpri));
-			warn(sprintf(gettext("Valid priorities are: %s"), join(" ", priority_list)));
+			warn(sprintf(gettext("Valid priorities are: %s"), join(" ", priority_list())));
 		}
 		else {
 			$config->{priority}=$newpri;

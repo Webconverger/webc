@@ -2,10 +2,26 @@
 # Set rcS vars
 #
 
+# Because /etc/default/rcS isn't a conffile, it's never updated
+# automatically.  So that an empty or outdated file missing newer
+# options works correctly, set the default values here.
+TMPTIME=0
+SULOGIN=no
+DELAYLOGIN=no
+UTC=yes
+VERBOSE=no
+FSCKFIX=no
+
 # Source conffile
 if [ -f /etc/default/rcS ]; then
     . /etc/default/rcS
 fi
+
+# Unset old unused options
+unset EDITMOTD
+unset RAMRUN
+unset RAMLOCK
+# Don't unset RAMSHM and RAMTMP for now.
 
 # Parse kernel command line
 if [ -r /proc/cmdline ]; then

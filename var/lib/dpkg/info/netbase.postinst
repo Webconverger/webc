@@ -25,12 +25,6 @@ create_networks_file() {
 EOF
 }
 
-update_rc() {
-  if [ -x /etc/init.d/networking ]; then
-    update-rc.d networking start 40 S . start 35 0 6 . > /dev/null
-  fi
-}
-
 # create bindv6only.conf on new installs and upgrades from << 4.38
 create_bindv6only_conf() {
   if [ -e /etc/sysctl.d/bindv6only.conf ]; then
@@ -63,7 +57,6 @@ case "$1" in
 	create_hosts_file
 	create_networks_file
     fi
-    update_rc
     #create_bindv6only_conf "$@"
     ;;
 

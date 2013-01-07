@@ -403,10 +403,10 @@ then
 
 		if [ -n "${EXTLINUX_THEME_ORIG}" ]
 		then
-			cp -aL "/usr/share/syslinux/themes/${EXTLINUX_THEME_ORIG}/extlinux" "${_EXTLINUX_DIRECTORY}/themes/${EXTLINUX_THEME_ORIG}"
+			cp -aLT "/usr/share/syslinux/themes/${EXTLINUX_THEME_ORIG}/extlinux" "${_EXTLINUX_DIRECTORY}/themes/${EXTLINUX_THEME_ORIG}"
 			ln -sf "${EXTLINUX_THEME_ORIG}" "${_EXTLINUX_DIRECTORY}/themes/${EXTLINUX_THEME}"
 		else
-			cp -aL "/usr/share/syslinux/themes/${EXTLINUX_THEME}/extlinux" "${_EXTLINUX_DIRECTORY}/themes/${EXTLINUX_THEME}"
+			cp -aLT "/usr/share/syslinux/themes/${EXTLINUX_THEME}/extlinux" "${_EXTLINUX_DIRECTORY}/themes/${EXTLINUX_THEME}"
 		fi
 
 		echo " done."

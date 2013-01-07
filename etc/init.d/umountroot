@@ -16,14 +16,6 @@ PATH=/sbin:/bin
 
 do_stop () {
 	[ "$VERBOSE" = no ] || log_action_begin_msg "Mounting root filesystem read-only"
-	# These directories must exist on the root filesystem as they are
-	# targets for system mountpoints.  We've just unmounted all other
-	# filesystems, so either they are mounted now (in which case the
-	# mount point exists) or we can make the mountpoint.
-	for dir in /proc /sys /var/run /var/lock; do
-	    mkdir -p $dir || true
-	done
-
 	MOUNT_FORCE_OPT=
 	[ "$(uname -s)" = "GNU/kFreeBSD" ] && MOUNT_FORCE_OPT=-f
 	# This:

@@ -114,9 +114,9 @@ to the access log file. The following levels are defined:</P>
   ...
   Allow from All
   Allow from None
-  Allow from *.domain.com
-  Allow from .domain.com
-  Allow from host.domain.com
+  Allow from *.example.com
+  Allow from .example.com
+  Allow from host.example.com
   Allow from nnn.*
   Allow from nnn.nnn.*
   Allow from nnn.nnn.nnn.*
@@ -133,8 +133,8 @@ to the access log file. The following levels are defined:</P>
 <H3>Description</H3>
 
 <P>The <CODE>Allow</CODE> directive specifies a hostname, IP
-address, or network that is allowed access to the server. 
-<CODE>Allow</CODE> directives are cummulative, so multiple
+address, or network that is allowed access to the server.
+<CODE>Allow</CODE> directives are cumulative, so multiple
 <CODE>Allow</CODE> directives can be used to allow access for
 multiple hosts or networks.</P>
 
@@ -342,7 +342,7 @@ default setting is <CODE>No</CODE>.</P>
 <PRE CLASS="command">
 BrowseAddress 255.255.255.255:631
 BrowseAddress 192.0.2.255:631
-BrowseAddress host.domain.com:631
+BrowseAddress host.example.com:631
 BrowseAddress @LOCAL
 BrowseAddress @IF(name)
 </PRE>
@@ -380,7 +380,7 @@ BrowseAllow from none
 BrowseAllow from 192.0.2
 BrowseAllow from 192.0.2.0/24
 BrowseAllow from 192.0.2.0/255.255.255.0
-BrowseAllow from *.domain.com
+BrowseAllow from *.example.com
 BrowseAllow from @LOCAL
 BrowseAllow from @IF(name)
 </PRE>
@@ -418,7 +418,7 @@ BrowseDeny from none
 BrowseDeny from 192.0.2
 BrowseDeny from 192.0.2.0/24
 BrowseDeny from 192.0.2.0/255.255.255.0
-BrowseDeny from *.domain.com
+BrowseDeny from *.example.com
 BrowseDeny from @LOCAL
 BrowseDeny from @IF(name)
 </PRE>
@@ -616,7 +616,7 @@ allow/deny processing. The default order is
 
 <PRE CLASS="command">
 BrowsePoll 192.0.2.2:631
-BrowsePoll host.domain.com:631
+BrowsePoll host.example.com:631
 </PRE>
 
 <H3>Description</H3>
@@ -677,7 +677,7 @@ the local network. Multiple protocols can be specified by
 separating them with spaces. The default protocol is
 "<CODE>CUPS dnssd</CODE>" for
 <A HREF="#BrowseLocalProtocols"><CODE>BrowseLocalProtocols</CODE></A> and
-"<CODE>CUPS</CODE>" for
+"<CODE>CUPS dnssd</CODE>" for
 <A HREF="#BrowseRemoteProtocols"><CODE>BrowseRemoteProtocols</CODE></A>.</P>
 
 <BLOCKQUOTE><B>Note:</B>
@@ -698,8 +698,8 @@ requests for several seconds while polling the network.</P>
 BrowseRelay 193.0.2.1 192.0.2.255
 BrowseRelay 193.0.2.0/255.255.255.0 192.0.2.255
 BrowseRelay 193.0.2.0/24 192.0.2.255
-BrowseRelay *.domain.com 192.0.2.255
-BrowseRelay host.domain.com 192.0.2.255
+BrowseRelay *.example.com 192.0.2.255
+BrowseRelay host.example.com 192.0.2.255
 </PRE>
 
 <H3>Description</H3>
@@ -715,11 +715,12 @@ can also be used to relay printer information from polled servers
 with the line:</P>
 
 <PRE CLASS="command">
-BrowseRelay 127.0.0.1 @LOCAL
+BrowseRelay 127.0.0.1 192.0.2.255
 </PRE>
 
 <P>This effectively provides access to printers on a WAN for all
-clients on the LAN(s).</P>
+clients on the LAN. Use multiple <CODE>BrowseRelay</CODE> lines to
+relay information to multiple subnets.</P>
 
 
 <H2 CLASS="title"><A NAME="BrowseRemoteOptions">BrowseRemoteOptions</A></H2>
@@ -758,7 +759,7 @@ BrowseRemoteProtocols slp
 <P>The <CODE>BrowseRemoteProtocols</CODE> directive specifies the
 protocols to use when finding remote shared printers on the
 network. Multiple protocols can be specified by separating them
-with spaces. The default is "<CODE>CUPS</CODE>".</P>
+with spaces. The default is "<CODE>CUPS dnssd</CODE>".</P>
 
 
 <H2 CLASS="title"><A NAME="BrowseShortNames">BrowseShortNames</A></H2>
@@ -908,9 +909,13 @@ ConfigFilePerm 0640
 
 <H3>Description</H3>
 
-<P>The <CODE>ConfigFilePerm</CODE> directive specifies the
-permissions to use when writing configuration files. The default
-is 640.</P>
+<P>The <CODE>ConfigFilePerm</CODE> directive specifies the permissions to use when the scheduler writes configuration and cache files, typically in response to IPP or HTTP requests. The default is 640.</P>
+
+<BLOCKQUOTE><B>Note:</B>
+
+<P>The permissions for the <VAR>printers.conf</VAR> file are always masked to only allow access from the scheduler user (typically root). This is done because printer device URIs sometimes contain sensitive authentication information that should not be generally known on the system. There is no way to disable this security feature.</P>
+
+</BLOCKQUOTE>
 
 
 <H2 CLASS="title"><A NAME="DataDir">DataDir</A></H2>
@@ -1009,6 +1014,7 @@ size.</P>
 
 <PRE CLASS="command">
 DefaultPolicy default
+DefaultPolicy authenticated
 DefaultPolicy foo
 </PRE>
 
@@ -1016,7 +1022,9 @@ DefaultPolicy foo
 
 <P>The <CODE>DefaultPolicy</CODE> directive specifies the default
 policy to use for IPP operation. The default is
-<CODE>default</CODE>.</P>
+<CODE>default</CODE>. CUPS also includes a policy called
+<CODE>authenticated</CODE> that requires a username and password for printing
+and other job operations.</P>
 
 
 <H2 CLASS="title"><SPAN CLASS="info">CUPS 1.2/Mac OS X 10.5</SPAN><A NAME="DefaultShared">DefaultShared</A></H2>
@@ -1044,9 +1052,9 @@ printers are shared (published) by default. The default is
   ..
   Deny from All
   Deny from None
-  Deny from *.domain.com
-  Deny from .domain.com
-  Deny from host.domain.com
+  Deny from *.example.com
+  Deny from .example.com
+  Deny from host.example.com
   Deny from nnn.*
   Deny from nnn.nnn.*
   Deny from nnn.nnn.nnn.*
@@ -1064,8 +1072,8 @@ printers are shared (published) by default. The default is
 
 <P>The <CODE>Deny</CODE> directive specifies a hostname, IP
 address, or network that is denied access to the server.
-<CODE>Deny</CODE> directives are cummulative, so multiple
-<CODE>Deny</CODE> directives can be used to allow access for
+<CODE>Deny</CODE> directives are cumulative, so multiple
+<CODE>Deny</CODE> directives can be used to deny access for
 multiple hosts or networks.</P>
 
 <P>Host and domain name matching require that you enable the <A
@@ -1479,6 +1487,48 @@ the file is assumed to be relative to the <A
 HREF="#ServerRoot"><CODE>ServerRoot</CODE></A> directory.</P>
 
 
+<H2 CLASS="title"><SPAN CLASS="info">CUPS 1.5</SPAN><A NAME="JobPrivateAccess">JobPrivateAccess</A></H2>
+
+<H3>Examples</H3>
+
+<PRE CLASS="command">
+JobPrivateAccess all
+JobPrivateAccess default
+JobPrivateAccess {user|@group|@ACL|@OWNER|@SYSTEM}+
+</PRE>
+
+<H3>Description</H3>
+
+<P>The <CODE>JobPrivateAccess</CODE> directive specifies the access list for a
+job's private values. The "default" access list is "@OWNER @SYSTEM". "@ACL" maps
+to the printer's requesting-user-name-allowed or requesting-user-name-denied
+values.</P>
+
+<P>The <CODE>JobPrivateAccess</CODE> directive must appear inside a <A
+HREF="#Policy"><CODE>Policy</CODE></A> section.</P>
+
+
+<H2 CLASS="title"><SPAN CLASS="info">CUPS 1.5</SPAN><A NAME="JobPrivateValues">JobPrivateValues</A></H2>
+
+<H3>Examples</H3>
+
+<PRE CLASS="command">
+JobPrivateValues all
+JobPrivateValues default
+JobPrivateValues none
+JobPrivateValues attribute-name-1 [ ... attribute-name-N ]
+</PRE>
+
+<H3>Description</H3>
+
+<P>The <CODE>JobPrivateValues</CODE> directive specifies the list of job values
+to make private. The "default" values are "job-name",
+"job-originating-host-name", and "job-originating-user-name".</P>
+
+<P>The <CODE>JobPrivateValues</CODE> directive must appear inside a <A
+HREF="#Policy"><CODE>Policy</CODE></A> section.</P>
+
+
 <H2 CLASS="title"><SPAN CLASS="info">CUPS 1.2/Mac OS X 10.5</SPAN><A NAME="JobRetryInterval">JobRetryInterval</A></H2>
 
 <H3>Examples</H3>
@@ -1733,11 +1783,11 @@ operations.</P>
 </TR>
 <TR>
 	<TD>Get-Printer-Attributes</TD>
-	<TD>Gets informaion about a printer or class</TD>
+	<TD>Gets information about a printer or class</TD>
 </TR>
 <TR>
 	<TD>Get-Subscription-Attributes</TD>
-	<TD>Gets informaion about a notification subscription</TD>
+	<TD>Gets information about a notification subscription</TD>
 </TR>
 <TR>
 	<TD>Get-Subscriptions</TD>
@@ -1773,7 +1823,7 @@ operations.</P>
 </TR>
 <TR>
 	<TD>Resume-Printer</TD>
-	<TD>Sets the printer-stae value for a printer to idle/processing</TD>
+	<TD>Sets the printer-state value for a printer to idle/processing</TD>
 </TR>
 <TR>
 	<TD>Send-Document</TD>
@@ -1992,7 +2042,7 @@ LogFilePerm 0600
 <H3>Description</H3>
 
 <P>The <CODE>LogFilePerm</CODE> directive specifies the
-permissions to use when writing configuration files. The default
+permissions to use when writing log files. The default
 is 0640.</P>
 
 
@@ -2330,8 +2380,8 @@ information to the system log instead of a plain file.</P>
 <H3>Examples</H3>
 
 <PRE CLASS="command">
-PageLogFormat %p %j %u %T %P %C %{job-billing} %{job-originating-host-name} %{job-name} %{media} %{sides}
-PageLogFormat PAGE %p %j %u %P %C %{job-billing} %{job-originating-host-name}
+PageLogFormat %p %u %j %T %P %C %{job-billing} %{job-originating-host-name} %{job-name} %{media} %{sides}
+PageLogFormat PAGE %p %u %j %P %C %{job-billing} %{job-originating-host-name}
 </PRE>
 
 <H3>Description</H3>
@@ -2364,7 +2414,7 @@ recognized:</P>
 
 </UL>
 
-<P>The default is "%p %j %u %T %P %C %{job-billing} %{job-originating-host-name} %{job-name} %{media} %{sides}".</P>
+<P>The default is "%p %u %j %T %P %C %{job-billing} %{job-originating-host-name} %{job-name} %{media} %{sides}".</P>
 
 
 <H2 CLASS="title"><SPAN CLASS="info">CUPS 1.2/Mac OS X 10.5</SPAN><A NAME="PassEnv">PassEnv</A></H2>
@@ -2646,7 +2696,7 @@ appear inside a <A HREF="#Location"><CODE>Location</CODE></A> or
 <H3>Examples</H3>
 
 <PRE CLASS="command">
-RIPCache 8m
+RIPCache 128m
 RIPCache 1g
 RIPCache 2048k
 </PRE>
@@ -2657,7 +2707,7 @@ RIPCache 2048k
 memory cache used by Raster Image Processor ("RIP") filters such
 as <CODE>imagetoraster</CODE> and <CODE>pstoraster</CODE>. The
 size can be suffixed with a "k" for kilobytes, "m" for megabytes,
-or "g" for gigabytes. The default cache size is "8m", or 8
+or "g" for gigabytes. The default cache size is "128m", or 128
 megabytes.</P>
 
 
@@ -2697,7 +2747,7 @@ is generated only once on startup or on a restart. The default is
 <P>The <CODE>Satisfy</CODE> directive specifies whether all
 conditions must be satisfied to allow access to the resource. If
 set to <CODE>all</CODE>, then all authentication and access
-control conditions must be satified to allow access.</P>
+control conditions must be satisfied to allow access.</P>
 
 <P>Setting <CODE>Satisfy</CODE> to <CODE>any</CODE> allows a user
 to gain access if the authentication or access control
@@ -2734,18 +2784,15 @@ HREF="#ServerName"><CODE>ServerName</CODE></A>.</P>
 
 <PRE CLASS="command">
 ServerAlias althost
-ServerAlias althost.foo.com
-ServerAlias althost.bar.com
+ServerAlias foo.example.com
+ServerAlias bar.example.com
+ServerAlias one.example.com two.example.com
 ServerAlias *
 </PRE>
 
 <H3>Description</H3>
 
-<P>The <CODE>ServerAlias</CODE> directive specifies alternate names that the
-server is known by. By default it contains a list of all aliases associated
-with the <A HREF="#ServerName"><CODE>ServerName</CODE></A>. The special name
-"*" can be used to allow any hostname when accessing CUPS via an external
-network interfaces.</P>
+<P>The <CODE>ServerAlias</CODE> directive specifies alternate names that the server is known by. By default it contains a list of all aliases associated with the <A HREF="#ServerName"><CODE>ServerName</CODE></A>. The special name "*" can be used to allow any hostname when accessing CUPS via an external network interfaces.</P>
 
 <BLOCKQUOTE><B>Note</B>
 
@@ -2822,8 +2869,8 @@ encrypted connections.</P>
 <H3>Examples</H3>
 
 <PRE CLASS="command">
-ServerName foo.domain.com
-ServerName myserver.domain.com
+ServerName foo.example.com
+ServerName myserver.example.com
 </PRE>
 
 <H3>Description</H3>
@@ -2931,23 +2978,23 @@ SetEnv MY_ENV_VAR foo
 variable that should be passed to child processes.</P>
 
 
-<H2 CLASS="title"><A NAME="SSLOptions">SSLOptions</A></H2>
+<H2 CLASS="title"><A NAME="SSLListen">SSLListen</A></H2>
 
 <H3>Examples</H3>
 
 <PRE CLASS="command">
-SSLOptions 127.0.0.1:443
-SSLOptions 192.0.2.1:443
+SSLListen 127.0.0.1:443
+SSLListen 192.0.2.1:443
 </PRE>
 
 <H3>Description</H3>
 
-<P>The <CODE>SSLOptions</CODE> directive specifies a network
+<P>The <CODE>SSLListen</CODE> directive specifies a network
 address and port to listen for secure connections. Multiple
-<CODE>SSLOptions</CODE> directives can be provided to listen on
+<CODE>SSLListen</CODE> directives can be provided to listen on
 multiple addresses.</P>
 
-<P>The <CODE>SSLOptions</CODE> directive is similar to the <A
+<P>The <CODE>SSLListen</CODE> directive is similar to the <A
 HREF="#SSLPort"><CODE>SSLPort</CODE></A> directive but allows you
 to restrict access to specific interfaces or networks.</P>
 
@@ -2983,6 +3030,49 @@ SSLPort 443
 <P>The <CODE>SSLPort</CODE> directive specifies a port to listen
 on for secure connections. Multiple <CODE>SSLPort</CODE> lines
 can be specified to listen on multiple ports.</P>
+
+
+<H2 CLASS="title"><SPAN CLASS="info">CUPS 1.5</SPAN><A NAME="SubscriptionPrivateAccess">SubscriptionPrivateAccess</A></H2>
+
+<H3>Examples</H3>
+
+<PRE CLASS="command">
+SubscriptionPrivateAccess all
+SubscriptionPrivateAccess default
+SubscriptionPrivateAccess {user|@group|@ACL|@OWNER|@SYSTEM}+
+</PRE>
+
+<H3>Description</H3>
+
+<P>The <CODE>SubscriptionPrivateAccess</CODE> directive specifies the access list for a
+subscription's private values. The "default" access list is "@OWNER @SYSTEM".
+"@ACL" maps to the printer's requesting-user-name-allowed or
+requesting-user-name-denied values.</P>
+
+<P>The <CODE>SubscriptionPrivateAccess</CODE> directive must appear inside a <A
+HREF="#Policy"><CODE>Policy</CODE></A> section.</P>
+
+
+<H2 CLASS="title"><SPAN CLASS="info">CUPS 1.5</SPAN><A NAME="SubscriptionPrivateValues">SubscriptionPrivateValues</A></H2>
+
+<H3>Examples</H3>
+
+<PRE CLASS="command">
+SubscriptionPrivateValues all
+SubscriptionPrivateValues default
+SubscriptionPrivateValues none
+SubscriptionPrivateValues attribute-name-1 [ ... attribute-name-N ]
+</PRE>
+
+<H3>Description</H3>
+
+<P>The <CODE>SubscriptionPrivateValues</CODE> directive specifies the list of
+subscription values to make private. The "default" values are "notify-events",
+"notify-pull-method", "notify-recipient-uri", "notify-subscriber-user-name", and
+"notify-user-data".</P>
+
+<P>The <CODE>SubscriptionPrivateValues</CODE> directive must appear inside a <A
+HREF="#Policy"><CODE>Policy</CODE></A> section.</P>
 
 
 <H2 CLASS="title"><A NAME="SystemGroup">SystemGroup</A></H2>
@@ -3094,6 +3184,19 @@ user whose ID is 0.</P>
 
 </BLOCKQUOTE>
 
+
+<H2 CLASS="title"><SPAN CLASS="INFO">CUPS 1.5</SPAN><A NAME="WebInterface">WebInterface</A></H2>
+
+<H3>Examples</H3>
+
+<PRE CLASS="command">
+WebInterface yes
+WebInterface no
+</PRE>
+
+<H3>Description</H3>
+
+<P>The <CODE>WebInterface</CODE> directive specifies whether the web interface is enabled. The default value is <CODE>Yes</CODE>.</P>
 
 </BODY>
 </HTML>

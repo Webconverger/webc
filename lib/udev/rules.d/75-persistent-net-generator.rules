@@ -56,8 +56,6 @@ ENV{MATCHADDR}=="02:cf:1f:*", GOTO="globally_administered_whitelist"
 ENV{MATCHADDR}=="02:e0:3b:*", GOTO="globally_administered_whitelist"
 # BTI (Bus-Tech, Inc.) IBM Mainframes
 ENV{MATCHADDR}=="02:e6:d3:*", GOTO="globally_administered_whitelist"
-# Realtek
-ENV{MATCHADDR}=="52:54:00:*", GOTO="globally_administered_whitelist"
 # Novell 2000
 ENV{MATCHADDR}=="52:54:4c:*", GOTO="globally_administered_whitelist"
 # Realtec
@@ -66,11 +64,15 @@ ENV{MATCHADDR}=="52:54:ab:*", GOTO="globally_administered_whitelist"
 ENV{MATCHADDR}=="e2:0c:0f:*", GOTO="globally_administered_whitelist"
 
 # ignore interfaces with locally administered or null MAC addresses
-# and KVM and VMWare virtual interfaces
+# and VMWare, Hyper-V, KVM, Virtualbox and Xen virtual interfaces
 ENV{MATCHADDR}=="?[2367abef]:*",	ENV{MATCHADDR}=""
 ENV{MATCHADDR}=="00:00:00:00:00:00",	ENV{MATCHADDR}=""
-ENV{MATCHADDR}=="00:0c:29:*|00:50:56:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:0c:29:*|00:50:56:*|00:05:69:*|00:1C:14:*", \
+					ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:15:5d:*",		ENV{MATCHADDR}=""
 ENV{MATCHADDR}=="52:54:00:*|54:52:00:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="08:00:27:*",		ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:16:3e:*",		ENV{MATCHADDR}=""
 
 LABEL="globally_administered_whitelist"
 
@@ -78,8 +80,9 @@ LABEL="globally_administered_whitelist"
 SUBSYSTEMS=="ibmveth",			ENV{MATCHADDR}="$attr{address}"
 
 # S/390 interfaces are matched only by id
-#SUBSYSTEMS=="ccwgroup", \
-#	ENV{MATCHDRV}="$driver", ENV{MATCHID}="$id", ENV{MATCHADDR}=""
+SUBSYSTEMS=="ccwgroup", \
+	ENV{MATCHDRV}="$driver", ENV{MATCHID}="$id", \
+	ENV{MATCHADDR}="", ENV{MATCHDEVID}=""
 
 # terminate processing if there are not enough conditions to create a rule
 ENV{MATCHADDR}=="", ENV{MATCHID}=="", ENV{INTERFACE_NAME}=="", \

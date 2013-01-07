@@ -24,6 +24,7 @@
 RUNLEVEL=/sbin/runlevel
 POLICYHELPER=/usr/sbin/policy-rc.d
 INITDPREFIX=/etc/init.d/
+UPSTARTDIR=/etc/init/
 RCDPREFIX=/etc/rc
 
 # Options
@@ -36,6 +37,7 @@ FORCE=
 RETRY=
 RETURNFAILURE=
 RC=
+is_upstart=
 
 # Shell options
 set +e
@@ -265,9 +267,15 @@ case ${ACTION} in
 	;;
 esac
 
-## Verifies if the given initscript ID is known
-## For sysvinit, this error is critical
-if test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
+# If we're running on upstart and there's an upstart job of this name, do
+# the rest with upstart instead of calling the init script.
+if which initctl >/dev/null && initctl version | grep -q upstart \
+   && [ -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]
+then
+    is_upstart=1
+elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
+    ## Verifies if the given initscript ID is known
+    ## For sysvinit, this error is critical
     printerror unknown initscript, ${INITDPREFIX}${INITSCRIPTID} not found.
     exit 100
 fi
@@ -375,7 +383,7 @@ case ${ACTION} in
 esac
 
 # test if /etc/init.d/initscript is actually executable
-if testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
     if test x${RC} = x && test x${MODE} = xquery ; then
         RC=105
     fi
@@ -422,11 +430,25 @@ getnextaction () {
     ACTION="$@"
 }
 
+if [ -n "$is_upstart" ]; then
+    RUNNING=
+    DISABLED=
+    if status "$INITSCRIPTID" 2>/dev/null | grep -q ' start/'; then
+	RUNNING=1
+    fi
+    UPSTART_VERSION_RUNNING=$(initctl version|awk '{print $3}'|tr -d ')')
+
+    if dpkg --compare-versions "$UPSTART_VERSION_RUNNING" ge 0.9.7
+    then
+	initctl show-config -e "$INITSCRIPTID"|grep -q '^  start on' || DISABLED=1
+    fi
+fi
+
 ## Executes initscript
 ## note that $ACTION is a space-separated list of actions
 ## to be attempted in order until one suceeds.
 if test x${FORCE} != x || test ${RC} -eq 104 ; then
-    if testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+    if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
 	RC=102
 	setechoactions ${ACTION}
 	while test ! -z "${ACTION}" ; do
@@ -435,7 +457,48 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 		printerror executing initscript action \"${saction}\"...
 	    fi
 
-	    "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+	    if [ -n "$is_upstart" ]; then
+		case $saction in
+		    status)
+			"$saction" "$INITSCRIPTID" && exit 0
+			;;
+		    start|stop)
+			if [ -z "$RUNNING" ] && [ "$saction" = "stop" ]; then
+			    exit 0
+			elif [ -n "$RUNNING" ] && [ "$saction" = "start" ]; then
+			    exit 0
+			elif [ -n "$DISABLED" ] && [ "$saction" = "start" ]; then
+			    exit 0
+			fi
+			$saction "$INITSCRIPTID" && exit 0
+			;;
+		    restart)
+			if [ -n "$RUNNING" ] ; then
+			    stop "$INITSCRIPTID"
+			fi
+
+			# If the job is disabled and is not currently
+			# running, the job is not restarted. However, if
+			# the job is disabled but has been forced into
+			# the running state, we *do* stop and restart it
+			# since this is expected behaviour
+			# for the admin who forced the start.
+			if [ -n "$DISABLED" ] && [ -z "$RUNNING" ]; then
+			    exit 0
+			fi
+			start "$INITSCRIPTID" && exit 0
+			;;
+		    reload|force-reload)
+			reload "$INITSCRIPTID" && exit 0
+			;;
+		    *)
+			# This will almost certainly fail, but give it a try
+			initctl "$saction" "$INITSCRIPTID" && exit 0
+			;;
+		esac
+	    else
+		"${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+	    fi
 	    RC=$?
 
 	    if test ! -z "${ACTION}" ; then

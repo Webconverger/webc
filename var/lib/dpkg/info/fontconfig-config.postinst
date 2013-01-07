@@ -10,9 +10,17 @@ rm -rf /var/lib/fontconfig
 CONFAVAIL=/etc/fonts/conf.avail
 CONFDIR=/etc/fonts/conf.d
 
-# Add the defoma configuration
-defoma_link="30-defoma.conf"
-ln -sf /var/lib/defoma/fontconfig.d/fonts.conf $CONFDIR/$defoma_link
+# Remove old defoma stuff
+if [ -x "`which defoma-app 2>/dev/null`" ]; then
+    defoma-app purge fontconfig >/dev/null || true
+fi
+DEFOMA=/var/lib/defoma/fontconfig.d/
+if [ -d $DEFOMA ]; then
+    rm -f $DEFOMA/fonts.conf
+    rm -f $DEFOMA/id-cache
+    rmdir $DEFOMA
+fi
+rm -f /etc/defoma/fontconfig.subst-rule
 
 db_get fontconfig/hinting_type
 hinting_type="$RET"

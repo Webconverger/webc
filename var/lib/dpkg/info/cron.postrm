@@ -1,12 +1,17 @@
 #!/bin/sh
 set -e
 
-# Conffile has become obsolete
+# Conffiles that are now obsolete
 dpkg-maintscript-helper rm_conffile /etc/cron.monthly/standard "3.0pl1-113" -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cron.daily/standard "3.0pl1-124" -- "$@"
 
-if [ $1 = purge ]; then 
-    update-rc.d cron remove >/dev/null
+if [ "$1" = "purge" ]; then 
     rm -f /etc/cron.allow /etc/cron.deny
 fi
 
+# Automatically added by dh_installinit
+if [ "$1" = "purge" ] ; then
+	update-rc.d cron remove >/dev/null
+fi
+# End automatically added section
 

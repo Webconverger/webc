@@ -32,6 +32,8 @@
 WPA_SUP_BIN="/sbin/wpa_supplicant"
 WPA_SUP_PNAME="wpa_supplicant"
 WPA_SUP_PIDFILE="/var/run/wpa_supplicant.${WPA_IFACE}.pid"
+WPA_SUP_OMIT_DIR="/run/sendsigs.omit.d"
+WPA_SUP_OMIT_PIDFILE="${WPA_SUP_OMIT_DIR}/wpasupplicant.wpa_supplicant.${WPA_IFACE}.pid"
 
 # wpa_cli variables
 WPA_CLI_BIN="/sbin/wpa_cli"
@@ -39,17 +41,6 @@ WPA_CLI_PNAME="wpa_cli"
 WPA_CLI_PIDFILE="/var/run/wpa_action.${WPA_IFACE}.pid"
 WPA_CLI_TIMESTAMP="/var/run/wpa_action.${WPA_IFACE}.timestamp"
 WPA_CLI_IFUPDOWN="/var/run/wpa_action.${WPA_IFACE}.ifupdown"
-
-# sendsigs omission interface, present in initscripts (>= 2.86.ds1-48)
-if [ -d /lib/init/rw/sendsigs.omit.d/ ]; then
-	# Debian
-	WPA_SUP_OMIT_PIDFILE="/lib/init/rw/sendsigs.omit.d/wpasupplicant.wpa_supplicant.${WPA_IFACE}.pid"
-elif [ -d /var/run/sendsigs.omit.d/ ]; then
-	# Ubuntu, see https://launchpad.net/bugs/181541 for status
-	WPA_SUP_OMIT_PIDFILE="/var/run/sendsigs.omit.d/wpasupplicant.wpa_supplicant.${WPA_IFACE}.pid"
-else
-	WPA_SUP_OMIT_PIDFILE=
-fi
 
 # default ctrl_interface socket directory
 if [ -z "$WPA_CTRL_DIR" ]; then
@@ -224,17 +215,17 @@ init_wpa_supplicant () {
 		wpa_msg verbose "wpa-driver $IF_WPA_DRIVER"
 		case "$IF_WPA_DRIVER" in
 			hostap|ipw|madwifi|ndiswrapper)
-				WPA_SUP_OPTIONS="$WPA_SUP_OPTIONS -D wext"
+				WPA_SUP_OPTIONS="$WPA_SUP_OPTIONS -D nl80211,wext"
 				wpa_msg stderr "\"$IF_WPA_DRIVER\" wpa-driver is unsupported"
-				wpa_msg stderr "using \"wext\" wpa-driver instead ..."
+				wpa_msg stderr "using \"nl80211,wext\" wpa-driver instead ..."
 				;;
 			*)
 				WPA_SUP_OPTIONS="$WPA_SUP_OPTIONS -D $IF_WPA_DRIVER"
 				;;
 		esac
 	else
-		WPA_SUP_OPTIONS="$WPA_SUP_OPTIONS -D wext"
-		wpa_msg verbose "using default driver type: wpa-driver wext"
+		WPA_SUP_OPTIONS="$WPA_SUP_OPTIONS -D nl80211,wext"
+		wpa_msg verbose "wpa-driver nl80211,wext (default)"
 	fi
 
 	if [ -n "$IF_WPA_DEBUG_LEVEL" ]; then
@@ -279,27 +270,25 @@ init_wpa_supplicant () {
 		return 1
 	fi
 
-	if [ -n "$WPA_SUP_OMIT_PIDFILE" ]; then
-		local WPA_PIDFILE_WAIT
-		local MAX_WPA_PIDFILE_WAIT
-		WPA_PIDFILE_WAIT="0"
-		MAX_WPA_PIDFILE_WAIT="5"
-		until [ -s "$WPA_SUP_PIDFILE" ]; do
-			if [ "$WPA_PIDFILE_WAIT" -ge "$MAX_WPA_PIDFILE_WAIT" ]; then
-				wpa_msg stderr "timed out waiting for creation of $WPA_SUP_PIDFILE"
-				return 1
-			else
-				wpa_msg verbose "waiting for \"$WPA_SUP_PIDFILE\": " \
-					"$WPA_PIDFILE_WAIT (max. $MAX_WPA_PIDFILE_WAIT)"
-			fi
+	local WPA_PIDFILE_WAIT
+	local MAX_WPA_PIDFILE_WAIT
+	WPA_PIDFILE_WAIT="0"
+	MAX_WPA_PIDFILE_WAIT="5"
+	until [ -s "$WPA_SUP_PIDFILE" ]; do
+		if [ "$WPA_PIDFILE_WAIT" -ge "$MAX_WPA_PIDFILE_WAIT" ]; then
+			wpa_msg stderr "timed out waiting for creation of $WPA_SUP_PIDFILE"
+			return 1
+		else
+			wpa_msg verbose "waiting for \"$WPA_SUP_PIDFILE\": " \
+				"$WPA_PIDFILE_WAIT (max. $MAX_WPA_PIDFILE_WAIT)"
+		fi
 
-			WPA_PIDFILE_WAIT=$(($WPA_PIDFILE_WAIT + 1))
-			sleep 1
-		done
+		WPA_PIDFILE_WAIT=$(($WPA_PIDFILE_WAIT + 1))
+		sleep 1
+	done
+	if [ -d "${WPA_SUP_OMIT_DIR}" ]; then
 		wpa_msg verbose "creating sendsigs omission pidfile: $WPA_SUP_OMIT_PIDFILE"
 		cat "$WPA_SUP_PIDFILE" > "$WPA_SUP_OMIT_PIDFILE"
-	else
-		wpa_msg verbose "sendsigs omission pidfile not created"
 	fi
 
 	local WPA_SOCKET_WAIT
@@ -679,6 +668,12 @@ conf_wpa_supplicant () {
 
 		wpa_cli_do "$IF_WPA_FREQUENCY" raw \
 			set_network frequency wpa-frequency
+
+		wpa_cli_do "$IF_WPA_SCAN_FREQ" raw \
+			set_network scan_freq wpa-scan-freq
+
+		wpa_cli_do "$IF_WPA_FREQ_LIST" raw \
+			set_network freq_list wpa-freq-list
 		
 		wpa_cli_do "$IF_WPA_KEY_MGMT" raw \
 			set_network key_mgmt wpa-key-mgmt
@@ -813,9 +808,6 @@ conf_wpa_supplicant () {
 			
 		wpa_cli_do "$IF_WPA_PAC_FILE" ascii \
 			set_network pac_file wpa-pac-file
-		
-		wpa_cli_do "$IF_WPA_MODE" raw \
-			set_network mode wpa-mode
 		
 		wpa_cli_do "$IF_WPA_PEERKEY" raw \
 			set_network peerkey wpa-peerkey
@@ -972,8 +964,10 @@ ifup () {
 		ifupdown_unlock
 	fi
 
-	wpa_msg log "creating sendsigs omission pidfile: $WPA_SUP_OMIT_PIDFILE"
-	cat "$WPA_SUP_PIDFILE" > "$WPA_SUP_OMIT_PIDFILE"
+	if [ -d "${WPA_SUP_OMIT_DIR}" ]; then
+		wpa_msg log "creating sendsigs omission pidfile: $WPA_SUP_OMIT_PIDFILE"
+		cat "$WPA_SUP_PIDFILE" > "$WPA_SUP_OMIT_PIDFILE"
+	fi
 
 	return "$IFUP_RETVAL"
 }

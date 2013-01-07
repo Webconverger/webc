@@ -1,8 +1,9 @@
 libkdecore.so.5 libkdecore5 #MINVER#
-| libkdecore5 #MINVER#, kdebase-runtime
+| libkdecore5 #MINVER#, kde-runtime
 * Build-Depends-Package: kdelibs5-dev
  KTraderParse_initFlex@Base 4:4.3.4
  KTraderParse_mainParse@Base 4:4.3.4
+ KTraderParse_putSimplePositiveFloat@Base 4:4.7.1
  KTraderParse_putString@Base 4:4.3.4
  KTraderParse_putSymbol@Base 4:4.3.4
  KTraderParse_putSymbolInBrackets@Base 4:4.3.4
@@ -16,6 +17,8 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _Z15kde_getaddrinfoPKcS0_PK8addrinfoPP12kde_addrinfo@Base 4:4.3.4
  _Z16kde_freeaddrinfoP12kde_addrinfo@Base 4:4.3.4
  _Z17kClearDebugConfigv@Base 4:4.3.4
+ _Z22_allKsslCaCertificatesP22KSslCertificateManager@Base 4:4.5.85
+ _Z25_setAllKsslCaCertificatesP22KSslCertificateManagerRK5QListI17KSslCaCertificateE@Base 4:4.5.85
  _Z5ki18nPKc@Base 4:4.3.4
  _Z5qHashRK11KPluginInfo@Base 4:4.3.4
  _Z5qHashRK4KUrl@Base 4:4.3.4
@@ -37,6 +40,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KAboutData14addLicenseTextERK16KLocalizedString@Base 4:4.3.4
  _ZN10KAboutData14setCatalogNameERK10QByteArray@Base 4:4.3.4
  _ZN10KAboutData14setLicenseTextERK16KLocalizedString@Base 4:4.3.4
+ _ZN10KAboutData14setOcsProviderERK10QByteArray@Base 4:4.5.85
  _ZN10KAboutData14setProductNameERK10QByteArray@Base 4:4.3.4
  _ZN10KAboutData14setProgramLogoERK8QVariant@Base 4:4.3.4
  _ZN10KAboutData14setProgramNameERK16KLocalizedString@Base 4:4.3.4
@@ -50,7 +54,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KAboutData21setOrganizationDomainERK10QByteArray@Base 4:4.3.4
  _ZN10KAboutData21unsetCustomAuthorTextEv@Base 4:4.3.4
  _ZN10KAboutData9addAuthorERK16KLocalizedStringS2_RK10QByteArrayS5_@Base 4:4.3.4
+ _ZN10KAboutData9addAuthorERK16KLocalizedStringS2_RK10QByteArrayS5_S5_@Base 4:4.5.85
  _ZN10KAboutData9addCreditERK16KLocalizedStringS2_RK10QByteArrayS5_@Base 4:4.3.4
+ _ZN10KAboutData9addCreditERK16KLocalizedStringS2_RK10QByteArrayS5_S5_@Base 4:4.5.85
  _ZN10KAboutDataC1ERK10QByteArrayS2_RK16KLocalizedStringS2_S5_NS_10LicenseKeyES5_S5_S2_S2_@Base 4:4.3.4
  _ZN10KAboutDataC1ERKS_@Base 4:4.3.4
  _ZN10KAboutDataC2ERK10QByteArrayS2_RK16KLocalizedStringS2_S5_NS_10LicenseKeyES5_S5_S2_S2_@Base 4:4.3.4
@@ -133,8 +139,6 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KTcpSocket10setCiphersERK5QListI10KSslCipherE@Base 4:4.3.4
  _ZN10KTcpSocket11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN10KTcpSocket11qt_metacastEPKc@Base 4:4.3.4
- _ZN10KTcpSocket12aboutToCloseEv@Base 4:4.3.4
- _ZN10KTcpSocket12bytesWrittenEx@Base 4:4.3.4
  _ZN10KTcpSocket12disconnectedEv@Base 4:4.3.4
  _ZN10KTcpSocket12stateChangedENS_5StateE@Base 4:4.3.4
  _ZN10KTcpSocket13connectToHostERK12QHostAddresstNS_11ProxyPolicyE@Base 4:4.3.4
@@ -144,6 +148,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KTcpSocket13setPrivateKeyERK7QStringN7KSslKey9AlgorithmEN4QSsl14EncodingFormatERK10QByteArray@Base 4:4.3.4
  _ZN10KTcpSocket13showSslErrorsEv@Base 4:4.3.4
  _ZN10KTcpSocket15ignoreSslErrorsEv@Base 4:4.3.4
+ _ZN10KTcpSocket15setSocketOptionEN15QAbstractSocket12SocketOptionERK8QVariant@Base 4:4.4.95
  _ZN10KTcpSocket16addCaCertificateERK15QSslCertificate@Base 4:4.3.4
  _ZN10KTcpSocket16staticMetaObjectE@Base 4:4.3.4
  _ZN10KTcpSocket16waitForConnectedEi@Base 4:4.3.4
@@ -155,12 +160,15 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KTcpSocket18disconnectFromHostEv@Base 4:4.3.4
  _ZN10KTcpSocket19setLocalCertificateERK15QSslCertificate@Base 4:4.3.4
  _ZN10KTcpSocket19setLocalCertificateERK7QStringN4QSsl14EncodingFormatE@Base 4:4.3.4
+ _ZN10KTcpSocket19setSslConfigurationERK17QSslConfiguration@Base 4:4.8.4
  _ZN10KTcpSocket19waitForBytesWrittenEi@Base 4:4.3.4
  _ZN10KTcpSocket19waitForDisconnectedEi@Base 4:4.3.4
+ _ZN10KTcpSocket21encryptedBytesWrittenEx@Base 4:4.8.1
  _ZN10KTcpSocket21encryptionModeChangedENS_14EncryptionModeE@Base 4:4.3.4
  _ZN10KTcpSocket21startClientEncryptionEv@Base 4:4.3.4
  _ZN10KTcpSocket22connectToHostEncryptedERK7QStringt6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.3.4
  _ZN10KTcpSocket23setAdvertisedSslVersionENS_10SslVersionE@Base 4:4.3.4
+ _ZN10KTcpSocket23setVerificationPeerNameERK7QString@Base 4:4.7.0
  _ZN10KTcpSocket27proxyAuthenticationRequiredERK13QNetworkProxyP14QAuthenticator@Base 4:4.3.4
  _ZN10KTcpSocket4openE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.3.4
  _ZN10KTcpSocket5abortEv@Base 4:4.3.4
@@ -172,7 +180,6 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN10KTcpSocket9connectedEv@Base 4:4.3.4
  _ZN10KTcpSocket9encryptedEv@Base 4:4.3.4
  _ZN10KTcpSocket9hostFoundEv@Base 4:4.3.4
- _ZN10KTcpSocket9readyReadEv@Base 4:4.3.4
  _ZN10KTcpSocket9sslErrorsERK5QListI9KSslErrorE@Base 4:4.3.4
  _ZN10KTcpSocket9writeDataEPKcx@Base 4:4.3.4
  _ZN10KTcpSocketC1EP7QObject@Base 4:4.3.4
@@ -260,6 +267,16 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN11KJobPrivateD0Ev@Base 4:4.3.4
  _ZN11KJobPrivateD1Ev@Base 4:4.3.4
  _ZN11KJobPrivateD2Ev@Base 4:4.3.4
+ _ZN11KMountPoint18currentMountPointsE6QFlagsINS_17DetailsNeededFlagEE@Base 4:4.4.95
+ _ZN11KMountPoint19possibleMountPointsE6QFlagsINS_17DetailsNeededFlagEE@Base 4:4.4.95
+ _ZN11KMountPoint4ListC1Ev@Base 4:4.4.95
+ _ZN11KMountPoint4ListC2Ev@Base 4:4.4.95
+ _ZN11KMountPoint7Private25finalizeCurrentMountPointE6QFlagsINS_17DetailsNeededFlagEE@Base 4:4.4.95
+ _ZN11KMountPoint7Private26finalizePossibleMountPointE6QFlagsINS_17DetailsNeededFlagEE@Base 4:4.4.95
+ _ZN11KMountPointC1Ev@Base 4:4.4.95
+ _ZN11KMountPointC2Ev@Base 4:4.4.95
+ _ZN11KMountPointD1Ev@Base 4:4.4.95
+ _ZN11KMountPointD2Ev@Base 4:4.4.95
  _ZN11KPluginInfo12fromServicesERK5QListI10KSharedPtrI8KServiceEERK12KConfigGroup@Base 4:4.3.4
  _ZN11KPluginInfo16setPluginEnabledEb@Base 4:4.3.4
  _ZN11KPluginInfo22fromKPartsInstanceNameERK7QStringRK12KConfigGroup@Base 4:4.3.4
@@ -290,20 +307,30 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN11KSycocaDictD1Ev@Base 4:4.3.4
  _ZN11KSycocaDictD2Ev@Base 4:4.3.4
  _ZN12KAboutPersonC1ERK16KLocalizedStringS2_RK10QByteArrayS5_@Base 4:4.3.4
+ _ZN12KAboutPersonC1ERK16KLocalizedStringS2_RK10QByteArrayS5_S5_@Base 4:4.5.85
  _ZN12KAboutPersonC1ERK7QStringS2_@Base 4:4.3.4
  _ZN12KAboutPersonC1ERKS_@Base 4:4.3.4
  _ZN12KAboutPersonC2ERK16KLocalizedStringS2_RK10QByteArrayS5_@Base 4:4.3.4
+ _ZN12KAboutPersonC2ERK16KLocalizedStringS2_RK10QByteArrayS5_S5_@Base 4:4.5.85
  _ZN12KAboutPersonC2ERK7QStringS2_@Base 4:4.3.4
  _ZN12KAboutPersonC2ERKS_@Base 4:4.3.4
  _ZN12KAboutPersonD1Ev@Base 4:4.3.4
  _ZN12KAboutPersonD2Ev@Base 4:4.3.4
  _ZN12KAboutPersonaSERKS_@Base 4:4.3.4
+ _ZN12KArchiveFile12virtual_hookEiPv@Base 4:4.4.95
+ _ZN12KArchiveFile7setSizeEx@Base 4:4.4.95
+ _ZN12KArchiveFileC1EP8KArchiveRK7QStringiiS4_S4_S4_xx@Base 4:4.4.95
+ _ZN12KArchiveFileC2EP8KArchiveRK7QStringiiS4_S4_S4_xx@Base 4:4.4.95
+ _ZN12KArchiveFileD0Ev@Base 4:4.4.95
+ _ZN12KArchiveFileD1Ev@Base 4:4.4.95
+ _ZN12KArchiveFileD2Ev@Base 4:4.4.95
  _ZN12KCmdLineArgs10initIgnoreEiPPcRK10QByteArray@Base 4:4.3.4
  _ZN12KCmdLineArgs10parsedArgsERK10QByteArray@Base 4:4.3.4
  _ZN12KCmdLineArgs10usageErrorERK7QString@Base 4:4.3.4
  _ZN12KCmdLineArgs11enable_i18nEv@Base 4:4.3.4
  _ZN12KCmdLineArgs11loadAppArgsER11QDataStream@Base 4:4.3.4
  _ZN12KCmdLineArgs11saveAppArgsER11QDataStream@Base 4:4.3.4
+ _ZN12KCmdLineArgs12allArgumentsEv@Base 4:4.5.85
  _ZN12KCmdLineArgs13isTempFileSetEv@Base 4:4.3.4
  _ZN12KCmdLineArgs17addCmdLineOptionsERK15KCmdLineOptionsRK16KLocalizedStringRK10QByteArrayS8_@Base 4:4.3.4 1
  _ZN12KCmdLineArgs17addTempFileOptionEv@Base 4:4.3.4
@@ -447,6 +474,12 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN13KAboutLicenseD1Ev@Base 4:4.3.4
  _ZN13KAboutLicenseD2Ev@Base 4:4.3.4
  _ZN13KAboutLicenseaSERKS_@Base 4:4.3.4
+ _ZN13KArchiveEntry12virtual_hookEiPv@Base 4:4.4.95
+ _ZN13KArchiveEntryC1EP8KArchiveRK7QStringiiS4_S4_S4_@Base 4:4.4.95
+ _ZN13KArchiveEntryC2EP8KArchiveRK7QStringiiS4_S4_S4_@Base 4:4.4.95
+ _ZN13KArchiveEntryD0Ev@Base 4:4.4.95
+ _ZN13KArchiveEntryD1Ev@Base 4:4.4.95
+ _ZN13KArchiveEntryD2Ev@Base 4:4.4.95
  _ZN13KAutoSaveFile10staleFilesERK4KUrlRK7QString@Base 4:4.3.4
  _ZN13KAutoSaveFile11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN13KAutoSaveFile11qt_metacastEPKc@Base 4:4.3.4
@@ -612,6 +645,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN13KStandardDirsD2Ev@Base 4:4.3.4
  _ZN13KTimeZoneData14setTransitionsERK5QListIN9KTimeZone10TransitionEE@Base 4:4.3.4
  _ZN13KTimeZoneData20setLeapSecondChangesERK5QListIN9KTimeZone11LeapSecondsEE@Base 4:4.3.4
+ _ZN13KTimeZoneData9setPhasesERK5QListIN9KTimeZone5PhaseEERKS2_@Base 4:4.8.3
  _ZN13KTimeZoneData9setPhasesERK5QListIN9KTimeZone5PhaseEEi@Base 4:4.3.4
  _ZN13KTimeZoneDataC1ERKS_@Base 4:4.3.4
  _ZN13KTimeZoneDataC1Ev@Base 4:4.3.4
@@ -621,6 +655,17 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN13KTimeZoneDataD1Ev@Base 4:4.3.4
  _ZN13KTimeZoneDataD2Ev@Base 4:4.3.4
  _ZN13KTimeZoneDataaSERKS_@Base 4:4.3.4
+ _ZN13KZipFileEntry14setHeaderStartEx@Base 4:4.4.95
+ _ZN13KZipFileEntry17setCompressedSizeEx@Base 4:4.4.95
+ _ZN13KZipFileEntry8setCRC32Em@Base 4:4.4.95
+ _ZN13KZipFileEntryC1EP4KZipRK7QStringiiS4_S4_S4_S4_xxix@Base 4:4.4.95
+ _ZN13KZipFileEntryC2EP4KZipRK7QStringiiS4_S4_S4_S4_xxix@Base 4:4.4.95
+ _ZN13KZipFileEntryD0Ev@Base 4:4.4.95
+ _ZN13KZipFileEntryD1Ev@Base 4:4.4.95
+ _ZN13KZipFileEntryD2Ev@Base 4:4.4.95
+ _ZN14KCatalogLoaderC1ERK7QString@Base 4:4.6.2
+ _ZN14KCatalogLoaderC2ERK7QString@Base 4:4.6.2
+ _ZN14KComponentData12setAboutDataERK10KAboutData@Base 4:4.4.95
  _ZN14KComponentData12virtual_hookEiPv@Base 4:4.3.4
  _ZN14KComponentData13setConfigNameERK7QString@Base 4:4.3.4
  _ZN14KComponentDataC1EPK10KAboutDataNS_25MainComponentRegistrationE@Base 4:4.3.4
@@ -666,6 +711,33 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN14KJobUiDelegateD0Ev@Base 4:4.3.4
  _ZN14KJobUiDelegateD1Ev@Base 4:4.3.4
  _ZN14KJobUiDelegateD2Ev@Base 4:4.3.4
+ _ZN14KLocalizedDate10addYearsToEi@Base 4:4.5.85
+ _ZN14KLocalizedDate11addMonthsToEi@Base 4:4.5.85
+ _ZN14KLocalizedDate11currentDateEv@Base 4:4.5.85
+ _ZN14KLocalizedDate13fromJulianDayEi@Base 4:4.5.85
+ _ZN14KLocalizedDate14calendarSystemEv@Base 4:4.5.85
+ _ZN14KLocalizedDate14setCurrentDateEv@Base 4:4.5.85
+ _ZN14KLocalizedDate17setCalendarSystemEN7KLocale14CalendarSystemE@Base 4:4.5.85
+ _ZN14KLocalizedDate7setDateE7QStringiii@Base 4:4.5.85
+ _ZN14KLocalizedDate7setDateEN7KLocale16WeekNumberSystemEiii@Base 4:4.5.85
+ _ZN14KLocalizedDate7setDateERK5QDate@Base 4:4.5.85
+ _ZN14KLocalizedDate7setDateEii@Base 4:4.5.85
+ _ZN14KLocalizedDate7setDateEiii@Base 4:4.5.85
+ _ZN14KLocalizedDate8fromDateERK5QDate@Base 4:4.5.85
+ _ZN14KLocalizedDate8readDateERK7QStringN7KLocale13ReadDateFlagsENS3_17DateTimeParseModeEPK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDate8readDateERK7QStringN7KLocale17DateTimeParseModeEPK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDate8readDateERK7QStringS2_N7KLocale17DateTimeParseModeENS3_22DateTimeFormatStandardEPK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDate9addDaysToEi@Base 4:4.5.85
+ _ZN14KLocalizedDateC1ERK5QDatePK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDateC1ERKS_@Base 4:4.5.85
+ _ZN14KLocalizedDateC1EiiiPK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDateC2ERK5QDatePK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDateC2ERKS_@Base 4:4.5.85
+ _ZN14KLocalizedDateC2EiiiPK15KCalendarSystem@Base 4:4.5.85
+ _ZN14KLocalizedDateD1Ev@Base 4:4.5.85
+ _ZN14KLocalizedDateD2Ev@Base 4:4.5.85
+ _ZN14KLocalizedDateaSERK5QDate@Base 4:4.5.85
+ _ZN14KLocalizedDateaSERKS_@Base 4:4.5.85
  _ZN14KMacroExpander12expandMacrosERK7QStringRK5QHashI5QChar11QStringListES4_@Base 4:4.3.4
  _ZN14KMacroExpander12expandMacrosERK7QStringRK5QHashI5QCharS0_ES4_@Base 4:4.3.4
  _ZN14KMacroExpander12expandMacrosERK7QStringRK5QHashIS0_11QStringListE5QChar@Base 4:4.3.4
@@ -765,13 +837,25 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN14KZoneAllocatorD1Ev@Base 4:4.3.4
  _ZN14KZoneAllocatorD2Ev@Base 4:4.3.4
  _ZN15KCalendarSystem11setHasYear0Eb@Base 4:4.4.0
+ _ZN15KCalendarSystem12calendarTypeEN7KLocale14CalendarSystemE@Base 4:4.7.0
+ _ZN15KCalendarSystem13calendarLabelEN7KLocale14CalendarSystemEPKS0_@Base 4:4.5.85
  _ZN15KCalendarSystem13calendarLabelERK7QString@Base 4:4.3.4
+ _ZN15KCalendarSystem14calendarSystemERK7QString@Base 4:4.7.0
  _ZN15KCalendarSystem15calendarSystemsEv@Base 4:4.3.4
  _ZN15KCalendarSystem16setMaxDaysInWeekEi@Base 4:4.4.0
  _ZN15KCalendarSystem18setMaxMonthsInYearEi@Base 4:4.4.0
+ _ZN15KCalendarSystem19calendarSystemsListEv@Base 4:4.5.85
+ _ZN15KCalendarSystem29calendarSystemForCalendarTypeERK7QString@Base 4:4.5.85
+ _ZN15KCalendarSystem6createEN7KLocale14CalendarSystemE10KSharedPtrI13KSharedConfigEPKS0_@Base 4:4.5.85
+ _ZN15KCalendarSystem6createEN7KLocale14CalendarSystemEPKS0_@Base 4:4.5.85
+ _ZN15KCalendarSystem6createERK7QString10KSharedPtrI13KSharedConfigEPK7KLocale@Base 4:4.4.95
  _ZN15KCalendarSystem6createERK7QStringPK7KLocale@Base 4:4.3.4
+ _ZN15KCalendarSystemC1E10KSharedPtrI13KSharedConfigEPK7KLocale@Base 4:4.4.95
  _ZN15KCalendarSystemC1EPK7KLocale@Base 4:4.3.4
+ _ZN15KCalendarSystemC1ER22KCalendarSystemPrivate10KSharedPtrI13KSharedConfigEPK7KLocale@Base 4:4.4.95
+ _ZN15KCalendarSystemC2E10KSharedPtrI13KSharedConfigEPK7KLocale@Base 4:4.4.95
  _ZN15KCalendarSystemC2EPK7KLocale@Base 4:4.3.4
+ _ZN15KCalendarSystemC2ER22KCalendarSystemPrivate10KSharedPtrI13KSharedConfigEPK7KLocale@Base 4:4.4.95
  _ZN15KCalendarSystemD0Ev@Base 4:4.3.4
  _ZN15KCalendarSystemD1Ev@Base 4:4.3.4
  _ZN15KCalendarSystemD2Ev@Base 4:4.3.4
@@ -794,6 +878,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN15KEncodingProberC2ENS_10ProberTypeE@Base 4:4.3.4
  _ZN15KEncodingProberD1Ev@Base 4:4.3.4
  _ZN15KEncodingProberD2Ev@Base 4:4.3.4
+ _ZN15KFileSystemType14fileSystemTypeERK7QString@Base 4:4.7.4
  _ZN15KFolderMimeTypeC1ER11QDataStreami@Base 4:4.3.4
  _ZN15KFolderMimeTypeC1ERK7QStringS2_S2_@Base 4:4.3.4
  _ZN15KFolderMimeTypeC2ER11QDataStreami@Base 4:4.3.4
@@ -838,11 +923,15 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN15KServiceFactoryD1Ev@Base 4:4.3.4
  _ZN15KServiceFactoryD2Ev@Base 4:4.3.4
  _ZN15KSslErrorUiDataC1EPK10KTcpSocket@Base 4:4.3.4
+ _ZN15KSslErrorUiDataC1EPK10QSslSocket@Base 4:4.8.1
  _ZN15KSslErrorUiDataC1ERKS_@Base 4:4.3.4
  _ZN15KSslErrorUiDataC1Ev@Base 4:4.3.4
  _ZN15KSslErrorUiDataC2EPK10KTcpSocket@Base 4:4.3.4
+ _ZN15KSslErrorUiDataC2EPK10QSslSocket@Base 4:4.8.1
  _ZN15KSslErrorUiDataC2ERKS_@Base 4:4.3.4
  _ZN15KSslErrorUiDataC2Ev@Base 4:4.3.4
+ _ZN15KSslErrorUiDataD1Ev@Base 4:4.7.0
+ _ZN15KSslErrorUiDataD2Ev@Base 4:4.7.0
  _ZN15KSslErrorUiDataaSERKS_@Base 4:4.3.4
  _ZN15KSystemTimeZoneC1EP21KSystemTimeZoneSourceRK7QStringS4_ffS4_@Base 4:4.3.4
  _ZN15KSystemTimeZoneC2EP21KSystemTimeZoneSourceRK7QStringS4_ffS4_@Base 4:4.3.4
@@ -899,22 +988,35 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN16KLocalizedStringD1Ev@Base 4:4.3.4
  _ZN16KLocalizedStringD2Ev@Base 4:4.3.4
  _ZN16KLocalizedStringaSERKS_@Base 4:4.3.4
- _ZN16KMimeTypeFactory10parseMagicEv@Base 4:4.3.4
+ _ZN16KMimeTypeFactory11entryOffsetERK7QString@Base 4:4.5.85
  _ZN16KMimeTypeFactory12allMimeTypesEv@Base 4:4.3.4
- _ZN16KMimeTypeFactory13matchFileNameERK7QStringS2_@Base 4:4.3.4
- _ZN16KMimeTypeFactory14checkMimeTypesEv@Base 4:4.3.4
- _ZN16KMimeTypeFactory15findFromContentEP9QIODeviceNS_13WhichPriorityEPiR10QByteArray@Base 4:4.3.4
- _ZN16KMimeTypeFactory16findFromFileNameERK7QStringPS0_@Base 4:4.3.4
- _ZN16KMimeTypeFactory18findMimeTypeByNameERK7QStringN9KMimeType16FindByNameOptionE@Base 4:4.3.4
- _ZN16KMimeTypeFactory23findFromFastPatternDictERK7QString@Base 4:4.3.4
- _ZN16KMimeTypeFactory24findFromOtherPatternListER5QListI10KSharedPtrI9KMimeTypeEERK7QStringRS6_b@Base 4:4.3.4
+ _ZN16KMimeTypeFactory13MimeTypeEntry22setServiceOffersOffsetEi@Base 4:4.5.85
+ _ZN16KMimeTypeFactory13MimeTypeEntryC1ER11QDataStreami@Base 4:4.5.85
+ _ZN16KMimeTypeFactory13MimeTypeEntryC1ERK7QStringS3_@Base 4:4.5.85
+ _ZN16KMimeTypeFactory13MimeTypeEntryC2ER11QDataStreami@Base 4:4.5.85
+ _ZN16KMimeTypeFactory13MimeTypeEntryC2ERK7QStringS3_@Base 4:4.5.85
+ _ZN16KMimeTypeFactory13MimeTypeEntryD0Ev@Base 4:4.7.4
+ _ZN16KMimeTypeFactory13MimeTypeEntryD1Ev@Base 4:4.7.4
+ _ZN16KMimeTypeFactory13MimeTypeEntryD2Ev@Base 4:4.7.4
+ _ZN16KMimeTypeFactory19serviceOffersOffsetERK7QString@Base 4:4.5.85
+ _ZN16KMimeTypeFactory20MimeTypeEntryPrivateD0Ev@Base 4:4.7.4
+ _ZN16KMimeTypeFactory20MimeTypeEntryPrivateD1Ev@Base 4:4.7.4
+ _ZN16KMimeTypeFactory20MimeTypeEntryPrivateD2Ev@Base 4:4.7.4
  _ZN16KMimeTypeFactory4selfEv@Base 4:4.3.4
- _ZN16KMimeTypeFactory7parentsERK7QString@Base 4:4.3.4
  _ZN16KMimeTypeFactoryC1Ev@Base 4:4.3.4
  _ZN16KMimeTypeFactoryC2Ev@Base 4:4.3.4
  _ZN16KMimeTypeFactoryD0Ev@Base 4:4.3.4
  _ZN16KMimeTypeFactoryD1Ev@Base 4:4.3.4
  _ZN16KMimeTypeFactoryD2Ev@Base 4:4.3.4
+ _ZN16KSharedDataCache11deleteCacheERK7QString@Base 4:4.4.95
+ _ZN16KSharedDataCache12setTimestampEj@Base 4:4.5.85
+ _ZN16KSharedDataCache17setEvictionPolicyENS_14EvictionPolicyE@Base 4:4.4.95
+ _ZN16KSharedDataCache5clearEv@Base 4:4.4.95
+ _ZN16KSharedDataCache6insertERK7QStringRK10QByteArray@Base 4:4.4.95
+ _ZN16KSharedDataCacheC1ERK7QStringjj@Base 4:4.4.95
+ _ZN16KSharedDataCacheC2ERK7QStringjj@Base 4:4.4.95
+ _ZN16KSharedDataCacheD1Ev@Base 4:4.4.95
+ _ZN16KSharedDataCacheD2Ev@Base 4:4.4.95
  _ZN16KSystemTimeZones11isSimulatedEv@Base 4:4.3.4
  _ZN16KSystemTimeZones11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN16KSystemTimeZones11qt_metacastEPKc@Base 4:4.3.4
@@ -925,6 +1027,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN16KSystemTimeZones14zonetabChangedERK7QString@Base 4:4.3.4
  _ZN16KSystemTimeZones16staticMetaObjectE@Base 4:4.3.4
  _ZN16KSystemTimeZones21zoneDefinitionChangedERK7QString@Base 4:4.3.4
+ _ZN16KSystemTimeZones25isTimeZoneDaemonAvailableEv@Base 4:4.5.85
  _ZN16KSystemTimeZones4zoneERK7QString@Base 4:4.3.4
  _ZN16KSystemTimeZones5localEv@Base 4:4.3.4
  _ZN16KSystemTimeZones5zonesEv@Base 4:4.3.4
@@ -947,6 +1050,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN16KTimeZoneBackendD1Ev@Base 4:4.3.4
  _ZN16KTimeZoneBackendD2Ev@Base 4:4.3.4
  _ZN16KTimeZoneBackendaSERKS_@Base 4:4.3.4
+ _ZN17KArchiveDirectory12virtual_hookEiPv@Base 4:4.4.95
+ _ZN17KArchiveDirectory8addEntryEP13KArchiveEntry@Base 4:4.4.95
+ _ZN17KArchiveDirectoryC1EP8KArchiveRK7QStringiiS4_S4_S4_@Base 4:4.4.95
+ _ZN17KArchiveDirectoryC2EP8KArchiveRK7QStringiiS4_S4_S4_@Base 4:4.4.95
+ _ZN17KArchiveDirectoryD0Ev@Base 4:4.4.95
+ _ZN17KArchiveDirectoryD1Ev@Base 4:4.4.95
+ _ZN17KArchiveDirectoryD2Ev@Base 4:4.4.95
  _ZN17KEncodingDetector11processNullEPci@Base 4:4.3.4
  _ZN17KEncodingDetector11setEncodingEPKcNS_20EncodingChoiceSourceE@Base 4:4.3.4
  _ZN17KEncodingDetector12errorsIfUtf8EPKci@Base 4:4.3.4
@@ -969,6 +1079,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN17KEncodingDetectorD2Ev@Base 4:4.3.4
  _ZN18KCharMacroExpander16expandPlainMacroERK7QStringiR11QStringList@Base 4:4.3.4
  _ZN18KCharMacroExpander18expandEscapedMacroERK7QStringiR11QStringList@Base 4:4.3.4
+ _ZN18KCharMacroExpanderD0Ev@Base 4:4.7.4
+ _ZN18KCharMacroExpanderD1Ev@Base 4:4.7.4
+ _ZN18KCharMacroExpanderD2Ev@Base 4:4.7.4
  _ZN18KLocalSocketServer11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN18KLocalSocketServer11qt_metacastEPKc@Base 4:4.3.4
  _ZN18KLocalSocketServer13newConnectionEv@Base 4:4.3.4
@@ -1003,6 +1116,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN18KServiceTypeTraderD2Ev@Base 4:4.3.4
  _ZN18KWordMacroExpander16expandPlainMacroERK7QStringiR11QStringList@Base 4:4.3.4
  _ZN18KWordMacroExpander18expandEscapedMacroERK7QStringiR11QStringList@Base 4:4.3.4
+ _ZN18KWordMacroExpanderD0Ev@Base 4:4.7.4
+ _ZN18KWordMacroExpanderD1Ev@Base 4:4.7.4
+ _ZN18KWordMacroExpanderD2Ev@Base 4:4.7.4
  _ZN19KConfigSkeletonItem10setToolTipERK7QString@Base 4:4.3.4
  _ZN19KConfigSkeletonItem12setWhatsThisERK7QString@Base 4:4.3.4
  _ZN19KConfigSkeletonItem16readImmutabilityERK12KConfigGroup@Base 4:4.3.4
@@ -1021,22 +1137,34 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeleton10ItemDouble11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemDoubleC1ERK7QStringS3_Rdd@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemDoubleC2ERK7QStringS3_Rdd@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton10ItemDoubleD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton10ItemDoubleD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton10ItemDoubleD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton10ItemString10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemString11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemString11writeConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemStringC1ERK7QStringS3_RS1_S3_NS0_4TypeE@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10ItemStringC2ERK7QStringS3_RS1_S3_NS0_4TypeE@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton10ItemStringD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton10ItemStringD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton10ItemStringD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton10addItemIntERK7QStringRiiS2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton10readConfigEv@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemIntList10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemIntList11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemIntListC1ERK7QStringS3_R5QListIiERKS5_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemIntListC2ERK7QStringS3_R5QListIiERKS5_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton11ItemIntListD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton11ItemIntListD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton11ItemIntListD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton11ItemUrlList10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemUrlList11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemUrlList11writeConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemUrlListC1ERK7QStringS3_RN4KUrl4ListERKS5_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11ItemUrlListC2ERK7QStringS3_RN4KUrl4ListERKS5_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton11ItemUrlListD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton11ItemUrlListD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton11ItemUrlListD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton11addItemBoolERK7QStringRbbS2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11addItemPathERK7QStringRS0_S2_S2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton11addItemRectERK7QStringR5QRectRKS3_S2_@Base 4:4.3.4
@@ -1052,22 +1180,37 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeleton12ItemDateTime11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemDateTimeC1ERK7QStringS3_R9QDateTimeRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemDateTimeC2ERK7QStringS3_R9QDateTimeRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton12ItemDateTimeD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemDateTimeD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemDateTimeD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton12ItemLongLong10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemLongLong11setMaxValueEx@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemLongLong11setMinValueEx@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemLongLong11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemLongLongC1ERK7QStringS3_Rxx@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemLongLongC2ERK7QStringS3_Rxx@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton12ItemLongLongD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemLongLongD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemLongLongD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton12ItemPasswordC1ERK7QStringS3_RS1_S3_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPasswordC2ERK7QStringS3_RS1_S3_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton12ItemPasswordD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPasswordD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPasswordD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton12ItemPathList10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPathList11writeConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPathListC1ERK7QStringS3_R11QStringListRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPathListC2ERK7QStringS3_R11QStringListRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton12ItemPathListD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPathListD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPathListD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton12ItemProperty10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemProperty11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPropertyC1ERK7QStringS3_R8QVariantRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12ItemPropertyC2ERK7QStringS3_R8QVariantRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton12ItemPropertyD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPropertyD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton12ItemPropertyD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton12addItemInt64ERK7QStringRxxS2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton12addItemPointERK7QStringR6QPointRKS3_S2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton13ItemULongLong10readConfigEP7KConfig@Base 4:4.3.4
@@ -1076,6 +1219,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeleton13ItemULongLong11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton13ItemULongLongC1ERK7QStringS3_Ryy@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton13ItemULongLongC2ERK7QStringS3_Ryy@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton13ItemULongLongD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton13ItemULongLongD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton13ItemULongLongD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton13addItemDoubleERK7QStringRddS2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton13addItemStringERK7QStringRS0_S2_S2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton13addItemUInt64ERK7QStringRyyS2_@Base 4:4.3.4
@@ -1085,6 +1231,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeleton14ItemStringList11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton14ItemStringListC1ERK7QStringS3_R11QStringListRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton14ItemStringListC2ERK7QStringS3_R11QStringListRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton14ItemStringListD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton14ItemStringListD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton14ItemStringListD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton14addItemIntListERK7QStringR5QListIiERKS4_S2_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton14usrSetDefaultsEv@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton14usrUseDefaultsEb@Base 4:4.3.4
@@ -1105,43 +1254,70 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeleton7ItemInt11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemIntC1ERK7QStringS3_Rii@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemIntC2ERK7QStringS3_Rii@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton7ItemIntD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton7ItemIntD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton7ItemIntD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton7ItemUrl10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemUrl11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemUrl11writeConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemUrlC1ERK7QStringS3_R4KUrlRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton7ItemUrlC2ERK7QStringS3_R4KUrlRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton7ItemUrlD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton7ItemUrlD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton7ItemUrlD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton7addItemEP19KConfigSkeletonItemRK7QString@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemBool10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemBool11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemBoolC1ERK7QStringS3_Rbb@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemBoolC2ERK7QStringS3_Rbb@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemBoolD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemBoolD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemBoolD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8ItemEnum10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemEnum11writeConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemEnumC1ERK7QStringS3_RiRK5QListINS0_6ChoiceEEi@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemEnumC1ERK7QStringS3_RiRK5QListINS0_7Choice2EEi@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemEnumC2ERK7QStringS3_RiRK5QListINS0_6ChoiceEEi@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemEnumC2ERK7QStringS3_RiRK5QListINS0_7Choice2EEi@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemEnumD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemEnumD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemEnumD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8ItemPathC1ERK7QStringS3_RS1_S3_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemPathC2ERK7QStringS3_RS1_S3_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemPathD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemPathD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemPathD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8ItemRect10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemRect11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemRectC1ERK7QStringS3_R5QRectRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemRectC2ERK7QStringS3_R5QRectRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemRectD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemRectD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemRectD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8ItemSize10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemSize11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemSizeC1ERK7QStringS3_R5QSizeRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemSizeC2ERK7QStringS3_R5QSizeRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemSizeD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemSizeD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemSizeD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8ItemUInt10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemUInt11setMaxValueEj@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemUInt11setMinValueEj@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemUInt11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemUIntC1ERK7QStringS3_Rjj@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton8ItemUIntC2ERK7QStringS3_Rjj@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton8ItemUIntD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemUIntD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton8ItemUIntD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeleton8findItemERK7QString@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton9ItemPoint10readConfigEP7KConfig@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton9ItemPoint11setPropertyERK8QVariant@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton9ItemPointC1ERK7QStringS3_R6QPointRKS4_@Base 4:4.3.4
  _ZN19KCoreConfigSkeleton9ItemPointC2ERK7QStringS3_R6QPointRKS4_@Base 4:4.3.4
+ _ZN19KCoreConfigSkeleton9ItemPointD0Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton9ItemPointD1Ev@Base 4:4.7.4
+ _ZN19KCoreConfigSkeleton9ItemPointD2Ev@Base 4:4.7.4
  _ZN19KCoreConfigSkeletonC1E10KSharedPtrI13KSharedConfigEP7QObject@Base 4:4.3.4
  _ZN19KCoreConfigSkeletonC1ERK7QStringP7QObject@Base 4:4.3.4
  _ZN19KCoreConfigSkeletonC2E10KSharedPtrI13KSharedConfigEP7QObject@Base 4:4.3.4
@@ -1149,6 +1325,28 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN19KCoreConfigSkeletonD0Ev@Base 4:4.3.4
  _ZN19KCoreConfigSkeletonD1Ev@Base 4:4.3.4
  _ZN19KCoreConfigSkeletonD2Ev@Base 4:4.3.4
+ _ZN19KMimeTypeRepository10parseGlobsEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository10parseMagicEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository11useFavIconsEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository12resolveAliasERK7QString@Base 4:4.5.85
+ _ZN19KMimeTypeRepository13canonicalNameERK7QString@Base 4:4.5.85
+ _ZN19KMimeTypeRepository13matchFileNameERK7QStringS2_@Base 4:4.5.85
+ _ZN19KMimeTypeRepository14checkMimeTypesEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository15findFromContentEP9QIODevicePiR10QByteArray@Base 4:4.5.85
+ _ZN19KMimeTypeRepository16findFromFileNameERK7QStringPS0_@Base 4:4.5.85
+ _ZN19KMimeTypeRepository18defaultMimeTypePtrEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository18findMimeTypeByNameERK7QStringN9KMimeType16FindByNameOptionE@Base 4:4.5.85
+ _ZN19KMimeTypeRepository19patternsForMimetypeERK7QString@Base 4:4.5.85
+ _ZN19KMimeTypeRepository21sharedMimeInfoVersionEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository23checkEssentialMimeTypesEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository24findFromOtherPatternListER11QStringListRK7QStringRS2_b@Base 4:4.5.85
+ _ZN19KMimeTypeRepository4selfEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository7aliasesEv@Base 4:4.5.85
+ _ZN19KMimeTypeRepository7parentsERK7QString@Base 4:4.5.85
+ _ZN19KMimeTypeRepositoryC1Ev@Base 4:4.5.85
+ _ZN19KMimeTypeRepositoryC2Ev@Base 4:4.5.85
+ _ZN19KMimeTypeRepositoryD1Ev@Base 4:4.5.85
+ _ZN19KMimeTypeRepositoryD2Ev@Base 4:4.5.85
  _ZN19KServiceTypeFactory12virtual_hookEiPv@Base 4:4.3.4
  _ZN19KServiceTypeFactory15allServiceTypesEv@Base 4:4.3.4
  _ZN19KServiceTypeFactory21findServiceTypeByNameERK7QString@Base 4:4.3.4
@@ -1231,7 +1429,6 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN21KTzfileTimeZoneSourceD2Ev@Base 4:4.3.4
  _ZN22KSslCertificateManager18nonIgnorableErrorsERK5QListI9KSslErrorE@Base 4:4.3.4
  _ZN22KSslCertificateManager18nonIgnorableErrorsERK5QListIN9KSslError5ErrorEE@Base 4:4.3.4
- _ZN22KSslCertificateManager19setRootCertificatesERK5QListI15QSslCertificateE@Base 4:4.3.4
  _ZN22KSslCertificateManager4selfEv@Base 4:4.3.4
  _ZN22KSslCertificateManager7setRuleERK19KSslCertificateRule@Base 4:4.3.4
  _ZN22KSslCertificateManager9clearRuleERK15QSslCertificateRK7QString@Base 4:4.3.4
@@ -1261,11 +1458,24 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN24OrgKdeKLauncherInterfaceD0Ev@Base 4:4.3.4
  _ZN24OrgKdeKLauncherInterfaceD1Ev@Base 4:4.3.4
  _ZN24OrgKdeKLauncherInterfaceD2Ev@Base 4:4.3.4
+ _ZN3KAr10doWriteDirERK7QStringS2_S2_jlll@Base 4:4.4.95
+ _ZN3KAr11openArchiveE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN3KAr12closeArchiveEv@Base 4:4.4.95
+ _ZN3KAr12virtual_hookEiPv@Base 4:4.4.95
+ _ZN3KAr14doWriteSymLinkERK7QStringS2_S2_S2_jlll@Base 4:4.4.95
+ _ZN3KAr15doFinishWritingEx@Base 4:4.4.95
+ _ZN3KAr16doPrepareWritingERK7QStringS2_S2_xjlll@Base 4:4.4.95
+ _ZN3KArC1EP9QIODevice@Base 4:4.4.95
+ _ZN3KArC1ERK7QString@Base 4:4.4.95
+ _ZN3KArC2EP9QIODevice@Base 4:4.4.95
+ _ZN3KArC2ERK7QString@Base 4:4.4.95
+ _ZN3KArD0Ev@Base 4:4.4.95
+ _ZN3KArD1Ev@Base 4:4.4.95
+ _ZN3KArD2Ev@Base 4:4.4.95
  _ZN3KDE12versionMajorEv@Base 4:4.3.4
  _ZN3KDE12versionMinorEv@Base 4:4.3.4
  _ZN3KDE13versionStringEv@Base 4:4.3.4
  _ZN3KDE14versionReleaseEv@Base 4:4.3.4
- _ZN3KDE4statERK7QStringP4stat@Base 4:4.3.4
  _ZN3KDE7versionEv@Base 4:4.3.4
  _ZN4KJob10emitResultEv@Base 4:4.3.4
  _ZN4KJob10setPercentEm@Base 4:4.3.4
@@ -1337,6 +1547,29 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN4KMD5C2Ev@Base 4:4.3.4
  _ZN4KMD5D1Ev@Base 4:4.3.4
  _ZN4KMD5D2Ev@Base 4:4.3.4
+ _ZN4KTar10doWriteDirERK7QStringS2_S2_jlll@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate10fillBufferEPcPKcxlcS3_S3_@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate10readHeaderEPcR7QStringS3_@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate12fillTempFileERK7QString@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate12readLonglinkEPcR10QByteArray@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate13readRawHeaderEPc@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate13writeLonglinkEPcRK10QByteArraycPKcS6_@Base 4:4.4.95
+ _ZN4KTar11KTarPrivate17writeBackTempFileERK7QString@Base 4:4.4.95
+ _ZN4KTar11openArchiveE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN4KTar12closeArchiveEv@Base 4:4.4.95
+ _ZN4KTar12createDeviceE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN4KTar12virtual_hookEiPv@Base 4:4.4.95
+ _ZN4KTar14doWriteSymLinkERK7QStringS2_S2_S2_jlll@Base 4:4.4.95
+ _ZN4KTar15doFinishWritingEx@Base 4:4.4.95
+ _ZN4KTar15setOrigFileNameERK10QByteArray@Base 4:4.4.95
+ _ZN4KTar16doPrepareWritingERK7QStringS2_S2_xjlll@Base 4:4.4.95
+ _ZN4KTarC1EP9QIODevice@Base 4:4.4.95
+ _ZN4KTarC1ERK7QStringS2_@Base 4:4.4.95
+ _ZN4KTarC2EP9QIODevice@Base 4:4.4.95
+ _ZN4KTarC2ERK7QStringS2_@Base 4:4.4.95
+ _ZN4KTarD0Ev@Base 4:4.4.95
+ _ZN4KTarD1Ev@Base 4:4.4.95
+ _ZN4KTarD2Ev@Base 4:4.4.95
  _ZN4KUrl10adjustPathENS_16AdjustPathOptionE@Base 4:4.3.4
  _ZN4KUrl10setHTMLRefERK7QString@Base 4:4.3.4
  _ZN4KUrl11relativeUrlERKS_S1_@Base 4:4.3.4
@@ -1357,9 +1590,11 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN4KUrl4List13mimeDataTypesEv@Base 4:4.3.4
  _ZN4KUrl4List9canDecodeEPK9QMimeData@Base 4:4.3.4
  _ZN4KUrl4ListC1ERK11QStringList@Base 4:4.3.4
+ _ZN4KUrl4ListC1ERK5QListI4QUrlE@Base 4:4.7.1
  _ZN4KUrl4ListC1ERK5QListIS_E@Base 4:4.3.4
  _ZN4KUrl4ListC1ERKS_@Base 4:4.3.4
  _ZN4KUrl4ListC2ERK11QStringList@Base 4:4.3.4
+ _ZN4KUrl4ListC2ERK5QListI4QUrlE@Base 4:4.7.1
  _ZN4KUrl4ListC2ERK5QListIS_E@Base 4:4.3.4
  _ZN4KUrl4ListC2ERKS_@Base 4:4.3.4
  _ZN4KUrl4joinERKNS_4ListE@Base 4:4.3.4
@@ -1391,6 +1626,23 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN4KUrlD1Ev@Base 4:4.3.4
  _ZN4KUrlD2Ev@Base 4:4.3.4
  _ZN4KUrlaSERKS_@Base 4:4.3.4
+ _ZN4KZip10doWriteDirERK7QStringS2_S2_jlll@Base 4:4.4.95
+ _ZN4KZip11openArchiveE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN4KZip12closeArchiveEv@Base 4:4.4.95
+ _ZN4KZip12virtual_hookEiPv@Base 4:4.4.95
+ _ZN4KZip13setExtraFieldENS_10ExtraFieldE@Base 4:4.4.95
+ _ZN4KZip14doWriteSymLinkERK7QStringS2_S2_S2_jlll@Base 4:4.4.95
+ _ZN4KZip14setCompressionENS_11CompressionE@Base 4:4.4.95
+ _ZN4KZip15doFinishWritingEx@Base 4:4.4.95
+ _ZN4KZip16doPrepareWritingERK7QStringS2_S2_xjlll@Base 4:4.4.95
+ _ZN4KZip9writeDataEPKcx@Base 4:4.4.95
+ _ZN4KZipC1EP9QIODevice@Base 4:4.4.95
+ _ZN4KZipC1ERK7QString@Base 4:4.4.95
+ _ZN4KZipC2EP9QIODevice@Base 4:4.4.95
+ _ZN4KZipC2ERK7QString@Base 4:4.4.95
+ _ZN4KZipD0Ev@Base 4:4.4.95
+ _ZN4KZipD1Ev@Base 4:4.4.95
+ _ZN4KZipD2Ev@Base 4:4.4.95
  _ZN5KAuth11ActionReply11deserializeERK10QByteArray@Base 4:4.4.0
  _ZN5KAuth11ActionReply12SuccessReplyE@Base 4:4.4.0
  _ZN5KAuth11ActionReply12setErrorCodeEi@Base 4:4.4.0
@@ -1453,6 +1705,8 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN5KAuth6Action11setHelperIDERK7QString@Base 4:4.4.0
  _ZN5KAuth6Action12setArgumentsERK4QMapI7QString8QVariantE@Base 4:4.4.0
  _ZN5KAuth6Action14executeActionsERK5QListIS0_EPS2_RK7QString@Base 4:4.4.0
+ _ZN5KAuth6Action14executeActionsERK5QListIS0_EPS2_RK7QStringP7QWidget@Base 4:4.5.85
+ _ZN5KAuth6Action15setParentWidgetEP7QWidget@Base 4:4.5.85
  _ZN5KAuth6Action16setExecutesAsyncEb@Base 4:4.4.0
  _ZN5KAuth6Action4stopERK7QString@Base 4:4.4.0
  _ZN5KAuth6Action4stopEv@Base 4:4.4.0
@@ -1489,6 +1743,10 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN5QTest14kWaitForSignalEP7QObjectPKci@Base 4:4.3.4
  _ZN6KDebug12registerAreaERK10QByteArrayb@Base 4:4.4.0
  _ZN6KDebug13hasNullOutputE9QtMsgTypebib@Base 4:4.4.0
+ _ZN6KDebug5BlockC1EPKci@Base 4:4.5.85
+ _ZN6KDebug5BlockC2EPKci@Base 4:4.5.85
+ _ZN6KDebug5BlockD1Ev@Base 4:4.5.85
+ _ZN6KDebug5BlockD2Ev@Base 4:4.5.85
  _ZN6KShell11tildeExpandERK7QString@Base 4:4.3.4
  _ZN6KShell8joinArgsERK11QStringList@Base 4:4.3.4
  _ZN6KShell8quoteArgERK7QString@Base 4:4.3.4
@@ -1545,6 +1803,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN6Sonnet17BackgroundChecker4stopEv@Base 4:4.3.4
  _ZN6Sonnet17BackgroundChecker5startEv@Base 4:4.3.4
  _ZN6Sonnet17BackgroundChecker7replaceEiRK7QStringS3_@Base 4:4.3.4
+ _ZN6Sonnet17BackgroundChecker7restoreEP7KConfig@Base 4:4.5.2
  _ZN6Sonnet17BackgroundChecker7setTextERK7QString@Base 4:4.3.4
  _ZN6Sonnet17BackgroundChecker9checkWordERK7QString@Base 4:4.3.4
  _ZN6Sonnet17BackgroundCheckerC1EP7QObject@Base 4:4.3.4
@@ -1555,11 +1814,16 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN6Sonnet17BackgroundCheckerD1Ev@Base 4:4.3.4
  _ZN6Sonnet17BackgroundCheckerD2Ev@Base 4:4.3.4
  _ZN6Sonnet19defaultLanguageNameEv@Base 4:4.3.4
+ _ZN6Sonnet4WordD1Ev@Base 4:4.7.4
+ _ZN6Sonnet4WordD2Ev@Base 4:4.7.4
  _ZN6Sonnet6Client11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN6Sonnet6Client11qt_metacastEPKc@Base 4:4.3.4
  _ZN6Sonnet6Client16staticMetaObjectE@Base 4:4.3.4
  _ZN6Sonnet6ClientC1EP7QObject@Base 4:4.3.4
  _ZN6Sonnet6ClientC2EP7QObject@Base 4:4.3.4
+ _ZN6Sonnet6ClientD0Ev@Base 4:4.7.4
+ _ZN6Sonnet6ClientD1Ev@Base 4:4.7.4
+ _ZN6Sonnet6ClientD2Ev@Base 4:4.7.4
  _ZN6Sonnet6Filter11setSettingsEPNS_8SettingsE@Base 4:4.3.4
  _ZN6Sonnet6Filter13defaultFilterEv@Base 4:4.3.4
  _ZN6Sonnet6Filter18setCurrentPositionEi@Base 4:4.3.4
@@ -1656,6 +1920,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN7KConfigD1Ev@Base 4:4.3.4
  _ZN7KConfigD2Ev@Base 4:4.3.4
  _ZN7KGlobal12setAllowQuitEb@Base 4:4.3.4
+ _ZN7KGlobal13insertCatalogERK7QString@Base 4:4.5.85
  _ZN7KGlobal13mainComponentEv@Base 4:4.3.4
  _ZN7KGlobal13staticQStringEPKc@Base 4:4.3.4
  _ZN7KGlobal13staticQStringERK7QString@Base 4:4.3.4
@@ -1700,14 +1965,19 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN7KLocale16setDecimalSymbolERK7QString@Base 4:4.3.4
  _ZN7KLocale16setMeasureSystemENS_13MeasureSystemE@Base 4:4.3.4
  _ZN7KLocale16setWeekDayOfPrayEi@Base 4:4.3.4
+ _ZN7KLocale16weekNumberSystemEv@Base 4:4.5.85
+ _ZN7KLocale17setCalendarSystemENS_14CalendarSystemE@Base 4:4.5.85
  _ZN7KLocale17setCurrencySymbolERK7QString@Base 4:4.3.4
  _ZN7KLocale18setDateFormatShortERK7QString@Base 4:4.3.4
  _ZN7KLocale19defaultCurrencyCodeEv@Base 4:4.4.0
  _ZN7KLocale19setDateTimeDigitSetENS_8DigitSetE@Base 4:4.3.4
  _ZN7KLocale19setMonetaryDigitSetENS_8DigitSetE@Base 4:4.3.4
+ _ZN7KLocale19setWeekNumberSystemENS_16WeekNumberSystemE@Base 4:4.5.85
+ _ZN7KLocale20reparseConfigurationEv@Base 4:4.8.1
  _ZN7KLocale20setBinaryUnitDialectENS_17BinaryUnitDialectE@Base 4:4.4.0
  _ZN7KLocale20setWorkingWeekEndDayEi@Base 4:4.3.4
  _ZN7KLocale21setThousandsSeparatorERK7QString@Base 4:4.3.4
+ _ZN7KLocale22setCountryDivisionCodeERK7QString@Base 4:4.5.85
  _ZN7KLocale22setWorkingWeekStartDayEi@Base 4:4.3.4
  _ZN7KLocale24setMonetaryDecimalPlacesEi@Base 4:4.4.0
  _ZN7KLocale24setMonetaryDecimalSymbolERK7QString@Base 4:4.3.4
@@ -1772,6 +2042,29 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN7KSycocaD0Ev@Base 4:4.3.4
  _ZN7KSycocaD1Ev@Base 4:4.3.4
  _ZN7KSycocaD2Ev@Base 4:4.3.4
+ _ZN8KArchive10setRootDirEP17KArchiveDirectory@Base 4:4.4.95
+ _ZN8KArchive12addLocalFileERK7QStringS2_@Base 4:4.4.95
+ _ZN8KArchive12createDeviceE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN8KArchive12findOrCreateERK7QString@Base 4:4.4.95
+ _ZN8KArchive12virtual_hookEiPv@Base 4:4.4.95
+ _ZN8KArchive12writeSymLinkERK7QStringS2_S2_S2_jlll@Base 4:4.4.95
+ _ZN8KArchive13finishWritingEx@Base 4:4.4.95
+ _ZN8KArchive14prepareWritingERK7QStringS2_S2_xjlll@Base 4:4.4.95
+ _ZN8KArchive17addLocalDirectoryERK7QStringS2_@Base 4:4.4.95
+ _ZN8KArchive4openE6QFlagsIN9QIODevice12OpenModeFlagEE@Base 4:4.4.95
+ _ZN8KArchive5closeEv@Base 4:4.4.95
+ _ZN8KArchive7rootDirEv@Base 4:4.4.95
+ _ZN8KArchive8writeDirERK7QStringS2_S2_jlll@Base 4:4.4.95
+ _ZN8KArchive9setDeviceEP9QIODevice@Base 4:4.4.95
+ _ZN8KArchive9writeDataEPKcx@Base 4:4.4.95
+ _ZN8KArchive9writeFileERK7QStringS2_S2_PKcxjlll@Base 4:4.4.95
+ _ZN8KArchiveC1EP9QIODevice@Base 4:4.4.95
+ _ZN8KArchiveC1ERK7QString@Base 4:4.4.95
+ _ZN8KArchiveC2EP9QIODevice@Base 4:4.4.95
+ _ZN8KArchiveC2ERK7QString@Base 4:4.4.95
+ _ZN8KArchiveD0Ev@Base 4:4.4.95
+ _ZN8KArchiveD1Ev@Base 4:4.4.95
+ _ZN8KArchiveD2Ev@Base 4:4.4.95
  _ZN8KLibrary11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.3.4
  _ZN8KLibrary11qt_metacastEPKc@Base 4:4.3.4
  _ZN8KLibrary11setFileNameERK7QStringRK14KComponentData@Base 4:4.3.4
@@ -2308,33 +2601,64 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZN9KDateTimeD1Ev@Base 4:4.3.4
  _ZN9KDateTimeD2Ev@Base 4:4.3.4
  _ZN9KDateTimeaSERKS_@Base 4:4.3.4
+ _ZN9KDirWatch10removeFileERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch10setCreatedERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch10setDeletedERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch10statisticsEv@Base 4:4.4.95
+ _ZN9KDirWatch11qt_metacallEN11QMetaObject4CallEiPPv@Base 4:4.4.95
+ _ZN9KDirWatch11qt_metacastEPKc@Base 4:4.4.95
+ _ZN9KDirWatch11stopDirScanERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch14internalMethodEv@Base 4:4.4.95
+ _ZN9KDirWatch14restartDirScanERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch16deleteQFSWatcherEv@Base 4:4.7.0
+ _ZN9KDirWatch16staticMetaObjectE@Base 4:4.4.95
+ _ZN9KDirWatch4selfEv@Base 4:4.4.95
+ _ZN9KDirWatch5dirtyERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch6addDirERK7QString6QFlagsINS_9WatchModeEE@Base 4:4.4.95
+ _ZN9KDirWatch6existsEv@Base 4:4.4.95
+ _ZN9KDirWatch7addFileERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch7createdERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch7deletedERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch8setDirtyERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch8stopScanEv@Base 4:4.4.95
+ _ZN9KDirWatch9isStoppedEv@Base 4:4.4.95
+ _ZN9KDirWatch9removeDirERK7QString@Base 4:4.4.95
+ _ZN9KDirWatch9startScanEbb@Base 4:4.4.95
+ _ZN9KDirWatchC1EP7QObject@Base 4:4.4.95
+ _ZN9KDirWatchC2EP7QObject@Base 4:4.4.95
+ _ZN9KDirWatchD0Ev@Base 4:4.4.95
+ _ZN9KDirWatchD1Ev@Base 4:4.4.95
+ _ZN9KDirWatchD2Ev@Base 4:4.4.95
  _ZN9KLockFile11getLockInfoERiR7QStringS2_@Base 4:4.3.4
  _ZN9KLockFile12setStaleTimeEi@Base 4:4.3.4
  _ZN9KLockFile4lockE6QFlagsINS_8LockFlagEE@Base 4:4.3.4
  _ZN9KLockFile6unlockEv@Base 4:4.3.4
+ _ZN9KLockFile7Private12readLockFileEv@Base 4:4.7.1
+ _ZN9KLockFile7Private13lockFileOExclER4stat@Base 4:4.7.1
+ _ZN9KLockFile7Private15deleteStaleLockEv@Base 4:4.7.1
+ _ZN9KLockFile7Private16lockFileWithLinkER4stat@Base 4:4.7.1
+ _ZN9KLockFile7Private17writeIntoLockFileER5QFileRK14KComponentData@Base 4:4.7.1
+ _ZN9KLockFile7Private23deleteStaleLockWithLinkEv@Base 4:4.7.1
+ _ZN9KLockFile7Private8lockFileER4stat@Base 4:4.7.1
  _ZN9KLockFileC1ERK7QStringRK14KComponentData@Base 4:4.3.4
  _ZN9KLockFileC2ERK7QStringRK14KComponentData@Base 4:4.3.4
  _ZN9KLockFileD1Ev@Base 4:4.3.4
  _ZN9KLockFileD2Ev@Base 4:4.3.4
  _ZN9KMimeType10findByPathERK7QStringjbPi@Base 4:4.3.4
- _ZN9KMimeType11setPatternsERK11QStringList@Base 4:4.3.4
  _ZN9KMimeType12allMimeTypesEv@Base 4:4.3.4
  _ZN9KMimeType12isBinaryDataERK7QString@Base 4:4.3.4
  _ZN9KMimeType13favIconForUrlERK4KUrl@Base 4:4.3.4
  _ZN9KMimeType13findByContentEP9QIODevicePi@Base 4:4.4.0
  _ZN9KMimeType13findByContentERK10QByteArrayPi@Base 4:4.3.4
+ _ZN9KMimeType13matchFileNameERK7QStringS2_@Base 4:4.6.1
  _ZN9KMimeType14iconNameForUrlERK4KUrlj@Base 4:4.3.4
  _ZN9KMimeType15defaultMimeTypeEv@Base 4:4.3.4
  _ZN9KMimeType15findByUrlHelperERK4KUrljbP9QIODevicePi@Base 4:4.3.4
- _ZN9KMimeType16buildDefaultTypeEv@Base 4:4.3.4
  _ZN9KMimeType17findByFileContentERK7QStringPi@Base 4:4.3.4
- _ZN9KMimeType17internalClearDataEv@Base 4:4.3.4
- _ZN9KMimeType17setParentMimeTypeERK7QString@Base 4:4.3.4
  _ZN9KMimeType18defaultMimeTypePtrEv@Base 4:4.3.4
  _ZN9KMimeType18isBufferBinaryDataERK10QByteArray@Base 4:4.3.4
  _ZN9KMimeType20findByNameAndContentERK7QStringP9QIODevicejPi@Base 4:4.4.2
  _ZN9KMimeType20findByNameAndContentERK7QStringRK10QByteArrayjPi@Base 4:4.3.4
- _ZN9KMimeType20setUserSpecifiedIconERK7QString@Base 4:4.3.4
  _ZN9KMimeType21extractKnownExtensionERK7QString@Base 4:4.3.4
  _ZN9KMimeType21sharedMimeInfoVersionEv@Base 4:4.3.4
  _ZN9KMimeType23checkEssentialMimeTypesEv@Base 4:4.3.4
@@ -2431,6 +2755,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK10KAboutData11programLogoEv@Base 4:4.3.4
  _ZNK10KAboutData11programNameEv@Base 4:4.3.4
  _ZNK10KAboutData11translatorsEv@Base 4:4.3.4
+ _ZNK10KAboutData14ocsProviderUrlEv@Base 4:4.5.85
  _ZNK10KAboutData15internalVersionEv@Base 4:4.3.4
  _ZNK10KAboutData15programIconNameEv@Base 4:4.3.4
  _ZNK10KAboutData16shortDescriptionEv@Base 4:4.3.4
@@ -2481,12 +2806,14 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK10KTcpSocket12bytesToWriteEv@Base 4:4.3.4
  _ZNK10KTcpSocket12isSequentialEv@Base 4:4.3.4
  _ZNK10KTcpSocket12localAddressEv@Base 4:4.3.4
+ _ZNK10KTcpSocket12socketOptionEN15QAbstractSocket12SocketOptionE@Base 4:4.4.95
  _ZNK10KTcpSocket13sessionCipherEv@Base 4:4.3.4
  _ZNK10KTcpSocket14bytesAvailableEv@Base 4:4.3.4
  _ZNK10KTcpSocket14caCertificatesEv@Base 4:4.3.4
  _ZNK10KTcpSocket14encryptionModeEv@Base 4:4.3.4
  _ZNK10KTcpSocket14readBufferSizeEv@Base 4:4.3.4
  _ZNK10KTcpSocket16localCertificateEv@Base 4:4.3.4
+ _ZNK10KTcpSocket16sslConfigurationEv@Base 4:4.8.4
  _ZNK10KTcpSocket20advertisedSslVersionEv@Base 4:4.3.4
  _ZNK10KTcpSocket20negotiatedSslVersionEv@Base 4:4.3.4
  _ZNK10KTcpSocket20peerCertificateChainEv@Base 4:4.3.4
@@ -2524,6 +2851,15 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK11KGzipFilter17inBufferAvailableEv@Base 4:4.3.4
  _ZNK11KGzipFilter18outBufferAvailableEv@Base 4:4.3.4
  _ZNK11KGzipFilter4modeEv@Base 4:4.3.4
+ _ZNK11KMountPoint10mountPointEv@Base 4:4.4.95
+ _ZNK11KMountPoint11mountedFromEv@Base 4:4.4.95
+ _ZNK11KMountPoint12mountOptionsEv@Base 4:4.4.95
+ _ZNK11KMountPoint12probablySlowEv@Base 4:4.4.95
+ _ZNK11KMountPoint14realDeviceNameEv@Base 4:4.4.95
+ _ZNK11KMountPoint18testFileSystemFlagENS_14FileSystemFlagE@Base 4:4.4.95
+ _ZNK11KMountPoint4List10findByPathERK7QString@Base 4:4.4.95
+ _ZNK11KMountPoint4List12findByDeviceERK7QString@Base 4:4.4.95
+ _ZNK11KMountPoint9mountTypeEv@Base 4:4.4.95
  _ZNK11KPluginInfo10pluginNameEv@Base 4:4.3.4
  _ZNK11KPluginInfo11fullLicenseEv@Base 4:4.3.4
  _ZNK11KPluginInfo11kcmServicesEv@Base 4:4.3.4
@@ -2555,9 +2891,16 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK11KSycocaDict7Private12offsetForKeyERK7QString@Base 4:4.3.4
  _ZNK11KSycocaDict7Private7hashKeyERK7QString@Base 4:4.3.4
  _ZNK12KAboutPerson10webAddressEv@Base 4:4.3.4
+ _ZNK12KAboutPerson11ocsUsernameEv@Base 4:4.5.85
  _ZNK12KAboutPerson12emailAddressEv@Base 4:4.3.4
  _ZNK12KAboutPerson4nameEv@Base 4:4.3.4
  _ZNK12KAboutPerson4taskEv@Base 4:4.3.4
+ _ZNK12KArchiveFile12createDeviceEv@Base 4:4.4.95
+ _ZNK12KArchiveFile4dataEv@Base 4:4.4.95
+ _ZNK12KArchiveFile4sizeEv@Base 4:4.4.95
+ _ZNK12KArchiveFile6copyToERK7QString@Base 4:4.4.95
+ _ZNK12KArchiveFile6isFileEv@Base 4:4.4.95
+ _ZNK12KArchiveFile8positionEv@Base 4:4.4.95
  _ZNK12KCmdLineArgs13getOptionListERK10QByteArray@Base 4:4.3.4
  _ZNK12KCmdLineArgs3argEi@Base 4:4.3.4
  _ZNK12KCmdLineArgs3urlEi@Base 4:4.3.4
@@ -2592,6 +2935,8 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK12KConfigGroup8entryMapEv@Base 4:4.3.4
  _ZNK12KConfigGroup9groupImplERK10QByteArray@Base 4:4.3.4
  _ZNK12KConfigGroup9groupListEv@Base 4:4.3.4
+ _ZNK12KConfigGroup9readCheckIbEET_PKcRKS1_@Base 4:4.7.4
+ _ZNK12KConfigGroup9readCheckIiEET_PKcRKS1_@Base 4:4.6.2
  _ZNK12KConfigGroup9readEntryEPKcRK11QStringList@Base 4:4.3.4
  _ZNK12KConfigGroup9readEntryEPKcRK5QListI8QVariantE@Base 4:4.3.4
  _ZNK12KConfigGroup9readEntryEPKcRK7QString@Base 4:4.3.4
@@ -2602,8 +2947,6 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK12KConfigGroup9readEntryERK7QStringRK5QListI8QVariantE@Base 4:4.3.4
  _ZNK12KConfigGroup9readEntryERK7QStringRK8QVariant@Base 4:4.3.4
  _ZNK12KConfigGroup9readEntryERK7QStringS2_@Base 4:4.3.4
- _ZNK12KConfigGroup9readEntryIbEET_PKcRKS1_@Base 4:4.3.4
- _ZNK12KConfigGroup9readEntryIiEET_PKcRKS1_@Base 4:4.3.4
  _ZNK12KDesktopFile10readDeviceEv@Base 4:4.3.4
  _ZNK12KDesktopFile11actionGroupERK7QString@Base 4:4.3.4
  _ZNK12KDesktopFile11hasLinkTypeEv@Base 4:4.3.4
@@ -2654,6 +2997,16 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK13KAboutLicense3keyEv@Base 4:4.3.4
  _ZNK13KAboutLicense4nameEN10KAboutData10NameFormatE@Base 4:4.3.4
  _ZNK13KAboutLicense4textEv@Base 4:4.3.4
+ _ZNK13KArchiveEntry11isDirectoryEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry11permissionsEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry13symLinkTargetEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry4dateEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry4nameEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry4userEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry5groupEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry6isFileEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry7archiveEv@Base 4:4.4.95
+ _ZNK13KArchiveEntry8datetimeEv@Base 4:4.4.95
  _ZNK13KAutoSaveFile10metaObjectEv@Base 4:4.3.4
  _ZNK13KAutoSaveFile11managedFileEv@Base 4:4.3.4
  _ZNK13KCompositeJob10metaObjectEv@Base 4:4.3.4
@@ -2737,6 +3090,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK13KTimeZoneData17previousUtcOffsetEv@Base 4:4.3.4
  _ZNK13KTimeZoneData5cloneEv@Base 4:4.3.4
  _ZNK13KTimeZoneData6phasesEv@Base 4:4.3.4
+ _ZNK13KZipFileEntry11headerStartEv@Base 4:4.4.95
+ _ZNK13KZipFileEntry12createDeviceEv@Base 4:4.4.95
+ _ZNK13KZipFileEntry14compressedSizeEv@Base 4:4.4.95
+ _ZNK13KZipFileEntry4dataEv@Base 4:4.4.95
+ _ZNK13KZipFileEntry4pathEv@Base 4:4.4.95
+ _ZNK13KZipFileEntry5crc32Ev@Base 4:4.4.95
+ _ZNK13KZipFileEntry8encodingEv@Base 4:4.4.95
  _ZNK14KComponentData11catalogNameEv@Base 4:4.3.4
  _ZNK14KComponentData13componentNameEv@Base 4:4.3.4
  _ZNK14KComponentData4dirsEv@Base 4:4.3.4
@@ -2751,6 +3111,59 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK14KJobUiDelegate10metaObjectEv@Base 4:4.3.4
  _ZNK14KJobUiDelegate26isAutoErrorHandlingEnabledEv@Base 4:4.3.4
  _ZNK14KJobUiDelegate28isAutoWarningHandlingEnabledEv@Base 4:4.3.4
+ _ZNK14KLocalizedDate10daysInWeekEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate10daysInYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate10formatDateEN7KLocale10DateFormatE@Base 4:4.5.85
+ _ZNK14KLocalizedDate10formatDateEN7KLocale17DateTimeComponentENS0_23DateTimeComponentFormatENS0_16WeekNumberSystemE@Base 4:4.5.86
+ _ZNK14KLocalizedDate10formatDateERK7QStringN7KLocale22DateTimeFormatStandardE@Base 4:4.5.85
+ _ZNK14KLocalizedDate10isLeapYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate11daysInMonthEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate11toJulianDayEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate11weeksInYearEN7KLocale16WeekNumberSystemE@Base 4:4.5.85
+ _ZNK14KLocalizedDate11weeksInYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate12monthsInYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate13lastDayOfYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate14dateDifferenceERK5QDatePiS3_S3_S3_@Base 4:4.5.85
+ _ZNK14KLocalizedDate14dateDifferenceERKS_PiS2_S2_S2_@Base 4:4.5.85
+ _ZNK14KLocalizedDate14daysDifferenceERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDate14daysDifferenceERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDate14firstDayOfYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate14lastDayOfMonthEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate15firstDayOfMonthEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate15yearsDifferenceERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDate15yearsDifferenceERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDate16monthsDifferenceERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDate16monthsDifferenceERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDate3dayEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate4dateEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate4weekEN7KLocale16WeekNumberSystemEPi@Base 4:4.5.85
+ _ZNK14KLocalizedDate4weekEPi@Base 4:4.5.85
+ _ZNK14KLocalizedDate4yearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate5monthEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate6isNullEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate7addDaysEi@Base 4:4.5.85
+ _ZNK14KLocalizedDate7eraNameEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate7eraYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate7getDateEPiS0_S0_@Base 4:4.5.85
+ _ZNK14KLocalizedDate7isValidEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate8addYearsEi@Base 4:4.5.85
+ _ZNK14KLocalizedDate8calendarEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate9addMonthsEi@Base 4:4.5.85
+ _ZNK14KLocalizedDate9dayOfWeekEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate9dayOfYearEv@Base 4:4.5.85
+ _ZNK14KLocalizedDate9yearInEraEv@Base 4:4.5.85
+ _ZNK14KLocalizedDateeqERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDateeqERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDategeERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDategeERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDategtERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDategtERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDateleERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDateleERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDateltERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDateltERKS_@Base 4:4.5.85
+ _ZNK14KLocalizedDateneERK5QDate@Base 4:4.5.85
+ _ZNK14KLocalizedDateneERKS_@Base 4:4.5.85
  _ZNK14KPluginFactory10metaObjectEv@Base 4:4.3.4
  _ZNK14KPluginFactory13componentDataEv@Base 4:4.3.4
  _ZNK14KServiceAction11isSeparatorEv@Base 4:4.3.4
@@ -2768,7 +3181,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK14KSycocaFactory7isEmptyEv@Base 4:4.3.4
  _ZNK15KCalendarSystem10daysInWeekERK5QDate@Base 4:4.3.4
  _ZNK15KCalendarSystem10daysInYearERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem10daysInYearEi@Base 4:4.4.95
  _ZNK15KCalendarSystem10formatDateERK5QDateN7KLocale10DateFormatE@Base 4:4.3.4
+ _ZNK15KCalendarSystem10formatDateERK5QDateN7KLocale17DateTimeComponentENS3_23DateTimeComponentFormatENS3_16WeekNumberSystemE@Base 4:4.5.86
  _ZNK15KCalendarSystem10formatDateERK5QDateRK7QStringN7KLocale22DateTimeFormatStandardE@Base 4:4.4.0
  _ZNK15KCalendarSystem10formatDateERK5QDateRK7QStringN7KLocale8DigitSetENS6_22DateTimeFormatStandardE@Base 4:4.4.0
  _ZNK15KCalendarSystem10isLeapYearERK5QDate@Base 4:4.3.4
@@ -2776,20 +3191,40 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK15KCalendarSystem10weekNumberERK5QDatePi@Base 4:4.3.4
  _ZNK15KCalendarSystem10yearStringERK5QDateNS_12StringFormatE@Base 4:4.3.4
  _ZNK15KCalendarSystem11daysInMonthERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem11daysInMonthEii@Base 4:4.4.95
  _ZNK15KCalendarSystem11monthStringERK5QDateNS_12StringFormatE@Base 4:4.3.4
  _ZNK15KCalendarSystem11weekDayNameERK5QDateNS_17WeekDayNameFormatE@Base 4:4.3.4
+ _ZNK15KCalendarSystem11weekDayNameEiNS_17WeekDayNameFormatE@Base 4:4.7.0
  _ZNK15KCalendarSystem11weeksInYearERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem11weeksInYearERK5QDateN7KLocale16WeekNumberSystemE@Base 4:4.7.0
  _ZNK15KCalendarSystem11weeksInYearEi@Base 4:4.3.4
+ _ZNK15KCalendarSystem11weeksInYearEiN7KLocale16WeekNumberSystemE@Base 4:4.7.0
  _ZNK15KCalendarSystem12monthsInYearERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem12monthsInYearEi@Base 4:4.4.95
  _ZNK15KCalendarSystem12weekStartDayEv@Base 4:4.3.4
+ _ZNK15KCalendarSystem13calendarLabelEv@Base 4:4.5.85
+ _ZNK15KCalendarSystem13lastDayOfYearERK5QDate@Base 4:4.5.85
+ _ZNK15KCalendarSystem13lastDayOfYearEi@Base 4:4.5.85
+ _ZNK15KCalendarSystem14calendarSystemEv@Base 4:4.5.85
+ _ZNK15KCalendarSystem14dateDifferenceERK5QDateS2_PiS3_S3_S3_@Base 4:4.4.95
+ _ZNK15KCalendarSystem14daysDifferenceERK5QDateS2_@Base 4:4.4.95
+ _ZNK15KCalendarSystem14firstDayOfYearERK5QDate@Base 4:4.5.85
+ _ZNK15KCalendarSystem14firstDayOfYearEi@Base 4:4.5.85
+ _ZNK15KCalendarSystem14lastDayOfMonthERK5QDate@Base 4:4.5.85
+ _ZNK15KCalendarSystem14lastDayOfMonthEii@Base 4:4.5.85
  _ZNK15KCalendarSystem14setDateIsoWeekER5QDateiii@Base 4:4.4.0
  _ZNK15KCalendarSystem15dateToJulianDayEiiiRi@Base 4:4.3.4
  _ZNK15KCalendarSystem15dayOfWeekStringERK5QDate@Base 4:4.4.0
  _ZNK15KCalendarSystem15dayOfYearStringERK5QDateNS_12StringFormatE@Base 4:4.4.0
+ _ZNK15KCalendarSystem15firstDayOfMonthERK5QDate@Base 4:4.5.85
+ _ZNK15KCalendarSystem15firstDayOfMonthEii@Base 4:4.5.85
  _ZNK15KCalendarSystem15julianDayToDateEiRiS0_S0_@Base 4:4.3.4
  _ZNK15KCalendarSystem15latestValidDateEv@Base 4:4.3.4
+ _ZNK15KCalendarSystem15yearInEraStringERK5QDateNS_12StringFormatE@Base 4:4.4.95
+ _ZNK15KCalendarSystem15yearsDifferenceERK5QDateS2_@Base 4:4.4.95
  _ZNK15KCalendarSystem16daysInWeekStringERK5QDate@Base 4:4.4.0
  _ZNK15KCalendarSystem16daysInYearStringERK5QDateNS_12StringFormatE@Base 4:4.4.0
+ _ZNK15KCalendarSystem16monthsDifferenceERK5QDateS2_@Base 4:4.4.95
  _ZNK15KCalendarSystem16weekNumberStringERK5QDateNS_12StringFormatE@Base 4:4.4.0
  _ZNK15KCalendarSystem17daysInMonthStringERK5QDateNS_12StringFormatE@Base 4:4.4.0
  _ZNK15KCalendarSystem17earliestValidDateEv@Base 4:4.3.4
@@ -2798,28 +3233,43 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK15KCalendarSystem18isValidIsoWeekDateEiii@Base 4:4.4.0
  _ZNK15KCalendarSystem18monthsInYearStringERK5QDateNS_12StringFormatE@Base 4:4.4.0
  _ZNK15KCalendarSystem19yearStringToIntegerERK7QStringRi@Base 4:4.3.4
+ _ZNK15KCalendarSystem20applyShortYearWindowEi@Base 4:4.5.85
  _ZNK15KCalendarSystem20monthStringToIntegerERK7QStringRi@Base 4:4.3.4
+ _ZNK15KCalendarSystem24shortYearWindowStartYearEv@Base 4:4.5.85
  _ZNK15KCalendarSystem3dayERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem3eraERK5QDate@Base 4:4.5.85
+ _ZNK15KCalendarSystem3eraERK7QStringi@Base 4:4.5.85
+ _ZNK15KCalendarSystem4weekERK5QDateN7KLocale16WeekNumberSystemEPi@Base 4:4.7.0
+ _ZNK15KCalendarSystem4weekERK5QDatePi@Base 4:4.7.0
  _ZNK15KCalendarSystem4yearERK5QDate@Base 4:4.3.4
  _ZNK15KCalendarSystem5epochEv@Base 4:4.3.4
  _ZNK15KCalendarSystem5monthERK5QDate@Base 4:4.3.4
  _ZNK15KCalendarSystem6localeEv@Base 4:4.3.4
  _ZNK15KCalendarSystem6setYMDER5QDateiii@Base 4:4.3.4
  _ZNK15KCalendarSystem7addDaysERK5QDatei@Base 4:4.3.4
+ _ZNK15KCalendarSystem7eraListEv@Base 4:4.5.85
+ _ZNK15KCalendarSystem7eraNameERK5QDateNS_12StringFormatE@Base 4:4.4.95
+ _ZNK15KCalendarSystem7eraYearERK5QDateNS_12StringFormatE@Base 4:4.4.95
+ _ZNK15KCalendarSystem7getDateE5QDatePiS1_S1_@Base 4:4.4.95
  _ZNK15KCalendarSystem7isValidERK5QDate@Base 4:4.3.4
+ _ZNK15KCalendarSystem7isValidERK7QStringiii@Base 4:4.4.95
  _ZNK15KCalendarSystem7isValidEii@Base 4:4.4.0
  _ZNK15KCalendarSystem7isValidEiii@Base 4:4.3.4
+ _ZNK15KCalendarSystem7setDateER5QDate7QStringiii@Base 4:4.4.95
  _ZNK15KCalendarSystem7setDateER5QDateii@Base 4:4.4.0
  _ZNK15KCalendarSystem7setDateER5QDateiii@Base 4:4.3.4
  _ZNK15KCalendarSystem8addYearsERK5QDatei@Base 4:4.3.4
  _ZNK15KCalendarSystem8readDateERK7QStringN7KLocale13ReadDateFlagsEPb@Base 4:4.3.4
  _ZNK15KCalendarSystem8readDateERK7QStringPb@Base 4:4.3.4
  _ZNK15KCalendarSystem8readDateERK7QStringS2_Pb@Base 4:4.3.4
+ _ZNK15KCalendarSystem8readDateERK7QStringS2_PbN7KLocale22DateTimeFormatStandardE@Base 4:4.4.95
  _ZNK15KCalendarSystem9addMonthsERK5QDatei@Base 4:4.3.4
  _ZNK15KCalendarSystem9dayOfWeekERK5QDate@Base 4:4.3.4
  _ZNK15KCalendarSystem9dayOfYearERK5QDate@Base 4:4.3.4
  _ZNK15KCalendarSystem9dayStringERK5QDateNS_12StringFormatE@Base 4:4.3.4
  _ZNK15KCalendarSystem9monthNameERK5QDateNS_15MonthNameFormatE@Base 4:4.3.4
+ _ZNK15KCalendarSystem9monthNameEiiNS_15MonthNameFormatE@Base 4:4.7.0
+ _ZNK15KCalendarSystem9yearInEraERK5QDate@Base 4:4.4.95
  _ZNK15KEncodingProber10confidenceEv@Base 4:4.3.4
  _ZNK15KEncodingProber10proberTypeEv@Base 4:4.3.4
  _ZNK15KEncodingProber12encodingNameEv@Base 4:4.3.4
@@ -2841,11 +3291,18 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK16KLocalizedString4subsEyiiRK5QChar@Base 4:4.3.4
  _ZNK16KLocalizedString7isEmptyEv@Base 4:4.3.4
  _ZNK16KLocalizedString8toStringEPK7KLocale@Base 4:4.3.4
+ _ZNK16KLocalizedString8toStringEPK7KLocaleRK7QString@Base 4:4.4.95
+ _ZNK16KLocalizedString8toStringERK7QString@Base 4:4.4.95
  _ZNK16KLocalizedString8toStringEv@Base 4:4.3.4
  _ZNK16KLocalizedString9inContextERK7QStringS2_@Base 4:4.3.4
  _ZNK16KMimeTypeFactory11createEntryEi@Base 4:4.3.4
- _ZNK16KMimeTypeFactory12resolveAliasERK7QString@Base 4:4.3.4
- _ZNK16KMimeTypeFactory14parseMagicFileEP9QIODeviceRK7QString@Base 4:4.3.4
+ _ZNK16KMimeTypeFactory13MimeTypeEntry19serviceOffersOffsetEv@Base 4:4.5.85
+ _ZNK16KSharedDataCache14evictionPolicyEv@Base 4:4.4.95
+ _ZNK16KSharedDataCache4findERK7QStringP10QByteArray@Base 4:4.4.95
+ _ZNK16KSharedDataCache8containsERK7QString@Base 4:4.4.95
+ _ZNK16KSharedDataCache8freeSizeEv@Base 4:4.4.95
+ _ZNK16KSharedDataCache9timestampEv@Base 4:4.5.85
+ _ZNK16KSharedDataCache9totalSizeEv@Base 4:4.4.95
  _ZNK16KSystemTimeZones10metaObjectEv@Base 4:4.3.4
  _ZNK16KTimeZoneBackend10isDstAtUtcEPK9KTimeZoneRK9QDateTime@Base 4:4.3.4
  _ZNK16KTimeZoneBackend11offsetAtUtcEPK9KTimeZoneRK9QDateTime@Base 4:4.3.4
@@ -2855,6 +3312,10 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK16KTimeZoneBackend5cloneEv@Base 4:4.3.4
  _ZNK16KTimeZoneBackend5isDstEPK9KTimeZonel@Base 4:4.3.4
  _ZNK16KTimeZoneBackend6offsetEPK9KTimeZonel@Base 4:4.3.4
+ _ZNK17KArchiveDirectory11isDirectoryEv@Base 4:4.4.95
+ _ZNK17KArchiveDirectory5entryERK7QString@Base 4:4.4.95
+ _ZNK17KArchiveDirectory6copyToERK7QStringb@Base 4:4.4.95
+ _ZNK17KArchiveDirectory7entriesEv@Base 4:4.4.95
  _ZNK17KEncodingDetector15visuallyOrderedEv@Base 4:4.3.4
  _ZNK17KEncodingDetector18autoDetectLanguageEv@Base 4:4.3.4
  _ZNK17KEncodingDetector20encodingChoiceSourceEv@Base 4:4.3.4
@@ -2931,6 +3392,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK19KCoreConfigSkeleton8findItemERK7QString@Base 4:4.4.0
  _ZNK19KCoreConfigSkeleton9ItemPoint7isEqualERK8QVariant@Base 4:4.3.4
  _ZNK19KCoreConfigSkeleton9ItemPoint8propertyEv@Base 4:4.3.4
+ _ZNK19KMimeTypeRepository14parseMagicFileEP9QIODeviceRK7QString@Base 4:4.5.85
  _ZNK19KServiceTypeFactory11createEntryEi@Base 4:4.3.4
  _ZNK19KSslCertificateRule10isRejectedEv@Base 4:4.3.4
  _ZNK19KSslCertificateRule11certificateEv@Base 4:4.3.4
@@ -2949,7 +3411,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK21KSystemTimeZoneSource5parseERK9KTimeZone@Base 4:4.3.4
  _ZNK21KTzfileTimeZoneSource5parseERK9KTimeZone@Base 4:4.3.4
  _ZNK21KTzfileTimeZoneSource8locationEv@Base 4:4.3.4
- _ZNK22KSslCertificateManager16rootCertificatesEv@Base 4:4.3.4
+ _ZNK22KSslCertificateManager14caCertificatesEv@Base 4:4.5.85
  _ZNK22KSslCertificateManager4ruleERK15QSslCertificateRK7QString@Base 4:4.3.4
  _ZNK22KSystemTimeZoneBackend10isDstAtUtcEPK9KTimeZoneRK9QDateTime@Base 4:4.3.4
  _ZNK22KSystemTimeZoneBackend11offsetAtUtcEPK9KTimeZoneRK9QDateTime@Base 4:4.3.4
@@ -2986,9 +3448,11 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK4KUrl3cmpERKS_b@Base 4:4.3.4
  _ZNK4KUrl3refEv@Base 4:4.3.4
  _ZNK4KUrl3urlENS_16AdjustPathOptionE@Base 4:4.3.4
+ _ZNK4KUrl4List12toStringListENS_16AdjustPathOptionE@Base 4:4.5.85
  _ZNK4KUrl4List12toStringListEv@Base 4:4.3.4
  _ZNK4KUrl4List16populateMimeDataEP9QMimeDataRK4QMapI7QStringS4_ENS_13MimeDataFlagsE@Base 4:4.3.4
  _ZNK4KUrl4List16populateMimeDataERKS0_P9QMimeDataRK4QMapI7QStringS6_ENS_13MimeDataFlagsE@Base 4:4.3.4
+ _ZNK4KUrl4Listcv5QListI4QUrlEEv@Base 4:4.7.1
  _ZNK4KUrl4Listcv8QVariantEv@Base 4:4.3.4
  _ZNK4KUrl4passEv@Base 4:4.3.4
  _ZNK4KUrl4pathENS_16AdjustPathOptionE@Base 4:4.3.4
@@ -3013,6 +3477,8 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK4KUrlcv8QVariantEv@Base 4:4.3.4
  _ZNK4KUrleqERK7QString@Base 4:4.3.4
  _ZNK4KUrleqERKS_@Base 4:4.3.4
+ _ZNK4KZip10extraFieldEv@Base 4:4.4.95
+ _ZNK4KZip11compressionEv@Base 4:4.4.95
  _ZNK5KAuth11ActionReply10serializedEv@Base 4:4.4.0
  _ZNK5KAuth11ActionReply16errorDescriptionEv@Base 4:4.4.0
  _ZNK5KAuth11ActionReply4dataEv@Base 4:4.4.0
@@ -3024,7 +3490,9 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK5KAuth11ActionReplyneERKS0_@Base 4:4.4.0
  _ZNK5KAuth13ActionWatcher10metaObjectEv@Base 4:4.4.0
  _ZNK5KAuth13ActionWatcher6actionEv@Base 4:4.4.0
+ _ZNK5KAuth6Action12parentWidgetEv@Base 4:4.5.85
  _ZNK5KAuth6Action13executesAsyncEv@Base 4:4.4.0
+ _ZNK5KAuth6Action14earlyAuthorizeEv@Base 4:4.4.95
  _ZNK5KAuth6Action4nameEv@Base 4:4.4.0
  _ZNK5KAuth6Action6statusEv@Base 4:4.4.0
  _ZNK5KAuth6Action7detailsEv@Base 4:4.4.0
@@ -3034,6 +3502,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK5KAuth6Action8helperIDEv@Base 4:4.4.0
  _ZNK5KAuth6Action9argumentsEv@Base 4:4.4.0
  _ZNK5KAuth6Action9authorizeEv@Base 4:4.4.0
+ _ZNK5KAuth6Action9hasHelperEv@Base 4:4.4.95
  _ZNK5KAuth6ActioneqERKS0_@Base 4:4.4.0
  _ZNK5KAuth6ActionneERKS0_@Base 4:4.4.0
  _ZNK5KUser10groupNamesEv@Base 4:4.3.4
@@ -3137,11 +3606,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK7KLocale12translateRawEPKcS1_mP7QStringS3_@Base 4:4.3.4
  _ZNK7KLocale12weekStartDayEv@Base 4:4.3.4
  _ZNK7KLocale13convertDigitsERK7QStringNS_8DigitSetEb@Base 4:4.3.4
+ _ZNK7KLocale13dayPeriodTextERK5QTimeNS_23DateTimeComponentFormatE@Base 4:4.5.85
  _ZNK7KLocale13decimalPlacesEv@Base 4:4.4.0
  _ZNK7KLocale13decimalSymbolEv@Base 4:4.3.4
  _ZNK7KLocale13measureSystemEv@Base 4:4.3.4
  _ZNK7KLocale13useTranscriptEv@Base 4:4.3.4
  _ZNK7KLocale13weekDayOfPrayEv@Base 4:4.3.4
+ _ZNK7KLocale14calendarSystemEv@Base 4:4.5.85
  _ZNK7KLocale14currencySymbolEv@Base 4:4.3.4
  _ZNK7KLocale14digitSetToNameENS_8DigitSetEb@Base 4:4.3.4
  _ZNK7KLocale14formatByteSizeEd@Base 4:4.3.4
@@ -3161,12 +3632,19 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK7KLocale16dateTimeDigitSetEv@Base 4:4.3.4
  _ZNK7KLocale16formatLocaleTimeERK5QTime6QFlagsINS_16TimeFormatOptionEE@Base 4:4.4.0
  _ZNK7KLocale16monetaryDigitSetEv@Base 4:4.3.4
+ _ZNK7KLocale16translateRawFromEPKcS1_P7QStringS3_@Base 4:4.4.95
+ _ZNK7KLocale16translateRawFromEPKcS1_S1_P7QStringS3_@Base 4:4.4.95
+ _ZNK7KLocale16translateRawFromEPKcS1_S1_S1_mP7QStringS3_@Base 4:4.4.95
+ _ZNK7KLocale16translateRawFromEPKcS1_S1_mP7QStringS3_@Base 4:4.4.95
+ _ZNK7KLocale16weekNumberSystemEv@Base 4:4.7.0
  _ZNK7KLocale17binaryUnitDialectEv@Base 4:4.4.0
  _ZNK7KLocale17countryCodeToNameERK7QString@Base 4:4.3.4
  _ZNK7KLocale17localizedFilePathERK7QString@Base 4:4.3.4
  _ZNK7KLocale17workingWeekEndDayEv@Base 4:4.3.4
+ _ZNK7KLocale18installedLanguagesEv@Base 4:4.5.85
  _ZNK7KLocale18languageCodeToNameERK7QString@Base 4:4.3.4
  _ZNK7KLocale18thousandsSeparatorEv@Base 4:4.3.4
+ _ZNK7KLocale19countryDivisionCodeEv@Base 4:4.5.85
  _ZNK7KLocale19workingWeekStartDayEv@Base 4:4.3.4
  _ZNK7KLocale20prettyFormatDurationEm@Base 4:4.3.4
  _ZNK7KLocale21monetaryDecimalPlacesEv@Base 4:4.4.0
@@ -3196,6 +3674,11 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK7KSslKey7secrecyEv@Base 4:4.3.4
  _ZNK7KSslKey9algorithmEv@Base 4:4.3.4
  _ZNK7KSycoca10metaObjectEv@Base 4:4.3.4
+ _ZNK8KArchive4modeEv@Base 4:4.4.95
+ _ZNK8KArchive6deviceEv@Base 4:4.4.95
+ _ZNK8KArchive6isOpenEv@Base 4:4.4.95
+ _ZNK8KArchive8fileNameEv@Base 4:4.4.95
+ _ZNK8KArchive9directoryEv@Base 4:4.4.95
  _ZNK8KLibrary10metaObjectEv@Base 4:4.3.4
  _ZNK8KMemFile12isSequentialEv@Base 4:4.3.4
  _ZNK8KMemFile4sizeEv@Base 4:4.3.4
@@ -3310,6 +3793,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK8KService10categoriesEv@Base 4:4.3.4
  _ZNK8KService11genericNameEv@Base 4:4.3.4
  _ZNK8KService11hasMimeTypeEPK12KServiceType@Base 4:4.3.4
+ _ZNK8KService11hasMimeTypeERK7QString@Base 4:4.5.85
  _ZNK8KService11locateLocalEv@Base 4:4.3.4
  _ZNK8KService12serviceTypesEv@Base 4:4.3.4
  _ZNK8KService13isApplicationEv@Base 4:4.3.4
@@ -3337,8 +3821,10 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK8KService8propertyERK7QStringN8QVariant4TypeE@Base 4:4.3.4
  _ZNK8KService8terminalEv@Base 4:4.3.4
  _ZNK8KService8usernameEv@Base 4:4.3.4
+ _ZNK8KService9mimeTypesEv@Base 4:4.8.3
  _ZNK8KService9noDisplayEv@Base 4:4.3.4
  _ZNK8KService9parentAppEv@Base 4:4.3.4
+ _ZNK8KService9showInKDEEv@Base 4:4.4.95
  _ZNK8KService9storageIdEv@Base 4:4.3.4
  _ZNK8KTempDir10autoRemoveEv@Base 4:4.3.4
  _ZNK8KTempDir4nameEv@Base 4:4.3.4
@@ -3401,6 +3887,10 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZNK9KDateTime9utcOffsetEv@Base 4:4.3.4
  _ZNK9KDateTimeeqERKS_@Base 4:4.3.4
  _ZNK9KDateTimeltERKS_@Base 4:4.3.4
+ _ZNK9KDirWatch10metaObjectEv@Base 4:4.4.95
+ _ZNK9KDirWatch5ctimeERK7QString@Base 4:4.4.95
+ _ZNK9KDirWatch8containsERK7QString@Base 4:4.4.95
+ _ZNK9KLockFile7Private5isNfsEv@Base 4:4.7.1
  _ZNK9KLockFile8isLockedEv@Base 4:4.3.4
  _ZNK9KLockFile9staleTimeEv@Base 4:4.3.4
  _ZNK9KMimeType13mainExtensionEv@Base 4:4.3.4
@@ -3488,11 +3978,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTI11KFilterBase@Base 4:4.3.4
  _ZTI11KGzipFilter@Base 4:4.3.4
  _ZTI11KJobPrivate@Base 4:4.3.4
+ _ZTI12KArchiveFile@Base 4:4.4.95
  _ZTI12KConfigGroup@Base 4:4.3.4
  _ZTI12KDesktopFile@Base 4:4.3.4
  _ZTI12KLocalSocket@Base 4:4.3.4
  _ZTI12KServiceType@Base 4:4.3.4
  _ZTI12KSycocaEntry@Base 4:4.3.4
+ _ZTI13KArchiveEntry@Base 4:4.4.95
  _ZTI13KAutoSaveFile@Base 4:4.3.4
  _ZTI13KCompositeJob@Base 4:4.3.4
  _ZTI13KCurrencyCode@Base 4:4.4.0
@@ -3502,6 +3994,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTI13KSharedConfig@Base 4:4.3.4
  _ZTI13KStandardDirs@Base 4:4.3.4
  _ZTI13KTimeZoneData@Base 4:4.3.4
+ _ZTI13KZipFileEntry@Base 4:4.4.95
  _ZTI14KComponentData@Base 4:4.3.4
  _ZTI14KConfigBackend@Base 4:4.3.4
  _ZTI14KJobUiDelegate@Base 4:4.3.4
@@ -3519,6 +4012,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTI16KMimeTypeFactory@Base 4:4.3.4
  _ZTI16KSystemTimeZones@Base 4:4.3.4
  _ZTI16KTimeZoneBackend@Base 4:4.3.4
+ _ZTI17KArchiveDirectory@Base 4:4.4.95
  _ZTI18KCharMacroExpander@Base 4:4.3.4
  _ZTI18KLocalSocketServer@Base 4:4.3.4
  _ZTI18KMacroExpanderBase@Base 4:4.3.4
@@ -3535,18 +4029,25 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTI22KSystemTimeZoneBackend@Base 4:4.3.4
  _ZTI22KTzfileTimeZoneBackend@Base 4:4.3.4
  _ZTI24OrgKdeKLauncherInterface@Base 4:4.3.4
+ _ZTI3KAr@Base 4:4.4.95
  _ZTI4KJob@Base 4:4.3.4
+ _ZTI4KTar@Base 4:4.4.95
+ _ZTI4KZip@Base 4:4.4.95
  _ZTI7KConfig@Base 4:4.3.4
  _ZTI7KLocale@Base 4:4.3.4
  _ZTI7KSycoca@Base 4:4.3.4
+ _ZTI8KArchive@Base 4:4.4.95
  _ZTI8KLibrary@Base 4:4.3.4
  _ZTI8KMemFile@Base 4:4.3.4
  _ZTI8KProcess@Base 4:4.3.4
  _ZTI8KService@Base 4:4.3.4
  _ZTI9KCharsets@Base 4:4.3.4
+ _ZTI9KDirWatch@Base 4:4.4.95
  _ZTI9KMimeType@Base 4:4.3.4
  _ZTI9KSaveFile@Base 4:4.3.4
  _ZTI9KTimeZone@Base 4:4.3.4
+ _ZTIN16KMimeTypeFactory13MimeTypeEntryE@Base 4:4.5.85
+ _ZTIN16KMimeTypeFactory20MimeTypeEntryPrivateE@Base 4:4.5.85
  _ZTIN19KCoreConfigSkeleton10ItemDoubleE@Base 4:4.3.4
  _ZTIN19KCoreConfigSkeleton10ItemStringE@Base 4:4.3.4
  _ZTIN19KCoreConfigSkeleton11ItemIntListE@Base 4:4.3.4
@@ -3600,11 +4101,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTS11KFilterBase@Base 4:4.3.4
  _ZTS11KGzipFilter@Base 4:4.3.4
  _ZTS11KJobPrivate@Base 4:4.3.4
+ _ZTS12KArchiveFile@Base 4:4.4.95
  _ZTS12KConfigGroup@Base 4:4.3.4
  _ZTS12KDesktopFile@Base 4:4.3.4
  _ZTS12KLocalSocket@Base 4:4.3.4
  _ZTS12KServiceType@Base 4:4.3.4
  _ZTS12KSycocaEntry@Base 4:4.3.4
+ _ZTS13KArchiveEntry@Base 4:4.4.95
  _ZTS13KAutoSaveFile@Base 4:4.3.4
  _ZTS13KCompositeJob@Base 4:4.3.4
  _ZTS13KCurrencyCode@Base 4:4.4.0
@@ -3614,6 +4117,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTS13KSharedConfig@Base 4:4.3.4
  _ZTS13KStandardDirs@Base 4:4.3.4
  _ZTS13KTimeZoneData@Base 4:4.3.4
+ _ZTS13KZipFileEntry@Base 4:4.4.95
  _ZTS14KComponentData@Base 4:4.3.4
  _ZTS14KConfigBackend@Base 4:4.3.4
  _ZTS14KJobUiDelegate@Base 4:4.3.4
@@ -3631,6 +4135,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTS16KMimeTypeFactory@Base 4:4.3.4
  _ZTS16KSystemTimeZones@Base 4:4.3.4
  _ZTS16KTimeZoneBackend@Base 4:4.3.4
+ _ZTS17KArchiveDirectory@Base 4:4.4.95
  _ZTS18KCharMacroExpander@Base 4:4.3.4
  _ZTS18KLocalSocketServer@Base 4:4.3.4
  _ZTS18KMacroExpanderBase@Base 4:4.3.4
@@ -3647,18 +4152,25 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTS22KSystemTimeZoneBackend@Base 4:4.3.4
  _ZTS22KTzfileTimeZoneBackend@Base 4:4.3.4
  _ZTS24OrgKdeKLauncherInterface@Base 4:4.3.4
+ _ZTS3KAr@Base 4:4.4.95
  _ZTS4KJob@Base 4:4.3.4
+ _ZTS4KTar@Base 4:4.4.95
+ _ZTS4KZip@Base 4:4.4.95
  _ZTS7KConfig@Base 4:4.3.4
  _ZTS7KLocale@Base 4:4.3.4
  _ZTS7KSycoca@Base 4:4.3.4
+ _ZTS8KArchive@Base 4:4.4.95
  _ZTS8KLibrary@Base 4:4.3.4
  _ZTS8KMemFile@Base 4:4.3.4
  _ZTS8KProcess@Base 4:4.3.4
  _ZTS8KService@Base 4:4.3.4
  _ZTS9KCharsets@Base 4:4.3.4
+ _ZTS9KDirWatch@Base 4:4.4.95
  _ZTS9KMimeType@Base 4:4.3.4
  _ZTS9KSaveFile@Base 4:4.3.4
  _ZTS9KTimeZone@Base 4:4.3.4
+ _ZTSN16KMimeTypeFactory13MimeTypeEntryE@Base 4:4.5.85
+ _ZTSN16KMimeTypeFactory20MimeTypeEntryPrivateE@Base 4:4.5.85
  _ZTSN19KCoreConfigSkeleton10ItemDoubleE@Base 4:4.3.4
  _ZTSN19KCoreConfigSkeleton10ItemStringE@Base 4:4.3.4
  _ZTSN19KCoreConfigSkeleton11ItemIntListE@Base 4:4.3.4
@@ -3722,11 +4234,13 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTV11KFilterBase@Base 4:4.3.4
  _ZTV11KGzipFilter@Base 4:4.3.4
  _ZTV11KJobPrivate@Base 4:4.3.4
+ _ZTV12KArchiveFile@Base 4:4.4.95
  _ZTV12KConfigGroup@Base 4:4.3.4
  _ZTV12KDesktopFile@Base 4:4.3.4
  _ZTV12KLocalSocket@Base 4:4.3.4
  _ZTV12KServiceType@Base 4:4.3.4
  _ZTV12KSycocaEntry@Base 4:4.3.4
+ _ZTV13KArchiveEntry@Base 4:4.4.95
  _ZTV13KAutoSaveFile@Base 4:4.3.4
  _ZTV13KCompositeJob@Base 4:4.3.4
  _ZTV13KCurrencyCode@Base 4:4.4.0
@@ -3736,6 +4250,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTV13KSharedConfig@Base 4:4.3.4
  _ZTV13KStandardDirs@Base 4:4.3.4
  _ZTV13KTimeZoneData@Base 4:4.3.4
+ _ZTV13KZipFileEntry@Base 4:4.4.95
  _ZTV14KComponentData@Base 4:4.3.4
  _ZTV14KConfigBackend@Base 4:4.3.4
  _ZTV14KJobUiDelegate@Base 4:4.3.4
@@ -3753,6 +4268,7 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTV16KMimeTypeFactory@Base 4:4.3.4
  _ZTV16KSystemTimeZones@Base 4:4.3.4
  _ZTV16KTimeZoneBackend@Base 4:4.3.4
+ _ZTV17KArchiveDirectory@Base 4:4.4.95
  _ZTV18KCharMacroExpander@Base 4:4.3.4
  _ZTV18KLocalSocketServer@Base 4:4.3.4
  _ZTV18KMacroExpanderBase@Base 4:4.3.4
@@ -3769,18 +4285,25 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTV22KSystemTimeZoneBackend@Base 4:4.3.4
  _ZTV22KTzfileTimeZoneBackend@Base 4:4.3.4
  _ZTV24OrgKdeKLauncherInterface@Base 4:4.3.4
+ _ZTV3KAr@Base 4:4.4.95
  _ZTV4KJob@Base 4:4.3.4
+ _ZTV4KTar@Base 4:4.4.95
+ _ZTV4KZip@Base 4:4.4.95
  _ZTV7KConfig@Base 4:4.3.4
  _ZTV7KLocale@Base 4:4.3.4
  _ZTV7KSycoca@Base 4:4.3.4
+ _ZTV8KArchive@Base 4:4.4.95
  _ZTV8KLibrary@Base 4:4.3.4
  _ZTV8KMemFile@Base 4:4.3.4
  _ZTV8KProcess@Base 4:4.3.4
  _ZTV8KService@Base 4:4.3.4
  _ZTV9KCharsets@Base 4:4.3.4
+ _ZTV9KDirWatch@Base 4:4.4.95
  _ZTV9KMimeType@Base 4:4.3.4
  _ZTV9KSaveFile@Base 4:4.3.4
  _ZTV9KTimeZone@Base 4:4.3.4
+ _ZTVN16KMimeTypeFactory13MimeTypeEntryE@Base 4:4.5.85
+ _ZTVN16KMimeTypeFactory20MimeTypeEntryPrivateE@Base 4:4.5.85
  _ZTVN19KCoreConfigSkeleton10ItemDoubleE@Base 4:4.3.4
  _ZTVN19KCoreConfigSkeleton10ItemStringE@Base 4:4.3.4
  _ZTVN19KCoreConfigSkeleton11ItemIntListE@Base 4:4.3.4
@@ -3879,12 +4402,19 @@ libkdecore.so.5 libkdecore5 #MINVER#
  _ZTv0_n44_N8KNetwork15KBufferedSocket15setSocketDeviceEPNS_13KSocketDeviceE@Base 4:4.3.4
  _ZTv0_n44_N8KNetwork17KActiveSocketBase15setSocketDeviceEPNS_13KSocketDeviceE@Base 4:4.3.4
  _ZZN6KSocks13KSocksPrivate9debugAreaEvE6s_area@Base 4:4.4.0
+ _Zls6QDebugRK14KLocalizedDate@Base 4:4.5.85
  _Zls6QDebugRK4KUrl@Base 4:4.3.4
  _Zls6QDebugRK9KDateTime@Base 4:4.3.4
+ _ZlsR11QDataStreamRK14KLocalizedDate@Base 4:4.5.85
  _ZlsR11QDataStreamRK14KServiceAction@Base 4:4.3.4
+ _ZlsR11QDataStreamRK9KDateTime@Base 4:4.5.0
  _ZlsR11QDataStreamRKN13KProtocolInfo10ExtraFieldE@Base 4:4.3.4
+ _ZlsR11QDataStreamRKN9KDateTime4SpecE@Base 4:4.5.0
+ _ZrsR11QDataStreamR14KLocalizedDate@Base 4:4.5.85
  _ZrsR11QDataStreamR14KServiceAction@Base 4:4.3.4
+ _ZrsR11QDataStreamR9KDateTime@Base 4:4.5.0
  _ZrsR11QDataStreamRN13KProtocolInfo10ExtraFieldE@Base 4:4.3.4
+ _ZrsR11QDataStreamRN9KDateTime4SpecE@Base 4:4.5.0
  _kde_internal_KConfigGroupGui@Base 4:4.3.4
  kde_kdebug_enable_dbus_interface@Base 4:4.3.4
  kiotrader_create_buffer@Base 4:4.3.4

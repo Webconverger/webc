@@ -46,12 +46,12 @@ check_run_dir()
 
 echo_procs_using_sound()
 {
-	echo $( \
-		lsof +D /dev -F rt \
-		| awk '/^p/ {pid=$1} /^t/ {type=$1} /^r0x(74|e)..$/ && type == "tCHR" {print pid}' \
-		| cut -c 2- \
-		| uniq \
-	)
+	for i in /proc/[0-9]*/fd/* ; do
+		var="$(readlink $i)"
+		if test x"$var" != x"${var#/dev/snd/pcm}" ; then
+			IFS=/; set -- $i; unset IFS; echo $3
+		fi
+	done
 }
 
 # $* [PID]...
