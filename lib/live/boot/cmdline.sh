@@ -267,6 +267,12 @@ Cmdline ()
 				UNIONTYPE="${_PARAMETER#union=}"
 				export UNIONTYPE
 				;;
+
+			git-revision=*)
+				GIT_REVISION="${ARGUMENT#git-revision=}"
+				export GIT_REVISION
+				;;
+
 		esac
 	done
 

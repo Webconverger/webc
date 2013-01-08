@@ -159,6 +159,45 @@ mountroot ()
 		mount --move /live/image /root/live/image
 	fi
 
+
+# If the git-fs code made a bindmount of the git repo, make it available in the real rootfs.
+	if [ -d /.git ]
+	then
+		mkdir "${rootmnt}/.git"
+	# Try to make /.git read-write, by simply remounting it, or by
+	# using a second aufs. Note that mount will return success even
+	# if the filesystem is still ro, so we test for writeability
+	# using touch.
+		if ! (mount -o remount,rw /.git && touch /.git ) && [ "${UNIONTYPE}" = aufs ]
+		then
+		# Overlay a second aufs over /.git. Even though
+		# changes will be lost on reboots, you can still make
+		# a change and push it out before the reboot. We can't
+		# include this in the main aufs mount, since aufs
+		# doesn't handle (bind)mounts in subdirectories.
+			mkdir /cow-git
+			mount -o rw,noatime,mode=755 -t tmpfs tmpfs /cow-git
+			mount -t aufs -o noatime,dirs=/cow-git=rw:/.git=rr aufs "${rootmnt}/.git"
+		else
+			mount --move /.git "${rootmnt}/.git"
+		fi
+
+		# Make sure that HEAD corresponds to the commit
+		# mounted by git-fs
+		if [ -n "$GIT_REVISION" ]
+		then
+			# We don't do a normal (--mixed) reset, since
+			# that also scans the entire working copy to
+			# update the cached info in the index (which is
+			# slow on git-fs / aufs). Instead, we reset HEAD
+			# and the index separately.
+			chroot "${rootmnt}" git --git-dir "/.git" reset --soft "${GIT_REVISION}"
+		fi
+		# Reset the index
+		chroot "${rootmnt}" git --git-dir "/.git" read-tree HEAD
+	fi
+
+
 	# aufs2 in kernel versions around 2.6.33 has a regression:
 	# directories can't be accessed when read for the first the time,
 	# causing a failure for example when accessing /var/lib/fai
