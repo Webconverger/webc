@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 . /etc/webc/functions.sh
 . /etc/webc/webc.conf
