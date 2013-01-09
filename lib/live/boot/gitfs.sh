@@ -15,6 +15,7 @@ echo here
 echo here
 echo here
 echo here
+read
 echo here
 echo here
 echo here
