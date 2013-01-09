@@ -196,9 +196,6 @@ mountroot ()
 		# Reset the index
 		chroot "${rootmnt}" git --git-dir "/.git" read-tree HEAD
 
-		ls /.git-fixups/
-		read
-
 	fi
 
 
