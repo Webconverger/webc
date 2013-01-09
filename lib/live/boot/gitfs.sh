@@ -1,4 +1,42 @@
 #!/bin/sh -x
 
-touch /tmp/GITFS-RUN
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+echo here
+
 for s in /.git-fixups/*; do sh "$s"; done
