@@ -7718,17 +7718,22 @@ Description: S-Lang programming library - runtime version
 Homepage: http://www.jedsoft.org/slang/
 
 Package: mozplugger
-Status: deinstall ok config-files
+Status: install ok installed
 Priority: optional
 Section: web
-Installed-Size: 260
+Installed-Size: 235
 Maintainer: Alessio Treglia <alessio@debian.org>
 Architecture: i386
-Version: 1.14.1-1
-Config-Version: 1.14.1-1
-Depends: m4, libc6 (>= 2.7), libx11-6, iceweasel | iceape-browser | firefox | abrowser | galeon | konqueror | opera | xulrunner-1.9 | xulrunner-1.9.1 | xulrunner-1.9.2
+Version: 1.14.5-1
+Depends: m4, libc6 (>= 2.7), libx11-6, iceweasel | iceape-browser | firefox | abrowser | galeon | rekonq | konqueror | opera | epiphany | chromium (>> 10.0.648.114~r75702-1~) | chromium-browser | xulrunner-1.9 | xulrunner-1.9.1 | xulrunner-1.9.2 | xulrunner-2.0
+Pre-Depends: dpkg (>= 1.15.7.2)
+Suggests: bplay, mikmod, mpg123, mpg321, mplayer | mplayer2, vorbis-tools, sox, playmidi, sidplay-base, splay, timidity, xcdroast, xine-ui, xmp, libreoffice-common, gqview, qiv, imagemagick, evince | evince-gtk, xpdf, texlive-base, abiword-common, gnumeric, rasmol, xscreensaver-gl
 Conffiles:
- /etc/mozpluggerrc f2169b5a992ab67c2e18e8f17cffea12
+ /etc/mozpluggerrc.d/40-global_defs.conf cab434004adf170da1e2bea14a11a102
+ /etc/mozpluggerrc.d/62-documents.conf 576868bb0bfdda1c6abbea98372a3c42
+ /etc/mozpluggerrc.d/60-video.conf ae2d02091fced4eaca472914d07b097e
+ /etc/mozpluggerrc.d/20-header.conf 3068b5e564292da4f663e9cd7b1118e8
+ /etc/mozpluggerrc.d/61-audio.conf a268d487dfa84e984bb067237ce30ab3
 Description: Plugin allowing external viewers to be launched inside Mozilla
  mozplugger allows you to seamlessly integrate external applications
  to view files downloaded from the web that Mozilla can not normally
@@ -10336,11 +10341,11 @@ Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
 Homepage: http://ipw2100.sourceforge.net/firmware.php, http://ipw2200.sourceforge.net/firmware.php
 
 Package: firefox
-Architecture: i386
 Status: install ok installed
 Priority: optional
 Section: web
 Maintainer: Kai Hendry <hendry@webconverger.com>
+Architecture: i386
 Version: 17.0.1
 Provides: firefox
 Description: Firefox Web browser
