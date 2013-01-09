@@ -1,12 +1,12 @@
-TARGETS = cups urandom alsa-utils bumblebeed sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs umountroot live live-boot halt reboot
-sendsigs: bumblebeed alsa-utils
-rsyslog: bumblebeed sendsigs cups
-umountnfs.sh: bumblebeed rsyslog sendsigs alsa-utils
+TARGETS = cups alsa-utils sendsigs urandom rsyslog umountnfs.sh hwclock.sh networking umountfs umountroot live live-boot halt reboot
+sendsigs: alsa-utils
+rsyslog: sendsigs cups
+umountnfs.sh: sendsigs alsa-utils rsyslog
 hwclock.sh: rsyslog
 networking: umountnfs.sh
-umountfs: umountnfs.sh bumblebeed urandom networking alsa-utils hwclock.sh
+umountfs: hwclock.sh networking umountnfs.sh urandom alsa-utils
 umountroot: umountfs
 live: umountroot
 live-boot: umountroot
-halt: live umountroot live-boot
-reboot: live umountroot live-boot
+halt: umountroot live live-boot
+reboot: umountroot live live-boot
