@@ -1,9 +1,10 @@
-TARGETS = networking rsyslog killprocs motd sudo cups acpid cron bootlogs single rmnologin stop-bootlogd rc.local
+TARGETS = networking rsyslog killprocs motd sudo cups acpid cron dbus bootlogs single rmnologin stop-bootlogd rc.local
 INTERACTIVE =
 cups: rsyslog networking
 acpid: rsyslog
 cron: rsyslog networking
+dbus: rsyslog
 single: killprocs bootlogs motd
-rmnologin: sudo networking rsyslog bootlogs motd cups acpid cron
-stop-bootlogd: networking rsyslog bootlogs motd cups sudo acpid cron
-rc.local: networking rsyslog bootlogs motd cups sudo acpid cron
+rmnologin: sudo networking rsyslog bootlogs motd cups acpid cron dbus
+stop-bootlogd: networking rsyslog bootlogs motd cups sudo acpid cron dbus
+rc.local: networking rsyslog bootlogs motd cups sudo acpid cron dbus
