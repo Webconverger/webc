@@ -57,6 +57,23 @@ Description: Freefont Serif, Sans and Mono Truetype fonts
  Times and Courier fonts.
 Homepage: http://savannah.gnu.org/projects/freefont/
 
+Package: libsystemd-id128-0
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 66
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 44-7
+Depends: libc6 (>= 2.9), libcap2 (>= 2.10), libselinux1 (>= 2.0.65)
+Pre-Depends: multiarch-support
+Description: systemd 128 bit ID utility library
+ The libsystemd-id128 library provides utility functions for generating
+ 128 bit IDs.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
 Package: debconf
 Status: install ok installed
 Priority: important
@@ -1650,6 +1667,23 @@ Description: X.Org X server -- Voodoo display driver
  <URL:http://www.X.org>
  .
  This package is built from the X.org xf86-video-voodoo driver module.
+
+Package: libsystemd-journal0
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 115
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 44-7
+Depends: libc6 (>= 2.9), libcap2 (>= 2.10), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 2.0.65), libsystemd-id128-0 (>= 38)
+Pre-Depends: multiarch-support
+Description: systemd journal utility library
+ The libsystemd-journal library provides an interface for the
+ systemd journal service.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
 
 Package: install-info
 Status: install ok installed
@@ -3501,6 +3535,31 @@ Description: OpenSLP libraries
  slpd package to be able to advertise the services.
 Homepage: http://www.openslp.org/
 
+Package: systemd-sysv
+Status: install ok installed
+Priority: extra
+Section: admin
+Installed-Size: 53
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Source: systemd
+Version: 44-7
+Replaces: sysvinit
+Depends: systemd (= 44-7)
+Conflicts: runit-run, sysvinit, upstart
+Description: system and service manager - SysV links
+ systemd is a replacement for sysvinit.  It is dependency-based and
+ able to read the LSB init script headers in addition to parsing rcN.d
+ links as hints.
+ .
+ It also provides process supervision using cgroups and the ability to
+ not only depend on other init script being started, but also
+ availability of a given mount point or dbus service.
+ .
+ This package provides the manual pages and links needed for systemd
+ to replace sysvinit.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
 Package: linux-image-2.6.32-5-686
 Status: deinstall ok config-files
 Priority: optional
@@ -4376,6 +4435,23 @@ Description: shared library for ALSA applications
  .
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
+
+Package: libsystemd-daemon0
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 54
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 44-7
+Depends: libc6 (>= 2.8)
+Pre-Depends: multiarch-support
+Description: systemd utility library
+ The sd-daemon library provides a reference implementation of various
+ APIs for new-style daemons, as implemented by the systemd init system.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
 
 Package: base-files
 Essential: yes
@@ -5707,6 +5783,41 @@ Description: X C Binding, render extension
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
 
+Package: systemd
+Status: install ok installed
+Priority: extra
+Section: admin
+Installed-Size: 3670
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Version: 44-7
+Depends: libacl1 (>= 2.2.51-8), libaudit0 (>= 1.7.13), libc6 (>= 2.11), libcap2 (>= 2.10), libcryptsetup4 (>= 2:1.4), libdbus-1-3 (>= 1.1.1), libkmod2 (>= 5~), liblzma5 (>= 5.1.1alpha+20120614), libpam0g (>= 0.99.7.1), libselinux1 (>= 2.0.65), libsystemd-daemon0 (>= 31), libsystemd-id128-0 (>= 38), libsystemd-journal0 (>= 38), libsystemd-login0 (>= 38), libudev0 (>= 172), libwrap0 (>= 7.6-4~), util-linux (>= 2.19.1-2), initscripts (>= 2.88dsf-17), udev
+Pre-Depends: dpkg (>= 1.15.7.2)
+Recommends: libpam-systemd
+Suggests: systemd-gui, python, python-dbus, python-cairo
+Breaks: lsb-base (<< 4.1+Debian4), lvm2 (<< 2.02.84-1)
+Conflicts: klogd
+Conffiles:
+ /etc/dbus-1/system.d/org.freedesktop.locale1.conf c98fa26ab7a4f4bfd34b926d23aec34e
+ /etc/dbus-1/system.d/org.freedesktop.hostname1.conf c3eb956b5e4494d67211c6766c84b1ef
+ /etc/dbus-1/system.d/org.freedesktop.systemd1.conf 1744d9d50f21aa59b938ef2f50a45ed5
+ /etc/dbus-1/system.d/org.freedesktop.timedate1.conf bd6c5f104f586c4125d9ab729d9ffc4a
+ /etc/dbus-1/system.d/org.freedesktop.login1.conf bfb152fcc7e5bc57f73b97684b7c89c1
+ /etc/systemd/systemd-logind.conf b6c3d3061386e3cd4ac9753af108fa6d
+ /etc/systemd/system.conf fbd97439fe4ca6283dd66efd78f47513
+ /etc/systemd/user.conf e69453051c7caba909a9ec94d2adc71c
+ /etc/systemd/systemd-journald.conf 2a1a703055578ac4cdfecbd2f3ad4c90
+ /etc/bash_completion.d/systemd-bash-completion.sh 7be91a9da91f21d9ee310585cce01e14
+Description: system and service manager
+ systemd is a replacement for sysvinit.  It is dependency-based and
+ able to read the LSB init script headers in addition to parsing rcN.d
+ links as hints.
+ .
+ It also provides process supervision using cgroups and the ability to
+ not only depend on other init script being started, but also
+ availability of a given mount point or dbus service.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
 Package: libswscale2
 Status: install ok installed
 Priority: optional
@@ -6045,6 +6156,23 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Broadcom BCM5705 TSO firmware (tigon/tg3_tso5.bin)
   * VIA VT6656 firmware (vntwusb.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+
+Package: libsystemd-login0
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 83
+Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 44-7
+Depends: libc6 (>= 2.9), libcap2 (>= 2.10), libselinux1 (>= 2.0.65)
+Pre-Depends: multiarch-support
+Description: systemd login utility library
+ The libsystemd-login library provides an interface for the
+ systemd-logind service which is used to track user sessions and seats.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
 
 Package: e2fslibs
 Status: install ok installed
@@ -7658,27 +7786,6 @@ Description: Independent JPEG Group's JPEG runtime library
  JPEG files.
  .
  This package contains the shared library.
-
-Package: sysvinit
-Essential: yes
-Status: install ok installed
-Priority: required
-Section: admin
-Installed-Size: 229
-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
-Architecture: i386
-Version: 2.88dsf-34
-Depends: libc6 (>= 2.11), libselinux1 (>= 1.32), libsepol1 (>= 1.14), debianutils (>= 4)
-Pre-Depends: initscripts (>= 2.88dsf-13.3), sysv-rc | file-rc, sysvinit-utils (>= 2.86.ds1-66)
-Description: System-V-like init utilities
- This package contains programs required for booting
- a Debian system and doing basic process management.
- .
- The most important program in the package is /sbin/init.
- It is the first process started on boot and continues
- to run as process number 1 until the system halts. All
- other processes are descended from it.
-Homepage: http://savannah.nongnu.org/projects/sysvinit
 
 Package: xauth
 Status: install ok installed
@@ -10225,7 +10332,7 @@ Description: utility wrapper around inotify
 Homepage: https://github.com/rvoicilas/inotify-tools/wiki/
 
 Package: live-config
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: misc
 Installed-Size: 144
@@ -10233,6 +10340,7 @@ Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
 Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Version: 3.0.14-1baureo1
+Config-Version: 3.0.14-1baureo1
 Depends: live-config-sysvinit | live-config-backend
 Recommends: live-config-doc, live-tools, keyboard-configuration, locales | locales-all, user-setup, sudo
 Suggests: pciutils, wget
@@ -10264,6 +10372,25 @@ Description: NetScape Portable Runtime Library - transitional package
  This is a transitional package to ensure smooth transition of all packages
  to libnspr4.
 Homepage: http://www.mozilla.org/projects/nspr/
+
+Package: libcryptsetup4
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 184
+Maintainer: Debian Cryptsetup Team <pkg-cryptsetup-devel@lists.alioth.debian.org>
+Architecture: i386
+Source: cryptsetup
+Version: 2:1.4.3-4
+Depends: libc6 (>= 2.8), libdevmapper1.02.1 (>= 2:1.02.74), libgcrypt11 (>= 1.4.6-3), libuuid1 (>= 2.16), libgpg-error0 (>= 1.10-0.1)
+Description: disk encryption support - shared library
+ Cryptsetup provides an interface for configuring encryption on block
+ devices (such as /home or swap partitions), using the Linux kernel
+ device mapper target dm-crypt. It features integrated Linux Unified Key
+ Setup (LUKS) support.
+ .
+ This package provides the libcryptsetup shared library.
+Homepage: http://code.google.com/p/cryptsetup/
 
 Package: libice6
 Status: install ok installed
@@ -10723,7 +10850,7 @@ Description: X11 XFree86 video mode extension library
  git://anongit.freedesktop.org/git/xorg/lib/libXxf86vm
 
 Package: live-config-sysvinit
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: misc
 Installed-Size: 61
@@ -10732,6 +10859,7 @@ Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: all
 Source: live-config
 Version: 3.0.14-1baureo1
+Config-Version: 3.0.14-1baureo1
 Replaces: live-config-backend
 Provides: live-config-backend
 Depends: sysvinit (>= 2.86)
@@ -11816,6 +11944,32 @@ Description: GCC, the GNU Compiler Collection (base package)
  This package contains files common to all languages and libraries
  contained in the GNU Compiler Collection (GCC).
 Homepage: http://gcc.gnu.org/
+
+Package: libwrap0
+Status: install ok installed
+Priority: standard
+Section: libs
+Installed-Size: 120
+Maintainer: Marco d'Itri <md@linux.it>
+Architecture: i386
+Multi-Arch: same
+Source: tcp-wrappers
+Version: 7.6.q-24
+Replaces: tcpd (<< 7.6.q-20)
+Depends: libc6 (>= 2.11)
+Pre-Depends: multiarch-support
+Recommends: tcpd
+Breaks: tcpd (<< 7.6.q-20)
+Description: Wietse Venema's TCP wrappers library
+ Wietse Venema's network logger, also known as TCPD or LOG_TCP.
+ .
+ These programs log the client host name of incoming telnet,
+ ftp, rsh, rlogin, finger etc. requests.
+ .
+ Security options are:
+  - access control per host, domain and/or service;
+  - detection of host name spoofing or host address spoofing;
+  - booby traps to implement an early-warning system.
 
 Package: cups
 Status: install ok installed

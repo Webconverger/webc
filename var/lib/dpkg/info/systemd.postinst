@@ -1,0 +1,79 @@
+#! /bin/sh
+
+set -e
+
+_systemctl() {
+    if [ -e /sys/fs/cgroup/systemd ]; then
+        systemctl "$@"
+    fi
+}
+
+if [ -n "$2" ]; then
+    _systemctl daemon-reexec || true
+fi
+
+# Do a one-time migration of the local time setting
+if dpkg --compare-versions "$2" lt "33-1"; then
+    if [ -f /etc/default/rcS ]; then
+        . /etc/default/rcS
+    fi
+    if [ "$UTC" = "no" ] && [ ! -e /etc/adjtime ]; then
+        printf "0.0 0 0.0\n0\nLOCAL" > /etc/adjtime
+    fi
+fi
+
+# Do a one-time migration of the TMPTIME setting
+if dpkg --compare-versions "$2" lt "36-2"; then
+    if [ -f /etc/default/rcS ]; then
+        . /etc/default/rcS
+    fi
+    if [ ! -e /etc/tmpfiles.d/tmp.conf ]; then
+        case "$TMPTIME" in
+            -*|infinite|infinity)
+                cat > /etc/tmpfiles.d/tmp.conf <<EOF
+# Automatically migrated from TMPTIME in /etc/default/rcS
+# Clear /var/tmp as in /usr/lib/tmpfiles.d/tmp.conf, but avoid clearing /tmp
+d /var/tmp 1777 root root 30d
+EOF
+                ;;
+        esac
+    fi
+fi
+
+# Create /run/initctl → /dev/initctl compat symlink on upgrades
+if [ -e /sys/fs/cgroup/systemd ]; then
+    _systemctl restart systemd-initctl.socket || true
+fi
+
+if dpkg --compare-versions "$2" lt "40-1"; then
+    # /lib/init/rw has been replaced by /run, so try to remove it on upgrades
+    # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=643699
+    _systemctl stop lib-init-rw.automount lib-init-rw.mount || true
+    if [ -d /lib/init/rw ]; then
+        rmdir --ignore-fail-on-non-empty /lib/init/rw || true
+    fi
+
+    # Create /run/initctl → /dev/initctl compat symlink on upgrades
+    if [ -e /sys/fs/cgroup/systemd ]; then
+        ln -sf /dev/initctl /run/initctl
+    fi
+fi
+
+systemd-machine-id-setup
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/lsb-base-logging.sh 25-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/legacy.conf 29-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/systemd.conf 29-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/x11.conf 29-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/bash_completion.d/systemctl-bash-completion.sh /etc/bash_completion.d/systemd-bash-completion.sh 44-2~ systemd -- "$@"
+# End automatically added section
+

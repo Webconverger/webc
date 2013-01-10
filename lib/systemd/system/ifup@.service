@@ -1,0 +1,8 @@
+[Unit]
+Description=ifup for %I
+After=local-fs.target
+
+[Service]
+ExecStart=/sbin/ifup --allow=hotplug %I
+ExecStop=/sbin/ifdown %I
+RemainAfterExit=true
