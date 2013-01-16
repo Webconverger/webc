@@ -187,5 +187,5 @@ else
 	logs "Not a writable boot medium. Could not cache configuration nor upgrade."
 fi
 
-# live-config should restart via inittab and get blocked 
+# live-config should restart via systemd and get blocked 
 # until $live_config_pipe is re-created
