@@ -1,7 +1,9 @@
 [Unit]
-Description=Service to setup Webconverger as a superuser
+Description=Setup Webconverger as a superuser, triggered by X startup script webc.sh
 
 [Service]
+Type=simple
+KillMode=process
 ExecStart=/etc/webc/logbot.sh /etc/webc/live-config.sh
 Restart=always
 
