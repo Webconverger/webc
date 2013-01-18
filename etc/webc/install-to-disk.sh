@@ -107,52 +107,46 @@ install_root() {
 	cp -r /live/image/live/filesystem.git ${dir}/live/
 }
 
-if cmdline_has install
-then
-	# Trap any shell exits with the failed handler
-	trap failed_install EXIT
+# Trap any shell exits with the failed handler
+trap failed_install EXIT
 
-	clear_screen
-	cmdline_has debug && _logs "debug has been enabled"
+clear_screen
 
-	# webc.conf exports the currently mounted git revision
-	test -n "$current_git_revision" || _err "No current revision found, not running git-fs?"
+# webc.conf exports the currently mounted git revision
+test -n "$current_git_revision" || _err "No current revision found, not running git-fs?"
 
-	disk=$( find_disk )
-	partition_disk $disk
-	verify_partition $disk
-	partition="${disk}1"
-	_logs "building filesystem on $partition"
-	mke2fs -j $partition
-	_logs "mounting $partition on /mnt/root"
-	test -d /mnt/root || mkdir /mnt/root
-	MOUNTED=1
-	mount $partition /mnt/root
-	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
-	_logs "enabling swap on /mnt/root/swap"
-	mkswap /mnt/root/swap
-	swapon /mnt/root/swap
-	SWAPON=1
-	install_root /mnt/root
-	install_extlinux /mnt/root $partition $disk
-	verify_extlinux_mbr $disk
+disk=$( find_disk )
+partition_disk $disk
+verify_partition $disk
+partition="${disk}1"
+_logs "building filesystem on $partition"
+mke2fs -j $partition
+_logs "mounting $partition on /mnt/root"
+test -d /mnt/root || mkdir /mnt/root
+MOUNTED=1
+mount $partition /mnt/root
+dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+_logs "enabling swap on /mnt/root/swap"
+mkswap /mnt/root/swap
+swapon /mnt/root/swap
+SWAPON=1
+install_root /mnt/root
+install_extlinux /mnt/root $partition $disk
+verify_extlinux_mbr $disk
 
-	_logs "unmounting partitions"
-	swapoff /mnt/root/swap
-	umount /mnt/root
-	unset SWAPON MOUNTED
+_logs "unmounting partitions"
+swapoff /mnt/root/swap
+umount /mnt/root
+unset SWAPON MOUNTED
 
-	_logs "install complete"
-	e2label $partition install
-	_logs $(blkid)
-	_logs "press enter to reboot..."
-	read DUMMY
-	# Install did not fail, unregister the trap (do this before the
-	# reboot, since the reboot might kill us before we get to
-	# exit ourselves)
-	trap - EXIT
+_logs "install complete"
+e2label $partition install
+_logs $(blkid)
+_logs "press enter to reboot..."
+read DUMMY
+# Install did not fail, unregister the trap (do this before the
+# reboot, since the reboot might kill us before we get to
+# exit ourselves)
+trap - EXIT
 
-	/sbin/reboot
-else
-	exec sleep 86400
-fi
+/sbin/reboot
