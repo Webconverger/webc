@@ -1,12 +1,1 @@
-TARGETS = cups urandom alsa-utils sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs umountroot live live-boot halt reboot
-sendsigs: alsa-utils
-rsyslog: sendsigs cups
-umountnfs.sh: rsyslog sendsigs alsa-utils
-hwclock.sh: rsyslog
-networking: umountnfs.sh
-umountfs: umountnfs.sh urandom networking alsa-utils hwclock.sh
-umountroot: umountfs
-live: umountroot
-live-boot: umountroot
-halt: live umountroot live-boot
-reboot: live umountroot live-boot
+TARGETS = networking cups

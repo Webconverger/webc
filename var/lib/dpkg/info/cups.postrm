@@ -49,6 +49,7 @@ case "$1" in
 	rm -rf /etc/cups/ppd
 	rm -rf /etc/cups/passwd.md5
 	rm -rf /etc/cups/cups.d
+	rm -rf /etc/cups/cupsd.conf
 	rm -f /etc/cups/printers.conf* /etc/cups/classes.conf.* \
 		/var/lib/cups/ppds.dat /etc/cups/raw.convs /etc/cups/raw.types
 	rmdir /etc/cups 2>/dev/null || true
@@ -57,7 +58,13 @@ case "$1" in
 	rm -f /etc/apparmor.d/local/usr.sbin.cupsd || true
 	rmdir /etc/apparmor.d/local 2>/dev/null || true
 	;;
-    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    abort-upgrade)
+        if [ -e /etc/cups/cupsd.conf.conffile-bak ]; then
+            # Move cupsd.conf back
+            mv /etc/cups/cupsd.conf.conffile-bak /etc/cups/cupsd.conf
+        fi
+        ;;
+    remove|upgrade|failed-upgrade|abort-install|disappear)
         ;;
 
     *)

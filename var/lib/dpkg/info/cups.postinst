@@ -180,6 +180,16 @@ EOM
 	fi
     fi
 
+    # Create default cupsd.conf if it doesn't exist
+    if [ ! -r /etc/cups/cupsd.conf ]; then
+        if dpkg --compare-versions "$2" le "1.5.3-2.7~" && [ -e /etc/cups/cupsd.conf.conffile-bak ]; then
+            # Move cupsd.conf back as it is now a non-conffile
+            mv /etc/cups/cupsd.conf.conffile-bak /etc/cups/cupsd.conf
+        else
+            cp /etc/cups/cupsd.conf.default /etc/cups/cupsd.conf
+        fi
+    fi
+
     if dpkg --compare-versions "$2" lt "1.5.3-2.1"; then
         modprobe -b usblp >/dev/null 2>&1 || :
     fi

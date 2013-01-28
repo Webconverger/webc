@@ -92,7 +92,7 @@ if [[ ${#VERSIONS[*]} == 0 ]]; then
 	exit 0;
 fi
 
-	if grep -q "lenny\|5" /etc/debian_version;
+	if grep -q "lenny\|^5" /etc/debian_version;
 	then
 		if [[ -n ${VERSIONS[173]} ]];
 		then
@@ -138,7 +138,7 @@ fi
 		else
 			echo "Uh oh. Your card is only supported by the 71.86 legacy drivers series, which is not in any current Debian suite.";
 		fi;
-	elif grep -q "wheezy" /etc/debian_version;
+	elif grep -q "wheezy\|^7" /etc/debian_version;
 	then
 		if [[ -n ${VERSIONS[999]} ]]; then
 			if [[ -n ${VERSIONS[173]} ]]; then
@@ -155,11 +155,12 @@ fi
 			echo "Your card is only supported up to the 173.14 legacy drivers series.";
 			PACKAGE="nvidia-glx-legacy-173xx"
 		elif [[ -n ${VERSIONS[96]} ]]; then
-			echo "Uh oh. Your card is only supported up to the 96.43 legacy drivers series, which is no longer usable due to lack of support for current Xorg Xserver 1.12";
+			echo "Your card is only supported up to the 96.43 legacy drivers series.";
+			PACKAGE="nvidia-glx-legacy-96xx"
 		else
 			echo "Uh oh. Your card is only supported by the 71.86 legacy drivers series, which is not in any current Debian suite.";
 		fi;
-	elif grep -q "4" /etc/debian_version;
+	elif grep -q "^4" /etc/debian_version;
 	then
 		echo "Uh oh. You are running Etch, which is no longer supported.";
 	else

@@ -27,7 +27,7 @@ BEGIN {
 	CGI->compile() if $ENV{'MOD_PERL'};
 }
 
-our $version = "1.7.10.4";
+our $version = "1.8.1.1";
 
 our ($my_url, $my_uri, $base_url, $path_info, $home_link);
 sub evaluate_uri {
@@ -54,6 +54,11 @@ sub evaluate_uri {
 	# to build the base URL ourselves:
 	our $path_info = decode_utf8($ENV{"PATH_INFO"});
 	if ($path_info) {
+		# $path_info has already been URL-decoded by the web server, but
+		# $my_url and $my_uri have not. URL-decode them so we can properly
+		# strip $path_info.
+		$my_url = unescape($my_url);
+		$my_uri = unescape($my_uri);
 		if ($my_url =~ s,\Q$path_info\E$,, &&
 		    $my_uri =~ s,\Q$path_info\E$,, &&
 		    defined $ENV{'SCRIPT_NAME'}) {
@@ -132,6 +137,12 @@ our $default_projects_order = "project";
 # show repository only if this file exists
 # (only effective if this variable evaluates to true)
 our $export_ok = "";
+
+# don't generate age column on the projects list page
+our $omit_age_column = 0;
+
+# don't generate information about owners of repositories
+our $omit_owner=0;
 
 # show repository only if this subroutine returns true
 # when given the path to the project, for example:
@@ -267,16 +278,15 @@ our %highlight_basename = (
 our %highlight_ext = (
 	# main extensions, defining name of syntax;
 	# see files in /usr/share/highlight/langDefs/ directory
-	map { $_ => $_ }
-		qw(py c cpp rb java css php sh pl js tex bib xml awk bat ini spec tcl sql make),
+	(map { $_ => $_ } qw(py rb java css js tex bib xml awk bat ini spec tcl sql)),
 	# alternate extensions, see /etc/highlight/filetypes.conf
-	'h' => 'c',
-	map { $_ => 'sh'  } qw(bash zsh ksh),
-	map { $_ => 'cpp' } qw(cxx c++ cc),
-	map { $_ => 'php' } qw(php3 php4 php5 phps),
-	map { $_ => 'pl'  } qw(perl pm), # perhaps also 'cgi'
-	map { $_ => 'make'} qw(mak mk),
-	map { $_ => 'xml' } qw(xhtml html htm),
+	(map { $_ => 'c'   } qw(c h)),
+	(map { $_ => 'sh'  } qw(sh bash zsh ksh)),
+	(map { $_ => 'cpp' } qw(cpp cxx c++ cc)),
+	(map { $_ => 'php' } qw(php php3 php4 php5 phps)),
+	(map { $_ => 'pl'  } qw(pl perl pm)), # perhaps also 'cgi'
+	(map { $_ => 'make'} qw(make mak mk)),
+	(map { $_ => 'xml' } qw(xml xhtml html htm)),
 );
 
 # You define site-wide feature defaults here; override them with
@@ -538,7 +548,7 @@ our %feature = (
 	# $feature{'remote_heads'}{'default'} = [1];
 	# To have project specific config enable override in $GITWEB_CONFIG
 	# $feature{'remote_heads'}{'override'} = 1;
-	# and in project config gitweb.remote_heads = 0|1;
+	# and in project config gitweb.remoteheads = 0|1;
 	'remote_heads' => {
 		'sub' => sub { feature_bool('remote_heads', @_) },
 		'override' => 0,
@@ -1554,7 +1564,7 @@ sub sanitize {
 	return undef unless defined $str;
 
 	$str = to_utf8($str);
-	$str =~ s|([[:cntrl:]])|($1 =~ /[\t\n\r]/ ? $1 : quot_cec($1))|eg;
+	$str =~ s|([[:cntrl:]])|(index("\t\n\r", $1) != -1 ? $1 : quot_cec($1))|eg;
 	return $str;
 }
 
@@ -1740,20 +1750,29 @@ sub chop_and_escape_str {
 # '<span class="mark">foo</span>bar'
 sub esc_html_hl_regions {
 	my ($str, $css_class, @sel) = @_;
-	return esc_html($str) unless @sel;
+	my %opts = grep { ref($_) ne 'ARRAY' } @sel;
+	@sel     = grep { ref($_) eq 'ARRAY' } @sel;
+	return esc_html($str, %opts) unless @sel;
 
 	my $out = '';
 	my $pos = 0;
 
 	for my $s (@sel) {
-		$out .= esc_html(substr($str, $pos, $s->[0] - $pos))
-			if ($s->[0] - $pos > 0);
-		$out .= $cgi->span({-class => $css_class},
-		                   esc_html(substr($str, $s->[0], $s->[1] - $s->[0])));
+		my ($begin, $end) = @$s;
 
-		$pos = $s->[1];
+		# Don't create empty <span> elements.
+		next if $end <= $begin;
+
+		my $escaped = esc_html(substr($str, $begin, $end - $begin),
+		                       %opts);
+
+		$out .= esc_html(substr($str, $pos, $begin - $pos), %opts)
+			if ($begin - $pos > 0);
+		$out .= $cgi->span({-class => $css_class}, $escaped);
+
+		$pos = $end;
 	}
-	$out .= esc_html(substr($str, $pos))
+	$out .= esc_html(substr($str, $pos), %opts)
 		if ($pos < length($str));
 
 	return $out;
@@ -2429,26 +2448,32 @@ sub format_cc_diff_chunk_header {
 }
 
 # process patch (diff) line (not to be used for diff headers),
-# returning class and HTML-formatted (but not wrapped) line
-sub process_diff_line {
-	my $line = shift;
-	my ($from, $to) = @_;
+# returning HTML-formatted (but not wrapped) line.
+# If the line is passed as a reference, it is treated as HTML and not
+# esc_html()'ed.
+sub format_diff_line {
+	my ($line, $diff_class, $from, $to) = @_;
 
-	my $diff_class = diff_line_class($line, $from, $to);
+	if (ref($line)) {
+		$line = $$line;
+	} else {
+		chomp $line;
+		$line = untabify($line);
 
-	chomp $line;
-	$line = untabify($line);
-
-	if ($from && $to && $line =~ m/^\@{2} /) {
-		$line = format_unidiff_chunk_header($line, $from, $to);
-		return $diff_class, $line;
-
-	} elsif ($from && $to && $line =~ m/^\@{3}/) {
-		$line = format_cc_diff_chunk_header($line, $from, $to);
-		return $diff_class, $line;
-
+		if ($from && $to && $line =~ m/^\@{2} /) {
+			$line = format_unidiff_chunk_header($line, $from, $to);
+		} elsif ($from && $to && $line =~ m/^\@{3}/) {
+			$line = format_cc_diff_chunk_header($line, $from, $to);
+		} else {
+			$line = esc_html($line, -nbsp=>1);
+		}
 	}
-	return $diff_class, esc_html($line, -nbsp=>1);
+
+	my $diff_classes = "diff";
+	$diff_classes .= " $diff_class" if ($diff_class);
+	$line = "<div class=\"$diff_classes\">$line</div>\n";
+
+	return $line;
 }
 
 # Generates undef or something like "_snapshot_" or "snapshot (_tbz2_ _zip_)",
@@ -2679,12 +2704,15 @@ sub git_get_project_config {
 	# only subsection, if exists, is case sensitive,
 	# and not lowercased by 'git config -z -l'
 	if (my ($hi, $mi, $lo) = ($key =~ /^([^.]*)\.(.*)\.([^.]*)$/)) {
+		$lo =~ s/_//g;
 		$key = join(".", lc($hi), $mi, lc($lo));
+		return if ($lo =~ /\W/ || $hi =~ /\W/);
 	} else {
 		$key = lc($key);
+		$key =~ s/_//g;
+		return if ($key =~ /\W/);
 	}
 	$key =~ s/^gitweb\.//;
-	return if ($key =~ m/\W/);
 
 	# type sanity check
 	if (defined $type) {
@@ -3005,9 +3033,11 @@ sub git_get_projects_list {
 			}
 			if (check_export_ok("$projectroot/$path")) {
 				my $pr = {
-					path => $path,
-					owner => to_utf8($owner),
+					path => $path
 				};
+				if ($owner) {
+					$pr->{'owner'} = to_utf8($owner);
+				}
 				push @list, $pr;
 			}
 		}
@@ -3894,6 +3924,7 @@ sub print_feed_meta {
 				'-type' => "application/$type+xml"
 			);
 
+			$href_params{'extra_options'} = undef;
 			$href_params{'action'} = $type;
 			$link_attr{'-href'} = href(%href_params);
 			print "<link ".
@@ -4468,30 +4499,33 @@ sub git_print_log {
 	}
 
 	# print log
-	my $signoff = 0;
-	my $empty = 0;
+	my $skip_blank_line = 0;
 	foreach my $line (@$log) {
-		if ($line =~ m/^ *(signed[ \-]off[ \-]by[ :]|acked[ \-]by[ :]|cc[ :])/i) {
-			$signoff = 1;
-			$empty = 0;
+		if ($line =~ m/^\s*([A-Z][-A-Za-z]*-[Bb]y|C[Cc]): /) {
 			if (! $opts{'-remove_signoff'}) {
 				print "<span class=\"signoff\">" . esc_html($line) . "</span><br/>\n";
-				next;
-			} else {
-				# remove signoff lines
-				next;
+				$skip_blank_line = 1;
 			}
-		} else {
-			$signoff = 0;
+			next;
+		}
+
+		if ($line =~ m,\s*([a-z]*link): (https?://\S+),i) {
+			if (! $opts{'-remove_signoff'}) {
+				print "<span class=\"signoff\">" . esc_html($1) . ": " .
+					"<a href=\"" . esc_html($2) . "\">" . esc_html($2) . "</a>" .
+					"</span><br/>\n";
+				$skip_blank_line = 1;
+			}
+			next;
 		}
 
 		# print only one empty line
 		# do not print empty line after signoff
 		if ($line eq "") {
-			next if ($empty || $signoff);
-			$empty = 1;
+			next if ($skip_blank_line);
+			$skip_blank_line = 1;
 		} else {
-			$empty = 0;
+			$skip_blank_line = 0;
 		}
 
 		print format_log_line_html($line) . "<br/>\n";
@@ -4499,7 +4533,7 @@ sub git_print_log {
 
 	if ($opts{'-final_empty_line'}) {
 		# end with single empty line
-		print "<br/>\n" unless $empty;
+		print "<br/>\n" unless $skip_blank_line;
 	}
 }
 
@@ -5001,9 +5035,185 @@ sub git_difftree_body {
 	print "</table>\n";
 }
 
-sub print_sidebyside_diff_chunk {
-	my @chunk = @_;
+# Print context lines and then rem/add lines in a side-by-side manner.
+sub print_sidebyside_diff_lines {
+	my ($ctx, $rem, $add) = @_;
+
+	# print context block before add/rem block
+	if (@$ctx) {
+		print join '',
+			'<div class="chunk_block ctx">',
+				'<div class="old">',
+				@$ctx,
+				'</div>',
+				'<div class="new">',
+				@$ctx,
+				'</div>',
+			'</div>';
+	}
+
+	if (!@$add) {
+		# pure removal
+		print join '',
+			'<div class="chunk_block rem">',
+				'<div class="old">',
+				@$rem,
+				'</div>',
+			'</div>';
+	} elsif (!@$rem) {
+		# pure addition
+		print join '',
+			'<div class="chunk_block add">',
+				'<div class="new">',
+				@$add,
+				'</div>',
+			'</div>';
+	} else {
+		print join '',
+			'<div class="chunk_block chg">',
+				'<div class="old">',
+				@$rem,
+				'</div>',
+				'<div class="new">',
+				@$add,
+				'</div>',
+			'</div>';
+	}
+}
+
+# Print context lines and then rem/add lines in inline manner.
+sub print_inline_diff_lines {
+	my ($ctx, $rem, $add) = @_;
+
+	print @$ctx, @$rem, @$add;
+}
+
+# Format removed and added line, mark changed part and HTML-format them.
+# Implementation is based on contrib/diff-highlight
+sub format_rem_add_lines_pair {
+	my ($rem, $add, $num_parents) = @_;
+
+	# We need to untabify lines before split()'ing them;
+	# otherwise offsets would be invalid.
+	chomp $rem;
+	chomp $add;
+	$rem = untabify($rem);
+	$add = untabify($add);
+
+	my @rem = split(//, $rem);
+	my @add = split(//, $add);
+	my ($esc_rem, $esc_add);
+	# Ignore leading +/- characters for each parent.
+	my ($prefix_len, $suffix_len) = ($num_parents, 0);
+	my ($prefix_has_nonspace, $suffix_has_nonspace);
+
+	my $shorter = (@rem < @add) ? @rem : @add;
+	while ($prefix_len < $shorter) {
+		last if ($rem[$prefix_len] ne $add[$prefix_len]);
+
+		$prefix_has_nonspace = 1 if ($rem[$prefix_len] !~ /\s/);
+		$prefix_len++;
+	}
+
+	while ($prefix_len + $suffix_len < $shorter) {
+		last if ($rem[-1 - $suffix_len] ne $add[-1 - $suffix_len]);
+
+		$suffix_has_nonspace = 1 if ($rem[-1 - $suffix_len] !~ /\s/);
+		$suffix_len++;
+	}
+
+	# Mark lines that are different from each other, but have some common
+	# part that isn't whitespace.  If lines are completely different, don't
+	# mark them because that would make output unreadable, especially if
+	# diff consists of multiple lines.
+	if ($prefix_has_nonspace || $suffix_has_nonspace) {
+		$esc_rem = esc_html_hl_regions($rem, 'marked',
+		        [$prefix_len, @rem - $suffix_len], -nbsp=>1);
+		$esc_add = esc_html_hl_regions($add, 'marked',
+		        [$prefix_len, @add - $suffix_len], -nbsp=>1);
+	} else {
+		$esc_rem = esc_html($rem, -nbsp=>1);
+		$esc_add = esc_html($add, -nbsp=>1);
+	}
+
+	return format_diff_line(\$esc_rem, 'rem'),
+	       format_diff_line(\$esc_add, 'add');
+}
+
+# HTML-format diff context, removed and added lines.
+sub format_ctx_rem_add_lines {
+	my ($ctx, $rem, $add, $num_parents) = @_;
+	my (@new_ctx, @new_rem, @new_add);
+	my $can_highlight = 0;
+	my $is_combined = ($num_parents > 1);
+
+	# Highlight if every removed line has a corresponding added line.
+	if (@$add > 0 && @$add == @$rem) {
+		$can_highlight = 1;
+
+		# Highlight lines in combined diff only if the chunk contains
+		# diff between the same version, e.g.
+		#
+		#    - a
+		#   -  b
+		#    + c
+		#   +  d
+		#
+		# Otherwise the highlightling would be confusing.
+		if ($is_combined) {
+			for (my $i = 0; $i < @$add; $i++) {
+				my $prefix_rem = substr($rem->[$i], 0, $num_parents);
+				my $prefix_add = substr($add->[$i], 0, $num_parents);
+
+				$prefix_rem =~ s/-/+/g;
+
+				if ($prefix_rem ne $prefix_add) {
+					$can_highlight = 0;
+					last;
+				}
+			}
+		}
+	}
+
+	if ($can_highlight) {
+		for (my $i = 0; $i < @$add; $i++) {
+			my ($line_rem, $line_add) = format_rem_add_lines_pair(
+			        $rem->[$i], $add->[$i], $num_parents);
+			push @new_rem, $line_rem;
+			push @new_add, $line_add;
+		}
+	} else {
+		@new_rem = map { format_diff_line($_, 'rem') } @$rem;
+		@new_add = map { format_diff_line($_, 'add') } @$add;
+	}
+
+	@new_ctx = map { format_diff_line($_, 'ctx') } @$ctx;
+
+	return (\@new_ctx, \@new_rem, \@new_add);
+}
+
+# Print context lines and then rem/add lines.
+sub print_diff_lines {
+	my ($ctx, $rem, $add, $diff_style, $num_parents) = @_;
+	my $is_combined = $num_parents > 1;
+
+	($ctx, $rem, $add) = format_ctx_rem_add_lines($ctx, $rem, $add,
+	        $num_parents);
+
+	if ($diff_style eq 'sidebyside' && !$is_combined) {
+		print_sidebyside_diff_lines($ctx, $rem, $add);
+	} else {
+		# default 'inline' style and unknown styles
+		print_inline_diff_lines($ctx, $rem, $add);
+	}
+}
+
+sub print_diff_chunk {
+	my ($diff_style, $num_parents, $from, $to, @chunk) = @_;
 	my (@ctx, @rem, @add);
+
+	# The class of the previous line.
+	my $prev_class = '';
 
 	return unless @chunk;
 
@@ -5023,55 +5233,19 @@ sub print_sidebyside_diff_chunk {
 
 		# print chunk headers
 		if ($class && $class eq 'chunk_header') {
-			print $line;
+			print format_diff_line($line, $class, $from, $to);
 			next;
 		}
 
-		## print from accumulator when type of class of lines change
-		# empty contents block on start rem/add block, or end of chunk
-		if (@ctx && (!$class || $class eq 'rem' || $class eq 'add')) {
-			print join '',
-				'<div class="chunk_block ctx">',
-					'<div class="old">',
-					@ctx,
-					'</div>',
-					'<div class="new">',
-					@ctx,
-					'</div>',
-				'</div>';
-			@ctx = ();
-		}
-		# empty add/rem block on start context block, or end of chunk
-		if ((@rem || @add) && (!$class || $class eq 'ctx')) {
-			if (!@add) {
-				# pure removal
-				print join '',
-					'<div class="chunk_block rem">',
-						'<div class="old">',
-						@rem,
-						'</div>',
-					'</div>';
-			} elsif (!@rem) {
-				# pure addition
-				print join '',
-					'<div class="chunk_block add">',
-						'<div class="new">',
-						@add,
-						'</div>',
-					'</div>';
-			} else {
-				# assume that it is change
-				print join '',
-					'<div class="chunk_block chg">',
-						'<div class="old">',
-						@rem,
-						'</div>',
-						'<div class="new">',
-						@add,
-						'</div>',
-					'</div>';
-			}
-			@rem = @add = ();
+		## print from accumulator when have some add/rem lines or end
+		# of chunk (flush context lines), or when have add and rem
+		# lines and new block is reached (otherwise add/rem lines could
+		# be reordered)
+		if (!$class || ((@rem || @add) && $class eq 'ctx') ||
+		    (@rem && @add && $class ne $prev_class)) {
+			print_diff_lines(\@ctx, \@rem, \@add,
+		                         $diff_style, $num_parents);
+			@ctx = @rem = @add = ();
 		}
 
 		## adding lines to accumulator
@@ -5087,6 +5261,8 @@ sub print_sidebyside_diff_chunk {
 		if ($class eq 'ctx') {
 			push @ctx, $line;
 		}
+
+		$prev_class = $class;
 	}
 }
 
@@ -5208,27 +5384,19 @@ sub git_patchset_body {
 
 			next PATCH if ($patch_line =~ m/^diff /);
 
-			my ($class, $line) = process_diff_line($patch_line, \%from, \%to);
-			my $diff_classes = "diff";
-			$diff_classes .= " $class" if ($class);
-			$line = "<div class=\"$diff_classes\">$line</div>\n";
+			my $class = diff_line_class($patch_line, \%from, \%to);
 
-			if ($diff_style eq 'sidebyside' && !$is_combined) {
-				if ($class eq 'chunk_header') {
-					print_sidebyside_diff_chunk(@chunk);
-					@chunk = ( [ $class, $line ] );
-				} else {
-					push @chunk, [ $class, $line ];
-				}
-			} else {
-				# default 'inline' style and unknown styles
-				print $line;
+			if ($class eq 'chunk_header') {
+				print_diff_chunk($diff_style, scalar @hash_parents, \%from, \%to, @chunk);
+				@chunk = ();
 			}
+
+			push @chunk, [ $class, $patch_line ];
 		}
 
 	} continue {
 		if (@chunk) {
-			print_sidebyside_diff_chunk(@chunk);
+			print_diff_chunk($diff_style, scalar @hash_parents, \%from, \%to, @chunk);
 			@chunk = ();
 		}
 		print "</div>\n"; # class="patch"
@@ -5368,23 +5536,30 @@ sub fill_project_list_info {
 
 sub sort_projects_list {
 	my ($projlist, $order) = @_;
-	my @projects;
 
-	my %order_info = (
-		project => { key => 'path', type => 'str' },
-		descr => { key => 'descr_long', type => 'str' },
-		owner => { key => 'owner', type => 'str' },
-		age => { key => 'age', type => 'num' }
-	);
-	my $oi = $order_info{$order};
-	return @$projlist unless defined $oi;
-	if ($oi->{'type'} eq 'str') {
-		@projects = sort {$a->{$oi->{'key'}} cmp $b->{$oi->{'key'}}} @$projlist;
-	} else {
-		@projects = sort {$a->{$oi->{'key'}} <=> $b->{$oi->{'key'}}} @$projlist;
+	sub order_str {
+		my $key = shift;
+		return sub { $a->{$key} cmp $b->{$key} };
 	}
 
-	return @projects;
+	sub order_num_then_undef {
+		my $key = shift;
+		return sub {
+			defined $a->{$key} ?
+				(defined $b->{$key} ? $a->{$key} <=> $b->{$key} : -1) :
+				(defined $b->{$key} ? 1 : 0)
+		};
+	}
+
+	my %orderings = (
+		project => order_str('path'),
+		descr => order_str('descr_long'),
+		owner => order_str('owner'),
+		age => order_num_then_undef('age'),
+	);
+
+	my $ordering = $orderings{$order};
+	return defined $ordering ? sort $ordering @$projlist : @$projlist;
 }
 
 # returns a hash of categories, containing the list of project
@@ -5468,11 +5643,15 @@ sub git_project_list_rows {
 		                        ? esc_html_match_hl_chopped($pr->{'descr_long'},
 		                                                    $pr->{'descr'}, $search_regexp)
 		                        : esc_html($pr->{'descr'})) .
-		      "</td>\n" .
-		      "<td><i>" . chop_and_escape_str($pr->{'owner'}, 15) . "</i></td>\n";
-		print "<td class=\"". age_class($pr->{'age'}) . "\">" .
-		      (defined $pr->{'age_string'} ? $pr->{'age_string'} : "No commits") . "</td>\n" .
-		      "<td class=\"link\">" .
+		      "</td>\n";
+		unless ($omit_owner) {
+		        print "<td><i>" . chop_and_escape_str($pr->{'owner'}, 15) . "</i></td>\n";
+		}
+		unless ($omit_age_column) {
+		        print "<td class=\"". age_class($pr->{'age'}) . "\">" .
+		            (defined $pr->{'age_string'} ? $pr->{'age_string'} : "No commits") . "</td>\n";
+		}
+		print"<td class=\"link\">" .
 		      $cgi->a({-href => href(project=>$pr->{'path'}, action=>"summary")}, "summary")   . " | " .
 		      $cgi->a({-href => href(project=>$pr->{'path'}, action=>"shortlog")}, "shortlog") . " | " .
 		      $cgi->a({-href => href(project=>$pr->{'path'}, action=>"log")}, "log") . " | " .
@@ -5503,7 +5682,10 @@ sub git_project_list_body {
 	                                 'tagfilter'  => $tagfilter)
 		if ($tagfilter || $search_regexp);
 	# fill the rest
-	@projects = fill_project_list_info(\@projects);
+	my @all_fields = ('descr', 'descr_long', 'ctags', 'category');
+	push @all_fields, ('age', 'age_string') unless($omit_age_column);
+	push @all_fields, 'owner' unless($omit_owner);
+	@projects = fill_project_list_info(\@projects, @all_fields);
 
 	$order ||= $default_projects_order;
 	$from = 0 unless defined $from;
@@ -5534,8 +5716,8 @@ sub git_project_list_body {
 		}
 		print_sort_th('project', $order, 'Project');
 		print_sort_th('descr', $order, 'Description');
-		print_sort_th('owner', $order, 'Owner');
-		print_sort_th('age', $order, 'Last Change');
+		print_sort_th('owner', $order, 'Owner') unless $omit_owner;
+		print_sort_th('age', $order, 'Last Change') unless $omit_age_column;
 		print "<th></th>\n" . # for links
 		      "</tr>\n";
 	}
@@ -6288,8 +6470,10 @@ sub git_summary {
 
 	print "<div class=\"title\">&nbsp;</div>\n";
 	print "<table class=\"projects_list\">\n" .
-	      "<tr id=\"metadata_desc\"><td>description</td><td>" . esc_html($descr) . "</td></tr>\n" .
-	      "<tr id=\"metadata_owner\"><td>owner</td><td>" . esc_html($owner) . "</td></tr>\n";
+	      "<tr id=\"metadata_desc\"><td>description</td><td>" . esc_html($descr) . "</td></tr>\n";
+        unless ($omit_owner) {
+	        print  "<tr id=\"metadata_owner\"><td>owner</td><td>" . esc_html($owner) . "</td></tr>\n";
+        }
 	if (defined $cd{'rfc2822'}) {
 		print "<tr id=\"metadata_lchange\"><td>last change</td>" .
 		      "<td>".format_timestamp_html(\%cd)."</td></tr>\n";
@@ -7011,6 +7195,28 @@ sub snapshot_name {
 	return wantarray ? ($name, $name) : $name;
 }
 
+sub exit_if_unmodified_since {
+	my ($latest_epoch) = @_;
+	our $cgi;
+
+	my $if_modified = $cgi->http('IF_MODIFIED_SINCE');
+	if (defined $if_modified) {
+		my $since;
+		if (eval { require HTTP::Date; 1; }) {
+			$since = HTTP::Date::str2time($if_modified);
+		} elsif (eval { require Time::ParseDate; 1; }) {
+			$since = Time::ParseDate::parsedate($if_modified, GMT => 1);
+		}
+		if (defined $since && $latest_epoch <= $since) {
+			my %latest_date = parse_date($latest_epoch);
+			print $cgi->header(
+				-last_modified => $latest_date{'rfc2822'},
+				-status => '304 Not Modified');
+			goto DONE_GITWEB;
+		}
+	}
+}
+
 sub git_snapshot {
 	my $format = $input_params{'snapshot_format'};
 	if (!@snapshot_fmts) {
@@ -7037,6 +7243,10 @@ sub git_snapshot {
 
 	my ($name, $prefix) = snapshot_name($project, $hash);
 	my $filename = "$name$known_snapshot_formats{$format}{'suffix'}";
+
+	my %co = parse_commit($hash);
+	exit_if_unmodified_since($co{'committer_epoch'}) if %co;
+
 	my $cmd = quote_command(
 		git_cmd(), 'archive',
 		"--format=$known_snapshot_formats{$format}{'format'}",
@@ -7046,9 +7256,15 @@ sub git_snapshot {
 	}
 
 	$filename =~ s/(["\\])/\\$1/g;
+	my %latest_date;
+	if (%co) {
+		%latest_date = parse_date($co{'committer_epoch'}, $co{'committer_tz'});
+	}
+
 	print $cgi->header(
 		-type => $known_snapshot_formats{$format}{'type'},
 		-content_disposition => 'inline; filename="' . $filename . '"',
+		%co ? (-last_modified => $latest_date{'rfc2822'}) : (),
 		-status => '200 OK');
 
 	open my $fd, "-|", $cmd
@@ -7828,33 +8044,14 @@ sub git_feed {
 	if (defined($commitlist[0])) {
 		%latest_commit = %{$commitlist[0]};
 		my $latest_epoch = $latest_commit{'committer_epoch'};
-		%latest_date   = parse_date($latest_epoch, $latest_commit{'comitter_tz'});
-		my $if_modified = $cgi->http('IF_MODIFIED_SINCE');
-		if (defined $if_modified) {
-			my $since;
-			if (eval { require HTTP::Date; 1; }) {
-				$since = HTTP::Date::str2time($if_modified);
-			} elsif (eval { require Time::ParseDate; 1; }) {
-				$since = Time::ParseDate::parsedate($if_modified, GMT => 1);
-			}
-			if (defined $since && $latest_epoch <= $since) {
-				print $cgi->header(
-					-type => $content_type,
-					-charset => 'utf-8',
-					-last_modified => $latest_date{'rfc2822'},
-					-status => '304 Not Modified');
-				return;
-			}
-		}
-		print $cgi->header(
-			-type => $content_type,
-			-charset => 'utf-8',
-			-last_modified => $latest_date{'rfc2822'});
-	} else {
-		print $cgi->header(
-			-type => $content_type,
-			-charset => 'utf-8');
+		exit_if_unmodified_since($latest_epoch);
+		%latest_date = parse_date($latest_epoch, $latest_commit{'committer_tz'});
 	}
+	print $cgi->header(
+		-type => $content_type,
+		-charset => 'utf-8',
+		%latest_date ? (-last_modified => $latest_date{'rfc2822'}) : (),
+		-status => '200 OK');
 
 	# Optimization: skip generating the body if client asks only
 	# for Last-Modified date.
@@ -7875,6 +8072,7 @@ sub git_feed {
 		$feed_type = 'history';
 	}
 	$title .= " $feed_type";
+	$title = esc_html($title);
 	my $descr = git_get_project_description($project);
 	if (defined $descr) {
 		$descr = esc_html($descr);

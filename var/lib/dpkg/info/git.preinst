@@ -6,7 +6,7 @@ set -e
 rm_conffile () {
 	CONFFILE=$1; shift
 	test "$1" = install || test "$1" = upgrade || return 0
-	dpkg --compare-versions "$2" lt-nl '1:1.7.4.1-2~' || return 0
+	dpkg --compare-versions "$2" lt-nl "$3" || return 0
 	test -e "$CONFFILE" || return 0
 
 	md5sum=$(md5sum $CONFFILE | sed -e 's/ .*//')
@@ -24,13 +24,15 @@ rm_conffile () {
 	fi
 }
 
+rm_conffile /etc/bash_completion.d/git "$1" "$2" '1:1.8.0-1~'
+
 # Now /etc/emacs/site-start.d/50git-core.el belongs to the
 # git-el package.  If we are upgrading from a pre- 1.7.4.1-2~
 # version then git-el is at most unpacked (so its version
 # is 50git-core.el.dpkg-new if present), and we can remove
 # an unchanged 50git-core.el file without danger.
 #
-rm_conffile /etc/emacs/site-start.d/50git-core.el "$1" "$2"
+rm_conffile /etc/emacs/site-start.d/50git-core.el "$1" "$2" '1:1.7.4.1-2~'
 
 # Git versions before 1.7.7-2 kept about 100 hard links to
 # /usr/lib/git-core/git at /usr/lib/git-core/git-* to avoid

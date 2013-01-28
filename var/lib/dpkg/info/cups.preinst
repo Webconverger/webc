@@ -1,5 +1,18 @@
 #!/bin/sh
+
 set -e
+
+case "$1" in
+upgrade)
+    if dpkg --compare-versions "$2" le "1.5.3-2.7~" && [ -e /etc/cups/cupsd.conf ]; then
+        # Move cupsd.conf away as it becomes a non-conffile
+        mv /etc/cups/cupsd.conf /etc/cups/cupsd.conf.conffile-bak
+    fi
+esac
+
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.3-2.1~ -- "$@"
 # End automatically added section
+
+
+exit 0

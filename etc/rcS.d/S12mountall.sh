@@ -1,1 +1,0 @@
-../init.d/mountall.sh

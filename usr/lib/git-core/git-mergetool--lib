@@ -103,14 +103,50 @@ run_merge_tool () {
 
 	if merge_mode
 	then
-		merge_cmd "$1"
+		run_merge_cmd "$1"
 	else
-		diff_cmd "$1"
+		run_diff_cmd "$1"
 	fi
 	return $status
 }
 
-guess_merge_tool () {
+# Run a either a configured or built-in diff tool
+run_diff_cmd () {
+	merge_tool_cmd="$(get_merge_tool_cmd "$1")"
+	if test -n "$merge_tool_cmd"
+	then
+		( eval $merge_tool_cmd )
+		status=$?
+		return $status
+	else
+		diff_cmd "$1"
+	fi
+}
+
+# Run a either a configured or built-in merge tool
+run_merge_cmd () {
+	merge_tool_cmd="$(get_merge_tool_cmd "$1")"
+	if test -n "$merge_tool_cmd"
+	then
+		trust_exit_code="$(git config --bool \
+			mergetool."$1".trustExitCode || echo false)"
+		if test "$trust_exit_code" = "false"
+		then
+			touch "$BACKUP"
+			( eval $merge_tool_cmd )
+			status=$?
+			check_unchanged
+		else
+			( eval $merge_tool_cmd )
+			status=$?
+		fi
+		return $status
+	else
+		merge_cmd "$1"
+	fi
+}
+
+list_merge_tool_candidates () {
 	if merge_mode
 	then
 		tools="tortoisemerge"
@@ -125,7 +161,7 @@ guess_merge_tool () {
 		else
 			tools="opendiff kdiff3 tkdiff xxdiff meld $tools"
 		fi
-		tools="$tools gvimdiff diffuse ecmerge p4merge araxis bc3"
+		tools="$tools gvimdiff diffuse ecmerge p4merge araxis bc3 codecompare"
 	fi
 	case "${VISUAL:-$EDITOR}" in
 	*vim*)
@@ -135,6 +171,10 @@ guess_merge_tool () {
 		tools="$tools emerge vimdiff"
 		;;
 	esac
+}
+
+guess_merge_tool () {
+	list_merge_tool_candidates
 	echo >&2 "merge tool candidates: $tools"
 
 	# Loop over each candidate and stop when a valid merge tool is found.
