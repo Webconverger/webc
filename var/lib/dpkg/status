@@ -2053,7 +2053,7 @@ Description: X.Org X Window System
  be installed to ensure a comfortable X experience.
 
 Package: linux-image-686
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: extra
 Section: oldlibs
 Installed-Size: 36
@@ -2062,6 +2062,7 @@ Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux-latest (46baureo1)
 Version: 3.2+46baureo1
+Config-Version: 3.2+46baureo1
 Depends: linux-image-686-pae, debconf (>= 0.5) | debconf-2.0
 Description: Linux for modern PCs (dummy package)
  This is a dummy transitional package.  It can be safely removed.
@@ -2072,7 +2073,7 @@ Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: linux-image-3.2.0-4baureo1-486
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 78181
@@ -2081,6 +2082,7 @@ Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
 Version: 3.2.32-1baureo1
+Config-Version: 3.2.32-1baureo1
 Provides: linux-image, linux-modules-3.2.0-4baureo1-486
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -4221,35 +4223,6 @@ Description: Embedded GNU C Library: National Language (locale) data [support]
  unpacked to an excess of 30 megs.
 Homepage: http://www.eglibc.org
 
-Package: linux-image-686-pae
-Status: install ok installed
-Priority: extra
-Section: kernel
-Installed-Size: 37
-Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
-Architecture: i386
-Source: linux-latest (46baureo1)
-Version: 3.2+46baureo1
-Provides: linux-latest-modules-3.2.0-4baureo1-686-pae
-Depends: linux-image-3.2.0-4baureo1-686-pae
-Description: Linux for modern PCs (meta-package)
- This package depends on the latest Linux kernel and modules for use on PCs
- with one or more processors supporting PAE.
- .
- This kernel requires PAE (Physical Address Extension). This feature is
- supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
- Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
- Transmeta Efficeon; VIA C7; and some other processors.
- .
- This kernel also runs on a Xen hypervisor.  It supports both privileged
- (dom0) and unprivileged (domU) operation.
-Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
-Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
-Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
-Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
-
 Package: traceroute
 Status: install ok installed
 Priority: important
@@ -4583,7 +4556,7 @@ Description: Tools for mounting and manipulating filesystems
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
 
 Package: linux-image-3.2.0-4baureo1-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 79713
@@ -4592,6 +4565,7 @@ Bugs: mailto:progress-bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
 Version: 3.2.32-1baureo1
+Config-Version: 3.2.32-1baureo1
 Provides: linux-image, linux-modules-3.2.0-4baureo1-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -6593,6 +6567,33 @@ Description: Library of Optimized Inner Loops Runtime Compiler
  This package contains the orc shared libraries.  It is typically
  installed automatically when an application or library requires it.
 Homepage: http://code.entropywave.com/projects/orc/
+
+Package: linux-image-3.7-0baureo1-486
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 80585
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.7.3-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.7-0baureo1-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.7, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~)
+Description: Linux 3.7 for older PCs
+ The Linux kernel 3.7 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: mawk
 Status: install ok installed
@@ -9195,6 +9196,38 @@ Description: module using libc functions for internationalization in Perl
  and dngettext().
 Homepage: http://search.cpan.org/dist/gettext/gettext.pm
 
+Package: linux-image-3.7-0baureo1-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 82299
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.7.3-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.7-0baureo1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.7, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~)
+Description: Linux 3.7 for modern PCs
+ The Linux kernel 3.7 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: xbitmaps
 Status: install ok installed
 Priority: optional
@@ -11006,30 +11039,6 @@ Description: lossless data compressor based on the LZMA algorithm
  Lzip decompresses almost as fast as gzip and compresses better than bzip2,
  which makes it well suited for software distribution and data archiving.
 Homepage: http://www.nongnu.org/lzip/lzip.html
-
-Package: linux-image-486
-Status: install ok installed
-Priority: extra
-Section: kernel
-Installed-Size: 37
-Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
-Architecture: i386
-Source: linux-latest (46baureo1)
-Version: 3.2+46baureo1
-Provides: linux-latest-modules-3.2.0-4baureo1-486
-Depends: linux-image-3.2.0-4baureo1-486
-Description: Linux for older PCs (meta-package)
- This package depends on the latest Linux kernel and modules for use on PCs
- with a single processor not supporting PAE.
- .
- This kernel is not suitable for SMP (multi-processor, multi-core or
- hyper-threaded) systems.
-Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
-Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Ben Hutchings <ben@decadent.org.uk>
-Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/sid/linux-latest/
-Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/sid/linux-latest/
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: udev
 Status: install ok installed

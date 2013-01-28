@@ -7739,6 +7739,33 @@ Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/iceweasel.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 
+Package: linux-image-3.7-0baureo1-486
+Priority: optional
+Section: kernel
+Installed-Size: 80585
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.7.3-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.7-0baureo1-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.7, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~)
+Size: 23064360
+Description: Linux 3.7 for older PCs
+ The Linux kernel 3.7 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: mawk
 Priority: required
 Section: interpreters
@@ -10777,6 +10804,38 @@ Description: module using libc functions for internationalization in Perl
  bindtextdomain(), bind_textdomain_codeset(), ngettext(), dcngettext()
  and dngettext().
 Homepage: http://search.cpan.org/dist/gettext/gettext.pm
+
+Package: linux-image-3.7-0baureo1-686-pae
+Priority: optional
+Section: kernel
+Installed-Size: 82299
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.7.3-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.7-0baureo1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.99~) | linux-initramfs-tool
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.7, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.99~)
+Size: 23655002
+Description: Linux 3.7 for modern PCs
+ The Linux kernel 3.7 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xbitmaps
 Priority: optional
