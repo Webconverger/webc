@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+DAEMON=/usr/sbin/console-kit-daemon
+PIDFILE=/var/run/console-kit-daemon.pid
+
+if [ "$1" = remove ]; then
+	start-stop-daemon --stop --quiet --oknodo --exec $DAEMON --pidfile $PIDFILE
+fi
+
+

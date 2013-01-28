@@ -21,6 +21,33 @@ Original-Uploaders: Clint Adams <clint@gnu.org>, Aurelien Jarno <aurel32@debian.
 Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-glibc/glibc-package/
 Original-Vcs-Svn: svn://svn.debian.org/pkg-glibc/glibc-package/
 
+Package: libfftw3-3
+Priority: optional
+Section: libs
+Installed-Size: 5250
+Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: fftw3
+Version: 3.3.2-3.1
+Replaces: fftw3
+Provides: fftw3
+Depends: libc6 (>= 2.11), libgomp1 (>= 4.2.1)
+Pre-Depends: multiarch-support
+Suggests: libfftw3-bin, libfftw3-dev
+Conflicts: fftw3
+Size: 1433976
+Description: Library for computing Fast Fourier Transforms
+ The FFTW library computes Fast Fourier Transforms (FFT) in one or more
+ dimensions. It is extremely fast. This package contains the shared library
+ versions of the fftw libraries in single, double and long double precisions.
+ Note that on some architectures double is the same as long double in which
+ case there is no long double library.
+ .
+ To get the static library and the header files, you need to install
+ libfftw3-dev. For documentation, see libfftw3-doc.
+Homepage: http://fftw.org
+
 Package: libtext-wrapi18n-perl
 Priority: required
 Section: perl
@@ -181,6 +208,26 @@ Description: POSIX-compliant shell
  dependencies (making it more robust against software or hardware
  failures), it is used as the default system shell on Debian systems.
 Homepage: http://gondor.apana.org.au/~herbert/dash/
+
+Package: libpolkit-gobject-1-0
+Priority: optional
+Section: libs
+Installed-Size: 158
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: policykit-1
+Version: 0.105-3
+Depends: libc6 (>= 2.7), libglib2.0-0 (>= 2.31.8)
+Pre-Depends: multiarch-support
+Breaks: libpolkit-agent-1-0 (<< 0.99), libpolkit-backend-1-0 (<< 0.99), libpolkit-gtk-1-0 (<< 0.99), policykit-1 (<< 0.99)
+Size: 49620
+Description: PolicyKit Authorization API
+ PolicyKit is a toolkit for defining and handling the policy that
+ allows unprivileged processes to speak to privileged processes.
+ .
+ This package contains a library for accessing PolicyKit.
+Homepage: http://hal.freedesktop.org/docs/PolicyKit/
 
 Package: shared-mime-info
 Priority: optional
@@ -710,6 +757,33 @@ Description: simple interprocess messaging system (library)
  .
  The daemon can be found in the dbus package.
 Homepage: http://dbus.freedesktop.org/
+
+Package: libflac8
+Priority: optional
+Section: libs
+Installed-Size: 359
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: flac
+Version: 1.2.1-6
+Depends: libc6 (>= 2.7), libogg0 (>= 1.0rc3)
+Pre-Depends: multiarch-support
+Size: 152056
+Description: Free Lossless Audio Codec - runtime C library
+ FLAC stands for Free Lossless Audio Codec. Grossly oversimplified, FLAC is
+ similar to MP3, but lossless.  The FLAC project consists of:
+ .
+  * The stream format
+  * libFLAC, which implements a reference encoder, stream decoder, and file
+    decoder
+  * flac, which is a command-line wrapper around libFLAC to encode and decode
+    .flac files
+  * Input plugins for various music players (Winamp, XMMS, and more in the
+    works)
+ .
+ This package contains the runtime library libFLAC.
+Homepage: http://flac.sourceforge.net/
 
 Package: module-init-tools
 Priority: extra
@@ -4396,6 +4470,26 @@ Description: libkmod shared library
  This library provides an API for insertion, removal, configuration and
  listing of kernel modules.
 
+Package: libtdb1
+Priority: optional
+Section: libs
+Installed-Size: 115
+Maintainer: Jelmer Vernooij <jelmer@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: tdb
+Version: 1.2.10-2
+Depends: libc6 (>= 2.2)
+Pre-Depends: multiarch-support
+Size: 40930
+Description: Trivial Database - shared library
+ This is a simple database API. It is modelled after the structure
+ of GDBM. TDB features, unlike GDBM, multiple writers support with
+ appropriate locking and transactions.
+ .
+ This package contains the shared library file.
+Homepage: http://tdb.samba.org/
+
 Package: tar
 Essential: yes
 Priority: required
@@ -5114,6 +5208,27 @@ Description: GCC support library
  special needs for some languages.
 Homepage: http://gcc.gnu.org/
 
+Package: libck-connector0
+Priority: optional
+Section: libs
+Installed-Size: 98
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: consolekit
+Version: 0.4.5-3.1
+Depends: libc6 (>= 2.3.4), libdbus-1-3 (>= 1.0.2)
+Pre-Depends: multiarch-support
+Size: 58604
+Description: ConsoleKit libraries
+ ConsoleKit is a system daemon for tracking what users are logged
+ into the system and how they interact with the computer (e.g.
+ which keyboard and mouse they use).
+ .
+ This package provides a convenience library which simplifies the access to
+ ConsoleKit.
+Homepage: http://www.freedesktop.org/wiki/Software/ConsoleKit
+
 Package: libxcomposite1
 Priority: optional
 Section: libs
@@ -5453,6 +5568,33 @@ Description: Tools for mounting and manipulating filesystems
  This package provides the mount(8), umount(8), swapon(8),
  swapoff(8), and losetup(8) commands.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+
+Package: libasound2-plugins
+Priority: optional
+Section: libs
+Installed-Size: 281
+Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: alsa-plugins
+Version: 1.0.25-2
+Depends: libasound2 (>= 1.0.25), libavcodec53 (>= 6:0.8.2-2) | libavcodec-extra-53 (>= 6:0.8.2-2), libavutil51 (>= 6:0.8.2-2), libc6 (>= 2.7), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libpulse0 (>= 0.99.1), libsamplerate0 (>= 0.1.7), libspeexdsp1 (>= 1.2~beta3.2-1)
+Pre-Depends: multiarch-support
+Size: 86758
+Description: ALSA library additional plugins
+ This package contains plugins for the ALSA library that are
+ not included in the main libasound2 package.
+ .
+ The following plugins are included, among other:
+   - a52: S16 to A52 stream converter
+   - jack: play or capture via JACK
+   - oss: run native ALSA apps on OSS drivers
+   - pulse: play or capture via Pulse Audio
+   - lavcrate, samplerate and speexrate: rate converters
+   - upmix and vdownmix: convert from/to 2 and 4/6 channel streams
+ .
+ ALSA is the Advanced Linux Sound Architecture.
+Homepage: http://www.alsa-project.org/
 
 Package: linux-image-3.2.0-4baureo1-686-pae
 Priority: optional
@@ -6409,6 +6551,24 @@ Description: libraries for the Soprano RDF framework
  plugins, and a storage plugin for the Redland RDF Application Framework.
 Homepage: http://soprano.sourceforge.net
 
+Package: libwebrtc-audio-processing-0
+Priority: extra
+Section: libs
+Installed-Size: 278
+Maintainer: Sjoerd Simons <sjoerd@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: webrtc-audio-processing
+Version: 0.1-2
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6)
+Pre-Depends: multiarch-support
+Size: 116120
+Description: AudioProcessing module from the WebRTC project.
+  Audio processing library (echo-cancellation, gain control etc) around the
+  AudioProcessing module from the WebRTC project
+  (http://code.google.com/p/webrtc/)
+Homepage: http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+
 Package: libpango1.0-0
 Priority: optional
 Section: libs
@@ -6788,6 +6948,28 @@ Description: multiple precision complex floating-point library
  It builds upon the GNU MP and the MPFR libraries.
 Homepage: http://www.multiprecision.org/mpc/
 
+Package: libspeexdsp1
+Priority: optional
+Section: libs
+Installed-Size: 209
+Maintainer: Ron Lee <ron@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: speex
+Version: 1.2~rc1-7
+Depends: libc6 (>= 2.3.4)
+Pre-Depends: multiarch-support
+Size: 97334
+Description: The Speex extended runtime library
+ Speex is an audio codec especially designed for compressing voice at low
+ bit-rates for applications such as voice over IP (VoIP). In some senses,
+ it is meant to be complementary to the Vorbis codec which places a greater
+ emphasis on high-quality music reproduction.
+ .
+ This package provides the runtime library of additional functions that
+ are part of the Speex distribution.
+Homepage: http://www.speex.org/
+
 Package: genisoimage
 Priority: optional
 Section: otherosfs
@@ -6987,6 +7169,29 @@ Size: 18638
 Description: support binaries for and cli utilities based on liblockfile
  This package contains support binaries for the liblockfile library,
  and the command-line utility ``dotlockfile''.
+
+Package: libpulse0
+Priority: optional
+Section: libs
+Installed-Size: 832
+Maintainer: Pulseaudio maintenance team <pkg-pulseaudio-devel@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: pulseaudio
+Version: 2.0-6
+Depends: libasyncns0 (>= 0.3), libc6 (>= 2.10), libcap2 (>= 2.10), libdbus-1-3 (>= 1.1.1), libice6 (>= 1:1.0.0), libjson0, libsm6, libsndfile1 (>= 1.0.20), libwrap0 (>= 7.6-4~), libx11-6, libx11-xcb1, libxcb1, libxtst6
+Pre-Depends: multiarch-support
+Suggests: pulseaudio
+Breaks: pavucontrol (<< 0.9.8)
+Size: 220382
+Description: PulseAudio client libraries
+ PulseAudio, previously known as Polypaudio, is a sound server for POSIX and
+ WIN32 systems. It is a drop in replacement for the ESD sound server with
+ much better latency, mixing/re-sampling quality and overall architecture.
+ .
+ Client libraries used by applications that access a PulseAudio sound server
+ via PulseAudio's native interface.
+Homepage: http://www.pulseaudio.org
 
 Package: libgtk2.0-common
 Priority: optional
@@ -7638,6 +7843,27 @@ Description: Debian base system master password and group files
  (/etc/passwd and /etc/group), containing the Debian-allocated user and
  group IDs. The update-passwd tool is provided to keep the system databases
  synchronized with these master files.
+
+Package: consolekit
+Priority: optional
+Section: admin
+Installed-Size: 491
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Version: 0.4.5-3.1
+Depends: libc6 (>= 2.4), libck-connector0 (= 0.4.5-3.1), libdbus-1-3 (>= 1.0.2), libdbus-glib-1-2 (>= 0.88), libglib2.0-0 (>= 2.31.8), libpolkit-gobject-1-0 (>= 0.94), libx11-6, zlib1g (>= 1:1.1.4), dbus (>= 1.1.2)
+Recommends: libpam-ck-connector
+Breaks: udev (<< 147)
+Size: 157498
+Description: framework for defining and tracking users, sessions and seats
+ ConsoleKit is a system daemon for tracking what users are logged
+ into the system and how they interact with the computer (e.g.
+ which keyboard and mouse they use).
+ .
+ It provides asynchronous notification via the system message bus.
+ .
+ This package provides the system daemon and tools to interact with it.
+Homepage: http://www.freedesktop.org/wiki/Software/ConsoleKit
 
 Package: iceweasel
 Priority: optional
@@ -8351,6 +8577,29 @@ Description: X11 miscellaneous 'fixes' extension library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXfixes
+
+Package: libsndfile1
+Priority: optional
+Section: libs
+Installed-Size: 556
+Maintainer: Erik de Castro Lopo <erikd@mega-nerd.com>
+Architecture: i386
+Multi-Arch: same
+Source: libsndfile
+Version: 1.0.25-5
+Depends: libc6 (>= 2.7), libflac8 (>= 1.2.1), libogg0 (>= 1.0rc3), libvorbis0a (>= 1.2.3), libvorbisenc2 (>= 1.1.2)
+Pre-Depends: multiarch-support
+Size: 256896
+Description: Library for reading/writing audio files
+ libsndfile is a library of C routines for reading and writing files containing
+ sampled audio data.
+ .
+ Various versions of WAV (integer, floating point, GSM, and compressed formats);
+ Microsoft PCM, A-law and u-law formats; AIFF, AIFC and RIFX; various AU/SND
+ formats (Sun/NeXT, Dec AU, G721 and G723 ADPCM); RAW header-less PCM files;
+ Amiga IFF/8SVX/16SV PCM files; Ensoniq PARIS  (.PAF); Apple's Core Audio Format
+ (CAF) and others.
+Homepage: http://www.mega-nerd.com/libsndfile/
 
 Package: iceweasel-l10n-gd
 Priority: optional
@@ -10068,6 +10317,29 @@ Description: type-safe Signal Framework for C++ - runtime
  .
  These are the runtime files for libsigc++, needed only if you wish to
  run software which depends on it.
+
+Package: libjack-jackd2-0
+Priority: optional
+Section: libs
+Installed-Size: 549
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: jackd2
+Version: 1.9.8~dfsg.4+20120529git007cdc37-5
+Replaces: libjack-0.116
+Provides: libjack-0.116
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libsamplerate0 (>= 0.1.7), libstdc++6 (>= 4.6)
+Pre-Depends: multiarch-support
+Suggests: jackd2 (= 1.9.8~dfsg.4+20120529git007cdc37-5)
+Conflicts: jackd2 (>> 1.9.8~dfsg.4+20120529git007cdc37-5), jackd2 (<< 1.9.8~dfsg.4+20120529git007cdc37-5), libjack-0.116, libjack0
+Size: 207548
+Description: JACK Audio Connection Kit (libraries)
+ JACK is a low-latency sound server, allowing multiple applications to
+ connect to one audio device, and to share audio between themselves.
+ .
+ This package contains the shared libraries.
+Homepage: http://jackaudio.org/
 
 Package: libx264-123
 Priority: optional
@@ -12447,6 +12719,24 @@ Description: X11 Inter-Client Exchange library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libICE
 
+Package: libjson0
+Priority: extra
+Section: libs
+Installed-Size: 68
+Maintainer: fabien boucher <fabien.dot.boucher@gmail.com>
+Architecture: i386
+Multi-Arch: same
+Source: json-c
+Version: 0.9-1.1
+Depends: libc6 (>= 2.8)
+Pre-Depends: multiarch-support
+Size: 19640
+Description: JSON manipulation library - shared library
+ This library allows you to easily construct JSON objects in C,
+ output them as JSON formatted strings and parse JSON formatted
+ strings back into the C representation of JSON objects.
+Homepage: http://oss.metaparadigm.com/json-c/
+
 Package: iceweasel-l10n-de
 Priority: optional
 Section: localization
@@ -13671,6 +13961,47 @@ Description: ISC DHCP client
  .
  Extra documentation can be found in the package isc-dhcp-common.
 
+Package: pulseaudio
+Priority: optional
+Section: sound
+Installed-Size: 4634
+Maintainer: Pulseaudio maintenance team <pkg-pulseaudio-devel@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Version: 2.0-6
+Depends: libasound2 (>= 1.0.24.1), libc6 (>= 2.9), libcap2 (>= 2.10), libdbus-1-3 (>= 1.1.1), libfftw3-3, libgcc1 (>= 1:4.1.1), libice6 (>= 1:1.0.0), libltdl7 (>= 2.4.2), liborc-0.4-0 (>= 1:0.4.16), libpulse0 (= 2.0-6), libsamplerate0 (>= 0.1.7), libsm6, libsndfile1 (>= 1.0.20), libspeexdsp1 (>= 1.2~beta3.2-1), libstdc++6 (>= 4.1.1), libsystemd-daemon0 (>= 31), libsystemd-login0 (>= 31), libtdb1 (>= 1.2.7+git20101214), libudev0 (>= 146), libwebrtc-audio-processing-0, libx11-6, libx11-xcb1, libxcb1, libxtst6, adduser, lsb-base (>= 3.2-13), consolekit, udev (>= 143), libasound2-plugins
+Recommends: pulseaudio-module-x11, gstreamer0.10-pulseaudio, rtkit
+Suggests: pulseaudio-utils, pavumeter, pavucontrol, paman, paprefs
+Breaks: libltdl3 (<< 1.5.24-1)
+Size: 830892
+Description: PulseAudio sound server
+ PulseAudio, previously known as Polypaudio, is a sound server for POSIX and
+ WIN32 systems. It is a drop in replacement for the ESD sound server with
+ much better latency, mixing/re-sampling quality and overall architecture.
+ .
+ These are some of PulseAudio's features:
+ .
+   * High quality software mixing of multiple audio streams with support for
+     more than one sink/source. May be used to combine multiple sound cards
+     into one (with sample rate adjustment).
+ .
+   * Wide range of supported client libraries. ESD, ALSA, oss, libao and
+     GStreamer client applications are supported as-is. Native PulseAudio
+     plug-ins are also available for xmms and mplayer.
+ .
+   * Good low latency behaviour and very accurate latency measurement for
+     playback and recording. Ability to fully synchronize multiple playback
+     streams.
+ .
+   * Network transparency, allowing an application to play back or record
+     audio on a different machine than the one it is running on.
+ .
+   * Extensible plug-in architecture with plug-ins for jackd, multicast-rtp
+     lirc and avahi, just to name a few.
+ .
+ This package contains the daemon and basic module set.
+Homepage: http://www.pulseaudio.org
+
 Package: libglx-nvidia-alternatives
 Priority: optional
 Section: non-free/libs
@@ -13883,6 +14214,42 @@ Description: GLib library of C routines
  .
  This package contains the shared libraries.
 Homepage: http://www.gtk.org/
+
+Package: libasyncns0
+Priority: optional
+Section: libs
+Installed-Size: 80
+Maintainer: Tanguy Ortolo <tanguy+debian@ortolo.eu>
+Architecture: i386
+Multi-Arch: same
+Source: libasyncns
+Version: 0.8-4
+Depends: libc6 (>= 2.3.6-6~)
+Pre-Depends: multiarch-support
+Size: 13272
+Description: Asynchronous name service query library
+ libasyncns is a C library for Linux/Unix for executing name service queries
+ asynchronously. It is an asynchronous wrapper around getaddrinfo(3),
+ getnameinfo(3), res_query(3) and res_search(3) from libc and libresolv.
+Homepage: http://0pointer.de/lennart/projects/libasyncns/
+
+Package: libgomp1
+Priority: optional
+Section: libs
+Installed-Size: 95
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.7
+Version: 4.7.2-5
+Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.6)
+Pre-Depends: multiarch-support
+Breaks: gcc-4.1, gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
+Size: 29118
+Description: GCC OpenMP (GOMP) support library
+ GOMP is an implementation of OpenMP for the C, C++, and Fortran compilers
+ in the GNU Compiler Collection.
+Homepage: http://gcc.gnu.org/
 
 Package: xserver-xorg-video-tseng
 Priority: optional
