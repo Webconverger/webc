@@ -5507,23 +5507,26 @@ Package: base-files
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 414
-Maintainer: Santiago Vila <sanvila@debian.org>
+Installed-Size: 415
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 7.1
+Version: 7.1-1baureo1
 Replaces: base, dpkg (<= 1.15.0), miscutils
 Provides: base
-Pre-Depends: awk
+Pre-Depends: dpkg-lzip, awk
 Breaks: initscripts (<< 2.88dsf-13.3), sendfile (<< 2.1b.20080616-5.2~)
 Filename: pool/main/b/base-files/base-files_6.0squeeze4_i386.deb
-Size: 77020
+Size: 56010
 MD5sum: 5e3e78475bec6d8f42cf4afe4fca76ee
 Description: Debian base system miscellaneous files
  This package contains the basic filesystem hierarchy of a Debian system, and
  several important miscellaneous files, such as /etc/debian_version,
  /etc/host.conf, /etc/issue, /etc/motd, /etc/profile, and others,
  and the text of several common licenses in use on Debian systems.
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: poppler-data
 Priority: optional
@@ -7330,10 +7333,10 @@ Maintainer: Jay Berkenbilt <qjb@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: tiff3
-Version: 3.9.6-10
+Version: 3.9.6-11
 Depends: libc6 (>= 2.11), libjbig0, libjpeg8 (>= 8c), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
-Size: 200540
+Size: 200638
 Description: Tag Image File Format (TIFF) library (old version)
  libtiff is a library providing support for the Tag Image File Format
  (TIFF), a widely used format for storing image data.  This package
@@ -10292,6 +10295,29 @@ Description: library for handling paper characteristics
  different paper types and sizes for programs that need to deal with
  printed output.
 
+Package: libjack-jackd2-0
+Priority: optional
+Section: libs
+Installed-Size: 549
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: jackd2
+Version: 1.9.8~dfsg.4+20120529git007cdc37-5
+Replaces: libjack-0.116
+Provides: libjack-0.116
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libsamplerate0 (>= 0.1.7), libstdc++6 (>= 4.6)
+Pre-Depends: multiarch-support
+Suggests: jackd2 (= 1.9.8~dfsg.4+20120529git007cdc37-5)
+Conflicts: jackd2 (>> 1.9.8~dfsg.4+20120529git007cdc37-5), jackd2 (<< 1.9.8~dfsg.4+20120529git007cdc37-5), libjack-0.116, libjack0
+Size: 207548
+Description: JACK Audio Connection Kit (libraries)
+ JACK is a low-latency sound server, allowing multiple applications to
+ connect to one audio device, and to share audio between themselves.
+ .
+ This package contains the shared libraries.
+Homepage: http://jackaudio.org/
+
 Package: libsigc++-2.0-0c2a
 Priority: optional
 Section: libs
@@ -10317,29 +10343,6 @@ Description: type-safe Signal Framework for C++ - runtime
  .
  These are the runtime files for libsigc++, needed only if you wish to
  run software which depends on it.
-
-Package: libjack-jackd2-0
-Priority: optional
-Section: libs
-Installed-Size: 549
-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
-Architecture: i386
-Multi-Arch: same
-Source: jackd2
-Version: 1.9.8~dfsg.4+20120529git007cdc37-5
-Replaces: libjack-0.116
-Provides: libjack-0.116
-Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libsamplerate0 (>= 0.1.7), libstdc++6 (>= 4.6)
-Pre-Depends: multiarch-support
-Suggests: jackd2 (= 1.9.8~dfsg.4+20120529git007cdc37-5)
-Conflicts: jackd2 (>> 1.9.8~dfsg.4+20120529git007cdc37-5), jackd2 (<< 1.9.8~dfsg.4+20120529git007cdc37-5), libjack-0.116, libjack0
-Size: 207548
-Description: JACK Audio Connection Kit (libraries)
- JACK is a low-latency sound server, allowing multiple applications to
- connect to one audio device, and to share audio between themselves.
- .
- This package contains the shared libraries.
-Homepage: http://jackaudio.org/
 
 Package: libx264-123
 Priority: optional
