@@ -269,7 +269,7 @@ Cmdline ()
 				;;
 
 			git-revision=*)
-				GIT_REVISION="${ARGUMENT#git-revision=}"
+				GIT_REVISION="${_PARAMETER#git-revision=}"
 				export GIT_REVISION
 				;;
 
