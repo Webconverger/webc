@@ -67,7 +67,7 @@ for x in $( cmdline ); do
 		log=${x#log=}
 		echo "*.*          @${log}" >> /etc/rsyslog.conf
 		logs "Logging to ${log}"
-		/etc/init.d/rsyslog restart
+		systemctl restart rsyslog.service
 		;;
 
 	locale=*)
