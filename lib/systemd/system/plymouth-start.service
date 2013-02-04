@@ -1,0 +1,13 @@
+[Unit]
+Description=Show Plymouth Boot Screen
+DefaultDependencies=no
+Wants=systemd-ask-password-plymouth.path
+After=systemd-vconsole-setup.service systemd-udev-settle.service
+Before=systemd-ask-password-plymouth.service
+ConditionKernelCommandLine=splash
+ConditionPathExists=!/run/plymouth/pid
+
+[Service]
+ExecStart=/sbin/plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
+ExecStartPost=-/bin/udevadm trigger --action=add --attr-match=class=0x030000 ; -/bin/udevadm trigger --action=add --subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty ; -/bin/udevadm settle --timeout=30 ; -/bin/plymouth show-splash
+Type=forking
