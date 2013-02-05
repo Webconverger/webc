@@ -127,8 +127,7 @@ then
   done
 fi
 
-chmod 0644 "$TEMPBUNDLE"
-mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
+rm -f "$CERTBUNDLE"
 
 ADDED_CNT=$(wc -l < "$ADDED")
 REMOVED_CNT=$(wc -l < "$REMOVED")
@@ -143,6 +142,9 @@ then
     c_rehash .
   fi
 fi
+
+chmod 0644 "$TEMPBUNDLE"
+mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
 
 echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
 

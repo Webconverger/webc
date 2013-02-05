@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 # /etc/perl/Net/libnet.cfg mistakenly installed as /etc/Net in perl 5.8
-if [ "$1" = remove ] && [ -f /etc/Net ] && [ -x /usr/bin/md5sum ] &&
-   [ "$(/usr/bin/md5sum /etc/Net)" = "fb2946cae573b8ed3d654a180d458733  /etc/Net" ]
+if [ "$1" = remove ] && [ -f /etc/Net ] && which md5sum > /dev/null &&
+   [ "$(md5sum /etc/Net)" = "fb2946cae573b8ed3d654a180d458733  /etc/Net" ]
 then
     rm -f /etc/Net
 fi

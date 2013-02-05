@@ -1,0 +1,68 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:			 webconverger
+# Required-Start:	 $local_fs $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:	 2 3 4 5
+# Default-Stop:		 0 1 6
+# Short-Description: Webconverger Live environment setup http://webconverger.org/startup/
+### END INIT INFO
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+NAME="webconverger"
+DESC="Webconverger live environment"
+WEBCHOME=/home/webc
+
+# Ensure sound volume is 100%
+amixer -s &>/dev/null <<END
+set Master 100% unmute
+set Master Front 100% unmute
+END
+
+. /etc/webc/functions.sh
+. /etc/webc/webc.conf
+
+for x in $(cmdline)
+do
+	case $x in
+		wpa-*)
+		# http://anonscm.debian.org/viewvc/pkg-wpa/wpasupplicant/trunk/debian/README.Debian?view=markup
+		wirelesscfg="${wirelesscfg}$(/bin/busybox httpd -d "${x/=/ }")\n\t"
+		;;
+		http_proxy=*)
+		# http://developer.mozilla.org/en/docs/Mozilla_Networking_Preferences#Proxy
+		echo "http_proxy=${x#http_proxy=}" >> /etc/environment
+		export HTTP_PROXY=${x#http_proxy=}
+		HOST_PORT=${HTTP_PROXY##*//}
+		PROXY_HOST=${HOST_PORT%%:*}
+		PROXY_PORT=${HOST_PORT##*:}
+
+		logger PROXY SETTINGS: $HTTP_PROXY $PROXY_HOST $PROXY_PORT
+		echo "pref(\"network.proxy.type\", 1);"  >> $prefs
+		echo "pref(\"network.proxy.http\", \"$PROXY_HOST\");" >> $prefs
+		echo "pref(\"network.proxy.http_port\", $PROXY_PORT);" >> $prefs
+		echo "pref(\"network.proxy.ssl\", \"$PROXY_HOST\");" >> $prefs
+		echo "pref(\"network.proxy.ssl_port\", $PROXY_PORT);" >> $prefs
+		;;
+	esac
+done
+
+# Don't try setup wireless if there is no config or we have a working internet connection
+
+if test -z "$wirelesscfg"
+then
+	exit 0
+fi
+
+sed -i "s,wireless config,$wirelesscfg,g" /etc/network/interfaces
+
+for iface in wlan0 eth1 # for want of a better way of detecting wireless interfaces
+do
+	ping -c 1 google.com &> /dev/null && break # If the network works, don't touch it
+	/sbin/ifconfig $iface &> /dev/null || continue # if the device does not exist, skip!
+	ifup $iface &> /dev/null
+done
+
+# Try to make /live/image writable
+mount -o remount,rw /live/image

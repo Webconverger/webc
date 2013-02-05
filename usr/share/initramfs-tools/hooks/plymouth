@@ -23,6 +23,7 @@ THEMES="/usr/share/plymouth/themes"
 
 if [ -n "${THEME}" ]
 then
+	THEME_NAME="${THEME}"
 	THEME="${THEMES}/${THEME}/${THEME}.plymouth"
 else
 	exit 0
@@ -30,17 +31,27 @@ fi
 
 PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
 
-case "$(basename ${THEME} .plymouth)" in
+case "${THEME_NAME}" in
 	text)
-		PLUGINS="details.so text.so"
+		PLUGINS="text.so"
+		;;
+
+	details)
+		PLUGINS="text.so details.so"
 		;;
 
 	*)
-		PLUGINS="details.so text.so label.so"
+		PLUGINS="text.so details.so label.so"
 		;;
 esac
 
 MODULE="${PLUGIN_PATH}/$(sed -n 's/^ModuleName=\(.*\)/\1/p' ${THEME}).so"
+
+if [ ! -e "$MODULE" ]
+then
+	echo "W: plymouth module ($MODULE) missing, skipping plymouth."
+	exit 0
+fi
 
 # copy plugin and images for current theme
 copy_exec "${MODULE}"
@@ -64,10 +75,14 @@ done
 # copy base themes and logo
 cp -a "${THEMES}/details" "${DESTDIR}/${THEMES}"
 cp -a "${THEMES}/text" "${DESTDIR}/${THEMES}"
-cp /etc/progress_version "${DESTDIR}/etc"
 
-case "$(basename ${THEME} .plymouth)" in
-	text)
+if [ -f /etc/os-release ]
+then
+	cp /etc/os-release "${DESTDIR}/etc"
+fi
+
+case "${THEME_NAME}" in
+	text|details)
 
 		;;
 
@@ -87,7 +102,7 @@ case "$(basename ${THEME} .plymouth)" in
 			# pre-multiarch fallback
 			PANGO_DIR=/usr/lib/pango/1.6.0
 		else
-			PANGO_DIR=/usr/lib//pango/1.6.0
+			PANGO_DIR=/usr/lib/i386-linux-gnu/pango/1.6.0
 		fi
 		mkdir -p "${DESTDIR}${PANGO_DIR}/module-files.d"
 		mkdir -p "${DESTDIR}${PANGO_DIR}/modules"
@@ -95,14 +110,11 @@ case "$(basename ${THEME} .plymouth)" in
 		copy_exec ${PANGO_DIR}/modules/pango-basic-fc.so
 
 		# copy renderers
-		copy_exec /usr/lib/plymouth/renderers/frame-buffer.so
-		copy_exec /usr/lib/plymouth/renderers/drm.so
+		copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/frame-buffer.so
+		copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/drm.so
 
-		# add drm/fb modules
-		manual_add_modules intel-agp
-		manual_add_modules ati-agp
-		manual_add_modules i915
-		manual_add_modules radeon
+		# add drm modules
+		copy_modules_dir kernel/drivers/gpu/drm mga r128 savage sis tdfx via
 		;;
 esac
 
@@ -115,3 +127,22 @@ then
 fi
 
 cp -a /usr/share/plymouth/plymouthd.defaults "${DESTDIR}/usr/share/plymouth/"
+
+# temporarily include dummy root account lookup (#691598)
+if ! grep -qs '^root:' "${DESTDIR}/etc/passwd"
+then
+	echo "root:x:0:0:root:/root:/bin/sh" >> "${DESTDIR}/etc/passwd"
+fi
+
+if ! grep -qs '^passwd: files' "${DESTDIR}/etc/nsswitch.conf"
+then
+	echo "passwd: files" >> "${DESTDIR}/etc/nsswitch.conf"
+fi
+
+for _LIBRARY in /lib/i386-linux-gnu/libnss_files*
+do
+	if [ -e "${_LIBRARY}" ]
+	then
+		copy_exec ${_LIBRARY} /lib
+	fi
+done

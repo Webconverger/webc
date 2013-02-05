@@ -1,0 +1,45 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:		plymouth-log
+# Required-Start:	$local_fs $remote_fs
+# Required-Stop:	$local_fs $remote_fs
+# Should-Start:
+# Should-Stop:
+# Default-Start:	S
+# Default-Stop:
+# Short-Description:	Inform plymouth that /var/log is writable
+### END INIT INFO
+
+PATH="/sbin:/bin:/usr/sbin:/usr/bin"
+NAME="plymouth-log"
+DESC="Boot splash manager (write log file)"
+
+test -x /bin/plymouth || exit 0
+
+if [ -r "/etc/default/${NAME}" ]
+then
+	. "/etc/default/${NAME}"
+fi
+
+set -e
+
+case "${1}" in
+	start)
+		if plymouth --ping
+		then
+			/bin/plymouth update-root-fs --read-write
+		fi
+		;;
+
+	stop|restart|force-reload)
+
+		;;
+
+	*)
+		echo "Usage: ${0} {start|stop|restart|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

@@ -64,10 +64,11 @@ updatever () {
 }
 
 if [ "$(basename $img)" = "vmlinux" ] ; then
-  updatever vmlinux "$img"
+  img_dest=vmlinux
 else
-  updatever vmlinuz "$img"
+  img_dest=vmlinuz
 fi
+updatever $img_dest "$img"
 updatever System.map "$map"
 
 config=$(dirname "$map")
@@ -75,5 +76,8 @@ config="${config}/.config"
 if [ -f "$config" ] ; then
   updatever config "$config"
 fi
+
+run-parts --verbose --exit-on-error --arg="$ver" --arg="$dir/$img_dest-$ver" \
+  /etc/kernel/postinst.d
  
 exit 0

@@ -31,7 +31,7 @@ XWRAPPER_CONFIG_ROSTER="$CONFIG_AUX_DIR/$XWRAPPER_CONFIG_ROSTER_BASE"
 # skip past this library by scanning forward in this file to the string
 # "GOBSTOPPER".
 
-SOURCE_VERSION=1:7.6+8~bpo60+1
+SOURCE_VERSION=1:7.7+1
 OFFICIAL_BUILD=
 
 # Use special abnormal exit codes so that problems with this library are more
@@ -702,11 +702,7 @@ fi
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/x11-common" ]; then
 	update-rc.d x11-common start 70 S . >/dev/null
-	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-		invoke-rc.d x11-common start || exit $?
-	else
-		/etc/init.d/x11-common start || exit $?
-	fi
+	invoke-rc.d x11-common start || exit $?
 fi
 # End automatically added section
 

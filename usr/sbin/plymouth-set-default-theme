@@ -2,7 +2,7 @@
 
 set -e
 
-[ -z "$PLYMOUTH_LIBEXECDIR" ] && PLYMOUTH_LIBEXECDIR="/usr/lib/plymouth"
+[ -z "$PLYMOUTH_LIBEXECDIR" ] && PLYMOUTH_LIBEXECDIR="/usr/lib/i386-linux-gnu"
 [ -z "$PLYMOUTH_DATADIR" ] && PLYMOUTH_DATADIR="/usr/share"
 [ -z "$PLYMOUTH_CONFDIR" ] && PLYMOUTH_CONFDIR="/etc/plymouth/"
 [ -z "$PLYMOUTH_POLICYDIR" ] && PLYMOUTH_POLICYDIR="/usr/share/plymouth/"
@@ -10,7 +10,7 @@ if [ -z "$PLYMOUTH_PLUGIN_PATH" ]; then
     if [ -z "$LIB" ]; then
         PLYMOUTH_PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
     else
-        [ -z "$PLYMOUTH_LIBDIR" ] && PLYMOUTH_LIBDIR="/usr/lib"
+        [ -z "$PLYMOUTH_LIBDIR" ] && PLYMOUTH_LIBDIR="/usr/lib/i386-linux-gnu"
         PLYMOUTH_PLUGIN_PATH=${PLYMOUTH_LIBDIR}/plymouth/
     fi
 fi
@@ -38,7 +38,7 @@ function list_themes ()
 {
         for theme in ${PLYMOUTH_DATADIR}/plymouth/themes/*/*.plymouth; do
                 [ -f $theme ] || continue;
-                echo "$(basename $theme .plymouth)"
+                echo "$(basename "$theme" .plymouth)"
         done
 }
 
@@ -55,10 +55,15 @@ function get_default_theme ()
                 THEME_NAME=$(read_theme_name_from_file ${PLYMOUTH_POLICYDIR}/plymouthd.defaults)
         fi
 
-        if [ -z "$THEME_NAME" -o ! -r "${PLYMOUTH_DATADIR}/plymouth/themes/$THEME_NAME/$THEME_NAME.plymouth" ]; then
-                THEME_NAME=$(basename $(readlink ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth) .plymouth)
+        if [ -z "$THEME_NAME" -o ! -r "${PLYMOUTH_DATADIR}/plymouth/themes/$THEME_NAME/$THEME_NAME.plymouth" \
+             -a -L "${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth" ]; then
+                THEME_NAME=$(basename "$(readlink ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth)" .plymouth)
         fi
-        [ -z "$THEME_NAME" ] || echo $THEME_NAME && exit 1
+        if [ -z "$THEME_NAME" -o ! -r "${PLYMOUTH_DATADIR}/plymouth/themes/$THEME_NAME/$THEME_NAME.plymouth" ]; then
+                THEME_NAME="text"
+        fi
+
+        echo $THEME_NAME
 }
 
 DO_RESET=0
@@ -175,9 +180,11 @@ fi
 [ -L ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth ] && rm -f ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth
 
 [ -d ${PLYMOUTH_CONFDIR} ] || mkdir -p ${PLYMOUTH_CONFDIR}
-grep -q '^[[]Daemon[]]' ${PLYMOUTH_CONFDIR}/plymouthd.conf 2> /null || echo '[Daemon]' >> ${PLYMOUTH_CONFDIR}/plymouthd.conf
+grep -q '^[[]Daemon[]]' ${PLYMOUTH_CONFDIR}/plymouthd.conf 2> /dev/null || echo '[Daemon]' >> ${PLYMOUTH_CONFDIR}/plymouthd.conf
 sed -i -e '/^Theme[[:blank:]]*=.*/d' ${PLYMOUTH_CONFDIR}/plymouthd.conf
 sed -i -e "s/^\([[]Daemon[]]\)\n*/\1\nTheme=${THEME_NAME}/" ${PLYMOUTH_CONFDIR}/plymouthd.conf
 
-[ $DO_INITRD_REBUILD -ne 0 ] && (${PLYMOUTH_LIBEXECDIR}/plymouth/plymouth-update-initrd)
-
+if [ $DO_INITRD_REBUILD -ne 0 ] ; then
+        (${PLYMOUTH_LIBEXECDIR}/plymouth/plymouth-update-initrd)
+fi
+exit 0

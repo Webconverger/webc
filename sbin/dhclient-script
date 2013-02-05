@@ -12,64 +12,119 @@
 
 # The alias handling in here probably still sucks. -mdz
 
+# update /etc/resolv.conf based on received values
 make_resolv_conf() {
-    if [ "$new_domain_name" -o "$new_domain_name_servers" ]; then
-        local new_resolv_conf=/etc/resolv.conf.dhclient-new
+    local new_resolv_conf
+
+    # DHCPv4
+    if [ -n "$new_domain_search" ] || [ -n "$new_domain_name" ] ||
+       [ -n "$new_domain_name_servers" ]; then
+        new_resolv_conf=/etc/resolv.conf.dhclient-new
         rm -f $new_resolv_conf
-        if [ "$new_domain_name" ]; then
+
+        if [ -n "$new_domain_name" ]; then
             echo domain ${new_domain_name%% *} >>$new_resolv_conf
         fi
-	if [ "$new_domain_search" ]; then
-	    #new_domain_search="${new_domain_search% }"
-	    if [ "$new_domain_name" ]; then
-		domain_in_search_list=""
-		for domain in "$new_domain_search"; do
-			if [ "$domain" = "$new_domain_name" ]; then
-				domain_in_search="Yes"
-			fi
-		done
-		if [ ! "$domain_in_search" ]; then
-	    		new_domain_search="$new_domain_name $new_domain_search"
-		fi
-	    fi
-	    echo "search ${new_domain_search}" >> $new_resolv_conf
-	elif [ "$new_domain_name" ]; then
-		echo "search ${new_domain_name}" >> $new_resolv_conf
-	fi
-        if [ "$new_domain_name_servers" ]; then
-                   for nameserver in $new_domain_name_servers; do
-                       echo nameserver $nameserver >>$new_resolv_conf
+
+        if [ -n "$new_domain_search" ]; then
+            if [ -n "$new_domain_name" ]; then
+                domain_in_search_list=""
+                for domain in $new_domain_search; do
+                    if [ "$domain" = "${new_domain_name}" ] ||
+                       [ "$domain" = "${new_domain_name}." ]; then
+                        domain_in_search_list="Yes"
+                    fi
+                done
+                if [ -z "$domain_in_search_list" ]; then
+                    new_domain_search="$new_domain_name $new_domain_search"
+                fi
+            fi
+            echo "search ${new_domain_search}" >> $new_resolv_conf
+        elif [ -n "$new_domain_name" ]; then
+            echo "search ${new_domain_name}" >> $new_resolv_conf
+        fi
+
+        if [ -n "$new_domain_name_servers" ]; then
+            for nameserver in $new_domain_name_servers; do
+                echo nameserver $nameserver >>$new_resolv_conf
             done
         else # keep 'old' nameservers
             sed -n /^\w*[Nn][Aa][Mm][Ee][Ss][Ee][Rr][Vv][Ee][Rr]/p /etc/resolv.conf >>$new_resolv_conf
         fi
+
+        chown --reference=/etc/resolv.conf $new_resolv_conf
+        chmod --reference=/etc/resolv.conf $new_resolv_conf
+        mv -f $new_resolv_conf /etc/resolv.conf
+    # DHCPv6
+    elif [ -n "$new_dhcp6_domain_search" ] || [ -n "$new_dhcp6_name_servers" ]; then
+        new_resolv_conf=/etc/resolv.conf.dhclient-new
+        rm -f $new_resolv_conf
+
+        if [ -n "$new_dhcp6_domain_search" ]; then
+            echo "search ${new_dhcp6_domain_search}" >> $new_resolv_conf
+        fi
+
+        if [ -n "$new_dhcp6_name_servers" ]; then
+            for nameserver in $new_dhcp6_name_servers; do
+                # append %interface to link-local-address nameservers
+                if [ "${nameserver##fe80::}" != "$nameserver" ] ||
+                   [ "${nameserver##FE80::}" != "$nameserver" ]; then
+                    nameserver="${nameserver}%${interface}"
+                fi
+                echo nameserver $nameserver >>$new_resolv_conf
+            done
+        else # keep 'old' nameservers
+            sed -n /^\w*[Nn][Aa][Mm][Ee][Ss][Ee][Rr][Vv][Ee][Rr]/p /etc/resolv.conf >>$new_resolv_conf
+        fi
+
         chown --reference=/etc/resolv.conf $new_resolv_conf
         chmod --reference=/etc/resolv.conf $new_resolv_conf
         mv -f $new_resolv_conf /etc/resolv.conf
     fi
 }
 
+# set host name
+set_hostname() {
+    local current_hostname
+
+    if [ -n "$new_host_name" ]; then
+        current_hostname=$(hostname)
+
+        # current host name is empty, '(none)' or 'localhost' or differs from new one from DHCP
+        if [ -z "$current_hostname" ] ||
+           [ "$current_hostname" = '(none)' ] ||
+           [ "$current_hostname" = 'localhost' ] ||
+           [ "$current_hostname" = "$old_host_name" ]; then
+           if [ "$new_host_name" != "$old_host_name" ]; then
+               hostname "$new_host_name"
+           fi
+        fi
+    fi
+}
+
+# run given script
 run_hook() {
-    local script="$1"
+    local script
     local exit_status
+    script="$1"
     shift	# discard the first argument, then the rest are the script's
 
     if [ -f $script ]; then
         . $script "$@"
     fi
 
-
     if [ -n "$exit_status" ] && [ "$exit_status" -ne 0 ]; then
         logger -p daemon.err "$script returned non-zero exit status $exit_status"
-        save_exit_status=$exit_status
     fi
 
     return $exit_status
 }
 
+# run scripts in given directory
 run_hookdir() {
-    local dir="$1"
+    local dir
     local exit_status
+    dir="$1"
     shift	# See run_hook
 
     if [ -d "$dir" ]; then
@@ -99,31 +154,14 @@ exit_with_hooks() {
     exit $exit_status
 }
 
-if [ -n "$new_broadcast_address" ]; then
-    new_broadcast_arg="broadcast $new_broadcast_address"
-fi
-if [ -n "$old_broadcast_address" ]; then
-    old_broadcast_arg="broadcast $old_broadcast_address"
-fi
-if [ -n "$new_subnet_mask" ]; then
-    new_subnet_arg="netmask $new_subnet_mask"
-fi
-if [ -n "$old_subnet_mask" ]; then
-    old_subnet_arg="netmask $old_subnet_mask"
-fi
-if [ -n "$alias_subnet_mask" ]; then
-    alias_subnet_arg="netmask $alias_subnet_mask"
-fi
+
 # The 576 MTU is only used for X.25 and dialup connections
 # where the admin wants low latency.  Such a low MTU can cause
 # problems with UDP traffic, among other things.  As such,
 # disallow MTUs from 576 and below by default, so that broken
 # MTUs are ignored, but higher stuff is allowed (1492, 1500, etc).
-if [ -n "$new_interface_mtu" ] && [ $new_interface_mtu -gt 576 ]; then
-    mtu_arg="mtu $new_interface_mtu"
-fi
-if [ -n "$IF_METRIC" ]; then
-    metric_arg="metric $IF_METRIC"	# interfaces(5), "metric" option
+if [ -z "$new_interface_mtu" ] || [ "$new_interface_mtu" -le 576 ]; then
+    new_interface_mtu=''
 fi
 
 
@@ -135,6 +173,9 @@ run_hookdir /etc/dhcp/dhclient-enter-hooks.d
 
 # Execute the operation
 case "$reason" in
+
+    ### DHCPv4 Handlers
+
     MEDIUM|ARPCHECK|ARPSEND)
         # Do nothing
         ;;
@@ -143,109 +184,200 @@ case "$reason" in
         # configured as required in order to send packets prior to
         # receiving an actual address. - dhclient-script(8)
 
+        # ensure interface is up
+        ip link set dev ${interface} up
+
         if [ -n "$alias_ip_address" ]; then
-            # Bring down alias interface. Its routes will disappear too.
-            ifconfig $interface:0- inet 0
+            # flush alias IP from interface
+            ip -4 addr flush dev ${interface} label ${interface}:0
         fi
-        ifconfig $interface inet 0 up
 
         ;;
+
     BOUND|RENEW|REBIND|REBOOT)
+        set_hostname
 
-	if [ -n "$old_host_name" -a -n "$host_name" -a \
-     	     "$host_name" != "$old_host_name" ]; then
-    	    hostname "$new_host_name"
-	fi
-
-        if [ -n "$old_ip_address" -a -n "$alias_ip_address" -a \
-             "$alias_ip_address" != "$old_ip_address" ]; then
-            # Possible new alias. Remove old alias.
-            ifconfig $interface:0- inet 0
+        if [ -n "$old_ip_address" ] && [ -n "$alias_ip_address" ] &&
+           [ "$alias_ip_address" != "$old_ip_address" ]; then
+            # alias IP may have changed => flush it
+            ip -4 addr flush dev ${interface} label ${interface}:0
         fi
 
-        if [ -n "$old_ip_address" -a \
-             "$old_ip_address" != "$new_ip_address" ]; then
-            # IP address changed. Bringing down the interface will delete all routes,
-            # and clear the ARP cache.
-            ifconfig $interface inet 0
-
+        if [ -n "$old_ip_address" ] &&
+           [ "$old_ip_address" != "$new_ip_address" ]; then
+            # leased IP has changed => flush it
+            ip -4 addr flush dev ${interface} label ${interface}
         fi
 
-        if [ -z "$old_ip_address" -o "$old_ip_address" != "$new_ip_address" -o \
-            "$reason" = "BOUND" -o "$reason" = "REBOOT" ]; then
+        if [ -z "$old_ip_address" ] ||
+           [ "$old_ip_address" != "$new_ip_address" ] ||
+           [ "$reason" = "BOUND" ] || [ "$reason" = "REBOOT" ]; then
+            # new IP has been leased or leased IP changed => set it
+            ip -4 addr add ${new_ip_address}${new_subnet_mask:+/$new_subnet_mask} \
+                ${new_broadcast_address:+broadcast $new_broadcast_address} \
+                dev ${interface} label ${interface}
 
-            ifconfig $interface inet $new_ip_address $new_subnet_arg \
-                $new_broadcast_arg $mtu_arg
+            if [ -n "$new_interface_mtu" ]; then
+                # set MTU
+                ip link set dev ${interface} mtu ${new_interface_mtu}
+            fi
 
-	    # point to point
-	    if [ "$new_subnet_mask" == "255.255.255.255" ]; then
-	    	for router in $new_routers; do
-	    	    route add -host $router dev $interface
-	    	done
-	    fi
+            # set if_metric if IF_METRIC is set or there's more than one router
+            if_metric="$IF_METRIC"
+            if [ "${new_routers%% *}" != "${new_routers}" ]; then
+                if_metric=${if_metric:-1}
+            fi
 
             for router in $new_routers; do
-                route add default dev $interface gw $router $metric_arg
+                if [ "$new_subnet_mask" = "255.255.255.255" ]; then
+                    # point-to-point connection => set explicit route
+                    ip -4 route add ${router} dev $interface >/dev/null 2>&1
+                fi
+
+                # set default route
+                ip -4 route add default via ${router} dev ${interface} \
+                    ${if_metric:+metric $if_metric} >/dev/null 2>&1
+
+                if [ -n "$if_metric" ]; then
+                    if_metric=$((if_metric+1))
+                fi
             done
         fi
 
-        if [ "$new_ip_address" != "$alias_ip_address" -a -n "$alias_ip_address" ];
-            then
-            ifconfig $interface:0- inet 0
-            ifconfig $interface:0 inet $alias_ip_address $alias_subnet_arg
-            route add -host $alias_ip_address $interface:0
+        if [ -n "$alias_ip_address" ] &&
+           [ "$new_ip_address" != "$alias_ip_address" ]; then
+            # separate alias IP given, which may have changed
+            # => flush it, set it & add host route to it
+            ip -4 addr flush dev ${interface} label ${interface}:0
+            ip -4 addr add ${alias_ip_address}${alias_subnet_mask:+/$alias_subnet_mask} \
+                dev ${interface} label ${interface}:0
+            ip -4 route add ${alias_ip_address} dev ${interface} >/dev/null 2>&1
         fi
 
+        # update /etc/resolv.conf
         make_resolv_conf
 
         ;;
 
     EXPIRE|FAIL|RELEASE|STOP)
         if [ -n "$alias_ip_address" ]; then
-            # Turn off alias interface.
-            ifconfig $interface:0- inet 0
+            # flush alias IP
+            ip -4 addr flush dev ${interface} label ${interface}:0
         fi
 
         if [ -n "$old_ip_address" ]; then
-            # Shut down interface, which will delete routes and clear arp cache.
-            ifconfig $interface inet 0
+            # flush leased IP
+            ip -4 addr flush dev ${interface} label ${interface}
         fi
 
         if [ -n "$alias_ip_address" ]; then
-            ifconfig $interface:0 inet $alias_ip_address $alias_subnet_arg
-            route add -host $alias_ip_address $interface:0
+            # alias IP given => set it & add host route to it
+            ip -4 addr add ${alias_ip_address}${alias_network_arg} \
+                dev ${interface} label ${interface}:0
+            ip -4 route add ${alias_ip_address} dev ${interface} >/dev/null 2>&1
         fi
 
         ;;
 
     TIMEOUT)
         if [ -n "$alias_ip_address" ]; then
-            ifconfig $interface:0- inet 0
+            # flush alias IP
+            ip -4 addr flush dev ${interface} label ${interface}:0
         fi
 
-        ifconfig $interface inet $new_ip_address $new_subnet_arg \
-            $new_broadcast_arg $mtu_arg
+        # set IP from recorded lease
+        ip -4 addr add ${new_ip_address}${new_subnet_mask:+/$new_subnet_mask} \
+            ${new_broadcast_address:+broadcast $new_broadcast_address} \
+            dev ${interface} label ${interface}
 
-        set -- $new_routers
-        first_router="$1"
+        if [ -n "$new_interface_mtu" ]; then
+            # set MTU
+            ip link set dev ${interface} mtu ${new_interface_mtu}
+        fi
 
-        if [ -z "$first_router" ] || ping -q -c 1 $first_router; then
-            if [ "$new_ip_address" != "$alias_ip_address" -a \
-                -n "$alias_ip_address" ]; then
-                ifconfig $interface:0 inet $alias_ip_address $alias_subnet_arg
-                route add -host $alias_ip_address dev $interface:0
+        # if there is no router recorded in the lease or the 1st router answers pings
+        if [ -z "$new_routers" ] || ping -q -c 1 "${new_routers%% *}"; then
+            if [ -n "$alias_ip_address" ] &&
+               [ "$new_ip_address" != "$alias_ip_address" ]; then
+                # separate alias IP given => set up the alias IP & add host route to it
+                ip -4 addr add ${alias_ip_address}${alias_subnet_mask:+/$alias_subnet_mask} \
+                    dev ${interface} label ${interface}:0
+                ip -4 route add ${alias_ip_address} dev ${interface} >/dev/null 2>&1
             fi
-	    
+
+            # set if_metric if IF_METRIC is set or there's more than one router
+            if_metric="$IF_METRIC"
+            if [ "${new_routers%% *}" != "${new_routers}" ]; then
+                if_metric=${if_metric:-1}
+            fi
+
+            # set default route
             for router in $new_routers; do
-                route add default dev $interface gw $router $metric_arg
+                ip -4 route add default via ${router} dev ${interface} \
+                    ${if_metric:+metric $if_metric} >/dev/null 2>&1
+
+                if [ -n "$if_metric" ]; then
+                    if_metric=$((if_metric+1))
+                fi
             done
 
+            # update /etc/resolv.conf
             make_resolv_conf
         else
-            # Changed from 'ifconfig $interface inet 0 down' - see Debian bug #144666
-            ifconfig $interface inet 0
+            # flush all IPs from interface
+            ip -4 addr flush dev ${interface}
             exit_with_hooks 2 "$@"
         fi
+
+        ;;
+
+    ### DHCPv6 Handlers
+    # TODO handle prefix change: ?based on ${old_ip6_prefix} and ${new_ip6_prefix}?
+
+    PREINIT6)
+        # ensure interface is up
+        ip link set ${interface} up
+
+        # flush any stale global permanent IPs from interface
+        ip -6 addr flush dev ${interface} scope global permanent
+
+        ;;
+
+    BOUND6|RENEW6|REBIND6)
+        if [ "${new_ip6_address}" ] && [ "${new_ip6_prefixlen}" ]; then
+            # set leased IP
+            ip -6 addr add ${new_ip6_address}/${new_ip6_prefixlen} \
+                dev ${interface} scope global
+        fi
+
+        # update /etc/resolv.conf
+        if [ "${reason}" = BOUND6 ] ||
+           [ "${new_dhcp6_name_servers}" != "${old_dhcp6_name_servers}" ] ||
+           [ "${new_dhcp6_domain_search}" != "${old_dhcp6_domain_search}" ]; then
+            make_resolv_conf
+        fi
+
+        ;;
+
+    DEPREF6)
+        if [ -z "${cur_ip6_prefixlen}" ]; then
+            exit_with_hooks 2
+        fi
+
+        # set preferred lifetime of leased IP to 0
+        ip -6 addr change ${cur_ip6_address}/${cur_ip6_prefixlen} \
+            dev ${interface} scope global preferred_lft 0
+
+        ;;
+
+    EXPIRE6|RELEASE6|STOP6)
+        if [ -z "${old_ip6_address}" ] || [ -z "${old_ip6_prefixlen}" ]; then
+            exit_with_hooks 2
+        fi
+
+        # delete leased IP
+        ip -6 addr del ${old_ip6_address}/${old_ip6_prefixlen} \
+            dev ${interface}
 
         ;;
 esac

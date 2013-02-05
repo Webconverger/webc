@@ -3,12 +3,14 @@
 # zgrep -- a wrapper around a grep program that decompresses files as needed
 # Adapted from a version sent by Charles Levert <charles@comm.polymtl.ca>
 
-# Copyright (C) 1998, 2001, 2002, 2006, 2007 Free Software Foundation
+# Copyright (C) 1998, 2001, 2002, 2006, 2007, 2009, 2010 Free Software
+# Foundation
+
 # Copyright (C) 1993 Jean-loup Gailly
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 
 # This program is distributed in the hope that it will be useful,
@@ -20,11 +22,16 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-PATH=${GZIP_BINDIR-'/bin'}:$PATH
+bindir='/bin'
+case $1 in
+--__bindir) bindir=${2?}; shift; shift;;
+esac
+PATH=$bindir:$PATH
+
 grep='${GREP-grep}'
 
-version='z$grep (gzip) 1.3.12
-Copyright (C) 2007 Free Software Foundation, Inc.
+version='zgrep (gzip) 1.5
+Copyright (C) 2010-2012 Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
@@ -40,14 +47,13 @@ OPTIONs are the same as for 'grep'.
 Report bugs to <bug-gzip@gnu.org>."
 
 # sed script to escape all ' for the shell, and then (to handle trailing
-# newlines correctly) turn trailing X on last line into '.
+# newlines correctly) append ' to the last line.
 escape='
   s/'\''/'\''\\'\'''\''/g
-  $s/X$/'\''/
+  $s/$/'\''/
 '
 operands=
 have_pat=0
-pat_on_stdin=0
 files_with_matches=0
 files_without_matches=0
 no_filename=0
@@ -59,20 +65,32 @@ while test $# -ne 0; do
   optarg=
 
   case $option in
-  (-[0123456789abcdhHiIKLlnoqrRsTuUvVwxyzZ]?*)
-    arg2=-\'$(expr "X${option}X" : 'X-.[0-9]*\(.*\)' | sed "$escape")
+  (-[0123456789EFGHIKLPRTUVZabchilnoqrsuvwxyz]?*)
+    arg2=-\'$(expr "X$option" : 'X-.[0-9]*\(.*\)' | sed "$escape")
     eval "set -- $arg2 "'${1+"$@"}'
     option=$(expr "X$option" : 'X\(-.[0-9]*\)');;
   (--binary-*=* | --[lm]a*=* | --reg*=*)
     ;;
-  (-[ABCDefm] | --binary-* | --file | --[lm]a* | --reg*)
+  (-[ABCDXdefm] | binary-* | --file | --[lm]a* | --reg*)
     case ${1?"$option option requires an argument"} in
     (*\'*)
-      optarg=" '"$(printf '%sX\n' "$1" | sed "$escape");;
+      optarg=" '"$(printf '%s\n' "$1" | sed "$escape");;
     (*)
       optarg=" '$1'";;
     esac
     shift;;
+  (-f?*\'*)
+    optarg=" '"$(expr "X$option" : 'X-f\(.*\)' | sed "$escape")
+    option=-f;;
+  (-f?*)
+    optarg=" '"$(expr "X$option" : 'X-f\(.*\)')\'
+    option=-f;;
+  (--file=*\'*)
+    optarg=" '"$(expr "X$option" : 'X--file=\(.*\)' | sed "$escape")
+    option=--file;;
+  (--file=*)
+    optarg=" '"$(expr "X$option" : 'X--file=\(.*\)')\'
+    option=--file;;
   (--)
     break;;
   (-?*)
@@ -80,7 +98,7 @@ while test $# -ne 0; do
   (*)
     case $option in
     (*\'*)
-      operands="$operands '"$(printf '%sX\n' "$option" | sed "$escape");;
+      operands="$operands '"$(printf '%s\n' "$option" | sed "$escape");;
     (*)
       operands="$operands '$option'";;
     esac
@@ -92,23 +110,18 @@ while test $# -ne 0; do
   (-[drRzZ] | --di* | --exc* | --inc* | --rec* | --nu*)
     printf >&2 '%s: %s: option not supported\n' "$0" "$option"
     exit 2;;
-  (-[ef]* | --file | --file=* | --reg*)
+  (-e* | --reg*)
+    have_pat=1;;
+  (-f | --file)
     # The pattern is coming from a file rather than the command-line.
     # If the file is actually stdin then we need to do a little
-    # magic, (since we use stdin to pass the gzip output to grep).
-    # So find a free fd and change the argument to then use this
-    # file descriptor for the pattern.
+    # magic, since we use stdin to pass the gzip output to grep.
+    # Turn the -f option into an -e option by copying the file's
+    # contents into OPTARG.
     case $optarg in
     (" '-'" | " '/dev/stdin'" | " '/dev/fd/0'")
-      pat_on_stdin=1
-      # Start search from 6 since the script already uses 3 and 5
-      for fd in $(seq 6 254); do
-	  if test ! -e /dev/fd/$fd; then
-	      pat_fd=$fd
-	      break;
-	  fi
-      done
-      optarg=/dev/fd/$pat_fd;
+      option=-e
+      optarg=" '"$(sed "$escape") || exit 2;;
     esac
     have_pat=1;;
   (--h | --he | --hel | --help)
@@ -132,7 +145,7 @@ while test $# -ne 0; do
 
   case $option in
   (*\'?*)
-    option=\'$(expr "X${option}X" : 'X\(.*\)' | sed "$escape");;
+    option=\'$(printf '%s\n' "$option" | sed "$escape");;
   (*)
     option="'$option'";;
   esac
@@ -145,7 +158,7 @@ eval "set -- $operands "'${1+"$@"}'
 if test $have_pat -eq 0; then
   case ${1?"missing pattern; try \`$0 --help' for help"} in
   (*\'*)
-    grep="$grep -- '"$(printf '%sX\n' "$1" | sed "$escape");;
+    grep="$grep -- '"$(printf '%s\n' "$1" | sed "$escape");;
   (*)
     grep="$grep -- '$1'";;
   esac
@@ -164,45 +177,44 @@ do
   # Fail if gzip or grep (or sed) fails.
   gzip_status=$(
     exec 5>&1
-    if test $pat_on_stdin -eq 1; then
-	eval "exec $pat_fd<&0"
-    fi
     (gzip -cdfq -- "$i" 5>&-; echo $? >&5) 3>&- |
     if test $files_with_matches -eq 1; then
       eval "$grep" >/dev/null && { printf '%s\n' "$i" || exit 2; }
     elif test $files_without_matches -eq 1; then
       eval "$grep" >/dev/null || {
-	r=$?
-	if test $r -eq 1; then
-	  printf '%s\n' "$i" || r=2
-	fi
-	exit $r
+        r=$?
+        if test $r -eq 1; then
+          printf '%s\n' "$i" || r=2
+        fi
+        exit $r
       }
     elif test $with_filename -eq 0 &&
-	 { test $# -eq 1 || test $no_filename -eq 1; }; then
+         { test $# -eq 1 || test $no_filename -eq 1; }; then
       eval "$grep"
     else
       case $i in
       (*'
 '* | *'&'* | *'\'* | *'|'*)
         i=$(printf '%s\n' "$i" |
-	    sed '
-	      $!N
-	      $s/[&\|]/\\&/g
-	      $s/\n/\\n/g
-	    ');;
+            sed '
+              $!N
+              $s/[&\|]/\\&/g
+              $s/\n/\\n/g
+            ');;
       esac
       sed_script="s|^|$i:|"
 
       # Fail if grep or sed fails.
       r=$(
-	exec 4>&1
-	(eval "$grep" 4>&-; echo $? >&4) 3>&- | sed "$sed_script" >&3 4>&-
-      ) || r=2
-      exit $r
+        exec 4>&1
+        (eval "$grep" 4>&-; echo $? >&4) 3>&- | sed "$sed_script" >&3 4>&-
+      ) && exit $r
+      r=$?
+      test 1 -lt $r && exit $r || exit 2
     fi >&3 5>&-
   )
   r=$?
+  test 128 -lt $r && exit $r
   test "$gzip_status" -eq 0 || test "$gzip_status" -eq 2 || r=2
   test $res -lt $r && res=$r
 done

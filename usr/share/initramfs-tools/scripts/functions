@@ -259,7 +259,14 @@ load_modules()
 			if [ "$com" = "#" ]; then
 				continue
 			fi
-			modprobe $m
+
+			if [ "$quiet" = "y" ]
+			then
+				# workaround for modules behaving not well (e.g. i915 with intel_ips)
+				modprobe -q $m > /dev/null 2>&1
+			else
+				modprobe -q $m
+			fi
 		done
 	fi
 }
@@ -360,7 +367,7 @@ configure_networking()
 	fi
 
 	# networking already configured thus bail out
-	[ -n "${DEVICE}" ] && [ -e /tmp/net-"${DEVICE}".conf ] && return 0
+	[ -n "${DEVICE}" ] && [ -e /run/net-"${DEVICE}".conf ] && return 0
 
 	wait_for_udev 10
 
@@ -373,7 +380,7 @@ configure_networking()
 		# The NIC is to be configured if this file does not exist.
 		# Ip-Config tries to create this file and when it succeds
 		# creating the file, ipconfig is not run again.
-		for x in /tmp/net-"${DEVICE}".conf /tmp/net-*.conf ; do
+		for x in /run/net-"${DEVICE}".conf /run/net-*.conf ; do
 			[ -e "$x" ] && break 2
 		done
 
@@ -409,11 +416,11 @@ configure_networking()
 	# source ipconfig output
 	if [ -n "${DEVICE}" ]; then
 		# source specific bootdevice
-		. /tmp/net-${DEVICE}.conf
+		. /run/net-${DEVICE}.conf
 	else
 		# source any interface...
 		# ipconfig should have quit after first response
-		. /tmp/net-*.conf
+		. /run/net-*.conf
 	fi
 }
 

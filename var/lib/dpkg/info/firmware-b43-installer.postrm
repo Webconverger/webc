@@ -2,9 +2,14 @@
 
 set -e
 
-if [ -d /lib/firmware/b43 ]; then
-	echo "Deleting old extracted firmware..."
-	rm -rf /lib/firmware/b43
+if [ "$1" = purge ] || [ "$1" = remove ]; then
+
+	if [ -d /lib/firmware/b43 ]; then
+		echo "Deleting old extracted firmware..."
+		rm -rf /lib/firmware/b43
+	fi
 fi
 
 
+
+exit 0 

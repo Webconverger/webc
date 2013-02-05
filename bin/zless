@@ -4,7 +4,7 @@
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 
 # This program is distributed in the hope that it will be useful,
@@ -16,10 +16,14 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-PATH="${GZIP_BINDIR-'/bin'}:$PATH"; export PATH
+bindir='/bin'
+case $1 in
+--__bindir) bindir=${2?}; shift; shift;;
+esac
+PATH=$bindir:$PATH; export PATH
 
-version="zless (gzip) 1.3.12
-Copyright (C) 2007 Free Software Foundation, Inc.
+version="zless (gzip) 1.5
+Copyright (C) 2007, 2011-2012 Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
@@ -49,5 +53,15 @@ if test "${LESSMETACHARS+set}" != set; then
   export LESSMETACHARS
 fi
 
-LESSOPEN="|gzip -cdfq -- %s"; export LESSOPEN
+less_version=`less -V` || exit
+case $less_version in
+'less 429
+'* | 'less '4[3-9][0-9]* | 'less '[5-9][0-9][0-9]* | 'less '[1-9][0-9][0-9][0-9]*)
+   use_input_pipe_on_stdin='-';;
+*) use_input_pipe_on_stdin='';;
+esac
+
+LESSOPEN="|${use_input_pipe_on_stdin}gzip -cdfq -- %s"
+export LESSOPEN
+
 exec less "$@"

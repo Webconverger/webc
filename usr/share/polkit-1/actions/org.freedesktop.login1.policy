@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+        "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+        <vendor>The systemd Project</vendor>
+        <vendor_url>http://www.freedesktop.org/wiki/Software/systemd</vendor_url>
+
+        <action id="org.freedesktop.login1.set-user-linger">
+                <description>Allow non-logged-in users to run programs</description>
+                <description xml:lang="pl">Zezwolenie niezalogowanym użytkownikom na uruchamianie programów</description>
+                <message>Authentication is required to allow a non-logged-in user to run programs</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby ustawić zezwolić niezalogowanym użytkownikom na uruchamianie programów</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>auth_admin_keep</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.attach-device">
+                <description>Allow attaching devices to seats</description>
+                <description xml:lang="pl">Zezwolenie na podłączanie urządzeń do stanowisk</description>
+                <message>Authentication is required to allow attaching a device to a seat</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na podłączenie urządzenia do stanowiska</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>auth_admin_keep</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.flush-devices">
+                <description>Flush device to seat attachments</description>
+                <description xml:lang="pl">Usunięcie podłączenia urządzeń do stanowisk</description>
+                <message>Authentication is required to allow resetting how devices are attached to seats</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na ponowne ustawianie sposobu podłączenia urządzeń do stanowisk</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>auth_admin_keep</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.power-off">
+                <description>Power off the system</description>
+                <description xml:lang="pl">Wyłączenie systemu</description>
+                <message>Authentication is required to allow powering off the system</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na wyłączanie systemu</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>yes</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.power-off-multiple-sessions">
+                <description>Power off the system when other users are logged in</description>
+                <description xml:lang="pl">Wyłączenie systemu, kiedy są zalogowani inni użytkownicy</description>
+                <message>Authentication is required to allow powering off the system while other users are logged in</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na wyłączanie systemu, kiedy są zalogowani inni użytkownicy</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>auth_admin_keep</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.reboot">
+                <description>Reboot the system</description>
+                <description xml:lang="pl">Ponowne uruchomienie systemu</description>
+                <message>Authentication is required to allow rebooting the system</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na ponowne uruchamianie systemu</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>yes</allow_active>
+                </defaults>
+        </action>
+
+        <action id="org.freedesktop.login1.reboot-multiple-sessions">
+                <description>Reboot the system when other users are logged in</description>
+                <description xml:lang="pl">Ponowne uruchomienie systemu, kiedy są zalogowani inni użytkownicy</description>
+                <message>Authentication is required to allow rebooting the system while other users are logged in</message>
+                <message xml:lang="pl">Wymagane jest uwierzytelnienie, aby zezwolić na ponowne uruchamianie systemu, kiedy są zalogowani inni użytkownicy</message>
+                <defaults>
+                        <allow_any>auth_admin_keep</allow_any>
+                        <allow_inactive>auth_admin_keep</allow_inactive>
+                        <allow_active>auth_admin_keep</allow_active>
+                </defaults>
+        </action>
+
+</policyconfig>

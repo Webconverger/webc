@@ -9,6 +9,7 @@ use Debconf::Priority;
 use Debconf::TmpFile;
 use Debconf::Log qw(:all);
 use Debconf::Encoding qw(wrap $columns width);
+use Debconf::Path;
 use IPC::Open3;
 use POSIX;
 use Fcntl;
@@ -36,9 +37,9 @@ sub init {
 	$this->interactive(1);
 	$this->capb('backup');
 
-	if (-x "/usr/bin/whiptail" && 
-	    (! defined $ENV{DEBCONF_FORCE_DIALOG} || ! -x "/usr/bin/dialog") &&
-	    (! defined $ENV{DEBCONF_FORCE_XDIALOG} || ! -x "/usr/bin/Xdialog")) {
+	if (Debconf::Path::find("whiptail") && 
+	    (! defined $ENV{DEBCONF_FORCE_DIALOG} || ! Debconf::Path::find("dialog")) &&
+	    (! defined $ENV{DEBCONF_FORCE_XDIALOG} || ! Debconf::Path::find("Xdialog"))) {
 		$this->program('whiptail');
 		$this->dashsep('--');
 		$this->borderwidth(5);
@@ -49,8 +50,8 @@ sub init {
 		$this->selectspacer(13);
 		$this->hasoutputfd(1);
 	}
-	elsif (-x "/usr/bin/dialog" &&
-	       (! defined $ENV{DEBCONF_FORCE_XDIALOG} || ! -x "/usr/bin/Xdialog")) {
+	elsif (Debconf::Path::find("dialog") &&
+	       (! defined $ENV{DEBCONF_FORCE_XDIALOG} || ! Debconf::Path::find("Xdialog"))) {
 		$this->program('dialog');
 		$this->dashsep(''); # dialog does not need (or support) 
 		$this->borderwidth(7);
@@ -61,7 +62,7 @@ sub init {
 		$this->selectspacer(0);
 		$this->hasoutputfd(1);
 	}
-	elsif (-x "/usr/bin/Xdialog" && defined $ENV{DISPLAY}) {
+	elsif (Debconf::Path::find("Xdialog") && defined $ENV{DISPLAY}) {
 		$this->program("Xdialog");
 		$this->borderwidth(7);
 		$this->borderheight(20);

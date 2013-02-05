@@ -1,21 +1,7 @@
 #!/bin/sh -e
 
-undivert_man() {
-  DSECTION=${2:-8}
-  for locale in '' fr/; do
-    dpkg-divert --remove --rename --package module-init-tools --divert \
-      /usr/share/man/${locale}man$DSECTION/$1.modutils.$DSECTION.gz \
-      /usr/share/man/${locale}man$DSECTION/$1.$DSECTION.gz > /dev/null
-  done
-}
-
-rm_conffile_md5() {
-  local file=$1
-  local md5=$2
-  if [ -f $file ] && echo "$md5  $file" | md5sum -c 2> /dev/null; then
-    rm $file
-  fi
-}
+dpkg-maintscript-helper rm_conffile /etc/init.d/module-init-tools 3.16-1 -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/aliases.conf 3.16-1 -- "$@"
 
 rm_conffile() {
   mv_conffile "$1" "$1.dpkg-bak"
@@ -44,27 +30,12 @@ upgrade_quirks() {
   [ "$2" ] || return 0
 
   if dpkg --compare-versions $2 lt 3.10-3; then
-  if dpkg --compare-versions $2 lt 3.1-pre11-1; then
-  if dpkg --compare-versions $2 lt 3.2-pre9-4; then
-  if dpkg --compare-versions $2 lt 3.1-pre2-1; then
+  if dpkg --compare-versions $2 lt 3.3-pre11-4; then
 
-  echo 'Upgrading from packages older than 3.1-pre2-1 is not supported.'
+  echo 'Upgrading from packages older than 3.3-pre11-4 is not supported.'
   echo 'Please purge module-init-tools before installing this package.'
+  echo '(But remember to keep a copy of /etc/modules!)'
   exit 1
-
-  fi # lt 3.1-pre2-1
-
-  rm -f /usr/share/man/man8/kallsyms.8.gz /usr/share/man/man8/ksyms.8.gz
-  for cmd in kallsyms ksyms; do
-    undivert_man $cmd
-  done
-
-  fi # lt 3.2-pre9-4
-
-  # remove an obsolete conffile, which was replaced by .../x86_64
-  if [ "$(dpkg --print-architecture)" = amd64 ]; then
-    rm_conffile_md5 /etc/modprobe.d/arch/i386 688ef8c36b20113c46ec631e6c9effd4
-  fi
 
   fi # lt 3.1-pre11-1
 
@@ -84,18 +55,7 @@ upgrade_quirks() {
 }
 
 case "$1" in
-    install|upgrade)
-
-    upgrade_quirks "$@"
-    ;;
-
-    abort-upgrade)
-    ;;
-
-    *)
-    echo "$0 called with unknown argument '$1'" >&2
-    exit 1
-    ;;
+  install|upgrade) upgrade_quirks "$@" ;;
 esac
 
 

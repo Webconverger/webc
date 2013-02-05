@@ -1,7 +1,7 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          mountall
-# Required-Start:    checkfs
+# Required-Start:    checkfs checkroot-bootclean
 # Required-Stop: 
 # Default-Start:     S
 # Default-Stop:
@@ -11,6 +11,7 @@
 
 PATH=/sbin:/bin
 . /lib/init/vars.sh
+. /lib/init/tmpfs.sh
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
@@ -27,7 +28,7 @@ do_start() {
 	# Mount local file systems in /etc/fstab.
 	#
 	mount_all_local() {
-	    mount -a -t nonfs,nfs4,smbfs,cifs,ncp,ncpfs,coda,ocfs2,gfs,gfs2 \
+	    mount -a -t nonfs,nfs4,smbfs,cifs,ncp,ncpfs,coda,ocfs2,gfs,gfs2,ceph \
 		-O no_netdev
 	}
 	pre_mountall
@@ -43,29 +44,35 @@ do_start() {
 	fi
 	post_mountall
 
-	case "$(uname -s)" in
-	  *FreeBSD)
-		INITCTL=/etc/.initctl
-		;;
-	  *)
-		INITCTL=/dev/initctl
-		;;
-	esac
+	# We might have mounted something over /run; see if
+	# /run/initctl is present.  Look for
+	# /usr/share/sysvinit/update-rc.d to verify that sysvinit (and
+	# not upstart) is installed).
+	INITCTL="/run/initctl"
+	if [ ! -p "$INITCTL" ] && [ -f "/usr/share/sysvinit/update-rc.d" ]; then
+		# Create new control channel
+		rm -f "$INITCTL"
+		mknod -m 600 "$INITCTL" p
 
-	#
-	# We might have mounted something over /dev, see if
-	# /dev/initctl is there.  Look for /usr/share/sysvinit/update-rc.d
-	# to verify that sysvinit (and not upstart) is installed).
-	#
-	if [ ! -p $INITCTL ] && [ -f /usr/share/sysvinit/update-rc.d ]; then
-		rm -f $INITCTL
-		mknod -m 600 $INITCTL p
-		kill -USR1 1
+		# Reopen control channel.
+		PID="$(pidof /sbin/init || echo 1)"
+		[ -n "$PID" ] && kill -s USR1 "$PID"
 	fi
 
 	# Execute swapon command again, in case we want to swap to
 	# a file on a now mounted filesystem.
 	swaponagain 'swapfile'
+
+	# Remount tmpfs filesystems; with increased VM after swapon,
+	# the size limits may be adjusted.
+	mount_run mount_noupdate
+	mount_lock mount_noupdate
+	mount_shm mount_noupdate
+
+	# Now we have mounted everything, check whether we need to
+	# mount a tmpfs on /tmp.  We can now also determine swap size
+	# to factor this into our size limit.
+	mount_tmp mount_noupdate
 }
 
 case "$1" in

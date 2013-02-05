@@ -1,0 +1,272 @@
+#!/usr/bin/python
+
+import dbus, sys
+
+def acquire_time_data():
+
+        manager = dbus.Interface(bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1'), 'org.freedesktop.systemd1.Manager')
+        units = manager.ListUnits()
+
+        l = []
+
+        for i in units:
+                if i[5] != "":
+                        continue
+
+                properties = dbus.Interface(bus.get_object('org.freedesktop.systemd1', i[6]), 'org.freedesktop.DBus.Properties')
+
+                ixt = int(properties.Get('org.freedesktop.systemd1.Unit', 'InactiveExitTimestampMonotonic'))
+                aet = int(properties.Get('org.freedesktop.systemd1.Unit', 'ActiveEnterTimestampMonotonic'))
+                axt = int(properties.Get('org.freedesktop.systemd1.Unit', 'ActiveExitTimestampMonotonic'))
+                iet = int(properties.Get('org.freedesktop.systemd1.Unit', 'InactiveEnterTimestampMonotonic'))
+
+                l.append((str(i[0]), ixt, aet, axt, iet))
+
+        return l
+
+def acquire_start_time():
+        properties = dbus.Interface(bus.get_object('org.freedesktop.systemd1', '/org/freedesktop/systemd1'), 'org.freedesktop.DBus.Properties')
+
+        initrd_time = int(properties.Get('org.freedesktop.systemd1.Manager', 'InitRDTimestampMonotonic'))
+        startup_time = int(properties.Get('org.freedesktop.systemd1.Manager', 'StartupTimestampMonotonic'))
+        finish_time = int(properties.Get('org.freedesktop.systemd1.Manager', 'FinishTimestampMonotonic'))
+
+        assert initrd_time <= startup_time
+        assert startup_time <= finish_time
+
+        return initrd_time, startup_time, finish_time
+
+def draw_box(context, j, k, l, m, r = 0, g = 0, b = 0):
+        context.save()
+        context.set_source_rgb(r, g, b)
+        context.rectangle(j, k, l, m)
+        context.fill()
+        context.restore()
+
+def draw_text(context, x, y, text, size = 12, r = 0, g = 0, b = 0, vcenter = 0.5, hcenter = 0.5):
+        context.save()
+
+        context.set_source_rgb(r, g, b)
+        context.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+        context.set_font_size(size)
+
+        if vcenter or hcenter:
+                x_bearing, y_bearing, width, height = context.text_extents(text)[:4]
+
+                if hcenter:
+                        x = x - width*hcenter - x_bearing
+
+                if vcenter:
+                        y = y - height*vcenter - y_bearing
+
+        context.move_to(x, y)
+        context.show_text(text)
+
+        context.restore()
+
+def help():
+        sys.stdout.write("""systemd-analyze time
+systemd-analyze blame
+systemd-analyze plot
+
+Process systemd profiling information
+
+  -h --help         Show this help
+""")
+
+
+bus = dbus.SystemBus()
+
+if len(sys.argv) <= 1 or sys.argv[1] == 'time':
+
+        initrd_time, start_time, finish_time = acquire_start_time()
+
+        if initrd_time > 0:
+                print "Startup finished in %lums (kernel) + %lums (initramfs) + %lums (userspace) = %lums" % ( \
+                        initrd_time/1000, \
+                        (start_time - initrd_time)/1000, \
+                        (finish_time - start_time)/1000, \
+                        finish_time/1000)
+        else:
+                print "Startup finished in %lums (kernel) + %lums (userspace) = %lums" % ( \
+                        start_time/1000, \
+                        (finish_time - start_time)/1000, \
+                        finish_time/1000)
+
+
+elif sys.argv[1] == 'blame':
+
+        data = acquire_time_data()
+        s = sorted(data, key = lambda i: i[2] - i[1], reverse = True)
+
+        for name, ixt, aet, axt, iet in s:
+
+                if ixt <= 0 or aet <= 0:
+                        continue
+
+                if aet <= ixt:
+                        continue
+
+                sys.stdout.write("%6lums %s\n" % ((aet - ixt) / 1000, name))
+
+elif sys.argv[1] == 'plot':
+        import cairo, os
+
+        initrd_time, start_time, finish_time = acquire_start_time()
+        data = acquire_time_data()
+        s = sorted(data, key = lambda i: i[1])
+
+        # Account for kernel and initramfs bars if they exist
+        if initrd_time > 0:
+                count = 3
+        else:
+                count = 2
+
+        for name, ixt, aet, axt, iet in s:
+
+                if (ixt >= start_time and ixt <= finish_time) or \
+                                (aet >= start_time and aet <= finish_time) or \
+                                (axt >= start_time and axt <= finish_time):
+                        count += 1
+
+        border = 100
+        bar_height = 20
+        bar_space = bar_height * 0.1
+
+        # 1000px = 10s, 1px = 10ms
+        width = finish_time/10000 + border*2
+        height = count * (bar_height + bar_space) + border * 2
+
+        if width < 1000:
+                width = 1000
+
+        surface = cairo.SVGSurface(sys.stdout, width, height)
+        context = cairo.Context(surface)
+
+        draw_box(context, 0, 0, width, height, 1, 1, 1)
+
+        context.translate(border + 0.5, border + 0.5)
+
+        context.save()
+        context.set_line_width(1)
+        context.set_source_rgb(0.7, 0.7, 0.7)
+
+        for x in range(0, finish_time/10000 + 100, 100):
+                context.move_to(x, 0)
+                context.line_to(x, height-border*2)
+
+        context.move_to(0, 0)
+        context.line_to(width-border*2, 0)
+
+        context.move_to(0, height-border*2)
+        context.line_to(width-border*2, height-border*2)
+
+        context.stroke()
+        context.restore()
+
+        osrel = "Linux"
+        if os.path.exists("/etc/os-release"):
+                for line in open("/etc/os-release"):
+                        if line.startswith('PRETTY_NAME='):
+                                osrel = line[12:]
+                                osrel = osrel.strip('\"\n')
+                                break
+
+        banner = "{} {} ({} {}) {}".format(osrel, *(os.uname()[1:5]))
+        draw_text(context, 0, -15, banner, hcenter = 0, vcenter = 1)
+
+        for x in range(0, finish_time/10000 + 100, 100):
+                draw_text(context, x, -5, "%lus" % (x/100), vcenter = 0, hcenter = 0)
+
+        y = 0
+
+        # draw boxes for kernel and initramfs boot time
+        if initrd_time > 0:
+                draw_box(context, 0, y, initrd_time/10000, bar_height, 0.7, 0.7, 0.7)
+                draw_text(context, 10, y + bar_height/2, "kernel", hcenter = 0)
+                y += bar_height + bar_space
+
+                draw_box(context, initrd_time/10000, y, start_time/10000-initrd_time/10000, bar_height, 0.7, 0.7, 0.7)
+                draw_text(context, initrd_time/10000 + 10, y + bar_height/2, "initramfs", hcenter = 0)
+                y += bar_height + bar_space
+
+        else:
+                draw_box(context, 0, y, start_time/10000, bar_height, 0.6, 0.6, 0.6)
+                draw_text(context, 10, y + bar_height/2, "kernel", hcenter = 0)
+                y += bar_height + bar_space
+
+        draw_box(context, start_time/10000, y, finish_time/10000-start_time/10000, bar_height, 0.7, 0.7, 0.7)
+        draw_text(context, start_time/10000 + 10, y + bar_height/2, "userspace", hcenter = 0)
+        y += bar_height + bar_space
+
+        for name, ixt, aet, axt, iet in s:
+
+                drawn = False
+                left = -1
+
+                if ixt >= start_time and ixt <= finish_time:
+
+                        # Activating
+                        a = ixt
+                        b = min(filter(lambda x: x >= ixt, (aet, axt, iet, finish_time))) - ixt
+
+                        draw_box(context, a/10000, y, b/10000, bar_height, 1, 0, 0)
+                        drawn = True
+
+                        if left < 0:
+                                left = a
+
+                if aet >= start_time and aet <= finish_time:
+
+                        # Active
+                        a = aet
+                        b = min(filter(lambda x: x >= aet, (axt, iet, finish_time))) - aet
+
+                        draw_box(context, a/10000, y, b/10000, bar_height, .8, .6, .6)
+                        drawn = True
+
+                        if left < 0:
+                                left = a
+
+                if axt >= start_time and axt <= finish_time:
+
+                        # Deactivating
+                        a = axt
+                        b = min(filter(lambda x: x >= axt, (iet, finish_time))) - axt
+
+                        draw_box(context, a/10000, y, b/10000, bar_height, .6, .4, .4)
+                        drawn = True
+
+                        if left < 0:
+                                left = a
+
+                if drawn:
+                        x = left/10000
+
+                        if x < width/2-border:
+                                draw_text(context, x + 10, y + bar_height/2, name, hcenter = 0)
+                        else:
+                                draw_text(context, x - 10, y + bar_height/2, name, hcenter = 1)
+
+                        y += bar_height + bar_space
+
+        draw_text(context, 0, height-border*2, "Legend: Red = Activating; Pink = Active; Dark Pink = Deactivating", hcenter = 0, vcenter = -1)
+
+        if initrd_time > 0:
+                draw_text(context, 0, height-border*2 + bar_height, "Startup finished in %lums (kernel) + %lums (initramfs) + %lums (userspace) = %lums" % ( \
+                        initrd_time/1000, \
+                        (start_time - initrd_time)/1000, \
+                        (finish_time - start_time)/1000, \
+                        finish_time/1000), hcenter = 0, vcenter = -1)
+        else:
+                draw_text(context, 0, height-border*2 + bar_height, "Startup finished in %lums (kernel) + %lums (userspace) = %lums" % ( \
+                        start_time/1000, \
+                        (finish_time - start_time)/1000, \
+                        finish_time/1000), hcenter = 0, vcenter = -1)
+
+        surface.finish()
+elif sys.argv[1] in ("help", "--help", "-h"):
+        help()
+else:
+        sys.stderr.write("Unknown verb '%s'.\n" % sys.argv[1])
+        sys.exit(1)

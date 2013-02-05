@@ -1,5 +1,3 @@
-// $XKeyboardConfig$
-
 // Hellenic keyboard map for X.org
 //
 // Original version:
@@ -11,11 +9,12 @@
 
 default partial alphanumeric_keys alternate_group
 xkb_symbols "basic" {
-	name[Group1] = "Greece";
+	include "gr(simple)"
+
+	name[Group1] = "Greek";
 
 	include "eurosign(e)"
 	include "eurosign(5)"
-	include "gr(simple)"
 	include "kpdl(comma)"
 	include "level3(ralt_switch)"
 
@@ -57,7 +56,7 @@ xkb_symbols "simple" {
 
     include "gr(bare)"
 
-    name[Group1] = "Greece - Simple";
+    name[Group1] = "Greek (simple)";
 
     key <TLDE> { [        grave,  asciitilde ] }; // ` ~
     key <AE01> { [            1,      exclam ] }; // 1 !
@@ -74,7 +73,7 @@ xkb_symbols "simple" {
     key <AE12> { [        equal,        plus ] }; // = +
 
     key <AD11> { [  bracketleft,   braceleft ] }; // [ {
-    key <AD12> { [ bracketright,  braceright ] }; // [ {
+    key <AD12> { [ bracketright,  braceright ] }; // ] }
 
     key <AC11> { [   apostrophe,    quotedbl ] }; // ' "
 
@@ -148,7 +147,7 @@ xkb_symbols "extended" {
 
     include "gr(simple)"
 
-    name[Group1] = "Greece - Extended";
+    name[Group1] = "Greek (extended)";
 
     key.type[Group1] = "THREE_LEVEL";
 
@@ -173,7 +172,7 @@ xkb_symbols "polytonic" {
 
     include "gr(extended)"
 
-    name[Group1] = "Greece - Polytonic";
+    name[Group1] = "Greek (polytonic)";
 
     key.type[Group1] = "THREE_LEVEL";
 
@@ -181,7 +180,9 @@ xkb_symbols "polytonic" {
     key <AD12> { [  dead_iota,     VoidSymbol,  dead_breve ] }; // ͺ   ˘
 
     key <AC10> { [ dead_acute, dead_psili  ] }; // ´ ̓ 
-    key <AC11> { [ dead_grave, dead_dasia  ] }; // ` ̔
+    key <AC11> { type[Group1]="FOUR_LEVEL",
+                 [ dead_grave, dead_dasia, apostrophe, quotedbl  ] };
+                 // ` ̔  ' "
 };
 
 partial alphanumeric_keys alternate_group
@@ -189,7 +190,7 @@ xkb_symbols "nodeadkeys" {
 
     include "gr(simple)"
 
-    name[Group1] = "Greece - Eliminate dead keys";
+    name[Group1] = "Greek (eliminate dead keys)";
 
     key <AC10> { [ semicolon, colon ] }; // ; :
 };

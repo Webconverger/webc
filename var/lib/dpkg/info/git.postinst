@@ -11,7 +11,7 @@ test "$1" = configure || exit 0
 # call to dpkg-maintscript-helper, don't you think?
 rm_conffile () {
   CONFFILE=$1; shift
-  if dpkg --compare-versions "$2" lt-nl '1:1.7.4.1-2~'; then
+  if dpkg --compare-versions "$2" lt-nl "$3"; then
     if test -e "$CONFFILE.dpkg-backup"; then
       mv -f "$CONFFILE.dpkg-backup" "$CONFFILE.dpkg-bak"
     fi
@@ -22,8 +22,10 @@ rm_conffile () {
   fi
 }
 
+rm_conffile /etc/bash_completion.d/git "$1" "$2" '1:1.8.0-1~'
+
 removed_conffile=/etc/emacs/site-start.d/50git-core.el
-rm_conffile "$removed_conffile" "$1" "$2"
+rm_conffile "$removed_conffile" "$1" "$2" '1:1.7.4.1-2~'
 
 # Carry over modifications so git-el can use them.
 if dpkg --compare-versions "$2" lt '1:1.7.4.1-2~' &&

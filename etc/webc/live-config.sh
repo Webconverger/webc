@@ -20,7 +20,7 @@ sub_literal() {
 process_options()
 {
 
-cmdline_has timezone && /etc/init.d/timezone # process timezone=
+cmdline_has timezone && /etc/webc/timezone # process timezone=
 
 # Create a Webconverger preferences to store dynamic FF options
 cat > "$prefs" <<EOF
@@ -67,7 +67,7 @@ for x in $( cmdline ); do
 		log=${x#log=}
 		echo "*.*          @${log}" >> /etc/rsyslog.conf
 		logs "Logging to ${log}"
-		/etc/init.d/rsyslog restart
+		systemctl restart rsyslog.service
 		;;
 
 	locale=*)
@@ -156,7 +156,8 @@ else
 	touch /etc/webc/cmdline
 fi
 
-/etc/init.d/webconverger
+# If there is a local config we need to re-run wireless now we have config in right place
+/etc/webc/wireless
 
 wait_for $live_config_pipe 2>/dev/null
 
@@ -187,5 +188,5 @@ else
 	logs "Not a writable boot medium. Could not cache configuration nor upgrade."
 fi
 
-# live-config should restart via inittab and get blocked 
+# live-config should restart via systemd and get blocked 
 # until $live_config_pipe is re-created

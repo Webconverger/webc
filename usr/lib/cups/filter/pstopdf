@@ -5,6 +5,7 @@
 # This is a Postscript to PDF filter for CUPS
 #
 # (C) 2003 Robert Sander <robert.sander@epigenomics.com>
+# (C) 2008-2012 Till Kamppeter <till.kamppeter@gmail.com>
 #
 # Released under GPL
 #
@@ -17,7 +18,7 @@ PS2PS=/usr/bin/ps2ps
 GS=/usr/bin/gs
 
 PS2PS_OPTIONS="-dAutoRotatePages=/None -dAutoFilterColorImages=false \
-               -dNOPLATFONTS -dPARANOIDSAFER -sstdout=%stderr"
+               -dNOPLATFONTS -dPARANOIDSAFER -dNOINTERPOLATE -sstdout=%stderr"
 PS2PDF_OPTIONS="-q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.3"
 PS2PDF_OPTIONS="$PS2PDF_OPTIONS $PS2PS_OPTIONS"
 PS2PDF_OPTIONS="$PS2PDF_OPTIONS -dColorImageFilter=/FlateEncode \
@@ -98,7 +99,7 @@ pagesize=
 unit=
 customw=
 customh=
-eval "$(printf "%s" "$5" | sed -nre 's/.*(^|\s)(media|PageSize)=(\S+).*/pagesize="${pagesize:-\3}"/p')"
+eval "$(printf "%s" "$5" | sed -nre 's/.*(^|\s)(PageSize|PageRegion)=(\S+).*/pagesize="${pagesize:-\3}"/p')"
 if test -e "$PPD"; then
     eval "$(sed -nre 's/^\*DefaultPageSize:\s*(\S+).*/pagesize="${pagesize:-\1}"/p' "$PPD")"
 fi

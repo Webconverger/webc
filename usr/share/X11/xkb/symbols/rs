@@ -12,12 +12,11 @@
 // - Further modifications on 2005-08-18 to support Bosnian, Croatian
 //   and Slovenian in xkeyboard-config
 //  
-// $XKeyboardConfig$
 
 default partial alphanumeric_keys
 xkb_symbols "basic" {
 
-  name[Group1]= "Serbia";
+  name[Group1]= "Serbian";
 
   include "rs(cyrlevel3)"
   include "rs(common)"
@@ -29,7 +28,7 @@ xkb_symbols "basic" {
 partial alphanumeric_keys
 xkb_symbols "latin" {
 
-  name[Group1]= "Serbia - Latin";
+  name[Group1]= "Serbian (Latin)";
 
   include "latin(type3)"
   include "rs(latalpha)"
@@ -43,7 +42,7 @@ partial alphanumeric_keys
 xkb_symbols "yz" {
   // Cyrillic_zhe and Cyrillic_ze swapped.
 
-  name[Group1]= "Serbia - Z and ZHE swapped";
+  name[Group1]= "Serbian (Z and ZHE swapped)";
 
   include "rs(basic)"
 
@@ -248,7 +247,7 @@ xkb_symbols "latinunicode" {
   // This mapping supports the Unicode characters 0x1c4-0x1cc (dz, lj, and nj
   // as single character). You get the title form with AltGr+Shift.
 
-  name[Group1]= "Serbia - Latin Unicode";
+  name[Group1]= "Serbian (Latin Unicode)";
 
   include "rs(latin)"
   include "rs(twoletter)"
@@ -258,7 +257,7 @@ partial alphanumeric_keys
 xkb_symbols "latinyz" {
   // For those who insist on using "english-position" Z and Y.
 
-  name[Group1]= "Serbia - Latin qwerty";
+  name[Group1]= "Serbian (Latin qwerty)";
 
   include "rs(latin)"
 
@@ -270,7 +269,7 @@ partial alphanumeric_keys
 xkb_symbols "latinunicodeyz" {
   // Unicode, ZHE and Z swapped.
 
-  name[Group1]= "Serbia - Latin Unicode qwerty";
+  name[Group1]= "Serbian (Latin Unicode qwerty)";
 
   include "rs(latinunicode)"
 
@@ -281,7 +280,7 @@ xkb_symbols "latinunicodeyz" {
 xkb_symbols "alternatequotes" {
   // Another acceptable »pair of quotes« for Serbian 
 
-  name[Group1]= "Serbia - With guillemets";
+  name[Group1]= "Serbian (with guillemets)";
 
   include "rs(basic)"
 
@@ -292,10 +291,55 @@ xkb_symbols "alternatequotes" {
 xkb_symbols "latinalternatequotes" {
   // Another acceptable »pair of quotes« for Serbian 
 
-  name[Group1]= "Serbia - Latin with guillemets";
+  name[Group1]= "Serbian (Latin with guillemets)";
 
   include "rs(latin)"
 
   key <AC02> {   [ any,any,     guillemotright, NoSymbol ]   }; // s
   key <AC03> {   [ any,any,     guillemotleft,  NoSymbol ]   }; // d
+};
+
+xkb_symbols "rue" {
+  // Homophonic layout for Pannonian Rusyn (spoken mainly in Serbia and
+  // Croatia by the Rusyn people), based on Ukrainian homophonic.
+  // Author: Ljubomir J. Papuga (Любомир Я. Папуґа) <papuga.rs@gmail.com>
+
+  name[Group1]= "Pannonian Rusyn (homophonic)";
+
+  include "ua(homophonic)"
+
+  key <TLDE> { [ grave, asciitilde ] };
+  key <AE03> { [ 3, doublelowquotemark ] };
+  key <AE04> { [ 4, rightdoublequotemark ] };
+  key <AE07> { [ 7, EuroSign ] };
+  key <AE11> { [ 0x002D, emdash ] };
+  key <AE12> { [ equal, plus ] };
+
+  key <AD02> { [ Ukrainian_ie, Ukrainian_IE ] };
+  key <AD06> { [ Cyrillic_yu, Cyrillic_YU ] };
+  key <AD08> { [ Cyrillic_i, Cyrillic_I ] };
+  key <AD11> { [ Cyrillic_sha, Cyrillic_SHA ] };
+  key <AD12> { [ Cyrillic_shcha, Cyrillic_SHCHA ] };
+
+  key <LSGT> { [ Ukrainian_yi, Ukrainian_YI ] };
+  key <AB08> { [ comma, semicolon ] };
+  key <AB09> { [ period, colon ] };
+};
+
+// EXTRAS:
+
+xkb_symbols "combiningkeys" {
+  // Raw combining characters instead of dead keys,
+  // especially good for post-accenting texts.
+
+  name[Group1]= "Serbian (combining accents instead of dead keys)";
+
+  include "rs(basic)"
+
+  key <AE03> {   [ any,any,     U0302, dead_circumflex    ]   }; // 3, U0302 = COMBINING CIRCUMFLEX ACCENT
+  key <AE07> {   [ any,any,     U0300, NoSymbol           ]   }; // 7, U0300 = COMBINING GRAVE ACCENT
+  key <AE08> {   [ any,any,     U030F, NoSymbol           ]   }; // 8, U030F = COMBINING DOUBLE GRAVE ACCENT
+  key <AE09> {   [ any,any,     U0301, NoSymbol           ]   }; // 9, U0301 = COMBINING ACUTE ACCENT
+  key <AE10> {   [ any,any,     U0311, NoSymbol           ]   }; // 0, U0311 = COMBINING INVERTED BREVE
+  key <AE11> {   [ any,any,     U0304, NoSymbol           ]   }; // -, U0304 = COMBINING MACRON
 };

@@ -6,8 +6,8 @@
 
 if [ -d /proc/asound ]; then
   prefix=/usr
-  exec_prefix=${prefix}
-  LD_PRELOAD=${exec_prefix}/lib/libaoss.so${LD_PRELOAD:+:$LD_PRELOAD} exec "$@"
+  libdir=${prefix}/lib/i386-linux-gnu
+  LD_PRELOAD=${libdir}/libaoss.so${LD_PRELOAD:+:$LD_PRELOAD} exec "$@"
 else
   echo "Warning: /proc/asound not found. Running without ALSA wrapper."
   exec "$@"

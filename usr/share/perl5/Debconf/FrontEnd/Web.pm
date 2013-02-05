@@ -114,9 +114,11 @@ sub go {
 		my ($qs)=$get=~m/^GET\s+.*?\?(.*?)(?:\s+.*)?$/;
 	
 		$query=CGI->new($qs);
-	} until ($query->param('formid') eq $formid);
+	} until (defined $query->param('formid') &&
+		 $query->param('formid') eq $formid);
 
-	if ($this->capb_backup && $query->param('back') ne '') {
+	if ($this->capb_backup && defined $query->param('back')  &&
+	    $query->param('back') ne '') {
 		return '';
 	}
 

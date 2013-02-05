@@ -41,33 +41,48 @@ Read C<:help helptags> in F<vim> for detailed information about helptags.
 
 =cut
 
+use strict;
+use warnings;
 use File::Glob ':globally';
 use POSIX qw(getcwd);
 
-($#ARGV==-1)&& die "Error: no directories given. Check manpage for details.\n";
+die "Error: no directories given. Check manpage for details.\n" unless @ARGV;
 
-$startdir=getcwd();
+my $startdir=getcwd();
+my %tags;
 
-foreach $dir (@ARGV) {
+foreach my $dir (@ARGV) {
   chdir $dir || die "Error: $dir: no such directory\n";
   print "Processing ".$dir."\n";
-  open(TAGSFILE,">tags") || die "Error: Cannot open $dir/tags for writing.\n";
-  foreach $file (<*.{gz,txt}>) {
-    next unless $file =~ m/^[\w.-]+\.txt(?:.gz)?$/;
+  foreach my $file (<*.{gz,txt,??x}>) {
+    next unless $file =~ m/^[\w.-]+\.(?:txt|([[:alpha:]]{2})x)(?:.gz)?$/;
+    my $suffix = '';
+    if ($1) {
+      $suffix = "-$1";
+    }
     do { open(GZ, "zcat $file|") if ($file =~ /\.gz$/) } or open(GZ,$file);
     while (<GZ>) {
-        # From vim61/src/ex_cmds.c, lines 5034-5036
+        # From vim73/src/ex_cmds.c, helptags_one, lines 6443-6445
         # 
         # Only accept a *tag* when it consists of valid
-        # characters, there is no '-' before it and is followed
-        # by a white character or end-of-line.
-      while (/(?<!-)\*([^*\s]+?)\*\s+?/g) {
-        $tags{$+}=$file;
+        # characters, there is white space before it and is
+        # followed by a white character or end-of-line.
+      while (/(?:(?<=^)|(?<=\s))\*([^*\s|]+?)\*(?:(?=\s)|(?=$))/g) {
+        $tags{"tags$suffix"}{$1}=$file;
       }
     }
     close(GZ);
   }
-  map { print TAGSFILE "$_\t$tags{$_}\t/*"; s'\\'\\\\'g; s'/'\/'g; print TAGSFILE "$_*\n" } sort keys %tags;
-  close TAGSFILE;
+  while (my ($tagfile, $tags) = each %tags) {
+    next unless %{$tags};
+    open(TAGSFILE, '>', $tagfile) || die "Error: Cannot open $dir/$tagfile for writing.\n";
+    foreach my $tag (sort keys %{$tags}) {
+      print TAGSFILE "$tag\t$tags->{$tag}\t/*";
+      $tag =~ s/\\/\\\\/g;
+      $tag =~ s@/@\/@g;
+      print TAGSFILE "$tag*\n";
+    }
+    close TAGSFILE;
+  }
   chdir $startdir;
 }

@@ -1,7 +1,3 @@
-// $XKeyboardConfig$
-// $XFree86: xc/programs/xkbcomp/symbols/cz,v 1.2 2002/11/22 04:02:22 dawes 
-// Exp $
-
 partial default alphanumeric_keys 
 xkb_symbols "basic" {
      
@@ -11,7 +7,7 @@ xkb_symbols "basic" {
 
     include "latin"
 
-    name[Group1]= "Czechia";
+    name[Group1]= "Czech";
 
     key <TLDE>	{ [ semicolon, dead_abovering,    grave,   asciitilde ]	};
     key <AE01>	{ [      plus,          1,       exclam,   dead_tilde ]	};
@@ -68,7 +64,7 @@ xkb_symbols "basic" {
     key <AB09>	{ [    period,      colon,      greater,     NoSymbol ]	};
     key <AB10>	{ [     minus, underscore,     asterisk,     NoSymbol ]	};
 
-    key <SPCE>	{ [     space,      space, nobreakspace, nobreakspace ]	};
+    key <SPCE>	{ [     space,      space,        space,       space ]	};
 
     include "level3(ralt_switch)"
 };
@@ -76,7 +72,7 @@ xkb_symbols "basic" {
 // Use <BKSL> instead of <LSGT> (useful for keyboard without <LSGT> key)
 xkb_symbols "bksl" {
     include "cz(basic)"
-    name[Group1]= "Czechia - With <\|> key";
+    name[Group1]= "Czech (with <\|> key)";
 
     key <BKSL>	{ [ backslash,        bar,        slash,     NoSymbol ]	};
 };
@@ -84,22 +80,29 @@ xkb_symbols "bksl" {
 partial alphanumeric_keys 
 xkb_symbols "qwerty" {
  
-    // This layout should work exactly as a cz with the exception 
-    // of 'Z' and 'Y' keys, which are in the qwerty style (ie. swapped).
-    // 2001 by Kamil Toman <ktoman@email.cz>
+    // This layout represent actual keyboard layout. It complies with symbols
+    // printed on keys.
+    // -----------------------------------------------------------------------
+    // This layout was created in 2011 by Lukáš Mojžíš <lmojzis@grenames.cz>
     
     include "cz(basic)"
-    name[Group1]= "Czechia - qwerty";
+    name[Group1]= "Czech (qwerty)";
 
-    key <AB01>	{ [         z,          Z,       degree,     NoSymbol ]	};
-    key <AD06>	{ [         y,          Y,     NoSymbol,     NoSymbol ]	};
+    key <AB01>	{ [         z,          Z,       degree,         NoSymbol ] };
+    key <AC10>	{ [     uring,   quotedbl,    semicolon,            colon ] };
+    key <AC11>	{ [   section,     exclam,   apostrophe,         quotedbl ] };
+    key <AD06>	{ [         y,          Y,     NoSymbol,         NoSymbol ] };
+    key <AD11>	{ [    uacute,      slash,  bracketleft,        braceleft ] };
+    key <AD12>	{ [parenright,  parenleft, bracketright,       braceright ] };
+    key <AE09>	{ [    iacute,          9,    parenleft,       dead_acute ] };
+    key <AE10>	{ [    eacute,          0,   parenright, dead_doubleacute ] };
 };
 
 // Use <BKSL> instead of <LSGT> (useful for keyboard without <LSGT> key)
 xkb_symbols "qwerty_bksl" {
     include "cz(qwerty)"
 
-    name[Group1]= "Czechia - qwerty, extended Backslash";
+    name[Group1]= "Czech (qwerty, extended Backslash)";
 
     key <BKSL>	{ [ backslash,        bar,        slash,     NoSymbol ]	};
 };
@@ -111,7 +114,7 @@ xkb_symbols "ucw" {
     // accented characters only, no 'latin' set.
     // 2008 by Milan Vancura <mvancura@suse.cz>
 
-    name[Group1]= "Czechia - UCW layout (accented letters only)";
+    name[Group1]= "Czech (UCW layout, accented letters only)";
 
     key <AB01> { [zcaron,      Zcaron      ] };
     key <AB02> { [ssharp                   ] };
@@ -141,4 +144,34 @@ xkb_symbols "ucw" {
     key <AD08> { [iacute,      Iacute      ] };
     key <AD09> { [oacute,      Oacute      ] };
     key <AD10> { [odiaeresis,  Odiaeresis  ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "dvorak-ucw" {
+
+    // US Dvorak layout extend with UCW - AltGr produces accented characters
+
+    include "us(dvorak)"
+
+    name[Group1]= "Czech (US Dvorak with CZ UCW support)";
+
+    key <AB03> { [ j, J, eacute, Eacute ] };
+    key <AB04> { [ k, K, uacute, Uacute ] };
+    key <AB10> { [ z, Z, zcaron, Zcaron ] };
+
+    key <AC01> { [ a, A, aacute, Aacute ] };
+    key <AC02> { [ o, O, oacute, Oacute ] };
+    key <AC03> { [ e, E, ecaron, Ecaron ] };
+    key <AC04> { [ u, U, uring,  Uring  ] };
+    key <AC05> { [ i, I, iacute, Iacute ] };
+    key <AC06> { [ d, D, dcaron, Dcaron ] };
+    key <AC08> { [ t, T, tcaron, Tcaron ] };
+    key <AC09> { [ n, N, ncaron, Ncaron ] };
+    key <AC10> { [ s, S, scaron, Scaron ] };
+
+    key <AD05> { [ y, Y, yacute, Yacute ] };
+    key <AD08> { [ c, C, ccaron, Ccaron ] };
+    key <AD09> { [ r, R, rcaron, Rcaron ] };
+
+    include "level3(ralt_switch)"
 };

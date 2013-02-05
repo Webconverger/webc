@@ -1,0 +1,9 @@
+[Unit]
+Description=Lock Directory
+Before=local-fs.target
+
+[Mount]
+What=tmpfs
+Where=/run/lock
+Type=tmpfs
+Options=nodev,noexec,nosuid,size=5242880

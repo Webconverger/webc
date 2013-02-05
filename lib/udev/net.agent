@@ -47,11 +47,11 @@ net_ifup() {
     fi
 
     wait_for_interface lo
-    if [ -e /bin/systemctl ]; then
-      wait_for_file /dev/log
+    if [ -e /sys/fs/cgroup/systemd ]; then
+      exec systemctl start ifup@${INTERFACE}.service
+    else
+      exec ifup --allow=hotplug $INTERFACE
     fi
-
-    exec ifup --allow=hotplug $INTERFACE
 }
 
 net_ifdown() {

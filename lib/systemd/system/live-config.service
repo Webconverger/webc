@@ -1,0 +1,23 @@
+## Debian Live - System Configuration Scripts
+##
+## live-config contains the scripts that configure a Debian Live system during
+## the boot process (late userspace).
+##
+## This is the systemd service for live-config.
+
+
+[Unit]
+Description=live-config contains the scripts that configure a Debian Live system during the boot process (late userspace).
+Documentation=man:live-config
+Before=basic.target
+DefaultDependencies=no
+ConditionPathExists=/lib/live/config.sh
+ConditionKernelCommandLine=boot=live
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/lib/live/config.sh
+
+[Install]
+WantedBy=basic.target

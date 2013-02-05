@@ -1,7 +1,3 @@
-// $XKeyboardConfig$
-
-// $XFree86: xc/programs/xkbcomp/symbols/inet,v 1.38 2004/01/17 14:59:37 pascal Exp $
-
 // EAK (Easy Access, Internet, Multimedia, PDA) keyboards
 // Copyright (C) 2002 Stanislav Brabec <sbrabec@suse.cz>
 //
@@ -120,11 +116,13 @@ xkb_symbols "evdev" {
 
     key <HNGL>   {      [ Hangul                ]       };
     key <HJCV>   {      [ Hangul_Hanja          ]       };
-    key <FK22>   {      [ XF86TouchpadToggle    ]       };
+    key <FK21>   {      [ XF86TouchpadToggle    ]       };
+    key <FK22>   {      [ XF86TouchpadOn        ]       };
+    key <FK23>   {      [ XF86TouchpadOff       ]       };
 
 //  key <I120>   {      [ ]       }; // KEY_MACRO 
     key <I126>   {      [ plusminus             ]       };
-    key <I129>   {      [ KP_Decimal            ]       };
+    key <I128>   {      [ XF86LaunchA           ]       };
     key <I147>   {      [ XF86MenuKB            ]       };
     key <I148>   {      [ XF86Calculator        ]       };
 //  key <I149>   {      [ ]       }; // KEY_SETUP
@@ -169,10 +167,16 @@ xkb_symbols "evdev" {
     key <I188>   {      [ parenright            ]       };
     key <I189>   {      [ XF86New               ]       };
     key <I190>   {      [ Redo                  ]       };
+    key <I192>   {      [ XF86LaunchA           ]       };
+    key <I193>   {      [ XF86LaunchC           ]       };
+    key <I194>   {      [ XF86LaunchD           ]       };
+    key <I195>   {      [ XF86LaunchE           ]       };
+    key <I196>   {      [ XF86LaunchF           ]       };
     key <I208>   {      [ XF86AudioPlay         ]       };
     key <I209>   {      [ XF86AudioPause        ]       };
     key <I210>   {      [ XF86Launch3           ]       };
     key <I211>   {      [ XF86Launch4           ]       };
+    key <I212>   {      [ XF86LaunchB           ]       };
     key <I213>   {      [ XF86Suspend           ]       };
     key <I214>   {      [ XF86Close             ]       };
     key <I215>   {      [ XF86AudioPlay         ]       };
@@ -184,11 +188,11 @@ xkb_symbols "evdev" {
 //  key <I221>   {      [ ]       }; // KEY_SOUND
 //  key <I222>   {      [ ]       }; // KEY_QUESTION
     key <I223>   {      [ XF86Mail              ]       };
-//  key <I224>   {      [ XF86Messenger         ]       }; // KEY_CHAT
+    key <I224>   {      [ XF86Messenger         ]       }; // KEY_CHAT
     key <I225>   {      [ XF86Search            ]       };
-//  key <I226>   {      [ XF86Go                ]       }; // KEY_CONNECT
+    key <I226>   {      [ XF86Go                ]       }; // KEY_CONNECT
     key <I227>   {      [ XF86Finance           ]       };
-//  key <I228>   {      [ XF86Game              ]       }; // KEY_SPORT
+    key <I228>   {      [ XF86Game              ]       }; // KEY_SPORT
     key <I229>   {      [ XF86Shop              ]       };
 //  key <I230>   {      [ ]       }; // KEY_ALTERASE
     key <I231>   {      [ Cancel                ]       };
@@ -215,6 +219,12 @@ xkb_symbols "evdev" {
 //  key <I254>   {      [ ]       }; // KEY_WIMAX
     key <I255>   {      [ XF86Hibernate         ]       }; // KEY_HIBERNATE
  
+    key <FK13>   {      [ XF86Tools         ]       };
+    key <FK14>   {      [ XF86Launch5       ]       };
+    key <FK15>   {      [ XF86Launch6       ]       };
+    key <FK16>   {      [ XF86Launch7       ]       };
+    key <FK17>   {      [ XF86Launch8       ]       };
+    key <FK18>   {      [ XF86Launch9       ]       };
 };
 
 
@@ -1207,7 +1217,7 @@ xkb_symbols "logitech_g15" {
     key  <K72> {         [     XF86LaunchC ] };
     key  <K74> {         [         XF86WWW ] };
     key  <K75> {         [     XF86LaunchE ] };
-    key <MDSW> {         [     XF86Launch1 ] };
+    key <II5D> {         [     XF86Launch1 ] };
     key <NFER> {         [     XF86Launch2 ] };
     key <XFER> {         [     XF86Launch8 ] };
 };
@@ -1260,6 +1270,19 @@ xkb_symbols "mx2750" {
 
 
 // Microsoft
+
+// Microsoft Natural Wireless Ergonomic Keyboard 4000
+partial alphanumeric_keys
+xkb_symbols "microsoft4000" {
+    include "inet(media_nav_common)"
+    key <I192>  {       [ XF86Launch1           ]       };
+    key <I193>  {       [ XF86Launch2           ]       };
+    key <I194>  {       [ XF86Launch3           ]       };
+    key <I195>  {       [ XF86Launch4           ]       };
+    key <I196>  {       [ XF86Launch5           ]       };
+//  Missing because of lack of support from kbd driver: Zoom in and
+//  slider.
+};
 
 // Microsoft Natural Wireless Ergonomic Keyboard 7000
 partial alphanumeric_keys
@@ -1705,7 +1728,7 @@ xkb_symbols "apple" {
     key <K5E>	{	[ F14 ]    };
     key <K5F>	{	[ F15 ]    };
     key <K6C>	{	[ XF86Eject ]    };
-    key <MDSW>	{	[ F16 ]    };
+    key <II5D>	{	[ F16 ]    };
     key <KPEQ>  {       [ KP_Equal ] };
 };
 
@@ -1819,4 +1842,32 @@ xkb_symbols "compalfl90" {
 partial alphanumeric_keys
 xkb_symbols "pc105" {
     include "inet(media_nav_acpi_common)"
+};
+
+// HTC Dream
+partial alphanumeric_keys
+xkb_symbols "htcdream" {
+	key <BKSP> { [ BackSpace ] };
+	key <RTRN> { [ Return ] };
+
+        //first row
+        key <AE01> { [ 1, 1, exclam, exclam ] };
+        key <AE02> { [ 2, 2, at, at ] };
+        key <AE03> { [ 3, 3, numbersign, numbersign ] };
+        key <AE04> { [ 4, 4, dollar, dollar ] };
+        key <AE05> { [ 5, 5, percent, percent ] };
+        key <AE06> { [ 6, 6, dead_circumflex, dead_circumflex ] };
+        key <AE07> { [ 7, 7, ampersand, ampersand ] };
+        key <AE08> { [ 8, 8, asterisk, asterisk ] };
+        key <AE09> { [ 9, 9, parenleft, parenleft ] };
+        key <AE10> { [ 0, 0, parenright, parenright ] };
+
+	//fifth row
+	key <LFSH> { [ Shift_L ] };
+	key <SPCE> { [ space ] };
+	key <AB09> { [ period, period, slash, slash ] };
+	key <RTSH> { [ Shift_R ] };
+
+	//modifiers
+	modifier_map Shift { <LFSH>, <RTSH> };
 };

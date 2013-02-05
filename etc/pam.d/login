@@ -17,7 +17,7 @@ auth       optional   pam_faildelay.so  delay=3000000
 #
 # With the default control of this module:
 #   [success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die]
-# root will not be prompted for a pasword on insecure lines.
+# root will not be prompted for a password on insecure lines.
 # if an invalid username is entered, a password is prompted (but login
 # will eventually be rejected)
 #
@@ -80,8 +80,11 @@ session    required   pam_limits.so
 # (Replaces the `LASTLOG_ENAB' option from login.defs)
 session    optional   pam_lastlog.so
 
-# Prints the motd upon succesful login
+# Prints the message of the day upon succesful login.
 # (Replaces the `MOTD_FILE' option in login.defs)
+# This includes a dynamically generated part from /run/motd.dynamic
+# and a static (admin-editable) part from /etc/motd.
+session    optional   pam_motd.so  motd=/run/motd.dynamic
 session    optional   pam_motd.so
 
 # Prints the status of the user's mailbox upon succesful login

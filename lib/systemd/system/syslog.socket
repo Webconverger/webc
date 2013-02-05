@@ -1,0 +1,40 @@
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+
+# See systemd.special(7) for details
+
+[Unit]
+Description=Syslog Socket
+DefaultDependencies=no
+Before=sockets.target syslog.target
+Conflicts=shutdown.target
+Before=shutdown.target
+
+# Pull in syslog.target to tell people that /dev/log is now accessible
+Wants=syslog.target
+
+[Socket]
+ListenDatagram=/run/systemd/journal/syslog
+SocketMode=0666
+PassCredentials=yes
+PassSecurity=yes
+ReceiveBuffer=8M
+
+# The default syslog implementation should make syslog.service a
+# symlink to itself, so that this socket activates the right actual
+# syslog service.
+#
+# Examples:
+#
+# /etc/systemd/system/syslog.service -> /lib/systemd/system/rsyslog.service
+# /etc/systemd/system/syslog.service -> /lib/systemd/system/syslog-ng.service
+#
+# Best way to achieve that is by adding this to your unit file
+# (i.e. to rsyslog.service or syslog-ng.service):
+#
+# [Install]
+# Alias=syslog.service

@@ -1,4 +1,3 @@
-// $XFree86$
 //  XFree86 special keysyms
 
 default partial xkb_compatibility "basic"  {
@@ -42,16 +41,26 @@ default partial xkb_compatibility "basic"  {
         action = SwitchScreen(Screen=12, !SameServer);
     };
 
-    interpret XF86_Ungrab {
-        action = Private(type=0x86, data="Ungrab");
+    interpret XF86LogGrabInfo {
+        action = Private(type=0x86, data="PrGrbs");
     };
-    interpret XF86_ClearGrab {
-        action = Private(type=0x86, data="ClsGrb");
+    interpret XF86LogWindowTree {
+        action = Private(type=0x86, data="PrWins");
     };
+
     interpret XF86_Next_VMode {
         action = Private(type=0x86, data="+VMode");
     };
     interpret XF86_Prev_VMode {
         action = Private(type=0x86, data="-VMode");
+    };
+};
+
+partial xkb_compatibility "grab_break" {
+    interpret XF86_Ungrab {
+        action = Private(type=0x86, data="Ungrab");
+    };
+    interpret XF86_ClearGrab {
+        action = Private(type=0x86, data="ClsGrb");
     };
 };

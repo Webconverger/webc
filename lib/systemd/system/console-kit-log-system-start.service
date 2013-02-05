@@ -1,0 +1,10 @@
+[Unit]
+Description=Console System Startup Logging
+DefaultDependencies=no
+After=sysinit.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ck-log-system-start
+RemainAfterExit=yes

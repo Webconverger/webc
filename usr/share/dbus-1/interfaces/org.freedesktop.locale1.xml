@@ -1,0 +1,31 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+ <interface name="org.freedesktop.locale1">
+  <property name="Locale" type="as" access="read"/>
+  <property name="VConsoleKeymap" type="s" access="read"/>
+  <property name="VConsoleKeymapToggle" type="s" access="read"/>
+  <property name="X11Layout" type="s" access="read"/>
+  <property name="X11Model" type="s" access="read"/>
+  <property name="X11Variant" type="s" access="read"/>
+  <property name="X11Options" type="s" access="read"/>
+  <method name="SetLocale">
+   <arg name="locale" type="as" direction="in"/>
+   <arg name="user_interaction" type="b" direction="in"/>
+  </method>
+  <method name="SetVConsoleKeyboard">
+   <arg name="keymap" type="s" direction="in"/>
+   <arg name="keymap_toggle" type="s" direction="in"/>
+   <arg name="convert" type="b" direction="in"/>
+   <arg name="user_interaction" type="b" direction="in"/>
+  </method>
+  <method name="SetX11Keyboard">
+   <arg name="layout" type="s" direction="in"/>
+   <arg name="model" type="s" direction="in"/>
+   <arg name="variant" type="s" direction="in"/>
+   <arg name="options" type="s" direction="in"/>
+   <arg name="convert" type="b" direction="in"/>
+   <arg name="user_interaction" type="b" direction="in"/>
+  </method>
+ </interface>
+</node>

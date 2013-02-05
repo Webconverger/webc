@@ -1,0 +1,28 @@
+#!/bin/sh -e
+
+create_etc_modules() {
+  [ -e /etc/modules ] && return 0
+  cat <<END > /etc/modules
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+# Parameters can be specified after the module name.
+
+END
+  chmod 644 /etc/modules
+}
+
+case "$1" in
+  configure)
+  create_etc_modules
+esac
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/kmod" ]; then
+	update-rc.d kmod start 20 S . >/dev/null || exit $?
+fi
+# End automatically added section
+
+
+exit 0

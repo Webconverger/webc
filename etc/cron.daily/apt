@@ -8,7 +8,7 @@
 #  Dir "/";
 #  - RootDir for all configuration files
 #
-#  Dir::Cache "var/apt/cache/";
+#  Dir::Cache "var/cache/apt/";
 #  - Set apt package cache directory
 #
 #  Dir::Cache::Archives "archives/";
@@ -305,14 +305,36 @@ debug_echo()
     fi
 }
 
+check_power(){
+    # laptop check, on_ac_power returns:
+    #       0 (true)    System is on main power
+    #       1 (false)   System is not on main power
+    #       255 (false) Power status could not be determined
+    # Desktop systems always return 255 it seems
+    if which on_ac_power >/dev/null; then
+        on_ac_power
+        POWER=$?
+        if [ $POWER -eq 1 ]; then
+	    debug_echo "exit: system NOT on main power"
+	    return 1
+        elif [ $POWER -ne 0 ]; then
+	    debug_echo "power status ($POWER) undetermined, continuing"
+        fi
+        debug_echo "system is on main power."
+    fi
+    return 0
+}
+
 # ------------------------ main ----------------------------
 
-# Backup the 7 last versions of APT's extended_states file
-# shameless copy from dpkg cron
-if cd /var/backups ; then
-    if ! cmp -s apt.extended_states.0 /var/lib/apt/extended_states; then
-	cp -p /var/lib/apt/extended_states apt.extended_states
-	savelog -c 7 apt.extended_states >/dev/null
+if test -r /var/lib/apt/extended_states; then
+    # Backup the 7 last versions of APT's extended_states file
+    # shameless copy from dpkg cron
+    if cd /var/backups ; then
+	if ! cmp -s apt.extended_states.0 /var/lib/apt/extended_states; then
+	    cp -p /var/lib/apt/extended_states apt.extended_states
+	    savelog -c 7 apt.extended_states >/dev/null
+	fi
     fi
 fi
 
@@ -350,22 +372,7 @@ if [ "$VERBOSE" -ge 3 ]; then
     set -x
 fi
 
-# laptop check, on_ac_power returns:
-#       0 (true)    System is on main power
-#       1 (false)   System is not on main power
-#       255 (false) Power status could not be determined
-# Desktop systems always return 255 it seems
-if which on_ac_power >/dev/null; then
-    on_ac_power
-    POWER=$?
-    if [ $POWER -eq 1 ]; then
-	debug_echo "exit: system NOT on main power"
-	exit 0
-    elif [ $POWER -ne 0 ]; then
-	debug_echo "power status ($POWER) undetermined, continuing"
-    fi
-    debug_echo "system is on main power."
-fi
+check_power || exit 0
 
 # check if we can lock the cache and if the cache is clean
 if which apt-get >/dev/null && ! eval apt-get check -f $XAPTOPT $XSTDERR ; then
@@ -416,6 +423,7 @@ do_cache_backup $BackupArchiveInterval
 # sleep random amount of time to avoid hitting the 
 # mirrors at the same time
 random_sleep
+check_power || exit 0
 
 # include default system language so that "apt-get update" will
 # fetch the right translated package descriptions
@@ -466,7 +474,7 @@ fi
 
 # auto upgrade all upgradeable packages
 UPGRADE_STAMP=/var/lib/apt/periodic/upgrade-stamp
-if [ $UPDATED -eq 1 ] && which unattended-upgrade >/dev/null && check_stamp $UPGRADE_STAMP $UnattendedUpgradeInterval; then
+if which unattended-upgrade >/dev/null && check_stamp $UPGRADE_STAMP $UnattendedUpgradeInterval; then
     if unattended-upgrade $XUUPOPT; then
 	update_stamp $UPGRADE_STAMP
 	debug_echo "unattended-upgrade (success)"

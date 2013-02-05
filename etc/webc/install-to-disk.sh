@@ -49,12 +49,35 @@ _err() {
 	return 1
 }
 
+describe_disk() {
+	local name=$(basename $1)
+	model=$(cat "/sys/block/${name}/device/model")
+	size=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1/1024/1024}')
+
+	echo "${model} (${size}GB)"
+}
+
 find_disk() {
 	_logs "finding disk"
-	local disk
-	for disk in /dev/[sh]d?; do
-		test -e $disk && { echo $disk ; return 0; }
+	while true; do
+		local disk
+		local choices=() # Use an array so we can have spaces in the titles
+		for dev in /dev/[sh]d?; do
+			# TODO: Filter out the device we're currently booting from
+			if test -e $dev; then
+				choices+=($dev "$(describe_disk "${dev}")")
+			fi
+		done
+
+		chosen=$(dialog --cancel-label "Reload" --menu "Select disk to install onto:" 17 60 10 "${choices[@]}" 2>&1 1>&4)
+		model=$(describe_disk "${chosen}")
+		msg="You are about to install to the following disk:\n\n${chosen} - ${model}\n\nThis will permanently and completely erase any data that is currently on this disk!\n\nDo you really want to continue?" 1>&4
+
+		if [ -n "${chosen}" ] && dialog --defaultno --title "Are you sure?" --yesno "${msg}" 0 0 1>&4; then
+			break
+		fi
 	done
+	echo "${chosen}"
 }
 partition_disk() {
 	local disk="$1"
@@ -107,52 +130,42 @@ install_root() {
 	cp -r /live/image/live/filesystem.git ${dir}/live/
 }
 
-if cmdline_has install
-then
-	# Trap any shell exits with the failed handler
-	trap failed_install EXIT
+# Trap any shell exits with the failed handler
+trap failed_install EXIT
 
-	clear_screen
-	cmdline_has debug && _logs "debug has been enabled"
+clear_screen
+disk=$( find_disk )
+partition_disk $disk
+verify_partition $disk
+partition="${disk}1"
+_logs "building filesystem on $partition"
+mke2fs -j $partition
+_logs "mounting $partition on /mnt/root"
+test -d /mnt/root || mkdir /mnt/root
+MOUNTED=1
+mount $partition /mnt/root
+dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
+_logs "enabling swap on /mnt/root/swap"
+mkswap /mnt/root/swap
+swapon /mnt/root/swap
+SWAPON=1
+install_root /mnt/root
+install_extlinux /mnt/root $partition $disk
+verify_extlinux_mbr $disk
 
-	# webc.conf exports the currently mounted git revision
-	test -n "$current_git_revision" || _err "No current revision found, not running git-fs?"
+_logs "unmounting partitions"
+swapoff /mnt/root/swap
+umount /mnt/root
+unset SWAPON MOUNTED
 
-	disk=$( find_disk )
-	partition_disk $disk
-	verify_partition $disk
-	partition="${disk}1"
-	_logs "building filesystem on $partition"
-	mke2fs -j $partition
-	_logs "mounting $partition on /mnt/root"
-	test -d /mnt/root || mkdir /mnt/root
-	MOUNTED=1
-	mount $partition /mnt/root
-	dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
-	_logs "enabling swap on /mnt/root/swap"
-	mkswap /mnt/root/swap
-	swapon /mnt/root/swap
-	SWAPON=1
-	install_root /mnt/root
-	install_extlinux /mnt/root $partition $disk
-	verify_extlinux_mbr $disk
+_logs "install complete"
+e2label $partition install
+_logs $(blkid)
+_logs "press enter to reboot..."
+read DUMMY
+# Install did not fail, unregister the trap (do this before the
+# reboot, since the reboot might kill us before we get to
+# exit ourselves)
+trap - EXIT
 
-	_logs "unmounting partitions"
-	swapoff /mnt/root/swap
-	umount /mnt/root
-	unset SWAPON MOUNTED
-
-	_logs "install complete"
-	e2label $partition install
-	_logs $(blkid)
-	_logs "press enter to reboot..."
-	read DUMMY
-	# Install did not fail, unregister the trap (do this before the
-	# reboot, since the reboot might kill us before we get to
-	# exit ourselves)
-	trap - EXIT
-
-	/sbin/reboot
-else
-	exec sleep 86400
-fi
+/sbin/reboot

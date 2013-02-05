@@ -2,10 +2,10 @@
 
 ### BEGIN INIT INFO
 # Provides:		plymouth
-# Required-Start:	udev $remote_fs $all
+# Required-Start:	$remote_fs $all
 # Required-Stop:	$remote_fs
-# Should-Start:		gdm gdm3 kdm xdm slim nodm
-# Should-Stop:		gdm gdm3 kdm xdm slim nodm
+# Should-Start:		$x-display-manager
+# Should-Stop:		$x-display-manager
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 6
 # Short-Description:	Stop plymouth during boot and start it on shutdown
@@ -14,7 +14,6 @@
 PATH="/sbin:/bin:/usr/sbin:/usr/bin"
 NAME="plymouth"
 DESC="Boot splash manager"
-SPLASH="false"
 
 test -x /sbin/plymouthd || exit 0
 
@@ -24,14 +23,6 @@ then
 fi
 
 set -e
-
-Start_plymouthd ()
-{
-	if ! plymouth --ping
-	then
-		/sbin/plymouthd --mode=${1} --attach-to-session
-	fi
-}
 
 for ARGUMENT in $(cat /proc/cmdline)
 do
@@ -48,33 +39,38 @@ done
 
 case "${1}" in
 	start)
-		if [ "${SPLASH}" = "true" ]
-		then
-			/bin/plymouth --quit
-		fi
+		case "${SPLASH}" in
+			true)
+				/bin/plymouth quit --retain-splash
+				;;
+		esac
 		;;
 
 	stop)
-		if [ "$SPLASH" = "true" ]
-		then
-			Start_plymouthd shutdown
+		case "${SPLASH}" in
+			true)
+				if ! plymouth --ping
+				then
+					/sbin/plymouthd --mode=shutdown --attach-to-session
+				fi
 
-			RUNLEVEL="$(/sbin/runlevel | cut -d " " -f 2)"
+				RUNLEVEL="$(/sbin/runlevel | cut -d " " -f 2)"
 
-			case "${RUNLEVEL}" in
-				0)
-					TEXT="Shutting down system..."
-					;;
+				case "${RUNLEVEL}" in
+					0)
+						TEXT="Shutting down system..."
+						;;
 
-				6)
-					TEXT="Restarting system..."
-					;;
-			esac
+					6)
+						TEXT="Restarting system..."
+						;;
+				esac
 
-			/bin/plymouth message --text="${TEXT}"
+				/bin/plymouth message --text="${TEXT}"
 
-			/bin/plymouth --show-splash
-		fi
+				/bin/plymouth --show-splash
+				;;
+		esac
 		;;
 
 	restart|force-reload)
@@ -82,8 +78,7 @@ case "${1}" in
 		;;
 
 	*)
-		N="/etc/init.d/${NAME}"
-		echo "Usage: ${N} {start|stop|restart|force-reload}" >&2
+		echo "Usage: ${0} {start|stop|restart|force-reload}" >&2
 		exit 1
 		;;
 esac

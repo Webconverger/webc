@@ -10,9 +10,6 @@ my $initd = "/etc/init.d";
 my $etcd  = "/etc/rc";
 my $notreally = 0;
 
-# Save last action to this directory
-my $archive = "/var/lib/update-rc.d";
-
 # Print usage message and die.
 
 sub usage {
@@ -52,19 +49,11 @@ while($#ARGV >= 0 && ($_ = $ARGV[0]) =~ /^-/) {
 }
 
 sub save_last_action {
-    my ($script, @arguments) = @_;
-
-    return if $notreally;
-
-    open(FILE, ">", "$archive/${script}.new") || die "unable to write to $archive/${script}.new";
-    print FILE join(" ","update-rc.d",@arguments), "\n";
-    close(FILE);
-    rename "$archive/${script}.new", "$archive/${script}";
+    # No-op (archive removed)
 }
 
 sub remove_last_action {
-    my ($script) = @_;
-    unlink "$archive/$script";
+    # No-op (archive removed)
 }
 
 # Action.
@@ -390,7 +379,7 @@ sub insserv_updatercd {
     $action = shift @args;
     if ("remove" eq $action) {
         if ( -f "/etc/init.d/$scriptname" ) {
-            my $rc = system("insserv", @opts, "-r", $scriptname) >> 8;
+            my $rc = system("/sbin/insserv", @opts, "-r", $scriptname) >> 8;
             if (0 == $rc && !$notreally) {
                 remove_last_action($scriptname);
             }
@@ -480,6 +469,7 @@ sub cmp_args_with_defaults {
     my ($name, $act) = (shift, shift);
     my ($lsb_start_ref, $lsb_stop_ref, $arg_str, $lsb_str);
     my (@arg_start_lvls, @arg_stop_lvls, @lsb_start_lvls, @lsb_stop_lvls);
+    my $default_msg = ($act eq 'defaults') ? 'default' : '';
 
     ($lsb_start_ref, $lsb_stop_ref) = parse_def_start_stop("/etc/init.d/$name");
     @lsb_start_lvls = @$lsb_start_ref;
@@ -523,15 +513,15 @@ sub cmp_args_with_defaults {
         join("\0", sort @arg_start_lvls) ne join("\0", sort @lsb_start_lvls)) {
         $arg_str = @arg_start_lvls ? "@arg_start_lvls" : "none";
         $lsb_str = @lsb_start_lvls ? "@lsb_start_lvls" : "none";
-        warning "$name start runlevel arguments ($arg_str) do not match",
-                "LSB Default-Start values ($lsb_str)";
+        warning "$default_msg start runlevel arguments ($arg_str) do not match",
+                "$name Default-Start values ($lsb_str)";
     }
     if ($#arg_stop_lvls != $#lsb_stop_lvls or
         join("\0", sort @arg_stop_lvls) ne join("\0", sort @lsb_stop_lvls)) {
         $arg_str = @arg_stop_lvls ? "@arg_stop_lvls" : "none";
         $lsb_str = @lsb_stop_lvls ? "@lsb_stop_lvls" : "none";
-        warning "$name stop runlevel arguments ($arg_str) do not match",
-                "LSB Default-Stop values ($lsb_str)";
+        warning "$default_msg stop runlevel arguments ($arg_str) do not match",
+                "$name Default-Stop values ($lsb_str)";
     }
 }
 

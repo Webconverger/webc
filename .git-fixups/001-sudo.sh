@@ -1,16 +1,16 @@
 #!/bin/sh
 
 echo "Fixing sudo"
-chmod 0440 etc/sudoers
-chmod 0440 etc/sudoers.d/README
+chmod 0440 /etc/sudoers
+chmod 0440 /etc/sudoers.d/README
 
 
 echo "Fixing setuids"
 suids="
-bin/ping
-bin/su
-usr/bin/sudo
-usr/bin/X
+/bin/ping
+/bin/su
+/usr/bin/sudo
+/usr/bin/X
 "
 
 for s in $suids; do

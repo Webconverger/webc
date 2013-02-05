@@ -35,7 +35,7 @@ use Debian::AdduserCommon;
 use Getopt::Long;
 
 
-my $version = "3.112+nmu2";
+my $version = "3.113+nmu3";
 
 ###################
 # return values
@@ -450,7 +450,7 @@ if ($action eq "addsysuser") {
 	      if ($?>>8);
 	    &cleanup(sprintf((gtx("`%s' exited from signal %d. Exiting.\n")), "$chage -M 99999 $new_name", $?&255));
 	} else {
-	    printf (gtx("%s failed with return code 15, shadow not enabled, password aging cannot be set. Continuing.\n"), $chage);
+            printf STDERR (gtx("%s failed with return code 15, shadow not enabled, password aging cannot be set. Continuing.\n"), $chage);
 	}
     }
     &invalidate_nscd();

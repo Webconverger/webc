@@ -10,10 +10,18 @@ if [ "$PS1" ]; then
       . /etc/bash.bashrc
     fi
     if [ "`id -u`" -eq 0 ]; then
-      PS1='\[\033[1;34m\]\u@\H:\w\$ \[\033[0m\]'
+      PS1="\[\033[1;34m\]\u@\H:\w\\\$ \[\033[0m\]"
+      PROMPT_COMMAND="__git_ps1 '' '\[\e[1;34m\]\u@\H:\w\\\$\[\e[0m\] '"
     else
-      PS1='\[\033[0m\]\u@\H:\w\$ \[\033[0m\]'
+      PS1="\[\033[0m\]\u@\H:\w\\\$ "
+      PROMPT_COMMAND="__git_ps1 '' '\[\e[0m\]\u@\H:\w\\\$ '"
     fi
+    export GIT_PS1_SHOWCOLORHINTS="true"
+    export GIT_PS1_SHOWDIRTYSTATE="true"
+    export GIT_PS1_SHOWSTASHSTATE="true"
+    export GIT_PS1_SHOWUNTRACKEDFILES="true"
+    export GIT_PS1_SHOWUPSTREAM="verbose"
+    export GIT_PS1_DESCRIBE_STYLE="branch"
   else
     if [ "`id -u`" -eq 0 ]; then
       PS1='# '
@@ -40,7 +48,7 @@ alias la="ls -al"
 
 alias leave="unset HISTORY; unset HISTFILE; exit"
 
-GREP_OPTIONS="--color=auto"
+export GREP_OPTIONS="--color=auto"
 
 HISTCONTROL="ignoredups:ignorespace"
 HISTSIZE="1000"

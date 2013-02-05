@@ -5,7 +5,7 @@ set -e
 
 case "$1" in
     configure)
-        grep -q utempter /etc/group || ( echo "Creating utempter group..." ; addgroup --quiet --system utempter)
+        getent group | grep -q "^utempter:" || ( echo "Creating utempter group..." ; addgroup --quiet --system utempter)
         chown root:utempter /usr/lib/utempter
     ;;
 

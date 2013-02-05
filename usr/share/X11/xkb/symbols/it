@@ -1,16 +1,12 @@
-// $XKeyboardConfig$
-
 // based on a keyboard map from an 'xkb/symbols/it' file
 // 17 May 2003 Modified by Sebastiano Vigna (vigna@dsi.unimi.it)
-//
-// $XFree86: xc/programs/xkbcomp/symbols/it,v 1.4 2003/04/19 12:22:12 pascal Exp $
 
 partial default alphanumeric_keys
 xkb_symbols "basic" {
 
     include "latin(type4)"
 
-    name[Group1]="Italy";
+    name[Group1]="Italian";
 
     key <TLDE>	{ [ backslash,        bar,      notsign,    brokenbar ]	};
 
@@ -47,7 +43,7 @@ xkb_symbols "nodeadkeys" {
 
     include "it(basic)"
 
-    name[Group1]="Italy - Eliminate dead keys";
+    name[Group1]="Italian (eliminate dead keys)";
 
     key <AE02>	{ [         2,   quotedbl,  twosuperior,  doubleacute ] };
     key <AE03>	{ [         3,   sterling,threesuperior,   asciitilde ]	};
@@ -69,7 +65,7 @@ xkb_symbols "nodeadkeys" {
 partial alphanumeric_keys
 xkb_symbols "mac" {
 
-    name[Group1]= "Italy - Macintosh";
+    name[Group1]= "Italian (Macintosh)";
 
     // Alphanumeric section
     key <LSGT> {	[        less,  greater   	]	};
@@ -137,7 +133,7 @@ xkb_symbols "geo" {
     include "it"
     include "ge(basic)"
 
-    name[Group1]= "Italy - Georgian";
+    name[Group1]= "Georgian (Italy)";
     key <TLDE> { [ backslash, bar, notsign, brokenbar ] };
     key <AE01> { [ 1, exclam, onesuperior ] };
     key <AE02> { [ 2, quotedbl, twosuperior, dead_doubleacute ] };
@@ -179,7 +175,7 @@ xkb_symbols "olpc" {
 partial alphanumeric_keys modifier_keys
 xkb_symbols "us" {
 
-    name[Group1]= "Italy - US keyboard with Italian letters";
+    name[Group1]= "Italian (US keyboard with Italian letters)";
     
     include "us(euro)"
     
@@ -216,3 +212,46 @@ xkb_symbols "us" {
     include "level3(ralt_switch)"
 };
 
+partial alphanumeric_keys
+xkb_symbols "htcdream" {
+        include "inet(htcdream)"
+        name[Group1]= "Italian";
+
+        //second row
+        key <AD01> { [ q, Q, Tab, Tab ] };
+        key <AD02> { [ w, W, grave, grave ] };
+        key <AD03> { [ e, E, egrave, egrave] };
+        key <AD04> { [ r, R, eacute, eacute ] };
+        key <AD05> { [ t, T, quotedbl, quotedbl ] };
+        key <AD06> { [ y, Y, apostrophe, apostrophe ] };
+        key <AD07> { [ u, U, ugrave, ugrave ] };
+        key <AD08> { [ i, I, igrave, igrave ] };
+        key <AD09> { [ o, O, ograve, ograve ] };
+        key <AD10> { [ p, P, NoSymbol, NoSymbol ] };
+
+        //third row
+        key <AC01> { [ a, A, agrave, agrave ] };
+        key <AC02> { [ s, S, bar, bar ] };
+        key <AC03> { [ d ,D, EuroSign, EuroSign ] };
+        key <AC04> { [ f, F, sterling, sterling ] };
+        key <AC05> { [ g, G, division, division ] };
+        key <AC06> { [ h, H, multiply, multiply ] };
+        key <AC07> { [ j, J, minus, minus ] };
+        key <AC08> { [ k, K, plus, plus ] };
+        key <AC09> { [ l, L, equal, equal ] };
+
+        //forth row
+        key <AB01> { [ z, Z, underscore, underscore ] };
+        key <AB02> { [ x, X, asciitilde, asciitilde ] };
+        key <AB03> { [ c, C, less, less ] };
+        key <AB04> { [ v, V, greater, greater ] };
+        key <AB05> { [ b, B,  backslash, backslash ] };
+        key <AB06> { [ n, N, colon, colon ] };
+        key <AB07> { [ m, M, semicolon, semicolon ] };
+        key <AB08> { [ comma, comma, question, question ] };
+
+        //fifth row
+        key <FK15> { [ at, at, NoSymbol, NoSymbol ] };
+
+        include "level3(alt_switch)"
+};

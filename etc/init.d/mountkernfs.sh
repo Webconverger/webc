@@ -13,29 +13,26 @@
 
 PATH=/sbin:/bin
 . /lib/init/vars.sh
+. /lib/init/tmpfs.sh
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
 
-[ -f /etc/default/tmpfs ] && . /etc/default/tmpfs
+# May be run several times, so must be idempotent.
+# $1: Mount mode, to allow for remounting and mtab updating
+mount_filesystems () {
+	MNTMODE="$1"
 
-do_start () {
 	#
-	# Get some writable area available before the root is checked
-	# and remounted.
+	# Mount tmpfs on /run and/or /run/lock
 	#
-	RW_OPT=
-	[ "${RW_SIZE:=$TMPFS_SIZE}" ] && RW_OPT=",size=$RW_SIZE"
-	domount tmpfs "" /lib/init/rw tmpfs -omode=0755,nosuid$RW_OPT
-	touch /lib/init/rw/.ramfs
-
-	# Make pidfile omit directory for sendsigs
-	mkdir /lib/init/rw/sendsigs.omit.d/
+	mount_run "$MNTMODE"
+	mount_lock "$MNTMODE"
 
 	#
 	# Mount proc filesystem on /proc
 	#
-	domount proc "" /proc proc -onodev,noexec,nosuid,hidepid=2
+	domount "$MNTMODE" proc "" /proc proc "-onodev,noexec,nosuid,hidepid=2"
 
 	#
 	# Mount sysfs on /sys
@@ -43,44 +40,32 @@ do_start () {
 	# Only mount sysfs if it is supported (kernel >= 2.6)
 	if grep -E -qs "sysfs\$" /proc/filesystems
 	then
-		domount sysfs "" /sys sysfs -onodev,noexec,nosuid
+		domount "$MNTMODE" sysfs "" /sys sysfs "-onodev,noexec,nosuid"
 	fi
 
 	#
 	# Mount cgroup on /sys/fs/cgroup
 	#
 	# Only mount cgroup if it is supported (kernel >= 2.6.32)
-	if grep -E -qs "cgroup\$" /proc/filesystems && [ -d /sys/fs/cgroup ]
+	if grep -E -qs "cgroup\$" /proc/filesystems
 	then
-		domount cgroup "" /sys/fs/cgroup cgroup -onodev,noexec,nosuid
-	fi
-
-	# Mount /var/run and /var/lock as tmpfs if enabled
-	if [ yes = "$RAMRUN" ] ; then
-		RUN_OPT=
-		[ "${RUN_SIZE:=$TMPFS_SIZE}" ] && RUN_OPT=",size=$RUN_SIZE"
-		domount tmpfs "" /var/run varrun -omode=0755,nosuid$RUN_OPT
-		touch /var/run/.ramfs
-	fi
-	if [ yes = "$RAMLOCK" ] ; then
-		LOCK_OPT=
-		[ "${LOCK_SIZE:=$TMPFS_SIZE}" ] && LOCK_OPT=",size=$LOCK_SIZE"
-		domount tmpfs "" /var/lock varlock -omode=1777,nodev,noexec,nosuid$LOCK_OPT
-		touch /var/lock/.ramfs
+		domount "$MNTMODE" cgroup "" /sys/fs/cgroup cgroup "-onodev,noexec,nosuid"
 	fi
 }
 
 case "$1" in
   "")
 	echo "Warning: mountkernfs should be called with the 'start' argument." >&2
-	do_start
+	mount_filesystems mount_noupdate
 	;;
   start)
-	do_start
+	mount_filesystems mount_noupdate
+	;;
+  mtab)
+	mount_filesystems mtab
 	;;
   restart|reload|force-reload)
-	echo "Error: argument '$1' not supported" >&2
-	exit 3
+	mount_filesystems remount
 	;;
   stop)
 	# No-op

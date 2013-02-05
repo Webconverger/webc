@@ -1,0 +1,13 @@
+[Unit]
+Description=Various fixups to make systemd work better on Debian
+Before=var-run.mount var-lock.mount sysinit.target
+After=remount-rootfs.service
+DefaultDependencies=no
+ConditionPathIsSymbolicLink=|!/etc/mtab
+ConditionPathIsSymbolicLink=|!/var/run
+ConditionPathIsSymbolicLink=|!/var/lock
+
+[Service]
+ExecStart=/lib/systemd/debian-fixup
+Type=oneshot
+RemainAfterExit=true

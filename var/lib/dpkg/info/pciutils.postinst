@@ -1,0 +1,23 @@
+#! /bin/sh
+# postinst script for pciutils
+
+set -e
+
+case "$1" in
+configure)
+	for ext in new neww old
+	do
+		rm -f /usr/share/misc/pci.ids.$ext
+	done
+	;;
+abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+*)
+	echo "postinst called with unknown argument \`$1'" >&2
+	exit 1
+	;;
+esac
+
+
+
+exit 0

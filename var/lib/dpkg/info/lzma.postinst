@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+update-alternatives \
+	--install /usr/bin/lzma lzma /usr/bin/lzmp 30 \
+	--slave /usr/bin/unlzma unlzma /usr/bin/lzmp \
+	--slave /usr/bin/lzcat lzcat /usr/bin/lzmp \
+	--slave /usr/share/man/man1/lzma.1.gz lzma.1.gz \
+		/usr/share/man/man1/lzmp.1.gz \
+	--slave /usr/share/man/man1/unlzma.1.gz unlzma.1.gz \
+		/usr/share/man/man1/lzmp.1.gz \
+	--slave /usr/share/man/man1/lzcat.1.gz lzcat.1.gz \
+		/usr/share/man/man1/lzmp.1.gz
+

@@ -24,6 +24,7 @@ ignore-space-change pass it through git-apply
 ignore-whitespace pass it through git-apply
 directory=      pass it through git-apply
 exclude=        pass it through git-apply
+include=        pass it through git-apply
 C=              pass it through git-apply
 p=              pass it through git-apply
 patch-format=   format the patch(es) are in
@@ -91,7 +92,7 @@ safe_to_abort () {
 	then
 		return 0
 	fi
-		gettextln "You seem to have moved HEAD since the last 'am' failure.
+	gettextln "You seem to have moved HEAD since the last 'am' failure.
 Not rewinding to ORIG_HEAD" >&2
 	return 1
 }
@@ -101,9 +102,9 @@ stop_here_user_resolve () {
 	    printf '%s\n' "$resolvemsg"
 	    stop_here $1
     fi
-    eval_gettextln "When you have resolved this problem run \"\$cmdline --resolved\".
-If you would prefer to skip this patch, instead run \"\$cmdline --skip\".
-To restore the original branch and stop patching run \"\$cmdline --abort\"."
+    eval_gettextln "When you have resolved this problem, run \"\$cmdline --resolved\".
+If you prefer to skip this patch, run \"\$cmdline --skip\" instead.
+To restore the original branch and stop patching, run \"\$cmdline --abort\"."
 
     stop_here $1
 }
@@ -135,9 +136,15 @@ fall_back_3way () {
     git write-tree >"$dotest/patch-merge-base+" ||
     cannot_fallback "$(gettext "Repository lacks necessary blobs to fall back on 3-way merge.")"
 
-    say Using index info to reconstruct a base tree...
+    say "$(gettext "Using index info to reconstruct a base tree...")"
 
     cmd='GIT_INDEX_FILE="$dotest/patch-merge-tmp-index"'
+
+    if test -z "$GIT_QUIET"
+    then
+	eval "$cmd git diff-index --cached --diff-filter=AM --name-status HEAD"
+    fi
+
     cmd="$cmd git apply --cached $git_apply_opt"' <"$dotest/patch"'
     if eval "$cmd"
     then
@@ -169,8 +176,7 @@ It does not apply to blobs recorded in its index.")"
     fi
     git-merge-recursive $orig_tree -- HEAD $his_tree || {
 	    git rerere $allow_rerere_autoupdate
-	    echo Failed to merge in the changes.
-	    exit 1
+	    die "$(gettext "Failed to merge in the changes.")"
     }
     unset GITHEAD_$his_tree
 }
@@ -253,7 +259,7 @@ check_patch_format () {
 split_patches () {
 	case "$patch_format" in
 	mbox)
-		if test -n "$rebasing" || test t = "$keepcr"
+		if test t = "$keepcr"
 		then
 		    keep_cr=--keep-cr
 		else
@@ -380,8 +386,8 @@ do
 	-i|--interactive)
 		interactive=t ;;
 	-b|--binary)
-		echo >&2 "The $1 option has been a no-op for long time, and"
-		echo >&2 "it will be removed. Please do not use it anymore."
+		gettextln >&2 "The -b/--binary option has been a no-op for long time, and
+it will be removed. Please do not use it anymore."
 		;;
 	-3|--3way)
 		threeway=t ;;
@@ -406,13 +412,10 @@ do
 	--abort)
 		abort=t ;;
 	--rebasing)
-		rebasing=t threeway=t keep=t scissors=f no_inbody_headers=t ;;
-	-d|--dotest)
-		die "$(gettext "-d option is no longer supported.  Do not use.")"
-		;;
+		rebasing=t threeway=t ;;
 	--resolvemsg)
 		shift; resolvemsg=$1 ;;
-	--whitespace|--directory|--exclude)
+	--whitespace|--directory|--exclude|--include)
 		git_apply_opt="$git_apply_opt $(sq "$1=$2")"; shift ;;
 	-C|-p)
 		git_apply_opt="$git_apply_opt $(sq "$1$2")"; shift ;;
@@ -651,32 +654,34 @@ do
 	# by the user, or the user can tell us to do so by --resolved flag.
 	case "$resume" in
 	'')
-		git mailinfo $keep $no_inbody_headers $scissors $utf8 "$dotest/msg" "$dotest/patch" \
-			<"$dotest/$msgnum" >"$dotest/info" ||
-			stop_here $this
-
-		# skip pine's internal folder data
-		sane_grep '^Author: Mail System Internal Data$' \
-			<"$dotest"/info >/dev/null &&
-			go_next && continue
-
-		test -s "$dotest/patch" || {
-			eval_gettextln "Patch is empty.  Was it split wrong?
-If you would prefer to skip this patch, instead run \"\$cmdline --skip\".
-To restore the original branch and stop patching run \"\$cmdline --abort\"."
-			stop_here $this
-		}
-		rm -f "$dotest/original-commit" "$dotest/author-script"
-		if test -f "$dotest/rebasing" &&
+		if test -f "$dotest/rebasing"
+		then
 			commit=$(sed -e 's/^From \([0-9a-f]*\) .*/\1/' \
 				-e q "$dotest/$msgnum") &&
-			test "$(git cat-file -t "$commit")" = commit
-		then
+			test "$(git cat-file -t "$commit")" = commit ||
+				stop_here $this
 			git cat-file commit "$commit" |
 			sed -e '1,/^$/d' >"$dotest/msg-clean"
-			echo "$commit" > "$dotest/original-commit"
-			get_author_ident_from_commit "$commit" > "$dotest/author-script"
+			echo "$commit" >"$dotest/original-commit"
+			get_author_ident_from_commit "$commit" >"$dotest/author-script"
+			git diff-tree --root --binary "$commit" >"$dotest/patch"
 		else
+			git mailinfo $keep $no_inbody_headers $scissors $utf8 "$dotest/msg" "$dotest/patch" \
+				<"$dotest/$msgnum" >"$dotest/info" ||
+				stop_here $this
+
+			# skip pine's internal folder data
+			sane_grep '^Author: Mail System Internal Data$' \
+				<"$dotest"/info >/dev/null &&
+				go_next && continue
+
+			test -s "$dotest/patch" || {
+				eval_gettextln "Patch is empty.  Was it split wrong?
+If you would prefer to skip this patch, instead run \"\$cmdline --skip\".
+To restore the original branch and stop patching run \"\$cmdline --abort\"."
+				stop_here $this
+			}
+			rm -f "$dotest/original-commit" "$dotest/author-script"
 			{
 				sed -n '/^Subject/ s/Subject: //p' "$dotest/info"
 				echo
@@ -848,6 +853,11 @@ did you forget to use 'git add'?"
 	if test $apply_status != 0
 	then
 		eval_gettextln 'Patch failed at $msgnum $FIRSTLINE'
+		if test "$(git config --bool advice.amworkdir)" != false
+		then
+			eval_gettextln 'The copy of the patch that failed is found in:
+   $dotest/patch'
+		fi
 		stop_here_user_resolve $this
 	fi
 

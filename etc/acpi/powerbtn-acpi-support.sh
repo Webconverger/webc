@@ -15,7 +15,7 @@ fi
 
 . /usr/share/acpi-support/policy-funcs
 
-if [ `CheckPolicy` = 0 ] ; then
+if CheckPolicy; then
 	exit 0
 fi
 

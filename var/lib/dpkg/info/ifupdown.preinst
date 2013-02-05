@@ -17,11 +17,13 @@ then
   fi
 fi
 
-if [ ! -f /etc/network/interfaces ]; then
-  cat <<EOF >/etc/network/interfaces
-# Used by ifup(8) and ifdown(8). See the interfaces(5) manpage or
-# /usr/share/doc/ifupdown/examples for more information.
-EOF
-fi
-
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/ifupdown 0.7~+ ifupdown -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/ifupdown 0.7~+ ifupdown -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/ifupdown-clean 0.7~beta1 ifupdown -- "$@"
+# End automatically added section
 

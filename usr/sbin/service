@@ -74,7 +74,7 @@ while [ $# -gt 0 ]; do
               *)
                 if ! is_ignored_file "${SERVICE}" \
 		    && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-                        if ! grep -qs "\Wstatus)" "$SERVICE"; then
+                        if ! grep -qs "\(^\|\W\)status)" "$SERVICE"; then
                           #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
                           echo " [ ? ]  $SERVICE" 1>&2
                           continue
@@ -115,8 +115,10 @@ while [ $# -gt 0 ]; do
    esac
 done
 
-if [ -r "/etc/init/${SERVICE}.conf" ]; then
-   # Upstart configuration exists for this job
+if [ -r "/etc/init/${SERVICE}.conf" ] && which initctl >/dev/null \
+   && initctl version | grep -q upstart
+then
+   # Upstart configuration exists for this job and we're running on upstart
    case "${ACTION}" in
       start|stop|restart|status|reload)
          # Action is a valid upstart action

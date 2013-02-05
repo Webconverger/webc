@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#set -e
+
+Swapon ()
+{
+	_DEVICES="/dev/sd* /dev/vd*"
+
+	if [ -e /run ]
+	then
+		# wheezy
+		_FSTAB="/root/etc/fstab.d/swap"
+	else
+		# squeeze
+		_FSTAB="/root/etc/fstab"
+	fi
+
+	for _DEVICE in ${_DEVICES}
+	do
+		if [ ! -b "${_DEVICE}" ]
+		then
+			continue
+		fi
+
+		blkid -o udev -p ${_DEVICE%%[0-9]*} | grep -q "^ID_FS_USAGE=raid" && continue
+
+		_MAGIC="$(/bin/dd if=${_DEVICE} bs=4086 skip=1 count=1 2>/dev/null | /bin/dd bs=10 count=1 2>/dev/null)" || continue
+
+		case "${_MAGIC}" in
+			SWAPSPACE2|SWAP-SPACE)
+				_SWAP_DEVICES="${_SWAP_DEVICES} ${_DEVICE}"
+				;;
+		esac
+	done
+
+	# Remove all auto swap entries
+	if grep -qs "swap swap" "${_FSTAB}"
+	then
+		grep -v "swap swap" "${_FSTAB}" > "${_FSTAB}".tmp
+		mv "${_FSTAB}".tmp "${_FSTAB}"
+	fi
+
+	# Add new swap entries
+	for _DEVICE in _SWAP_DEVICES
+	do
+		echo "${_DEVICE} swap swap defaults 0 0" >> "${_FSTAB}"
+	done
+}

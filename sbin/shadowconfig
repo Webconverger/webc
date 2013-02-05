@@ -5,8 +5,8 @@ set -e
 
 shadowon () {
     set -e
-    pwck -q
-    grpck -p
+    pwck -q -r
+    grpck -r
     pwconv
     grpconv
     chown root:root /etc/passwd /etc/group
@@ -17,8 +17,8 @@ shadowon () {
 
 shadowoff () {
     set -e
-    pwck -q
-    grpck -p
+    pwck -q -r
+    grpck -r
     pwunconv
     grpunconv
     # sometimes the passwd perms get munged

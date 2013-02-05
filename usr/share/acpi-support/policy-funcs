@@ -1,11 +1,7 @@
 . /usr/share/acpi-support/power-funcs
 
 CheckUPowerPolicy() {
-	if pidof upowerd > /dev/null; then
-		return 0;
-	else
-		return 1;
-	fi
+	pidof upowerd > /dev/null
 }
 
 # The (not very aptly named) function CheckPolicy checks if the current X
@@ -20,24 +16,51 @@ CheckPolicy() {
 	getXconsole
 	PMS="/usr/bin/gnome-power-manager /usr/bin/kpowersave /usr/bin/xfce4-power-manager"
 	PMS="$PMS /usr/bin/guidance-power-manager /usr/lib/dalston/dalston-power-applet"
-	if pidof -x $PMS > /dev/null ||
-	   (test "$XUSER" != "" && pidof dcopserver > /dev/null && test -x /usr/bin/dcop && /usr/bin/dcop --user $XUSER kded kded loadedModules | grep -q klaptopdaemon) ||
-	   PowerDevilRunning ; then
-		echo 0;
-	else
-		echo 1;
-	fi
+	pidof -x $PMS > /dev/null ||
+        { test "$XUSER" != "" && 
+          pidof dcopserver > /dev/null &&
+          test -x /usr/bin/dcop &&
+          /usr/bin/dcop --user $XUSER kded kded loadedModules | grep -q klaptopdaemon; } ||
+        PowerDevilRunning ||
+	GnomeSettingsDaemonPowerRunning
 }
 
-PowerDevilRunning() {
+# Find a DBUS session bus, by looking at the given process' environment and
+# then send a message to that bus. If multiple processes match the given name,
+# the message is sent to all of the buses (and output is simply concatenated.
+DBusSend() {
+	# The process to get the DBUS session address from
+	local PROC_NAME="$1"
+
+	# Parameters for dbus-send
+	local DEST="$2"
+	local DBUS_PATH="$3"
+	local METHOD="$4"
+
 	test -x /usr/bin/dbus-send || return 1
-	
-	for p in $(pidof kded4); do
+
+	local DBUS_SESS	
+	for p in $(pidof "$PROC_NAME"); do
 		test -r /proc/$p/environ || continue
-		local DBUS_SESS=$(cat /proc/$p/environ | grep -a -z "DBUS_SESSION_BUS_ADDRESS=")
+		DBUS_SESS=$(grep -a -z "DBUS_SESSION_BUS_ADDRESS=" /proc/$p/environ || :)
 		test "$DBUS_SESS" != "" || continue
-		(su $(ps -o user= $p) -s /bin/sh -c "$DBUS_SESS dbus-send --print-reply --dest=org.kde.kded /kded org.kde.kded.loadedModules" | grep -q powerdevil) && return 0
+		su $(ps -o user= $p) -s /bin/sh -c "$DBUS_SESS dbus-send --print-reply --dest='$DEST' '$DBUS_PATH' '$METHOD'"
 	done
-	
-	return 1
+}
+
+# Ask kde if the powerdevil module is loaded
+PowerDevilRunning() {
+	DBusSend kded4 org.kde.kded /kded org.kde.kded.loadedModules | grep -q powerdevil
+}
+
+# gnome-power-manager was integrated into gnome-settings-daemon from version
+# 3.1.4, in a new Power plugin (though the handling of buttons is done in the
+# MediaKeys plugin.
+#
+# gnome-settings-daemon does not export a list of loaded plugins, but
+# fortunately the Power plugin does have its own Dbus interface we can check
+# for (We can't check the MediaKeys plugin, since that has been around for
+# longer).
+GnomeSettingsDaemonPowerRunning() {
+	DBusSend gnome-settings-daemon org.gnome.SettingsDaemon /org/gnome/SettingsDaemon/Power org.freedesktop.DBus.Introspectable.Introspect | grep -q 'interface name="org.gnome.SettingsDaemon.Power"'
 }

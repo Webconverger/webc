@@ -1,0 +1,17 @@
+#! /bin/sh -e
+
+case "$1" in
+    configure)
+	docdir=/usr/share/doc/libgcc1
+	if [ -d $docdir ] && [ ! -h $docdir ]; then
+	    rm -rf $docdir
+	    ln -s gcc-4.7-base $docdir
+	fi
+esac
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+

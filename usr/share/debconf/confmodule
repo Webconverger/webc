@@ -39,7 +39,10 @@ fi
 # Commands.
 
 _db_cmd () {
-	IFS=' ' printf '%s\n' "$*" >&3
+	_db_internal_IFS="$IFS"
+	IFS=' '
+	printf '%s\n' "$*" >&3
+	IFS="$_db_internal_IFS"
 	# Set to newline to get whole line.
 	IFS='
 ' read -r _db_internal_line

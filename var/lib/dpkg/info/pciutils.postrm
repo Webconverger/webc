@@ -1,0 +1,23 @@
+#! /bin/sh
+# postrm script for pciutils
+
+set -e
+
+case "$1" in
+purge)
+	for ext in new neww old
+	do
+		rm -f /usr/share/misc/pci.ids.$ext
+	done
+	;;
+remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+	;;
+*)
+	echo "postrm called with unknown argument \`$1'" >&2
+	exit 1
+	;;
+esac
+
+
+
+exit 0

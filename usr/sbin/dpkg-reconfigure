@@ -3,7 +3,9 @@
 
 
 
-my $infodir="/var/lib/dpkg/info";
+if (exists $ENV{DEBCONF_USE_CDEBCONF} and $ENV{DEBCONF_USE_CDEBCONF} ne '') {
+    exec "/usr/lib/cdebconf/dpkg-reconfigure", @ARGV;
+}
 
 use strict;
 use Debconf::Db;
@@ -71,6 +73,8 @@ else {
 
 $ENV{DEBCONF_RECONFIGURE}=1;
 
+my %initial_triggers=map { $_ => 1 } triggers_pending();
+
 foreach my $pkg (@packages) {
 	$frontend->default_title($pkg);
 	$frontend->info(undef);
@@ -78,6 +82,8 @@ foreach my $pkg (@packages) {
 	$_=`dpkg --status $pkg`;
 	my ($version)=m/Version: (.*)\n/;
 	my ($status)=m/Status: (.*)\n/;
+	my ($package)=m/Package: (.*)\n/;
+	my ($arch)=m/Architecture: (.*)\n/;
 	if (! $force) {
 		if (! defined $status || $status =~ m/not-installed$/) {
 			print STDERR "$0: ".sprintf(gettext("%s is not installed"), $pkg)."\n";
@@ -89,21 +95,38 @@ foreach my $pkg (@packages) {
 		}
 	}
 	
+	my @control_paths=`dpkg-query --control-path $pkg`;
+	map chomp, @control_paths;
+	my $control_path = sub {
+		my $file = shift;
+		my $path = (grep /\.\Q$file\E$/, @control_paths)[0];
+		chomp($path) if defined $path;
+		return $path;
+	};
+
 	if ($reload) {
-		Debconf::Template->load("$infodir/$pkg.templates", $pkg)
-			if -e "$infodir/$pkg.templates";
+		my $templates=$control_path->('templates');
+		if ($templates and -e $templates) {
+			Debconf::Template->load($templates, $pkg);
+		}
 	}
 
 	foreach my $info (['prerm',    'upgrade',     $version],
 		          ['config',   'reconfigure', $version],
 			  ['postinst', 'configure',   $version]) {
 		my $script=shift @$info;
-		next unless -x "$infodir/$pkg.$script";
+		my $path_script=$control_path->($script);
+
+		next unless $path_script and -x $path_script;
 
 		my $is_confmodule='';
 
+		$ENV{DPKG_MAINTSCRIPT_PACKAGE}=$package;
+		$ENV{DPKG_MAINTSCRIPT_ARCH}=$arch;
+		$ENV{DPKG_MAINTSCRIPT_NAME}=$script;
+
 		if ($script ne 'config') {
-			open (IN, "<$infodir/$pkg.$script");
+			open (IN, "<$path_script");
 			while (<IN>) {
 				if (/confmodule/i) {
 					$is_confmodule=1;
@@ -114,8 +137,7 @@ foreach my $pkg (@packages) {
 		}
 		
 		if ($script eq 'config' || $is_confmodule) {
-			my $confmodule=make_confmodule(
-				"$infodir/$pkg.$script", @$info);
+			my $confmodule=make_confmodule($path_script, @$info);
 	
 			$confmodule->owner($pkg);
 		
@@ -124,19 +146,22 @@ foreach my $pkg (@packages) {
 			exit $confmodule->exitcode if $confmodule->exitcode > 0;
 		}
 		else {
-			Debconf::Db->save;
-			
-			delete $ENV{DEBIAN_HAS_FRONTEND};
-			my $ret=system("$infodir/$pkg.$script", @$info);
-			if (int($ret / 256) != 0) {
-				exit int($ret / 256);
-			}
-			$ENV{DEBIAN_HAS_FRONTEND}=1;
-			
-			Debconf::Db->load;
+			run_external($path_script, @$info);
 		}
 	}
 }
+
+my @new_triggers;
+do {
+	@new_triggers=();
+	foreach my $trigpend (triggers_pending()) {
+		push @new_triggers, $trigpend
+			if not exists $initial_triggers{$trigpend};
+	}
+	if (@new_triggers) {
+		run_external("dpkg", "--configure", @new_triggers);
+	}
+} while (@new_triggers);
 
 $frontend->shutdown;
 
@@ -155,5 +180,37 @@ sub allpackages {
 	close STATUS;
 
 	return sort @ret;
+}
+
+sub run_external {
+	Debconf::Db->save;
+	
+	delete $ENV{DEBIAN_HAS_FRONTEND};
+	my $ret=system(@_);
+	if (int($ret / 256) != 0) {
+		exit int($ret / 256);
+	}
+	$ENV{DEBIAN_HAS_FRONTEND}=1;
+	
+	Debconf::Db->load;
+}
+
+sub triggers_pending {
+	my @ret;
+	local $_;
+
+	open (QUERY, '-|', 'dpkg-query', '-W',
+		'-f', '${Package} ${binary:Package}\t${Triggers-Pending}\n');
+	while (<QUERY>) {
+		chomp;
+		my ($pkgnames, $triggers) = split /\t/;
+		if (length $triggers) {
+			my ($pkg, $binpkg) = split ' ', $pkgnames;
+			push @ret, (length $binpkg ? $binpkg : $pkg);
+		}
+	}
+	close QUERY;
+
+	return @ret;
 }
 

@@ -1,7 +1,7 @@
 #!/bin/sh
-# $Id: ncurses-config.in,v 1.24 2010/02/06 22:12:16 Miroslav.Lichvar Exp $
+# $Id: ncurses-config.in,v 1.25 2011/03/19 22:43:38 tom Exp $
 ##############################################################################
-# Copyright (c) 2006-2009,2010 Free Software Foundation, Inc.                #
+# Copyright (c) 2006-2010,2011 Free Software Foundation, Inc.                #
 #                                                                            #
 # Permission is hereby granted, free of charge, to any person obtaining a    #
 # copy of this software and associated documentation files (the "Software"), #
@@ -35,12 +35,12 @@ exec_prefix="${prefix}"
 
 bindir="${exec_prefix}/bin"
 includedir="${prefix}/include"
-libdir="${exec_prefix}/lib"
+libdir="/usr/lib/i386-linux-gnu"
 datadir="${prefix}/share"
 mandir="/usr/share/man"
 
 THIS="ncurses"
-TINFO_LIB="ncurses"
+TINFO_LIB="tinfo"
 
 LANG=C;		export LANG
 LANGUAGE=C;	export LANGUAGE
@@ -72,30 +72,30 @@ while test $# -gt 0; do
 	# compile/link
 	--cflags)
 		INCS=
-		if test "${includedir}" != /usr/include ; then
-			INCS="-I${includedir}"
-		fi
 		if test "xyes" = xno ; then
 			INCS="$INCS -I${includedir}/${THIS}"
+		fi
+		if test "${includedir}" != /usr/include ; then
+			INCS="$INCS -I${includedir}"
 		fi
 		sed -e 's,^[ ]*,,' -e 's, [ ]*, ,g' -e 's,[ ]*$,,' <<-ENDECHO
 			$INCS
 ENDECHO
 		;;
 	--libs)
-		if test ncurses = ncurses ; then
+		if test tinfo = ncurses ; then
 		sed -e 's,^[ ]*,,' -e 's, [ ]*, ,g' -e 's,[ ]*$,,' <<-ENDECHO
-			-L$libdir  -l${THIS} 
+			 -l${THIS}  
 ENDECHO
 		else
 		sed -e 's,^[ ]*,,' -e 's, [ ]*, ,g' -e 's,[ ]*$,,' <<-ENDECHO
-			-L$libdir  -l${THIS} -l${TINFO_LIB} 
+			 -l${THIS} -l${TINFO_LIB}  
 ENDECHO
 		fi
 		;;
 	# identification
 	--version)
-		echo "5.7.20100313"
+		echo "5.9.20110404"
 		;;
 	--abi-version)
 		echo "5"
@@ -120,7 +120,7 @@ ENDECHO
 		echo "${mandir}"
 		;;
 	--terminfo)
-		echo "/usr/share/terminfo"
+		echo "/etc/terminfo"
 		;;
 	--terminfo-dirs)
 		echo "/etc/terminfo:/lib/terminfo:/usr/share/terminfo"

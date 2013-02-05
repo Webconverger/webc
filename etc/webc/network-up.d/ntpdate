@@ -56,5 +56,5 @@ if [ -x /usr/bin/lockfile-create ] ; then
 fi
 
 for d in cron rsyslog; do
-	/etc/init.d/${d} restart
+	systemctl restart ${d}.service
 done

@@ -1,18 +1,12 @@
-// $XKeyboardConfig$
-
-//
-// $XFree86: xc/programs/xkbcomp/symbols/syr,v 1.1 2002/11/22 03:06:50 dawes Exp $
-//
-
 partial default alphanumeric_keys
 xkb_symbols "basic" {
     include "ara(basic)"
-    name[Group1]= "Syria";
+    name[Group1]= "Arabic (Syria)";
 };
 
 partial alphanumeric_keys
 xkb_symbols "syc" {
-    name[Group1]= "Syria - Syriac";
+    name[Group1]= "Syriac";
 
     key <TLDE> {  [	0x100070F,	0x100032E,	Arabic_shadda		]     };
     key <AE01> {  [  	1,		exclam,		0x1000701		]     };
@@ -54,7 +48,6 @@ xkb_symbols "syc" {
     key <AC10> {  [  	0x100071F,      0x1000323				]     };
     key <AC11> {  [  	0x100071B,	0x1000330				]     };
 
-    key <SPCE> {  [  	space,		0x100200c				]     };
     key <AB01> {  [  	bracketright,	0x1000732,	Arabic_sukun		]     };
     key <AB02> {  [  	bracketleft,	0x1000735				]     };
     key <AB03> {  [  	0x1000724,      0x1000738,	0x100200D		]     };
@@ -68,6 +61,8 @@ xkb_symbols "syc" {
 
     // End Alphanumeric Section
 
+    // Space
+    include "nbsp(zwnj2)"
     
     // Begin Modifier Mappings
     
@@ -78,13 +73,10 @@ xkb_symbols "syc" {
     modifier_map Mod2   { Mode_switch };
 
 };
-//
-// $XFree86: xc/programs/xkbcomp/symbols/syr_phonetic,v 1.1 2002/11/22 03:06:50 dawes Exp $
-//
 
 partial alphanumeric_keys
 xkb_symbols "syc_phonetic" {
-    name[Group1]= "Syria - Syriac phonetic";
+    name[Group1]= "Syriac (phonetic)";
 
     key <TLDE> {  [	0x100070F,	0x100032E,	Arabic_shadda		]     };
     key <AE01> {  [  	1,		exclam,		0x1000701		]     };
@@ -154,18 +146,17 @@ xkb_symbols "syc_phonetic" {
 partial alphanumeric_keys
 xkb_symbols "ku" {
     include "tr(ku)"
-    name[Group1]= "Syria - Kurdish, Latin Q";
+    name[Group1]= "Kurdish (Syria, Latin Q)";
 };
 
 partial alphanumeric_keys
 xkb_symbols "ku_f" {
     include "tr(ku_f)"
-    name[Group1]= "Syria - Kurdish, (F)";
+    name[Group1]= "Kurdish (Syria, F)";
 };
 
 partial alphanumeric_keys
 xkb_symbols "ku_alt" {
     include "tr(ku_alt)"
-    name[Group1]= "Syria - Kurdish, Latin Alt-Q";
+    name[Group1]= "Kurdish (Syria, Latin Alt-Q)";
 };
-

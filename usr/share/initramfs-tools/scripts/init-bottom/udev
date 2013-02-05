@@ -12,14 +12,7 @@ case "$1" in
 esac
 
 # Stop udevd, we'll miss a few events while we run init, but we catch up
-for proc in /proc/[0-9]*; do
-  [ -x $proc/exe ] || continue
-  if [ "$(readlink $proc/exe)" = /sbin/udevd ]; then
-    # errors must be ignored due to a race with udevd child processes
-    # naturally terminating
-    kill ${proc#/proc/} 2> /dev/null || true
-  fi
-done
+udevadm control --exit
 
 udev_root="/dev"
 if [ -e /etc/udev/udev.conf ]; then

@@ -14,6 +14,8 @@ case "$1" in
 	rm -f /etc/init.d/bootclean.dpkg-old
 	rm -f /etc/init.d/bootclean.sh
 	rm -f /etc/init.d/bootclean.sh.dpkg-old
+	rm -f /etc/default/bootlogd
+	rm -f /etc/default/bootlogd.dpkg-old
 
 	#
 	# Remove configuration files
@@ -22,8 +24,7 @@ case "$1" in
 		/etc/default/rcS \
 		/etc/nologin \
 		/etc/motd.tail \
-		/etc/motd.static \
-		/etc/motd
+		/etc/motd.static
 
 	#
 	# Remove state files
@@ -46,33 +47,31 @@ case "$1" in
 
 	# Remove rc symlinks in the reverse dependency order they were
 	# inserted
-	update-rc.d stop-bootlogd         remove >/dev/null || exit $?
-	update-rc.d stop-bootlogd-single  remove >/dev/null || exit $?
-	update-rc.d rmnologin             remove >/dev/null || exit $?
-	update-rc.d rc.local              remove >/dev/null || exit $?
-	update-rc.d bootlogs              remove >/dev/null || exit $?
-	update-rc.d single                remove >/dev/null || exit $?
-	update-rc.d killprocs             remove >/dev/null || exit $?
-	update-rc.d sendsigs              remove >/dev/null || exit $?
-	update-rc.d umountnfs.sh          remove >/dev/null || exit $?
-	update-rc.d umountfs              remove >/dev/null || exit $?
-	update-rc.d umountroot            remove >/dev/null || exit $?
-	update-rc.d reboot                remove >/dev/null || exit $?
-	update-rc.d halt                  remove >/dev/null || exit $?
-	update-rc.d urandom               remove >/dev/null || exit $?
-	update-rc.d bootmisc.sh           remove >/dev/null || exit $?
-	update-rc.d mountnfs-bootclean.sh remove >/dev/null || exit $?
-	update-rc.d mountnfs.sh           remove >/dev/null || exit $?
-	update-rc.d mountoverflowtmp      remove >/dev/null || exit $?
-	update-rc.d mountall-bootclean.sh remove >/dev/null || exit $?
-	update-rc.d mountall.sh           remove >/dev/null || exit $?
-	update-rc.d checkfs.sh            remove >/dev/null || exit $?
-	update-rc.d mtab.sh               remove >/dev/null || exit $?
-	update-rc.d checkroot.sh          remove >/dev/null || exit $?
-	update-rc.d bootlogd              remove >/dev/null || exit $?
-	update-rc.d mountdevsubfs.sh      remove >/dev/null || exit $?
-	update-rc.d hostname.sh           remove >/dev/null || exit $?
-	update-rc.d mountkernfs.sh        remove >/dev/null || exit $?
+	update-rc.d rmnologin              remove >/dev/null || exit $?
+	update-rc.d rc.local               remove >/dev/null || exit $?
+	update-rc.d motd                   remove >/dev/null || exit $?
+	update-rc.d bootlogs               remove >/dev/null || exit $?
+	update-rc.d single                 remove >/dev/null || exit $?
+	update-rc.d killprocs              remove >/dev/null || exit $?
+	update-rc.d sendsigs               remove >/dev/null || exit $?
+	update-rc.d umountnfs.sh           remove >/dev/null || exit $?
+	update-rc.d umountfs               remove >/dev/null || exit $?
+	update-rc.d umountroot             remove >/dev/null || exit $?
+	update-rc.d reboot                 remove >/dev/null || exit $?
+	update-rc.d halt                   remove >/dev/null || exit $?
+	update-rc.d urandom                remove >/dev/null || exit $?
+	update-rc.d bootmisc.sh            remove >/dev/null || exit $?
+	update-rc.d mountnfs-bootclean.sh  remove >/dev/null || exit $?
+	update-rc.d mountnfs.sh            remove >/dev/null || exit $?
+	update-rc.d mountall-bootclean.sh  remove >/dev/null || exit $?
+	update-rc.d mountall.sh            remove >/dev/null || exit $?
+	update-rc.d checkfs.sh             remove >/dev/null || exit $?
+	update-rc.d mtab.sh                remove >/dev/null || exit $?
+	update-rc.d checkroot-bootclean.sh remove >/dev/null || exit $?
+	update-rc.d checkroot.sh           remove >/dev/null || exit $?
+	update-rc.d mountdevsubfs.sh       remove >/dev/null || exit $?
+	update-rc.d hostname.sh            remove >/dev/null || exit $?
+	update-rc.d mountkernfs.sh         remove >/dev/null || exit $?
 
 	# Remove /dev/pts and /dev/shm ?
 	;;

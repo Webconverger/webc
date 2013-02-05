@@ -82,16 +82,16 @@ manual_add_modules()
 					continue
 				fi
 
+				# the devicenumber/inode pair of / are not the same as that of /sbin/init's
+				# root, so we're in a chroot.
 				if [ "${verbose}" != "y" ] \
 				&& [ "$(stat -c %d/%i /)" != "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ]; then
-					# the devicenumber/inode pair of / are not the same as that of /sbin/init's
-					# root, so we're in a chroot.
 					continue
 				fi
 
+				# this is a cgroup set, so we're in a container.
 				if [ "${verbose}" != "y" ] \
 				&& ! grep -qs ':/$' /proc/1/cgroup; then
-					# the is a cgroup set, so we're in a container.
 					continue
 				fi
 
@@ -437,8 +437,8 @@ auto_add_modules()
 		base)
 			modules="$modules ehci-hcd ohci-hcd uhci-hcd usbhid"
 			modules="$modules xhci xhci-hcd"
-			modules="$modules hid-apple hid-cherry hid-logitech"
-			modules="$modules hid-logitech-dj"
+			modules="$modules hid-apple hid-cherry hid-generic"
+			modules="$modules hid-logitech hid-logitech-dj"
 			modules="$modules hid-microsoft hid-sunplus"
 			modules="$modules btrfs ext2 ext3 ext4 ext4dev "
 			modules="$modules isofs jfs nfs reiserfs udf xfs"

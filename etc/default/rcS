@@ -7,11 +7,18 @@
 #
 # This file belongs to the "initscripts" package.
 
-TMPTIME=0
-SULOGIN=no
-DELAYLOGIN=no
-UTC=yes
-VERBOSE=no
-FSCKFIX=no
-RAMRUN=no
-RAMLOCK=no
+# delete files in /tmp during boot older than x days.
+# '0' means always, -1 or 'infinite' disables the feature
+#TMPTIME=0
+
+# spawn sulogin during boot, continue normal boot if not used in 30 seconds
+#SULOGIN=no
+
+# do not allow users to log in until the boot has completed
+#DELAYLOGIN=no
+
+# be more verbose during the boot process
+#VERBOSE=no
+
+# automatically repair filesystems with inconsistencies during boot
+#FSCKFIX=no

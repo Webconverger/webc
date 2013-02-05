@@ -1,0 +1,172 @@
+#! /bin/sh
+# Description:       Now that TCP/IP is configured, mount the NFS file
+#                    systems in /etc/fstab if needed. If possible,
+#                    start the portmapper before mounting (this is needed for
+#                    Linux 2.1.x and up).
+#
+#                    Also mounts SMB filesystems now, so the name of
+#                    this script is getting increasingly inaccurate.
+
+PATH=/sbin:/bin
+. /lib/init/vars.sh
+
+. /lib/lsb/init-functions
+. /lib/init/mount-functions.sh
+
+set_env() {
+	# Read through fstab line by line. If it is NFS, set the flag
+	# for mounting NFS file systems. If any NFS partition is found
+	# and it not mounted with the nolock option, we start the
+	# portmapper.
+	#
+	# If any sec={krb5,krb5i,krb5p} option is given, or any of the
+	# file systems are nfs4, we'll need to start rpc.gssd and/or
+	# rpc.idmapd too; we'll leave that to nfs-common.
+
+	start_nfs=no
+	NETFS=""
+	NETDEV=""
+	for file in "$(eval ls $(fstab_files))"; do
+		if [ -f "$file" ]; then
+			while read DEV MTPT FSTYPE OPTS REST; do
+				case "$DEV" in
+				  ""|\#*)
+					continue
+					;;
+				esac
+				case "$OPTS" in
+				  noauto|*,noauto|noauto,*|*,noauto,*)
+					continue
+					;;
+				  _netdev|*,_netdev|_netdev,*|*,_netdev,*)
+					NETDEV=yes
+					;;
+				esac
+				case "$FSTYPE" in
+				  nfs)
+					# NFS filsystems normally
+					# require statd and
+					# portmap. However, if nolock
+					# is set, portmap and statd
+					# are not required for this
+					# file system.
+					case "$OPTS" in
+					  nolock|*,nolock|nolock,*|*,nolock,*)
+						# no action
+						;;
+					  *)
+						start_nfs=yes
+						;;
+					esac
+
+					# However, Kerberos requires
+					# gssd, so start nfs-common
+					# anyway.
+					case "$OPTS" in
+					  sec=krb5|*,sec=krb5|sec=krb5,*|*,sec=krb5,*|sec=krb5i|*,sec=krb5i|sec=krb5i,*|*,sec=krb5i,*|sec=krb5p|*,sec=krb5p|sec=krb5p,*|*,sec=krb5p,*)
+						start_nfs=yes
+						;;
+						esac
+					;;
+				  nfs4)
+					# NFSv4 requires idmapd, so
+					# start nfs-common no matter
+					# what the options are.
+					start_nfs=yes
+					;;
+				  smbfs|cifs|coda|ncp|ncpfs|ocfs2|gfs|ceph)
+					;;
+				  *)
+					FSTYPE=
+					;;
+				esac
+				if [ "$FSTYPE" ]; then
+					case "$NETFS" in
+					  $FSTYPE|*,$FSTYPE|$FSTYPE,*|*,$FSTYPE,*)
+						;;
+					  *)
+						NETFS="$NETFS${NETFS:+,}$FSTYPE"
+						;;
+					esac
+				fi
+			done < "$file"
+		fi
+	done
+}
+
+do_start() {
+	#
+	# Initialize nfs-common (which starts rpc.statd, rpc.gssd
+	# and/or rpc.idmapd, and loads the right kernel modules if
+	# applicable) if we use Kerberos and/or NFSv4 mounts.
+	#
+	if [ "$start_nfs" = yes ] && [ -x /etc/init.d/nfs-common ]
+	then
+		[ -x /etc/init.d/portmap ] && /etc/init.d/portmap start
+		[ -x /etc/init.d/rpcbind ] && /etc/init.d/rpcbind start
+		/etc/init.d/nfs-common start
+	fi
+
+	pre_mountall
+	if [ "$NETFS" ]
+	then
+		mount -a -t$NETFS
+	fi
+	if [ "$NETDEV" ]; then
+		mount -a -O _netdev
+	fi
+	post_mountall
+}
+
+exit_unless_last_interface() {
+    ifaces="$(ifquery --list)"
+    for i in $ifaces ; do
+	if ! grep -q $i /etc/network/run/ifstate ; then
+	    msg="if-up.d/mountnfs[$IFACE]: waiting for interface $i before doing NFS mounts"
+	    log_warning_msg "$msg"
+	    exit 0
+	fi
+    done
+}
+
+# Using 'no !=' instead of 'yes =' to make sure async nfs mounting is
+# the default even without a value in /etc/default/rcS
+set_env
+# Exit imediately and do not claim to wait for the last interface if
+# no network file systems are listed in /etc/fstab.
+if [ "$start_nfs" = "no" ] && [ ! "$NETFS" ] && [ ! "$NETDEV" ]; then
+  exit 0
+fi
+
+if [ no != "$ASYNCMOUNTNFS" ]; then
+    # Not for loopback!
+    [ "$IFACE" != "lo" ] || exit 0
+
+    [ "$ADDRFAM" = "inet" ] || [ "$ADDRFAM" = "inet6" ] || exit 0
+
+    # Lock around this otherwise insanity may occur
+    mkdir /var/run/network          2>/dev/null || true
+
+    # Wait until all auto interfaces are up before attemting to mount
+    # network file systems.
+    exit_unless_last_interface
+
+    if mkdir /var/run/network/mountnfs 2>/dev/null ; then
+	:
+    else
+	msg="if-up.d/mountnfs[$IFACE]: lock /var/run/network/mountnfs exist, not mounting"
+	log_failure_msg "$msg"
+	# Log if /usr/ is mounted
+	[ -x /usr/bin/logger ] && /usr/bin/logger -t "if-up.d/mountnfs[$IFACE]" "$msg"
+	exit 0
+    fi
+
+    on_exit() {
+        # Clean up lock when script exits, even if it is interrupted
+	rmdir /var/run/network/mountnfs 2>/dev/null || exit 0
+    }
+    trap on_exit EXIT # Enable emergency handler
+    do_start
+elif [ yes = "$FROMINITD" ] ; then
+    do_start
+fi

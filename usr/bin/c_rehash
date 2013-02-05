@@ -16,13 +16,23 @@ if(defined $ENV{OPENSSL}) {
 	$ENV{OPENSSL} = $openssl;
 }
 
-$ENV{PATH} .= ":$dir/bin";
+my $pwd;
+eval "require Cwd";
+if (defined(&Cwd::getcwd)) {
+	$pwd=Cwd::getcwd();
+} else {
+	$pwd=`pwd`; chomp($pwd);
+}
+my $path_delim = ($pwd =~ /^[a-z]\:/i) ? ';' : ':'; # DOS/Win32 or Unix delimiter?
+
+$ENV{PATH} = "$prefix/bin" . ($ENV{PATH} ? $path_delim . $ENV{PATH} : ""); # prefix our path
 
 if(! -x $openssl) {
 	my $found = 0;
-	foreach (split /:/, $ENV{PATH}) {
+	foreach (split /$path_delim/, $ENV{PATH}) {
 		if(-x "$_/$openssl") {
 			$found = 1;
+			$openssl = "$_/$openssl";
 			last;
 		}	
 	}
@@ -35,11 +45,16 @@ if(! -x $openssl) {
 if(@ARGV) {
 	@dirlist = @ARGV;
 } elsif($ENV{SSL_CERT_DIR}) {
-	@dirlist = split /:/, $ENV{SSL_CERT_DIR};
+	@dirlist = split /$path_delim/, $ENV{SSL_CERT_DIR};
 } else {
 	$dirlist[0] = "$dir/certs";
 }
 
+if (-d $dirlist[0]) {
+	chdir $dirlist[0];
+	$openssl="$pwd/$openssl" if (!-x $openssl);
+	chdir $pwd;
+}
 
 foreach (@dirlist) {
 	if(-d $_ and -w $_) {
@@ -71,6 +86,7 @@ sub hash_dir {
 			}
 		}
 		link_hash_cert($fname) if($cert);
+		link_hash_cert_old($fname) if($cert);
 		link_hash_crl($fname) if($crl);
 	}
 }
@@ -104,34 +120,56 @@ sub check_file {
 
 sub link_hash_cert {
 		my $fname = $_[0];
+		my $hashopt = $_[1] || '-subject_hash';
 		$fname =~ s/'/'\\''/g;
-		my ($hash, $fprint) = `"$openssl" x509 -hash -fingerprint -noout -in '$fname'`;
-		if(!$hash || !fprint) {
-			($hash, $fprint) = `"$openssl" x509 -hash -fingerprint -noout -in '$fname' -inform der`;
-		}
-		chomp $hash;
-		chomp $fprint;
-		$fprint =~ s/^.*=//;
-		$fprint =~ tr/://d;
-		my $suffix = 0;
-		# Search for an unused hash filename
-		while(exists $hashlist{"$hash.$suffix"}) {
-			# Hash matches: if fingerprint matches its a duplicate cert
-			if($hashlist{"$hash.$suffix"} eq $fprint) {
-				print STDERR "WARNING: Skipping duplicate certificate $fname\n";
-				return;
-			}
-			$suffix++;
-		}
-		$hash .= ".$suffix";
-		print "$fname => $hash\n";
-		$symlink_exists=eval {symlink("",""); 1};
-		if ($symlink_exists) {
-			symlink $fname, $hash;
-		} else {
-			system ("cp", $fname, $hash);
-		}
-		$hashlist{$hash} = $fprint;
+		open my $in_fh, '<', $fname or die "can't open $fname for read";
+		my $cert = eval {local $/ = undef; <$in_fh>};
+		close $in_fh;
+		OUTERLOOP:
+		while ($cert =~ /^(-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----)$/gms)
+		{
+		   my $part = $1;
+		   my $tfile = `tempfile`;
+		   chomp $tfile;
+		   open my $tfile_fh, '>', $tfile or die "can't open $tfile for write";
+		   print {$tfile_fh} "$part\n";
+		   close $tfile_fh;
+
+		   my ($hash, $fprint) = `"$openssl" x509 $hashopt -fingerprint -noout -in "$tfile"`;
+		   chomp $hash;
+		   chomp $fprint;
+		   $fprint =~ s/^.*=//;
+		   $fprint =~ tr/://d;
+		   my $suffix = 0;
+		   # Search for an unused hash filename
+		   while(exists $hashlist{"$hash.$suffix"}) {
+			   # Hash matches: if fingerprint matches its a duplicate cert
+			   if($hashlist{"$hash.$suffix"} eq $fprint) {
+				   print STDERR "WARNING: Skipping duplicate certificate $fname\n";
+				   unlink $tfile;
+				   next OUTERLOOP;
+			   }
+			   $suffix++;
+		   }
+		   $hash .= ".$suffix";
+		   print "$fname => $hash\n";
+		   $symlink_exists=eval {symlink("",""); 1};
+		   if ($symlink_exists) {
+			   symlink $fname, $hash;
+		   } else {
+			   open IN,"<$tfile" or die "can't open $tfile for read";
+			   open OUT,">$hash" or die "can't open $hash for write";
+			   print OUT <IN>;	# does the job for small text files
+			   close OUT;
+			   close IN;
+		   }
+		   $hashlist{$hash} = $fprint;
+		   unlink $tfile;
+		} ## end while ($cert =~ /^(-----BEGIN ...
+}
+
+sub link_hash_cert_old {
+		link_hash_cert($_[0], '-subject_hash_old');
 }
 
 # Same as above except for a CRL. CRL links are of the form <hash>.r<n>
@@ -140,6 +178,9 @@ sub link_hash_crl {
 		my $fname = $_[0];
 		$fname =~ s/'/'\\''/g;
 		my ($hash, $fprint) = `"$openssl" crl -hash -fingerprint -noout -in '$fname'`;
+		if(!$hash || !fprint) {
+			($hash, $fprint) = `"$openssl" crl -hash -fingerprint -noout -in '$fname' -inform der`;
+		}
 		chomp $hash;
 		chomp $fprint;
 		$fprint =~ s/^.*=//;

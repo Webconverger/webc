@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "upgrade" ] && dpkg --compare-versions "$2" lt-nl 1.28.3-4; then
+    if [ -L /usr/share/doc/libpango1.0-0 ]; then
+        rm -f /usr/share/doc/libpango1.0-0
+    fi
+fi
+
+

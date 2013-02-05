@@ -1,11 +1,17 @@
 #!/bin/sh
 set -e
 
-if [ -x "/etc/init.d/cron" ]; then
-    update-rc.d cron start 89 2 3 4 5 . >/dev/null || exit $?
-fi
-# Copy existing allow/deny files
 crondir="/var/spool/cron"
+action="$1"
+
+if [ "$action" != configure ]; then
+    exit 0
+fi
+
+
+# LEGACY: This hasn't been relevant to Debian cron since the last Millenium,
+# but we keep it here to preserve the upgrade path... 
+# Copy existing allow/deny files
 pausemessage="F"
 for fname in allow deny ; do
     if [ -f $crondir/$fname ] ; then
@@ -24,8 +30,9 @@ for fname in allow deny ; do
     fi
 done
 
-# Conffile has become obsolete
+# Conffiles that are now obsolete
 dpkg-maintscript-helper rm_conffile /etc/cron.monthly/standard "3.0pl1-113" -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cron.daily/standard "3.0pl1-124" -- "$@"
 # If dpkg-maintscript-helper renames it instead of removing it because it has
 # local modifications, we must rename it back to a valid name, or crond
 # will not accept it. Thanks to Raphaël Hertzog for the tip.
@@ -33,6 +40,7 @@ if [ -e /etc/cron.monthly/standard.dpkg-bak ]; then
     mv /etc/cron.monthly/standard.dpkg-bak \
         /etc/cron.monthly/standard-obsolete-please-verify-and-remove
 fi
+
 
 # Add group for crontabs
 getent group crontab > /dev/null 2>&1 || addgroup --system crontab
@@ -57,14 +65,11 @@ if [ -d $crondir/crontabs ] ; then
     set -e
 fi
 
-if [ -x /etc/init.d/cron ]; then
-	if [ -x /usr/sbin/invoke-rc.d ] ; then
-	       invoke-rc.d cron start
-	else
-	       /etc/init.d/cron start
-	fi
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/cron" ]; then
+	update-rc.d cron start 89 2 3 4 5 . >/dev/null
+	invoke-rc.d cron start || exit $?
 fi
-
-
-
+# End automatically added section
 

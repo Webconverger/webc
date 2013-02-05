@@ -36,6 +36,7 @@ my $template = 'libpam-runtime/profiles';
 my $errtemplate = 'libpam-runtime/conflicts';
 my $overridetemplate = 'libpam-runtime/override';
 my $blanktemplate = 'libpam-runtime/no_profiles_chosen';
+my $titletemplate = 'libpam-runtime/title';
 my $confdir = '/etc/pam.d';
 my $savedir = '/var/lib/pam';
 my (%profiles, @sorted, @enabled, @conflicts, @new, %removals);
@@ -147,6 +148,8 @@ my $prev = '';
 # Do we have any new options to show?  If not, we shouldn't reprompt the
 # user, at any priority level, unless explicitly called.
 @new = grep { !$seen{$_} } @sorted;
+
+settitle($titletemplate);
 
 # if diff_profiles() fails, and we weren't passed a 'force' argument
 # (because this isn't an upgrade from an old version, or the checksum

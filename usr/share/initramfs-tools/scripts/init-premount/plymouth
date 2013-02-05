@@ -31,9 +31,7 @@ done
 
 if [ "${SPLASH}" = "true" ]
 then
-	modprobe i8042
-	modprobe atkbd
-
-	/sbin/plymouthd --mode=boot --attach-to-session
+	mkdir -m 0755 /run/plymouth
+	/sbin/plymouthd --mode=boot --attach-to-session --pid-file=/run/plymouth/pid
 	/bin/plymouth --show-splash
 fi

@@ -9,14 +9,14 @@ set -e
 # diverted if dictionaries-common is used. We need to remove that
 # diversion if dictionaries-common is removed
 if [ "$1" = "remove" ]; then
-    dpkg-divert --package dictionaries-common \
-	--rename --remove /usr/share/dict/words
+  dpkg-divert --package dictionaries-common \
+    --rename --remove /usr/share/dict/words
 fi
 
 #  Make sure /etc/openoffice myspell stuff is removed on purge
 
 if [ "$1" = "purge" ]; then
-    rm -f /etc/openoffice/dictionary.lst /etc/openoffice/dictionary.lst.old
+  rm -f /etc/openoffice/dictionary.lst /etc/openoffice/dictionary.lst.old
 fi
 
 # Automatically added by dh_installdebconf
@@ -28,3 +28,8 @@ fi
 
 
 exit 0
+
+# Local Variables:
+#  sh-basic-offset: 2
+#  sh-indentation: 2
+# End:
