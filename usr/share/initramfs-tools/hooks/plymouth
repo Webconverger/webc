@@ -97,17 +97,11 @@ case "${THEME_NAME}" in
 		cp -a /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf  "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
 		cp -a /etc/fonts/fonts.conf "${DESTDIR}/etc/fonts"
 		cp -rL /etc/fonts/conf.d/60-latin.conf "${DESTDIR}/etc/fonts/conf.d"
-		if [ -e /usr/lib/pango/1.6.0/module-files.d/libpango1.0-0.modules ]
-		then
-			# pre-multiarch fallback
-			PANGO_DIR=/usr/lib/pango/1.6.0
-		else
-			PANGO_DIR=/usr/lib/i386-linux-gnu/pango/1.6.0
-		fi
-		mkdir -p "${DESTDIR}${PANGO_DIR}/module-files.d"
-		mkdir -p "${DESTDIR}${PANGO_DIR}/modules"
-		cp ${PANGO_DIR}/module-files.d/libpango1.0-0.modules ${DESTDIR}${PANGO_DIR}/module-files.d/
-		copy_exec ${PANGO_DIR}/modules/pango-basic-fc.so
+
+		mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d"
+		mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/modules"
+		cp /usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d/libpango1.0-0.modules ${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d/
+		copy_exec /usr/lib/i386-linux-gnu/pango/1.6.0/modules/pango-basic-fc.so
 
 		# copy renderers
 		copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/frame-buffer.so

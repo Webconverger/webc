@@ -13,6 +13,7 @@
 [ -z "$PLYMOUTH_POLICYDIR" ] && PLYMOUTH_POLICYDIR="/usr/share/plymouth/"
 [ -z "$PLYMOUTH_DAEMON_PATH" ] && PLYMOUTH_DAEMON_PATH="/sbin/plymouthd"
 [ -z "$PLYMOUTH_CLIENT_PATH" ] && PLYMOUTH_CLIENT_PATH="/bin/plymouth"
+[ -z "$SYSTEMD_UNIT_DIR" ] && SYSTEMD_UNIT_DIR="/lib/systemd/system"
 
 # Generic substring function.  If $2 is in $1, return 0.
 strstr() { [ "${1#*$2*}" != "$1" ]; }
@@ -371,7 +372,7 @@ done
 [ -z "$INITRDDIR" ] && usage error
 
 mkdir -p ${INITRDDIR}${PLYMOUTH_DATADIR}/plymouth/themes
-inst ${PLYMOUTH_DAEMON_PATH} $INITRDDIR /bin/plymouthd
+inst ${PLYMOUTH_DAEMON_PATH} $INITRDDIR /sbin/plymouthd
 inst ${PLYMOUTH_CLIENT_PATH} $INITRDDIR /bin/plymouth
 inst ${PLYMOUTH_DATADIR}/plymouth/themes/text/text.plymouth $INITRDDIR
 inst ${PLYMOUTH_PLUGIN_PATH}/text.so $INITRDDIR
@@ -408,6 +409,29 @@ fi
 
 if [ -L ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth ]; then
     cp -a ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth $INITRDDIR${PLYMOUTH_DATADIR}/plymouth/themes
+fi
+
+if [ -n "$SYSTEMD_UNIT_DIR" -a -d "$SYSTEMD_UNIT_DIR" ]; then
+    inst $SYSTEMD_UNIT_DIR/systemd-ask-password-plymouth.path $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/systemd-ask-password-plymouth.service $INITRDDIR
+
+    inst $SYSTEMD_UNIT_DIR/plymouth-switch-root.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-start.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-quit.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-quit-wait.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-reboot.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-kexec.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-poweroff.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/plymouth-halt.service $INITRDDIR
+
+    inst $SYSTEMD_UNIT_DIR/initrd-switch-root.target.wants/plymouth-switch-root.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/sysinit.target.wants/plymouth-start.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/multi-user.target.wants/plymouth-quit.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/multi-user.target.wants/plymouth-quit-wait.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/reboot.target.wants/plymouth-reboot.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/kexec.target.wants/plymouth-kexec.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/poweroff.target.wants/plymouth-poweroff.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/halt.target.wants/plymouth-halt.service $INITRDDIR
 fi
 
 # vim:ts=8:sw=4:sts=4:et
