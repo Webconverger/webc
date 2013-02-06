@@ -1,32 +1,30 @@
-if (typeof webc == 'undefined') { (function() {
-		window.webc = {};
-
-		function tabRemoved(event) {
-
-			// Get number of tabs
-			var num = gBrowser.browsers.length;
-
-			// If there are two tabs, the second tab has no title and the closed tab
-			// does have a title (ie is not the same tab) then close the browser
-			if ((num == 2) && (!gBrowser.getBrowserAtIndex(1).contentTitle) && event.target.linkedBrowser.contentTitle) {
-				goQuitApplication();
-			}
-			if ((num == 2) && (!gBrowser.getBrowserAtIndex(0).contentTitle)) {
-				goQuitApplication();
-			}
+var webc = {
+	init: function() {
+		if (gBrowser) {
+			gBrowser.tabContainer.addEventListener("TabClose", webc.tabRemoved, false);
 		}
+	},
+	tabRemoved: function(event) {
 
-		function init() {
-			// Add close tab listener, gBrowser has not been initiated by this point
-			getBrowser().tabContainer.addEventListener("TabClose", tabRemoved, false);
-			try {
-				getBrowser().tabContainer.addEventListener("DisableDownload", onDownloadStateChange, false);
-			} catch (ex) {}
+		// Get number of tabs
+		var num = gBrowser.browsers.length;
+
+		// If there are two tabs, the second tab has no title and the closed tab
+		// does have a title (ie is not the same tab) then close the browser
+		if ((num == 2) && (!gBrowser.getBrowserAtIndex(1).contentTitle) && event.target.linkedBrowser.contentTitle) {
+			goQuitApplication();
 		}
+		if ((num == 2) && (!gBrowser.getBrowserAtIndex(0).contentTitle)) {
+			goQuitApplication();
+		}
+	}
 
-		webc.init = init();
-	})();
 }
+window.addEventListener("load", function load(event) {
+	window.removeEventListener("load", load, false); //remove listener, no longer needed
+	webc.init();
+},
+false);
 
 function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 	var url = gURLBar.value;
@@ -41,7 +39,7 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 		}
 
 		// We have a mouse event (from the go button), so use the standard UI link behaviors
-		openUILink(url, aTriggeringEvent, false, false, true , aPostData);
+		openUILink(url, aTriggeringEvent, false, false, true, aPostData);
 		return;
 	}
 
