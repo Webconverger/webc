@@ -1,8 +1,18 @@
+function installButton(toolbarId, id) {
+	var toolbar = document.getElementById(toolbarId);
+	var before = null;
+	toolbar.insertItem(id, before);
+	toolbar.setAttribute("currentset", toolbar.currentSet);
+	document.persist(toolbar.id, "currentset");
+}
+
 var webc = {
 	init: function() {
 		if (gBrowser) {
 			gBrowser.tabContainer.addEventListener("TabClose", webc.tabRemoved, false);
 		}
+		// COMMENT BELOW OUT only if showprintbutton is explicity set
+		// installButton("nav-bar", "print-button");
 	},
 	tabRemoved: function(event) {
 
@@ -19,7 +29,8 @@ var webc = {
 		}
 	}
 
-}
+};
+
 window.addEventListener("load", function load(event) {
 	window.removeEventListener("load", load, false); //remove listener, no longer needed
 	webc.init();
