@@ -168,7 +168,7 @@ mountroot ()
 		# using a second aufs. Note that mount will return success even
 		# if the filesystem is still ro, so we test for writeability
 		# using touch.
-		if ! (mount -o remount,rw /.git && touch /.git ) && [ "${UNIONTYPE}" = aufs ]
+		if ! (mount -o remount,rw /.git && touch /.git 2> /dev/null) && [ "${UNIONTYPE}" = aufs ]
 		then
 			# Overlay a second aufs over /.git. Even though
 			# changes will be lost on reboots, you can still make
