@@ -160,21 +160,21 @@ mountroot ()
 	fi
 
 
-# If the git-fs code made a bindmount of the git repo, make it available in the real rootfs.
+	# If the git-fs code made a bindmount of the git repo, make it available in the real rootfs.
 	if [ -d /.git ]
 	then
 		mkdir "${rootmnt}/.git"
-	# Try to make /.git read-write, by simply remounting it, or by
-	# using a second aufs. Note that mount will return success even
-	# if the filesystem is still ro, so we test for writeability
-	# using touch.
+		# Try to make /.git read-write, by simply remounting it, or by
+		# using a second aufs. Note that mount will return success even
+		# if the filesystem is still ro, so we test for writeability
+		# using touch.
 		if ! (mount -o remount,rw /.git && touch /.git ) && [ "${UNIONTYPE}" = aufs ]
 		then
-		# Overlay a second aufs over /.git. Even though
-		# changes will be lost on reboots, you can still make
-		# a change and push it out before the reboot. We can't
-		# include this in the main aufs mount, since aufs
-		# doesn't handle (bind)mounts in subdirectories.
+			# Overlay a second aufs over /.git. Even though
+			# changes will be lost on reboots, you can still make
+			# a change and push it out before the reboot. We can't
+			# include this in the main aufs mount, since aufs
+			# doesn't handle (bind)mounts in subdirectories.
 			mkdir /cow-git
 			mount -o rw,noatime,mode=755 -t tmpfs tmpfs /cow-git
 			mount -t aufs -o noatime,dirs=/cow-git=rw:/.git=rr aufs "${rootmnt}/.git"

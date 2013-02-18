@@ -101,48 +101,48 @@ setup_unionfs ()
 
 			if [ "${image##*.}" = "git" ]
 			then
-			_log_msg git
-			if [ "${UNIONTYPE}" != "unionmount" ]
-			then
-				mpoint="${croot}/${imagename}"
-				rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
-				_log_msg mpoint: $mpoint
-			else
-				mpoint="${rootmnt}"
-			fi
+				_log_msg git
+				if [ "${UNIONTYPE}" != "unionmount" ]
+				then
+					mpoint="${croot}/${imagename}"
+					rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
+					_log_msg mpoint: $mpoint
+				else
+					mpoint="${rootmnt}"
+				fi
 
-			mkdir -p "${mpoint}"
-			log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
-			# Replace /etc/mtab with a symlink to
-			# /proc/mounts. This prevents fuse from
-			# calling /bin/mount to update the mtab,
-			# using options that busybox mount does
-			# not understand...
-			ln -sf /proc/mounts /etc/mtab
+				mkdir -p "${mpoint}"
+				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
+				# Replace /etc/mtab with a symlink to
+				# /proc/mounts. This prevents fuse from
+				# calling /bin/mount to update the mtab,
+				# using options that busybox mount does
+				# not understand...
+				ln -sf /proc/mounts /etc/mtab
 
-			# Make sure aufs and fuse both keep persistent inode numbers
-			# (i.e.  disable noxino and add noforget), to not confuse
-			# git.
-			noxino_opt=""
-			gitfs_opt="$gitfs_opt,noforget"
-			# This will be later moved into the real rootfs (but we
-			# can't do that now, since the .git dir would end up
-			# underneath the aufs mount).
-			mkdir /.git
-			mount --bind ${image} /.git
+				# Make sure aufs and fuse both keep persistent inode numbers
+				# (i.e.  disable noxino and add noforget), to not confuse
+				# git.
+				noxino_opt=""
+				gitfs_opt="$gitfs_opt,noforget"
+				# This will be later moved into the real rootfs (but we
+				# can't do that now, since the .git dir would end up
+				# underneath the aufs mount).
+				mkdir /.git
+				mount --bind ${image} /.git
 
-			if [ -n "$GIT_REVISION" ]; then
-				gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
-			fi
+				if [ -n "$GIT_REVISION" ]; then
+					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
+				fi
 
-			#ulimit -c unlimited # enable core dumps
-			#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
-			#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-			git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
+				#ulimit -c unlimited # enable core dumps
+				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
+				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
+				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
 
-			log_end_msg
-			#maybe_break gitfs
-			#openvt -c 3 -- /bin/sh
+				log_end_msg
+				#maybe_break gitfs
+				#openvt -c 3 -- /bin/sh
 
 			elif [ -d "${image}" ]
 			then
