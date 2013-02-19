@@ -17,6 +17,62 @@ sub_literal() {
   1'
 }
 
+# Make /.git available for debugging and development
+mount_git () {
+	GIT_REPO=/live/image/live/filesystem.git
+
+	# Sanity checks
+	[ -d "$GIT_REPO" ] || return
+	[ -d /live/overlay ] || return
+	[ -n "$current_git_revision" ] || return
+
+
+	mkdir /.git
+	mount --bind "$GIT_REPO" /.git
+
+	# Try to make /.git read-write, by simply remounting it, or by
+	# using a second aufs. Note that mount will return success even
+	# if the filesystem is still ro, so we test for writeability
+	# using touch.
+	if ! (mount -o remount,rw /.git && touch /.git 2> /dev/null)
+	then
+		# Sanity check
+		if ! grep aufs /proc/filesystems > /dev/null; then
+			umount /.git
+			return
+		fi
+
+
+		# Overlay a second aufs over /.git. Even though
+		# changes will be lost on reboots, you can still make
+		# a change and push it out before the reboot. We can't
+		# include this in the main aufs mount, since aufs
+		# doesn't handle (bind)mounts in subdirectories.
+		mkdir /live/git-overlay
+		mount -o rw,noatime,mode=755 -t tmpfs tmpfs /live/git-overlay
+		umount /.git
+		mount -t aufs -o noatime,dirs=/live/git-overlay=rw:$GIT_REPO=rr aufs "/.git"
+	fi
+
+	# Make sure that HEAD corresponds to the commit
+	# mounted by git-fs
+	#
+	# We don't do a normal (--mixed) reset, since
+	# that also scans the entire working copy to
+	# update the cached info in the index (which is
+	# slow on git-fs / aufs). Instead, we reset HEAD
+	# and the index separately.
+	git --git-dir "/.git" reset --soft "$current_git_revision"
+
+	# Reset the index
+	git --git-dir "/.git" read-tree HEAD
+
+	# Make sure that aufs doesn't forget about filename to inode
+	# mappings, since that confuses git. git-fs should also be
+	# mounted with the noforget option.
+	mount -o remount,xino=/live/overlay/.aufs.xino /
+}
+
 process_options()
 {
 
@@ -48,6 +104,8 @@ for x in $( cmdline ); do
 
 	debug)
 		echo "webc ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+		mount_git
 		;;
 
 	chrome=*)

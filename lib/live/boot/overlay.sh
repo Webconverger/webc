@@ -120,16 +120,21 @@ setup_unionfs ()
 				# not understand...
 				ln -sf /proc/mounts /etc/mtab
 
-				# Make sure aufs and fuse both keep persistent inode numbers
-				# (i.e.  disable noxino and add noforget), to not confuse
-				# git.
-				noxino_opt=""
+				# Make sure fuse keeps persistent inode
+				# numbers to not confuse git. This is
+				# needed in debug mode, when the files
+				# exposed by git-fs are the working
+				# copy for the git repository
+				# bindmounted into /.git. In this case,
+				# git gets confused and becomes slow
+				# when inode numbers change. Since we
+				# can't change this option after
+				# mounting when we decide we need /.git,
+				# we just set it always and accept the
+				# extra (small) memory overhead.
+				#
+				# https://github.com/Webconverger/webc/issues/115
 				gitfs_opt="$gitfs_opt,noforget"
-				# This will be later moved into the real rootfs (but we
-				# can't do that now, since the .git dir would end up
-				# underneath the aufs mount).
-				mkdir /.git
-				mount --bind ${image} /.git
 
 				if [ -n "$GIT_REVISION" ]; then
 					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
