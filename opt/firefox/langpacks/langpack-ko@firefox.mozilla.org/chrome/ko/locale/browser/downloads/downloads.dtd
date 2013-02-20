@@ -2,22 +2,43 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this file,
    - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
 
-<!-- LOCALIZATION NOTE (indicator.tooltiptext):
-     Tooltip for the indicator that displays the progress of ongoing downloads.
-     -->
-<!ENTITY indicator.tooltiptext            "다운로드">
-
 <!-- LOCALIZATION NOTE (downloads.title):
      Used by screen readers to describe the Downloads Panel.
      -->
 <!ENTITY downloads.title                  "다운로드">
 
-<!-- LOCALIZATION NOTE (downloads.width):
-     Width of the Downloads Panel list items, expressed using a CSS unit.  The
-     longest labels that should fit in the item width are usually those of
-     in-progress downloads and those of blocked downloads.
-     -->
-<!ENTITY downloads.width                  "65ch">
+<!-- LOCALIZATION NOTE (downloadDetails.width):
+     Width of details for a Downloads Panel item (which directly influences the
+     width of the Downloads Panel) expressed using a CSS unit. The longest
+     labels that should fit in the item width are usually those of in-progress
+     downloads and those of blocked downloads.
+
+     A good rule of thumb is to try to determine the longest string possible
+     that an in-progress download could display, and use that value in ch
+     units.
+
+     For example, in English, a long string would be:
+     toolkit/locales/en-US/chrome/mozapps/downloads/downloads.properties 참고함
+     59 minutes, 59 seconds remaining - 1022 of 1023 KB
+     59시간 59분 남음 - 1023 / 1022 KB 
+     That's 50 characters, so we set the width at 50ch.
+     한글이 2ch이면 33ch -->
+<!ENTITY downloadDetails.width            "33ch">
+
+<!-- LOCALIZATION NOTE (downloadsSummary.minWidth):
+     Minimum width for the main description of the downloads summary,
+     which is displayed at the bottom of the Downloads Panel if the
+     number of downloads exceeds the limit that the panel can display.
+
+     A good rule of thumb here is to look at the otherDownloads string
+     in downloads.properties, and make a reasonable estimate of its
+     maximum length. For English, this seems like a reasonable limit:
+
+     +999 other current downloads
+     진행중인 다운로드 999개 더 있음
+     that's 28 characters, so we set the minimum width to 28ch.
+     한글이 2ch이면 31ch -->
+<!ENTITY downloadsSummary.minWidth        "31ch">
 
 <!ENTITY cmd.pause.label                  "중단">
 <!ENTITY cmd.pause.accesskey              "P">
@@ -34,7 +55,7 @@
 <!ENTITY cmd.show.accesskey               "F">
 <!ENTITY cmd.showMac.label                "Finder에서 보기">
 <!ENTITY cmd.showMac.accesskey            "F">
-<!ENTITY cmd.retry.label                  "재시고">
+<!ENTITY cmd.retry.label                  "다시 시도">
 <!ENTITY cmd.goToDownloadPage.label       "다운로드 페이지 가기">
 <!ENTITY cmd.goToDownloadPage.accesskey   "G">
 <!ENTITY cmd.copyDownloadLink.label       "다운로드 링크 복사">
@@ -44,3 +65,10 @@
 <!ENTITY cmd.clearList.label              "목록 전체 삭제">
 <!ENTITY cmd.clearList.accesskey          "a">
 
+<!-- LOCALIZATION NOTE (downloadsHistory.label, downloadsHistory.accesskey):
+     This string is shown at the bottom of the Downloads Panel when all the
+     downloads fit in the available space, or when there are no downloads in
+     the panel at all.
+     -->
+<!ENTITY downloadsHistory.label           "다운로드 항목 모두 보기">
+<!ENTITY downloadsHistory.accesskey       "S">

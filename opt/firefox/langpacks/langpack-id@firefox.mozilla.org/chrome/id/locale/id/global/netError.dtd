@@ -1,7 +1,11 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
 <!ENTITY loadError.label "Kesalahan Memuat Laman">
 <!ENTITY retry.label "Coba Lagi">
-
 <!-- Specific error messages -->
+
 
 <!ENTITY connectionFailure.title "Gagal Tersambung">
 <!ENTITY connectionFailure.longDesc "<p>Walaupun tampaknya benar, program peramban tidak dapat tersambung ke situs yang dituju.</p><ul><li>Apakah situs tersebut sedang tidak berfungsi? Coba lagi nanti.</li><li>Apakah Anda tidak bisa membuka situs lain? Periksa sambungan jaringan komputer.</li><li>Apakah komputer Anda dilindungi firewall atau proxy? Kesalahan pengaturan dapat mengganggu nikmatnya menjelajah web.</li></ul>">
@@ -34,11 +38,9 @@
 <!ENTITY contentEncodingError.longDesc "<p>Laman yang ingin dibuka tidak bisa ditampilkan karena menggunakan format kompresi yang tidak didukung atau tidak dikenali.</p><ul><li>Mohon hubungi pemilik situs web mengenai masalah ini.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Jenis Berkas Tidak Aman">
-<!ENTITY unsafeContentType.longDesc "
-<ul>
-  <li>Mohon hubungi pemilik situs web mengenai masalah ini.</li>
-</ul>
-">
+<!ENTITY unsafeContentType.longDesc "<ul> 
+<li>Mohon hubungi pemilik situs web mengenai masalah ini.</li> 
+</ul>">
 
 <!ENTITY netReset.title "Sambungan Terputus">
 <!ENTITY netReset.longDesc "<p>Sambungan jaringan terganggu saat sedang membangun sambungan. Silakan coba lagi.</p>">
@@ -62,32 +64,24 @@
 <!ENTITY unknownSocketType.longDesc "<p>Situs menjawab permintaan lewat jaringan dengan cara yang tidak diharapkan dan program peramban tidak dapat melanjutkan.</p>">
 
 <!ENTITY nssFailure2.title "Sambungan Aman Gagal">
-<!ENTITY nssFailure2.longDesc "
-<ul>
-  <li>Laman yang ingin dibuka tidak dapat ditampilkan karena keaslian data yang dikirimkan tidak bisa diverifikasi.</li>
-  <li>Mohon hubungi pemilik situs web mengenai masalah ini. Anda juga bisa menggunakan menu Bantuan untuk melaporkan situs web yang bermasalah ini.</li>
-</ul>
-">
+<!ENTITY nssFailure2.longDesc "<ul> 
+<li>Laman yang ingin dibuka tidak dapat ditampilkan karena keaslian data yang dikirimkan tidak bisa diverifikasi.</li> 
+<li>Mohon hubungi pemilik situs web mengenai masalah ini. Anda juga bisa menggunakan menu Bantuan untuk melaporkan situs web yang bermasalah ini.</li> 
+</ul>">
 
 <!ENTITY nssBadCert.title "Sambungan Aman Gagal">
-<!ENTITY nssBadCert.longDesc2 "
-<ul>
-  <li>Hal ini mungkin terjadi karena masalah pada konfigurasi server atau pihak tertentu mencoba menyamar menjadi server pada alamat di atas.</li>
-  <li>Jika Anda pernah tersambung dengan baik, kesalahan ini mungkin hanya sementara dan Anda dapat mencoba lagi nanti.</li>
-</ul>
-">
+<!ENTITY nssBadCert.longDesc2 "<ul> 
+<li>Hal ini mungkin terjadi karena masalah pada konfigurasi server atau pihak tertentu mencoba menyamar menjadi server pada alamat di atas.</li> 
+<li>Jika Anda pernah tersambung dengan baik, kesalahan ini mungkin hanya sementara dan Anda dapat mencoba lagi nanti.</li> 
+</ul>">
 
 <!ENTITY malwareBlocked.title "Tersangka Situs Penyerang!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Situs penyerang mencoba memasang program yang dapat mencuri data pribadi, menggunakan komputer Anda untuk menyerang komputer lain, atau merusak sistem Anda.</p>
-<p>Pemilik situs web yang merasa situs yang bersangkutan bukan merupakan situs web penyerang dapat meminta <a href='http://www.stopbadware.org/home/reviewinfo' >peninjauan kembali</a>.</p>
-">
+<!ENTITY malwareBlocked.longDesc "<p>Situs penyerang mencoba memasang program yang dapat mencuri data pribadi, menggunakan komputer Anda untuk menyerang komputer lain, atau merusak sistem Anda.</p> 
+<p>Pemilik situs web yang merasa situs yang bersangkutan bukan merupakan situs web penyerang dapat meminta <a href='http://www.stopbadware.org/home/reviewinfo' >peninjauan kembali</a>.</p>">
 
 <!ENTITY phishingBlocked.title "Tersangka Pemalsuan Web!">
-<!ENTITY phishingBlocked.longDesc '
-<p>Dengan memasukkan informasi pribadi pada laman ini, dapat menyebabkan pencurian identitas atau kejahatan lainnya.</p>
-<p>Jenis pemalsuan web yang dikenal sebagai "phishing attacks", memalsukan laman web dan email yang Anda percaya.</p>
-'>
+<!ENTITY phishingBlocked.longDesc '<p>Dengan memasukkan informasi pribadi pada laman ini, dapat menyebabkan pencurian identitas atau kejahatan lainnya.</p> 
+<p>Jenis pemalsuan web yang dikenal sebagai "phishing attacks", memalsukan laman web dan email yang Anda percaya.</p>'>
 
 <!ENTITY cspFrameAncestorBlocked.title "Diblokir oleh Kebijakan Keamanan Konten">
 <!ENTITY cspFrameAncestorBlocked.longDesc "<p>Peramban mencegah pemuatan laman dengan cara ini karena laman mengandung kebijakan keamanan konten yang tidak mengizinkan hal ini.</p>">
@@ -97,9 +91,10 @@
 
 <!ENTITY remoteXUL.title "XUL Daring">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Hubungi pemilik situs web untuk memberitahukan masalah ini.</li></ul></p>">
-
 <!-- Include app-specific error messages - do not change this in localization!
      Some applications might override netErrorApp.dtd with their specific version,
-     this inclusion needs to be intact for that approach to work correctly. -->
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
+
 <!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
 %netErrorAppDTD;

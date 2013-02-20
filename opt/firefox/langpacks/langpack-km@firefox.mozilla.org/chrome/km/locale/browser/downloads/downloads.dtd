@@ -2,22 +2,43 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this file,
    - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
 
-<!-- LOCALIZATION NOTE (indicator.tooltiptext):
-     Tooltip for the indicator that displays the progress of ongoing downloads.
-     -->
-<!ENTITY indicator.tooltiptext            "ទាញយក">
-
 <!-- LOCALIZATION NOTE (downloads.title):
      Used by screen readers to describe the Downloads Panel.
      -->
-<!ENTITY downloads.title                  "ទាញយក">
+<!ENTITY downloads.title                  "Downloads">
 
-<!-- LOCALIZATION NOTE (downloads.width):
-     Width of the Downloads Panel list items, expressed using a CSS unit.  The
-     longest labels that should fit in the item width are usually those of
-     in-progress downloads and those of blocked downloads.
+<!-- LOCALIZATION NOTE (downloadDetails.width):
+     Width of details for a Downloads Panel item (which directly influences the
+     width of the Downloads Panel) expressed using a CSS unit. The longest
+     labels that should fit in the item width are usually those of in-progress
+     downloads and those of blocked downloads.
+
+     A good rule of thumb is to try to determine the longest string possible
+     that an in-progress download could display, and use that value in ch
+     units.
+
+     For example, in English, a long string would be:
+
+     59 minutes, 59 seconds remaining - 1022 of 1023 KB
+
+     That's 50 characters, so we set the width at 50ch.
      -->
-<!ENTITY downloads.width                  "65ch">
+<!ENTITY downloadDetails.width            "50ch">
+
+<!-- LOCALIZATION NOTE (downloadsSummary.minWidth):
+     Minimum width for the main description of the downloads summary,
+     which is displayed at the bottom of the Downloads Panel if the
+     number of downloads exceeds the limit that the panel can display.
+
+     A good rule of thumb here is to look at the otherDownloads string
+     in downloads.properties, and make a reasonable estimate of its
+     maximum length. For English, this seems like a reasonable limit:
+
+     +999 other current downloads
+
+     that's 28 characters, so we set the minimum width to 28ch.
+     -->
+<!ENTITY downloadsSummary.minWidth        "28ch">
 
 <!ENTITY cmd.pause.label                  "ផ្អាក">
 <!ENTITY cmd.pause.accesskey              "ក">
@@ -44,4 +65,11 @@
 <!ENTITY cmd.clearList.label              "សម្អាត​បញ្ជី">
 <!ENTITY cmd.clearList.accesskey          "ស">
 
+<!-- LOCALIZATION NOTE (downloadsHistory.label, downloadsHistory.accesskey):
+     This string is shown at the bottom of the Downloads Panel when all the
+     downloads fit in the available space, or when there are no downloads in
+     the panel at all.
+     -->
+<!ENTITY downloadsHistory.label           "បង្ហាញ​ការ​ទាញ​យក​ទាំងអស់">
+<!ENTITY downloadsHistory.accesskey       "ញ">
 
