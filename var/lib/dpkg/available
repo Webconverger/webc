@@ -1538,6 +1538,35 @@ Description: utility libraries for X C Binding -- atom, aux and event
  the X protocol but which have traditionally been provided by Xlib.
 Homepage: http://xcb.freedesktop.org
 
+Package: libv4l-0
+Priority: optional
+Section: libs
+Installed-Size: 166
+Maintainer: Gregor Jasny <gjasny@googlemail.com>
+Architecture: i386
+Multi-Arch: same
+Source: v4l-utils
+Version: 0.8.8-3
+Depends: libv4lconvert0 (= 0.8.8-3), libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 55144
+Description: Collection of video4linux support libraries
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains the shared libraries.
+Homepage: http://linuxtv.org/downloads/v4l-utils/
+
 Package: firmware-ralink
 Priority: optional
 Section: non-free/kernel
@@ -10948,6 +10977,27 @@ Description: Open source MPEG-4 video codec (library)
  This package contains the shared library.
 Homepage: http://www.xvid.org/
 
+Package: libv4lconvert0
+Priority: optional
+Section: libs
+Installed-Size: 251
+Maintainer: Gregor Jasny <gjasny@googlemail.com>
+Architecture: i386
+Multi-Arch: same
+Source: v4l-utils
+Version: 0.8.8-3
+Replaces: libv4l-0 (<< 0.8.5-4)
+Depends: libc6 (>= 2.11), libjpeg8 (>= 8c)
+Pre-Depends: multiarch-support
+Breaks: libv4l-0 (<< 0.8.5-4)
+Size: 98678
+Description: Video4linux frame format conversion library
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ This package contains the shared library.
+Homepage: http://linuxtv.org/downloads/v4l-utils/
+
 Package: libpcre3
 Priority: important
 Section: libs
@@ -11214,6 +11264,23 @@ Size: 31836
 Description: Base X bitmaps
  This package contains the base X bitmaps, which are used in many legacy X
  clients.
+
+Package: google-talkplugin
+Priority: optional
+Section: main/web
+Installed-Size: 29628
+Maintainer: Voice and Video Chat Linux Team <voice-and-video-linux-packager@google.com>
+Architecture: i386
+Version: 3.14.17.0-1
+Depends: libc6 (>= 2.11), libcairo2 (>= 1.6.0), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.3.9), libgcc1 (>= 1:4.1.1), libgl1-mesa-glx | libgl1, libglib2.0-0 (>= 2.14.0), libgtk2.0-0 (>= 2.20.0), libpango1.0-0 (>= 1.14.0), libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.4.0), libx11-6 (>= 0), libxcomposite1 (>= 1:0.3-1), libxfixes3 (>= 1:4.0.1), libxrandr2 (>= 2:1.2.99.2), libxrender1, libxt6, libasound2 | libpulse0, libv4l-0
+Size: 11606038
+Description: Google Talk Plugin
+ The Google Talk Plugin is a browser plugin that enables you to use Google voice
+ and video chat to chat face to face with family and friends.
+ .
+ This product includes software developed by the OpenSSL Project for use in the
+ OpenSSL Toolkit (http://www.openssl.org/). This product includes cryptographic
+ software written by Eric Young (eay@cryptsoft.com).
 
 Package: info
 Priority: important
