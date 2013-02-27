@@ -1,0 +1,40 @@
+#!/bin/sh
+
+set -e
+
+VERSION=20091130+git-1
+PKG=ttf-droid
+FILE=/etc/defoma/hints/${PKG}.hints
+
+# Remove a no-longer used conffile
+rm_conffile() {
+    local PKGNAME="$1"
+    local CONFFILE="$2"
+    [ -e "$CONFFILE" ] || return 0
+
+    local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
+    local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
+            sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+    if [ "$md5sum" != "$old_md5sum" ]; then
+        echo "Obsolete conffile $CONFFILE has been modified by you."
+        echo "Saving as $CONFFILE.dpkg-bak ..."
+        mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+    else
+        echo "Removing obsolete conffile $CONFFILE ..."
+        rm -f "$CONFFILE"
+    fi
+}
+
+case "$1" in
+install|upgrade)
+    if dpkg --compare-versions "$2" lt-nl "$VERSION"; then
+	if [ -f $FILE ]; then
+        	if [ -x /usr/bin/defoma-font ]; then
+			defoma-font purge-all $FILE || true
+		fi
+	fi
+	rm_conffile $PKG $FILE
+    fi
+esac
+
+
