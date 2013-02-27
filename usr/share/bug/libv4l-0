@@ -1,0 +1,21 @@
+#!/bin/sh
+
+exec 1>&3 2>&3
+
+if command -v v4l-info &> /dev/null
+then
+    for v in /dev/video[0-9]*
+    do
+	if [ -r "$v" ]
+	then
+	    echo "--- v4l-info for $v ---"
+	    v4l-info $v
+	fi
+    done
+else
+    echo "--- v4l-info is not available. Please consider installing package v4l-conf ---"
+fi
+
+echo "--- last dmesg lines ---"
+dmesg | tail -n 25
+echo "--- finished ---"
