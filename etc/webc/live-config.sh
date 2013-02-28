@@ -127,6 +127,18 @@ for x in $( cmdline ); do
 			fi
 		;;
 
+	iptables=*)
+		options=$( /bin/busybox httpd -d ${x#iptables=} )
+
+		if iptables $options
+		then
+			logs "OK iptables: $options"
+		else
+			logs "NOK iptables: $options"
+		fi
+
+		;;
+
 	log=*)
 		log=${x#log=}
 		echo "*.*          @${log}" >> /etc/rsyslog.conf
@@ -142,7 +154,7 @@ for x in $( cmdline ); do
 		;;
 
 	cron=*)
-		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"		
+		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"
 		cat <<EOC > /etc/cron.d/live-config
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -252,5 +264,5 @@ else
 	logs "Not a writable boot medium. Could not cache configuration nor upgrade."
 fi
 
-# live-config should restart via systemd and get blocked 
+# live-config should restart via systemd and get blocked
 # until $live_config_pipe is re-created
