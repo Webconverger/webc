@@ -491,6 +491,39 @@ Description: X C Binding, shm extension
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
 
+Package: linux-image-3.8-0baureo1-686-pae
+Priority: optional
+Section: kernel
+Installed-Size: 82632
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.8.2-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.8-0baureo1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: dpkg-lzip, debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.8, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Size: 23737336
+Description: Linux 3.8 for modern PCs
+ The Linux kernel 3.8 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libxmuu1
 Priority: optional
 Section: libs
@@ -518,18 +551,19 @@ Package: initramfs-tools
 Priority: optional
 Section: utils
 Installed-Size: 324
-Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
-Version: 0.109baureo1
+Version: 0.110-0baureo+1
 Provides: linux-initramfs-tool
 Depends: klibc-utils (>= 2.0-1~), cpio, kmod | module-init-tools, udev
+Pre-Depends: dpkg-lzip
 Recommends: busybox (>= 1:1.01-3) | busybox-initramfs | busybox-static
 Suggests: bash-completion
 Breaks: console-setup (<< 1.72), cryptsetup (<< 2:1.1.0-2.1), elilo (<< 3.12-3.1~), lilo (<< 22.8-8.2~), s390-tools (<< 1.8.3-2~)
 Conflicts: usplash (<< 0.5.50)
-Size: 92932
+Size: 87524
 Description: generic modular initramfs generator
  This package contains tools to create a bootable initramfs for Linux kernel
  packages. The initramfs is a compressed cpio archive. At boot time, the
@@ -1217,6 +1251,34 @@ Description: generic font configuration library - support binaries
  to test the matching rules (fc-match) and a program to dump the binary
  cache files in string form (fc-cat). It no longer makes fonts managed by defoma
  available to fontconfig applications.
+
+Package: linux-image-3.8-0baureo1-486
+Priority: optional
+Section: kernel
+Installed-Size: 80913
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: linux
+Version: 3.8.2-1~experimental.1~baureo1
+Provides: linux-image, linux-modules-3.8-0baureo1-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: dpkg-lzip, debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.8, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Size: 23143550
+Description: Linux 3.8 for older PCs
+ The Linux kernel 3.8 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://anonscm.debian.org/viewvc/kernel/dists/trunk/linux/
+Original-Vcs-Svn: svn://svn.debian.org/svn/kernel/dists/trunk/linux/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libjpeg62
 Priority: optional

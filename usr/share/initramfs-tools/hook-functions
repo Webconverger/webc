@@ -435,13 +435,14 @@ auto_add_modules()
 	for arg in "$@" ; do
 		case "$arg" in
 		base)
-			modules="$modules ehci-hcd ohci-hcd uhci-hcd usbhid"
+			modules="$modules ehci-pci ehci-hcd ohci-hcd uhci-hcd usbhid"
 			modules="$modules xhci xhci-hcd"
 			modules="$modules hid-apple hid-cherry hid-generic"
 			modules="$modules hid-logitech hid-logitech-dj"
 			modules="$modules hid-microsoft hid-sunplus"
 			modules="$modules btrfs ext2 ext3 ext4 ext4dev "
-			modules="$modules isofs jfs nfs reiserfs udf xfs"
+			modules="$modules isofs jfs reiserfs udf xfs"
+			modules="$modules nfs nfsv2 nfsv3 nfsv4"
 			modules="$modules af_packet atkbd i8042 virtio_pci"
 		;;
 		net)
