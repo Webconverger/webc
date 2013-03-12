@@ -474,12 +474,13 @@ case $type in
 esac
 
 if [ -n "$preversion" ]; then
-    if dpkg --compare-versions "$preversion" lt 2.13-5; then
+    if dpkg --compare-versions "$preversion" lt 2.13-38; then
        # upgrading from a pre-multiarch libc to a multiarch libc; we have
        # to blow away /etc/ld.so.cache, otherwise the old unpacked libc
        # is still first in the cache and segfaults when combined with
        # our newly-unpacked ld.so. Do this last to avoid slowing down the
-       # rest of the upgrade.
+       # rest of the upgrade.  Version number bumped to 2.13-38 to also
+       # cover cache format upgrades for ARM.
        rm -f /etc/ld.so.cache
     fi
 fi

@@ -53,7 +53,7 @@ sub new {
 			return($class);
 		}
 		shaclose($$class) if $$class;
-		$$class = shaopen($alg) || return;
+		return unless $$class = shaopen($alg);
 		return($class);
 	}
 	$alg = 1 unless defined $alg;
@@ -153,18 +153,21 @@ sub Addfile {
 
 sub dump {
 	my $self = shift;
-	my $file = shift || "";
+	my $file = shift;
 
+	$file = "" unless defined $file;
 	shadump($file, $$self) || return;
 	return($self);
 }
 
 sub load {
 	my $class = shift;
-	my $file = shift || "";
+	my $file = shift;
+
+	$file = "" unless defined $file;
 	if (ref($class)) {	# instance method
 		shaclose($$class) if $$class;
-		$$class = shaload($file) || return;
+		return unless $$class = shaload($file);
 		return($class);
 	}
 	my $state = shaload($file) || return;

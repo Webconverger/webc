@@ -80,9 +80,9 @@ sub header_files {
 #
 ## Package name      : perl5
 ## Source directory  : .
-## Configuration time: Mon Dec 10 13:17:22 UTC 2012
+## Configuration time: Wed Mar  6 17:34:32 UTC 2013
 ## Configured by     : Debian Project
-## Target system     : linux callisto 3.2.0-4-686-pae #1 smp debian 3.2.32-1 i686 gnulinux 
+## Target system     : linux murphy 2.6.32-5-686-bigmem #1 smp mon feb 25 01:53:47 utc 2013 i686 gnulinux 
 #
 #: Configure command line arguments.
 #
@@ -206,7 +206,7 @@ ccsymbols=''
 ccversion=''
 cf_by='Debian Project'
 cf_email='perl@packages.debian.org'
-cf_time='Mon Dec 10 13:17:22 UTC 2012'
+cf_time='Wed Mar  6 17:34:32 UTC 2013'
 charbits='8'
 charsize='1'
 chgrp=''
@@ -1006,7 +1006,7 @@ mv=''
 myarchname='i686-linux'
 mydomain=''
 myhostname='localhost'
-myuname='linux callisto 3.2.0-4-686-pae #1 smp debian 3.2.32-1 i686 gnulinux '
+myuname='linux murphy 2.6.32-5-686-bigmem #1 smp mon feb 25 01:53:47 utc 2013 i686 gnulinux '
 n='-n'
 need_va_copy='undef'
 netdb_hlen_type='size_t'
@@ -1034,7 +1034,7 @@ old_pthread_create_joinable=''
 optimize='-O2 -g'
 orderlib='false'
 osname='linux'
-osvers='3.2.0-4-686-pae'
+osvers='2.6.32-5-686-bigmem'
 otherlibdirs=' '
 package='perl5'
 pager='/usr/bin/sensible-pager'

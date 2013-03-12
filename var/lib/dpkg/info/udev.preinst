@@ -198,9 +198,20 @@ mask_systemd_service() {
   fi
 }
 
+stop_on_upstart_upgrade() {
+  if which initctl >/dev/null && initctl version | grep -q upstart
+  then
+    # We have to stop udev before we can restart it under upstart in the
+    # postinst.
+    invoke-rc.d udev stop
+  fi
+}
+
 check_version() {
   # $2 is non-empty when installing from the "config-files" state
   [ "$2" ] || return 0
+
+  if dpkg --compare-versions $2 lt 175-7.1; then
 
   if dpkg --compare-versions $2 lt 175-1; then
 
@@ -262,6 +273,9 @@ check_version() {
   rm_conffile /etc/modprobe.d/blacklist.conf
 
   fi # 175-1
+
+  stop_on_upstart_upgrade
+  fi # 175-7.1
 }
 
 case "$1" in

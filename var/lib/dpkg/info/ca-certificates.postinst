@@ -142,11 +142,28 @@ EOF
 	# fix bogus symlink to ca-certificates.crt on upgrades; see
 	# Debian #643667; drop after wheezy
 	if dpkg --compare-versions "$2" lt-nl 20111025; then
-	    update-ca-certificates --fresh
+	    dpkg-trigger --no-await update-ca-certificates-fresh
 	else
-	    update-ca-certificates
+	    dpkg-trigger --no-await update-ca-certificates
 	fi
     ;;
+
+    triggered)
+	for trigger in $2; do
+	    case "$trigger" in
+		update-ca-certificates)
+		    update-ca-certificates
+		    ;;
+		update-ca-certificates-fresh)
+		    update-ca-certificates --fresh
+		    ;;
+		*)
+		    echo "postinst called with unknown trigger \`$2'">&2
+		    exit 1
+		    ;;
+	    esac;
+	done;
+	;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
 

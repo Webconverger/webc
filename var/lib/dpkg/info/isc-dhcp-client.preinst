@@ -15,6 +15,13 @@ case "$1" in
 		cp /etc/dhclient.conf /etc/dhcp3/dhclient.conf.oldconfig
         fi
 
+	# handle lingering dhclient.conf from lenny (this can be safely removed
+	# after the wheezy release)
+	if [ -e /etc/dhcp/dhclient.conf ] && \
+		[ "`md5sum /etc/dhcp/dhclient.conf  | cut -d\  -f1`" = 6e3910d75cd5cde0042ecb6d48492ae9 ]; then
+		sed -i -e 's/rfc3442-classless-static-routes;/rfc3442-classless-static-routes, ntp-servers;/' /etc/dhcp/dhclient.conf
+	fi
+
 	# We renamed debug-enter to debug - handle the transition
 	if [ ! -e /etc/dhcp3/dhclient-enter-hooks.d/debug ] && \
 	      [ -e /etc/dhcp3/dhclient-enter-hooks.d/debug-enter ]; then

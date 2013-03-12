@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## Copyright (C) 2006-2012 Daniel Baumann <daniel.baumann@progress-technologies.net>
+## Copyright (C) 2006-2013 Daniel Baumann <daniel.baumann@progress-technologies.net>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -58,21 +58,29 @@ else
 	echo " found."
 fi
 
-# Searching syslinux MBR
-if [ ! -e /usr/lib/extlinux/mbr.bin ]
+# FIXME: hackish check for GPT but better than nothing
+if dd if=${_DEVICE} count=440 2>&1 | strings | grep -qs '^EFI PART'
 then
-	echo "E: /usr/lib/extlinux/mbr.bin: No such file"
+	_MBR="gptmbr"
+else
+	_MBR="mbr"
+fi
+
+# Searching syslinux MBR
+if [ ! -e /usr/lib/extlinux/${_MBR}.bin ]
+then
+	echo "E: /usr/lib/extlinux/${_MBR}.bin: No such file"
 	exit 1
 fi
 
 # Saving old MBR
-echo -n "P: Saving old MBR..."
-dd if="${_DEVICE}" of=/boot/mbr-$(basename "${_DEVICE}").old bs=440 count=1 2> /dev/null
-echo " done: /boot/mbr-$(basename "${_DEVICE}").old"
+echo -n "P: Saving old ${_MBR}..."
+dd if="${_DEVICE}" of=/boot/${_MBR}-$(basename "${_DEVICE}").old bs=440 count=1 2> /dev/null
+echo " done: /boot/${_MBR}-$(basename "${_DEVICE}").old"
 
 # Writing syslinux MBR
-echo -n "P: Writing new MBR..."
-dd if=/usr/lib/extlinux/mbr.bin of="${_DEVICE}" bs=440 count=1 2> /dev/null
+echo -n "P: Writing new ${_MBR}..."
+dd if=/usr/lib/extlinux/${_MBR}.bin of="${_DEVICE}" bs=440 count=1 2> /dev/null
 echo " done: ${_DEVICE}"
 
 # Writing extlinux loader

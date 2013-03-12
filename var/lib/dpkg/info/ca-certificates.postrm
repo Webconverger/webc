@@ -46,12 +46,6 @@ case "$1" in
     purge)
         rm -f /etc/ssl/certs/ca-certificates.crt
         remove_dangling_symlinks
-
-        # Clean up even if openssl is removed before ca-certificates.
-        # (Which is what piuparts does.)
-        [ -d /etc/ssl/certs ] && rmdir --ignore-fail-on-non-empty /etc/ssl/certs
-        [ -d /etc/ssl ] && rmdir --ignore-fail-on-non-empty /etc/ssl
-
         rm -f /etc/ca-certificates.conf*
         ;;
 

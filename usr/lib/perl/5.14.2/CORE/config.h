@@ -9,9 +9,9 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Mon Dec 10 13:17:22 UTC 2012
+ * Configuration time: Wed Mar  6 17:34:32 UTC 2013
  * Configured by     : Debian Project
- * Target system     : linux callisto 3.2.0-4-686-pae #1 smp debian 3.2.32-1 i686 gnulinux 
+ * Target system     : linux murphy 2.6.32-5-686-bigmem #1 smp mon feb 25 01:53:47 utc 2013 i686 gnulinux 
  */
 
 #ifndef _config_h_
@@ -2246,7 +2246,7 @@
  *	feature tests from Configure are generally more reliable.
  */
 #define OSNAME "linux"		/**/
-#define OSVERS "3.2.0-4-686-pae"		/**/
+#define OSVERS "2.6.32-5-686-bigmem"		/**/
 
 /* CAT2:
  *	This macro concatenates 2 tokens together.

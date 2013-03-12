@@ -113,21 +113,26 @@ Description: Freefont Serif, Sans and Mono Truetype fonts
 Homepage: http://savannah.gnu.org/projects/freefont/
 
 Package: libsystemd-id128-0
-Priority: extra
+Priority: optional
 Section: libs
-Installed-Size: 66
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 64
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: systemd
-Version: 44-7
+Version: 44-10baureo1
 Depends: libc6 (>= 2.9), libcap2 (>= 2.10), libselinux1 (>= 2.0.65)
-Pre-Depends: multiarch-support
-Size: 20454
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 19172
 Description: systemd 128 bit ID utility library
  The libsystemd-id128 library provides utility functions for generating
  128 bit IDs.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: debconf
 Priority: important
@@ -157,11 +162,11 @@ Installed-Size: 1516
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: all
 Source: xorg-server
-Version: 2:1.12.4-4
+Version: 2:1.12.4-5
 Replaces: xserver-xorg-core (<< 2:1.5.2)
 Depends: x11-common, xkb-data, x11-xkb-utils
 Recommends: xfonts-base, xauth
-Size: 1395676
+Size: 1395898
 Description: common files used by various X servers
  This package provides files necessary for all X.Org based X servers.
 
@@ -602,15 +607,15 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libxml2
 Priority: standard
 Section: libs
-Installed-Size: 1718
+Installed-Size: 1722
 Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Version: 2.8.0+dfsg1-7
+Version: 2.8.0+dfsg1-7+nmu1
 Depends: libc6 (>= 2.7), liblzma5 (>= 5.1.1alpha+20120614), zlib1g (>= 1:1.2.3.3)
 Pre-Depends: multiarch-support
 Recommends: xml-core
-Size: 892626
+Size: 892576
 Description: GNOME XML library
  XML is a metalanguage to let you design your own markup language.
  A regular markup language defines a way to describe information in
@@ -680,16 +685,18 @@ Homepage: http://pkg-shadow.alioth.debian.org/
 Package: gpgv
 Priority: important
 Section: utils
-Installed-Size: 432
-Maintainer: Debian GnuPG-Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
+Installed-Size: 425
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
 Source: gnupg
-Version: 1.4.12-7
-Depends: libbz2-1.0, libc6 (>= 2.4), zlib1g (>= 1:1.1.4)
+Version: 1.4.12-7baureo1
+Depends: libbz2-1.0, libc6 (>= 2.3.3), zlib1g (>= 1:1.1.4)
+Pre-Depends: dpkg-lzip
 Suggests: gnupg
 Filename: pool/main/g/gnupg/gpgv_1.4.10-4_i386.deb
-Size: 219696
+Size: 193198
 MD5sum: 581f3c2689875addfbe6b562a8da2493
 Description: GNU privacy guard - signature verification tool
  GnuPG is GNU's tool for secure communication and data storage.
@@ -699,19 +706,26 @@ Description: GNU privacy guard - signature verification tool
  different (and simpler) way to check that the public keys used to
  make the signature are trustworthy.
 Homepage: http://www.gnupg.org
+Original-Maintainer: Debian GnuPG-Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
+Original-Uploaders: Sune Vuorela <debian@pusling.com>,
+ Daniel Leidert <dleidert@debian.org>,
+ Thijs Kinkhorst <thijs@debian.org>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-gnupg/gnupg/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-gnupg/gnupg/trunk/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libssl1.0.0
 Priority: important
 Section: libs
-Installed-Size: 7007
+Installed-Size: 7036
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: openssl
-Version: 1.0.1c-4
+Version: 1.0.1e-1
 Depends: libc6 (>= 2.7), zlib1g (>= 1:1.1.4), debconf (>= 0.5) | debconf-2.0
 Pre-Depends: multiarch-support
-Size: 3021360
+Size: 3028576
 Description: SSL shared libraries
  libssl and libcrypto shared libraries needed by programs like
  apache-ssl, telnet-ssl and openssh.
@@ -721,17 +735,17 @@ Description: SSL shared libraries
 Package: cups-ppdc
 Priority: optional
 Section: utils
-Installed-Size: 219
+Installed-Size: 220
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.13
+Version: 1.5.3-2.15
 Replaces: cupsddk (<< 1.4.0)
 Provides: cupsddk
 Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common
 Breaks: cupsddk (<< 1.4.0)
-Size: 114742
+Size: 114942
 Description: Common UNIX Printing System(tm) - PPD manipulation utilities
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -885,11 +899,11 @@ Maintainer: Dave Beckett <dajobe@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cairo
-Version: 1.12.2-2
+Version: 1.12.2-3
 Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.9.0), libfreetype6 (>= 2.3.5), libpixman-1-0 (>= 0.21.6), libpng12-0 (>= 1.2.13-4), libx11-6, libxcb-render0, libxcb-shm0, libxcb1 (>= 1.6), libxrender1, zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Breaks: iceape-browser (<= 2.0.3-3), libgtk-directfb-2.0-0, xulrunner-1.9, xulrunner-1.9.1 (<= 1.9.1.8-3)
-Size: 943974
+Size: 943786
 Description: The Cairo 2D vector graphics library
  Cairo is a multi-platform library providing anti-aliased
  vector-based rendering for multiple target backends. Paths consist
@@ -956,16 +970,16 @@ Homepage: http://libav.org/
 Package: libgcrypt11
 Priority: standard
 Section: libs
-Installed-Size: 644
+Installed-Size: 610
 Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Version: 1.5.0-3
-Depends: libc6 (>= 2.3), libgpg-error0 (>= 1.10)
+Version: 1.5.0-5
+Depends: libc6 (>= 2.4), libgpg-error0 (>= 1.10)
 Pre-Depends: multiarch-support
 Suggests: rng-tools
 Breaks: gnupg2 (<< 2.0.17-2ubuntu2), gpgsm (<< 2.0.17-2ubuntu2), libgnutls26 (<< 2.12.7-3)
-Size: 299296
+Size: 299774
 Description: LGPL Crypto library - runtime library
  libgcrypt contains cryptographic functions.  Many important free
  ciphers, hash algorithms and public key signing algorithms have been
@@ -1026,12 +1040,12 @@ Installed-Size: 1855
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.2.2.dfsg.1-5+deb70u2
+Version: 4.2.2.dfsg.1-5+deb70u3
 Replaces: dhcp3-common
 Provides: dhcp3-common
 Depends: libc6 (>= 2.4), debianutils (>= 2.8.2)
 Filename: pool/main/i/isc-dhcp/isc-dhcp-common_4.1.1-P1-15+squeeze3_i386.deb
-Size: 852350
+Size: 852226
 MD5sum: 0f6a234bf6784a9917b5c8b35cc36aad
 Description: common files used by all the isc-dhcp* packages
  This package contains the files used by all the packages from ISC
@@ -1089,18 +1103,19 @@ Homepage: http://www.7-zip.org/sdk.html
 Package: libuuid1
 Priority: required
 Section: libs
-Installed-Size: 110
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 108
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: util-linux
-Version: 2.20.1-5.3
+Version: 2.20.1-5.3baureo1
 Replaces: e2fsprogs (<< 1.34-1)
-Depends: passwd, libc6 (>= 2.4)
-Pre-Depends: multiarch-support
+Depends: passwd, libc6 (>= 2.3)
+Pre-Depends: dpkg-lzip, multiarch-support
 Recommends: uuid-runtime
 Filename: pool/main/u/util-linux/libuuid1_2.17.2-9_i386.deb
-Size: 57850
+Size: 56476
 MD5sum: 569ea071793e6def6248a5a0cf5cf363
 Description: Universally Unique ID library
  The libuuid library generates and parses 128-bit universally unique
@@ -1112,6 +1127,11 @@ Description: Universally Unique ID library
  .
  See RFC 4122 for more information.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libkidletime4
 Priority: optional
@@ -1200,13 +1220,13 @@ Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.26.0-1
+Version: 7.26.0-1+wheezy1
 Replaces: libcurl4-gnutls
 Depends: libc6 (>= 2.11), libgcrypt11 (>= 1.4.5), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), libssh2-1 (>= 1.2.6), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Recommends: ca-certificates
 Conflicts: libcurl4-gnutls
-Size: 326726
+Size: 327260
 Description: easy-to-use client-side URL transfer library (GnuTLS flavour)
  libcurl is an easy-to-use client-side URL transfer library, supporting DICT,
  FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, POP3, POP3S, RTMP,
@@ -1558,12 +1578,12 @@ Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-3
-Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-3), libkrb5support0 (>= 1.7dfsg~beta2)
+Version: 1.10.1+dfsg-4
+Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-4), libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
 Breaks: libgssglue1 (<< 0.2-2)
-Size: 148614
+Size: 148710
 Description: MIT Kerberos runtime libraries - krb5 GSS-API Mechanism
  Kerberos is a system for authenticating users and services on a network.
  Kerberos is a trusted third-party service.  That means that there is a
@@ -2028,14 +2048,14 @@ Installed-Size: 14082
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: all
 Source: perl
-Version: 5.14.2-16
+Version: 5.14.2-19
 Replaces: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Provides: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Depends: perl (>= 5.14.2-1), libswitch-perl, libclass-isa-perl
 Suggests: libpod-plainer-perl
 Breaks: libansicolor-perl (<< 3.00), libarchive-tar-perl (<< 1.76), libattribute-handlers-perl (<< 0.89), libautodie-perl (<< 2.10.01), libcgi-pm-perl (<< 3.52), libcpan-meta-perl (<< 2.110440), libcpan-meta-yaml-perl (<< 0.003), libcpanplus-perl (<< 0.9103), libdigest-perl (<< 1.16), libextutils-cbuilder-perl (<< 0.280203), libextutils-command-perl (<< 1.17), libextutils-install-perl (<< 1.56), libextutils-parsexs-perl (<< 2.221000), libfile-path-perl (<< 2.08.01), libfile-spec-perl (<< 3.3300), libfile-temp-perl (<< 0.22), libhttp-tiny-perl (<< 0.012), libi18n-langtags-perl (<< 0.35.01), libio-zlib-perl (<< 1.10), libjson-pp-perl (<< 2.27105), liblocale-codes-perl (<< 3.16), liblocale-maketext-perl (<< 1.19), liblocale-maketext-simple-perl (<< 0.21), libmath-bigint-perl (<< 1.994), libmath-complex-perl (<< 1.56), libmodule-build-perl (<< 0.380000), libmodule-corelist-perl (<< 2.49.02), libmodule-load-conditional-perl (<< 0.44), libmodule-load-perl (<< 0.18), libmodule-metadata-perl (<< 1.000004), libmodule-pluggable-perl (<< 3.9), libnet-perl (<= 1:1.22), libnet-ping-perl (<< 2.38), libparams-check-perl (<< 0.28), libparent-perl (<< 0.225), libparse-cpan-meta-perl (<< 1.4401), libperl-ostype-perl (<< 1.002), libpod-escapes-perl (<< 1.04), libpod-parser-perl (<< 1.37), libpod-simple-perl (<< 3.16), libshell-perl (<< 0.72.01), libtest-harness-perl (<< 3.23), libtest-simple-perl (<< 0.98), libthread-queue-perl (<< 2.12), libtime-local-perl (<< 1.2000), libunicode-collate-perl (<< 0.73), libversion-perl (<< 1:0.8800), libversion-requirements-perl (<< 0.101020), podlators-perl (<< 2.3.1)
 Conflicts: defoma (<< 0.11.12), mono-gac (<< 2.10.8.1-3)
-Size: 3439114
+Size: 3442406
 Description: Core Perl modules
  Architecture independent Perl modules.  These modules are part of Perl and
  required if the `perl' package is installed.
@@ -2050,22 +2070,29 @@ Package: bsdutils
 Essential: yes
 Priority: required
 Section: utils
-Installed-Size: 180
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 171
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Source: util-linux (2.20.1-5.3)
-Version: 1:2.20.1-5.3
-Depends: libc6 (>= 2.7)
+Source: util-linux (2.20.1-5.3baureo1)
+Version: 1:2.20.1-5.3baureo1
+Depends: libc6 (>= 2.3)
+Pre-Depends: dpkg-lzip
 Recommends: bsdmainutils
 Filename: pool/main/u/util-linux/bsdutils_2.17.2-9_i386.deb
-Size: 83128
+Size: 79812
 MD5sum: aec9e939e02ab2afadfa4158378f8f21
 Description: Basic utilities from 4.4BSD-Lite
  This package contains the bare minimum number of BSD utilities needed
  to boot a Debian system: logger, renice, script, scriptreplay, and wall.
  The remaining standard BSD utilities are provided by bsdmainutils.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: firmware-realtek
 Priority: optional
@@ -2192,21 +2219,26 @@ Description: X.Org X server -- Voodoo display driver
  This package is built from the X.org xf86-video-voodoo driver module.
 
 Package: libsystemd-journal0
-Priority: extra
+Priority: optional
 Section: libs
-Installed-Size: 115
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 116
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: systemd
-Version: 44-7
+Version: 44-10baureo1
 Depends: libc6 (>= 2.9), libcap2 (>= 2.10), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 2.0.65), libsystemd-id128-0 (>= 38)
-Pre-Depends: multiarch-support
-Size: 45456
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 40586
 Description: systemd journal utility library
  The libsystemd-journal library provides an interface for the
  systemd journal service.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: install-info
 Priority: important
@@ -2555,23 +2587,28 @@ Homepage: http://www.vim.org/
 Package: extlinux
 Priority: optional
 Section: utils
-Installed-Size: 236
-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Installed-Size: 238
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: syslinux
-Version: 2:4.05+dfsg-6+deb7u1
+Version: 2:4.05+dfsg-6+deb7u1baureo1
 Replaces: syslinux
 Depends: debconf (>= 0.5) | debconf-2.0, libc6 (>= 2.3.3)
+Pre-Depends: dpkg-lzip
 Recommends: syslinux-common, syslinux-themes-debian, os-prober
-Breaks: syslinux (<< 2:4.05+dfsg-6+deb7u1)
-Size: 113638
+Breaks: syslinux (<< 2:4.05+dfsg-6+deb7u1baureo1)
+Size: 114850
 Description: collection of boot loaders (ext2/3/4 and btrfs bootloader)
  SYSLINUX is a collection of boot loaders which operates off Linux ext2/3/4 or
  btrfs filesystems, FAT and NTFS filesystems, network servers using PXE
  firmware, or from CD-ROMs.
  .
  This package contains the ext2/3/4 and btrfs bootloader.
-Homepage: http://syslinux.zytor.com/
+Homepage: http://www.syslinux.org/
+Original-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Original-Uploaders: Otavio Salvador <otavio@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: openssl
 Priority: optional
@@ -2579,10 +2616,10 @@ Section: utils
 Installed-Size: 1073
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1.0.1c-4
+Version: 1.0.1e-1
 Depends: libc6 (>= 2.7), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Suggests: ca-certificates
-Size: 691772
+Size: 690508
 Description: Secure Socket Layer (SSL) binary and related cryptographic tools
  This package contains the openssl binary and related tools.
  .
@@ -2640,11 +2677,11 @@ Section: x11
 Installed-Size: 78
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:7.7+1
+Version: 1:7.7+2
 Provides: x-window-system, x-window-system-core
-Depends: xserver-xorg (>= 1:7.7+1), libgl1-mesa-glx | libgl1, libgl1-mesa-dri, libglu1-mesa, xfonts-base (>= 1:1.0.0-1), xfonts-100dpi (>= 1:1.0.0-1), xfonts-75dpi (>= 1:1.0.0-1), xfonts-scalable (>= 1:1.0.0-1), x11-apps, x11-session-utils, x11-utils, x11-xfs-utils, x11-xkb-utils, x11-xserver-utils, xauth, xinit, xfonts-utils, xkb-data, xorg-docs-core, xterm | x-terminal-emulator
+Depends: xserver-xorg (>= 1:7.7+2), libgl1-mesa-glx | libgl1, libgl1-mesa-dri, libglu1-mesa, xfonts-base (>= 1:1.0.0-1), xfonts-100dpi (>= 1:1.0.0-1), xfonts-75dpi (>= 1:1.0.0-1), xfonts-scalable (>= 1:1.0.0-1), x11-apps, x11-session-utils, x11-utils, x11-xfs-utils, x11-xkb-utils, x11-xserver-utils, xauth, xinit, xfonts-utils, xkb-data, xorg-docs-core, xterm | x-terminal-emulator
 Suggests: xorg-docs
-Size: 36544
+Size: 36328
 Description: X.Org X Window System
  This metapackage provides the components for a standalone
  workstation running the X Window System.  It provides the X libraries, an X
@@ -2734,7 +2771,7 @@ Installed-Size: 4705
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
 Source: perl
-Version: 5.14.2-16
+Version: 5.14.2-19
 Replaces: libperl5.8 (<< 5.8.0-20), libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl (<< 5.10.1-12), perl-modules (<< 5.10.1-1)
 Provides: libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl5-base, perlapi-5.14.2
 Pre-Depends: libc6 (>= 2.11), dpkg (>= 1.14.20)
@@ -2742,7 +2779,7 @@ Suggests: perl
 Breaks: autoconf2.13 (<< 2.13-45), libfile-spec-perl (<< 3.3300), libmarc-charset-perl (<< 1.2), libscalar-list-utils-perl (<< 1:1.23), libsocket-perl (<< 1.940), libxsloader-perl (<< 0.13)
 Conflicts: defoma (<< 0.11.12), doc-base (<< 0.10.3), mono-gac (<< 2.10.8.1-3), safe-rm (<< 0.8), update-inetd (<< 4.41)
 Filename: pool/main/p/perl/perl-base_5.10.1-17squeeze3_i386.deb
-Size: 1493988
+Size: 1503852
 MD5sum: 20ced901f6f8c21fb31c546a7177c4ed
 Description: minimal Perl system
  Perl is a scripting language used in many system scripts and utilities.
@@ -2815,16 +2852,18 @@ Description: Perl module for error/exception handling in an OO-ish way
 Package: apt
 Priority: important
 Section: admin
-Installed-Size: 3210
-Maintainer: APT Development Team <deity@lists.debian.org>
+Installed-Size: 3180
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 0.9.7.7
+Version: 0.9.7.7-0baureo1
 Replaces: manpages-pl (<< 20060617-3~)
-Depends: libapt-pkg4.12 (>= 0.9.7.7), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
+Depends: libapt-pkg4.12 (>= 0.9.7.7-0baureo1), libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
+Pre-Depends: dpkg-lzip
 Suggests: aptitude | synaptic | wajig, dpkg-dev, apt-doc, xz-utils, python-apt
 Conflicts: python-apt (<< 0.7.93.2~)
 Filename: pool/main/a/apt/apt_0.8.10.3+squeeze1_i386.deb
-Size: 1259612
+Size: 926524
 MD5sum: a823518b46a3e4efb68a703521d43256
 Description: commandline package manager
  This package provides commandline tools for searching and
@@ -2840,6 +2879,13 @@ Description: commandline package manager
   * apt-cdrom to use removable media as a source for packages
   * apt-config as an interface to the configuration settings
   * apt-key as an interface to manage authentication keys
+Original-Maintainer: APT Development Team <deity@lists.debian.org>
+Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
+ Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
+ Julian Andres Klode <jak@debian.org>
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: iceweasel-l10n-nb-no
 Priority: optional
@@ -2991,15 +3037,15 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libdbus-glib-1-2
 Priority: optional
 Section: libs
-Installed-Size: 333
+Installed-Size: 335
 Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: dbus-glib
-Version: 0.100-1
+Version: 0.100.2-1
 Depends: libc6 (>= 2.1.3), libdbus-1-3 (>= 1.2.16), libglib2.0-0 (>= 2.31.8)
 Pre-Depends: multiarch-support
-Size: 201408
+Size: 202838
 Description: simple interprocess messaging system (GLib-based shared library)
  D-Bus is a message bus, used for sending messages between applications.
  Conceptually, it fits somewhere in between raw sockets and CORBA in
@@ -3138,14 +3184,14 @@ Installed-Size: 4125
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg-server
-Version: 2:1.12.4-4
+Version: 2:1.12.4-5
 Provides: xorg-input-abi-16, xorg-video-abi-12
-Depends: xserver-common (>= 2:1.12.4-4), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.8), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
+Depends: xserver-common (>= 2:1.12.4-5), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.8), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
 Recommends: libgl1-mesa-dri (>= 7.10.2-4)
 Suggests: xfonts-100dpi | xfonts-75dpi, xfonts-scalable
 Breaks: libgl1-mesa-dri (<< 7.10.2-4), libgl1-mesa-dri-experimental (<< 7.10.2-4), xserver-xorg-input, xserver-xorg-input-2, xserver-xorg-input-2.1, xserver-xorg-input-4, xserver-xorg-input-7, xserver-xorg-input-joystick (<= 1:1.5.0-3), xserver-xorg-input-synaptics (<= 1.2.2-1), xserver-xorg-input-tslib (<= 0.0.6-3), xserver-xorg-input-vmmouse (<= 1:12.6.5-4), xserver-xorg-input-wacom (<= 0.10.5+20100415-1), xserver-xorg-video, xserver-xorg-video-1.0, xserver-xorg-video-1.9, xserver-xorg-video-2, xserver-xorg-video-4, xserver-xorg-video-5, xserver-xorg-video-6, xserver-xorg-video-cyrix (<= 1:1.1.0-8), xserver-xorg-video-i810 (<< 2:2.4), xserver-xorg-video-imstt (<= 1:1.1.0-7), xserver-xorg-video-nsc (<= 1:2.8.3-4), xserver-xorg-video-sunbw2 (<= 1:1.1.0-5), xserver-xorg-video-v4l (<< 1:0.2.0), xserver-xorg-video-vga (<= 1:4.1.0-8)
 Conflicts: xserver-xorg-input-evtouch
-Size: 1731762
+Size: 1731856
 Description: Xorg X server - core server
  The Xorg X server is an X server for several architectures and operating
  systems, which is derived from the XFree86 4.x series of X servers.
@@ -3190,13 +3236,13 @@ Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-3
+Version: 1.10.1+dfsg-4
 Depends: libc6 (>= 2.4), libkeyutils1, libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
 Breaks: libgssapi-krb5-2 (<= 1.10+dfsg~alpha1), libkrb5-3 (<= 1.8~aa)
 Conflicts: libkrb53
-Size: 108452
+Size: 108528
 Description: MIT Kerberos runtime libraries - Crypto Library
  Kerberos is a system for authenticating users and services on a network.
  Kerberos is a trusted third-party service.  That means that there is a
@@ -3445,12 +3491,12 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.13), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
 Recommends: smbclient
 Suggests: cups, xpp, cups-bsd
 Conflicts: lprng
-Size: 174946
+Size: 173214
 Description: Common UNIX Printing System(tm) - client programs (SysV)
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -3677,19 +3723,22 @@ Homepage: http://www.iana.org/time-zones
 Package: libudev0
 Priority: important
 Section: libs
-Installed-Size: 189
-Maintainer: Marco d'Itri <md@linux.it>
+Installed-Size: 187
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: udev
-Version: 175-7
-Depends: libc6 (>= 2.8)
-Pre-Depends: multiarch-support
+Version: 175-7.1baureo1
+Depends: libc6 (>= 2.3)
+Pre-Depends: dpkg-lzip, multiarch-support
 Filename: pool/main/u/udev/libudev0_164-3_i386.deb
-Size: 127950
+Size: 124440
 MD5sum: 3c508398ae085be9ea2880346efbc5dd
 Description: libudev shared library
  This library provides access to udev device information.
+Original-Maintainer: Marco d'Itri <md@linux.it>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: iceweasel-l10n-lg
 Priority: optional
@@ -3814,22 +3863,27 @@ Homepage: http://userspace.selinuxproject.org/
 Package: syslinux-common
 Priority: optional
 Section: utils
-Installed-Size: 3144
-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Installed-Size: 3166
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Source: syslinux
-Version: 2:4.05+dfsg-6+deb7u1
+Version: 2:4.05+dfsg-6+deb7u1baureo1
 Replaces: syslinux
+Pre-Depends: dpkg-lzip
 Recommends: libcrypt-passwdmd5-perl, libdigest-sha-perl
-Breaks: syslinux (<< 2:4.05+dfsg-6+deb7u1)
-Size: 934446
+Breaks: syslinux (<< 2:4.05+dfsg-6+deb7u1baureo1)
+Size: 947638
 Description: collection of boot loaders (common files)
  SYSLINUX is a collection of boot loaders which operates off Linux ext2/3/4 or
  btrfs filesystems, FAT and NTFS filesystems, network servers using PXE
  firmware, or from CD-ROMs.
  .
  This package contains common files.
-Homepage: http://syslinux.zytor.com/
+Homepage: http://www.syslinux.org/
+Original-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Original-Uploaders: Otavio Salvador <otavio@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxxf86dga1
 Priority: optional
@@ -3976,11 +4030,11 @@ Installed-Size: 1453
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xserver-xorg-video-ati
-Version: 1:6.14.4-6
+Version: 1:6.14.4-7
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.7), libdrm-radeon1 (>= 2.4.31), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.10.2), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Suggests: firmware-linux
-Size: 701362
+Size: 701396
 Description: X.Org X server -- AMD/ATI Radeon display driver
  This package provides the 'radeon' driver for the AMD/ATI cards. The
  following chips should be supported: R100, RV100, RS100, RV200, RS200,
@@ -4219,16 +4273,17 @@ Description: X.Org X server -- Savage display driver
 Package: libapt-pkg4.12
 Priority: important
 Section: libs
-Installed-Size: 2702
-Maintainer: APT Development Team <deity@lists.debian.org>
+Installed-Size: 2698
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: apt
-Version: 0.9.7.7
-Depends: libbz2-1.0, libc6 (>= 2.8), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.3.3)
-Pre-Depends: multiarch-support
+Version: 0.9.7.7-0baureo1
+Depends: libbz2-1.0, libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.3.3)
+Pre-Depends: dpkg-lzip, multiarch-support
 Breaks: apt (<< 0.9.4~)
-Size: 898950
+Size: 695870
 Description: package managment runtime library
  This library provides the common functionality for searching and
  managing packages as well as information about packages.
@@ -4244,6 +4299,13 @@ Description: package managment runtime library
   * providing different transports to retrieve data over cdrom, ftp,
     http, rsh as well as an interface to add more transports like
     https (apt-transport-https) and debtorrent (apt-transport-debtorrent).
+Original-Maintainer: APT Development Team <deity@lists.debian.org>
+Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
+ Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
+ Julian Andres Klode <jak@debian.org>
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-fbdev
 Priority: optional
@@ -4808,17 +4870,23 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libmount1
 Priority: required
 Section: libs
-Installed-Size: 249
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 242
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: util-linux
-Version: 2.20.1-5.3
-Depends: libblkid1 (>= 2.17.2), libc6 (>= 2.8), libselinux1 (>= 1.32), libsepol1 (>= 1.14)
-Pre-Depends: multiarch-support
-Size: 120576
+Version: 2.20.1-5.3baureo1
+Depends: libblkid1 (>= 2.17.2), libc6 (>= 2.4), libselinux1 (>= 1.32), libsepol1 (>= 1.14)
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 108668
 Description: block device id library
  The device mounting library, used by mount and mount helpers.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libqtcore4
 Priority: optional
@@ -4935,11 +5003,11 @@ Installed-Size: 361
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg
-Version: 1:7.7+1
+Version: 1:7.7+2
 Provides: xserver
 Depends: xserver-xorg-core (>= 2:1.11), xserver-xorg-video-all | xorg-driver-video, xserver-xorg-input-all | xorg-driver-input, xserver-xorg-input-evdev, libc6 (>= 2.7), xkb-data (>= 1.4), x11-xkb-utils
 Recommends: libgl1-mesa-dri
-Size: 110628
+Size: 112294
 Description: X.Org X server
  This package depends on the full suite of the server and drivers for the
  X.Org X server.  It does not provide the actual server itself.
@@ -5002,19 +5070,27 @@ Homepage: http://mesa3d.sourceforge.net/
 Package: libapt-inst1.5
 Priority: important
 Section: libs
-Installed-Size: 694
-Maintainer: APT Development Team <deity@lists.debian.org>
+Installed-Size: 692
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: apt
-Version: 0.9.7.7
-Depends: libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
-Pre-Depends: multiarch-support
-Size: 164782
+Version: 0.9.7.7-0baureo1
+Depends: libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 152106
 Description: deb package format runtime library
  This library provides methods to query and extract information
  from deb packages. This includes the control data and the package
  file content.
+Original-Maintainer: APT Development Team <deity@lists.debian.org>
+Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
+ Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
+ Julian Andres Klode <jak@debian.org>
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: gsfonts
 Priority: optional
@@ -5070,16 +5146,16 @@ Homepage: http://alioth.debian.org/projects/adduser/
 Package: libcupsmime1
 Priority: optional
 Section: libs
-Installed-Size: 139
+Installed-Size: 140
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.13)
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
 Pre-Depends: multiarch-support
 Breaks: cups (<< 1.5.0)
-Size: 98732
+Size: 98948
 Description: Common UNIX Printing System(tm) - MIME library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -5126,12 +5202,12 @@ Installed-Size: 62
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg
-Version: 1:7.7+1
+Version: 1:7.7+2
 Replaces: xserver-xorg-driver-all
 Depends: xserver-xorg-video-apm, xserver-xorg-video-ark, xserver-xorg-video-ati, xserver-xorg-video-chips, xserver-xorg-video-cirrus, xserver-xorg-video-fbdev, xserver-xorg-video-i128, xserver-xorg-video-i740, xserver-xorg-video-intel, xserver-xorg-video-mga, xserver-xorg-video-neomagic, xserver-xorg-video-nouveau, xserver-xorg-video-openchrome, xserver-xorg-video-rendition, xserver-xorg-video-s3, xserver-xorg-video-s3virge, xserver-xorg-video-savage, xserver-xorg-video-siliconmotion, xserver-xorg-video-sis, xserver-xorg-video-sisusb, xserver-xorg-video-tdfx, xserver-xorg-video-trident, xserver-xorg-video-tseng, xserver-xorg-video-vesa, xserver-xorg-video-voodoo, xserver-xorg-video-vmware
 Recommends: xserver-xorg-video-geode
 Conflicts: xserver-xorg-driver-all
-Size: 36058
+Size: 35954
 Description: X.Org X server -- output driver metapackage
  This package depends on the full suite of output drivers for the X.Org X server
  (Xorg).  It does not provide any drivers itself, and may be removed if you wish
@@ -5543,11 +5619,11 @@ Section: web
 Installed-Size: 359
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
-Version: 7.26.0-1
+Version: 7.26.0-1+wheezy1
 Replaces: curl-ssl
 Provides: curl-ssl
-Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1), zlib1g (>= 1:1.1.4)
-Size: 269132
+Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1+wheezy1), zlib1g (>= 1:1.1.4)
+Size: 269580
 Description: command line tool for transferring data with URL syntax
  curl is a command line tool for transferring data with URL syntax, supporting
  DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, POP3, POP3S,
@@ -5602,21 +5678,26 @@ Description: shared library for ALSA applications
 Homepage: http://www.alsa-project.org/
 
 Package: libsystemd-daemon0
-Priority: extra
+Priority: optional
 Section: libs
-Installed-Size: 54
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 50
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: systemd
-Version: 44-7
+Version: 44-10baureo1
 Depends: libc6 (>= 2.8)
-Pre-Depends: multiarch-support
-Size: 14148
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 13906
 Description: systemd utility library
  The sd-daemon library provides a reference implementation of various
  APIs for new-style daemons, as implemented by the systemd init system.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: base-files
 Essential: yes
@@ -5755,10 +5836,10 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.13)
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
 Pre-Depends: multiarch-support
-Size: 104400
+Size: 104662
 Description: Common UNIX Printing System(tm) - Driver library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -5812,13 +5893,13 @@ Homepage: http://search.cpan.org/search?module=Text::Iconv
 Package: cups-common
 Priority: optional
 Section: net
-Installed-Size: 4227
+Installed-Size: 4228
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.13
-Size: 902658
+Version: 1.5.3-2.15
+Size: 902872
 Description: Common UNIX Printing System(tm) - common files
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -5851,7 +5932,7 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
+Version: 1.5.3-2.15
 Replaces: libcupsys2
 Provides: libcupsys2
 Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.10+dfsg~), zlib1g (>= 1:1.1.4)
@@ -5859,7 +5940,7 @@ Pre-Depends: multiarch-support
 Suggests: cups-common
 Breaks: cups (<< 1.5.0)
 Conflicts: libcupsys2
-Size: 255398
+Size: 255812
 Description: Common UNIX Printing System(tm) - Core library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -6020,16 +6101,17 @@ Description: GNU readline and history libraries, run-time libraries
 Package: libreadline6
 Priority: important
 Section: libs
-Installed-Size: 366
-Maintainer: Matthias Klose <doko@debian.org>
+Installed-Size: 359
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: readline6
-Version: 6.2+dfsg-0.1
-Depends: readline-common, libc6 (>= 2.11), libtinfo5
-Pre-Depends: multiarch-support
+Version: 6.2+dfsg-0.1baureo1
+Depends: readline-common, libc6 (>= 2.3), libtinfo5
+Pre-Depends: dpkg-lzip, multiarch-support
 Filename: pool/main/r/readline6/libreadline6_6.1-3_i386.deb
-Size: 161838
+Size: 129276
 MD5sum: 63c3a619ef1fd5ec1c04fd0992f3f71f
 Description: GNU readline and history libraries, run-time libraries
  The GNU readline library aids in the consistency of user interface
@@ -6038,6 +6120,8 @@ Description: GNU readline and history libraries, run-time libraries
  .
  The GNU history library provides a consistent user interface for
  recalling lines of previously typed input.
+Original-Maintainer: Matthias Klose <doko@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libncurses5
 Priority: required
@@ -6446,14 +6530,15 @@ Installed-Size: 973
 Maintainer: Debian iproute maintainers <ah-iproute@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 20120521-3
+Source: iproute (20120521-3)
+Version: 20120521-3+b3
 Provides: arpd
 Depends: libc6 (>= 2.4), libdb5.1
 Recommends: libatm1
 Suggests: iproute-doc
 Conflicts: arpd
 Filename: pool/main/i/iproute/iproute_20100519-3_i386.deb
-Size: 459818
+Size: 459946
 MD5sum: fd4cd9e6433bf9424de69b6a8e6eec14
 Description: networking and traffic control tools
  The iproute suite, also known as iproute2, is a collection of
@@ -6888,13 +6973,13 @@ Installed-Size: 306
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: lvm2 (2.02.95-4)
-Version: 2:1.02.74-4
-Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-4)
+Source: lvm2 (2.02.95-6)
+Version: 2:1.02.74-6
+Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-6)
 Pre-Depends: multiarch-support
 Breaks: lvm2 (<< 2.02.66)
 Conflicts: libdevmapper1.02
-Size: 124984
+Size: 125056
 Description: Linux Kernel Device Mapper userspace library
  The Linux Kernel Device Mapper is the LVM (Linux Logical Volume Management)
  Team's implementation of a minimalistic kernel-space driver that handles
@@ -7655,21 +7740,26 @@ Description: Binary firmware for various drivers in the Linux kernel
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
 
 Package: libsystemd-login0
-Priority: extra
+Priority: optional
 Section: libs
-Installed-Size: 83
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 84
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: systemd
-Version: 44-7
+Version: 44-10baureo1
 Depends: libc6 (>= 2.9), libcap2 (>= 2.10), libselinux1 (>= 2.0.65)
-Pre-Depends: multiarch-support
-Size: 29252
+Pre-Depends: dpkg-lzip, multiarch-support
+Size: 26620
 Description: systemd login utility library
  The libsystemd-login library provides an interface for the
  systemd-logind service which is used to track user sessions and seats.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: e2fslibs
 Priority: required
@@ -7756,13 +7846,13 @@ Section: text
 Installed-Size: 900
 Maintainer: Agustin Martin Domingo <agmartin@debian.org>
 Architecture: all
-Version: 1.12.10
+Version: 1.12.11
 Replaces: openoffice.org-updatedicts
 Provides: openoffice.org-updatedicts
 Depends: debconf (>= 1.5.5) | debconf-2.0, libtext-iconv-perl
 Suggests: ispell, emacsen-common, jed-extra
-Breaks: hunspell-ar (<= 0.0.0+20080110-1.1), hunspell-da (<= 1:3.1.0), hunspell-de-at (<= 20100727-1), hunspell-de-ch (<= 20100727-1), hunspell-de-de (<= 20100727-1), hunspell-en-us (<= 20070829-4ubuntu2), hunspell-eu-es (<= 0.4.20081029-4), hunspell-gl-es (<= 2.2a-8), hunspell-kk (<= 1.1-1), hunspell-ko (<= 0.5.3-1), hunspell-se (<= 1.0~beta6.20081222-1.1), hunspell-uz (<= 0.6-3.1), hyphen-en-us (<< 2.8.3-1), myspell-bg (<= 3.0-12), myspell-ca (<= 0.6-10), myspell-cs (<= 20040229-5), myspell-da (<= 1.6.25-1), myspell-de-at (<= 20100727-1), myspell-de-ch (<= 20100727-1), myspell-de-de (<= 20100727-1), myspell-de-de-oldspell (<= 1:2-27), myspell-el-gr (<= 0.8-1), myspell-en-au (<= 2.1-5), myspell-eo (<= 2.1.2000.02.25-42), myspell-es (<= 1.11-1), myspell-et (<= 1:20030606-12.1), myspell-fa (<= 0.20070816-2), myspell-fi (<= 0.7-17.3), myspell-fo (<= 0.2.44-2), myspell-fr (<= 1.4-25), myspell-fr-gut (<= 1:1.0-28), myspell-ga (<= 2.0-20), myspell-gd (<= 0.50-7), myspell-gv (<= 0.50-9), myspell-he (<= 1.1-1), myspell-hr (<= 20060617-2), myspell-hu (<= 0.99.4-2), myspell-hy (<= 0.20.0-1), myspell-ku (<= 0.20.0-1.1), myspell-lv (<= 0.9.3-2), myspell-nb (<= 2.0.10-3.2), myspell-nl (<= 1:2.0-1), myspell-nn (<= 2.0.10-3.2), myspell-nr (<< 20070206-4ubuntu1), myspell-ns (<< 20070206-4ubuntu1), myspell-pl (<= 20100612-1), myspell-pt-br (<= 20101030-1), myspell-pt-pt (<= 20091013-2), myspell-ru (<= 0.99g5-8.1), myspell-sk (<= 0.5.5a-2.1fakesync1), myspell-sl (<< 1.0-3ubuntu1), myspell-ss (<< 20070206-4ubuntu1), myspell-sv-se (<= 1.3.8-6-2.2), myspell-tn (<< 20070206-4ubuntu1), myspell-ts (<< 20070207-4ubuntu1), myspell-uk (<= 1.6.0-1), myspell-ve (<< 20070206-3ubuntu1), myspell-xh (<< 20070206-4ubuntu1), myspell-zu (<< 20070207-5ubuntu1), mythes-it (<= 2.0.7.gh.deb1-3), openoffice.org-thesaurus-it (<< 2.0.7.gh.deb1-1.1ubuntu3)
-Size: 299808
+Breaks: hunspell-ar (<= 0.0.0+20080110-1.1), hunspell-da (<= 1:3.1.0), hunspell-de-at (<= 20100727-1), hunspell-de-ch (<= 20100727-1), hunspell-de-de (<= 20100727-1), hunspell-en-us (<= 20070829-4ubuntu2), hunspell-eu-es (<= 0.4.20081029-4), hunspell-gl-es (<= 2.2a-8), hunspell-kk (<= 1.1-1), hunspell-ko (<= 0.5.3-1), hunspell-se (<= 1.0~beta6.20081222-1.1), hunspell-uz (<= 0.6-3.1), hyphen-en-us (<< 2.8.3-1), myspell-bg (<= 3.0-12), myspell-ca (<= 0.6-10), myspell-cs (<= 20040229-5), myspell-cs-cz (<= 20040229-5), myspell-da (<= 1.6.25-1), myspell-de-at (<= 20100727-1), myspell-de-ch (<= 20100727-1), myspell-de-de (<= 20100727-1), myspell-de-de-oldspell (<= 1:2-27), myspell-el-gr (<= 0.8-1), myspell-en-au (<= 2.1-5), myspell-eo (<= 2.1.2000.02.25-42), myspell-es (<= 1.11-1), myspell-et (<= 1:20030606-12.1), myspell-eu-es (<= 0.4.20081029-4), myspell-fa (<= 0.20070816-2), myspell-fi (<= 0.7-17.3), myspell-fo (<= 0.2.44-2), myspell-fr (<= 1.4-25), myspell-fr-gut (<= 1:1.0-28), myspell-ga (<= 2.0-20), myspell-gd (<= 0.50-7), myspell-gl-es (<= 2.2a-8), myspell-gv (<= 0.50-9), myspell-he (<= 1.1-1), myspell-hr (<= 20060617-2), myspell-hu (<= 0.99.4-2), myspell-hy (<= 0.20.0-1), myspell-ku (<= 0.20.0-1.1), myspell-lv (<= 0.9.3-2), myspell-nb (<= 2.0.10-3.2), myspell-nl (<= 1:2.0-1), myspell-nn (<= 2.0.10-3.2), myspell-nr (<< 20070206-4ubuntu1), myspell-ns (<< 20070206-4ubuntu1), myspell-pl (<= 20100612-1), myspell-pt-br (<= 20101030-1), myspell-pt-pt (<= 20091013-2), myspell-ru (<= 0.99g5-8.1), myspell-sk (<= 0.5.5a-2.1fakesync1), myspell-sl (<< 1.0-3ubuntu1), myspell-ss (<< 20070206-4ubuntu1), myspell-sv-se (<= 1.3.8-6-2.2), myspell-tn (<< 20070206-4ubuntu1), myspell-ts (<< 20070207-4ubuntu1), myspell-uk (<= 1.6.0-1), myspell-ve (<< 20070206-3ubuntu1), myspell-xh (<< 20070206-4ubuntu1), myspell-zu (<< 20070207-5ubuntu1), mythes-it (<= 2.0.7.gh.deb1-3), openoffice.org-thesaurus-it (<< 2.0.7.gh.deb1-1.1ubuntu3)
+Size: 301776
 Description: Common utilities for spelling dictionary tools
  These are utilities shared by all ispell, myspell and wordlist
  dictionaries, including support for some tools that use ispell
@@ -7804,11 +7894,11 @@ Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-3
+Version: 1.10.1+dfsg-4
 Depends: libc6 (>= 2.3.4), libkeyutils1
 Pre-Depends: multiarch-support
 Conflicts: libkrb53
-Size: 49282
+Size: 49362
 Description: MIT Kerberos runtime libraries - Support library
  Kerberos is a system for authenticating users and services on a network.
  Kerberos is a trusted third-party service.  That means that there is a
@@ -8251,10 +8341,10 @@ Maintainer: Loic Minier <lool@dooz.org>
 Architecture: i386
 Multi-Arch: same
 Source: poppler
-Version: 0.18.4-4
+Version: 0.18.4-5
 Depends: libc6 (>= 2.4), libcairo2 (>= 1.10.0), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.1.1), libglib2.0-0 (>= 2.24.0), libpoppler19 (>= 0.18.4), libstdc++6 (>= 4.1.1)
 Pre-Depends: multiarch-support
-Size: 106174
+Size: 106248
 Description: PDF rendering library (GLib-based shared library)
  Poppler is a PDF rendering library based on Xpdf PDF viewer.
  .
@@ -8374,16 +8464,18 @@ Original-Maintainer: Loic Minier <lool@dooz.org>
 Package: gnupg
 Priority: important
 Section: utils
-Installed-Size: 4942
-Maintainer: Debian GnuPG-Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
+Installed-Size: 4915
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.4.12-7
-Depends: libbz2-1.0, libc6 (>= 2.4), libreadline6 (>= 6.0), libusb-0.1-4 (>= 2:0.1.12), zlib1g (>= 1:1.1.4), dpkg (>= 1.15.4) | install-info, gpgv
+Version: 1.4.12-7baureo1
+Depends: libbz2-1.0, libc6 (>= 2.3.4), libreadline6 (>= 6.0), libusb-0.1-4 (>= 2:0.1.12), zlib1g (>= 1:1.1.4), dpkg (>= 1.15.4) | install-info, gpgv
+Pre-Depends: dpkg-lzip
 Recommends: libldap-2.4-2 (>= 2.4.7), gnupg-curl
 Suggests: gnupg-doc, xloadimage | imagemagick | eog, libpcsclite1
 Filename: pool/main/g/gnupg/gnupg_1.4.10-4_i386.deb
-Size: 1937844
+Size: 1127976
 MD5sum: 531563eb1c0109d1729acb5175f473cd
 Description: GNU privacy guard - a free PGP replacement
  GnuPG is GNU's tool for secure communication and data storage.
@@ -8404,6 +8496,13 @@ Description: GNU privacy guard - a free PGP replacement
  compatible with PGP2, because that uses IDEA (which is patented in
  a number of countries).
 Homepage: http://www.gnupg.org
+Original-Maintainer: Debian GnuPG-Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
+Original-Uploaders: Sune Vuorela <debian@pusling.com>,
+ Daniel Leidert <dleidert@debian.org>,
+ Thijs Kinkhorst <thijs@debian.org>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-gnupg/gnupg/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-gnupg/gnupg/trunk/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libkcmutils4
 Priority: optional
@@ -8486,16 +8585,16 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libnewt0.52
 Priority: important
 Section: libs
-Installed-Size: 791
+Installed-Size: 792
 Maintainer: Alastair McKinstry <mckinstry@debian.org>
 Architecture: i386
 Source: newt
-Version: 0.52.14-10
-Depends: libc6 (>= 2.3), libslang2 (>= 2.2.4)
+Version: 0.52.14-11.1
+Depends: libc6 (>= 2.4), libslang2 (>= 2.2.4)
 Pre-Depends: multiarch-support
 Recommends: libfribidi0
 Filename: pool/main/n/newt/libnewt0.52_0.52.11-1_i386.deb
-Size: 71816
+Size: 77724
 MD5sum: be04bedb79431088f0ed072317143fdd
 Description: Not Erik's Windowing Toolkit - text mode windowing with slang
  Newt is a windowing toolkit for text mode built from the slang library.
@@ -8593,9 +8692,9 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: xorg
-Version: 1:7.7+1
+Version: 1:7.7+2
 Depends: debconf (>= 0.5) | debconf-2.0, lsb-base (>= 1.3-9ubuntu2)
-Size: 278012
+Size: 283664
 Description: X Window System (X.Org) infrastructure
  x11-common contains the filesystem infrastructure required for further
  installation of the X Window System in any configuration; it does not
@@ -9119,13 +9218,13 @@ Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.26.0-1
+Version: 7.26.0-1+wheezy1
 Replaces: libcurl2 (<< 1:7.11.2-2), libcurl4
 Depends: libc6 (>= 2.11), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), libssh2-1 (>= 1.2.6), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Recommends: ca-certificates
 Conflicts: libcurl4
-Size: 336044
+Size: 336146
 Description: easy-to-use client-side URL transfer library (OpenSSL flavour)
  libcurl is an easy-to-use client-side URL transfer library, supporting DICT,
  FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, POP3, POP3S, RTMP,
@@ -9407,16 +9506,18 @@ Homepage: http://www.cyrusimap.org/
 Package: passwd
 Priority: required
 Section: admin
-Installed-Size: 2196
-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Installed-Size: 2148
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
 Source: shadow
-Version: 1:4.1.5.1-1
+Version: 1:4.1.5.1-1baureo1
 Replaces: manpages-tr (<< 1.0.5), manpages-zh (<< 1.5.1-1)
-Depends: libc6 (>= 2.8), libpam0g (>= 0.99.7.1), libselinux1 (>= 1.32), libsemanage1 (>= 2.0.3), libpam-modules, debianutils (>= 2.15.2)
+Depends: libc6 (>= 2.3), libpam0g (>= 0.99.7.1), libselinux1 (>= 1.32), libsemanage1 (>= 2.0.3), libpam-modules, debianutils (>= 2.15.2)
+Pre-Depends: dpkg-lzip
 Filename: pool/main/s/shadow/passwd_4.1.4.2+svn3283-2+squeeze1_i386.deb
-Size: 1235444
+Size: 925278
 MD5sum: ec0a3936d002eb286de7d0713f11d8d1
 Description: change and administer password and group data
  This package includes passwd, chsh, chfn, and many other programs to
@@ -9424,6 +9525,11 @@ Description: change and administer password and group data
  .
  Shadow passwords are supported.  See /usr/share/doc/passwd/README.Debian
 Homepage: http://pkg-shadow.alioth.debian.org/
+Original-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Original-Uploaders: Christian Perrier <bubulle@debian.org>, Nicolas FRANCOIS (Nekral) <nicolas.francois@centraliens.net>
+Original-Vcs-Browser: http://svn.debian.org/viewsvn/pkg-shadow/debian/trunk
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-shadow/debian/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xfonts-75dpi
 Priority: optional
@@ -9872,16 +9978,17 @@ Homepage: http://savannah.nongnu.org/projects/sysvinit
 Package: libblkid1
 Priority: required
 Section: libs
-Installed-Size: 241
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 238
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: util-linux
-Version: 2.20.1-5.3
-Depends: libc6 (>= 2.7), libuuid1 (>= 2.16)
-Pre-Depends: multiarch-support
+Version: 2.20.1-5.3baureo1
+Depends: libc6 (>= 2.4), libuuid1 (>= 2.16)
+Pre-Depends: dpkg-lzip, multiarch-support
 Filename: pool/main/u/util-linux/libblkid1_2.17.2-9_i386.deb
-Size: 127524
+Size: 115812
 MD5sum: d4f93860a7a9fa3da8f7001d88fcce72
 Description: block device id library
  The blkid library which allows system programs like fsck and
@@ -9890,6 +9997,11 @@ Description: block device id library
  filesystems by hard-coded device names, but via a logical naming
  system instead.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libdatrie1
 Priority: optional
@@ -10150,11 +10262,11 @@ Section: x11
 Installed-Size: 472
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:1.0.1-4
+Version: 1:1.0.1-5
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.17), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Recommends: libgl1-mesa-dri (>= 7.11.1)
-Size: 307912
+Size: 307978
 Description: X.Org X server -- Nouveau display driver
  This driver for the X.Org X server (see xserver-xorg for a further description)
  provides support for NVIDIA Riva, TNT, GeForce, and Quadro cards.
@@ -10322,16 +10434,16 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceape.git
 Package: git-man
 Priority: optional
 Section: doc
-Installed-Size: 1158
+Installed-Size: 1174
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: git
-Version: 1:1.8.1.1-1~baureo1
+Version: 1:1.8.2~rc0-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git (<< 1:1.7.4~rc1), git-core (<< 1:1.7.0.4-1.)
 Breaks: git (<< 1:1.7.4~rc1)
-Size: 1135338
+Size: 1151540
 Description: fast, scalable, distributed revision control system (manual pages)
  Git is popular version control system designed to handle very large
  projects with speed and efficiency; it is used for many high profile
@@ -10747,13 +10859,13 @@ Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: gnutls26
-Version: 2.12.20-2
+Version: 2.12.20-4
 Replaces: gnutls0, gnutls0.4, gnutls3
 Depends: libc6 (>= 2.8), libgcrypt11 (>= 1.4.5), libp11-kit0 (>= 0.11), libtasn1-3 (>= 1.6-0), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Breaks: ccbuild (<= 2.0.1-1), csync2 (<= 1.34-2.2), freewheeling (<= 0.6-1.1), gkrellm (<= 2.3.4-1), libsoup2.4-1 (= 2.31.2-1), libsoup2.4-1 (<= 2.30.1-1), macopix-gtk2 (<= 1.7.4-3), pokerth (<= 0.8.3-3+b1), pokerth-server (<= 0.8.3-3+b1), sipsak (<= 0.9.6-2.1), slrn (<= 1.0.0~pre18-1.1), slrnpull (<= 1.0.0~pre18-1.1), snowdrop (<= 0.02b-9), ssmtp (<= 2.64-4), tf5 (<= 5.0beta8-4), wput (<= 0.6.2-2), zoneminder (<= 1.24.4-1)
 Conflicts: gnutls0, gnutls0.4
-Size: 604212
+Size: 604988
 Description: GNU TLS library - runtime library
  GnuTLS is a portable library which implements the Transport Layer
  Security (TLS 1.0, 1.1, 1.2) and Secure Sockets Layer (SSL) 3.0 protocols.
@@ -10977,20 +11089,25 @@ Package: syslinux
 Priority: optional
 Section: utils
 Installed-Size: 169
-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 2:4.05+dfsg-6+deb7u1
+Version: 2:4.05+dfsg-6+deb7u1baureo1
 Replaces: syslinux-common
-Depends: libc6 (>= 2.7), libuuid1 (>= 2.16), syslinux-common (= 2:4.05+dfsg-6+deb7u1)
+Depends: libc6 (>= 2.7), libuuid1 (>= 2.16), syslinux-common (= 2:4.05+dfsg-6+deb7u1baureo1)
+Pre-Depends: dpkg-lzip
 Recommends: mtools
 Suggests: dosfstools, os-prober
-Breaks: syslinux-common (<< 2:4.05+dfsg-6+deb7u1)
-Size: 96076
+Breaks: syslinux-common (<< 2:4.05+dfsg-6+deb7u1baureo1)
+Size: 96734
 Description: collection of boot loaders
  SYSLINUX is a collection of boot loaders which operates off Linux ext2/3/4 or
  btrfs filesystems, FAT and NTFS filesystems, network servers using PXE
  firmware, or from CD-ROMs.
-Homepage: http://syslinux.zytor.com/
+Homepage: http://www.syslinux.org/
+Original-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Original-Uploaders: Otavio Salvador <otavio@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: gzip
 Essential: yes
@@ -11417,15 +11534,15 @@ Homepage: http://wireless.kernel.org/en/developers/Regulatory/#CRDA
 Package: dmsetup
 Priority: optional
 Section: admin
-Installed-Size: 168
+Installed-Size: 169
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Source: lvm2 (2.02.95-4)
-Version: 2:1.02.74-4
+Source: lvm2 (2.02.95-6)
+Version: 2:1.02.74-6
 Depends: libc6 (>= 2.4), libdevmapper1.02.1 (>= 2:1.02.74), libudev0 (>= 0.140), util-linux (>> 2.16)
 Conflicts: devicekit-disks (<< 009)
-Size: 67924
+Size: 67112
 Description: Linux Kernel Device Mapper userspace library
  The Linux Kernel Device Mapper is the LVM (Linux Logical Volume Management)
  Team's implementation of a minimalistic kernel-space driver that handles
@@ -11948,21 +12065,21 @@ Homepage: http://www.bzip.org/
 Package: git
 Priority: optional
 Section: vcs
-Installed-Size: 15270
+Installed-Size: 16138
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1:1.8.1.1-1~baureo1
+Version: 1:1.8.2~rc0-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git-core (<< 1:1.7.0.4-1.), gitweb (<< 1:1.7.4~rc1)
 Provides: git-completion, git-core
-Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.1.1), git-man (<< 1:1.8.1.1-.)
+Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.2~rc0), git-man (<< 1:1.8.2~rc0-.)
 Pre-Depends: dpkg-lzip
 Recommends: patch, less, rsync, ssh-client
 Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-arch, git-cvs, git-svn, git-email, git-gui, gitk, gitweb
 Breaks: bash-completion (<< 1:1.90-1), cogito (<= 0.18.2+), git-buildpackage (<< 0.4.38), git-core (<< 1:1.7.0.4-1.), gitosis (<< 0.2+20090917-7), gitpkg (<< 0.15), gitweb (<< 1:1.7.4~rc1), guilt (<< 0.33), qgit (<< 1.5.5), stgit (<< 0.15), stgit-contrib (<< 0.15)
 Conflicts: git-core (<< 1:1.5.2~rc3-2.)
-Size: 2443500
+Size: 2527908
 Description: fast, scalable, distributed revision control system
  Git is popular version control system designed to handle very large
  projects with speed and efficiency; it is used for many high profile
@@ -12029,18 +12146,18 @@ Description: X.Org X server -- Intel i8xx, i9xx display driver
 Package: perl
 Priority: standard
 Section: perl
-Installed-Size: 11282
+Installed-Size: 11283
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
-Version: 5.14.2-16
+Version: 5.14.2-19
 Replaces: libarchive-tar-perl (<= 1.38-2), libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libmodule-corelist-perl (<< 2.14-2), libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl-base (<< 5.10.1-12), perl-doc (<< 5.8.0-1), perl-modules (<< 5.8.1-1)
 Provides: data-dumper, libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl5
-Depends: perl-base (= 5.14.2-16), perl-modules (>= 5.14.2-16), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
+Depends: perl-base (= 5.14.2-19), perl-modules (>= 5.14.2-19), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
 Recommends: netbase
 Suggests: perl-doc, libterm-readline-gnu-perl | libterm-readline-perl-perl, make
-Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.61), libencode-perl (<< 2.42.01), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
+Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.71-2), libencode-perl (<< 2.42.01), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
 Conflicts: libjson-pp-perl (<< 2.27200-2)
-Size: 3700978
+Size: 3700676
 Description: Larry Wall's Practical Extraction and Report Language
  An interpreted scripting language, known among some as "Unix's Swiss
  Army Chainsaw".
@@ -12119,15 +12236,15 @@ Description: Fixed-width fonts for fast reading on the Linux console
 Package: libcupscgi1
 Priority: optional
 Section: libs
-Installed-Size: 176
+Installed-Size: 177
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.13)
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
 Pre-Depends: multiarch-support
-Size: 115692
+Size: 115908
 Description: Common UNIX Printing System(tm) - CGI library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -12451,16 +12568,16 @@ Package: libc-bin
 Essential: yes
 Priority: required
 Section: libs
-Installed-Size: 3090
+Installed-Size: 3091
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: eglibc
-Version: 2.13-37
+Version: 2.13-38
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Breaks: libc0.1 (<< 2.10), libc0.3 (<< 2.10), libc6 (<< 2.10), libc6.1 (<< 2.10)
 Filename: pool/main/e/eglibc/libc-bin_2.11.3-2_i386.deb
-Size: 1211690
+Size: 1211036
 MD5sum: 1461399818a3202f675c2780067494ef
 Description: Embedded GNU C Library: Binaries
  This package contains utility programs related to the GNU C Library.
@@ -12697,10 +12814,10 @@ Installed-Size: 62
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg
-Version: 1:7.7+1
+Version: 1:7.7+2
 Depends: xserver-xorg-input-evdev, xserver-xorg-input-synaptics
 Recommends: xserver-xorg-input-wacom
-Size: 35914
+Size: 35816
 Description: X.Org X server -- input driver metapackage
  This package depends on the full suite of input drivers for the X.Org X server
  (Xorg).  It does not provide any drivers itself, and may be removed if you wish
@@ -12952,15 +13069,15 @@ Description: X11 Inter-Client Exchange library
 Package: libjson0
 Priority: extra
 Section: libs
-Installed-Size: 68
+Installed-Size: 77
 Maintainer: fabien boucher <fabien.dot.boucher@gmail.com>
 Architecture: i386
 Multi-Arch: same
 Source: json-c
-Version: 0.9-1.1
+Version: 0.10-1.2
 Depends: libc6 (>= 2.8)
 Pre-Depends: multiarch-support
-Size: 19640
+Size: 24652
 Description: JSON manipulation library - shared library
  This library allows you to easily construct JSON objects in C,
  output them as JSON formatted strings and parse JSON formatted
@@ -13100,10 +13217,10 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.13), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
 Pre-Depends: multiarch-support
-Size: 140126
+Size: 140190
 Description: Common UNIX Printing System(tm) - PPD manipulation library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -13301,16 +13418,17 @@ Homepage: http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
 Package: ntpdate
 Priority: optional
 Section: net
-Installed-Size: 219
-Maintainer: Debian NTP Team <pkg-ntp-maintainers@lists.alioth.debian.org>
+Installed-Size: 217
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: ntp
-Version: 1:4.2.6.p5+dfsg-2
-Depends: netbase, libc6 (>= 2.4), libssl1.0.0 (>= 1.0.0)
-Pre-Depends: dpkg (>= 1.15.7.2)
+Version: 1:4.2.6.p5+dfsg-2baureo1
+Depends: netbase, libc6 (>= 2.3), libssl1.0.0 (>= 1.0.0)
+Pre-Depends: dpkg-lzip
 Recommends: lockfile-progs
 Breaks: dhcp3-client (<< 4.1.0-1)
-Size: 80522
+Size: 72302
 Description: client for setting system time from NTP servers
  NTP, the Network Time Protocol, is used to keep computer clocks
  accurate by synchronizing them over the Internet or a local network,
@@ -13327,6 +13445,11 @@ Description: client for setting system time from NTP servers
  If the full NTP daemon from the package "ntp" is installed, then
  ntpdate is not necessary.
 Homepage: http://support.ntp.org/
+Original-Maintainer: Debian NTP Team <pkg-ntp-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Bdale Garbee <bdale@gag.com>, Peter Eisentraut <petere@debian.org>, Kurt Roeckx <kurt@roeckx.be>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-ntp/ntp/trunk/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-ntp/ntp/trunk/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libc6
 Priority: required
@@ -13336,16 +13459,16 @@ Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: eglibc
-Version: 2.13-37
+Version: 2.13-38
 Replaces: libc6-i386
 Provides: glibc-2.13-1
-Depends: libc-bin (= 2.13-37), libgcc1
+Depends: libc-bin (= 2.13-38), libgcc1
 Recommends: libc6-i686
 Suggests: glibc-doc, debconf | debconf-2.0, locales
 Breaks: locales (<< 2.13), locales-all (<< 2.13), nscd (<< 2.13)
 Conflicts: prelink (<= 0.0.20090311-1), tzdata (<< 2007k-1), tzdata-etch
 Filename: pool/main/e/eglibc/libc6_2.11.3-2_i386.deb
-Size: 3932840
+Size: 3939074
 MD5sum: 98b7f493e00de957998177965ddbbdc9
 Description: Embedded GNU C Library: Shared libraries
  Contains the standard libraries that are used by nearly all programs on
@@ -13504,15 +13627,17 @@ Homepage: http://libpng.org/pub/png/libpng.html
 Package: apt-utils
 Priority: important
 Section: admin
-Installed-Size: 1283
-Maintainer: APT Development Team <deity@lists.debian.org>
+Installed-Size: 1275
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: apt
-Version: 0.9.7.7
-Depends: libapt-inst1.5 (>= 0.8.0), libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.4), libdb5.1, libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
+Version: 0.9.7.7-0baureo1
+Depends: libapt-inst1.5 (>= 0.8.0), libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.3.6-6~), libdb5.1, libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
+Pre-Depends: dpkg-lzip
 Suggests: xz-utils
 Filename: pool/main/a/apt/apt-utils_0.8.10.3+squeeze1_i386.deb
-Size: 379320
+Size: 327460
 MD5sum: f4c7780300f5c44c97f8d15704b3cd0b
 Description: package managment related utility programs
  This package contains some less used commandline utilities related
@@ -13523,6 +13648,13 @@ Description: package managment related utility programs
   * apt-ftparchive is used to create Packages and other index files
     needed to publish an archive of debian packages
   * apt-sortpkgs is a Packages/Sources file normalizer.
+Original-Maintainer: APT Development Team <deity@lists.debian.org>
+Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
+ Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
+ Julian Andres Klode <jak@debian.org>
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: lzip
 Priority: optional
@@ -13568,23 +13700,26 @@ Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 Package: udev
 Priority: important
 Section: admin
-Installed-Size: 959
-Maintainer: Marco d'Itri <md@linux.it>
+Installed-Size: 917
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 175-7
+Version: 175-7.1baureo1
 Replaces: libudev0
-Depends: libc6 (>= 2.10), libselinux1 (>= 1.32), libudev0 (= 175-7), lsb-base (>= 3.0-6), util-linux (>= 2.16), procps
-Pre-Depends: debconf (>= 1.4.69) | debconf-2.0
+Depends: libc6 (>= 2.10), libselinux1 (>= 1.32), libudev0 (= 175-7.1baureo1), lsb-base (>= 3.0-6), util-linux (>= 2.16), procps
+Pre-Depends: dpkg-lzip, debconf (>= 1.4.69) | debconf-2.0
 Recommends: usbutils, pciutils
 Breaks: consolekit (<< 0.4.1), dmsetup (<< 2.02.84-1), libsane (<< 1.0.21-3), linux-image-2.6-486 (<< 2.6.32), linux-image-2.6-686 (<< 2.6.32), linux-image-2.6-686-bigmem (<< 2.6.32), linux-image-2.6-amd64 (<< 2.6.32), linux-image-2.6-k7 (<< 2.6.32), linux-image-2.6-openvz-686 (<< 2.6.32), linux-image-2.6-vserver-686 (<< 2.6.32), linux-image-2.6-vserver-686-bigmem (<< 2.6.32), linux-image-2.6-xen-686 (<< 2.6.32), mdadm (<< 3.0-3), multipath-tools (<< 0.4.8-12), systemd (<< 28)
 Conflicts: libc6 (<< 2.9-22)
 Filename: pool/main/u/udev/udev_164-3_i386.deb
-Size: 374674
+Size: 239802
 MD5sum: e34ca58cc428f11e8bf04753d64e31d9
 Description: /dev/ and hotplug management daemon
  udev is a daemon which dynamically creates and removes device nodes from
  /dev/, handles hotplug events and loads drivers at boot time.
+Original-Maintainer: Marco d'Itri <md@linux.it>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: firmware-b43-installer
 Priority: optional
@@ -13637,15 +13772,15 @@ Description: Debian Font Manager -- automatic font configuration framework
 Package: libpixman-1-0
 Priority: optional
 Section: libs
-Installed-Size: 835
+Installed-Size: 836
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: pixman
-Version: 0.26.0-3
+Version: 0.26.0-4
 Depends: libc6 (>= 2.3)
 Pre-Depends: multiarch-support
-Size: 442022
+Size: 442436
 Description: pixel-manipulation library for X and cairo
  A library for manipulating pixel regions -- a set of Y-X banded
  rectangles, image compositing using the Porter/Duff model
@@ -13672,13 +13807,15 @@ Homepage: http://lloyd.github.com/yajl/
 Package: iptables
 Priority: important
 Section: net
-Installed-Size: 1200
+Installed-Size: 1201
 Maintainer: Laurence J. Lane <ljlane@debian.org>
 Architecture: i386
-Version: 1.4.14-3
+Version: 1.4.14-3.1
+Provides: libxtables7
 Depends: libc6 (>= 2.7), libnfnetlink0 (>= 1.0.0)
+Breaks: iproute (<< 20120521-3), xtables-addons-common (<< 1.42-2)
 Filename: pool/main/i/iptables/iptables_1.4.8-3_i386.deb
-Size: 387300
+Size: 387158
 MD5sum: e8bd99e17e9cfabf90469e5defba3d56
 Description: administration tools for packet filtering and NAT
  These are the user-space administration tools for the Linux
@@ -13835,11 +13972,11 @@ Maintainer: Loic Minier <lool@dooz.org>
 Architecture: i386
 Multi-Arch: same
 Source: poppler
-Version: 0.18.4-4
+Version: 0.18.4-5
 Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.9.0), libfreetype6 (>= 2.2.1), libjpeg8 (>= 8c), liblcms1 (>= 1.15-1), libopenjpeg2, libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.1.1), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
 Recommends: poppler-data
-Size: 1091044
+Size: 1091100
 Description: PDF rendering library
  Poppler is a PDF rendering library based on Xpdf PDF viewer.
  .
@@ -14164,18 +14301,18 @@ Homepage: http://www.mpfr.org/
 Package: isc-dhcp-client
 Priority: important
 Section: net
-Installed-Size: 1887
+Installed-Size: 1888
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.2.2.dfsg.1-5+deb70u2
+Version: 4.2.2.dfsg.1-5+deb70u3
 Replaces: dhcp3-client
 Provides: dhcp-client, dhcp3-client
-Depends: libc6 (>= 2.4), debianutils (>= 2.8.2), isc-dhcp-common (= 4.2.2.dfsg.1-5+deb70u2), iproute
+Depends: libc6 (>= 2.4), debianutils (>= 2.8.2), isc-dhcp-common (= 4.2.2.dfsg.1-5+deb70u3), iproute
 Suggests: resolvconf, avahi-autoipd
 Conflicts: dhcp-client (<< 3.0), ifupdown (<< 0.6.8+nmu3), resolvconf (<= 1.45), samba-common (<< 3.0.0beta1-2)
 Filename: pool/main/i/isc-dhcp/isc-dhcp-client_4.1.1-P1-15+squeeze3_i386.deb
-Size: 791766
+Size: 791570
 MD5sum: ea80f83efebe75cae67f0df1cf9d84a9
 Description: ISC DHCP client
  This is the client from the Internet Software Consortium's implementation of
@@ -14253,14 +14390,15 @@ Homepage: http://www.nvidia.com
 Package: ca-certificates
 Priority: optional
 Section: misc
-Installed-Size: 392
+Installed-Size: 329
 Maintainer: Michael Shuler <michael@pbandjelly.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 20120623
+Version: 20130119
 Depends: openssl (>= 1.0.0), debconf (>= 0.5) | debconf-2.0
+Breaks: ca-certificates-java (<< 20121112+nmu1)
 Enhances: openssl
-Size: 183022
+Size: 185428
 Description: Common CA certificates
  This package includes PEM files of CA certificates to allow SSL-based
  applications to check for the authenticity of SSL connections.
@@ -14345,10 +14483,10 @@ Section: x11
 Installed-Size: 329
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:6.14.4-6
+Version: 1:6.14.4-7
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.1.3), libpciaccess0, xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901), xserver-xorg-video-r128, xserver-xorg-video-mach64, xserver-xorg-video-radeon
-Size: 275200
+Size: 275242
 Description: X.Org X server -- AMD/ATI display driver wrapper
  This package provides the 'ati' driver for the AMD/ATI Mach64, Rage128,
  Radeon, FireGL, FireMV, FirePro and FireStream series. This driver is
@@ -14387,19 +14525,28 @@ Description: X.Org X server -- SiliconMotion display driver
 Package: nvidia-detect
 Priority: optional
 Section: non-free/x11
-Installed-Size: 118
-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Installed-Size: 157
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 304.64-4
+Version: 304.64-4baureo1
 Depends: pciutils
-Size: 94098
+Pre-Depends: dpkg-lzip
+Size: 94660
 Description: NVIDIA GPU detection utility
  The 'nvidia-detect' script in this package checks for an NVIDIA GPU in the
  system and recommends one of the non-free accelerated driver meta-packages
  (nvidia-glx, nvidia-glx-legacy-173xx or nvidia-glx-legacy-96xx) for
  installation.
 Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: less
 Priority: standard
@@ -14425,18 +14572,18 @@ Homepage: http://www.greenwoodsoftware.com/less/
 Package: libglib2.0-0
 Priority: optional
 Section: libs
-Installed-Size: 3982
+Installed-Size: 3983
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: glib2.0
-Version: 2.33.12+really2.32.4-3
+Version: 2.33.12+really2.32.4-5
 Replaces: libglib2.0-dev (<< 2.23.2-2)
 Depends: libc6 (>= 2.9), libffi5 (>= 3.0.4), libpcre3 (>= 8.10), libselinux1 (>= 1.32), zlib1g (>= 1:1.2.2)
 Pre-Depends: multiarch-support
 Recommends: libglib2.0-data, shared-mime-info
-Breaks: emacs23 (<< 23.4+1-3), eog (<< 3.2.2-3), gdm3 (<< 3.0.3), gnome-control-center (<< 1:3), gnome-session (<< 3.0.0-3), gvfs (<< 1.8), gwaei (<< 3.2.0b1-2), libgtk-3-0 (<< 3.0.12)
-Size: 1829940
+Breaks: gvfs (<< 1.8)
+Size: 1829432
 Description: GLib library of C routines
  GLib is a library containing many useful C routines for things such
  as trees, hashes, lists, and strings.  It is a useful general-purpose
@@ -14643,15 +14790,15 @@ Description: Netfilter netlink library
 Package: libcupsimage2
 Priority: optional
 Section: libs
-Installed-Size: 225
+Installed-Size: 226
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.13
-Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-2.13), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
+Version: 1.5.3-2.15
+Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
-Size: 138154
+Size: 138232
 Description: Common UNIX Printing System(tm) - Raster image library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -14709,19 +14856,19 @@ Description: Wietse Venema's TCP wrappers library
 Package: cups
 Priority: optional
 Section: net
-Installed-Size: 4158
+Installed-Size: 4159
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.5.3-2.13
+Version: 1.5.3-2.15
 Replaces: cupsddk-drivers (<< 1.4.0), ghostscript-cups (<< 9.02~)
 Provides: cupsddk-drivers
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-2.13), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-2.13), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-2.15), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
 Pre-Depends: dpkg (>= 1.15.7.2)
 Recommends: avahi-daemon, colord, foomatic-filters (>= 4.0), printer-driver-gutenprint, ghostscript-cups (>= 9.02~)
 Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
 Breaks: cupsddk-drivers (<< 1.4.0), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
-Size: 1390300
+Size: 1390680
 Description: Common UNIX Printing System(tm) - server
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -14739,14 +14886,14 @@ Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-3
-Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-3)
+Version: 1.10.1+dfsg-4
+Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-4)
 Pre-Depends: multiarch-support
 Recommends: krb5-locales
 Suggests: krb5-doc, krb5-user
 Breaks: libsmbclient (<= 2:3.6.1-2), sssd (<= 1.2.1-4.3)
 Conflicts: libkrb53
-Size: 403056
+Size: 402652
 Description: MIT Kerberos runtime libraries
  Kerberos is a system for authenticating users and services on a network.
  Kerberos is a trusted third-party service.  That means that there is a

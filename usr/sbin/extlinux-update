@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## Copyright (C) 2006-2012 Daniel Baumann <daniel.baumann@progress-technologies.net>
+## Copyright (C) 2006-2013 Daniel Baumann <daniel.baumann@progress-technologies.net>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -183,47 +183,65 @@ do
 
 	if echo ${EXTLINUX_ALTERNATIVES} | grep -q default
 	then
-
-	# Writing default entry
-	_CONFIG="${_CONFIG}
+		# Writing default entry
+		_CONFIG="${_CONFIG}
 
 label l${_NUMBER}
-	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION}
+	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION}"
+
+		if [ "${EXTLINUX_DEFAULT}" = "l${_NUMBER}" ]
+		then
+			_CONFIG="${_CONFIG}
+	menu default"
+		fi
+
+		_CONFIG="${_CONFIG}
 	linux ${_BOOT_DIRECTORY}/vmlinuz-${_VERSION}
 	append ${_INITRD} ${EXTLINUX_ROOT} ${EXTLINUX_PARAMETERS}"
-
 	fi
 
 	if echo ${EXTLINUX_ALTERNATIVES} | grep -q live
 	then
-
-	# Writing live entry
-	_CONFIG="${_CONFIG}
+		# Writing live entry
+		_CONFIG="${_CONFIG}
 
 label l${_NUMBER}l
-	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION} (live mode)
+	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION} (live mode)"
+
+		if [ "${EXTLINUX_DEFAULT}" = "l${_NUMBER}l" ]
+		then
+			_CONFIG="${_CONFIG}
+	menu default"
+		fi
+
+		_CONFIG="${_CONFIG}
 	linux ${_BOOT_DIRECTORY}/vmlinuz-${_VERSION}
 	append ${_INITRD} ${EXTLINUX_ROOT} ${EXTLINUX_PARAMETERS} boot=live plainroot
 	text help
    This option boots the system into live mode (non-persistent)
 	endtext"
-
 	fi
 
 	if echo ${EXTLINUX_ALTERNATIVES} | grep -q recovery
 	then
-
-	# Writing recovery entry
-	_CONFIG="${_CONFIG}
+		# Writing recovery entry
+		_CONFIG="${_CONFIG}
 
 label l${_NUMBER}r
-	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION} (recovery mode)
+	menu label ${EXTLINUX_MENU_LABEL} ${_VERSION} (recovery mode)"
+
+		if [ "${EXTLINUX_DEFAULT}" = "l${_NUMBER}r" ]
+		then
+			_CONFIG="${_CONFIG}
+		menu default"
+		fi
+
+		_CONFIG="${_CONFIG}
 	linux ${_BOOT_DIRECTORY}/vmlinuz-${_VERSION}
 	append ${_INITRD} ${EXTLINUX_ROOT} $(echo ${EXTLINUX_PARAMETERS} | sed -e 's| quiet||') single
 	text help
    This option boots the system into recovery mode (single-user)
 	endtext"
-
 	fi
 
 	_NUMBER="$((${_NUMBER} + 1))"
@@ -297,7 +315,15 @@ _CONFIG="\
 		_CONFIG="${_CONFIG}
 
 label m${_NUMBER}
-	menu label Memdisk, image $(basename ${_IMAGE})
+	menu label Memdisk, image $(basename ${_IMAGE})"
+
+		if [ "${EXTLINUX_DEFAULT}" = "m${_NUMBER}" ]
+		then
+			_CONFIG="${_CONFIG}
+		menu default"
+		fi
+
+		_CONFIG="${_CONFIG}
 	linux ${_MEMDISK_DIRECTORY}/memdisk
 	initrd ${_IMAGE}
 	append ${_IMAGE_APPEND}"
@@ -359,7 +385,15 @@ _CONFIG="\
 		_CONFIG="${_CONFIG}
 
 label o${_NUMBER}
-	menu label Other OS, ${_LONGNAME} (on ${_DEVICE})
+	menu label Other OS, ${_LONGNAME} (on ${_DEVICE})"
+
+		if [ "${EXTLINUX_DEFAULT}" = "o${_NUMBER}" ]
+		then
+			_CONFIG="${_CONFIG}
+	menu default"
+		fi
+
+		_CONFIG="${_CONFIG}
 	kernel chain.c32
 	append hd${_DEVICENAME}"
 

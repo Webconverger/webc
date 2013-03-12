@@ -15,7 +15,20 @@ case "${1}" in
 			true)
 				extlinux-update
 
-				_DEVICE="$(df -P /boot/extlinux | tail -1 | awk '{ print $1 }' | sed -e 's|[0-9]||g')"
+				_DEVICE=""
+				_PATH="/boot/extlinux"
+
+				while true
+				do
+					_DEVICE="$(findmnt --canonicalize --noheadings --output SOURCE --raw ${_PATH}/ | sed -e 's|[0-9]||g')"
+
+					if [ -n "${_DEVICE}" ] || [ -z "${_PATH}" ]
+					then
+						break
+					fi
+
+					_PATH="$(dirname ${_PATH})"
+				done
 
 				extlinux-install "${_DEVICE}"
 				;;
