@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+    purge)
+        rm -f /etc/foomatic/filter.conf /etc/foomatic/defaultspooler
+        ucf --purge /etc/foomatic/filter.conf || true
+        ;;
+esac
+
+# Automatically added by dh_installdebconf
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section
+
+
+exit 0
