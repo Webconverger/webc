@@ -104,7 +104,6 @@ for x in $( cmdline ); do
 
 	debug)
 		echo "webc ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 		mount_git
 		;;
 
@@ -116,6 +115,29 @@ for x in $( cmdline ); do
 			logs "switching chrome to ${chrome}"
 			ln -s "$dir" "$link"
 		}
+		;;
+
+	printer=*)
+		p="$( /bin/busybox httpd -d ${x#printer=} )"
+		IFS=, read -ra P <<< "$p"
+		logs "Printer name: ${P[0]}"
+		logs "Printer device URI: ${P[1]}"
+		logs "Printer driver URI: ${P[2]}"
+		if [[ "${P[2]}" = http:* ]] 
+		then
+			t=$(tempfile)
+			if curl -L -f "${P[2]}" > $t
+			then
+				lpadmin -p "${P[0]}" -E -v "${P[1]}" -i "$t" &&
+				logs "Setup printer with PPD: lpadmin -p ${P[0]} -E -v ${P[1]} -i $t"
+			else
+				logs "Failed to download ${P[2]}, using generic.ppd"
+				lpadmin -p "${P[0]}" -E -v "${P[1]}" -m drv:///sample.drv/generic.ppd
+			fi
+		else
+			lpadmin -p "${P[0]}" -E -v "${P[1]}" -m "${P[2]}" &&
+			logs "Setup printer with ${P[2]}: lpadmin -p ${P[0]} -E -v ${P[1]} -m ${P[2]}"
+		fi
 		;;
 
 	hosts=*)
