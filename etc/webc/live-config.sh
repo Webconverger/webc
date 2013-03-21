@@ -149,6 +149,12 @@ for x in $( cmdline ); do
 			fi
 		;;
 
+	prefs=*)
+		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
+		wget --timeout=5 "${prefs}" -O /opt/firefox/defaults/preferences/prefs.js &&
+		logs "Set prefs: $(cat /opt/firefox/defaults/preferences/prefs.js)"
+		;;
+
 	iptables=*)
 		options=$( /bin/busybox httpd -d ${x#iptables=} )
 
