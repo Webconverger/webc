@@ -237,6 +237,24 @@ cat ${link}/content/about.xhtml.bak |
 sub_literal 'OS not running' "${webc_version} ${stamp}" |
 sub_literal 'var aboutwebc = "";' "var aboutwebc = \"$(echo ${install_qa_url} | sed 's,&,&amp;,g')\";" > ${link}/content/about.xhtml
 
+if cmdline_has dns
+then
+cat /etc/resolv.conf | sed '/nameserver/d' > /etc/resolv.conf.tmp
+
+for i in $(cmdline_get dns)
+do
+	IFS=,; for dns in $i
+	do
+		echo nameserver $dns
+	done
+done >> /etc/resolv.conf.tmp
+
+mv -f /etc/resolv.conf /etc/resolv.conf.old
+mv -f /etc/resolv.conf.tmp /etc/resolv.conf
+chmod 644 /etc/resolv.conf
+fi
+
+
 } # end of process_options
 
 update_cmdline() {
