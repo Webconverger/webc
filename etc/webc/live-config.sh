@@ -118,8 +118,10 @@ for x in $( cmdline ); do
 		;;
 
 	printer=*)
-		p="$( /bin/busybox httpd -d ${x#printer=} )"
-		IFS=, read -ra P <<< "$p"
+		IFS=, read -ra P <<< "${x#printer=}"
+		P[0]=$(/bin/busybox httpd -d ${P[0]})
+		P[1]=$(/bin/busybox httpd -d ${P[1]})
+		P[2]=$(/bin/busybox httpd -d ${P[2]})
 		logs "Printer name: ${P[0]}"
 		logs "Printer device URI: ${P[1]}"
 		logs "Printer driver URI: ${P[2]}"
