@@ -266,7 +266,7 @@ update_cmdline() {
 		touch /etc/webc/cmdline.tmp
 		# This file can be empty in the case of an invalidated configuration
 		mv /etc/webc/cmdline.tmp "$config_runtime"
-		logs "CONFIG: Download applied"
+		logs "CONFIG: Download applied $(md5sum $config_runtime)"
 	else
 		logs "CONFIG: Failed to download from $config_url"
 	fi
@@ -279,7 +279,7 @@ update_cmdline() {
 if test -s "$config_cached"
 then
 	cp "$config_cached" "$config_runtime"
-	logs "CONFIG: Applied cache"
+	logs "CONFIG: Applied cache $(md5sum $config_runtime)"
 else
 	touch "$config_runtime"
 	logs "CONFIG: No cache"
@@ -307,7 +307,7 @@ if touch /live/image
 then
 	# Cache cmdline in case subsequent boots can't reach $config_url
 	cp "$config_runtime" "$config_cached"
-	logs "CONFIG: cached $(tr '\n' ' ' < $config_cached)"
+	logs "CONFIG: cached $(md5sum $config_cached) $(tr '\n' ' ' < $config_cached)"
 
 	# Kicks off an upgrade
 	mkfifo $upgrade_pipe
