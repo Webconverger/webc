@@ -260,6 +260,11 @@ fi
 } # end of process_options
 
 update_cmdline() {
+
+	# Update $device
+	. "/etc/webc/webc.conf"
+
+
 	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url?V=$webc_version&D=$device"
 	then
 		# curl has a bug where it doesn't write an empty file
@@ -294,13 +299,13 @@ wait_for $live_config_pipe 2>/dev/null
 
 cmdline_has debug && set -x
 
+# Try to make /live/image writable
+mount -o remount,rw /live/image
+
 cmdline_has noconfig || update_cmdline
 process_options
 
 echo ACK > $live_config_pipe
-
-# Try to make /live/image writable
-mount -o remount,rw /live/image
 
 # if writable
 if touch /live/image
