@@ -260,7 +260,7 @@ fi
 } # end of process_options
 
 update_cmdline() {
-	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url"
+	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url?v=$webc_version"
 	then
 		# curl has a bug where it doesn't write an empty file
 		touch /etc/webc/cmdline.tmp
