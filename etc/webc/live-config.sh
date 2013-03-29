@@ -107,6 +107,10 @@ for x in $( cmdline ); do
 		mount_git
 		;;
 
+	support)
+		echo '*/5 * * * * root /sbin/support' > /etc/cron.d/webc-support
+		;;
+
 	chrome=*)
 		chrome=${x#chrome=}
 		dir="/etc/webc/extensions/${chrome}"
