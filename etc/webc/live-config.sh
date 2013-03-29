@@ -185,7 +185,7 @@ for x in $( cmdline ); do
 
 	cron=*)
 		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"
-		cat <<EOC > /etc/cron.d/live-config
+		cat <<EOC > /etc/cron.d/webc-$RANDOM
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 $cron
