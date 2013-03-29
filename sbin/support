@@ -1,0 +1,5 @@
+#!/bin/bash
+test -s /etc/webc/id || exit
+f="/tmp/$(cat /etc/webc/id | tr ';' '%')"
+tar cvfj "$f" /var/log
+curl -F f=@$f http://support.webconverger.com/
