@@ -1,0 +1,6 @@
+#!/bin/bash
+test -s /etc/webc/id || exit
+id="$(cat /etc/webc/id)"
+f="/tmp/log.tar.bz2"
+tar cvfj "$f" /var/log
+curl -F id="$id" -F f=@$f http://support.webconverger.com/?id="$id"

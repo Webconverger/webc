@@ -107,6 +107,10 @@ for x in $( cmdline ); do
 		mount_git
 		;;
 
+	support)
+		echo '*/5 * * * * root /sbin/support' > /etc/cron.d/webc-support
+		;;
+
 	chrome=*)
 		chrome=${x#chrome=}
 		dir="/etc/webc/extensions/${chrome}"
@@ -185,7 +189,7 @@ for x in $( cmdline ); do
 
 	cron=*)
 		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"
-		cat <<EOC > /etc/cron.d/live-config
+		cat <<EOC > /etc/cron.d/webc-$RANDOM
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 $cron
@@ -260,12 +264,19 @@ fi
 } # end of process_options
 
 update_cmdline() {
-	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url"
+
+	# Update $device
+	. "/etc/webc/webc.conf"
+
+	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url?V=$webc_version&D=$device&K=$kernel"
 	then
 		# curl has a bug where it doesn't write an empty file
 		touch /etc/webc/cmdline.tmp
 		# This file can be empty in the case of an invalidated configuration
-		mv /etc/webc/cmdline.tmp /etc/webc/cmdline
+		mv /etc/webc/cmdline.tmp "$config_runtime"
+		logs "CONFIG: Download applied $(md5sum $config_runtime)"
+	else
+		logs "CONFIG: Failed to download from $config_url"
 	fi
 }
 
@@ -273,11 +284,13 @@ update_cmdline() {
 # copy that to /etc/webc, so we can compare the new version with
 # it to detect changes and/or use it in case the new download
 # fails.
-if test -s /live/image/live/webc-cmdline
+if test -s "$config_cached"
 then
-	cp /live/image/live/webc-cmdline /etc/webc/cmdline
+	cp "$config_cached" "$config_runtime"
+	logs "CONFIG: Applied cache $(md5sum $config_runtime)"
 else
-	touch /etc/webc/cmdline
+	touch "$config_runtime"
+	logs "CONFIG: No cache"
 fi
 
 # If there is a local config we need to re-run wireless now we have config in right place
@@ -289,19 +302,20 @@ wait_for $live_config_pipe 2>/dev/null
 
 cmdline_has debug && set -x
 
+# Try to make /live/image writable
+mount -o remount,rw /live/image
+
 cmdline_has noconfig || update_cmdline
 process_options
 
 echo ACK > $live_config_pipe
 
-# Try to make /live/image writable
-mount -o remount,rw /live/image
-
 # if writable
 if touch /live/image
 then
 	# Cache cmdline in case subsequent boots can't reach $config_url
-	cp /etc/webc/cmdline /live/image/live/webc-cmdline
+	cp "$config_runtime" "$config_cached"
+	logs "CONFIG: cached $(md5sum $config_cached) $(tr '\n' ' ' < $config_cached)"
 
 	# Kicks off an upgrade
 	mkfifo $upgrade_pipe
@@ -309,7 +323,7 @@ else
 # /live/image could not be made writable (e.g. live version: booting
 # from an iso fs), so just use the new config downloaded
 # and skip all the other stuff below
-	logs "Not a writable boot medium. Could not cache configuration nor upgrade."
+	logs "CONFIG: Not a writable boot medium. Could not cache configuration nor upgrade."
 fi
 
 # live-config should restart via systemd and get blocked
