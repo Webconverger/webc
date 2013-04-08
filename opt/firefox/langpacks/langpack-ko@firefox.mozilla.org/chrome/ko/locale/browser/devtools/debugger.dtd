@@ -13,7 +13,7 @@
 
 <!-- LOCALIZATION NOTE (debuggerMenu.label): This is the label for the
   -  application menu item that opens the debugger UI. -->
-<!ENTITY debuggerMenu.label2    "스크립트 디버거">
+<!ENTITY debuggerMenu.label2    "디버거">
 
 <!-- LOCALIZATION NOTE (debuggerMenu.accesskey): This is accesskey for the
   -  Tools meny entry of Debugger that opens the debugger UI. -->
@@ -35,13 +35,17 @@
   -  the button that closes the debugger UI. -->
 <!ENTITY debuggerUI.closeButton.tooltip		"닫기">
 
+<!-- LOCALIZATION NOTE (debuggerUI.panesButton.tooltip): This is the tooltip for
+  -  the button that toggles the panes visible or hidden in the debugger UI. -->
+<!ENTITY debuggerUI.panesButton.tooltip "창 열고 닫기">
+
 <!-- LOCALIZATION NOTE (debuggerUI.optsButton.tooltip): This is the tooltip for
   -  the button that opens up an options context menu for the debugger UI. -->
 <!ENTITY debuggerUI.optsButton.tooltip  "디버거 설정">
 
 <!-- LOCALIZATION NOTE (debuggerUI.pauseExceptions): This is the label for the
   -  checkbox that toggles pausing on exceptions. -->
-<!ENTITY debuggerUI.pauseExceptions		"예외 발생으로 정지하기">
+<!ENTITY debuggerUI.pauseExceptions		"예외 발생시 중단">
 <!ENTITY debuggerUI.pauseExceptions.key "E">
 
 <!-- LOCALIZATION NOTE (debuggerUI.showPanesOnInit): This is the label for the
@@ -49,30 +53,81 @@
 <!ENTITY debuggerUI.showPanesOnInit     "시작시 창 보기">
 <!ENTITY debuggerUI.showPanesOnInit.key "S">
 
-<!-- LOCALIZATION NOTE (debuggerUI.showVarsSearch): This is the label for the
-  -  checkbox that toggles visibility of a designated variables searchbox. -->
-<!ENTITY debuggerUI.showVarsSearch      "변수 찾는 상자 보기">
-<!ENTITY debuggerUI.showVarsSearch.key  "V">
+<!-- LOCALIZATION NOTE (debuggerUI.showVarsFilter): This is the label for the
+  -  checkbox that toggles visibility of a designated variables filter box. -->
+<!ENTITY debuggerUI.showVarsFilter      "변수 필터 상자 보기">
+<!ENTITY debuggerUI.showVarsFilter.key  "V">
 
-<!-- LOCALIZATION NOTE (debuggerUI.showNonEnums): This is the label for the
+<!-- LOCALIZATION NOTE (debuggerUI.showOnlyEnum): This is the label for the
   -  checkbox that toggles visibility of hidden (non-enumerable) variables and
-  -  properties in stack views. -->
-<!ENTITY debuggerUI.showNonEnums        "숨겨진 속성 보기">
-<!ENTITY debuggerUI.showNonEnums.key    "P">
+  -  properties in stack views. The "enumerable" flag is a state of a property
+  -  defined in JavaScript. When in doubt, leave untranslated. -->
+<!ENTITY debuggerUI.showOnlyEnum        "enumerable 속성만 보기">
+<!ENTITY debuggerUI.showOnlyEnum.key    "P">
 
 <!-- LOCALIZATION NOTE (debuggerUI.searchPanelTitle): This is the text that
   -  appears in the filter panel popup as a description. -->
 <!ENTITY debuggerUI.searchPanelTitle    "연산자">
 
+<!-- LOCALIZATION NOTE (debuggerUI.searchFile): This is the text that appears
+  -  in the source editor's context menu for the scripts search operation. -->
+<!ENTITY debuggerUI.searchFile          "스크립트 필터">
+<!ENTITY debuggerUI.searchFile.key      "P">
+
+<!-- LOCALIZATION NOTE (debuggerUI.searchGlobal): This is the text that appears
+  -  in the source editor's context menu for the global search operation. -->
+<!ENTITY debuggerUI.searchGlobal        "모든 파일에서 찾기">
+<!ENTITY debuggerUI.searchGlobal.key    "F">
+
+<!-- LOCALIZATION NOTE (debuggerUI.searchToken): This is the text that appears
+  -  in the source editor's context menu for the token search operation. -->
+<!ENTITY debuggerUI.searchToken         "찾기">
+<!ENTITY debuggerUI.searchToken.key     "F">
+
+<!-- LOCALIZATION NOTE (debuggerUI.searchLine): This is the text that appears
+  -  in the source editor's context menu for the line search operation. -->
+<!ENTITY debuggerUI.searchLine          "다른 행으로 건너뛰기…">
+<!ENTITY debuggerUI.searchLine.key      "J">
+
+<!-- LOCALIZATION NOTE (debuggerUI.searchVariable): This is the text that appears
+  -  in the source editor's context menu for the variables search operation. -->
+<!ENTITY debuggerUI.searchVariable      "변수 필터">
+<!ENTITY debuggerUI.searchVariable.key  "V">
+
 <!-- LOCALIZATION NOTE (debuggerUI.condBreakPanelTitle): This is the text that
   -  appears in the conditional breakpoint panel popup as a description. -->
-<!ENTITY debuggerUI.condBreakPanelTitle "다음 표현이 참이면 이 breakpoint는 실행을 중지할 것입니다.">
+<!ENTITY debuggerUI.condBreakPanelTitle "다음 표현이 참이면 이 중단점에서 실행을 중지할 것입니다.">
 
 <!-- LOCALIZATION NOTE (debuggerUI.seMenuBreak): This is the text that
   -  appears in the source editor context menu for adding a breakpoint. -->
-<!ENTITY debuggerUI.seMenuBreak         "breakpoint 추가">
+<!ENTITY debuggerUI.seMenuBreak         "중단점 추가">
+<!ENTITY debuggerUI.seMenuBreak.key     "B">
 
 <!-- LOCALIZATION NOTE (debuggerUI.seMenuCondBreak): This is the text that
   -  appears in the source editor context menu for adding a conditional
   -  breakpoint. -->
-<!ENTITY debuggerUI.seMenuCondBreak     "conditional breakpoint 추가">
+<!ENTITY debuggerUI.seMenuCondBreak     "조건 중단점 추가">
+<!ENTITY debuggerUI.seMenuCondBreak.key "B">
+
+<!-- LOCALIZATION NOTE (debuggerUI.seMenuAddWatch): This is the text that
+  -  appears in the source editor context menu for adding an expression. -->
+<!ENTITY debuggerUI.seMenuAddWatch      "선택한 곳 조사식에 넣기">
+<!ENTITY debuggerUI.seMenuAddWatch.key  "E">
+
+<!-- LOCALIZATION NOTE (debuggerUI.addWatch): This is the text that
+  -  appears in the watch expressions context menu for adding an expression. -->
+<!ENTITY debuggerUI.addWatch            "조사식 추가">
+<!ENTITY debuggerUI.addWatch.key        "E">
+
+<!-- LOCALIZATION NOTE (debuggerUI.removeWatch): This is the text that
+  -  appears in the watch expressions context menu for removing all expressions. -->
+<!ENTITY debuggerUI.removeAllWatch      "모든 조사식 제거">
+<!ENTITY debuggerUI.removeAllWatch.key  "E">
+
+<!-- LOCALIZATION NOTE (debuggerUI.stepping): These are the keycodes that
+  -  control the stepping commands in the debugger (continue, step over,
+  -  step in and step out). -->
+<!ENTITY debuggerUI.stepping.resume     "VK_F6">
+<!ENTITY debuggerUI.stepping.stepOver   "VK_F7">
+<!ENTITY debuggerUI.stepping.stepIn     "VK_F8">
+<!ENTITY debuggerUI.stepping.stepOut    "VK_F8">
