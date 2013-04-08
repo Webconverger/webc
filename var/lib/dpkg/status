@@ -134,15 +134,21 @@ Status: install ok installed
 Priority: optional
 Section: x11
 Installed-Size: 1516
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Source: xorg-server
-Version: 2:1.12.4-5
+Version: 2:1.12.4-5baureo1
 Replaces: xserver-xorg-core (<< 2:1.5.2)
 Depends: x11-common, xkb-data, x11-xkb-utils
 Recommends: xfonts-base, xauth
 Description: common files used by various X servers
  This package provides files necessary for all X.Org based X servers.
+Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Original-Uploaders: Drew Parsons <dparsons@debian.org>, Cyril Brulebois <kibi@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/xserver/xorg-server.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-xorg/xserver/xorg-server
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: dash
 Essential: yes
@@ -435,12 +441,12 @@ Package: linux-image-3.8-0baureo1-686-pae
 Status: install ok installed
 Priority: optional
 Section: kernel
-Installed-Size: 82632
+Installed-Size: 82657
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
-Version: 3.8.2-1~experimental.1~baureo1
+Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -1164,12 +1170,12 @@ Package: linux-image-3.8-0baureo1-486
 Status: install ok installed
 Priority: optional
 Section: kernel
-Installed-Size: 80913
+Installed-Size: 80938
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
-Version: 3.8.2-1~experimental.1~baureo1
+Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-486
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -2596,13 +2602,14 @@ Package: xserver-xorg-core
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 4125
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Installed-Size: 4015
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: xorg-server
-Version: 2:1.12.4-5
+Version: 2:1.12.4-5baureo1
 Provides: xorg-input-abi-16, xorg-video-abi-12
-Depends: xserver-common (>= 2:1.12.4-5), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.8), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
+Depends: xserver-common (>= 2:1.12.4-5baureo1), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
 Recommends: libgl1-mesa-dri (>= 7.10.2-4)
 Suggests: xfonts-100dpi | xfonts-75dpi, xfonts-scalable
 Breaks: libgl1-mesa-dri (<< 7.10.2-4), libgl1-mesa-dri-experimental (<< 7.10.2-4), xserver-xorg-input, xserver-xorg-input-2, xserver-xorg-input-2.1, xserver-xorg-input-4, xserver-xorg-input-7, xserver-xorg-input-joystick (<= 1:1.5.0-3), xserver-xorg-input-synaptics (<= 1.2.2-1), xserver-xorg-input-tslib (<= 0.0.6-3), xserver-xorg-input-vmmouse (<= 1:12.6.5-4), xserver-xorg-input-wacom (<= 0.10.5+20100415-1), xserver-xorg-video, xserver-xorg-video-1.0, xserver-xorg-video-1.9, xserver-xorg-video-2, xserver-xorg-video-4, xserver-xorg-video-5, xserver-xorg-video-6, xserver-xorg-video-cyrix (<= 1:1.1.0-8), xserver-xorg-video-i810 (<< 2:2.4), xserver-xorg-video-imstt (<= 1:1.1.0-7), xserver-xorg-video-nsc (<= 1:2.8.3-4), xserver-xorg-video-sunbw2 (<= 1:1.1.0-5), xserver-xorg-video-v4l (<< 1:0.2.0), xserver-xorg-video-vga (<= 1:4.1.0-8)
@@ -2618,6 +2625,11 @@ Description: Xorg X server - core server
  <URL:http://www.X.org>
  .
  This package is built from the X.org xserver module.
+Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Original-Uploaders: Drew Parsons <dparsons@debian.org>, Cyril Brulebois <kibi@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/xserver/xorg-server.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-xorg/xserver/xorg-server
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: librdf0
 Status: install ok installed
@@ -3349,7 +3361,7 @@ Installed-Size: 1453
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xserver-xorg-video-ati
-Version: 1:6.14.4-7
+Version: 1:6.14.4-8
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.7), libdrm-radeon1 (>= 2.4.31), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.10.2), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Suggests: firmware-linux
@@ -10002,13 +10014,12 @@ Package: xserver-xorg-video-s3
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 130
+Installed-Size: 133
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Source: xserver-xorg-video-s3 (1:0.6.3-4)
-Version: 1:0.6.3-4+b3
+Version: 1:0.6.3-5
 Provides: xorg-driver-video
-Depends: libc6 (>= 2.1.3), xorg-video-abi-12, xserver-xorg-core (>= 2:1.11.99.901)
+Depends: libc6 (>= 2.1.3), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Description: X.Org X server -- legacy S3 display driver
  This package provides the driver for certain legacy S3 video card chipsets,
  including the Trio64 and 96x cards.  It does not provide support for
@@ -12449,7 +12460,7 @@ Section: x11
 Installed-Size: 329
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:6.14.4-7
+Version: 1:6.14.4-8
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.1.3), libpciaccess0, xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901), xserver-xorg-video-r128, xserver-xorg-video-mach64, xserver-xorg-video-radeon
 Description: X.Org X server -- AMD/ATI display driver wrapper
