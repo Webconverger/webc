@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+
+if [ "$1" = "configure" ]; then
+	# <target: squeeze>
+	# this file was left over by some old versions of the
+	# nvidia-libvdpau* packages
+	if [ -L /usr/lib/libvdpau_nvidia.so ]; then
+		rm /usr/lib/libvdpau_nvidia.so || true
+	fi
+	# </target: squeeze>
+fi
+
+
+
+
+exit 0

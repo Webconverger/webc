@@ -1670,6 +1670,30 @@ Description: KDE Platform User Interface Library
  This package is part of the KDE Development Platform libraries module.
 Homepage: http://www.kde.org/
 
+Package: nvidia-support
+Status: install ok installed
+Priority: optional
+Section: contrib/misc
+Installed-Size: 82
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Version: 20120731+1-0baureo+1
+Depends: debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary graphics driver support files
+ This package contains support files needed for all current and legacy
+ versions of the non-free NVIDIA graphics drivers.  These include scripts
+ used for warning about a mismatching version of the kernel module or for
+ creating a minimal xorg.conf to enable the NVIDIA driver.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libusb-0.1-4
 Status: install ok installed
 Priority: important
@@ -2597,6 +2621,34 @@ Description: library for accessing process information from /proc
  This package contains the shared libraries necessary to run programs
  compilied with libprocps.
 Homepage: http://gitorious.org/procps
+
+Package: libgl1-nvidia-alternatives
+Status: install ok installed
+Priority: optional
+Section: non-free/oldlibs
+Installed-Size: 141
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Depends: glx-alternative-mesa, glx-alternative-nvidia
+Pre-Depends: dpkg-lzip
+Breaks: libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), nvidia-glx (<< 195.36.31-2), nvidia-glx-dev (<< 195.36.31-2), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-173xx-dev (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-71xx-dev (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18), nvidia-glx-legacy-96xx-dev (<< 96.43.18)
+Description: transition libGL.so* diversions to glx-alternative-nvidia
+ This is a transitional package aiding the upgrade to glx-alternative-nvidia.
+ The libGL.so* diversions are now handled by glx-diversions and the
+ alternatives by glx-alternative-mesa.
+ .
+ This package can be safely removed from the system once nothing depends on it.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: linux-image-3.2.0-3artax1-486
 Status: deinstall ok config-files
@@ -4584,24 +4636,6 @@ Description: X C Binding
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
 
-Package: xserver-xorg-video-all
-Status: install ok installed
-Priority: optional
-Section: x11
-Installed-Size: 62
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
-Architecture: i386
-Source: xorg
-Version: 1:7.7+2
-Replaces: xserver-xorg-driver-all
-Depends: xserver-xorg-video-apm, xserver-xorg-video-ark, xserver-xorg-video-ati, xserver-xorg-video-chips, xserver-xorg-video-cirrus, xserver-xorg-video-fbdev, xserver-xorg-video-i128, xserver-xorg-video-i740, xserver-xorg-video-intel, xserver-xorg-video-mga, xserver-xorg-video-neomagic, xserver-xorg-video-nouveau, xserver-xorg-video-openchrome, xserver-xorg-video-rendition, xserver-xorg-video-s3, xserver-xorg-video-s3virge, xserver-xorg-video-savage, xserver-xorg-video-siliconmotion, xserver-xorg-video-sis, xserver-xorg-video-sisusb, xserver-xorg-video-tdfx, xserver-xorg-video-trident, xserver-xorg-video-tseng, xserver-xorg-video-vesa, xserver-xorg-video-voodoo, xserver-xorg-video-vmware
-Recommends: xserver-xorg-video-geode
-Conflicts: xserver-xorg-driver-all
-Description: X.Org X server -- output driver metapackage
- This package depends on the full suite of output drivers for the X.Org X server
- (Xorg).  It does not provide any drivers itself, and may be removed if you wish
- to only have certain drivers installed.
-
 Package: locales
 Status: install ok installed
 Priority: standard
@@ -5958,6 +5992,44 @@ Description: An asynchronous event notification library
  libevent_extra.
 Homepage: http://www.monkey.org/~provos/libevent/
 
+Package: libvdpau1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 115
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: libvdpau
+Version: 0.6-1~baureo1
+Replaces: lib32vdpau1, nvidia-libvdpau, nvidia-libvdpau-ia32, nvidia-libvdpau1, nvidia-libvdpau1-ia32
+Depends: libc6 (>= 2.1.3), libx11-6 (>= 2:1.4.99.1), libxext6
+Pre-Depends: dpkg-lzip, multiarch-support
+Suggests: nvidia-vdpau-driver | vdpau-driver
+Conflicts: lib32vdpau1, nvidia-libvdpau, nvidia-libvdpau-ia32, nvidia-libvdpau1, nvidia-libvdpau1-ia32
+Conffiles:
+ /etc/vdpau_wrapper.cfg bc89239208609c5d031b74c99a45747d
+Description: Video Decode and Presentation API for Unix (libraries)
+ VDPAU (Video Decode and Presentation API for Unix) is an open source
+ library (libvdpau) and API designed by NVIDIA originally for its GeForce
+ 8 series and later GPU hardware, targeted at the X Window System on Unix
+ operating-systems (including Linux, FreeBSD, and Solaris). This VDPAU API
+ allows video programs to offload portions of the video decoding process
+ and video post-processing to the GPU video-hardware.
+ .
+ This package contains the VDPAU wrapper and trace libraries.
+Homepage: http://cgit.freedesktop.org/~aplattner/libvdpau
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Jean-Yves Avenard <jyavenard@gmail.com>,
+ Andres Mejia <amejia@debian.org>,
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-nvidia/libvdpau.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-nvidia/libvdpau.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libjbig0
 Status: install ok installed
 Priority: extra
@@ -6063,6 +6135,47 @@ Description: X11 Input extension library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXi
+
+Package: nvidia-glx
+Status: install ok installed
+Priority: optional
+Section: non-free/x11
+Installed-Size: 910
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Provides: nvidia-glx-any
+Depends: libgl1-nvidia-glx (= 313.30-1~baureo1), xserver-xorg-video-nvidia (= 313.30-1~baureo1), nvidia-vdpau-driver (= 313.30-1~baureo1), nvidia-alternative (= 313.30-1~baureo1), nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30, nvidia-support
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-settings
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Description: NVIDIA metapackage
+ This metapackage depends on the NVIDIA binary driver and libraries
+ that provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ AGP, PCIe, SLI, TV-out and flat panel displays are also supported.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+ .
+ This version only supports GeForce 6xxx and higher of the Geforce GPUs
+ plus complimentary Quadros and nforce.  Look at the legacy packages
+ for older cards.
+ .
+ See /usr/share/doc/nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xinit
 Status: install ok installed
@@ -8907,27 +9020,6 @@ Description: XZ-format compression utilities
   * support for flushing the encoder.
 Homepage: http://tukaani.org/xz/
 
-Package: xserver-xorg-video-nouveau
-Status: install ok installed
-Priority: optional
-Section: x11
-Installed-Size: 472
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
-Architecture: i386
-Version: 1:1.0.1-5
-Provides: xorg-driver-video
-Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.17), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
-Recommends: libgl1-mesa-dri (>= 7.11.1)
-Description: X.Org X server -- Nouveau display driver
- This driver for the X.Org X server (see xserver-xorg for a further description)
- provides support for NVIDIA Riva, TNT, GeForce, and Quadro cards.
- .
- This package provides 2D support including EXA acceleration, Xv and
- RandR.  3D functionality is provided by the libgl1-mesa-dri package.
- .
- This package is built from the FreeDesktop.org xf86-video-nouveau driver.
-Homepage: http://nouveau.freedesktop.org/wiki/
-
 Package: ethtool
 Status: install ok installed
 Priority: optional
@@ -10026,6 +10118,41 @@ Description: Google Talk Plugin
  OpenSSL Toolkit (http://www.openssl.org/). This product includes cryptographic
  software written by Eric Young (eay@cryptsoft.com).
 
+Package: libgl1-nvidia-glx
+Status: install ok installed
+Priority: optional
+Section: non-free/libs
+Installed-Size: 31173
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: libgl1-nvidia-dev, nvidia-glx (<< 195.36.31), nvidia-glx-dev
+Provides: libgl1-nvidia-glx-any, libgl1-nvidia-glx-i386
+Depends: nvidia-alternative, nvidia-support, libc6 (>= 2.1.3), libx11-6, libxext6
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup, multiarch-support
+Recommends: nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: fglrx-glx (<< 1:11-6-~), ia32-libs (<< 1:0), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), nvidia-glx (<< 275.09.07-3), nvidia-glx-legacy (<< 71.86.14-3), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2), nvidia-settings (<< 304), nvidia-settings-legacy-173xx (<< 173.14.35-4baureo1)
+Conflicts: libgl1-nvidia-dev, libgl1-nvidia-glx-ia32, nvidia-glx-dev
+Description: NVIDIA binary OpenGL libraries
+ These binary libraries provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ .
+ See the description of the nvidia-glx package
+ or /usr/share/doc/libgl1-nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: crda
 Status: install ok installed
 Priority: optional
@@ -10110,6 +10237,48 @@ Description: Multitouch Protocol Translation Library - shared library
  drivers that have not been updated to use the newer protocol.
 Homepage: http://bitmath.org/code/mtdev/
 
+Package: xserver-xorg-video-nvidia
+Status: install ok installed
+Priority: optional
+Section: non-free/x11
+Installed-Size: 13232
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: nvidia-glx (<< 275.09.07-2)
+Provides: xorg-driver-video, xserver-xorg-video-nvidia-any
+Depends: libgl1-nvidia-glx (= 313.30-1~baureo1), nvidia-alternative (= 313.30-1~baureo1), nvidia-support (>= 20120630), xorg-video-abi-14 | xorg-video-abi-13 | xorg-video-abi-12 | xorg-video-abi-11 | xorg-video-abi-10 | xorg-video-abi-8 | xorg-video-abi-6.0, xserver-xorg-core (<< 2:1.14.99), libc6 (>= 2.1.3), debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-vdpau-driver (>= 313.30), nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30, nvidia-settings
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: fglrx-driver (<< 1:11-6-~), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy (<< 71.86.14-3), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: NVIDIA binary Xorg driver
+ These binary drivers provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ AGP, PCIe, SLI, TV-out and flat panel displays are also supported.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+ .
+ This version only supports GeForce 6xxx and higher of the Geforce GPUs
+ plus complimentary Quadros and nforce.  Look at the legacy packages
+ for older cards.
+ .
+ See /usr/share/doc/nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: alsa-utils
 Status: install ok installed
 Priority: optional
@@ -10134,6 +10303,49 @@ Description: Utilities for configuring and using ALSA
  .
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
+
+Package: nvidia-vdpau-driver
+Status: install ok installed
+Priority: optional
+Section: non-free/video
+Installed-Size: 2097
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: nvidia-glx (<< 180.51), nvidia-libvdpau, nvidia-libvdpau-dev, nvidia-libvdpau1, nvidia-libvdpau1-driver
+Provides: nvidia-vdpau-driver-i386, vdpau-driver
+Depends: libvdpau1, libc6 (>= 2.1), libx11-6, libxext6
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: libvdpau1 (<< 0.4.1-3), nvidia-glx (<< 180.51)
+Conflicts: nvidia-libvdpau, nvidia-libvdpau-dev, nvidia-libvdpau1, nvidia-libvdpau1-driver, nvidia-vdpau-driver-ia32
+Enhances: libvdpau1
+Description: NVIDIA vdpau driver
+ These libraries provide the Video Decode and Presentation API for Unix.
+ They provide accelerated video playback (incl. H.264) for the supported
+ graphics cards.
+ .
+ This package contains the NVIDIA VDPAU driver.
+ .
+ See /usr/share/doc/nvidia-vdpau-driver/README.txt.gz
+ for more information.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ghostscript
 Status: install ok installed
@@ -11841,6 +12053,39 @@ Description: PNG library - runtime
  using libpng.
 Homepage: http://libpng.org/pub/png/libpng.html
 
+Package: nvidia-alternative
+Status: install ok installed
+Priority: optional
+Section: non-free/libs
+Installed-Size: 157
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Depends: glx-alternative-nvidia (>= 0.2), libgl1-nvidia-alternatives (>= 275.09.07-4), libglx-nvidia-alternatives (>= 275.09.07-4)
+Pre-Depends: dpkg-lzip
+Breaks: libgl1-nvidia-glx (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2)
+Description: allows the selection of NVIDIA as GLX provider
+ In setups with several NVIDIA driver versions installed (e.g. current and
+ legacy) this metapackage registers an alternative to allow easy switching
+ between the different versions.
+ .
+ Use 'update-alternatives --config nvidia' to select a version.
+ .
+ This package does not depend on the corresponding NVIDIA libraries.
+ In order to install the NVIDIA driver and libraries, install the
+ nvidia-glx package instead.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: apt-utils
 Status: install ok installed
 Priority: important
@@ -12576,23 +12821,32 @@ Description: PulseAudio sound server
 Homepage: http://www.pulseaudio.org
 
 Package: libglx-nvidia-alternatives
-Status: deinstall ok config-files
+Status: install ok installed
 Priority: optional
-Section: non-free/libs
-Installed-Size: 136
-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Section: non-free/oldlibs
+Installed-Size: 141
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 195.36.31-6squeeze2
-Config-Version: 195.36.31-6
-Depends: dpkg (>= 1.15)
-Breaks: nvidia-glx (<< 195.36.31-3), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18)
-Conflicts: fglrx-driver
-Description: simplifies replacing Xorg module libglx.so with GPU vendor library
- Diverts the free Xorg module libglx.so (Xorg) and introduces alternatives
- to simplify plugging in accelerated implementations from GPU vendors.
- Handles both libglx.so and its debug symbols.
+Version: 313.30-1~baureo1
+Depends: glx-alternative-mesa, glx-alternative-nvidia
+Pre-Depends: dpkg-lzip
+Breaks: nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: transition libgl.so diversions to glx-alternative-nvidia
+ This is a transitional package aiding the upgrade to glx-alternative-nvidia.
+ The libglx.so diversions are now handled by glx-diversions and the
+ alternatives by glx-alternative-mesa.
+ .
+ This package can be safely removed from the system once nothing depends on it.
 Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ca-certificates
 Status: install ok installed

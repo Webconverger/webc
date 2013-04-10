@@ -1,0 +1,88 @@
+#!/bin/sh
+set -e
+
+
+if [ "$1" = "configure" ]
+then
+
+	# dpkg-reconfigure does not set DPKG_MAINTSCRIPT_PACKAGE (#560317)
+	if [ -z "$DPKG_MAINTSCRIPT_PACKAGE" ]
+	then
+		echo "ERROR: DPKG_MAINTSCRIPT_PACKAGE is not set, usually a bug in dpkg-reconfigure"
+		exit 1
+	fi
+
+fi
+
+# <target: squeeze>
+dpkg-maintscript-helper rm_conffile /etc/default/$DPKG_MAINTSCRIPT_PACKAGE 195.36.24-1~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/$DPKG_MAINTSCRIPT_PACKAGE 195.36.24-3~ -- "$@"
+# </target: squeeze>
+
+# <target: squeeze>
+exists()
+{
+	test -e "$1" || test -L "$1"
+}
+
+undivert()
+{
+	div="$1"
+	ori="$2"
+	if exists "$ori" && exists "$div"
+	then
+		# If both the original and the diverted file exist, something went wrong long ago.
+		# Either a pre-lenny nvidia-glx package created the diversions incorrectly or
+		# the nvidia installer was used to install the driver and messed up things.
+		# Let's move the original file (which is not owned by any package) out of the way.
+		echo "WARNING: Renaming conflicting file '$ori'"
+		echo "         to '$ori.dpkg-old'".
+		mv "$ori" "$ori.dpkg-old"
+	fi
+	dpkg-divert --remove --rename --package $DPKG_MAINTSCRIPT_PACKAGE --divert "$div" "$ori"
+}
+# </target: squeeze>
+
+if [ "$1" = "configure" ]
+then
+
+	# <target: squeeze>
+	if dpkg --compare-versions "$2" lt-nl 195.36.24-3 ; then
+	    update-rc.d $DPKG_MAINTSCRIPT_PACKAGE remove || true
+	fi
+	# </target: squeeze>
+
+	# <target: squeeze>
+        if dpkg --compare-versions "$2" lt-nl 195.36.24-2 ; then
+	    if [ -f /etc/default/$DPKG_MAINTSCRIPT_PACKAGE.dpkg-new ]; then
+		rm -f /etc/default/$DPKG_MAINTSCRIPT_PACKAGE.dpkg-new
+	    fi
+	fi
+	# </target: squeeze>
+
+        # <target: squeeze>
+        if true || dpkg --compare-versions "$2" lt-nl 195.36.24-1 ; then
+            # remove obsolete diversions
+		undivert /usr/lib/nvidia/libGLcore.so.xlibmesa /usr/lib/xorg/modules/extensions/libGLcore.so
+		undivert /usr/lib/nvidia/libGLcore.a.xlibmesa /usr/lib/xorg/modules/extensions/libGLcore.a
+		undivert /usr/lib/nvidia/libglx.a.xlibmesa /usr/lib/xorg/modules/extensions/libglx.a
+        fi
+        # </target: squeeze>
+
+        # <target: squeeze>
+	# remove libGL.so created before the trigger was moved to libgl1-nvidia*-glx
+	# will be recreated by the trigger
+	if dpkg --compare-versions "$2" lt-nl 195.36.31 ; then
+		rm -f /usr/lib/libGL.so
+	fi
+
+	# activate the trigger
+	dpkg-trigger /usr/lib/libGL.so
+        # </target: squeeze>
+
+fi
+
+
+
+
+exit 0

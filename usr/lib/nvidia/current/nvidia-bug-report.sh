@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# NVIDIA Graphics Driver bug reporting shell script.  This shell
-# script will generate a log file named "nvidia-bug-report.log.gz", which
-# should be attached when emailing bug reports to NVIDIA.
-
 PATH="/sbin:/usr/sbin:$PATH"
 
 BASE_LOG_FILENAME="nvidia-bug-report.log"
@@ -12,18 +8,100 @@ BASE_LOG_FILENAME="nvidia-bug-report.log"
 GZIP_CMD=`which gzip 2> /dev/null | head -n 1`
 if [ $? -eq 0 -a "$GZIP_CMD" ]; then
     GZIP_CMD="gzip -c"
-    LOG_FILENAME="$BASE_LOG_FILENAME.gz"
-    OLD_LOG_FILENAME="$BASE_LOG_FILENAME.old.gz"
 else
     GZIP_CMD="cat"
-    LOG_FILENAME=$BASE_LOG_FILENAME
-    OLD_LOG_FILENAME="$BASE_LOG_FILENAME.old"
 fi
 
+set_filename() {
+    if [ "$GZIP_CMD" = "gzip -c" ]; then
+        LOG_FILENAME="$BASE_LOG_FILENAME.gz"
+        OLD_LOG_FILENAME="$BASE_LOG_FILENAME.old.gz"
+    else
+        LOG_FILENAME=$BASE_LOG_FILENAME
+        OLD_LOG_FILENAME="$BASE_LOG_FILENAME.old"
+    fi
+}
 
-NVIDIA_BUG_REPORT_CHANGE='$Change: 12564671 $'
+# Check if running within Xen dom0
+if [ -f /proc/xen/capabilities ]; then
+    IS_CONTROL_D=`cat /proc/xen/capabilities`
+    if [ "$IS_CONTROL_D" == "control_d" ]; then
+        IS_XEN_HYPERVISOR=1
+    fi
+fi
+
+usage_bug_report_message() {
+    echo "Please include the '$LOG_FILENAME' log file when reporting"
+    echo "your bug via the NVIDIA Linux forum (see devtalk.nvidia.com)"
+    echo "or by sending email to 'linux-bugs@nvidia.com'."
+}
+
+usage() {
+    echo ""
+    echo "$(basename $0): NVIDIA Linux Graphics Driver bug reporting shell script."
+    echo ""
+    usage_bug_report_message
+    echo ""
+    echo "$(basename $0) [OPTION]..."
+    echo "    -h / --help"
+    echo "        Print this help output and exit."
+    echo "    --output-file <file>"
+    echo "        Write output to <file>. If gzip is available, the output file"
+    echo "        will be automatically compressed, and \".gz\" will be appended"
+    echo "        to the filename. Default: write to nvidia-bug-report.log(.gz)."
+    echo "    --safe-mode"
+    echo "        Disable some parts of the script that may hang the system."
+    if [ -n "$IS_XEN_HYPERVISOR" ]; then
+        echo "    --domain-name \"<domain_name>\""
+        echo "        Create bug report for the specified Virtual machine domain."
+    fi
+    echo ""
+}
+
+NVIDIA_BUG_REPORT_CHANGE='$Change: 14583860 $'
 NVIDIA_BUG_REPORT_VERSION=`echo "$NVIDIA_BUG_REPORT_CHANGE" | tr -c -d "[:digit:]"`
 
+# Set the default filename so that it won't be empty in the usage message
+set_filename
+
+# Parse arguments: Optionally set output file, run in safe mode, or print help
+BUG_REPORT_SAFE_MODE=0
+SAVED_FLAGS=$@
+while [ "$1" != "" ]; do
+    case $1 in
+        -o | --output-file )    if [ -z $2 ]; then
+                                    usage
+                                    exit 1
+                                elif [ "$(echo "$2" | cut -c 1)" = "-" ]; then
+                                    echo "Warning: Questionable filename"\
+                                         "\"$2\": possible missing argument?"
+                                fi
+                                BASE_LOG_FILENAME="$2"
+                                # override the default filename
+                                set_filename
+                                shift
+                                ;;
+        --safe-mode )           BUG_REPORT_SAFE_MODE=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        --domain-name )         if [ -z "$IS_XEN_HYPERVISOR" ] || [ -z "$2" ]; then
+                                    usage
+                                    exit 1
+                                elif [ "$(echo "$2" | cut -c 1)" = "-" ]; then
+                                    echo "Domain names starting with \"-\" are not supported"
+                                    usage
+                                    exit 1
+                                fi
+                                DOMAIN_NAME=$2
+                                shift
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
 
 #
 # echo_metadata() - echo metadata of specified file
@@ -164,9 +242,12 @@ echo "by the Linux kernel and/or the NVIDIA kernel module.  While"
 echo "the bug report log file will be incomplete if this happens, it"
 echo "may still contain enough data to diagnose your problem." 
 echo ""
-echo "Please include the '$LOG_FILENAME' log file when reporting"
-echo "your bug via the nV News NVIDIA Linux forum (see www.nvnews.net)"
-echo "or by sending email to 'linux-bugs@nvidia.com'."
+if [ -n "$IS_XEN_HYPERVISOR" ]; then
+    echo "For Xen open source/XCP users, if you are reporting a domain issue,"
+    echo "please run: nvidia-bug-report.sh --domain-name <\"domain_name\">"
+    echo ""
+fi
+usage_bug_report_message
 echo ""
 echo -n "Running $(basename $0)...";
 
@@ -176,15 +257,16 @@ echo -n "Running $(basename $0)...";
 (
     echo "____________________________________________"
     echo ""
-    echo "Start of NVIDIA bug report log file.  Please include this file"
-    echo "when reporting a graphics driver bug via the nV News NVIDIA"
-    echo "Linux forum (see www.nvnews.net) or by sending email to"
-    echo "'linux-bugs@nvidia.com'."
+    echo "Start of NVIDIA bug report log file.  Please include this file, along"
+    echo "with a detailed description of your problem, when reporting a graphics"
+    echo "driver bug via the NVIDIA Linux forum (see devtalk.nvidia.com)"
+    echo "or by sending email to 'linux-bugs@nvidia.com'."
     echo ""
     echo "nvidia-bug-report.sh Version: $NVIDIA_BUG_REPORT_VERSION"
     echo ""
     echo "Date: `date`"
     echo "uname: `uname -a`"
+    echo "command line flags: $SAVED_FLAGS"
     echo ""
 ) | $GZIP_CMD >> $LOG_FILENAME
 
@@ -268,6 +350,67 @@ for log_basename in /var/log/XFree86 /var/log/Xorg; do
     done
 done
 
+# append xl information for XEN debugging
+xl_cmd()
+{
+    (
+        cmd=${1}
+        echo "____________________________________________"
+        echo ""
+        echo "$xl $cmd"
+        echo ""
+        $xl $cmd 2> /dev/null
+        echo ""
+    ) | $GZIP_CMD >> $LOG_FILENAME
+}
+
+if [ -n "$IS_XEN_HYPERVISOR" ]; then
+    xl=`which xl 2> /dev/null | head -n 1`
+    if [ -x "$xl" ]; then
+        xl_cmd "info"
+        xl_cmd "dmesg"
+        xl_cmd "list"
+        if [ -n "$DOMAIN_NAME" ]; then
+            DOMAIN_ID="`$xl domid "$DOMAIN_NAME"`\[" 2> /dev/null
+        fi
+    fi
+    if [ -z "$DOMAIN_ID" ]; then
+        DOMAIN_ID="[0-9]*\[[0-9]*\]\:"
+        DOMAIN_NAME="*"
+    fi
+
+    # For Xen open source
+    for j in /var/log/xen/qemu-dm-$DOMAIN_NAME.log ; do
+        append "$j"
+    done
+    append "/var/log/xen/xen-hotplug.log"
+    append "/var/log/xen/xend-debug.log"
+    append "/var/log/xen/domain-builder-ng.log"
+    append "/var/log/xen/xend.log"
+
+    # For XCP
+    for i in /var/log/messages /var/log/kern.log ; do
+        if [ -f $i -a -r $i ]; then
+            (
+                echo "___________________________________________"
+                echo ""
+                echo "$i"
+                echo ""
+                cat $i | grep "qemu-dm-$DOMAIN_ID"
+            ) 2> /dev/null | $GZIP_CMD >> $LOG_FILENAME
+        else
+            (
+                echo "___________________________________________"
+                echo ""
+                echo "$i does not exist or is not readable"
+            ) 2> /dev/null | $GZIP_CMD >> $LOG_FILENAME
+        fi
+    done
+
+    append "/var/log/xensource.log"
+    append "/var/log/squeezed.log"
+fi
+
 # append ldd info
 
 (
@@ -296,9 +439,16 @@ done
     lspci=`which lspci 2> /dev/null | head -n 1`
 
     if [ $? -eq 0 -a -x "$lspci" ]; then
+        # Capture NVIDIA devices
         echo "$lspci -d \"10de:*\" -v -xxx"
         echo ""
         $lspci -d "10de:*" -v -xxx 2> /dev/null
+        echo ""
+        echo "____________________________________________"
+        # Capture PLX devices
+        echo "$lspci -d \"10b5:*\" -v -xxx"
+        echo ""
+        $lspci -d "10b5:*" -v -xxx 2> /dev/null
         echo ""
         echo "____________________________________________"
         echo ""
@@ -482,7 +632,6 @@ while [ -d /proc/driver/nvidia/gpus/$GPU ]; do
     append "/proc/driver/nvidia/gpus/$GPU/registry"
     GPU=$((GPU + 1))
 done
-append_glob "/proc/driver/nvidia/agp/*"
 append_glob "/proc/driver/nvidia/warnings/*"
 append "/proc/driver/nvidia/params"
 append "/proc/driver/nvidia/registry"
@@ -507,72 +656,91 @@ for CARD in /proc/asound/card[0-9]*; do
     done
 done
 
-# nvidia-smi
+# disable these when safemode is requested
+if [ $BUG_REPORT_SAFE_MODE -eq 0 ]; then
 
-(
-    echo "____________________________________________"
-    echo ""
-
-    nvidia_smi=`which nvidia-smi 2> /dev/null | head -n 1`
-
-    if [ $? -eq 0 -a -x "$nvidia_smi" ]; then
-        echo "$nvidia_smi -q"
+    # Inform user about safemode
+    (
         echo ""
-        $nvidia_smi -q
         echo ""
-
-        echo "$nvidia_smi -q -u"
+        echo "If the bug report script hangs after this point consider running with"
+        echo "--safe-mode command line argument."
         echo ""
-        $nvidia_smi -q -u
-        echo "" 
-    else
-        echo "Skipping nvidia-smi output (nvidia-smi not found)"
-        echo ""
-    fi
-) | $GZIP_CMD >> $LOG_FILENAME
-
-# nvidia-debugdump
-
-(
-    echo "____________________________________________"
-    echo ""
-
-    nvidia_debugdump=`which nvidia-debugdump 2> /dev/null | head -n 1`
-
-    if [ $? -eq 0 -a -x "$nvidia_debugdump" ]; then
+    )
     
-        base64=`which base64 2> /dev/null | head -n 1`
-        
-        if [ $? -eq 0 -a -x "$base64" ]; then
-            # make sure what we can write to the temp file
-            
-            NVDD_TEMP_FILENAME="nvidia-debugdump-temp$$.log"
-            
-            touch $NVDD_TEMP_FILENAME 2> /dev/null
+    # nvidia-smi
 
-            if [ $? -ne 0 ]; then
-                echo "Skipping nvidia-debugdump output (can't create temp file $NVDD_TEMP_FILENAME)"
-                echo ""
-                # don't fail here, continue
-            else
-                echo "$nvidia_debugdump -D"
-                echo ""
-                $nvidia_debugdump -D -f $NVDD_TEMP_FILENAME 2> /dev/null
-                $base64 $NVDD_TEMP_FILENAME 2> /dev/null
-                echo ""
-                
-                # remove the temporary file when complete
-                rm $NVDD_TEMP_FILENAME 2> /dev/null
-            fi
+    (
+        echo "____________________________________________"
+        echo ""
+
+        nvidia_smi=`which nvidia-smi 2> /dev/null | head -n 1`
+
+        if [ $? -eq 0 -a -x "$nvidia_smi" ]; then
+            echo "$nvidia_smi -q"
+            echo ""
+            $nvidia_smi -q
+            echo ""
+
+            echo "$nvidia_smi -q -u"
+            echo ""
+            $nvidia_smi -q -u
+            echo "" 
         else
-            echo "Skipping nvidia-debugdump output (base64 not found)"
+            echo "Skipping nvidia-smi output (nvidia-smi not found)"
             echo ""
         fi
-    else
-        echo "Skipping nvidia-debugdump output (nvidia-debugdump not found)"
+    ) | $GZIP_CMD >> $LOG_FILENAME
+
+    # nvidia-debugdump
+
+    (
+        echo "____________________________________________"
         echo ""
-    fi
-) | $GZIP_CMD >> $LOG_FILENAME
+
+        nvidia_debugdump=`which nvidia-debugdump 2> /dev/null | head -n 1`
+
+        if [ $? -eq 0 -a -x "$nvidia_debugdump" ]; then
+        
+            base64=`which base64 2> /dev/null | head -n 1`
+            
+            if [ $? -eq 0 -a -x "$base64" ]; then
+                # make sure what we can write to the temp file
+                
+                NVDD_TEMP_FILENAME="nvidia-debugdump-temp$$.log"
+                
+                touch $NVDD_TEMP_FILENAME 2> /dev/null
+
+                if [ $? -ne 0 ]; then
+                    echo "Skipping nvidia-debugdump output (can't create temp file $NVDD_TEMP_FILENAME)"
+                    echo ""
+                    # don't fail here, continue
+                else
+                    echo "$nvidia_debugdump -D"
+                    echo ""
+                    $nvidia_debugdump -D -f $NVDD_TEMP_FILENAME 2> /dev/null
+                    $base64 $NVDD_TEMP_FILENAME 2> /dev/null
+                    echo ""
+                    
+                    # remove the temporary file when complete
+                    rm $NVDD_TEMP_FILENAME 2> /dev/null
+                fi
+            else
+                echo "Skipping nvidia-debugdump output (base64 not found)"
+                echo ""
+            fi
+        else
+            echo "Skipping nvidia-debugdump output (nvidia-debugdump not found)"
+            echo ""
+        fi
+    ) | $GZIP_CMD >> $LOG_FILENAME
+
+else
+    (
+        echo "Skipping nvidia-smi and nvidia-debugdump due to --safe-mode argument."
+        echo ""
+    ) | $GZIP_CMD >> $LOG_FILENAME
+fi
 
 (
     echo "____________________________________________"
