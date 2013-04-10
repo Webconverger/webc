@@ -1,1 +1,0 @@
-/etc/alternatives/glx--nvidia-bug-report.sh
