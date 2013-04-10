@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+
+# <target: wheezy>
+if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
+
+	# remove alternatives set up by libgl1-nvidia-glx#LEGACY#-glx, nvidia-glx#LEGACY#
+	update-alternatives --remove libGL.so.1 /usr/lib/nvidia/libGL.so.1
+	update-alternatives --remove libglx.so /usr/lib/nvidia/libglx.so
+
+fi
+# </target: wheezy>
+
+
+
+
+exit 0
+

@@ -28,7 +28,7 @@
 	,"DEBPKG:debian/skip-upstream-git-tests - Skip tests specific to the upstream Git repository"
 	,"DEBPKG:fixes/extutils-cbuilder-cflags - [011e8fb] http://bugs.debian.org/624460 [perl #89478] Append CFLAGS and LDFLAGS to their Config.pm counterparts in EU::CBuilder"
 	,"DEBPKG:fixes/module-build-home-directory - http://bugs.debian.org/624850 [rt.cpan.org #67893] Fix failing tilde test when run under a UID without a passwd entry"
-	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.14.2-19 in patchlevel.h"
+	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.14.2-20 in patchlevel.h"
 	,"DEBPKG:fixes/h2ph-multiarch - [e7ec705] http://bugs.debian.org/625808 [perl #90122] Make h2ph correctly search gcc include directories"
 	,"DEBPKG:fixes/index-tainting - [3b36395] http://bugs.debian.org/291450 [perl #64804] RT 64804: tainting with index() of a constant"
 	,"DEBPKG:fixes/document_makemaker_ccflags - http://bugs.debian.org/628522 [rt.cpan.org #68613] Document that CCFLAGS should include $Config{ccflags}"
@@ -77,3 +77,4 @@
 	,"DEBPKG:fixes/64bitint-signedness-wraparound - http://bugs.debian.org/698320 [94e529c] Avoid wraparound when casting unsigned size_t to signed ssize_t."
 	,"DEBPKG:fixes/stdin-sigchld - http://bugs.debian.org/700171 [perl #116621] [be48bbe] add a couple missing LEAVEs in perlio_async_run()"
 	,"DEBPKG:fixes/hsplit-rehash - [d59e31f] http://bugs.debian.org/702296 Prevent premature hsplit() calls, and only trigger REHASH after hsplit()"
+	,"DEBPKG:fixes/encode-memleak - http://bugs.debian.org/702416 [5814803] Encode: Fixed a memory leak that occurred in the UTF-8 encoding."
