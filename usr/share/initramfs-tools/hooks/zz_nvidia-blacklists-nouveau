@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "prereqs" ]; then exit 0; fi
+
+. /usr/share/initramfs-tools/hook-functions
+
+BLACKLIST=/etc/modprobe.d/nvidia-blacklists-nouveau.conf
+
+# there may be a dangling symlink
+if [ -n "$DESTDIR" ] && [ -L "$DESTDIR$BLACKLIST" ]; then
+	rm -f "$DESTDIR$BLACKLIST"
+fi
+
+if [ -f "$BLACKLIST" ]; then
+	# this will dereference the symlink
+	copy_exec "$BLACKLIST"
+fi

@@ -106,6 +106,34 @@ Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.gi
 Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: nvidia-kernel-3.8-0baureo1-486
+Status: install ok installed
+Priority: optional
+Section: non-free/kernel
+Installed-Size: 9360
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-modules (313.30+0-0baureo+1)
+Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Provides: nvidia-kernel-313.30
+Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-486
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary kernel module for Linux 3.8-0baureo1-486
+ This package provides the non-free NVIDIA binary kernel module built for
+ the Debian Linux kernel package.  This kernel module is required by the
+ nvidia-glx X video driver, the non-free binary video driver for NVIDIA
+ graphics chipsets.  This is the main NVIDIA driver release, which
+ supports the latest chipsets; for older chipsets, see the NVIDIA legacy
+ packages.
+ .
+ This package is built for linux-image-3.8-0baureo1-486.
+Built-Using: linux (= 3.8.5-1~experimental.1~baureo1)
+Homepage: http://www.nvidia.com/
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: debconf
 Status: install ok installed
 Priority: important
@@ -912,6 +940,34 @@ Original-Maintainer: Debian Live Project <debian-live@lists.debian.org>
 Original-Uploaders: Daniel Baumann <daniel@debian.org>
 Original-Vcs-Browser: http://live.debian.net/gitweb/?p=live-config.git
 Original-Vcs-Git: git://live.debian.net/git/live-config.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: nvidia-kernel-3.8-0baureo1-686-pae
+Status: install ok installed
+Priority: optional
+Section: non-free/kernel
+Installed-Size: 11685
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-modules (313.30+0-0baureo+1)
+Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Provides: nvidia-kernel-313.30
+Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-686-pae
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary kernel module for Linux 3.8-0baureo1-686-pae
+ This package provides the non-free NVIDIA binary kernel module built for
+ the Debian Linux kernel package.  This kernel module is required by the
+ nvidia-glx X video driver, the non-free binary video driver for NVIDIA
+ graphics chipsets.  This is the main NVIDIA driver release, which
+ supports the latest chipsets; for older chipsets, see the NVIDIA legacy
+ packages.
+ .
+ This package is built for linux-image-3.8-0baureo1-686-pae.
+Built-Using: linux (= 3.8.5-1~experimental.1~baureo1)
+Homepage: http://www.nvidia.com/
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-sis
@@ -1966,6 +2022,35 @@ Description: X11 keyboard file manipulation library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libxkbfile
 
+Package: nvidia-installer-cleanup
+Status: install ok installed
+Priority: optional
+Section: contrib/misc
+Installed-Size: 70
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: nvidia-support
+Version: 20120731+1-0baureo+1
+Replaces: nvidia-common
+Depends: debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip
+Conflicts: nvidia-common
+Description: Cleanup after driver installation with the nvidia-installer
+ This package takes care that no old installation of the non-free NVIDIA
+ graphics drivers that was done with the nvidia-installer remains on the
+ system.  Such an installation conflicts with the packaged drivers.
+ .
+ Furthermore using the nvidia-installer to install a new version of the
+ drivers is prevented as long as this package is installed.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: ssl-cert
 Status: install ok installed
 Priority: optional
@@ -2654,6 +2739,41 @@ Description: Redland Resource Description Framework (RDF) library
  backed storages, the librdf-storage-postgresql, librdf-storage-mysql
  or librdf-storage-sqlite packages should be installed.
 Homepage: http://librdf.org/
+
+Package: glx-alternative-nvidia
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 81
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Depends: glx-diversions (= 0.2.90-0baureo+1), glx-alternative-mesa
+Pre-Depends: dpkg-lzip
+Suggests: nvidia-glx
+Breaks: libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Conffiles:
+ /etc/nvidia/nvidia-blacklists-nouveau.conf fe5dc7192daf6ff23989deb9357743dc
+Description: allows the selection of NVIDIA as GLX provider
+ In setups with several GLX providers (e.g. the free MESA implementation and
+ proprietary graphics hardware vendor implementations) this metapackage
+ allows one to switch to the non-free NVIDIA driver and libraries.
+ .
+ Use 'update-alternatives --config glx' to select an implementation.
+ .
+ This package does not depend on the corresponding NVIDIA libraries.
+ In order to install the NVIDIA driver and libraries, install the nvidia-glx
+ package instead.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libk5crypto3
 Status: install ok installed
@@ -4275,6 +4395,34 @@ Description: X11 RandR extension library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXrandr
+
+Package: glx-diversions
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 107
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: glx-alternative-mesa
+Breaks: fglrx-driver (<< 1:11-6-~), fglrx-glx (<< 1:11-6-~), libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 195.36.31-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 195.36.31-3), nvidia-glx-dev (<< 195.36.31-2), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-173xx-dev (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-71xx-dev (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18), nvidia-glx-legacy-96xx-dev (<< 96.43.18)
+Conflicts: libgl1-mesa-swx11
+Description: prepare for using accelerated GLX implementations from GPU vendors
+ Diverts the free libGL.so implementation (MESA) and the xserver module
+ libglx.so (Xorg), preparing the system for plugging in accelerated
+ implementations from GPU vendors via alternatives, see the
+ glx-alternative-* packages.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libglu1-mesa
 Status: install ok installed
@@ -11079,6 +11227,39 @@ Description: NetScape Portable Runtime Library - transitional package
  to libnspr4.
 Homepage: http://www.mozilla.org/projects/nspr/
 
+Package: glx-alternative-mesa
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 50
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Depends: glx-diversions (= 0.2.90-0baureo+1)
+Pre-Depends: dpkg-lzip
+Suggests: libgl1-mesa-glx | libgl1
+Breaks: libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: allows the selection of MESA as GLX provider
+ In setups with several GLX providers (e.g. the free MESA implementation and
+ proprietary graphics hardware vendor implementations) this metapackage
+ allows one to switch back to MESA.
+ .
+ Use 'update-alternatives --config glx' to select an implementation.
+ .
+ This package does not depend on the corresponding MESA libraries.
+ In order to install the MESA libraries, install the libgl1-mesa-glx package
+ instead.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libcryptsetup4
 Status: install ok installed
 Priority: optional
@@ -11119,6 +11300,35 @@ Description: X11 Inter-Client Exchange library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libICE
+
+Package: nvidia-kernel-common
+Status: install ok installed
+Priority: optional
+Section: contrib/kernel
+Installed-Size: 80
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-support
+Version: 20120731+1-0baureo+1
+Depends: kmod | module-init-tools (<< 4), glx-alternative-nvidia (>= 0.2.90)
+Pre-Depends: dpkg-lzip, dpkg (>= 1.15.7.2)
+Conffiles:
+ /etc/init.d/nvidia-kernel 458a40c41d7d327fa8e379df297a4d64
+ /etc/modprobe.d/nvidia-kernel-common.conf d189ab3bec7291d20f566f4ab44c6676
+ /etc/default/nvidia-kernel 54698b13d35b26c14e5f3db2d558d96b
+Description: NVIDIA binary kernel module support files
+ This package contains support files used for any version of the NVIDIA
+ kernel module.  It sets up udev and ConsoleKit rules, ensures the NVIDIA
+ control device is created, associates the NVIDIA card with the correct
+ kernel module, and performs any other tasks required for the module to
+ work properly.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libjson0
 Status: install ok installed

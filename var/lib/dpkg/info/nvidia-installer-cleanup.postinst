@@ -1,0 +1,51 @@
+#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+exists()
+{
+	test -e "$1" || test -L "$1"
+}
+
+if [ "$1" = "configure" ]
+then
+
+	if [ -x "/usr/bin/nvidia-installer" ]
+	then
+		db_fset nvidia-installer-cleanup/uninstall-nvidia-installer seen false
+		# The following command intentionally fails in DEBIAN_FRONTEND=noninteractive mode.
+		db_input high nvidia-installer-cleanup/uninstall-nvidia-installer
+		db_go
+		db_get nvidia-installer-cleanup/uninstall-nvidia-installer
+		if [ "$RET" = "true" ]
+		then
+			nvidia-installer --uninstall --no-runlevel-check --no-x-check --ui=none || true
+		elif [ ! -x "/usr/bin/nvidia-installer" ]
+		then
+			: # the user may have removed it inbetween
+		else
+			echo "ERROR: Please run 'nvidia-installer --uninstall' manually or delete it." >&2
+			exit 1
+		fi
+	fi
+
+	if exists "/usr/bin/nvidia-installer" || exists "/usr/bin/nvidia-uninstall"
+	then
+		db_fset nvidia-installer-cleanup/delete-nvidia-installer seen false
+		# The following command intentionally fails in DEBIAN_FRONTEND=noninteractive mode.
+		db_input high nvidia-installer-cleanup/delete-nvidia-installer
+		db_go
+		db_get nvidia-installer-cleanup/delete-nvidia-installer
+		if [ "$RET" = "true" ]
+		then
+			rm -f /usr/bin/nvidia-installer /usr/bin/nvidia-uninstall
+		else
+			echo "ERROR: Please run 'nvidia-installer --uninstall' manually or delete it." >&2
+			exit 1
+		fi
+	fi
+
+fi
+
+
