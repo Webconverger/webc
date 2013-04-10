@@ -9,7 +9,7 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Wed Mar  6 17:34:32 UTC 2013
+ * Configuration time: Sun Mar 10 15:42:58 UTC 2013
  * Configured by     : Debian Project
  * Target system     : linux murphy 2.6.32-5-686-bigmem #1 smp mon feb 25 01:53:47 utc 2013 i686 gnulinux 
  */

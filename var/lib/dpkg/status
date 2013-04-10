@@ -264,12 +264,12 @@ Package: libgl1-mesa-dri
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 88962
+Installed-Size: 88963
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libgl1-mesa-dri-experimental (<< 7.11.1), xlibmesa-dri (<< 1:7.0.0)
 Depends: libc6 (>= 2.3.6-6~), libdrm-intel1 (>= 2.4.27), libdrm-nouveau1a (>= 2.4.23), libdrm-radeon1 (>= 2.4.17), libdrm2 (>= 2.4.3), libexpat1 (>= 2.0.1), libffi5 (>= 3.0.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6)
 Suggests: libglide3
@@ -678,7 +678,7 @@ Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: openssl
-Version: 1.0.1e-1
+Version: 1.0.1e-2
 Depends: libc6 (>= 2.7), zlib1g (>= 1:1.1.4), debconf (>= 0.5) | debconf-2.0
 Pre-Depends: multiarch-support
 Description: SSL shared libraries
@@ -696,7 +696,7 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: cupsddk (<< 1.4.0)
 Provides: cupsddk
 Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common
@@ -1447,13 +1447,13 @@ Package: libgssapi-krb5-2
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 328
+Installed-Size: 329
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
-Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-4), libkrb5support0 (>= 1.7dfsg~beta2)
+Version: 1.10.1+dfsg-5
+Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-5), libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
 Breaks: libgssglue1 (<< 0.2-2)
@@ -1526,12 +1526,14 @@ Package: firmware-ralink
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 94
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 99
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Ralink wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -1547,8 +1549,14 @@ Description: Binary firmware for Ralink wireless cards
   * Ralink RT2760/RT2790/RT2860/RT2890/RT3090 (RT2700P[D]/RT2700E[D]/RT2800P[D]/RT2800E[D]/RT3000E[D] chipset) firmware, version 34 (rt2860.bin, rt3090.bin)
   * Ralink RT2870/RT3070/RT3071/RT3072 (RT2800U[D] chipset) firmware, version 29 (rt2870.bin, rt3070.bin)
   * Ralink RT3071/RT3072 firmware, version 29 (rt3071.bin)
+  * Ralink RT3290 firmware, version 1 (rt3290.bin)
   * Ralink RT2571W/RT2671 (RT2501USB/RT5201USB chipset) firmware, version 1.8 (rt73.bin)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ncurses-base
 Essential: yes
@@ -1794,7 +1802,7 @@ Installed-Size: 14082
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: all
 Source: perl
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Provides: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Depends: perl (>= 5.14.2-1), libswitch-perl, libclass-isa-perl
@@ -1843,12 +1851,14 @@ Package: firmware-realtek
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 481
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 486
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Realtek wired and wireless network adapters
  This package contains the binary firmware for some Ethernet adapters with
@@ -1863,21 +1873,30 @@ Description: Binary firmware for Realtek wired and wireless network adapters
   * Realtek RTL8192E main code (RTL8192E/main.img)
   * Realtek RTL8192SU firmware, version 902B (RTL8192SU/rtl8192sfw.bin)
   * Realtek RTL8105E-1 firmware (rtl_nic/rtl8105e-1.fw)
+  * Realtek RTL8106E-1 firmware, version 0.0.1 (rtl_nic/rtl8106e-1.fw)
   * Realtek RTL8111D-1/RTL8168D-1 firmware (rtl_nic/rtl8168d-1.fw)
   * Realtek RTL8111D-2/RTL8168D-2 firmware (rtl_nic/rtl8168d-2.fw)
   * Realtek RTL8168E-1 firmware (rtl_nic/rtl8168e-1.fw)
   * Realtek RTL8168E-2 firmware (rtl_nic/rtl8168e-2.fw)
   * Realtek RTL8168E-3 firmware, version 0.0.4 (rtl_nic/rtl8168e-3.fw)
-  * Realtek RTL8168F-1 firmware, version 0.0.4 (rtl_nic/rtl8168f-1.fw)
+  * Realtek RTL8168F-1 firmware, version 0.0.5 (rtl_nic/rtl8168f-1.fw)
   * Realtek RTL8168F-2 firmware, version 0.0.4 (rtl_nic/rtl8168f-2.fw)
+  * Realtek RTL8168G-1 firmware, version 0.0.3 (rtl_nic/rtl8168g-1.fw)
+  * Realtek RTL8402-1 firmware, version 0.0.1 (rtl_nic/rtl8402-1.fw)
+  * Realtek RTL8411-1 firmware, version 0.0.3 (rtl_nic/rtl8411-1.fw)
   * Realtek RTL8192CE/RTL8188CE firmware, version 4.816.2011 (rtlwifi/rtl8192cfw.bin)
   * Realtek RTL8192CE/RTL8188CE B-cut firmware, version 4.816.2011 (rtlwifi/rtl8192cfwU_B.bin)
   * Realtek RTL8188CE A-cut firmware, version 4.816.2011 (rtlwifi/rtl8192cfwU.bin)
   * Realtek RTL8192CU/RTL8188CU firmware (rtlwifi/rtl8192cufw.bin)
-  * Realtek RTL8192DE firmware (rtlwifi/rtl8192defw.bin)
-  * Realtek RTL8192SE/RTL8191SE firmware (rtlwifi/rtl8192sefw.bin)
+  * Realtek RTL8192DE firmware, version 4.816.2011 (rtlwifi/rtl8192defw.bin)
+  * Realtek RTL8192SE/RTL8191SE firmware, version 4.816.2011 (rtlwifi/rtl8192sefw.bin)
   * Realtek RTL8192SU/RTL8712U firmware (rtlwifi/rtl8712u.bin)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-apm
 Status: install ok installed
@@ -2269,10 +2288,10 @@ Package: openssl
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 1073
+Installed-Size: 1074
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1.0.1e-1
+Version: 1.0.1e-2
 Depends: libc6 (>= 2.7), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Suggests: ca-certificates
 Conffiles:
@@ -2432,7 +2451,7 @@ Installed-Size: 4705
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
 Source: perl
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libperl5.8 (<< 5.8.0-20), libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl (<< 5.10.1-12), perl-modules (<< 5.10.1-1)
 Provides: libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl5-base, perlapi-5.14.2
 Pre-Depends: libc6 (>= 2.11), dpkg (>= 1.14.20)
@@ -2513,9 +2532,9 @@ Installed-Size: 3180
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Replaces: manpages-pl (<< 20060617-3~)
-Depends: libapt-pkg4.12 (>= 0.9.7.7-0baureo1), libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
+Depends: libapt-pkg4.12 (>= 0.9.7.8-0baureo1), libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
 Pre-Depends: dpkg-lzip
 Suggests: aptitude | synaptic | wajig, dpkg-dev, apt-doc, xz-utils, python-apt
 Conflicts: python-apt (<< 0.7.93.2~)
@@ -2541,8 +2560,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxslt1.1
@@ -2610,7 +2629,7 @@ Maintainer: Craig Small <csmall@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: procps
-Version: 1:3.3.3-2
+Version: 1:3.3.3-3
 Replaces: procps (<< 1:3.3.2-1)
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
@@ -2831,12 +2850,12 @@ Package: libk5crypto3
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 239
+Installed-Size: 240
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
+Version: 1.10.1+dfsg-5
 Depends: libc6 (>= 2.4), libkeyutils1, libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
@@ -3095,8 +3114,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
 Recommends: smbclient
 Suggests: cups, xpp, cups-bsd
 Conflicts: lprng
@@ -3729,7 +3748,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: apt
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Depends: libbz2-1.0, libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.3.3)
 Pre-Depends: dpkg-lzip, multiarch-support
 Breaks: apt (<< 0.9.4~)
@@ -3752,8 +3771,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-fbdev
@@ -4485,7 +4504,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libglu1
 Provides: libglu1
 Depends: libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libgl1-mesa-glx | libgl1, libstdc++6 (>= 4.1.1)
@@ -4593,8 +4612,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Breaks: cups (<< 1.5.0)
 Description: Common UNIX Printing System(tm) - MIME library
@@ -5093,8 +5112,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - Driver library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -5152,7 +5171,7 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Description: Common UNIX Printing System(tm) - common files
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -5181,12 +5200,12 @@ Package: libcups2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 477
+Installed-Size: 478
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: libcupsys2
 Provides: libcupsys2
 Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.10+dfsg~), zlib1g (>= 1:1.1.4)
@@ -5531,14 +5550,15 @@ Package: libnspr4
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 347
-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Installed-Size: 342
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.9.2-1
-Depends: libc6 (>= 2.4)
-Pre-Depends: multiarch-support
+Version: 2:4.9.6-1~baureo1
+Depends: libc6 (>= 2.3.6-6~)
+Pre-Depends: dpkg-lzip, multiarch-support
 Conflicts: libnspr4-0d (<< 2:4.9-2~)
 Description: NetScape Portable Runtime Library
  This library provides platform independent non-GUI operating system
@@ -5550,6 +5570,11 @@ Description: NetScape Portable Runtime Library
   * basic memory management (malloc and free),
   * shared library linking.
 Homepage: http://www.mozilla.org/projects/nspr/
+Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Mike Hommey <glandium@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libnepomukquery4a
 Status: deinstall ok config-files
@@ -6074,13 +6099,13 @@ Package: libdevmapper1.02.1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 306
+Installed-Size: 275
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: lvm2 (2.02.95-6)
-Version: 2:1.02.74-6
-Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-6)
+Source: lvm2 (2.02.95-7)
+Version: 2:1.02.74-7
+Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-7)
 Pre-Depends: multiarch-support
 Breaks: lvm2 (<< 2.02.66)
 Conflicts: libdevmapper1.02
@@ -6469,12 +6494,12 @@ Package: libswscale2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 726
+Installed-Size: 727
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:0.8.5-1
+Version: 6:0.8.6-1
 Replaces: libswscale-extra-2
 Provides: libswscale-extra-2
 Depends: libavutil51 (>= 6:0.8.3-1~), libc6 (>= 2.3.6-6~)
@@ -6609,7 +6634,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Depends: libc6 (>= 2.3.6-6~)
 Pre-Depends: multiarch-support
 Description: free implementation of the GL API -- shared library
@@ -6713,13 +6738,15 @@ Package: firmware-linux-nonfree
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 1527
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 1689
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Replaces: firmware-linux (<< 0.19)
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Conflicts: firmware-linux (<< 0.19)
 Description: Binary firmware for various drivers in the Linux kernel
@@ -6742,7 +6769,8 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Chelsio T3C protocol engine firmware, version 1.1.0 (cxgb3/t3c_psram-1.1.0.bin)
   * Chelsio T3 main firmware, version 7.4.0 (cxgb3/t3fw-7.4.0.bin)
   * Chelsio T3 main firmware, version 7.10.0 (cxgb3/t3fw-7.10.0.bin)
-  * Chelsio T4 firmware, version 1.4.16.0 (cxgb4/t4fw-1.4.16.0.bin)
+  * Chelsio T3 main firmware, version 7.12.0 (cxgb3/t3fw-7.12.0.bin)
+  * Chelsio T4 firmware, version 1.6.2.0 (cxgb4/t4fw-1.6.2.0.bin)
   * DAB-USB FPGA bitfile (dabusb/bitstream.bin)
   * DAB-USB firmware (dabusb/firmware.fw)
   * Xceive 5000 tuner firmware, version 1.6.114 (dvb-fe-xc5000-1.6.114.fw)
@@ -6852,6 +6880,11 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Broadcom BCM5705 TSO firmware (tigon/tg3_tso5.bin)
   * VIA VT6656 firmware (vntwusb.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libsystemd-login0
 Status: install ok installed
@@ -6884,7 +6917,7 @@ Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: same
 Source: e2fsprogs
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: e2fsprogs (<< 1.34-1)
 Provides: libe2p2, libext2fs2
 Depends: libc6 (>= 2.10)
@@ -7008,12 +7041,12 @@ Package: libkrb5support0
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 113
+Installed-Size: 114
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
+Version: 1.10.1+dfsg-5
 Depends: libc6 (>= 2.3.4), libkeyutils1
 Pre-Depends: multiarch-support
 Conflicts: libkrb53
@@ -7091,10 +7124,10 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libgl1, libgl1-mesa-dri (<< 6.4.0)
 Provides: libgl1
-Depends: libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcc1 (>= 1:4.1.1), libglapi-mesa (= 8.0.5-3), libstdc++6 (>= 4.1.1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-glx0 (>= 1.8), libxcb1, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxxf86vm1
+Depends: libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcc1 (>= 1:4.1.1), libglapi-mesa (= 8.0.5-4), libstdc++6 (>= 4.1.1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-glx0 (>= 1.8), libxcb1, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxxf86vm1
 Pre-Depends: multiarch-support
 Recommends: libgl1-mesa-dri (>= 7.2)
 Breaks: fglrx-glx (<< 1:11-6-1), libgl1-nvidia-alternatives (<= 275.09.07-1)
@@ -7925,16 +7958,19 @@ Package: firmware-atheros
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 814
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 1577
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Atheros wireless cards
  This package contains the binary firmware for USB wireless network and
- Bluetooth cards supported by the ar9170, ath3k or ath9k_htc drivers.
+ Bluetooth cards supported by the ar9170, ath3k, ath6kl_sdio, ath6kl_usb or
+ ath9k_htc drivers.
  .
  Contents:
   * Atheros AR3012 rev 01020001 patch (ar3k/AthrBT_0x01020001.dfu)
@@ -7954,9 +7990,46 @@ Description: Binary firmware for Atheros wireless cards
   * Atheros AR9170 firmware (ar9170.fw)
   * Atheros AR9271 firmware (ar9271.fw)
   * Atheros AR3011 firmware (ath3k-1.fw)
+  * ath6k/AR6003.1/hw2.1.1/athwlan.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.SD31.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.SD32.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.WB31.bin
+  * ath6k/AR6003.1/hw2.1.1/data.patch.bin
+  * ath6k/AR6003.1/hw2.1.1/endpointping.bin
+  * ath6k/AR6003.1/hw2.1.1/otp.bin
+  * ath6k/AR6003/hw1.0/athwlan.bin.z77
+  * ath6k/AR6003/hw1.0/bdata.SD31.bin
+  * ath6k/AR6003/hw1.0/bdata.SD32.bin
+  * ath6k/AR6003/hw1.0/bdata.WB31.bin
+  * ath6k/AR6003/hw1.0/data.patch.bin
+  * ath6k/AR6003/hw1.0/otp.bin.z77
+  * ath6k/AR6003/hw2.0/athwlan.bin.z77
+  * ath6k/AR6003/hw2.0/bdata.SD31.bin
+  * ath6k/AR6003/hw2.0/bdata.SD32.bin
+  * ath6k/AR6003/hw2.0/bdata.WB31.bin
+  * ath6k/AR6003/hw2.0/data.patch.bin
+  * ath6k/AR6003/hw2.0/otp.bin.z77
+  * ath6k/AR6003/hw2.1.1/athwlan.bin
+  * ath6k/AR6003/hw2.1.1/bdata.SD31.bin
+  * ath6k/AR6003/hw2.1.1/bdata.SD32.bin
+  * ath6k/AR6003/hw2.1.1/bdata.WB31.bin
+  * ath6k/AR6003/hw2.1.1/data.patch.bin
+  * ath6k/AR6003/hw2.1.1/endpointping.bin
+  * ath6k/AR6003/hw2.1.1/fw-2.bin
+  * ath6k/AR6003/hw2.1.1/fw-3.bin
+  * ath6k/AR6003/hw2.1.1/otp.bin
+  * ath6k/AR6004/hw1.2/bdata.bin
+  * ath6k/AR6004/hw1.2/fw-2.bin
+  * ath6k/AR6004/hw1.3/bdata.bin
+  * ath6k/AR6004/hw1.3/fw-3.bin
   * Atheros AR7010 firmware, version 1.3 (htc_7010.fw)
   * Atheros AR9271 firmware, version 1.3 (htc_9271.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libdlrestrictions1
 Status: install ok installed
@@ -8853,7 +8926,7 @@ Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: same
 Source: e2fsprogs
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: e2fsprogs (<< 1.34-1)
 Depends: libcomerr2, libc6 (>= 2.11)
 Pre-Depends: multiarch-support
@@ -9101,13 +9174,13 @@ Package: git-man
 Status: install ok installed
 Priority: optional
 Section: doc
-Installed-Size: 1174
+Installed-Size: 1181
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: git
-Version: 1:1.8.2~rc0-1~baureo1
+Version: 1:1.8.2.1-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git (<< 1:1.7.4~rc1), git-core (<< 1:1.7.0.4-1.)
 Breaks: git (<< 1:1.7.4~rc1)
 Description: fast, scalable, distributed revision control system (manual pages)
@@ -9184,9 +9257,9 @@ Installed-Size: 2337
 Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: hurd (<= 20040301-1), libblkid1 (<< 1.38+1.39-WIP-2005.12.10-2), libuuid1 (<< 1.38+1.39-WIP-2005.12.10-2)
-Pre-Depends: e2fslibs (= 1.42.5-1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
+Pre-Depends: e2fslibs (= 1.42.5-1.1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
 Suggests: gpart, parted, e2fsck-static
 Conflicts: dump (<< 0.4b4-4), initscripts (<< 2.85-4), quota (<< 1.55-8.1), sysvinit (<< 2.85-4)
 Conffiles:
@@ -9756,15 +9829,15 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6297
-Origin: progress-linux
-Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 6393
+Origin: debian
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.16.9baureo1
+Version: 1.16.10-0baureo1
 Provides: dpkg-lzip
-Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), lzip
+Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), plzip | lzip | lziprecover
 Suggests: apt
 Breaks: apt (<< 0.7.7), aptitude (<< 0.4.7-1), dpkg-dev (<< 1.15.8), libdpkg-perl (<< 1.15.8), pinfo (<< 0.6.9-3.1), tkinfo (<< 2.8-3.1)
 Conffiles:
@@ -10179,12 +10252,12 @@ Package: dmsetup
 Status: install ok installed
 Priority: optional
 Section: admin
-Installed-Size: 169
+Installed-Size: 109
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Source: lvm2 (2.02.95-6)
-Version: 2:1.02.74-6
+Source: lvm2 (2.02.95-7)
+Version: 2:1.02.74-7
 Depends: libc6 (>= 2.4), libdevmapper1.02.1 (>= 2:1.02.74), libudev0 (>= 0.140), util-linux (>> 2.16)
 Conflicts: devicekit-disks (<< 009)
 Description: Linux Kernel Device Mapper userspace library
@@ -10553,18 +10626,18 @@ Package: git
 Status: install ok installed
 Priority: optional
 Section: vcs
-Installed-Size: 16138
+Installed-Size: 16218
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1:1.8.2~rc0-1~baureo1
+Version: 1:1.8.2.1-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git-core (<< 1:1.7.0.4-1.), gitweb (<< 1:1.7.4~rc1)
 Provides: git-completion, git-core
-Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.2~rc0), git-man (<< 1:1.8.2~rc0-.)
+Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.2.1), git-man (<< 1:1.8.2.1-.)
 Pre-Depends: dpkg-lzip
 Recommends: patch, less, rsync, ssh-client
-Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-arch, git-cvs, git-svn, git-email, git-gui, gitk, gitweb
+Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-email, git-gui, gitk, gitweb, git-arch, git-bzr, git-cvs, git-svn
 Breaks: bash-completion (<< 1:1.90-1), cogito (<= 0.18.2+), git-buildpackage (<< 0.4.38), git-core (<< 1:1.7.0.4-1.), gitosis (<< 0.2+20090917-7), gitpkg (<< 0.15), gitweb (<< 1:1.7.4~rc1), guilt (<< 0.33), qgit (<< 1.5.5), stgit (<< 0.15), stgit-contrib (<< 0.15)
 Conflicts: git-core (<< 1:1.5.2~rc3-2.)
 Conffiles:
@@ -10641,13 +10714,13 @@ Section: perl
 Installed-Size: 11283
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libarchive-tar-perl (<= 1.38-2), libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libmodule-corelist-perl (<< 2.14-2), libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl-base (<< 5.10.1-12), perl-doc (<< 5.8.0-1), perl-modules (<< 5.8.1-1)
 Provides: data-dumper, libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl5
-Depends: perl-base (= 5.14.2-19), perl-modules (>= 5.14.2-19), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
+Depends: perl-base (= 5.14.2-20), perl-modules (>= 5.14.2-20), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
 Recommends: netbase
 Suggests: perl-doc, libterm-readline-gnu-perl | libterm-readline-perl-perl, make
-Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.71-2), libencode-perl (<< 2.42.01), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
+Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.71-2), libencode-perl (<< 2.44-1+deb7u1), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
 Conflicts: libjson-pp-perl (<< 2.27200-2)
 Description: Larry Wall's Practical Extraction and Report Language
  An interpreted scripting language, known among some as "Unix's Swiss
@@ -10711,8 +10784,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - CGI library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -10892,12 +10965,14 @@ Package: firmware-iwlwifi
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 7226
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 7888
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel PRO/Wireless 3945 and 802.11n cards
  This package contains the binary firmware for Intel PRO/Wireless 3945ABG,
@@ -10919,11 +10994,17 @@ Description: Binary firmware for Intel PRO/Wireless 3945 and 802.11n cards
   * Intel Wireless 5100, 5300 and 5350 firmware, version 8.83.5.1 (iwlwifi-5000-5.ucode)
   * Intel Wireless 5150 firmware, version 8.24.2.2 (iwlwifi-5150-2.ucode)
   * Intel Wireless 6000 firmware, version 9.221.4.1 (iwlwifi-6000-4.ucode)
-  * Intel Wireless 6005 firmware, version 17.168.5.3 (iwlwifi-6000g2a-5.ucode)
+  * Intel Wireless 6005/6205 firmware, version 17.168.5.3 (iwlwifi-6000g2a-5.ucode)
+  * Intel Wireless 6005/6205 firmware, version 18.168.6.1 (iwlwifi-6000g2a-6.ucode)
   * Intel Wireless 6030 firmware, version 18.168.6.1 (iwlwifi-6000g2b-6.ucode)
   * Intel Wireless 6250 firmware, version 9.201.4.1 (iwlwifi-6050-4.ucode)
   * Intel Wireless 6250 firmware, version 41.28.5.1 (iwlwifi-6050-5.ucode)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libexiv2-12
 Status: install ok installed
@@ -11428,16 +11509,23 @@ Status: install ok installed
 Priority: extra
 Section: oldlibs
 Installed-Size: 61
-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.9.2-1
-Depends: libnspr4 (= 2:4.9.2-1)
+Version: 2:4.9.6-1~baureo1
+Depends: libnspr4 (= 2:4.9.6-1~baureo1)
+Pre-Depends: dpkg-lzip
 Description: NetScape Portable Runtime Library - transitional package
  This is a transitional package to ensure smooth transition of all packages
  to libnspr4.
 Homepage: http://www.mozilla.org/projects/nspr/
+Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Mike Hommey <glandium@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: glx-alternative-mesa
 Status: install ok installed
@@ -11589,11 +11677,12 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 1216
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Pre-Depends: debconf | debconf-2.0
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
@@ -11612,6 +11701,11 @@ Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
  License.  You must agree to the terms of this license before it is
  installed.
 Homepage: http://ipw2100.sourceforge.net/firmware.php, http://ipw2200.sourceforge.net/firmware.php
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: firefox
 Status: install ok installed
@@ -11660,8 +11754,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - PPD manipulation library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -11749,14 +11843,16 @@ Package: firmware-libertas
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 2135
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 2136
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Replaces: libertas-firmware
 Provides: libertas-firmware
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Conflicts: libertas-firmware (<< 9.70.7.p0.0-2)
 Description: Binary firmware for Marvell Libertas 8xxx wireless cards
@@ -11792,6 +11888,11 @@ Description: Binary firmware for Marvell Libertas 8xxx wireless cards
   * MWL8366 boot code (mwl8k/helper_8366.fw)
   * MWL8687 boot code (mwl8k/helper_8687.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libfam0
 Status: install ok installed
@@ -11960,12 +12061,14 @@ Package: firmware-brcm80211
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 157
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 156
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Broadcom 802.11 wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -11973,9 +12076,14 @@ Description: Binary firmware for Broadcom 802.11 wireless cards
  brcm80211 driver.
  .
  Contents:
-  * Broadcom 802.11 firmware, version 610.811 (brcm/bcm43xx-0.fw)
-  * Broadcom 802.11 firmware header, version 610.811 (brcm/bcm43xx_hdr-0.fw)
+  * Broadcom 802.11 firmware, version 610.812 (brcm/bcm43xx-0.fw)
+  * Broadcom 802.11 firmware header, version 610.812 (brcm/bcm43xx_hdr-0.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxxf86vm1
 Status: install ok installed
@@ -12095,7 +12203,7 @@ Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: apt
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Depends: libapt-inst1.5 (>= 0.8.0), libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.3.6-6~), libdb5.1, libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
 Pre-Depends: dpkg-lzip
 Suggests: xz-utils
@@ -12112,8 +12220,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: lzip
@@ -12458,7 +12566,7 @@ Maintainer: Loic Minier <lool@dooz.org>
 Architecture: i386
 Multi-Arch: same
 Source: poppler
-Version: 0.18.4-5
+Version: 0.18.4-6
 Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.9.0), libfreetype6 (>= 2.2.1), libjpeg8 (>= 8c), liblcms1 (>= 1.15-1), libopenjpeg2, libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.1.1), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
 Recommends: poppler-data
@@ -12966,12 +13074,12 @@ Package: nvidia-detect
 Status: install ok installed
 Priority: optional
 Section: non-free/x11
-Installed-Size: 157
+Installed-Size: 169
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 304.64-4baureo1
+Version: 313.30-1~baureo1
 Depends: pciutils
 Pre-Depends: dpkg-lzip
 Description: NVIDIA GPU detection utility
@@ -12983,7 +13091,7 @@ Homepage: http://www.nvidia.com
 Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
 Original-Uploaders: 
  Russ Allbery <rra@debian.org>,
- Andreas Beckmann <debian@abeckmann.de>,
+ Andreas Beckmann <anbe@debian.org>,
 Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
 Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
@@ -13232,8 +13340,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-5), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - Raster image library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -13291,26 +13399,26 @@ Package: cups
 Status: install ok installed
 Priority: optional
 Section: net
-Installed-Size: 4159
+Installed-Size: 4151
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: cupsddk-drivers (<< 1.4.0), ghostscript-cups (<< 9.02~)
 Provides: cupsddk-drivers
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-2.15), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-5), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-5), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
 Pre-Depends: dpkg (>= 1.15.7.2)
 Recommends: avahi-daemon, colord, foomatic-filters (>= 4.0), printer-driver-gutenprint, ghostscript-cups (>= 9.02~)
 Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
 Breaks: cupsddk-drivers (<< 1.4.0), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
 Conffiles:
- /etc/cups/cups-files.conf 2ada8629cf8d280aa4fb7d06ee5a7e2e
- /etc/cups/cupsd.conf.default 9ffef7ab095f3f35dcd108ba52de6295
- /etc/cups/snmp.conf 55baa060a50f48f9dbb99c6eb60dc04c
+ /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
  /etc/pam.d/cups ff2488324854f7b1e892bb0df062d5f0
  /etc/init.d/cups 7aaba466614799b00d74c700fe04c603
+ /etc/cups/snmp.conf 55baa060a50f48f9dbb99c6eb60dc04c
+ /etc/cups/cupsd.conf.default 9ffef7ab095f3f35dcd108ba52de6295
+ /etc/cups/cups-files.conf 2ada8629cf8d280aa4fb7d06ee5a7e2e
  /etc/default/cups 2b436fbb1a32b82b6aba45a76a1d7e40
- /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
 Description: Common UNIX Printing System(tm) - server
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -13324,13 +13432,13 @@ Package: libkrb5-3
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 971
+Installed-Size: 972
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
-Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-4)
+Version: 1.10.1+dfsg-5
+Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-5)
 Pre-Depends: multiarch-support
 Recommends: krb5-locales
 Suggests: krb5-doc, krb5-user
