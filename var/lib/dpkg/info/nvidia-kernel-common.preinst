@@ -1,0 +1,36 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installmodules
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	if [ -e "/etc/modprobe.d/nvidia-kernel-common" ]; then
+		if [ "`md5sum \"/etc/modprobe.d/nvidia-kernel-common\" | sed -e \"s/ .*//\"`" = \
+		     "`dpkg-query -W -f='${Conffiles}' nvidia-kernel-common | sed -n -e \"\\\\' /etc/modprobe.d/nvidia-kernel-common '{s/ obsolete$//;s/.* //p}\"`" ]
+		then
+			rm -f "/etc/modprobe.d/nvidia-kernel-common"
+		fi
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installudev
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	if [ -e "/etc/udev/rules.d/z60_nvidia-kernel-common.rules" ]; then
+		if [ "`md5sum \"/etc/udev/rules.d/z60_nvidia-kernel-common.rules\" | sed -e \"s/ .*//\"`" = \
+		     "`dpkg-query -W -f='${Conffiles}' nvidia-kernel-common | sed -n -e \"\\\\' /etc/udev/rules.d/z60_nvidia-kernel-common.rules '{s/ obsolete$//;s/.* //p}\"`" ]
+		then
+			rm -f "/etc/udev/rules.d/z60_nvidia-kernel-common.rules"
+		fi
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/devfs/conf.d/nvidia-kernel-nkc '20051028+1+nmu2~' -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modutils/nvidia-kernel-nkc '20051028+1+nmu2~' -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/nvidia-kernel-nkc /etc/modprobe.d/nvidia-kernel-common.conf '20100216+1~' -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/modprobe.d/nvidia-kernel-nkc.conf /etc/modprobe.d/nvidia-kernel-common.conf '20100522+1~' -- "$@"
+# End automatically added section

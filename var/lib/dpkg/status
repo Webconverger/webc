@@ -106,6 +106,34 @@ Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.gi
 Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: nvidia-kernel-3.8-0baureo1-486
+Status: install ok installed
+Priority: optional
+Section: non-free/kernel
+Installed-Size: 9360
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-modules (313.30+0-0baureo+1)
+Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Provides: nvidia-kernel-313.30
+Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-486
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary kernel module for Linux 3.8-0baureo1-486
+ This package provides the non-free NVIDIA binary kernel module built for
+ the Debian Linux kernel package.  This kernel module is required by the
+ nvidia-glx X video driver, the non-free binary video driver for NVIDIA
+ graphics chipsets.  This is the main NVIDIA driver release, which
+ supports the latest chipsets; for older chipsets, see the NVIDIA legacy
+ packages.
+ .
+ This package is built for linux-image-3.8-0baureo1-486.
+Built-Using: linux (= 3.8.5-1~experimental.1~baureo1)
+Homepage: http://www.nvidia.com/
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: debconf
 Status: install ok installed
 Priority: important
@@ -134,15 +162,21 @@ Status: install ok installed
 Priority: optional
 Section: x11
 Installed-Size: 1516
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Source: xorg-server
-Version: 2:1.12.4-5
+Version: 2:1.12.4-5baureo1
 Replaces: xserver-xorg-core (<< 2:1.5.2)
 Depends: x11-common, xkb-data, x11-xkb-utils
 Recommends: xfonts-base, xauth
 Description: common files used by various X servers
  This package provides files necessary for all X.Org based X servers.
+Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Original-Uploaders: Drew Parsons <dparsons@debian.org>, Cyril Brulebois <kibi@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/xserver/xorg-server.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-xorg/xserver/xorg-server
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: dash
 Essential: yes
@@ -230,12 +264,12 @@ Package: libgl1-mesa-dri
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 88962
+Installed-Size: 88963
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libgl1-mesa-dri-experimental (<< 7.11.1), xlibmesa-dri (<< 1:7.0.0)
 Depends: libc6 (>= 2.3.6-6~), libdrm-intel1 (>= 2.4.27), libdrm-nouveau1a (>= 2.4.23), libdrm-radeon1 (>= 2.4.17), libdrm2 (>= 2.4.3), libexpat1 (>= 2.0.1), libffi5 (>= 3.0.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6)
 Suggests: libglide3
@@ -435,12 +469,12 @@ Package: linux-image-3.8-0baureo1-686-pae
 Status: install ok installed
 Priority: optional
 Section: kernel
-Installed-Size: 82632
+Installed-Size: 82657
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
-Version: 3.8.2-1~experimental.1~baureo1
+Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -644,7 +678,7 @@ Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: openssl
-Version: 1.0.1e-1
+Version: 1.0.1e-2
 Depends: libc6 (>= 2.7), zlib1g (>= 1:1.1.4), debconf (>= 0.5) | debconf-2.0
 Pre-Depends: multiarch-support
 Description: SSL shared libraries
@@ -662,7 +696,7 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: cupsddk (<< 1.4.0)
 Provides: cupsddk
 Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common
@@ -906,6 +940,34 @@ Original-Maintainer: Debian Live Project <debian-live@lists.debian.org>
 Original-Uploaders: Daniel Baumann <daniel@debian.org>
 Original-Vcs-Browser: http://live.debian.net/gitweb/?p=live-config.git
 Original-Vcs-Git: git://live.debian.net/git/live-config.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: nvidia-kernel-3.8-0baureo1-686-pae
+Status: install ok installed
+Priority: optional
+Section: non-free/kernel
+Installed-Size: 11685
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-modules (313.30+0-0baureo+1)
+Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Provides: nvidia-kernel-313.30
+Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-686-pae
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary kernel module for Linux 3.8-0baureo1-686-pae
+ This package provides the non-free NVIDIA binary kernel module built for
+ the Debian Linux kernel package.  This kernel module is required by the
+ nvidia-glx X video driver, the non-free binary video driver for NVIDIA
+ graphics chipsets.  This is the main NVIDIA driver release, which
+ supports the latest chipsets; for older chipsets, see the NVIDIA legacy
+ packages.
+ .
+ This package is built for linux-image-3.8-0baureo1-686-pae.
+Built-Using: linux (= 3.8.5-1~experimental.1~baureo1)
+Homepage: http://www.nvidia.com/
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-sis
@@ -1164,12 +1226,12 @@ Package: linux-image-3.8-0baureo1-486
 Status: install ok installed
 Priority: optional
 Section: kernel
-Installed-Size: 80913
+Installed-Size: 80938
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
-Version: 3.8.2-1~experimental.1~baureo1
+Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-486
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -1385,13 +1447,13 @@ Package: libgssapi-krb5-2
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 328
+Installed-Size: 329
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
-Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-4), libkrb5support0 (>= 1.7dfsg~beta2)
+Version: 1.10.1+dfsg-5
+Depends: libc6 (>= 2.7), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.8+dfsg), libkeyutils1, libkrb5-3 (= 1.10.1+dfsg-5), libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
 Breaks: libgssglue1 (<< 0.2-2)
@@ -1464,12 +1526,14 @@ Package: firmware-ralink
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 94
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 99
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Ralink wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -1485,8 +1549,14 @@ Description: Binary firmware for Ralink wireless cards
   * Ralink RT2760/RT2790/RT2860/RT2890/RT3090 (RT2700P[D]/RT2700E[D]/RT2800P[D]/RT2800E[D]/RT3000E[D] chipset) firmware, version 34 (rt2860.bin, rt3090.bin)
   * Ralink RT2870/RT3070/RT3071/RT3072 (RT2800U[D] chipset) firmware, version 29 (rt2870.bin, rt3070.bin)
   * Ralink RT3071/RT3072 firmware, version 29 (rt3071.bin)
+  * Ralink RT3290 firmware, version 1 (rt3290.bin)
   * Ralink RT2571W/RT2671 (RT2501USB/RT5201USB chipset) firmware, version 1.8 (rt73.bin)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ncurses-base
 Essential: yes
@@ -1608,6 +1678,30 @@ Description: KDE Platform User Interface Library
  This package is part of the KDE Development Platform libraries module.
 Homepage: http://www.kde.org/
 
+Package: nvidia-support
+Status: install ok installed
+Priority: optional
+Section: contrib/misc
+Installed-Size: 82
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Version: 20120731+1-0baureo+1
+Depends: debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip
+Description: NVIDIA binary graphics driver support files
+ This package contains support files needed for all current and legacy
+ versions of the non-free NVIDIA graphics drivers.  These include scripts
+ used for warning about a mismatching version of the kernel module or for
+ creating a minimal xorg.conf to enable the NVIDIA driver.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libusb-0.1-4
 Status: install ok installed
 Priority: important
@@ -1708,7 +1802,7 @@ Installed-Size: 14082
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: all
 Source: perl
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Provides: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-yaml-perl, libcpanplus-perl, libdigest-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-path-perl, libfile-spec-perl, libfile-temp-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libmodule-pluggable-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libperl4-corelibs-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libshell-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Depends: perl (>= 5.14.2-1), libswitch-perl, libclass-isa-perl
@@ -1757,12 +1851,14 @@ Package: firmware-realtek
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 481
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 486
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Realtek wired and wireless network adapters
  This package contains the binary firmware for some Ethernet adapters with
@@ -1777,21 +1873,30 @@ Description: Binary firmware for Realtek wired and wireless network adapters
   * Realtek RTL8192E main code (RTL8192E/main.img)
   * Realtek RTL8192SU firmware, version 902B (RTL8192SU/rtl8192sfw.bin)
   * Realtek RTL8105E-1 firmware (rtl_nic/rtl8105e-1.fw)
+  * Realtek RTL8106E-1 firmware, version 0.0.1 (rtl_nic/rtl8106e-1.fw)
   * Realtek RTL8111D-1/RTL8168D-1 firmware (rtl_nic/rtl8168d-1.fw)
   * Realtek RTL8111D-2/RTL8168D-2 firmware (rtl_nic/rtl8168d-2.fw)
   * Realtek RTL8168E-1 firmware (rtl_nic/rtl8168e-1.fw)
   * Realtek RTL8168E-2 firmware (rtl_nic/rtl8168e-2.fw)
   * Realtek RTL8168E-3 firmware, version 0.0.4 (rtl_nic/rtl8168e-3.fw)
-  * Realtek RTL8168F-1 firmware, version 0.0.4 (rtl_nic/rtl8168f-1.fw)
+  * Realtek RTL8168F-1 firmware, version 0.0.5 (rtl_nic/rtl8168f-1.fw)
   * Realtek RTL8168F-2 firmware, version 0.0.4 (rtl_nic/rtl8168f-2.fw)
+  * Realtek RTL8168G-1 firmware, version 0.0.3 (rtl_nic/rtl8168g-1.fw)
+  * Realtek RTL8402-1 firmware, version 0.0.1 (rtl_nic/rtl8402-1.fw)
+  * Realtek RTL8411-1 firmware, version 0.0.3 (rtl_nic/rtl8411-1.fw)
   * Realtek RTL8192CE/RTL8188CE firmware, version 4.816.2011 (rtlwifi/rtl8192cfw.bin)
   * Realtek RTL8192CE/RTL8188CE B-cut firmware, version 4.816.2011 (rtlwifi/rtl8192cfwU_B.bin)
   * Realtek RTL8188CE A-cut firmware, version 4.816.2011 (rtlwifi/rtl8192cfwU.bin)
   * Realtek RTL8192CU/RTL8188CU firmware (rtlwifi/rtl8192cufw.bin)
-  * Realtek RTL8192DE firmware (rtlwifi/rtl8192defw.bin)
-  * Realtek RTL8192SE/RTL8191SE firmware (rtlwifi/rtl8192sefw.bin)
+  * Realtek RTL8192DE firmware, version 4.816.2011 (rtlwifi/rtl8192defw.bin)
+  * Realtek RTL8192SE/RTL8191SE firmware, version 4.816.2011 (rtlwifi/rtl8192sefw.bin)
   * Realtek RTL8192SU/RTL8712U firmware (rtlwifi/rtl8712u.bin)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-apm
 Status: install ok installed
@@ -1959,6 +2064,35 @@ Description: X11 keyboard file manipulation library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libxkbfile
+
+Package: nvidia-installer-cleanup
+Status: install ok installed
+Priority: optional
+Section: contrib/misc
+Installed-Size: 70
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: nvidia-support
+Version: 20120731+1-0baureo+1
+Replaces: nvidia-common
+Depends: debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip
+Conflicts: nvidia-common
+Description: Cleanup after driver installation with the nvidia-installer
+ This package takes care that no old installation of the non-free NVIDIA
+ graphics drivers that was done with the nvidia-installer remains on the
+ system.  Such an installation conflicts with the packaged drivers.
+ .
+ Furthermore using the nvidia-installer to install a new version of the
+ drivers is prevented as long as this package is installed.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ssl-cert
 Status: install ok installed
@@ -2154,10 +2288,10 @@ Package: openssl
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 1073
+Installed-Size: 1074
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1.0.1e-1
+Version: 1.0.1e-2
 Depends: libc6 (>= 2.7), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Suggests: ca-certificates
 Conffiles:
@@ -2317,7 +2451,7 @@ Installed-Size: 4705
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
 Source: perl
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libperl5.8 (<< 5.8.0-20), libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl (<< 5.10.1-12), perl-modules (<< 5.10.1-1)
 Provides: libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl5-base, perlapi-5.14.2
 Pre-Depends: libc6 (>= 2.11), dpkg (>= 1.14.20)
@@ -2398,9 +2532,9 @@ Installed-Size: 3180
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Replaces: manpages-pl (<< 20060617-3~)
-Depends: libapt-pkg4.12 (>= 0.9.7.7-0baureo1), libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
+Depends: libapt-pkg4.12 (>= 0.9.7.8-0baureo1), libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), debian-archive-keyring, gnupg
 Pre-Depends: dpkg-lzip
 Suggests: aptitude | synaptic | wajig, dpkg-dev, apt-doc, xz-utils, python-apt
 Conflicts: python-apt (<< 0.7.93.2~)
@@ -2426,8 +2560,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxslt1.1
@@ -2495,7 +2629,7 @@ Maintainer: Craig Small <csmall@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: procps
-Version: 1:3.3.3-2
+Version: 1:3.3.3-3
 Replaces: procps (<< 1:3.3.2-1)
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
@@ -2506,6 +2640,34 @@ Description: library for accessing process information from /proc
  This package contains the shared libraries necessary to run programs
  compilied with libprocps.
 Homepage: http://gitorious.org/procps
+
+Package: libgl1-nvidia-alternatives
+Status: install ok installed
+Priority: optional
+Section: non-free/oldlibs
+Installed-Size: 141
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Depends: glx-alternative-mesa, glx-alternative-nvidia
+Pre-Depends: dpkg-lzip
+Breaks: libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), nvidia-glx (<< 195.36.31-2), nvidia-glx-dev (<< 195.36.31-2), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-173xx-dev (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-71xx-dev (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18), nvidia-glx-legacy-96xx-dev (<< 96.43.18)
+Description: transition libGL.so* diversions to glx-alternative-nvidia
+ This is a transitional package aiding the upgrade to glx-alternative-nvidia.
+ The libGL.so* diversions are now handled by glx-diversions and the
+ alternatives by glx-alternative-mesa.
+ .
+ This package can be safely removed from the system once nothing depends on it.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: linux-image-3.2.0-3artax1-486
 Status: deinstall ok config-files
@@ -2596,13 +2758,14 @@ Package: xserver-xorg-core
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 4125
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Installed-Size: 4015
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: xorg-server
-Version: 2:1.12.4-5
+Version: 2:1.12.4-5baureo1
 Provides: xorg-input-abi-16, xorg-video-abi-12
-Depends: xserver-common (>= 2:1.12.4-5), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.8), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
+Depends: xserver-common (>= 2:1.12.4-5baureo1), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
 Recommends: libgl1-mesa-dri (>= 7.10.2-4)
 Suggests: xfonts-100dpi | xfonts-75dpi, xfonts-scalable
 Breaks: libgl1-mesa-dri (<< 7.10.2-4), libgl1-mesa-dri-experimental (<< 7.10.2-4), xserver-xorg-input, xserver-xorg-input-2, xserver-xorg-input-2.1, xserver-xorg-input-4, xserver-xorg-input-7, xserver-xorg-input-joystick (<= 1:1.5.0-3), xserver-xorg-input-synaptics (<= 1.2.2-1), xserver-xorg-input-tslib (<= 0.0.6-3), xserver-xorg-input-vmmouse (<= 1:12.6.5-4), xserver-xorg-input-wacom (<= 0.10.5+20100415-1), xserver-xorg-video, xserver-xorg-video-1.0, xserver-xorg-video-1.9, xserver-xorg-video-2, xserver-xorg-video-4, xserver-xorg-video-5, xserver-xorg-video-6, xserver-xorg-video-cyrix (<= 1:1.1.0-8), xserver-xorg-video-i810 (<< 2:2.4), xserver-xorg-video-imstt (<= 1:1.1.0-7), xserver-xorg-video-nsc (<= 1:2.8.3-4), xserver-xorg-video-sunbw2 (<= 1:1.1.0-5), xserver-xorg-video-v4l (<< 1:0.2.0), xserver-xorg-video-vga (<= 1:4.1.0-8)
@@ -2618,6 +2781,11 @@ Description: Xorg X server - core server
  <URL:http://www.X.org>
  .
  This package is built from the X.org xserver module.
+Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Original-Uploaders: Drew Parsons <dparsons@debian.org>, Cyril Brulebois <kibi@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/xserver/xorg-server.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-xorg/xserver/xorg-server
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: librdf0
 Status: install ok installed
@@ -2643,16 +2811,51 @@ Description: Redland Resource Description Framework (RDF) library
  or librdf-storage-sqlite packages should be installed.
 Homepage: http://librdf.org/
 
+Package: glx-alternative-nvidia
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 81
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Depends: glx-diversions (= 0.2.90-0baureo+1), glx-alternative-mesa
+Pre-Depends: dpkg-lzip
+Suggests: nvidia-glx
+Breaks: libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Conffiles:
+ /etc/nvidia/nvidia-blacklists-nouveau.conf fe5dc7192daf6ff23989deb9357743dc
+Description: allows the selection of NVIDIA as GLX provider
+ In setups with several GLX providers (e.g. the free MESA implementation and
+ proprietary graphics hardware vendor implementations) this metapackage
+ allows one to switch to the non-free NVIDIA driver and libraries.
+ .
+ Use 'update-alternatives --config glx' to select an implementation.
+ .
+ This package does not depend on the corresponding NVIDIA libraries.
+ In order to install the NVIDIA driver and libraries, install the nvidia-glx
+ package instead.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libk5crypto3
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 239
+Installed-Size: 240
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
+Version: 1.10.1+dfsg-5
 Depends: libc6 (>= 2.4), libkeyutils1, libkrb5support0 (>= 1.7dfsg~beta2)
 Pre-Depends: multiarch-support
 Suggests: krb5-doc, krb5-user
@@ -2911,8 +3114,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
 Recommends: smbclient
 Suggests: cups, xpp, cups-bsd
 Conflicts: lprng
@@ -3349,7 +3552,7 @@ Installed-Size: 1453
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xserver-xorg-video-ati
-Version: 1:6.14.4-7
+Version: 1:6.14.4-8
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.7), libdrm-radeon1 (>= 2.4.31), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.10.2), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Suggests: firmware-linux
@@ -3545,7 +3748,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: apt
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Depends: libbz2-1.0, libc6 (>= 2.3.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.3.3)
 Pre-Depends: dpkg-lzip, multiarch-support
 Breaks: apt (<< 0.9.4~)
@@ -3568,8 +3771,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-fbdev
@@ -4264,6 +4467,34 @@ Description: X11 RandR extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXrandr
 
+Package: glx-diversions
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 107
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: glx-alternative-mesa
+Breaks: fglrx-driver (<< 1:11-6-~), fglrx-glx (<< 1:11-6-~), libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 195.36.31-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 195.36.31-3), nvidia-glx-dev (<< 195.36.31-2), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-173xx-dev (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-71xx-dev (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18), nvidia-glx-legacy-96xx-dev (<< 96.43.18)
+Conflicts: libgl1-mesa-swx11
+Description: prepare for using accelerated GLX implementations from GPU vendors
+ Diverts the free libGL.so implementation (MESA) and the xserver module
+ libglx.so (Xorg), preparing the system for plugging in accelerated
+ implementations from GPU vendors via alternatives, see the
+ glx-alternative-* packages.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libglu1-mesa
 Status: install ok installed
 Priority: optional
@@ -4273,7 +4504,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libglu1
 Provides: libglu1
 Depends: libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libgl1-mesa-glx | libgl1, libstdc++6 (>= 4.1.1)
@@ -4381,8 +4612,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Breaks: cups (<< 1.5.0)
 Description: Common UNIX Printing System(tm) - MIME library
@@ -4423,24 +4654,6 @@ Description: X C Binding
   * Easy creation of new extensions: automatically generates interface from
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
-
-Package: xserver-xorg-video-all
-Status: install ok installed
-Priority: optional
-Section: x11
-Installed-Size: 62
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
-Architecture: i386
-Source: xorg
-Version: 1:7.7+2
-Replaces: xserver-xorg-driver-all
-Depends: xserver-xorg-video-apm, xserver-xorg-video-ark, xserver-xorg-video-ati, xserver-xorg-video-chips, xserver-xorg-video-cirrus, xserver-xorg-video-fbdev, xserver-xorg-video-i128, xserver-xorg-video-i740, xserver-xorg-video-intel, xserver-xorg-video-mga, xserver-xorg-video-neomagic, xserver-xorg-video-nouveau, xserver-xorg-video-openchrome, xserver-xorg-video-rendition, xserver-xorg-video-s3, xserver-xorg-video-s3virge, xserver-xorg-video-savage, xserver-xorg-video-siliconmotion, xserver-xorg-video-sis, xserver-xorg-video-sisusb, xserver-xorg-video-tdfx, xserver-xorg-video-trident, xserver-xorg-video-tseng, xserver-xorg-video-vesa, xserver-xorg-video-voodoo, xserver-xorg-video-vmware
-Recommends: xserver-xorg-video-geode
-Conflicts: xserver-xorg-driver-all
-Description: X.Org X server -- output driver metapackage
- This package depends on the full suite of output drivers for the X.Org X server
- (Xorg).  It does not provide any drivers itself, and may be removed if you wish
- to only have certain drivers installed.
 
 Package: locales
 Status: install ok installed
@@ -4899,8 +5112,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - Driver library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -4958,7 +5171,7 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Description: Common UNIX Printing System(tm) - common files
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -4987,12 +5200,12 @@ Package: libcups2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 477
+Installed-Size: 478
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: libcupsys2
 Provides: libcupsys2
 Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.10+dfsg~), zlib1g (>= 1:1.1.4)
@@ -5337,14 +5550,15 @@ Package: libnspr4
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 347
-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Installed-Size: 342
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.9.2-1
-Depends: libc6 (>= 2.4)
-Pre-Depends: multiarch-support
+Version: 2:4.9.6-1~baureo1
+Depends: libc6 (>= 2.3.6-6~)
+Pre-Depends: dpkg-lzip, multiarch-support
 Conflicts: libnspr4-0d (<< 2:4.9-2~)
 Description: NetScape Portable Runtime Library
  This library provides platform independent non-GUI operating system
@@ -5356,6 +5570,11 @@ Description: NetScape Portable Runtime Library
   * basic memory management (malloc and free),
   * shared library linking.
 Homepage: http://www.mozilla.org/projects/nspr/
+Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Mike Hommey <glandium@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libnepomukquery4a
 Status: deinstall ok config-files
@@ -5798,6 +6017,44 @@ Description: An asynchronous event notification library
  libevent_extra.
 Homepage: http://www.monkey.org/~provos/libevent/
 
+Package: libvdpau1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 115
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: libvdpau
+Version: 0.6-1~baureo1
+Replaces: lib32vdpau1, nvidia-libvdpau, nvidia-libvdpau-ia32, nvidia-libvdpau1, nvidia-libvdpau1-ia32
+Depends: libc6 (>= 2.1.3), libx11-6 (>= 2:1.4.99.1), libxext6
+Pre-Depends: dpkg-lzip, multiarch-support
+Suggests: nvidia-vdpau-driver | vdpau-driver
+Conflicts: lib32vdpau1, nvidia-libvdpau, nvidia-libvdpau-ia32, nvidia-libvdpau1, nvidia-libvdpau1-ia32
+Conffiles:
+ /etc/vdpau_wrapper.cfg bc89239208609c5d031b74c99a45747d
+Description: Video Decode and Presentation API for Unix (libraries)
+ VDPAU (Video Decode and Presentation API for Unix) is an open source
+ library (libvdpau) and API designed by NVIDIA originally for its GeForce
+ 8 series and later GPU hardware, targeted at the X Window System on Unix
+ operating-systems (including Linux, FreeBSD, and Solaris). This VDPAU API
+ allows video programs to offload portions of the video decoding process
+ and video post-processing to the GPU video-hardware.
+ .
+ This package contains the VDPAU wrapper and trace libraries.
+Homepage: http://cgit.freedesktop.org/~aplattner/libvdpau
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Jean-Yves Avenard <jyavenard@gmail.com>,
+ Andres Mejia <amejia@debian.org>,
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-nvidia/libvdpau.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-nvidia/libvdpau.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: libjbig0
 Status: install ok installed
 Priority: extra
@@ -5842,13 +6099,13 @@ Package: libdevmapper1.02.1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 306
+Installed-Size: 275
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: lvm2 (2.02.95-6)
-Version: 2:1.02.74-6
-Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-6)
+Source: lvm2 (2.02.95-7)
+Version: 2:1.02.74-7
+Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev0 (>= 0.140), dmsetup (>= 2:1.02.74-7)
 Pre-Depends: multiarch-support
 Breaks: lvm2 (<< 2.02.66)
 Conflicts: libdevmapper1.02
@@ -5903,6 +6160,47 @@ Description: X11 Input extension library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXi
+
+Package: nvidia-glx
+Status: install ok installed
+Priority: optional
+Section: non-free/x11
+Installed-Size: 910
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Provides: nvidia-glx-any
+Depends: libgl1-nvidia-glx (= 313.30-1~baureo1), xserver-xorg-video-nvidia (= 313.30-1~baureo1), nvidia-vdpau-driver (= 313.30-1~baureo1), nvidia-alternative (= 313.30-1~baureo1), nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30, nvidia-support
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-settings
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Description: NVIDIA metapackage
+ This metapackage depends on the NVIDIA binary driver and libraries
+ that provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ AGP, PCIe, SLI, TV-out and flat panel displays are also supported.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+ .
+ This version only supports GeForce 6xxx and higher of the Geforce GPUs
+ plus complimentary Quadros and nforce.  Look at the legacy packages
+ for older cards.
+ .
+ See /usr/share/doc/nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xinit
 Status: install ok installed
@@ -6196,12 +6494,12 @@ Package: libswscale2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 726
+Installed-Size: 727
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:0.8.5-1
+Version: 6:0.8.6-1
 Replaces: libswscale-extra-2
 Provides: libswscale-extra-2
 Depends: libavutil51 (>= 6:0.8.3-1~), libc6 (>= 2.3.6-6~)
@@ -6336,7 +6634,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Depends: libc6 (>= 2.3.6-6~)
 Pre-Depends: multiarch-support
 Description: free implementation of the GL API -- shared library
@@ -6440,13 +6738,15 @@ Package: firmware-linux-nonfree
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 1527
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 1689
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Replaces: firmware-linux (<< 0.19)
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Conflicts: firmware-linux (<< 0.19)
 Description: Binary firmware for various drivers in the Linux kernel
@@ -6469,7 +6769,8 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Chelsio T3C protocol engine firmware, version 1.1.0 (cxgb3/t3c_psram-1.1.0.bin)
   * Chelsio T3 main firmware, version 7.4.0 (cxgb3/t3fw-7.4.0.bin)
   * Chelsio T3 main firmware, version 7.10.0 (cxgb3/t3fw-7.10.0.bin)
-  * Chelsio T4 firmware, version 1.4.16.0 (cxgb4/t4fw-1.4.16.0.bin)
+  * Chelsio T3 main firmware, version 7.12.0 (cxgb3/t3fw-7.12.0.bin)
+  * Chelsio T4 firmware, version 1.6.2.0 (cxgb4/t4fw-1.6.2.0.bin)
   * DAB-USB FPGA bitfile (dabusb/bitstream.bin)
   * DAB-USB firmware (dabusb/firmware.fw)
   * Xceive 5000 tuner firmware, version 1.6.114 (dvb-fe-xc5000-1.6.114.fw)
@@ -6579,6 +6880,11 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Broadcom BCM5705 TSO firmware (tigon/tg3_tso5.bin)
   * VIA VT6656 firmware (vntwusb.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libsystemd-login0
 Status: install ok installed
@@ -6611,7 +6917,7 @@ Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: same
 Source: e2fsprogs
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: e2fsprogs (<< 1.34-1)
 Provides: libe2p2, libext2fs2
 Depends: libc6 (>= 2.10)
@@ -6735,12 +7041,12 @@ Package: libkrb5support0
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 113
+Installed-Size: 114
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
+Version: 1.10.1+dfsg-5
 Depends: libc6 (>= 2.3.4), libkeyutils1
 Pre-Depends: multiarch-support
 Conflicts: libkrb53
@@ -6818,10 +7124,10 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 8.0.5-3
+Version: 8.0.5-4
 Replaces: libgl1, libgl1-mesa-dri (<< 6.4.0)
 Provides: libgl1
-Depends: libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcc1 (>= 1:4.1.1), libglapi-mesa (= 8.0.5-3), libstdc++6 (>= 4.1.1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-glx0 (>= 1.8), libxcb1, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxxf86vm1
+Depends: libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcc1 (>= 1:4.1.1), libglapi-mesa (= 8.0.5-4), libstdc++6 (>= 4.1.1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-glx0 (>= 1.8), libxcb1, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxxf86vm1
 Pre-Depends: multiarch-support
 Recommends: libgl1-mesa-dri (>= 7.2)
 Breaks: fglrx-glx (<< 1:11-6-1), libgl1-nvidia-alternatives (<= 275.09.07-1)
@@ -7652,16 +7958,19 @@ Package: firmware-atheros
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 814
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 1577
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Atheros wireless cards
  This package contains the binary firmware for USB wireless network and
- Bluetooth cards supported by the ar9170, ath3k or ath9k_htc drivers.
+ Bluetooth cards supported by the ar9170, ath3k, ath6kl_sdio, ath6kl_usb or
+ ath9k_htc drivers.
  .
  Contents:
   * Atheros AR3012 rev 01020001 patch (ar3k/AthrBT_0x01020001.dfu)
@@ -7681,9 +7990,46 @@ Description: Binary firmware for Atheros wireless cards
   * Atheros AR9170 firmware (ar9170.fw)
   * Atheros AR9271 firmware (ar9271.fw)
   * Atheros AR3011 firmware (ath3k-1.fw)
+  * ath6k/AR6003.1/hw2.1.1/athwlan.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.SD31.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.SD32.bin
+  * ath6k/AR6003.1/hw2.1.1/bdata.WB31.bin
+  * ath6k/AR6003.1/hw2.1.1/data.patch.bin
+  * ath6k/AR6003.1/hw2.1.1/endpointping.bin
+  * ath6k/AR6003.1/hw2.1.1/otp.bin
+  * ath6k/AR6003/hw1.0/athwlan.bin.z77
+  * ath6k/AR6003/hw1.0/bdata.SD31.bin
+  * ath6k/AR6003/hw1.0/bdata.SD32.bin
+  * ath6k/AR6003/hw1.0/bdata.WB31.bin
+  * ath6k/AR6003/hw1.0/data.patch.bin
+  * ath6k/AR6003/hw1.0/otp.bin.z77
+  * ath6k/AR6003/hw2.0/athwlan.bin.z77
+  * ath6k/AR6003/hw2.0/bdata.SD31.bin
+  * ath6k/AR6003/hw2.0/bdata.SD32.bin
+  * ath6k/AR6003/hw2.0/bdata.WB31.bin
+  * ath6k/AR6003/hw2.0/data.patch.bin
+  * ath6k/AR6003/hw2.0/otp.bin.z77
+  * ath6k/AR6003/hw2.1.1/athwlan.bin
+  * ath6k/AR6003/hw2.1.1/bdata.SD31.bin
+  * ath6k/AR6003/hw2.1.1/bdata.SD32.bin
+  * ath6k/AR6003/hw2.1.1/bdata.WB31.bin
+  * ath6k/AR6003/hw2.1.1/data.patch.bin
+  * ath6k/AR6003/hw2.1.1/endpointping.bin
+  * ath6k/AR6003/hw2.1.1/fw-2.bin
+  * ath6k/AR6003/hw2.1.1/fw-3.bin
+  * ath6k/AR6003/hw2.1.1/otp.bin
+  * ath6k/AR6004/hw1.2/bdata.bin
+  * ath6k/AR6004/hw1.2/fw-2.bin
+  * ath6k/AR6004/hw1.3/bdata.bin
+  * ath6k/AR6004/hw1.3/fw-3.bin
   * Atheros AR7010 firmware, version 1.3 (htc_7010.fw)
   * Atheros AR9271 firmware, version 1.3 (htc_9271.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libdlrestrictions1
 Status: install ok installed
@@ -8580,7 +8926,7 @@ Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: same
 Source: e2fsprogs
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: e2fsprogs (<< 1.34-1)
 Depends: libcomerr2, libc6 (>= 2.11)
 Pre-Depends: multiarch-support
@@ -8747,27 +9093,6 @@ Description: XZ-format compression utilities
   * support for flushing the encoder.
 Homepage: http://tukaani.org/xz/
 
-Package: xserver-xorg-video-nouveau
-Status: install ok installed
-Priority: optional
-Section: x11
-Installed-Size: 472
-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
-Architecture: i386
-Version: 1:1.0.1-5
-Provides: xorg-driver-video
-Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.17), libudev0 (>= 146), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
-Recommends: libgl1-mesa-dri (>= 7.11.1)
-Description: X.Org X server -- Nouveau display driver
- This driver for the X.Org X server (see xserver-xorg for a further description)
- provides support for NVIDIA Riva, TNT, GeForce, and Quadro cards.
- .
- This package provides 2D support including EXA acceleration, Xv and
- RandR.  3D functionality is provided by the libgl1-mesa-dri package.
- .
- This package is built from the FreeDesktop.org xf86-video-nouveau driver.
-Homepage: http://nouveau.freedesktop.org/wiki/
-
 Package: ethtool
 Status: install ok installed
 Priority: optional
@@ -8849,13 +9174,13 @@ Package: git-man
 Status: install ok installed
 Priority: optional
 Section: doc
-Installed-Size: 1174
+Installed-Size: 1181
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: git
-Version: 1:1.8.2~rc0-1~baureo1
+Version: 1:1.8.2.1-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git (<< 1:1.7.4~rc1), git-core (<< 1:1.7.0.4-1.)
 Breaks: git (<< 1:1.7.4~rc1)
 Description: fast, scalable, distributed revision control system (manual pages)
@@ -8932,9 +9257,9 @@ Installed-Size: 2337
 Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.42.5-1
+Version: 1.42.5-1.1
 Replaces: hurd (<= 20040301-1), libblkid1 (<< 1.38+1.39-WIP-2005.12.10-2), libuuid1 (<< 1.38+1.39-WIP-2005.12.10-2)
-Pre-Depends: e2fslibs (= 1.42.5-1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
+Pre-Depends: e2fslibs (= 1.42.5-1.1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
 Suggests: gpart, parted, e2fsck-static
 Conflicts: dump (<< 0.4b4-4), initscripts (<< 2.85-4), quota (<< 1.55-8.1), sysvinit (<< 2.85-4)
 Conffiles:
@@ -9504,15 +9829,15 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6297
-Origin: progress-linux
-Maintainer: Progress Linux Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 6393
+Origin: debian
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.16.9baureo1
+Version: 1.16.10-0baureo1
 Provides: dpkg-lzip
-Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), lzip
+Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), plzip | lzip | lziprecover
 Suggests: apt
 Breaks: apt (<< 0.7.7), aptitude (<< 0.4.7-1), dpkg-dev (<< 1.15.8), libdpkg-perl (<< 1.15.8), pinfo (<< 0.6.9-3.1), tkinfo (<< 2.8-3.1)
 Conffiles:
@@ -9866,6 +10191,41 @@ Description: Google Talk Plugin
  OpenSSL Toolkit (http://www.openssl.org/). This product includes cryptographic
  software written by Eric Young (eay@cryptsoft.com).
 
+Package: libgl1-nvidia-glx
+Status: install ok installed
+Priority: optional
+Section: non-free/libs
+Installed-Size: 31173
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: libgl1-nvidia-dev, nvidia-glx (<< 195.36.31), nvidia-glx-dev
+Provides: libgl1-nvidia-glx-any, libgl1-nvidia-glx-i386
+Depends: nvidia-alternative, nvidia-support, libc6 (>= 2.1.3), libx11-6, libxext6
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup, multiarch-support
+Recommends: nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: fglrx-glx (<< 1:11-6-~), ia32-libs (<< 1:0), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), nvidia-glx (<< 275.09.07-3), nvidia-glx-legacy (<< 71.86.14-3), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2), nvidia-settings (<< 304), nvidia-settings-legacy-173xx (<< 173.14.35-4baureo1)
+Conflicts: libgl1-nvidia-dev, libgl1-nvidia-glx-ia32, nvidia-glx-dev
+Description: NVIDIA binary OpenGL libraries
+ These binary libraries provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ .
+ See the description of the nvidia-glx package
+ or /usr/share/doc/libgl1-nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: crda
 Status: install ok installed
 Priority: optional
@@ -9892,12 +10252,12 @@ Package: dmsetup
 Status: install ok installed
 Priority: optional
 Section: admin
-Installed-Size: 169
+Installed-Size: 109
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Source: lvm2 (2.02.95-6)
-Version: 2:1.02.74-6
+Source: lvm2 (2.02.95-7)
+Version: 2:1.02.74-7
 Depends: libc6 (>= 2.4), libdevmapper1.02.1 (>= 2:1.02.74), libudev0 (>= 0.140), util-linux (>> 2.16)
 Conflicts: devicekit-disks (<< 009)
 Description: Linux Kernel Device Mapper userspace library
@@ -9950,6 +10310,48 @@ Description: Multitouch Protocol Translation Library - shared library
  drivers that have not been updated to use the newer protocol.
 Homepage: http://bitmath.org/code/mtdev/
 
+Package: xserver-xorg-video-nvidia
+Status: install ok installed
+Priority: optional
+Section: non-free/x11
+Installed-Size: 13232
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: nvidia-glx (<< 275.09.07-2)
+Provides: xorg-driver-video, xserver-xorg-video-nvidia-any
+Depends: libgl1-nvidia-glx (= 313.30-1~baureo1), nvidia-alternative (= 313.30-1~baureo1), nvidia-support (>= 20120630), xorg-video-abi-14 | xorg-video-abi-13 | xorg-video-abi-12 | xorg-video-abi-11 | xorg-video-abi-10 | xorg-video-abi-8 | xorg-video-abi-6.0, xserver-xorg-core (<< 2:1.14.99), libc6 (>= 2.1.3), debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-vdpau-driver (>= 313.30), nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30, nvidia-settings
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: fglrx-driver (<< 1:11-6-~), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy (<< 71.86.14-3), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: NVIDIA binary Xorg driver
+ These binary drivers provide optimized hardware acceleration of
+ OpenGL applications via a direct-rendering X Server.
+ AGP, PCIe, SLI, TV-out and flat panel displays are also supported.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+ .
+ This version only supports GeForce 6xxx and higher of the Geforce GPUs
+ plus complimentary Quadros and nforce.  Look at the legacy packages
+ for older cards.
+ .
+ See /usr/share/doc/nvidia-glx/README.txt.gz
+ for a complete list of supported GPUs and PCI IDs.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: alsa-utils
 Status: install ok installed
 Priority: optional
@@ -9974,6 +10376,49 @@ Description: Utilities for configuring and using ALSA
  .
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
+
+Package: nvidia-vdpau-driver
+Status: install ok installed
+Priority: optional
+Section: non-free/video
+Installed-Size: 2097
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: same
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Replaces: nvidia-glx (<< 180.51), nvidia-libvdpau, nvidia-libvdpau-dev, nvidia-libvdpau1, nvidia-libvdpau1-driver
+Provides: nvidia-vdpau-driver-i386, vdpau-driver
+Depends: libvdpau1, libc6 (>= 2.1), libx11-6, libxext6
+Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
+Recommends: nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30
+Suggests: nvidia-kernel-dkms (>= 313.30) | nvidia-kernel-source (>= 313.30)
+Breaks: libvdpau1 (<< 0.4.1-3), nvidia-glx (<< 180.51)
+Conflicts: nvidia-libvdpau, nvidia-libvdpau-dev, nvidia-libvdpau1, nvidia-libvdpau1-driver, nvidia-vdpau-driver-ia32
+Enhances: libvdpau1
+Description: NVIDIA vdpau driver
+ These libraries provide the Video Decode and Presentation API for Unix.
+ They provide accelerated video playback (incl. H.264) for the supported
+ graphics cards.
+ .
+ This package contains the NVIDIA VDPAU driver.
+ .
+ See /usr/share/doc/nvidia-vdpau-driver/README.txt.gz
+ for more information.
+ .
+ Please see the nvidia-kernel-dkms or
+ nvidia-kernel-source packages
+ for building the kernel module required by this package.
+ This will provide nvidia-kernel-313.30.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ghostscript
 Status: install ok installed
@@ -10002,13 +10447,12 @@ Package: xserver-xorg-video-s3
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 130
+Installed-Size: 133
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Source: xserver-xorg-video-s3 (1:0.6.3-4)
-Version: 1:0.6.3-4+b3
+Version: 1:0.6.3-5
 Provides: xorg-driver-video
-Depends: libc6 (>= 2.1.3), xorg-video-abi-12, xserver-xorg-core (>= 2:1.11.99.901)
+Depends: libc6 (>= 2.1.3), xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Description: X.Org X server -- legacy S3 display driver
  This package provides the driver for certain legacy S3 video card chipsets,
  including the Trio64 and 96x cards.  It does not provide support for
@@ -10182,18 +10626,18 @@ Package: git
 Status: install ok installed
 Priority: optional
 Section: vcs
-Installed-Size: 16138
+Installed-Size: 16218
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1:1.8.2~rc0-1~baureo1
+Version: 1:1.8.2.1-1~baureo1
 Replaces: cogito (<< 0.16rc2-0), git-core (<< 1:1.7.0.4-1.), gitweb (<< 1:1.7.4~rc1)
 Provides: git-completion, git-core
-Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.2~rc0), git-man (<< 1:1.8.2~rc0-.)
+Depends: libc6 (>= 2.9), libcurl3-gnutls (>= 7.16.2), libexpat1 (>= 2.0.1), libpcre3 (>= 8.10), zlib1g (>= 1:1.2.0), perl-modules, liberror-perl, git-man (>> 1:1.8.2.1), git-man (<< 1:1.8.2.1-.)
 Pre-Depends: dpkg-lzip
 Recommends: patch, less, rsync, ssh-client
-Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-arch, git-cvs, git-svn, git-email, git-gui, gitk, gitweb
+Suggests: gettext-base, git-daemon-run | git-daemon-sysvinit, git-doc, git-el, git-email, git-gui, gitk, gitweb, git-arch, git-bzr, git-cvs, git-svn
 Breaks: bash-completion (<< 1:1.90-1), cogito (<= 0.18.2+), git-buildpackage (<< 0.4.38), git-core (<< 1:1.7.0.4-1.), gitosis (<< 0.2+20090917-7), gitpkg (<< 0.15), gitweb (<< 1:1.7.4~rc1), guilt (<< 0.33), qgit (<< 1.5.5), stgit (<< 0.15), stgit-contrib (<< 0.15)
 Conflicts: git-core (<< 1:1.5.2~rc3-2.)
 Conffiles:
@@ -10270,13 +10714,13 @@ Section: perl
 Installed-Size: 11283
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
-Version: 5.14.2-19
+Version: 5.14.2-20
 Replaces: libarchive-tar-perl (<= 1.38-2), libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libmodule-corelist-perl (<< 2.14-2), libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl-base (<< 5.10.1-12), perl-doc (<< 5.8.0-1), perl-modules (<< 5.8.1-1)
 Provides: data-dumper, libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdevel-dprof-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl5
-Depends: perl-base (= 5.14.2-19), perl-modules (>= 5.14.2-19), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
+Depends: perl-base (= 5.14.2-20), perl-modules (>= 5.14.2-20), libbz2-1.0, libc6 (>= 2.11), libdb5.1, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.3.3)
 Recommends: netbase
 Suggests: perl-doc, libterm-readline-gnu-perl | libterm-readline-perl-perl, make
-Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.71-2), libencode-perl (<< 2.42.01), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
+Breaks: dh-make-perl (<< 0.73-1), ftpmirror (<< 1.96+dfsg-13), libcompress-raw-bzip2-perl (<< 2.033), libcompress-raw-zlib-perl (<< 2.033), libcompress-zlib-perl (<< 2.033), libdevel-dprof-perl (<< 20110228.00), libdigest-md5-perl (<< 2.51), libdigest-sha-perl (<< 5.71-2), libencode-perl (<< 2.44-1+deb7u1), libhtml-template-compiled-perl (<< 0.95-1), libio-compress-base-perl (<< 2.033), libio-compress-bzip2-perl (<< 2.033), libio-compress-perl (<< 2.033), libio-compress-zlib-perl (<< 2.033), libload-perl (<< 0.20-1), libmime-base64-perl (<< 3.13), libnet-jifty-perl (<< 0.14-1), libperl-apireference-perl (<< 0.09-1), libregexp-optimizer-perl (<< 0.15-3), libsoap-lite-perl (<< 0.712-4), libstorable-perl (<< 2.27), libsys-syslog-perl (<< 0.27), libthreads-perl (<< 1.83), libthreads-shared-perl (<< 1.37), libtime-hires-perl (<< 1.9721.01), libtime-piece-perl (<< 1.20.01), libxml-parser-lite-tree-perl (<< 0.14-1), libyaml-perl (<< 0.73-1), mrtg (<< 2.16.3-3.1), perl-doc (<< 5.14.2-1)
 Conflicts: libjson-pp-perl (<< 2.27200-2)
 Description: Larry Wall's Practical Extraction and Report Language
  An interpreted scripting language, known among some as "Unix's Swiss
@@ -10340,8 +10784,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - CGI library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -10521,12 +10965,14 @@ Package: firmware-iwlwifi
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 7226
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 7888
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel PRO/Wireless 3945 and 802.11n cards
  This package contains the binary firmware for Intel PRO/Wireless 3945ABG,
@@ -10548,11 +10994,17 @@ Description: Binary firmware for Intel PRO/Wireless 3945 and 802.11n cards
   * Intel Wireless 5100, 5300 and 5350 firmware, version 8.83.5.1 (iwlwifi-5000-5.ucode)
   * Intel Wireless 5150 firmware, version 8.24.2.2 (iwlwifi-5150-2.ucode)
   * Intel Wireless 6000 firmware, version 9.221.4.1 (iwlwifi-6000-4.ucode)
-  * Intel Wireless 6005 firmware, version 17.168.5.3 (iwlwifi-6000g2a-5.ucode)
+  * Intel Wireless 6005/6205 firmware, version 17.168.5.3 (iwlwifi-6000g2a-5.ucode)
+  * Intel Wireless 6005/6205 firmware, version 18.168.6.1 (iwlwifi-6000g2a-6.ucode)
   * Intel Wireless 6030 firmware, version 18.168.6.1 (iwlwifi-6000g2b-6.ucode)
   * Intel Wireless 6250 firmware, version 9.201.4.1 (iwlwifi-6050-4.ucode)
   * Intel Wireless 6250 firmware, version 41.28.5.1 (iwlwifi-6050-5.ucode)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libexiv2-12
 Status: install ok installed
@@ -11057,16 +11509,56 @@ Status: install ok installed
 Priority: extra
 Section: oldlibs
 Installed-Size: 61
-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.9.2-1
-Depends: libnspr4 (= 2:4.9.2-1)
+Version: 2:4.9.6-1~baureo1
+Depends: libnspr4 (= 2:4.9.6-1~baureo1)
+Pre-Depends: dpkg-lzip
 Description: NetScape Portable Runtime Library - transitional package
  This is a transitional package to ensure smooth transition of all packages
  to libnspr4.
 Homepage: http://www.mozilla.org/projects/nspr/
+Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
+Original-Uploaders: Mike Hommey <glandium@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
+Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: glx-alternative-mesa
+Status: install ok installed
+Priority: optional
+Section: contrib/libs
+Installed-Size: 50
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: glx-alternatives
+Version: 0.2.90-0baureo+1
+Depends: glx-diversions (= 0.2.90-0baureo+1)
+Pre-Depends: dpkg-lzip
+Suggests: libgl1-mesa-glx | libgl1
+Breaks: libgl1-nvidia-alternatives (<< 275.09.07-2), libgl1-nvidia-glx (<< 275.09.07-2), libgl1-nvidia-legacy-173xx-glx (<< 173.14.30-2), libgl1-nvidia-legacy-71xx-glx (<< 71.86.14-3), libgl1-nvidia-legacy-96xx-glx (<< 96.43.19-2), libglx-nvidia-alternatives (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: allows the selection of MESA as GLX provider
+ In setups with several GLX providers (e.g. the free MESA implementation and
+ proprietary graphics hardware vendor implementations) this metapackage
+ allows one to switch back to MESA.
+ .
+ Use 'update-alternatives --config glx' to select an implementation.
+ .
+ This package does not depend on the corresponding MESA libraries.
+ In order to install the MESA libraries, install the libgl1-mesa-glx package
+ instead.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/glx-alternatives/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/glx-alternatives/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libcryptsetup4
 Status: install ok installed
@@ -11108,6 +11600,35 @@ Description: X11 Inter-Client Exchange library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libICE
+
+Package: nvidia-kernel-common
+Status: install ok installed
+Priority: optional
+Section: contrib/kernel
+Installed-Size: 80
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Source: nvidia-support
+Version: 20120731+1-0baureo+1
+Depends: kmod | module-init-tools (<< 4), glx-alternative-nvidia (>= 0.2.90)
+Pre-Depends: dpkg-lzip, dpkg (>= 1.15.7.2)
+Conffiles:
+ /etc/init.d/nvidia-kernel 458a40c41d7d327fa8e379df297a4d64
+ /etc/modprobe.d/nvidia-kernel-common.conf d189ab3bec7291d20f566f4ab44c6676
+ /etc/default/nvidia-kernel 54698b13d35b26c14e5f3db2d558d96b
+Description: NVIDIA binary kernel module support files
+ This package contains support files used for any version of the NVIDIA
+ kernel module.  It sets up udev and ConsoleKit rules, ensures the NVIDIA
+ control device is created, associates the NVIDIA card with the correct
+ kernel module, and performs any other tasks required for the module to
+ work properly.
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <debian@abeckmann.de>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-support/
+Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libjson0
 Status: install ok installed
@@ -11156,11 +11677,12 @@ Status: install ok installed
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 1216
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Pre-Depends: debconf | debconf-2.0
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
@@ -11179,6 +11701,11 @@ Description: Binary firmware for Intel Pro Wireless 2100, 2200 and 2915
  License.  You must agree to the terms of this license before it is
  installed.
 Homepage: http://ipw2100.sourceforge.net/firmware.php, http://ipw2200.sourceforge.net/firmware.php
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: firefox
 Status: install ok installed
@@ -11227,8 +11754,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-2.15), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - PPD manipulation library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -11316,14 +11843,16 @@ Package: firmware-libertas
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 2135
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 2136
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
 Replaces: libertas-firmware
 Provides: libertas-firmware
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Conflicts: libertas-firmware (<< 9.70.7.p0.0-2)
 Description: Binary firmware for Marvell Libertas 8xxx wireless cards
@@ -11359,6 +11888,11 @@ Description: Binary firmware for Marvell Libertas 8xxx wireless cards
   * MWL8366 boot code (mwl8k/helper_8366.fw)
   * MWL8687 boot code (mwl8k/helper_8687.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libfam0
 Status: install ok installed
@@ -11527,12 +12061,14 @@ Package: firmware-brcm80211
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 157
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Installed-Size: 156
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 0.36+wheezy.1
+Version: 0.37-0baureo+1
+Pre-Depends: dpkg-lzip
 Suggests: initramfs-tools, linux-image
 Description: Binary firmware for Broadcom 802.11 wireless cards
  This package contains the binary firmware for wireless network cards with
@@ -11540,9 +12076,14 @@ Description: Binary firmware for Broadcom 802.11 wireless cards
  brcm80211 driver.
  .
  Contents:
-  * Broadcom 802.11 firmware, version 610.811 (brcm/bcm43xx-0.fw)
-  * Broadcom 802.11 firmware header, version 610.811 (brcm/bcm43xx_hdr-0.fw)
+  * Broadcom 802.11 firmware, version 610.812 (brcm/bcm43xx-0.fw)
+  * Broadcom 802.11 firmware header, version 610.812 (brcm/bcm43xx_hdr-0.fw)
 Homepage: http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+Original-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Frederik Schüler <fs@debian.org>, Steve Langasek <vorlon@debian.org>, dann frazier <dannf@debian.org>, maximilian attems <maks@debian.org>, Ben Hutchings <ben@decadent.org.uk>
+Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-nonfree/
+Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxxf86vm1
 Status: install ok installed
@@ -11620,6 +12161,39 @@ Description: PNG library - runtime
  using libpng.
 Homepage: http://libpng.org/pub/png/libpng.html
 
+Package: nvidia-alternative
+Status: install ok installed
+Priority: optional
+Section: non-free/libs
+Installed-Size: 157
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
+Architecture: i386
+Multi-Arch: foreign
+Source: nvidia-graphics-drivers
+Version: 313.30-1~baureo1
+Depends: glx-alternative-nvidia (>= 0.2), libgl1-nvidia-alternatives (>= 275.09.07-4), libglx-nvidia-alternatives (>= 275.09.07-4)
+Pre-Depends: dpkg-lzip
+Breaks: libgl1-nvidia-glx (<< 275.09.07-2), nvidia-glx (<< 275.09.07-2)
+Description: allows the selection of NVIDIA as GLX provider
+ In setups with several NVIDIA driver versions installed (e.g. current and
+ legacy) this metapackage registers an alternative to allow easy switching
+ between the different versions.
+ .
+ Use 'update-alternatives --config nvidia' to select a version.
+ .
+ This package does not depend on the corresponding NVIDIA libraries.
+ In order to install the NVIDIA driver and libraries, install the
+ nvidia-glx package instead.
+Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
 Package: apt-utils
 Status: install ok installed
 Priority: important
@@ -11629,7 +12203,7 @@ Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: apt
-Version: 0.9.7.7-0baureo1
+Version: 0.9.7.8-0baureo1
 Depends: libapt-inst1.5 (>= 0.8.0), libapt-pkg4.12 (>= 0.8.16~exp9), libc6 (>= 2.3.6-6~), libdb5.1, libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
 Pre-Depends: dpkg-lzip
 Suggests: xz-utils
@@ -11646,8 +12220,8 @@ Original-Maintainer: APT Development Team <deity@lists.debian.org>
 Original-Uploaders: Michael Vogt <mvo@debian.org>, Otavio Salvador <otavio@debian.org>,
  Christian Perrier <bubulle@debian.org>, Daniel Burrows <dburrows@debian.org>,
  Julian Andres Klode <jak@debian.org>
-Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-sid/
-Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-sid/
+Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
+Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: lzip
@@ -11992,7 +12566,7 @@ Maintainer: Loic Minier <lool@dooz.org>
 Architecture: i386
 Multi-Arch: same
 Source: poppler
-Version: 0.18.4-5
+Version: 0.18.4-6
 Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.9.0), libfreetype6 (>= 2.2.1), libjpeg8 (>= 8c), liblcms1 (>= 1.15-1), libopenjpeg2, libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.1.1), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
 Recommends: poppler-data
@@ -12355,23 +12929,32 @@ Description: PulseAudio sound server
 Homepage: http://www.pulseaudio.org
 
 Package: libglx-nvidia-alternatives
-Status: deinstall ok config-files
+Status: install ok installed
 Priority: optional
-Section: non-free/libs
-Installed-Size: 136
-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Section: non-free/oldlibs
+Installed-Size: 141
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 195.36.31-6squeeze2
-Config-Version: 195.36.31-6
-Depends: dpkg (>= 1.15)
-Breaks: nvidia-glx (<< 195.36.31-3), nvidia-glx-legacy-173xx (<< 173.14.27), nvidia-glx-legacy-71xx (<< 71.86.14), nvidia-glx-legacy-96xx (<< 96.43.18)
-Conflicts: fglrx-driver
-Description: simplifies replacing Xorg module libglx.so with GPU vendor library
- Diverts the free Xorg module libglx.so (Xorg) and introduces alternatives
- to simplify plugging in accelerated implementations from GPU vendors.
- Handles both libglx.so and its debug symbols.
+Version: 313.30-1~baureo1
+Depends: glx-alternative-mesa, glx-alternative-nvidia
+Pre-Depends: dpkg-lzip
+Breaks: nvidia-glx (<< 275.09.07-2), nvidia-glx-legacy-173xx (<< 173.14.30-2), nvidia-glx-legacy-71xx (<< 71.86.14-3), nvidia-glx-legacy-96xx (<< 96.43.19-2)
+Description: transition libgl.so diversions to glx-alternative-nvidia
+ This is a transitional package aiding the upgrade to glx-alternative-nvidia.
+ The libglx.so diversions are now handled by glx-diversions and the
+ alternatives by glx-alternative-mesa.
+ .
+ This package can be safely removed from the system once nothing depends on it.
 Homepage: http://www.nvidia.com
+Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Russ Allbery <rra@debian.org>,
+ Andreas Beckmann <anbe@debian.org>,
+Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: ca-certificates
 Status: install ok installed
@@ -12449,7 +13032,7 @@ Section: x11
 Installed-Size: 329
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:6.14.4-7
+Version: 1:6.14.4-8
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.1.3), libpciaccess0, xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901), xserver-xorg-video-r128, xserver-xorg-video-mach64, xserver-xorg-video-radeon
 Description: X.Org X server -- AMD/ATI display driver wrapper
@@ -12491,12 +13074,12 @@ Package: nvidia-detect
 Status: install ok installed
 Priority: optional
 Section: non-free/x11
-Installed-Size: 157
+Installed-Size: 169
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
-Version: 304.64-4baureo1
+Version: 313.30-1~baureo1
 Depends: pciutils
 Pre-Depends: dpkg-lzip
 Description: NVIDIA GPU detection utility
@@ -12508,7 +13091,7 @@ Homepage: http://www.nvidia.com
 Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.debian.org>
 Original-Uploaders: 
  Russ Allbery <rra@debian.org>,
- Andreas Beckmann <debian@abeckmann.de>,
+ Andreas Beckmann <anbe@debian.org>,
 Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-graphics-drivers/
 Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
@@ -12757,8 +13340,8 @@ Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-2.15
-Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
+Version: 1.5.3-5
+Depends: libc6 (>= 2.7), libcups2 (= 1.5.3-5), libjpeg8 (>= 8c), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~)
 Pre-Depends: multiarch-support
 Description: Common UNIX Printing System(tm) - Raster image library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
@@ -12816,26 +13399,26 @@ Package: cups
 Status: install ok installed
 Priority: optional
 Section: net
-Installed-Size: 4159
+Installed-Size: 4151
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.5.3-2.15
+Version: 1.5.3-5
 Replaces: cupsddk-drivers (<< 1.4.0), ghostscript-cups (<< 9.02~)
 Provides: cupsddk-drivers
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-2.15), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-2.15), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-5), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-5), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
 Pre-Depends: dpkg (>= 1.15.7.2)
 Recommends: avahi-daemon, colord, foomatic-filters (>= 4.0), printer-driver-gutenprint, ghostscript-cups (>= 9.02~)
 Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
 Breaks: cupsddk-drivers (<< 1.4.0), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
 Conffiles:
- /etc/cups/cups-files.conf 2ada8629cf8d280aa4fb7d06ee5a7e2e
- /etc/cups/cupsd.conf.default 9ffef7ab095f3f35dcd108ba52de6295
- /etc/cups/snmp.conf 55baa060a50f48f9dbb99c6eb60dc04c
+ /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
  /etc/pam.d/cups ff2488324854f7b1e892bb0df062d5f0
  /etc/init.d/cups 7aaba466614799b00d74c700fe04c603
+ /etc/cups/snmp.conf 55baa060a50f48f9dbb99c6eb60dc04c
+ /etc/cups/cupsd.conf.default 9ffef7ab095f3f35dcd108ba52de6295
+ /etc/cups/cups-files.conf 2ada8629cf8d280aa4fb7d06ee5a7e2e
  /etc/default/cups 2b436fbb1a32b82b6aba45a76a1d7e40
- /etc/logrotate.d/cups 5bb41fa9900f0d1c565954405a2bd7c4
 Description: Common UNIX Printing System(tm) - server
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -12849,13 +13432,13 @@ Package: libkrb5-3
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 971
+Installed-Size: 972
 Maintainer: Sam Hartman <hartmans@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: krb5
-Version: 1.10.1+dfsg-4
-Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-4)
+Version: 1.10.1+dfsg-5
+Depends: libc6 (>= 2.9), libcomerr2 (>= 1.34), libk5crypto3 (>= 1.9+dfsg~beta1), libkeyutils1, libkrb5support0 (= 1.10.1+dfsg-5)
 Pre-Depends: multiarch-support
 Recommends: krb5-locales
 Suggests: krb5-doc, krb5-user
