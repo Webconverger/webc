@@ -1,0 +1,581 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "chrome://grabanddrag/locale/grabanddrag.dtd">
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/skin/pref/pref.css" type="text/css"?>
+<?xml-stylesheet href="chrome://grabanddrag/skin/" type="text/css"?>
+
+<dialog id="gadPrefs"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="&options.title;"
+	buttons="accept, cancel, extra1, extra2" 
+	buttonlabelextra1="&options.apply;"
+	buttonlabelextra2="&options.wizard;"
+	onload="init();"
+	oncommand="updateElements();"
+	ondialogaccept="return savePrefs();"
+	ondialogextra1="savePrefs();"
+	ondialogextra2="return runWizard();"
+	persist="screenX screenY"
+	flex="1" style="max-height: 50em; max-width: 50em;">
+
+<script type="application/x-javascript">
+<![CDATA[
+function init() {
+  var checkboxes  = ["on","useCtrl","useAlt","useShift", "sbmode", "samecur", 
+  						"reverse", "flickon", "momOn", "flickon-2", "momOn-2", "smoothStop",
+  						"qtOffCopy", "qtOn", "strict"]; 
+  var menulists = ["togKey", "button", "qtOnCnt", "qtOffCnt", "flickwhole", "flickhoriz"];
+  var cmenulists = ["grabCursor","grabbingCursor"];
+  var textboxes = ["mult","dragInc", "flickspeed", "flicktimelimit", "momExtent", "momVariation", "momFriction"];
+  var checkbox, radiogroup, menulist, textbox, i, j;
+  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  for (i = 0; i < checkboxes.length; ++i) {
+    checkbox = document.getElementById(checkboxes[i]);
+    if (checkbox.hasAttribute("prefstring")) {
+	    checkbox.checked = pref.getBoolPref(checkbox.getAttribute("prefstring"));
+    } else {
+	    checkbox.checked = pref.getBoolPref("extensions.grabanddrag." + checkbox.getAttribute("id"));
+    }
+  }
+  for (i = 0; i < menulists.length; ++i) {
+    menulist = document.getElementById(menulists[i]);
+    if (menulist.hasAttribute("prefstring")) {
+	    menulist.value = pref.getIntPref(menulist.getAttribute("prefstring"));
+    } else {
+	    menulist.value = pref.getIntPref("extensions.grabanddrag." + menulist.getAttribute("id"));
+    }
+  }
+  for (i = 0; i < cmenulists.length; ++i) {
+    menulist = document.getElementById(cmenulists[i]);
+    if (menulist.hasAttribute("prefstring")) {
+	    menulist.value = pref.getCharPref(menulist.getAttribute("prefstring"));
+    } else {
+	    menulist.value = pref.getCharPref("extensions.grabanddrag." + menulist.getAttribute("id"));
+    }
+  }
+  for (i = 0; i < textboxes.length; ++i) {
+    textbox = document.getElementById(textboxes[i]);
+    if (textbox.hasAttribute("prefstring")) {
+	    textbox.value = pref.getCharPref(textbox.getAttribute("prefstring"));
+    } else {
+	    textbox.value = pref.getCharPref("extensions.grabanddrag." + textbox.getAttribute("id"));
+    }
+  }
+  
+  updateLinkCheckbox();  
+  updateElements();
+}
+
+function updateLinkCheckbox() {
+  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  var bl=JSON.parse(pref.getCharPref("extensions.grabanddrag."+gethiddenBL()));
+  document.getElementById("grablinks").checked = false;
+  for (var i=0;i<bl.length;i++) {
+    if (bl[i].id=="links") {
+	    document.getElementById("grablinks").checked = (bl[i].on=="true"); break;
+    }	  
+  }	
+}
+
+function updateElements() {
+  var elist, i;
+  document.getElementById("mult").disabled = document.getElementById("sbmode").checked;
+  document.getElementById("grabbingCursor").disabled = document.getElementById("samecur").checked;
+  
+  elist = document.getElementsByAttribute("inflickgroup","true");
+  for (i=0; i<elist.length; i++) elist[i].disabled = !document.getElementById("flickon").checked;	
+
+  elist = document.getElementsByAttribute("inmomgroup","true");
+  for (i=0; i<elist.length; i++) elist[i].disabled = !document.getElementById("momOn").checked;	
+
+  elist = document.getElementsByAttribute("inqtgroup","true");
+  for (i=0; i<elist.length; i++) elist[i].disabled = !document.getElementById("qtOn").checked;	
+
+}
+
+function savePrefs() {
+  var checkboxes  = ["on","useCtrl","useAlt","useShift", "sbmode", "samecur", 
+  						"reverse", "flickon", "momOn", "smoothStop", "qtOffCopy", "qtOn", "strict"];
+  var menulists = ["togKey", "button", "qtOnCnt", "qtOffCnt", "flickwhole", "flickhoriz"];
+  var cmenulists = ["grabCursor","grabbingCursor"];
+  var textboxes = ["mult","dragInc", "flickspeed", "flicktimelimit", "momExtent", "momVariation", "momFriction"];
+  var checkbox, radiogroup, menulist, textbox, i;
+  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  for (i = 0; i < checkboxes.length; ++i) {
+    checkbox = document.getElementById(checkboxes[i]);
+    if (checkbox.hasAttribute("prefstring")) {
+    	pref.setBoolPref(checkbox.getAttribute("prefstring"), checkbox.checked);
+    } else {
+	  	pref.setBoolPref("extensions.grabanddrag." + checkbox.getAttribute("id"), checkbox.checked);
+    }
+  }
+  for (i = 0; i < menulists.length; ++i) {
+    menulist = document.getElementById(menulists[i]);
+    if (menulist.hasAttribute("prefstring")) {
+    	pref.setIntPref(menulist.getAttribute("prefstring"), menulist.value);
+    } else {
+	  	pref.setIntPref("extensions.grabanddrag." + menulist.getAttribute("id"), menulist.value);
+    }
+  }
+  for (i = 0; i < cmenulists.length; ++i) {
+    menulist = document.getElementById(cmenulists[i]);
+    if (menulist.hasAttribute("prefstring")) {
+    	pref.setCharPref(menulist.getAttribute("prefstring"), menulist.value);
+    } else {
+	  	pref.setCharPref("extensions.grabanddrag." + menulist.getAttribute("id"), menulist.value);
+    }
+  }
+  for (i = 0; i < textboxes.length; ++i) {
+    textbox = document.getElementById(textboxes[i]);
+    var f = parseFloat(textbox.value);
+		if (!isNaN(f)) if (f>=0) {
+  		if (textbox.hasAttribute("prefstring")) {
+				pref.setCharPref(textbox.getAttribute("prefstring"), String(f));
+	    } else {
+		  	pref.setCharPref("extensions.grabanddrag." + textbox.getAttribute("id"), String(f));
+	    }
+    }
+  }
+  
+  var bl=JSON.parse(pref.getCharPref("extensions.grabanddrag."+gethiddenBL())); 
+  for (i=0;i<bl.length;i++) {
+    if (bl[i].id=="links") {
+	    bl[i].on = document.getElementById("grablinks").checked?"true":"false";
+	    break;
+    }	  
+  }
+  pref.setCharPref("extensions.grabanddrag."+gethiddenBL(),JSON.stringify(bl));
+  
+  return true;
+}
+
+function runWizard() {
+	var win=Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser");
+	if (win) win.openDialog("chrome://grabanddrag/content/gadIntro.xul", "gadIntro", "chrome=yes,dialog=yes,resizable=yes");
+	this.close();
+}
+
+function getGAD() {
+	var win=Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser");
+	return win.gadGrabAndDragExtension;
+}
+
+function resetHiddenBL() {
+	var gadPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.grabanddrag.");
+	gadPref.clearUserPref(gethiddenBL());
+}
+
+function gethiddenBL()
+{
+	return "hiddenBL"+String(document.getElementById("button").value);
+}
+
+]]>
+</script>
+<hbox align="top">
+<tabbox flex="1">
+	<tabs id="grabOptionTabs" orient="horizontal">
+		<tab label="&options.tab.general;" />
+		<tab label="&options.tab.behavior;" />
+		<tab label="&options.tab.mom;" />
+		<tab label="&options.tab.gestures;" />
+		<tab label="&options.tab.advanced;" />
+	</tabs>
+	<tabpanels id="grabOptionPanels" flex="1">
+		<!--general-->
+		<tabpanel orient="vertical" flex="1">
+			<hbox>
+				<groupbox orient="vertical" flex="1">
+					<caption label="&options.features;"/>	
+					<checkbox id="on" type="checkbox" label="&enabled.label;"/>
+					<hbox>
+						<separator orient="vertical" style="max-width:7px;"/>
+						<checkbox id="momOn-2" prefstring="extensions.grabanddrag.momOn"
+											type="checkbox" label="&options.momOn;"
+											oncommand='document.getElementById("momOn").checked = this.checked'/>
+					</hbox>
+					<hbox>
+						<separator orient="vertical" style="max-width:7px;"/>
+						<checkbox id="flickon-2" prefstring="extensions.grabanddrag.flickon" 
+											type="checkbox" label="&options.flickon;"
+											oncommand='document.getElementById("flickon").checked = this.checked'/>
+					</hbox>
+					<hbox>
+						<separator orient="vertical" style="max-width:7px;"/>
+						<checkbox id="qtOn" type="checkbox" label="&options.qton;"/>
+					</hbox>
+				</groupbox>	
+				<groupbox orient="vertical">
+					<caption label="&options.togKeyCap;"/>
+					<grid flex="1">
+						<columns>
+							<column/>
+							<column flex="1"/>
+						</columns>
+						<rows>
+							<row>
+								<checkbox id="useCtrl" type="checkbox" label="&options.togUseCtrl;"/>
+							</row>
+							<row>
+								<checkbox id="useAlt" type="checkbox" label="&options.togUseAlt;"/>
+							</row>
+							<row>							
+								<checkbox id="useShift" type="checkbox" label="&options.togUseShift;"/>
+								<hbox align="center">
+									<label value="+"/>
+									<menulist id="togKey">
+										<menupopup>
+											<menuitem label="A" value="65"/>
+											<menuitem label="B" value="66"/>
+											<menuitem label="C" value="67"/>
+											<menuitem label="D" value="68"/>
+											<menuitem label="E" value="69"/>
+											<menuitem label="F" value="70"/>
+											<menuitem label="G" value="71"/>
+											<menuitem label="H" value="72"/>
+											<menuitem label="I" value="73"/>
+											<menuitem label="J" value="74"/>
+											<menuitem label="K" value="75"/>
+											<menuitem label="L" value="76"/>
+											<menuitem label="M" value="77"/>
+											<menuitem label="N" value="78"/>
+											<menuitem label="O" value="79"/>
+											<menuitem label="P" value="80"/>
+											<menuitem label="Q" value="81"/>
+											<menuitem label="R" value="82"/>
+											<menuitem label="S" value="83"/>
+											<menuitem label="T" value="84"/>
+											<menuitem label="U" value="85"/>
+											<menuitem label="V" value="86"/>
+											<menuitem label="W" value="87"/>
+											<menuitem label="X" value="88"/>
+											<menuitem label="Y" value="89"/>
+											<menuitem label="Z" value="90"/>
+											<menuitem label="0" value="48"/>
+											<menuitem label="1" value="49"/>
+											<menuitem label="2" value="50"/>
+											<menuitem label="3" value="51"/>
+											<menuitem label="4" value="52"/>
+											<menuitem label="5" value="53"/>
+											<menuitem label="6" value="54"/>
+											<menuitem label="7" value="55"/>
+											<menuitem label="8" value="56"/>
+											<menuitem label="9" value="57"/>
+											<menuitem label="F1" value="112"/>
+											<menuitem label="F2" value="113"/>
+											<menuitem label="F3" value="114"/>
+											<menuitem label="F4" value="115"/>
+											<menuitem label="F5" value="116"/>
+											<menuitem label="F6" value="117"/>
+											<menuitem label="F7" value="118"/>
+											<menuitem label="F8" value="119"/>
+											<menuitem label="F9" value="120"/>
+											<menuitem label="F10" value="121"/>
+											<menuitem label="F11" value="122"/>
+											<menuitem label="F12" value="123"/>
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+			<groupbox orient="vertical">
+				<caption label="&options.behavior;"/>
+				<hbox align="center">
+					<label value="&options.button1;"/>
+					<menulist id="button" oncommand='document.getElementById("qtOn").checked=(document.getElementById("button").value==0); updateLinkCheckbox();'>
+						<menupopup>
+							<menuitem label="&left;" value="0"/>
+							<menuitem label="&middle;" value="1"/>
+							<menuitem label="&right;" value="2"/>
+						</menupopup>
+					</menulist>
+					<label value="&options.button2;"/>
+				</hbox>
+				<checkbox id="grablinks" type="checkbox" label="&options.grablinks;"/>
+			</groupbox>
+			<groupbox id="qtgroup" orient="vertical">
+				<caption label="&options.QT;"/>
+				<grid flex="1">
+					<columns>
+						<column flex=""/>
+						<column flex=""/>
+						<column flex=""/>
+					</columns>
+					<rows>
+						<row align="center">
+							<menulist id="qtOnCnt" inqtgroup="true">
+								<menupopup>
+									<menuitem label="&autoh;" value="0"/>
+									<menuitem label="&oneclick;" value="1"/>
+									<menuitem label="&twoclick;" value="2"/>
+								</menupopup>
+							</menulist>
+							<label value="&qt.enable1;" inqtgroup="true"/>							
+						</row>      			
+						<row align="center">
+							<menulist id="qtOffCnt" inqtgroup="true">
+								<menupopup>
+									<menuitem label="&auto;" value="0"/>
+									<menuitem label="&oneclick;" value="1"/>
+									<menuitem label="&twoclick;" value="2"/>
+								</menupopup>
+							</menulist>
+							<label value="&qt.disable1;" inqtgroup="true"/>
+						</row>
+					</rows>
+				</grid>
+				<checkbox id="qtOffCopy" type="checkbox" label="&qt.qtOffCopy;" inqtgroup="true"/>
+			</groupbox>
+			<button label="&prefs.blbutton;" oncommand='getGAD().openBlacklist("blacklist","");'/>
+		</tabpanel>
+		<!--more options-->
+		<tabpanel orient="vertical" flex="1">
+			<groupbox orient="vertical">
+				<caption label="&options.mult;"/>
+				<grid flex="1">
+					<columns>
+						<!--<column flex=""/>-->
+						<column flex="1"/>
+					</columns>
+					<rows>                                    					   
+						<row align="center">
+							<prefscale id="mult"
+											orient="horizontal" flex="1" showTB="true"
+											boxwidth="30"
+											minval="0.1"
+											maxval="8"
+											minlab="&options.mult.min;"
+											maxlab="&options.mult.max;"
+											inc="0.1"
+											pageinc="1"/>
+						</row>
+					</rows>
+				</grid>      
+				<description class="inner">&prefs.multInfo;</description>
+			</groupbox>
+			<groupbox orient="vertical">
+				<caption label="&options.behavior.drag;"/>
+				<checkbox id="reverse" type="checkbox" label="&options.reverse;"/>
+				<checkbox id="sbmode" type="checkbox" label="&options.sbmode;"
+					oncommand='if (this.checked) document.getElementById("reverse").checked = false;'/>
+			</groupbox>   
+			<groupbox orient="vertical">
+				<caption label="&options.cursors;"/>
+				<grid flex="1">
+					<columns>
+						<column flex=""/>
+						<column flex=""/>
+					</columns>
+					<rows>
+						<row align="center">
+							<label value="&mousecursor.label;"/>
+							<menulist id="grabCursor">
+								<menupopup>
+									<menuitem value="url(chrome://grabanddrag/skin/grab.png) 10 4, move" label="&openhand.label;" />
+									<menuitem value="url(chrome://grabanddrag/skin/biggrab.png) 10 4, move" label="&bigopenhand.label;" />
+									<menuitem value="-moz-grab" label="&altopenhand.label;" />
+									<menuitem value="move" label="&fourway.label;" />
+									<menuitem value="default" label="&stdarrow.label;" />
+									<menuitem value="url(chrome://grabanddrag/skin/invisible.png) 10 4, auto" label="&nocursor.label;" />
+									<menuitem value="auto" label="&defcur.label;" />
+								</menupopup>
+							</menulist>
+						</row>
+						<row align="center">
+							<label value ="&grabcursor.label;"/>
+							<menulist id="grabbingCursor">
+								<menupopup>
+									<menuitem value="url(chrome://grabanddrag/skin/grabbing.png) 10 4, move" label="&closedhand.label;" />
+									<menuitem value="url(chrome://grabanddrag/skin/biggrabbing.png) 10 4, move" label="&bigclosedhand.label;" />
+									<menuitem value="-moz-grabbing" label="&altclosedhand.label;" />
+									<menuitem value="move" label="&fourway.label;" />
+									<menuitem value="default" label="&stdarrow.label;" />
+									<menuitem value="url(chrome://grabanddrag/skin/invisible.png) 10 4, auto" label="&nocursor.label;" />
+									<menuitem value="auto" label="&defcur.label;" />
+								</menupopup>
+							</menulist>
+						</row>	
+						<row>
+							<spacer/>             		       			
+							<checkbox id="samecur" type="checkbox" label="&options.samecur;"/>
+						</row>      			
+					</rows>
+				</grid>
+				<description class="inner">&prefs.cursorwarning;</description>
+			</groupbox>
+		</tabpanel>
+		<!--momentum-->
+		<tabpanel orient="vertical" flex="1">
+			<description>&prefs.momInfo;</description>
+			<groupbox orient="vertical">
+				<caption label="&options.mom;"/>
+					<checkbox id="momOn" type="checkbox" 
+										label="&options.momOn;" 
+										oncommand='document.getElementById("momOn-2").checked = this.checked'/>
+					<grid flex="1">
+						<columns>
+							<!--<column flex=""/>-->
+							<column flex="1"/>
+						</columns>
+						<rows>
+						<row align="center">
+							<prefscale id="momExtent" inmomgroup="true"
+											orient="horizontal" flex="1" showTB="false"
+											label="&options.momExtent;"
+											boxwidth="30"
+											minval="10"
+											maxval="1000"
+											minlab="&options.momExtent.min;"
+											maxlab="&options.momExtent.max;"
+											inc="10"
+											pageinc="250"/>
+						</row>
+						<row align="center">
+							<prefscale id="momVariation" inmomgroup="true"
+											orient="horizontal" flex="1" showTB="false"
+											label="&options.momVariation;"
+											boxwidth="30"
+											minval="0"
+											maxval="1.0"
+											minlab="&options.momVariation.min;"
+											maxlab="&options.momVariation.max;"
+											inc="0.05"
+											pageinc="0.25"/>
+						</row>
+						<row align="center">
+							<prefscale id="momFriction" inmomgroup="true"
+											orient="horizontal" flex="1" showTB="false"
+											label="&options.momFriction;"
+											boxwidth="30"
+											minval="0"
+											maxval="0.25"
+											minlab="&options.momFriction.min;"
+											maxlab="&options.momFriction.max;"
+											inc="0.01"
+											pageinc="0.05"/>
+						</row>
+					</rows>
+				</grid>
+				<description class="inner">&prefs.momParamInfo;</description>
+				<description class="inner">&prefs.momParamInfo2;</description>
+			</groupbox>
+		</tabpanel>					
+		<!--gestures-->
+		<tabpanel orient="vertical" flex="1">   
+			<description>&prefs.flicksInfo;</description>
+  		<groupbox orient="vertical">
+				<caption label="&options.flicks;"/>
+				<checkbox id="flickon" type="checkbox" 
+									label="&options.flickon;" 
+									oncommand='document.getElementById("flickon-2").checked = this.checked;'/>
+				<hbox align="center">
+					<label value="&options.flickExtent;" inflickgroup="true"/>
+					<menulist id="flickwhole" inflickgroup="true">
+						<menupopup>
+							<menuitem label="&options.flickOneScreen;" value="0"/>
+							<menuitem label="&options.flickWholePage;" value="-1"/>
+						</menupopup>
+					</menulist>
+				</hbox>
+				<hbox align="center">
+					<label value="&options.flickhoriz;" inflickgroup="true"/>
+					<menulist id="flickhoriz" inflickgroup="true">
+						<menupopup>
+							<menuitem label="&options.horizsame;" value="0"/>
+							<menuitem label="&options.bfatedge;" value="1"/>
+							<menuitem label="&options.backforward;" value="2"/>
+							<menuitem label="&options.backforwardreversed;" value="3"/>
+						</menupopup>
+					</menulist>
+				</hbox>
+				<grid flex="1">
+					<columns>
+						<!--<column flex=""/>-->
+						<column flex="1"/>
+					</columns>
+					<rows>	        			
+						<row align="center">
+							<prefscale id="flickspeed" prefstring="extensions.grabanddrag.flickspeed_ppms"  inflickgroup="true"
+											orient="horizontal" flex="1" showTB="false"
+											label="&options.flickspeed;"
+											boxwidth="40"
+											minval="0.05"
+											maxval="5"
+											minlab="&options.flickspeed.min;"
+											maxlab="&options.flickspeed.max;"
+											inc="0.05"
+											pageinc="0.5"/>
+						</row>
+						<row align="center">
+							<prefscale id="flicktimelimit"  inflickgroup="true"
+											orient="horizontal" flex="1" showTB="false"
+											label="&options.flicktimelimit;"
+											boxwidth="40"
+											minval="20"
+											maxval="500"
+											minlab="&options.flicktimelimit.min;"
+											maxlab="&options.flicktimelimit.max;"
+											inc="10"
+											pageinc="50"/>
+						</row>
+					</rows>
+				</grid>                         		       									
+				<description class="inner">&prefs.flickTimeLimitInfo;</description>	
+			</groupbox>
+		</tabpanel>	
+		<!--Advanced-->
+		<tabpanel orient="vertical" flex="1"> 
+			<groupbox orient="vertical">
+				<caption label="&options.dragInc;"/>
+				<grid flex="1">
+					<columns>
+						<!--<column flex=""/>-->
+						<column flex="1"/>
+					</columns>
+					<rows> 
+						<row align="center">
+							<prefscale id="dragInc"
+											orient="horizontal" flex="1" showTB="false"
+											boxwidth="30"
+											minval="1"
+											maxval="50"
+											minlab="&options.dragInc.min;"
+											maxlab="&options.dragInc.max;"
+											inc="1"
+											pageinc="5"/>
+						</row>      			
+					</rows>
+				</grid>
+				<description class="inner">&prefs.dragIncInfo;</description>
+			</groupbox>			
+			<groupbox orient="vertical">
+				<caption label="&options.misc;"/>    
+				<checkbox id="smoothStop"	type="checkbox" label="&options.smoothStop;"/>
+				<checkbox id="strict" type="checkbox" label="&options.strict;"/>
+			</groupbox>
+			<groupbox orient="vertical">
+				<button label="&prefs.blbutton;" oncommand='getGAD().openBlacklist("blacklist","");'/>
+				<hbox>
+				  <button flex="1" label="&prefs.blbutton2;" oncommand='getGAD().openBlacklist(gethiddenBL(),"noedits");'/>
+				</hbox>
+			</groupbox>
+		</tabpanel>				
+	</tabpanels>
+</tabbox>    
+</hbox>
+
+<hbox id="dialogButtons">
+	<button dlgtype="extra2" id="gad-wizard-button" />
+	<spacer flex="1" />
+	<button dlgtype="accept" id="gad-accept-button" />
+	<button dlgtype="extra1" id="gad-apply-button" />
+	<button dlgtype="cancel" id="gad-cancel-button" />
+</hbox>
+
+</dialog>
+
