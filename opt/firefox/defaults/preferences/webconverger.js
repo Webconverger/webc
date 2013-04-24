@@ -5,9 +5,11 @@ pref("browser.shell.checkDefaultBrowser", false);
 pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
 
+// Don't nag the user
 pref("browser.rights.3.shown", true);
 pref("toolkit.telemetry.prompted", 2);
 pref("toolkit.telemetry.rejected", true);
+pref("toolkit.telemetry.enabled", false);
 
 pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/defaults/preferences/homepage.properties");
