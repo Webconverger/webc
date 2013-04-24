@@ -14,7 +14,7 @@ wm="/usr/bin/dwm.web" # default
 
 if test "$(cmdline_get chrome)" = neon
 then
-	wm="/usr/bin/dwm.neon" # special version to show version/id info on top bar
+	cmdline_has neonshowid && wm="/usr/bin/dwm.neon" # special version to show version/id info on top bar
 	neon="-neon"
 	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
 	xsetroot -solid black
