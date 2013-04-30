@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "chrome://grabanddrag/locale/grabanddrag.dtd">
+
+<?xml-stylesheet href="chrome://grabanddrag/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/skin/pref/pref.css" type="text/css"?>
+
+<dialog id="gadBL"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	title="&blacklist.title;"
+	buttons="accept, cancel"
+	onload="init();"
+	ondialogaccept="return go();"
+	persist="screenX screenY width height sizemode"
+	style="max-width: 200em; height: 50em;">
+
+<stringbundleset id="stringbundleset">
+	<stringbundle id="bundle_gad" src="chrome://grabanddrag/locale/grabanddrag.properties"/>
+</stringbundleset>
+
+<script type="application/x-javascript">
+<![CDATA[
+  
+function init() 
+{	
+  var row; var cell; var item; var i, j;
+  var gadPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.grabanddrag.");
+  var bllist = document.getElementById("blchildren");
+  var newfilter = document.getElementById("newfilter");
+  
+  if (window.arguments[1]=="noedits") {
+    document.getElementById("add").setAttribute("collapsed","true");
+    document.getElementById("remove").setAttribute("collapsed","true");
+    document.getElementById("blfilters").setAttribute("editable","false");
+    document.getElementById("notes").setAttribute("collapsed","true");
+    document.getElementById("notes2").setAttribute("collapsed","false");
+  }
+  
+  var bl = JSON.parse(gadPref.getCharPref(window.arguments[0]));
+  var desc;
+  
+  for (i=0; i<bl.length;i++) {
+    item=document.createElement('treeitem');
+	row=document.createElement('treerow');
+	row.setAttribute('properties',(bl[i].on=="true")?'on':'off');
+	if (bl[i].id) {
+		row.setAttribute('filterid',bl[i].id);
+		desc = document.getElementById("bundle_gad").getString("desc."+bl[i].id);
+	} else {
+		desc = bl[i].com;	
+	}
+            
+    cell=document.createElement('treecell');
+    cell.setAttribute('label',bl[i].url);    
+    row.appendChild(cell);
+    
+    cell=document.createElement('treecell');
+    cell.setAttribute('label',bl[i].elem);
+    row.appendChild(cell);
+    
+    cell=document.createElement('treecell');
+    cell.setAttribute('label',desc);
+    row.appendChild(cell);
+    
+    for (j=0;j<row.children.length; j++) {
+      row.children[j].setAttribute('properties',row.getAttribute('properties'));	  
+    }
+
+    item.appendChild(row);
+    bllist.appendChild(item);
+  }
+}
+	
+function go() 
+{
+  var gadPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.grabanddrag.");
+  var bllist = document.getElementById("blchildren").children;
+  var bl=[]; var f;
+  for (var i=0;i<bllist.length;i++) {
+    if (bllist[i].children[0].children[0].getAttribute('label')!="") { 
+	    f = { on : (bllist[i].children[0].getAttribute('properties')=='on')?"true":"false",
+	    		url : bllist[i].children[0].children[0].getAttribute('label'),
+    			elem : bllist[i].children[0].children[1].getAttribute('label')
+    	};
+    	if (bllist[i].children[0].hasAttribute('filterid')) {
+	    	f.id = bllist[i].children[0].getAttribute('filterid');
+    	} else {
+	    	f.com = bllist[i].children[0].children[2].getAttribute('label');	
+    	}
+    	bl.push(f);
+	}
+  }
+  
+  gadPref.setCharPref(window.arguments[0],JSON.stringify(bl));
+}
+
+
+function add() {  
+	var item, row, cell, j; 
+	
+    item=document.createElement('treeitem');
+	row=document.createElement('treerow');
+	row.setAttribute('properties','on');
+           
+    cell=document.createElement('treecell');
+    cell.setAttribute('label','');    
+    row.appendChild(cell);
+    
+    cell=document.createElement('treecell');
+    cell.setAttribute('label','*');
+    row.appendChild(cell);
+    
+    cell=document.createElement('treecell');
+    cell.setAttribute('label','');
+    row.appendChild(cell);
+    
+    for (j=0;j<row.children.length; j++) {
+      row.children[j].setAttribute('properties','on');	  
+    }
+
+    item.appendChild(row);
+    document.getElementById("blchildren").insertBefore(item,document.getElementById("blchildren").children[0]);
+    document.getElementById("blfilters").focus();
+    document.getElementById("blfilters").view.selection.select(0);
+    var b = document.getElementById("blfilters").boxObject;
+    b.QueryInterface(Components.interfaces.nsITreeBoxObject);
+    b.scrollToRow(0);
+    document.getElementById("blfilters").startEditing(0,document.getElementById("blfilters").columns.getNamedColumn("urlcol"));
+
+}
+
+function toggle() {
+  var ind = document.getElementById("blfilters").currentIndex;
+  var r = document.getElementById("blchildren").children[ind].children[0];
+  r.setAttribute('properties',(r.getAttribute('properties')=='on')?'off':'on');
+  for (var i=0;i<r.children.length; i++) {
+    r.children[i].setAttribute('properties',r.getAttribute('properties'));	  
+  }
+}
+
+function remove() {
+  var ind = document.getElementById("blfilters").currentIndex;
+  document.getElementById("blchildren").removeChild(document.getElementById("blchildren").children[ind]);
+}
+
+]]>
+</script>
+
+<vbox flex="1">
+	<description id="notes">&blacklist.notes;</description>
+	<description id="notes2" collapsed="true">&blacklist.notes2;</description>
+	<separator/>
+	<groupbox flex="1" orient="vertical">
+	  <tree id="blfilters" flex="1" editable="true" enableColumnDrag="true" hidecolumnpicker="true" seltype="single">
+	    <treecols>
+	      <treecol id="urlcol" label="&url;" editable="true" flex="1" persist="width ordinal hidden sortDirection"/>
+	      <splitter class="tree-splitter"/>
+	      <treecol id="elementcol" label="&element;" editable="true" flex="1" persist="width ordinal hidden sortDirection"/>
+	      <splitter class="tree-splitter"/>
+	      <treecol id="commentcol" label="&description;" editable="true" flex="2" persist="width ordinal hidden sortDirection"/>
+	    </treecols>
+	    <treechildren id="blchildren"/>
+	  </tree>
+	  
+	  <hbox>
+	    <button id="add" label="&blacklist.add;" oncommand="add();"/>
+	    <button id="toggle" label="&blacklist.toggle;" oncommand="toggle();"/>	  
+	    <button id="remove" label="&blacklist.remove;" oncommand="remove();"/>	  
+	  </hbox>
+	</groupbox>
+
+</vbox>
+
+</dialog>
+

@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "chrome://grabanddrag/locale/grabanddrag.dtd">
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://grabanddrag/skin/" type="text/css"?>
+
+<dialog id="gadIntro"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	title="&wiz.title;"
+	buttons="accept, cancel"
+	buttonlabelaccept="&wiz.go;"
+	onload="init();"
+	ondialogaccept="return go();"
+	persist="screenX screenY"
+	style="max-width: 40em; height: 30em;">
+
+<stringbundleset id="stringbundleset">
+	<stringbundle id="bundle_gad" src="chrome://grabanddrag/locale/grabanddrag.properties"/>
+</stringbundleset>
+
+<script type="application/x-javascript">
+<![CDATA[
+  
+function init() 
+{	
+	var win = mostRecentWindow("navigator:browser");
+	if (!win) return;
+	var bar = win.document.getElementById("nav-bar");
+	if (!bar) return;
+	if (bar.currentSet.indexOf("grabanddrag-button")!=-1) {
+		document.getElementById("addTB").setAttribute("checked","false");
+		document.getElementById("addTB").setAttribute("disabled","true");
+	}
+}
+
+function mostRecentWindow(winType) {
+	var WindowMediator = Components.classes['@mozilla.org/appshell/window-mediator;1'].
+				getService(Components.interfaces.nsIWindowMediator);
+	return WindowMediator.getMostRecentWindow(winType);
+}
+	
+function go() 
+{
+	var gadPrefRoot = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch(null);
+	var gadPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.grabanddrag.");
+	//gadPref.resetBranch("");  // not yet implemented!
+	var list=["on","grabCursor","grabbingCursor","togKey","useCtrl","useAlt","useShift",	
+						"dragInc","mult","sbmode","samecur","reverse","flickon","flickspeed_ppms",
+						"flicktimelimit","momOn","momExtent","momFriction","momVariation","smoothStop","button",
+						"qtOn", "qtOnCnt","qtOffCnt","qtOffCopy","flickwhole","version","hiddenBL0","hiddenBL1","hiddenBL2"];
+  for (var i=0; i<list.length; ++i) {
+    try { gadPref.clearUserPref(list[i]); } catch(err){}
+  }
+	switch (document.getElementById("config").value) {  // pen is the default config
+		case "3":
+			gadPref.setIntPref("button",1);
+			gadPref.setCharPref("grabCursor","auto");
+			gadPref.setBoolPref("samecur",false);
+			gadPref.setBoolPref("flickon",false);
+			gadPref.setBoolPref("qtOn", false);
+			break;
+		case "2R":
+			gadPref.setIntPref("button",2);
+			gadPref.setCharPref("grabCursor","auto");
+			gadPref.setBoolPref("samecur",false);
+			gadPref.setBoolPref("flickon",false);
+			gadPref.setBoolPref("qtOn", false);
+			break;
+		case "2L":
+			gadPref.setBoolPref("flickon",false);
+			gadPref.setBoolPref("samecur",false);		
+			break;
+	}
+		
+	// add tb toggle
+	var win = mostRecentWindow("navigator:browser");
+	if (!win) return;
+	var bar = win.document.getElementById("nav-bar");
+	if (!bar) return;
+	if (document.getElementById("addTB").checked && 
+					bar.currentSet.indexOf("grabanddrag-button")==-1) {
+		bar.insertItem("grabanddrag-button", null, null, false);
+		win.document.getElementById("grabanddrag-button").setAttribute("gadOn",gadPref.getBoolPref("on"));
+		bar.setAttribute("currentset",bar.currentSet); // needed to make persist work for some reason
+		win.document.persist(bar.id, 'currentset');
+		alert(document.getElementById("bundle_gad").getString("wiz.tbaddedalert"));
+	}	
+	
+	// open main pref dialog
+	if (document.getElementById("openPrefs").checked) 
+		win.openDialog("chrome://grabanddrag/content/gadPrefs.xul", "gadPrefs", "chrome=yes,dialog=yes,resizable=yes");
+}
+	
+
+]]>
+</script>
+
+<vbox flex="1">
+	<description id="notes">&wiz.notes;</description>
+	<description id="notes2"><html:b>&wiz.please;</html:b> &wiz.notes2;</description>
+	<separator flex="1" />
+	<groupbox flex="1" orient="vertical">
+		<caption label="&wiz.config;"/>
+		<radiogroup id="config" value="pen">
+			<radio id="pen" value="pen" label="&wiz.pen;" selected="true"/>
+			<radio id="desktop3" value="3" label="&wiz.3button;"/>
+			<radio id="desktop2R" value="2R" label="&wiz.2buttonR;"/>
+			<radio id="desktop2L" value="2L" label="&wiz.2buttonL;"/>
+		</radiogroup>
+	</groupbox>
+	<checkbox id="addTB" type="checkbox" checked="true" label="&wiz.addTB;"/>
+	<checkbox id="openPrefs" type="checkbox" checked="true" label="&wiz.openprefs;"/>
+</vbox>
+
+</dialog>
+

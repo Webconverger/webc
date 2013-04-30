@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "chrome://grabanddrag/locale/grabanddrag.dtd">
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
+<?xml-stylesheet href="chrome://grabanddrag/skin/" type="text/css"?>
+
+<overlay id="grabanddrag"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript" src="grabanddrag.js"/>
+
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="bundle_gad" src="chrome://grabanddrag/locale/grabanddrag.properties"/>
+	</stringbundleset>
+	
+	<menupopup id="menu_ToolsPopup">
+		<menuitem id="gad-options" oncommand="gadGrabAndDragExtension.gadShowOptions(false);"
+					class="menuitem-iconic" image="chrome://grabanddrag/skin/grabanddragsmall.png"
+					label="&options.title;" hidden="false" insertbefore="devToolsSeparator"/>
+	</menupopup>
+
+	<menupopup id="taskPopup">
+		<menuitem id="gad-toggle-option" oncommand="gadGrabAndDragExtension.gadShowOptions(false);"
+					class="menuitem-iconic" image="chrome://grabanddrag/skin/grabanddragsmall.png"
+					label="&options.title;" hidden="false" insertbefore="devToolsSeparator"/>
+	</menupopup>
+
+	
+	<toolbarpalette id="BrowserToolbarPalette">
+		<toolbarbutton  class="toolbarbutton-1"		
+						id="grabanddrag-button"
+						label="&grabanddrag.label;"
+						oncommand="gadGrabAndDragExtension.gadToggle();"
+						tooltiptext="&grabanddrag.tooltip;"	/>
+	</toolbarpalette>
+
+</overlay>

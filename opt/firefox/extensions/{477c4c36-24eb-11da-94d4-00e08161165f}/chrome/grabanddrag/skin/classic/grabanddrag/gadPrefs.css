@@ -1,0 +1,28 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+description.inner {
+	font-size: 90%;	
+	color: graytext;
+}
+prefscale {
+	-moz-binding: url('chrome://grabanddrag/content/gadScale.xml#prefscale');
+	min-width: 200px;
+}
+
+treechildren::-moz-tree-checkbox { 
+	list-style-image: url("chrome://global/skin/checkbox/cbox-check.gif") !important;
+} 
+treechildren::-moz-tree-checkbox(checked) {
+	list-style-image: url("chrome://global/skin/checkbox/cbox-check.gif") !important;
+} 
+treechildren::-moz-tree-checkbox(disabled) {
+	list-style-image: url("chrome://global/skin/checkbox/cbox-check-dis.gif") !important; 
+}
+
+treechildren::-moz-tree-cell-text(on) { font-weight: bold; }
+treechildren::-moz-tree-cell-text(off) { font-style: italic; color: grey; }
+
+description {
+	width:25em;
+	overflow:auto;
+}
