@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="prefscale">
+		<content>
+		  <xul:box anonid="firstBox"
+		  			xbl:inheirits="flex,disabled,tooltiptext"
+		  			flex="1"
+		  			orient="vertical">
+			<xul:label anonid="thelabel"
+						xbl:inheirits="value=label,disabled,tooltiptext"/>
+			<xul:box xbl:inheirits="orient,flex,tooltiptext"
+					flex="1"
+					orient="horizontal">
+				<xul:spacer width="25"/>
+				<xul:box anonid="outerBox" 
+						xbl:inheirits="orient,flex,tooltiptext" 
+						orient="horizontal"
+						pack="start"
+						align="center"
+						flex="1">	
+					<xul:textbox anonid="tb"
+								xbl:inherits="minval,maxval,inc,disabled,tooltiptext,width=boxwidth"
+								style="background-color:transparent; cursor:default;"
+								width="30"/>
+					<xul:box anonid="innerBox"
+						orient="vertical"
+						dir="ltr"
+						pack="start"
+						flex="1">
+						<xul:slider anonid="scaleSlider" class="scale-slider"
+								xbl:inherits="minval,maxval,inc,orient,height,width,disabled,tooltiptext"
+								curpos="0"
+								maxpos="100"
+								pageincrement="10"
+								increment="1"
+								flex="1"
+								orient="horizontal">
+						  <xul:thumb anonid="scaleThumb" class="scale-thumb"
+					  				xbl:inherits="orient,disabled,tooltiptext"
+									orient="horizontal"/>
+				     	</xul:slider> 
+						<xul:box anonid="scaleBox"
+							xbl:inherits="orient,tooltiptext"
+							orient="horizontal"
+							flex="1"
+							align="end">
+							<xul:box class="zeroWidth"
+								xbl:inherits="orient,tooltiptext"
+								orient="horizontal">
+								<xul:label anonid="scaleFirst"
+									xbl:inherits="value=minlab,disabled,tooltiptext"
+									value="0"/>
+							</xul:box>
+							<xul:spacer anonid="scaleSpacer"
+								flex="1"/>
+							<xul:box class="zeroWidth"
+								xbl:inherits="orient,tooltiptext"
+								orient="horizontal">
+								<xul:label anonid="scaleLast"
+									xbl:inherits="value=maxlab,disabled,tooltiptext"
+									value="100"/>
+							</xul:box>
+						</xul:box>
+					</xul:box>
+				</xul:box>
+				<xul:spacer width="5"/>
+			</xul:box>
+		  </xul:box>
+		</content>
+		<implementation>
+			<constructor>
+				<![CDATA[
+				var orientation = this.getAttribute('orient') || 'horizontal';
+				var perp = orientation == 'vertical' ? 'horizontal' : 'vertical';
+				var lateral = orientation == 'vertical' ? 'height' : 'width';
+				var orthogonal = orientation == 'vertical' ? 'width' : 'height';
+				var max=parseFloat(this.getAttribute('maxval'));				
+				var min=parseFloat(this.getAttribute('minval'));
+				var inc=parseFloat(this.getAttribute('inc'));
+				var pinc=parseFloat(this.getAttribute('pageinc'));
+
+				var label = document.getAnonymousElementByAttribute(this,'anonid','thelabel');
+				label.value = this.getAttribute("label");
+				if (!label.value) label.setAttribute("collapsed","true");
+				var firstBox = document.getAnonymousElementByAttribute(this,'anonid','firstBox');
+				firstBox.setAttribute('orient',perp);
+				var innerBox = document.getAnonymousElementByAttribute(this,'anonid','innerBox');
+				innerBox.setAttribute('orient',perp);
+				if (orientation == 'vertical') {
+					innerBox.setAttribute('dir','rtl');
+					innerBox.setAttribute('pack','end');
+				}
+				var slider = document.getAnonymousElementByAttribute(this,'anonid','scaleSlider');
+				var tb = document.getAnonymousElementByAttribute(this,'anonid','tb');
+				if (this.getAttribute('showTB')=="false") tb.setAttribute("collapsed","true");
+				var mp = ((max-min)/inc).toFixed(6)*(1.0);
+				slider.setAttribute("maxpos",String(mp));
+				slider.setAttribute("increment","1");
+				var pi = (pinc/inc).toFixed(6)*(1.0);
+				slider.setAttribute("pageincrement",String(pi));
+				slider.addEventListener('DOMAttrModified',this._sliderChange,false);
+				tb.addEventListener('input',this._tbInput,false);
+				]]>
+			</constructor>
+			<property name="value">
+			  <getter>
+			    return document.getAnonymousElementByAttribute(this,'anonid','tb').value;
+			  </getter>
+			  <setter>									
+				var min=parseFloat(this.getAttribute('minval'));
+				var inc=parseFloat(this.getAttribute('inc'));
+				var slider=document.getAnonymousElementByAttribute(this,'anonid','scaleSlider');
+				var tb=document.getAnonymousElementByAttribute(this,'anonid','tb');
+			    tb.value=val;
+			    var cp = ((val-min)/inc).toFixed(6)*(1.0);
+			    slider.setAttribute("curpos",String(cp));
+			  </setter>
+			</property>
+			<property name="disabled">
+			  <getter>
+			  	return this.getAttribute("disabled");
+			  </getter>
+			  <setter>		 
+			  	this.setAttribute("disabled",val);
+			  	// for some reason the label just won't inheirit....
+			  	document.getAnonymousElementByAttribute(this,'anonid','thelabel').disabled = val;
+			  </setter>
+			</property>
+			<method name="_sliderChange">
+				<parameter name="evt"/>
+				<!-- "this" is the slider -->
+				<body>
+					<![CDATA[
+					if (evt.attrName == 'curpos') {
+						var tb = this.parentNode.previousSibling;						
+						var min=parseFloat(this.getAttribute('minval'));
+						var inc=parseFloat(this.getAttribute('inc'));
+						var v = (evt.newValue*inc + min).toFixed(6)*(1.0);
+						tb.value = String(v);
+					}
+					]]>
+				</body>
+			</method>
+			<method name="_tbInput">
+				<parameter name="evt"/>
+				<!-- "this" is the tb -->
+				<body>
+					<![CDATA[
+						var slider = this.nextSibling.firstChild;				
+						var min=parseFloat(this.getAttribute('minval'));
+						var inc=parseFloat(this.getAttribute('inc'));
+						var cp=((this.value-min)/inc).toFixed(6)*(1.0);
+						slider.setAttribute("curpos",String(cp));
+					]]>
+				</body>
+			</method>
+		</implementation>
+		<resources>
+			<stylesheet src="chrome://gadscale/skin/gadScale_xbl.css"/>
+		</resources>
+	</binding>
+</bindings>
