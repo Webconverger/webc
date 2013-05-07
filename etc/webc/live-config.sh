@@ -107,6 +107,10 @@ for x in $( cmdline ); do
 		mount_git
 		;;
 
+	widescrollbars)
+		ln -s /etc/webc/extensions/scrollbars@kaply.com /opt/firefox/extensions/
+		;;
+
 	support)
 		echo '*/5 * * * * root /sbin/support' > /etc/cron.d/webc-support
 		;;
