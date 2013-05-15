@@ -108,7 +108,7 @@ for x in $( cmdline ); do
 		;;
 
 	widescrollbars)
-		ln -s /etc/webc/extensions/scrollbars@kaply.com /opt/firefox/extensions/
+		ln -s /etc/webc/extensions/scrollbars@kaply.com /opt/firefox/browser/extensions/
 		;;
 
 	support)
@@ -161,8 +161,8 @@ for x in $( cmdline ); do
 
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
-		wget --timeout=5 "${prefs}" -O /opt/firefox/defaults/preferences/prefs.js &&
-		logs "Set prefs: $(cat /opt/firefox/defaults/preferences/prefs.js)"
+		wget --timeout=5 "${prefs}" -O /opt/firefox/browser/defaults/preferences/prefs.js &&
+		logs "Set prefs: $(cat /opt/firefox/browser/defaults/preferences/prefs.js)"
 		;;
 
 	iptables=*)
@@ -186,7 +186,7 @@ for x in $( cmdline ); do
 
 	locale=*)
 		locale=${x#locale=}
-		for i in /opt/firefox/langpacks/langpack-$locale*; do ln -s $i /opt/firefox/extensions/$(basename $i); done
+		for i in /opt/firefox/langpacks/langpack-$locale*; do ln -s $i /opt/firefox/browser/extensions/$(basename $i); done
 		echo "pref(\"general.useragent.locale\", \"${locale}\");" >> "$prefs"
 		echo "pref(\"intl.accept_languages\", \"${locale}, en\");" >> "$prefs"
 		;;
@@ -202,7 +202,7 @@ EOC
 
 	homepage=*)
 		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
-		echo "browser.startup.homepage=$(echo $homepage | awk '{print $1}')" > /opt/firefox/defaults/preferences/homepage.properties
+		echo "browser.startup.homepage=$(echo $homepage | awk '{print $1}')" > /opt/firefox/browser/defaults/preferences/homepage.properties
 		;;
 	esac
 done

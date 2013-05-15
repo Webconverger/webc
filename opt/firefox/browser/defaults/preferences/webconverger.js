@@ -12,7 +12,7 @@ pref("toolkit.telemetry.rejected", true);
 pref("toolkit.telemetry.enabled", false);
 
 pref("browser.newtab.url", "about:blank");
-pref("browser.startup.homepage", "file:/opt/firefox/defaults/preferences/homepage.properties");
+pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences/homepage.properties");
 
 // Disable updates, since we use git
 pref("app.update.auto", false);
