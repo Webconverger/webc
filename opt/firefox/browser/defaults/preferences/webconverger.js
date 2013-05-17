@@ -22,3 +22,6 @@ pref("keyword.URL", "https://duckduckgo.com/?t=webconverger&q=");
 
 pref("general.config.obscure_value", 0);
 pref("general.config.filename", "mozilla.cfg");
+
+// Disable https://blog.mozilla.org/metrics/2012/09/21/firefox-health-report/
+pref("datareporting.healthreport.uploadEnabled", false);
