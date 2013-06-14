@@ -698,16 +698,17 @@ Package: login
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 2711
-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Installed-Size: 2694
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: shadow
-Version: 1:4.1.5.1-1
+Version: 1:4.1.5.1-1baureo1
 Replaces: manpages-de (<< 0.5-3), manpages-tr (<< 1.0.5), manpages-zh (<< 1.5.1-1)
-Pre-Depends: libc6 (>= 2.7), libpam0g (>= 0.99.7.1), libpam-runtime, libpam-modules
+Pre-Depends: dpkg-lzip, libc6 (>= 2.3), libpam0g (>= 0.99.7.1), libpam-runtime, libpam-modules
 Conflicts: amavisd-new (<< 2.3.3-8), backupninja (<< 0.9.3-5), echolot (<< 2.1.8-4), gnunet (<< 0.7.0c-2), python-4suite (<< 0.99cvs20060405-1)
 Filename: pool/main/s/shadow/login_4.1.4.2+svn3283-2+squeeze1_i386.deb
-Size: 983766
+Size: 712702
 MD5sum: 9313466f0c01582ea9893e7cbff57031
 Description: system login tools
  These tools are required to be able to login and use your system. The
@@ -716,6 +717,11 @@ Description: system login tools
  workgroup type situations). The su program allows changing your effective
  user ID (useful being able to execute commands as another user).
 Homepage: http://pkg-shadow.alioth.debian.org/
+Original-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Original-Uploaders: Christian Perrier <bubulle@debian.org>, Nicolas FRANCOIS (Nekral) <nicolas.francois@centraliens.net>
+Original-Vcs-Browser: http://svn.debian.org/viewsvn/pkg-shadow/debian/trunk
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-shadow/debian/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: gpgv
 Priority: important
@@ -875,11 +881,11 @@ Installed-Size: 31
 Maintainer: Marco d'Itri <md@linux.it>
 Architecture: all
 Source: kmod
-Version: 9-2
+Version: 9-3
 Depends: libkmod2, kmod
 Pre-Depends: dpkg (>= 1.15.7.2)
 Filename: pool/main/m/module-init-tools/module-init-tools_3.12-2+b1_i386.deb
-Size: 1792
+Size: 1796
 MD5sum: d22df1128ee48e89a7fa3ff311efd5cc
 Description: transitional dummy package (module-init-tools to kmod)
  This dummy package is provided to support the transition from
@@ -3687,10 +3693,10 @@ Section: x11
 Installed-Size: 544
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:0.2.906-2
+Version: 1:0.2.906-2+deb7u1
 Provides: xorg-driver-video
-Depends: libc6 (>= 2.1.3), libdrm2 (>= 2.3.1), libx11-6 (>= 2:1.4.99.1), libxext6, libxv1, libxvmc1, xorg-video-abi-12, xserver-xorg-core (>= 2:1.11.99.901)
-Size: 205130
+Depends: libc6 (>= 2.1.3), libdrm2 (>= 2.3.1), libx11-6 (>= 2:1.4.99.1), libxext6, libxv1, libxvmc1, xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
+Size: 205170
 Description: X.Org X server -- VIA display driver
  OpenChrome is a project for the development of free and open-source drivers
  for the VIA UniChrome video chipsets.
@@ -5489,11 +5495,11 @@ Installed-Size: 15118
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Source: eglibc
-Version: 2.13-37
+Version: 2.13-38
 Replaces: base-config, lliurex-belocs-locales-data
 Depends: glibc-2.13-1, debconf (>= 0.5) | debconf-2.0
 Conflicts: base-config, belocs-locales-bin, belocs-locales-data
-Size: 5712576
+Size: 5712070
 Description: Embedded GNU C Library: National Language (locale) data [support]
  Machine-readable data files, shared objects and programs used by the
  C library for localization (l10n) and internationalization (i18n) support.
@@ -6021,21 +6027,27 @@ Package: mount
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 401
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 386
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
 Source: util-linux
-Version: 2.20.1-5.3
-Pre-Depends: libblkid1 (>= 2.20.1), libc6 (>= 2.8), libmount1 (>= 2.20.1), libselinux1 (>= 2.0.15), libsepol1 (>= 1.14)
+Version: 2.20.1-5.3baureo1
+Pre-Depends: dpkg-lzip, libblkid1 (>= 2.20.1), libc6 (>= 2.6), libmount1 (>= 2.20.1), libselinux1 (>= 2.0.15), libsepol1 (>= 1.14)
 Suggests: nfs-common (>= 1:1.1.0-13)
 Filename: pool/main/u/util-linux/mount_2.17.2-9_i386.deb
-Size: 212366
+Size: 160154
 MD5sum: 9d114d52949d504cbf28f6fcb9ca1d81
 Description: Tools for mounting and manipulating filesystems
  This package provides the mount(8), umount(8), swapon(8),
  swapoff(8), and losetup(8) commands.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libasound2-plugins
 Priority: optional
@@ -11538,7 +11550,7 @@ Description: X.Org X server -- i128 display driver
 Package: syslinux
 Priority: optional
 Section: utils
-Installed-Size: 169
+Installed-Size: 170
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
@@ -11549,7 +11561,7 @@ Pre-Depends: dpkg-lzip
 Recommends: mtools
 Suggests: dosfstools, os-prober
 Breaks: syslinux-common (<< 2:4.05+dfsg-6+deb7u1baureo1)
-Size: 96734
+Size: 97214
 Description: collection of boot loaders
  SYSLINUX is a collection of boot loaders which operates off Linux ext2/3/4 or
  btrfs filesystems, FAT and NTFS filesystems, network servers using PXE
@@ -14366,19 +14378,22 @@ Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 Package: lzip
 Priority: optional
 Section: utils
-Installed-Size: 145
-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Installed-Size: 157
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 1.13-3
-Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Version: 1.15~pre1-1~baureo1
+Depends: libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
 Suggests: lziprecover, plzip
-Size: 53016
+Size: 61466
 Description: lossless data compressor based on the LZMA algorithm
  Lzip is a lossless data compressor based on the LZMA algorithm, with very safe
  integrity checking and a user interface similar to the one of gzip or bzip2.
  Lzip decompresses almost as fast as gzip and compresses better than bzip2,
  which makes it well suited for software distribution and data archiving.
 Homepage: http://www.nongnu.org/lzip/lzip.html
+Original-Maintainer: Daniel Baumann <mail@daniel-baumann.ch>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-geode
 Priority: optional

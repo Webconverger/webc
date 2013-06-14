@@ -619,16 +619,17 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 2711
-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Installed-Size: 2694
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: shadow
-Version: 1:4.1.5.1-1
+Version: 1:4.1.5.1-1baureo1
 Replaces: manpages-de (<< 0.5-3), manpages-tr (<< 1.0.5), manpages-zh (<< 1.5.1-1)
-Pre-Depends: libc6 (>= 2.7), libpam0g (>= 0.99.7.1), libpam-runtime, libpam-modules
+Pre-Depends: dpkg-lzip, libc6 (>= 2.3), libpam0g (>= 0.99.7.1), libpam-runtime, libpam-modules
 Conflicts: amavisd-new (<< 2.3.3-8), backupninja (<< 0.9.3-5), echolot (<< 2.1.8-4), gnunet (<< 0.7.0c-2), python-4suite (<< 0.99cvs20060405-1)
 Conffiles:
- /etc/login.defs 57481a000f52991697204006aa6f200e
+ /etc/login.defs 329b87d83c41feec5f1f517c14234a3f
  /etc/pam.d/login e6f9c742b53359a4371dd9bfc209880c
  /etc/pam.d/su 7309fb874571fe5447321b43448a50b3
  /etc/securetty cf2ea2178d07b6bb16d7de7fc1ac3fea
@@ -639,6 +640,11 @@ Description: system login tools
  workgroup type situations). The su program allows changing your effective
  user ID (useful being able to execute commands as another user).
 Homepage: http://pkg-shadow.alioth.debian.org/
+Original-Maintainer: Shadow package maintainers <pkg-shadow-devel@lists.alioth.debian.org>
+Original-Uploaders: Christian Perrier <bubulle@debian.org>, Nicolas FRANCOIS (Nekral) <nicolas.francois@centraliens.net>
+Original-Vcs-Browser: http://svn.debian.org/viewsvn/pkg-shadow/debian/trunk
+Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-shadow/debian/trunk
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: gpgv
 Status: install ok installed
@@ -797,7 +803,7 @@ Installed-Size: 31
 Maintainer: Marco d'Itri <md@linux.it>
 Architecture: all
 Source: kmod
-Version: 9-2
+Version: 9-3
 Depends: libkmod2, kmod
 Pre-Depends: dpkg (>= 1.15.7.2)
 Description: transitional dummy package (module-init-tools to kmod)
@@ -3109,9 +3115,9 @@ Section: x11
 Installed-Size: 544
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:0.2.906-2
+Version: 1:0.2.906-2+deb7u1
 Provides: xorg-driver-video
-Depends: libc6 (>= 2.1.3), libdrm2 (>= 2.3.1), libx11-6 (>= 2:1.4.99.1), libxext6, libxv1, libxvmc1, xorg-video-abi-12, xserver-xorg-core (>= 2:1.11.99.901)
+Depends: libc6 (>= 2.1.3), libdrm2 (>= 2.3.1), libx11-6 (>= 2:1.4.99.1), libxext6, libxv1, libxvmc1, xorg-video-abi-12, xserver-xorg-core (>= 2:1.12.3.901)
 Description: X.Org X server -- VIA display driver
  OpenChrome is a project for the development of free and open-source drivers
  for the VIA UniChrome video chipsets.
@@ -4703,7 +4709,7 @@ Installed-Size: 15118
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Source: eglibc
-Version: 2.13-37
+Version: 2.13-38
 Replaces: base-config, lliurex-belocs-locales-data
 Depends: glibc-2.13-1, debconf (>= 0.5) | debconf-2.0
 Conflicts: base-config, belocs-locales-bin, belocs-locales-data
@@ -5069,18 +5075,24 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 401
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 386
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
 Source: util-linux
-Version: 2.20.1-5.3
-Pre-Depends: libblkid1 (>= 2.20.1), libc6 (>= 2.8), libmount1 (>= 2.20.1), libselinux1 (>= 2.0.15), libsepol1 (>= 1.14)
+Version: 2.20.1-5.3baureo1
+Pre-Depends: dpkg-lzip, libblkid1 (>= 2.20.1), libc6 (>= 2.6), libmount1 (>= 2.20.1), libselinux1 (>= 2.0.15), libsepol1 (>= 1.14)
 Suggests: nfs-common (>= 1:1.1.0-13)
 Description: Tools for mounting and manipulating filesystems
  This package provides the mount(8), umount(8), swapon(8),
  swapoff(8), and losetup(8) commands.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libasound2-plugins
 Status: install ok installed
@@ -9854,7 +9866,7 @@ Package: syslinux
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 169
+Installed-Size: 170
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
@@ -12308,11 +12320,12 @@ Package: lzip
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 145
-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Installed-Size: 157
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 1.13-3
-Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Version: 1.15~pre1-1~baureo1
+Depends: libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
 Suggests: lziprecover, plzip
 Description: lossless data compressor based on the LZMA algorithm
  Lzip is a lossless data compressor based on the LZMA algorithm, with very safe
@@ -12320,6 +12333,8 @@ Description: lossless data compressor based on the LZMA algorithm
  Lzip decompresses almost as fast as gzip and compresses better than bzip2,
  which makes it well suited for software distribution and data archiving.
 Homepage: http://www.nongnu.org/lzip/lzip.html
+Original-Maintainer: Daniel Baumann <mail@daniel-baumann.ch>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xserver-xorg-video-geode
 Status: install ok installed
