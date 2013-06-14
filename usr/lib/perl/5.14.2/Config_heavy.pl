@@ -80,7 +80,7 @@ sub header_files {
 #
 ## Package name      : perl5
 ## Source directory  : .
-## Configuration time: Sun Mar 10 15:42:58 UTC 2013
+## Configuration time: Fri Apr 12 09:56:36 UTC 2013
 ## Configured by     : Debian Project
 ## Target system     : linux murphy 2.6.32-5-686-bigmem #1 smp mon feb 25 01:53:47 utc 2013 i686 gnulinux 
 #
@@ -206,7 +206,7 @@ ccsymbols=''
 ccversion=''
 cf_by='Debian Project'
 cf_email='perl@packages.debian.org'
-cf_time='Sun Mar 10 15:42:58 UTC 2013'
+cf_time='Fri Apr 12 09:56:36 UTC 2013'
 charbits='8'
 charsize='1'
 chgrp=''
