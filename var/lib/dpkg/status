@@ -1530,7 +1530,7 @@ Installed-Size: 49087
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
-Version: 2013.04.21-0baureo1
+Version: 2013.04.21-0baureo+1
 Replaces: debian-maintainers
 Provides: debian-maintainers
 Recommends: gnupg (>= 1.0.6-4)
@@ -3318,24 +3318,24 @@ Package: ifupdown
 Status: install ok installed
 Priority: important
 Section: admin
-Installed-Size: 195
-Maintainer: Andrew O. Shadura <bugzilla@tut.by>
+Installed-Size: 196
+Maintainer: Andrew Shadura <andrewsh@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 0.7.5
+Version: 0.7.8
 Replaces: netbase (<< 5.0)
 Depends: iproute (>= 20071016-1), libc6 (>= 2.7), lsb-base (>= 4.1+Debian3), initscripts (>= 2.88dsf-25)
 Pre-Depends: dpkg (>= 1.15.7.2)
 Suggests: isc-dhcp-client | dhcp-client, ppp, rdnssd, net-tools
 Breaks: dhcp-client (<< 3.0), netbase (<< 5.0)
 Conffiles:
- /etc/network/if-down.d/upstart 1a0205ddbc1446782a8d4d818e97d8a5
- /etc/network/if-up.d/upstart dfbcde4fd4a3a2553930605e03e160ab
  /etc/init.d/networking b91fa5f0529020176659b341b7a1a740
- /etc/init/network-interface-container.conf 7fb0862f8c092b33c16ec0f05387fbfb
  /etc/init/network-interface.conf 296dd23a2833cc2bb5c646a833011eab
  /etc/init/networking.conf 1a5e78aba88486d1b6070f8fa3bd60ad
  /etc/init/network-interface-security.conf 8d6447a035b681f5fa22d168adcf8dec
+ /etc/init/network-interface-container.conf 7fb0862f8c092b33c16ec0f05387fbfb
+ /etc/network/if-down.d/upstart 1a0205ddbc1446782a8d4d818e97d8a5
+ /etc/network/if-up.d/upstart dfbcde4fd4a3a2553930605e03e160ab
  /etc/default/networking 35cd4a2713981c9239ce4532c1bfc1c7
 Description: high level tools to configure network interfaces
  This package provides the tools ifup and ifdown which may be used to
@@ -3713,18 +3713,18 @@ Package: dbus
 Status: install ok installed
 Priority: optional
 Section: admin
-Installed-Size: 979
+Installed-Size: 980
 Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.6.8-1
+Version: 1.6.8-1+deb7u1
 Depends: libc6 (>= 2.10), libdbus-1-3 (>= 1.0.2), libexpat1 (>= 2.0.1), libselinux1 (>= 1.32), libsystemd-login0 (>= 31), adduser, lsb-base (>= 3.2-14)
 Suggests: dbus-x11
 Conffiles:
- /etc/dbus-1/session.conf 3ec4497bcff6f8e1445db64b23bda595
  /etc/dbus-1/system.conf 3ecc20abdab563c7f463daf76d57e009
- /etc/init.d/dbus dfa067b2ace1fc88114695d93be749d3
+ /etc/dbus-1/session.conf 3ec4497bcff6f8e1445db64b23bda595
  /etc/default/dbus 0d0f25a2f993509c857eb262f6e22015
+ /etc/init.d/dbus dfa067b2ace1fc88114695d93be749d3
 Description: simple interprocess messaging system (daemon and utilities)
  D-Bus is a message bus, used for sending messages between applications.
  Conceptually, it fits somewhere in between raw sockets and CORBA in
@@ -4927,10 +4927,10 @@ Section: web
 Installed-Size: 359
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
-Version: 7.26.0-1+wheezy1
+Version: 7.26.0-1+wheezy2
 Replaces: curl-ssl
 Provides: curl-ssl
-Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1+wheezy1), zlib1g (>= 1:1.1.4)
+Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1+wheezy2), zlib1g (>= 1:1.1.4)
 Description: command line tool for transferring data with URL syntax
  curl is a command line tool for transferring data with URL syntax, supporting
  DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, POP3, POP3S,
@@ -6937,16 +6937,17 @@ Package: e2fslibs
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 415
-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
+Installed-Size: 413
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: same
 Source: e2fsprogs
-Version: 1.42.5-1.1
+Version: 1.42.7~WIP-2013-01-01-1~baureo1
 Replaces: e2fsprogs (<< 1.34-1)
 Provides: libe2p2, libext2fs2
 Depends: libc6 (>= 2.10)
-Pre-Depends: multiarch-support
+Pre-Depends: dpkg-lzip
 Description: ext2/ext3/ext4 file system libraries
  The ext2, ext3 and ext4 file systems are successors of the original ext
  ("extended") file system. They are the main file system types used for
@@ -6957,6 +6958,8 @@ Description: ext2/ext3/ext4 file system libraries
  include e2fsck, mke2fs, and tune2fs. Programs that use libe2p include
  dumpe2fs, chattr, and lsattr.
 Homepage: http://e2fsprogs.sourceforge.net
+Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: xfonts-scalable
 Status: install ok installed
@@ -7933,12 +7936,12 @@ Section: admin
 Installed-Size: 177
 Maintainer: Debian Acpi Team <pkg-acpi-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1:2.0.16-1
+Version: 1:2.0.16-1+deb7u1
 Depends: libc6 (>= 2.10), lsb-base (>= 3.2-14), module-init-tools (>> 3.1-rel-2)
 Recommends: acpi-support-base (>= 0.114-1)
 Conffiles:
- /etc/init.d/acpid cdab533a6c8944135d0a48b937796ade
  /etc/default/acpid 8905607a50c80a1fb8ee1e09fc8dc3f2
+ /etc/init.d/acpid cdab533a6c8944135d0a48b937796ade
 Description: Advanced Configuration and Power Interface event daemon
  Modern computers support the Advanced Configuration and Power Interface (ACPI)
  to allow intelligent power management on your system and to query battery and
@@ -8182,7 +8185,7 @@ Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.26.0-1+wheezy1
+Version: 7.26.0-1+wheezy2
 Replaces: libcurl2 (<< 1:7.11.2-2), libcurl4
 Depends: libc6 (>= 2.11), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), libssh2-1 (>= 1.2.6), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
@@ -9280,13 +9283,14 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 2337
-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
+Installed-Size: 2321
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.42.5-1.1
+Version: 1.42.7~WIP-2013-01-01-1~baureo1
 Replaces: hurd (<= 20040301-1), libblkid1 (<< 1.38+1.39-WIP-2005.12.10-2), libuuid1 (<< 1.38+1.39-WIP-2005.12.10-2)
-Pre-Depends: e2fslibs (= 1.42.5-1.1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
+Pre-Depends: dpkg-lzip, e2fslibs (= 1.42.7~WIP-2013-01-01-1~baureo1), libblkid1 (>= 2.17.2), libc6 (>= 2.11), libcomerr2 (>= 1.42~WIP-2011-10-05-1), libss2 (>= 1.34-1), libuuid1 (>= 2.16), util-linux (>= 2.15~rc1-1)
 Suggests: gpart, parted, e2fsck-static
 Conflicts: dump (<< 0.4b4-4), initscripts (<< 2.85-4), quota (<< 1.55-8.1), sysvinit (<< 2.85-4)
 Conffiles:
@@ -9299,6 +9303,8 @@ Description: ext2/ext3/ext4 file system utilities
  This package contains programs for creating, checking, and maintaining
  ext2/3/4-based file systems.
 Homepage: http://e2fsprogs.sourceforge.net
+Original-Maintainer: Theodore Y. Ts'o <tytso@mit.edu>
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libpaper1
 Status: install ok installed
@@ -9505,10 +9511,10 @@ Package: b43-fwcutter
 Status: install ok installed
 Priority: optional
 Section: contrib/utils
-Installed-Size: 73
+Installed-Size: 74
 Maintainer: Fabrizio Regalli <fabreg@fabreg.it>
 Architecture: i386
-Version: 1:015-14
+Version: 1:015-14.1
 Depends: libc6 (>= 2.1)
 Description: Utility for extracting Broadcom 43xx firmware
  fwcutter is a tool which can extract firmware from various source files.
@@ -9743,7 +9749,7 @@ Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Multi-Arch: foreign
-Version: 2012.4-0baureo1
+Version: 2012.4-0baureo+1
 Depends: gpgv
 Recommends: gnupg
 Breaks: apt (<< 0.7.25.1)
@@ -9758,12 +9764,12 @@ Conffiles:
  /etc/apt/trusted.gpg.d/debian-archive-baureo-archive.gpg bb712425e372eab16f0f6599939429ce
  /etc/apt/trusted.gpg.d/debian-archive-baureo-backports-archive.gpg 6075262c959848bde01eff2bee9474a9
  /etc/apt/trusted.gpg.d/debian-archive-artax-backports-archive.gpg 4be84fd42e4f563b26fe11a2fab5ac11
- /etc/apt/trusted.gpg.d/debian-archive-artax-automatic.gpg ee025bdb02936d4c5bb7346ec3b73570 obsolete
- /etc/apt/trusted.gpg.d/debian-archive-baureo-automatic.gpg 0bf1e1b7a5017d86d91d1d1401d48bfb obsolete
- /etc/apt/trusted.gpg.d/debian-archive-artax-stable.gpg f019946c0d72b0543163117dda6f545a obsolete
- /etc/apt/trusted.gpg.d/debian-archive-baureo-stable.gpg 493edee46ab5c5dcd3f09b9ac7f8373c obsolete
- /etc/apt/trusted.gpg.d/debian-archive-charon-automatic.gpg c0b6fb7b61c0bf774a2e35cc3c08fc2f obsolete
  /etc/apt/trusted.gpg.d/debian-archive-charon-stable.gpg 04d52737d1c27a3ca313b21426ffb7b3 obsolete
+ /etc/apt/trusted.gpg.d/debian-archive-charon-automatic.gpg c0b6fb7b61c0bf774a2e35cc3c08fc2f obsolete
+ /etc/apt/trusted.gpg.d/debian-archive-baureo-stable.gpg 493edee46ab5c5dcd3f09b9ac7f8373c obsolete
+ /etc/apt/trusted.gpg.d/debian-archive-artax-stable.gpg f019946c0d72b0543163117dda6f545a obsolete
+ /etc/apt/trusted.gpg.d/debian-archive-baureo-automatic.gpg 0bf1e1b7a5017d86d91d1d1401d48bfb obsolete
+ /etc/apt/trusted.gpg.d/debian-archive-artax-automatic.gpg ee025bdb02936d4c5bb7346ec3b73570 obsolete
 Description: GnuPG archive keys of the Debian archive
  The Debian project digitally signs its Release files. This package
  contains the archive keys used for that.
@@ -9862,13 +9868,13 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6393
+Installed-Size: 6421
 Origin: debian
 Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.16.10-0baureo1
+Version: 1.16.10-0baureo+1
 Provides: dpkg-lzip
 Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), plzip | lzip | lziprecover
 Suggests: apt
@@ -12340,12 +12346,12 @@ Package: firmware-b43-installer
 Status: install ok installed
 Priority: optional
 Section: contrib/kernel
-Installed-Size: 35
+Installed-Size: 52
 Maintainer: Fabrizio Regalli <fabreg@fabreg.it>
 Architecture: all
 Source: b43-fwcutter
-Version: 1:015-14
-Depends: b43-fwcutter (>= 1:015-14), bzip2, wget
+Version: 1:015-14.1
+Depends: b43-fwcutter (>= 1:015-14.1), bzip2, wget
 Recommends: linux-image
 Conflicts: firmware-b43-lpphy-installer
 Description: Installer package for firmware for the b43 driver
@@ -12835,12 +12841,14 @@ Package: busybox
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 725
-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+Installed-Size: 748
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 1:1.20.0-7
+Version: 1:1.20.0-7baureo1
 Replaces: busybox-static
-Depends: libc6 (>= 2.11)
+Depends: libc6 (>= 2.3.4)
+Pre-Depends: dpkg-lzip
 Conflicts: busybox-static
 Description: Tiny utilities for small and embedded systems
  BusyBox combines tiny versions of many common UNIX utilities into a single
@@ -12856,6 +12864,11 @@ Description: Tiny utilities for small and embedded systems
  can be used in the system by installing the busybox-syslogd,
  busybox-udhcpc or busybox-udhcpd packages.
 Homepage: http://www.busybox.net
+Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+Original-Uploaders: Bastian Blank <waldi@debian.org>, Michael Tokarev <mjt@tls.msk.ru>
+Original-Vcs-Browser: http://git.debian.org/?p=d-i/busybox.git
+Original-Vcs-Git: git://git.debian.org/d-i/busybox.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libmpfr4
 Status: install ok installed
