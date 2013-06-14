@@ -1,7 +1,7 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          mountall
-# Required-Start:    checkfs checkroot-bootclean
+# Required-Start:    
 # Required-Stop: 
 # Default-Start:     S
 # Default-Stop:

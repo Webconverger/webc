@@ -3,12 +3,13 @@
 #
 # Sourcer must source /lib/lsb/init-functions.sh
 
+# List available fstab files, including any files in /etc/fstab.d.
+# This looks ugly, but we can't use find and it's safer than globbing.
 fstab_files()
 {
-    if ! eval 'ls /etc/fstab.d/*.fstab' >/dev/null 2>&1; then
-	echo /etc/fstab
-    else
-	echo '/etc/fstab' '/etc/fstab.d/*'
+    echo /etc/fstab
+    if [ -d /etc/fstab.d ]; then
+        ls -1 /etc/fstab.d | grep '\.fstab$' | sed -e 's;^;/etc/fstab.d/;'
     fi
 }
 
@@ -35,17 +36,17 @@ selinux_enabled () {
 #	device node,
 # 2) Swap that is on a md device or a file that may be on a md
 #	device,
-read_fstab () {
-	fstabroot=/dev/root
-	rootdev=none
-	roottype=none
-	rootopts=defaults
-	rootmode=rw
-	rootcheck=no
-	swap_on_lv=no
-	swap_on_file=no
+_read_fstab () {
+	echo "fstabroot=/dev/root"
+	echo "rootdev=none"
+	echo "roottype=none"
+	echo "rootopts=defaults"
+	echo "rootmode=rw"
+	echo "rootcheck=no"
+	echo "swap_on_lv=no"
+	echo "swap_on_file=no"
 
-	for file in "$(eval ls $(fstab_files))"; do
+	fstab_files | while read file; do
 		if [ -f "$file" ]; then
 			while read DEV MTPT FSTYPE OPTS DUMP PASS JUNK; do
 				case "$DEV" in
@@ -53,7 +54,7 @@ read_fstab () {
 					continue;
 					;;
 				  /dev/mapper/*)
-					[ "$FSTYPE" = "swap" ] && swap_on_lv=yes
+					[ "$FSTYPE" = "swap" ] && echo swap_on_lv=yes
 					;;
 				  /dev/*)
 					;;
@@ -64,21 +65,21 @@ read_fstab () {
 					fi
 					;;
 				  /*)
-					[ "$FSTYPE" = "swap" ] && swap_on_file=yes
+					[ "$FSTYPE" = "swap" ] && echo swap_on_file=yes
 					;;
 				  *)
 					;;
 				esac
 				[ "$MTPT" != "/" ] && continue
-				rootdev="$DEV"
-				fstabroot="$DEV"
-				rootopts="$OPTS"
-				roottype="$FSTYPE"
-				( [ "$PASS" != 0 ] && [ "$PASS" != "" ]   ) && rootcheck=yes
-				( [ "$FSTYPE" = "nfs" ] || [ "$FSTYPE" = "nfs4" ] ) && rootcheck=no
+				echo rootdev=\"$DEV\"
+				echo fstabroot=\"$DEV\"
+				echo rootopts=\"$OPTS\"
+				echo roottype=\"$FSTYPE\"
+				( [ "$PASS" != 0 ] && [ "$PASS" != "" ]   ) && echo rootcheck=yes
+				( [ "$FSTYPE" = "nfs" ] || [ "$FSTYPE" = "nfs4" ] ) && echo rootcheck=no
 				case "$OPTS" in
 				  ro|ro,*|*,ro|*,ro,*)
-					rootmode=ro
+					echo rootmode=ro
 					;;
 				esac
 			done < "$file"
@@ -86,15 +87,29 @@ read_fstab () {
 	done
 }
 
+# Read /etc/fstab, looking for:
+# 1) The root filesystem, resolving LABEL=*|UUID=* entries to the
+#	device node,
+# 2) Swap that is on a md device or a file that may be on a md
+#	device,
+
+read_fstab () {
+	eval "$(_read_fstab)"
+}
+
 # Find a specific fstab entry
 # $1=mountpoint
 # $2=fstype (optional)
-# returns 0 on success, 1 on failure (not found or no fstab)
-read_fstab_entry () {
+_read_fstab_entry () {
 	# Not found by default.
-	found=1
+	echo "MNT_FSNAME="
+	echo "MNT_DIR="
+	echo "MNT_TYPE="
+	echo "MNT_OPTS="
+	echo "MNT_FREQ="
+	echo "MNT_PASS="
 
-	for file in "$(eval ls $(fstab_files))"; do
+	fstab_files | while read file; do
 		if [ -f "$file" ]; then
 			while read MNT_FSNAME MNT_DIR MNT_TYPE MNT_OPTS MNT_FREQ MNT_PASS MNT_JUNK; do
 				case "$MNT_FSNAME" in
@@ -106,12 +121,32 @@ read_fstab_entry () {
 					if [ -n "$2" ]; then
 						[ "$MNT_TYPE" = "$2" ] || continue;
 					fi
-					found=0
+	                                echo "MNT_FSNAME=$MNT_FSNAME"
+	                                echo "MNT_DIR=$MNT_DIR"
+	                                echo "MNT_TYPE=$MNT_TYPE"
+	                                echo "MNT_OPTS=$MNT_OPTS"
+	                                echo "MNT_FREQ=$MNT_FREQ"
+	                                echo "MNT_PASS=$MNT_PASS"
 					break 2
 				fi
+				MNT_DIR=""
 			done < "$file"
 		fi
 	done
+}
+
+# Find a specific fstab entry
+# $1=mountpoint
+# $2=fstype (optional)
+# returns 0 on success, 1 on failure (not found or no fstab)
+read_fstab_entry () {
+	eval "$(_read_fstab_entry "$1" "$2")"
+
+	# Not found by default.
+	found=1
+	if [ "$1" = "$MNT_DIR" ]; then
+		found=0
+	fi
 
 	return $found
 }
@@ -252,10 +287,8 @@ domount () {
 			if ! read_fstab_entry "$MTPT" "$FSTYPE"; then
 				CALLER_OPTS="$(echo "$CALLER_OPTS" | sed -e 's/^-o//')"
 				echo "Creating /etc/fstab entry for $MTPT to replace default in /etc/default/tmpfs (deprecated)" >&2
-				cat << EOF
-# This mount for $MTPT replaces the default configured in /etc/default/tmpfs
-$DEVNAME	$MTPT	$FSTYPE	$CALLER_OPTS	0	0
-EOF
+	                        echo "# This mount for $MTPT replaces the default configured in /etc/default/tmpfs"
+	                        echo "$DEVNAME	$MTPT	$FSTYPE	$CALLER_OPTS	0	0"
 			fi
 			;;
 	esac
@@ -424,6 +457,14 @@ post_mountall ()
 	# directory.  The migration logic will then take care of the
 	# rest.  Note that it will take a second boot to fully
 	# migrate; it should only ever be needed on broken systems.
+	RAMSHM_ON_DEV_SHM="no"
+	if read_fstab_entry "/dev/shm"; then
+	    RAMSHM_ON_DEV_SHM="yes"
+	fi
+	if read_fstab_entry "/run/shm"; then
+	    RAMSHM_ON_DEV_SHM="no"
+	fi
+
 	if [ -L /run ]; then
 		if [ "$(readlink /run)" = "/var/run" ]; then
 			rm -f /run
@@ -431,12 +472,20 @@ post_mountall ()
 		fi
 		if bind_mount /var/run /run; then
 		    bind_mount /var/lock /run/lock
-		    bind_mount /dev/shm /run/shm
+		    if [ yes = "$RAMSHM_ON_DEV_SHM" ]; then
+			run_migrate /run/shm /dev/shm
+		    else
+			run_migrate /dev/shm /run/shm
+		    fi
 		fi
 	else
 	    run_migrate /var/run /run
 	    run_migrate /var/lock /run/lock
-	    run_migrate /dev/shm /run/shm
+	    if [ yes = "$RAMSHM_ON_DEV_SHM" ]; then
+		run_migrate /run/shm /dev/shm
+	    else
+		run_migrate /dev/shm /run/shm
+	    fi
 	fi
 }
 
@@ -512,20 +561,38 @@ mount_shm ()
 {
 	MNTMODE="$1"
 
-	if [ ! -d /run/shm ]
+	RAMSHM_ON_DEV_SHM="no"
+	SHMDIR="/run/shm"
+	if read_fstab_entry "/dev/shm"; then
+		if [ "$MNTMODE" = "mount_noupdate" ]; then
+			log_warning_msg "Warning: fstab entry for /dev/shm; should probably be for /run/shm unless working around a bug in the Oracle database"
+		fi
+		SHMDIR="/dev/shm"
+		RAMSHM_ON_DEV_SHM="yes"
+	fi
+	if read_fstab_entry "/run/shm"; then
+		if [ "$MNTMODE" = "mount_noupdate" ] && [ "$RAMSHM_ON_DEV_SHM" = "yes" ]; then
+			log_warning_msg "Warning: fstab entries for both /dev/shm and /run/shm found; only /run/shm will be used"
+		fi
+
+		SHMDIR="/run/shm"
+		RAMSHM_ON_DEV_SHM="no"
+	fi
+
+	if [ ! -d "$SHMDIR" ]
 	then
-		mkdir --mode=755 /run/shm
-		[ -x /sbin/restorecon ] && /sbin/restorecon /run/shm
+		mkdir --mode=755 "$SHMDIR"
+		[ -x /sbin/restorecon ] && /sbin/restorecon "$SHMDIR"
 	fi
 
 	# Now check if there's an entry in /etc/fstab.  If there is,
 	# it overrides the existing RAMSHM setting.
-	if read_fstab_entry /run/shm; then
-	    if [ "$MNT_TYPE" = "tmpfs" ] ; then
-		RAMSHM="yes"
-	    else
-		RAMSHM="no"
-	    fi
+	if read_fstab_entry "$SHMDIR"; then
+		if [ "$MNT_TYPE" = "tmpfs" ] ; then
+			RAMSHM="yes"
+		else
+			RAMSHM="no"
+		fi
 	fi
 
 	KERNEL="$(uname -s)"
@@ -535,16 +602,20 @@ mount_shm ()
 	esac
 
 	if [ yes = "$RAMSHM" ]; then
-		domount "$MNTMODE" tmpfs shmfs /run/shm tmpfs "-onosuid,${NODEV}noexec$SHM_OPT"
+		domount "$MNTMODE" tmpfs shmfs "$SHMDIR" tmpfs "-onosuid,${NODEV}noexec$SHM_OPT"
 		# Make sure we don't get cleaned
-		touch /run/shm/.tmpfs
+		touch "$SHMDIR"/.tmpfs
 	else
-		chmod "$SHM_MODE" /run/shm
+		chmod "$SHM_MODE" "$SHMDIR"
 	fi
 
 	# Migrate early, so /dev/shm is available from the start
 	if [ "$MNTMODE" = mount_noupdate ] || [ "$MNTMODE" = mount ]; then
-		run_migrate /dev/shm /run/shm ../run/shm
+		if [ yes = "$RAMSHM_ON_DEV_SHM" ]; then
+			run_migrate /run/shm /dev/shm
+		else
+			run_migrate /dev/shm /run/shm
+		fi
 	fi
 }
 

@@ -1,2 +1,3 @@
-TARGETS = mountkernfs.sh plymouth-log
+TARGETS = mountkernfs.sh mountall.sh plymouth-log
 INTERACTIVE =
+plymouth-log: mountall.sh

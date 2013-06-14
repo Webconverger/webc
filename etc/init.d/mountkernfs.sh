@@ -51,6 +51,15 @@ mount_filesystems () {
 	then
 		domount "$MNTMODE" cgroup "" /sys/fs/cgroup cgroup "-onodev,noexec,nosuid"
 	fi
+
+	#
+	# Mount securityfs on /sys/kernel/security
+	#
+	# Only mount securityfs if it is supported (kernel >= 2.6.14)
+	if grep -E -qs "securityfs\$" /proc/filesystems
+	then
+		domount "$MNTMODE" securityfs "" /sys/kernel/security securityfs "-onodev,noexec,nosuid"
+	fi
 }
 
 case "$1" in

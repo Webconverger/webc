@@ -437,18 +437,35 @@ auto_add_modules()
 		base)
 			modules="$modules ehci-pci ehci-hcd ohci-hcd uhci-hcd usbhid"
 			modules="$modules xhci xhci-hcd"
-			modules="$modules hid-apple hid-cherry hid-generic"
-			modules="$modules hid-logitech hid-logitech-dj"
-			modules="$modules hid-microsoft hid-sunplus"
 			modules="$modules btrfs ext2 ext3 ext4 ext4dev "
 			modules="$modules isofs jfs reiserfs udf xfs"
 			modules="$modules nfs nfsv2 nfsv3 nfsv4"
 			modules="$modules af_packet atkbd i8042 virtio_pci"
+
+			# Include all HID drivers unless we're sure they
+			# don't support keyboards.  hid-*ff covers various
+			# game controllers with force feedback.
+			copy_modules_dir kernel/drivers/hid \
+				'hid-*ff.ko' hid-a4tech.ko hid-cypress.ko \
+				hid-dr.ko hid-elecom.ko hid-gyration.ko \
+				hid-icade.ko hid-kensington.ko hid-kye.ko \
+				hid-lcpower.ko hid-magicmouse.ko \
+				hid-multitouch.ko hid-ntrig.ko \
+				hid-petalynx.ko hid-picolcd.ko hid-pl.ko \
+				hid-ps3remote.ko hid-quanta.ko \
+				'hid-roccat-ko*.ko' hid-roccat-pyra.ko \
+				hid-saitek.ko hid-sensor-hub.ko hid-sony.ko \
+				hid-speedlink.ko hid-tivo.ko hid-twinhan.ko \
+				hid-uclogic.ko hid-wacom.ko hid-waltop.ko \
+				hid-wiimote.ko hid-zydacron.ko
 		;;
 		net)
 			copy_modules_dir kernel/drivers/net \
-				appletalk arcnet bonding can hamradio irda \
-				pcmcia tokenring usb wan wimax wireless
+				appletalk arcnet bonding can dummy.ko \
+				hamradio hippi ifb.ko irda macvlan.ko \
+				macvtap.ko pcmcia sb1000.ko team tokenring \
+				tun.ko usb veth.ko wan wimax wireless \
+				xen-netback.ko
 		;;
 		ide)
 			copy_modules_dir kernel/drivers/ide
