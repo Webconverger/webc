@@ -191,11 +191,11 @@ Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Source: xorg-server
-Version: 2:1.12.4-5baureo1
+Version: 2:1.12.4-6baureo1
 Replaces: xserver-xorg-core (<< 2:1.5.2)
 Depends: x11-common, xkb-data, x11-xkb-utils
 Recommends: xfonts-base, xauth
-Size: 1396954
+Size: 1397106
 Description: common files used by various X servers
  This package provides files necessary for all X.Org based X servers.
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
@@ -1447,15 +1447,22 @@ Package: user-setup
 Priority: extra
 Section: admin
 Installed-Size: 475
-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
-Version: 1.48
+Version: 1.48-0baureo1
 Depends: debconf (>= 0.5) | debconf-2.0, passwd, adduser
-Size: 170490
+Pre-Depends: dpkg-lzip
+Size: 169848
 Description: Set up initial user and password
  This package creates an initial user, using the same code as is
  responsible for creating the initial user in the installer. It is only
  likely to be of any use if your system has no non-system users at all.
+Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+Original-Uploaders: Christian Perrier <bubulle@debian.org>, Colin Watson <cjwatson@debian.org>
+Original-Vcs-Browser: http://git.debian.org/?p=d-i/user-setup.git
+Original-Vcs-Git: git://git.debian.org/d-i/user-setup.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libiodbc2
 Priority: optional
@@ -2720,15 +2727,17 @@ Homepage: http://www.bzip.org/
 Package: vim-common
 Priority: important
 Section: editors
-Installed-Size: 287
-Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Installed-Size: 286
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: vim
-Version: 2:7.3.547-6
+Version: 2:7.3.547-7baureo1
 Depends: libc6 (>= 2.3.4)
+Pre-Depends: dpkg-lzip
 Recommends: vim | vim-gnome | vim-gtk | vim-athena | vim-nox | vim-tiny
 Filename: pool/main/v/vim/vim-common_7.2.445+hg~cb94c42c0e1a-1_i386.deb
-Size: 162312
+Size: 163028
 MD5sum: 4ccdb99c59c9e17554b53c86340bf557
 Description: Vi IMproved - Common files
  Vim is an almost compatible version of the UNIX editor Vi.
@@ -2742,6 +2751,11 @@ Description: Vi IMproved - Common files
  Examples of such shared files are: manpages, common executables
  like xxd, and configuration files.
 Homepage: http://www.vim.org/
+Original-Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Original-Uploaders: James McCoy <jamessan@debian.org>
+Original-Vcs-Browser: http://hg.debian.org/hg/pkg-vim/vim
+Original-Vcs-Hg: http://hg.debian.org/hg/pkg-vim/vim
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: extlinux
 Priority: optional
@@ -3372,14 +3386,14 @@ Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
 Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: xorg-server
-Version: 2:1.12.4-5baureo1
+Version: 2:1.12.4-6baureo1
 Provides: xorg-input-abi-16, xorg-video-abi-12
-Depends: xserver-common (>= 2:1.12.4-5baureo1), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
+Depends: xserver-common (>= 2:1.12.4-6baureo1), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
 Recommends: libgl1-mesa-dri (>= 7.10.2-4)
 Suggests: xfonts-100dpi | xfonts-75dpi, xfonts-scalable
 Breaks: libgl1-mesa-dri (<< 7.10.2-4), libgl1-mesa-dri-experimental (<< 7.10.2-4), xserver-xorg-input, xserver-xorg-input-2, xserver-xorg-input-2.1, xserver-xorg-input-4, xserver-xorg-input-7, xserver-xorg-input-joystick (<= 1:1.5.0-3), xserver-xorg-input-synaptics (<= 1.2.2-1), xserver-xorg-input-tslib (<= 0.0.6-3), xserver-xorg-input-vmmouse (<= 1:12.6.5-4), xserver-xorg-input-wacom (<= 0.10.5+20100415-1), xserver-xorg-video, xserver-xorg-video-1.0, xserver-xorg-video-1.9, xserver-xorg-video-2, xserver-xorg-video-4, xserver-xorg-video-5, xserver-xorg-video-6, xserver-xorg-video-cyrix (<= 1:1.1.0-8), xserver-xorg-video-i810 (<< 2:2.4), xserver-xorg-video-imstt (<= 1:1.1.0-7), xserver-xorg-video-nsc (<= 1:2.8.3-4), xserver-xorg-video-sunbw2 (<= 1:1.1.0-5), xserver-xorg-video-v4l (<< 1:0.2.0), xserver-xorg-video-vga (<= 1:4.1.0-8)
 Conflicts: xserver-xorg-input-evtouch
-Size: 1716658
+Size: 1716888
 Description: Xorg X server - core server
  The Xorg X server is an X server for several architectures and operating
  systems, which is derived from the XFree86 4.x series of X servers.
@@ -3622,10 +3636,10 @@ Installed-Size: 82
 Maintainer: Alastair McKinstry <mckinstry@debian.org>
 Architecture: i386
 Source: newt
-Version: 0.52.14-10
-Depends: libc6 (>= 2.1), libnewt0.52, libpopt0 (>= 1.14), libslang2 (>= 2.2.4)
+Version: 0.52.14-11.1
+Depends: libc6 (>= 2.4), libnewt0.52, libpopt0 (>= 1.14), libslang2 (>= 2.2.4)
 Filename: pool/main/n/newt/whiptail_0.52.11-1_i386.deb
-Size: 33078
+Size: 33770
 MD5sum: cac6b0f08d25c91011d5c267e35cb0d2
 Description: Displays user-friendly dialog boxes from shell scripts
  Whiptail is a "dialog" replacement using newt instead of ncurses. It
@@ -3927,16 +3941,16 @@ Description: X.Org X server -- VMware display driver
 Package: tzdata
 Priority: required
 Section: libs
-Installed-Size: 1739
+Installed-Size: 1772
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 2012j-1
+Version: 2013b-2
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Provides: tzdata-wheezy
 Depends: debconf (>= 0.5) | debconf-2.0
 Filename: pool/main/t/tzdata/tzdata_2011n-0squeeze1_all.deb
-Size: 499530
+Size: 507038
 MD5sum: 92a9f0be3e962142cd29c0d420b09e6b
 Description: time zone and daylight-saving time data
  This package contains data required for the implementation of
@@ -13297,17 +13311,20 @@ Package: sysvinit-utils
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 217
-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
+Installed-Size: 203
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: sysvinit
-Version: 2.88dsf-34
+Version: 2.88dsf-41baureo1
 Replaces: last, sysvinit (<= 2.86.ds1-65)
 Depends: libc6 (>= 2.10), libselinux1 (>= 1.32)
+Pre-Depends: dpkg-lzip
 Suggests: bootlogd, sash
+Breaks: upstart (<< 1.5-1)
 Conflicts: chkconfig (<< 11.0-79.1-2), last, sysvconfig
 Filename: pool/main/s/sysvinit/sysvinit-utils_2.88dsf-13.1_i386.deb
-Size: 98934
+Size: 89416
 MD5sum: eb633d54471ea21f10160318b63ee643
 Description: System-V-like utilities
  This package contains the important System-V-like utilities.
@@ -13315,6 +13332,15 @@ Description: System-V-like utilities
  Specifically, this package includes:
  killall5, last, lastb, mesg, pidof, service, sulogin
 Homepage: http://savannah.nongnu.org/projects/sysvinit
+Original-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Petter Reinholdtsen <pere@debian.org>,
+ Henrique de Moraes Holschuh <hmh@debian.org>,
+ Kel Modderman <kel@otaku42.de>,
+ Roger Leigh <rleigh@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
+Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: cron
 Priority: important
@@ -14631,19 +14657,20 @@ Package: util-linux
 Essential: yes
 Priority: required
 Section: utils
-Installed-Size: 1526
-Maintainer: LaMont Jones <lamont@debian.org>
+Installed-Size: 1383
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 2.20.1-5.3
+Version: 2.20.1-5.3baureo1
 Replaces: e2fsprogs, fdisk, fstrim, linux32, miscutils, schedutils, setterm, sparc-utils
 Provides: linux32, schedutils
-Depends: lsb-base (>= 3.0-6), tzdata (>= 2006c-2), initscripts, dpkg (>= 1.15.4) | install-info, debconf (>= 0.5) | debconf-2.0
-Pre-Depends: libblkid1 (>= 2.20.1), libc6 (>= 2.11), libncurses5 (>= 5.5-5~), libselinux1 (>= 1.32), libslang2 (>= 2.2.4), libtinfo5, libuuid1 (>= 2.16), zlib1g (>= 1:1.1.4)
+Depends: lsb-base (>= 3.0-6), tzdata (>= 2006c-2), initscripts, debconf (>= 0.5) | debconf-2.0
+Pre-Depends: dpkg-lzip, libblkid1 (>= 2.20.1), libc6 (>= 2.11), libncurses5 (>= 5.5-5~), libselinux1 (>= 1.32), libslang2 (>= 2.2.4), libtinfo5, libuuid1 (>= 2.16), zlib1g (>= 1:1.1.4)
 Suggests: util-linux-locales, kbd | console-tools, dosfstools
 Conflicts: console-tools (<< 1:0.2.3-21), fdisk, fstrim, kbd (<< 1.05-3), linux32, schedutils, setterm
 Filename: pool/main/u/util-linux/util-linux_2.17.2-9_i386.deb
-Size: 659268
+Size: 504408
 MD5sum: 0ffe97d1152b03ed237c2e59319022f1
 Description: Miscellaneous system utilities
  This package contains a number of important utilities, most of which
@@ -14651,6 +14678,11 @@ Description: Miscellaneous system utilities
  important utilities included in this package allow you to partition
  your hard disk, view kernel messages, and create new filesystems.
 Homepage: http://userweb.kernel.org/~kzak/util-linux/
+Original-Maintainer: LaMont Jones <lamont@debian.org>
+Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
+Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
+Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libxcursor1
 Priority: optional
@@ -15141,16 +15173,18 @@ Description: Common CA certificates
 Package: vim-tiny
 Priority: important
 Section: editors
-Installed-Size: 780
-Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Installed-Size: 778
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: vim
-Version: 2:7.3.547-6
+Version: 2:7.3.547-7baureo1
 Provides: editor
-Depends: vim-common (= 2:7.3.547-6), libacl1 (>= 2.2.51-8), libc6 (>= 2.11), libselinux1 (>= 1.32), libtinfo5
+Depends: vim-common (= 2:7.3.547-7baureo1), libacl1 (>= 2.2.51-8), libc6 (>= 2.11), libselinux1 (>= 1.32), libtinfo5
+Pre-Depends: dpkg-lzip
 Suggests: indent
 Filename: pool/main/v/vim/vim-tiny_7.2.445+hg~cb94c42c0e1a-1_i386.deb
-Size: 326600
+Size: 327642
 MD5sum: 67390b40f2d4516c03ac9ef248738456
 Description: Vi IMproved - enhanced vi editor - compact version
  Vim is an almost compatible version of the UNIX editor Vi.
@@ -15165,6 +15199,11 @@ Description: Vi IMproved - enhanced vi editor - compact version
  package, but installing it you will get its additional benefits
  (online documentation, plugins, ...).
 Homepage: http://www.vim.org/
+Original-Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Original-Uploaders: James McCoy <jamessan@debian.org>
+Original-Vcs-Browser: http://hg.debian.org/hg/pkg-vim/vim
+Original-Vcs-Hg: http://hg.debian.org/hg/pkg-vim/vim
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: iceweasel-l10n-or
 Priority: optional
