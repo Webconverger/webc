@@ -12,6 +12,30 @@ if [ "$1" = "upgrade" ]; then
 	[ -d /etc/apm ]           && rmdir --ignore-fail-on-non-empty /etc/apm
 fi
 
+case "$1" in
+    install|upgrade)
+	# Handle upgrade of /etc/default/alsa → /etc/default/alsa-base
+	if [ -f /etc/default/alsa ]; then
+		OLDMD5SUM="b0f9824c2d4288aa89df3777668f0d99"
+		CURMD5SUM=$(md5sum /etc/default/alsa | sed -e 's/ .*//')
+		# Upgrades prior to the file rename
+		if dpkg --compare-versions "$2" lt "1.0.25+2"; then
+			if [ "$OLDMD5SUM" = "$CURMD5SUM" ]; then
+				rm -f /etc/default/alsa
+			# Don't overwrite the file if it already existed
+			elif [ ! -f /etc/default/alsa-base ]; then
+				mv /etc/default/alsa /etc/default/alsa-base
+			fi
+		# Upgrades from current testing: both files exist
+		# If the old file was modified, just leave it there
+		elif dpkg --compare-versions "$2" lt "1.0.25+3"; then
+			if [ "$OLDMD5SUM" = "$CURMD5SUM" ]; then
+				rm -f /etc/default/alsa
+			fi
+		fi
+	fi
+esac
+
 # Automatically added by dh_installmodules
 if [ "$1" = install ] || [ "$1" = upgrade ]; then
 	if [ -e "/etc/modprobe.d/alsa-base" ]; then

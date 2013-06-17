@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+  configure)
+  if dpkg --compare-versions "$2" lt 1:12.6.5-4; then
+    udevadm trigger --subsystem-match=input --action=change || true
+  fi
+esac
+
+
+
+exit 0

@@ -1,5 +1,21 @@
-#!/bin/sh
+#! /bin/sh
+
 set -e
+
+# Clean up the mess we created
+statedir=/var/lib/systemd
+if [ "$1" = "purge" ] && [ -d $statedir ]; then
+    find $statedir -name "*.symlinks" | while read file ; do
+        while read symlink ; do
+             rm -f "$symlink"
+        done < "$file"
+        rm -f "$file"
+    done
+    rm -f $statedir/enabled-units
+    rm -f $statedir/run-debian-enable-units
+    rmdir --ignore-fail-on-non-empty $statedir
+fi
+
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper mv_conffile /etc/bash_completion.d/systemctl-bash-completion.sh /etc/bash_completion.d/systemd-bash-completion.sh 44-2~ systemd -- "$@"
 # End automatically added section
@@ -15,3 +31,4 @@ dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/legacy.conf 29-1~ systemd --
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/lsb-base-logging.sh 25-1~ systemd -- "$@"
 # End automatically added section
+

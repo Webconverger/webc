@@ -8,6 +8,16 @@ _systemctl() {
     fi
 }
 
+if [ "$1" = triggered ]; then
+    /lib/systemd/debian-enable-units
+    exit 0
+fi
+
+# Run the script after the initial installation or once on upgrades
+if [ -z "$2" ] || dpkg --compare-versions "$2" lt "44-9"; then
+    /lib/systemd/debian-enable-units
+fi
+
 if [ -n "$2" ]; then
     _systemctl daemon-reexec || true
 fi

@@ -8,7 +8,6 @@
 [Unit]
 Description=Getty on %I
 BindTo=dev-%i.device
-ConditionKernelCommandLine=debug
 After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service
 
 # If additional gettys are spawned during boot then we should make
@@ -18,7 +17,7 @@ Before=getty.target
 
 [Service]
 Environment=TERM=linux
-ExecStart=-/sbin/agetty %I 38400
+ExecStart=-/sbin/agetty --nohostname %I 38400
 Restart=always
 RestartSec=0
 UtmpIdentifier=%I

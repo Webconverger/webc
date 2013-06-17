@@ -1,3 +1,30 @@
+Package: xserver-xorg-input-vmmouse
+Status: install ok installed
+Priority: optional
+Section: x11
+Installed-Size: 121
+Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Architecture: i386
+Version: 1:12.9.0-1
+Provides: xorg-driver-input
+Depends: libc6 (>= 2.7), xorg-input-abi-16, xserver-xorg-core (>= 2:1.11.99.901), xserver-xorg-input-mouse, udev
+Description: X.Org X server -- VMMouse input driver to use with VMWare
+ This package provides the driver for the X11 vmmouse input device.
+ .
+ The VMMouse driver enables support for the special VMMouse protocol
+ that is provided by VMware virtual machines to give absolute pointer
+ positioning.
+ .
+ The vmmouse driver is capable of falling back to the standard "mouse"
+ driver if a VMware virtual machine is not detected. This allows for
+ dual-booting of an operating system from a virtual machine to real hardware
+ without having to edit xorg.conf every time.
+ .
+ More information about X.Org can be found at:
+ <URL:http://www.X.org>
+ .
+ This package is built from the X.org xf86-input-vmmouse driver module.
+
 Package: libfftw3-3
 Status: install ok installed
 Priority: optional
@@ -1003,7 +1030,7 @@ Installed-Size: 1855
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.2.2.dfsg.1-5+deb70u3
+Version: 4.2.2.dfsg.1-5+deb70u6
 Replaces: dhcp3-common
 Provides: dhcp3-common
 Depends: libc6 (>= 2.4), debianutils (>= 2.8.2)
@@ -1320,11 +1347,11 @@ Package: libiodbc2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 492
+Installed-Size: 490
 Maintainer: Debian QA Group <packages@qa.debian.org>
 Architecture: i386
-Version: 3.52.7-2
-Depends: libc6 (>= 2.3)
+Version: 3.52.7-2+deb7u1
+Depends: libc6 (>= 2.4)
 Description: iODBC Driver Manager
  The iODBC (intrinsic Open Database Connectivity) driver manager is compatible
  with the ODBC 2.x and 3.x specification and performs all the jobs of a
@@ -2403,9 +2430,9 @@ Section: x11
 Installed-Size: 78
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 1:7.7+2
+Version: 1:7.7+3~deb7u1
 Provides: x-window-system, x-window-system-core
-Depends: xserver-xorg (>= 1:7.7+2), libgl1-mesa-glx | libgl1, libgl1-mesa-dri, libglu1-mesa, xfonts-base (>= 1:1.0.0-1), xfonts-100dpi (>= 1:1.0.0-1), xfonts-75dpi (>= 1:1.0.0-1), xfonts-scalable (>= 1:1.0.0-1), x11-apps, x11-session-utils, x11-utils, x11-xfs-utils, x11-xkb-utils, x11-xserver-utils, xauth, xinit, xfonts-utils, xkb-data, xorg-docs-core, xterm | x-terminal-emulator
+Depends: xserver-xorg (>= 1:7.7+3~deb7u1), libgl1-mesa-glx | libgl1, libgl1-mesa-dri, libglu1-mesa, xfonts-base (>= 1:1.0.0-1), xfonts-100dpi (>= 1:1.0.0-1), xfonts-75dpi (>= 1:1.0.0-1), xfonts-scalable (>= 1:1.0.0-1), x11-apps, x11-session-utils, x11-utils, x11-xfs-utils, x11-xkb-utils, x11-xserver-utils, xauth, xinit, xfonts-utils, xkb-data, xorg-docs-core, xterm | x-terminal-emulator
 Suggests: xorg-docs
 Description: X.Org X Window System
  This metapackage provides the components for a standalone
@@ -2517,13 +2544,15 @@ Package: sysv-rc
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 218
-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
+Installed-Size: 219
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: all
 Source: sysvinit
-Version: 2.88dsf-34
+Version: 2.88dsf-41baureo1
 Replaces: file-rc
 Depends: debconf (>= 0.5) | debconf-2.0, sysvinit-utils (>= 2.86.ds1-62), insserv (>> 1.12.0-10)
+Pre-Depends: dpkg-lzip
 Recommends: lsb-base (>= 3.2-14)
 Suggests: sysv-rc-conf, bum
 Breaks: initscripts (<< 2.86.ds1-63)
@@ -2533,6 +2562,15 @@ Description: System-V-like runlevel change mechanism
  for booting, changing runlevels, and shutting down,
  configured through symbolic links in /etc/rc?.d/.
 Homepage: http://savannah.nongnu.org/projects/sysvinit
+Original-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
+Original-Uploaders: 
+ Petter Reinholdtsen <pere@debian.org>,
+ Henrique de Moraes Holschuh <hmh@debian.org>,
+ Kel Modderman <kel@otaku42.de>,
+ Roger Leigh <rleigh@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
+Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libutempter0
 Status: install ok installed
@@ -3279,11 +3317,11 @@ Package: tzdata
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 1772
+Installed-Size: 1802
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 2013b-2
+Version: 2013c-0wheezy1
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Provides: tzdata-wheezy
 Depends: debconf (>= 0.5) | debconf-2.0
@@ -4038,16 +4076,19 @@ Description: OpenSLP libraries
 Homepage: http://www.openslp.org/
 
 Package: systemd-sysv
+Essential: yes
 Status: install ok installed
-Priority: extra
+Priority: required
 Section: admin
-Installed-Size: 53
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 54
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: systemd
-Version: 44-7
+Version: 44-11baureo1
 Replaces: sysvinit
-Depends: systemd (= 44-7)
+Depends: systemd (= 44-11baureo1)
+Pre-Depends: dpkg-lzip
 Conflicts: runit-run, sysvinit, upstart
 Description: system and service manager - SysV links
  systemd is a replacement for sysvinit.  It is dependency-based and
@@ -4061,6 +4102,10 @@ Description: system and service manager - SysV links
  This package provides the manual pages and links needed for systemd
  to replace sysvinit.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: linux-image-2.6.32-5-686
 Status: deinstall ok config-files
@@ -4480,7 +4525,7 @@ Installed-Size: 361
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg
-Version: 1:7.7+2
+Version: 1:7.7+3~deb7u1
 Provides: xserver
 Depends: xserver-xorg-core (>= 2:1.11), xserver-xorg-video-all | xorg-driver-video, xserver-xorg-input-all | xorg-driver-input, xserver-xorg-input-evdev, libc6 (>= 2.7), xkb-data (>= 1.4), x11-xkb-utils
 Recommends: libgl1-mesa-dri
@@ -5011,34 +5056,31 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 415
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 414
+Maintainer: Santiago Vila <sanvila@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 7.1-1baureo1
+Version: 7.1wheezy1
 Replaces: base, dpkg (<= 1.15.0), miscutils
 Provides: base
-Pre-Depends: dpkg-lzip, awk
+Pre-Depends: awk
 Breaks: initscripts (<< 2.88dsf-13.3), sendfile (<< 2.1b.20080616-5.2~)
 Conffiles:
- /etc/debian_version a81dbdee5126e79a7099b890c5a36ebe
+ /etc/debian_version e27a54634c3ce5c1d473733b996ad7d3
  /etc/dpkg/origins/debian 731423fa8ba067262f8ef37882d1e742
- /etc/dpkg/origins/progress-linux 86aba0f382eb064563a2ad4de5d31b28
  /etc/host.conf 4eb63731c9f5e30903ac4fc07a7fe3d6
- /etc/issue 83093dccd5cd4fcbee061159fcc91f28
- /etc/issue.net df24ae213bcdbde809b06a8d86650445
- /etc/lsb-release 22d02316f358a0cfb6c002c42bb5d41a
- /etc/os-release 77d82ebfed6aa0f2c0437780be865af4
- /etc/progress-linux_version 3cf918272ffa5de195752d73f3da3e5e
+ /etc/issue a18897477f3fb6f0115ea42f61ffc80a
+ /etc/issue.net adf32bc904b048f378c22f2df797861e
+ /etc/os-release 22585b94012c8e6dc2e0aa8958288ee9
  /etc/dpkg/origins/progress eb8cd942c2cc678ca65dcb012ad92d5e obsolete
+ /etc/lsb-release 22d02316f358a0cfb6c002c42bb5d41a obsolete
+ /etc/dpkg/origins/progress-linux 86aba0f382eb064563a2ad4de5d31b28 obsolete
+ /etc/progress-linux_version 3cf918272ffa5de195752d73f3da3e5e obsolete
 Description: Debian base system miscellaneous files
  This package contains the basic filesystem hierarchy of a Debian system, and
  several important miscellaneous files, such as /etc/debian_version,
  /etc/host.conf, /etc/issue, /etc/motd, /etc/profile, and others,
  and the text of several common licenses in use on Debian systems.
-Original-Maintainer: Santiago Vila <sanvila@debian.org>
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: poppler-data
 Status: install ok installed
@@ -5420,7 +5462,7 @@ Maintainer: Debian QA Group <packages@qa.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: readline5
-Version: 5.2+dfsg-1
+Version: 5.2+dfsg-2~deb7u1
 Depends: readline-common, libc6 (>= 2.3), libtinfo5
 Pre-Depends: multiarch-support
 Description: GNU readline and history libraries, run-time libraries
@@ -6508,30 +6550,32 @@ Description: X C Binding, render extension
 Homepage: http://xcb.freedesktop.org
 
 Package: systemd
+Essential: yes
 Status: install ok installed
-Priority: extra
+Priority: required
 Section: admin
-Installed-Size: 3670
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 3600
+Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
+Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
-Version: 44-7
+Version: 44-11baureo1
 Depends: libacl1 (>= 2.2.51-8), libaudit0 (>= 1.7.13), libc6 (>= 2.11), libcap2 (>= 2.10), libcryptsetup4 (>= 2:1.4), libdbus-1-3 (>= 1.1.1), libkmod2 (>= 5~), liblzma5 (>= 5.1.1alpha+20120614), libpam0g (>= 0.99.7.1), libselinux1 (>= 2.0.65), libsystemd-daemon0 (>= 31), libsystemd-id128-0 (>= 38), libsystemd-journal0 (>= 38), libsystemd-login0 (>= 38), libudev0 (>= 172), libwrap0 (>= 7.6-4~), util-linux (>= 2.19.1-2), initscripts (>= 2.88dsf-17), udev
-Pre-Depends: dpkg (>= 1.15.7.2)
+Pre-Depends: dpkg-lzip, dpkg (>= 1.15.7.2)
 Recommends: libpam-systemd
 Suggests: systemd-gui, python, python-dbus, python-cairo
 Breaks: lsb-base (<< 4.1+Debian4), lvm2 (<< 2.02.84-1)
 Conflicts: klogd
 Conffiles:
+ /etc/bash_completion.d/systemd-bash-completion.sh 7be91a9da91f21d9ee310585cce01e14
+ /etc/dbus-1/system.d/org.freedesktop.login1.conf bfb152fcc7e5bc57f73b97684b7c89c1
  /etc/dbus-1/system.d/org.freedesktop.locale1.conf c98fa26ab7a4f4bfd34b926d23aec34e
+ /etc/dbus-1/system.d/org.freedesktop.timedate1.conf bd6c5f104f586c4125d9ab729d9ffc4a
  /etc/dbus-1/system.d/org.freedesktop.hostname1.conf c3eb956b5e4494d67211c6766c84b1ef
  /etc/dbus-1/system.d/org.freedesktop.systemd1.conf 1744d9d50f21aa59b938ef2f50a45ed5
- /etc/dbus-1/system.d/org.freedesktop.timedate1.conf bd6c5f104f586c4125d9ab729d9ffc4a
- /etc/dbus-1/system.d/org.freedesktop.login1.conf bfb152fcc7e5bc57f73b97684b7c89c1
- /etc/systemd/systemd-logind.conf b6c3d3061386e3cd4ac9753af108fa6d
  /etc/systemd/system.conf fbd97439fe4ca6283dd66efd78f47513
  /etc/systemd/user.conf e69453051c7caba909a9ec94d2adc71c
  /etc/systemd/systemd-journald.conf 2a1a703055578ac4cdfecbd2f3ad4c90
- /etc/bash_completion.d/systemd-bash-completion.sh 7be91a9da91f21d9ee310585cce01e14
+ /etc/systemd/systemd-logind.conf b6c3d3061386e3cd4ac9753af108fa6d
 Description: system and service manager
  systemd is a replacement for sysvinit.  It is dependency-based and
  able to read the LSB init script headers in addition to parsing rcN.d
@@ -6541,6 +6585,10 @@ Description: system and service manager
  not only depend on other init script being started, but also
  availability of a given mount point or dbus service.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+Original-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-systemd/systemd.git;a=summary
+Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
+Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libswscale2
 Status: install ok installed
@@ -7692,7 +7740,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: xorg
-Version: 1:7.7+2
+Version: 1:7.7+3~deb7u1
 Depends: debconf (>= 0.5) | debconf-2.0, lsb-base (>= 1.3-9ubuntu2)
 Conffiles:
  /etc/X11/Xreset 05d188ccac2f3360af8fe0c216640233
@@ -8489,11 +8537,11 @@ Maintainer: Debian Cyrus SASL Team <pkg-cyrus-sasl2-debian-devel@lists.alioth.de
 Architecture: i386
 Multi-Arch: same
 Source: cyrus-sasl2
-Version: 2.1.25.dfsg1-6
+Version: 2.1.25.dfsg1-6+deb7u1
 Replaces: libsasl2
 Depends: libc6 (>= 2.4), libdb5.1
 Pre-Depends: multiarch-support
-Recommends: libsasl2-modules (= 2.1.25.dfsg1-6)
+Recommends: libsasl2-modules (= 2.1.25.dfsg1-6+deb7u1)
 Breaks: postfix (<= 2.8.3-1), slapd (<= 2.4.25-3)
 Description: Cyrus SASL - authentication abstraction library
  This is the Cyrus SASL API implementation, version 2.1.
@@ -11213,12 +11261,13 @@ Package: alsa-base
 Status: install ok installed
 Priority: optional
 Section: sound
-Installed-Size: 130
+Installed-Size: 131
 Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
 Architecture: all
-Version: 1.0.25+2+nmu2
+Version: 1.0.25+3~deb7u1
 Provides: alsa
 Depends: kmod, procps, udev
+Pre-Depends: dpkg (>= 1.15.7.2~)
 Recommends: alsa-utils
 Suggests: alsa-oss, oss-compat
 Breaks: linux-sound-base
@@ -11415,8 +11464,8 @@ Installed-Size: 62
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Source: xorg
-Version: 1:7.7+2
-Depends: xserver-xorg-input-evdev, xserver-xorg-input-synaptics
+Version: 1:7.7+3~deb7u1
+Depends: xserver-xorg-input-evdev, xserver-xorg-input-vmmouse, xserver-xorg-input-synaptics
 Recommends: xserver-xorg-input-wacom
 Description: X.Org X server -- input driver metapackage
  This package depends on the full suite of input drivers for the X.Org X server
@@ -11618,6 +11667,24 @@ Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nspr.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nspr.git
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: xserver-xorg-input-mouse
+Status: install ok installed
+Priority: optional
+Section: x11
+Installed-Size: 147
+Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Architecture: i386
+Version: 1:1.7.2-3
+Provides: xorg-driver-input
+Depends: libc6 (>= 2.7), xorg-input-abi-16, xserver-xorg-core (>= 2:1.11.99.901)
+Description: X.Org X server -- mouse input driver
+ This package provides the driver for mouse input devices.
+ .
+ More information about X.Org can be found at:
+ <URL:http://www.X.org>
+ .
+ This package is built from the X.org xf86-input-mouse driver module.
 
 Package: glx-alternative-mesa
 Status: install ok installed
@@ -12844,11 +12911,11 @@ Maintainer: Ludovic Rousseau <rousseau@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: pcsc-lite
-Version: 1.8.4-1
+Version: 1.8.4-1+deb7u1
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
-Suggests: pcscd (= 1.8.4-1)
-Breaks: libpcsclite-dev (<< 1.8.4-1), pcscd (<< 1.8.4-1)
+Suggests: pcscd (= 1.8.4-1+deb7u1)
+Breaks: libpcsclite-dev (<< 1.8.4-1+deb7u1), pcscd (<< 1.8.4-1+deb7u1)
 Description: Middleware to access a smart card using PC/SC (library)
  The purpose of PC/SC Lite is to provide a Windows(R) SCard interface
  in a very small form factor for communicating to smartcards and
@@ -12957,21 +13024,21 @@ Package: isc-dhcp-client
 Status: install ok installed
 Priority: important
 Section: net
-Installed-Size: 1888
+Installed-Size: 1884
 Maintainer: Debian ISC DHCP maintainers <pkg-dhcp-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: isc-dhcp
-Version: 4.2.2.dfsg.1-5+deb70u3
+Version: 4.2.2.dfsg.1-5+deb70u6
 Replaces: dhcp3-client
 Provides: dhcp-client, dhcp3-client
-Depends: libc6 (>= 2.4), debianutils (>= 2.8.2), isc-dhcp-common (= 4.2.2.dfsg.1-5+deb70u3), iproute
+Depends: libc6 (>= 2.4), debianutils (>= 2.8.2), isc-dhcp-common (= 4.2.2.dfsg.1-5+deb70u6), iproute
 Suggests: resolvconf, avahi-autoipd
 Conflicts: dhcp-client (<< 3.0), ifupdown (<< 0.6.8+nmu3), resolvconf (<= 1.45), samba-common (<< 3.0.0beta1-2)
 Conffiles:
  /etc/dhcp/dhclient.conf ed8f55fbf1e31a2ab1ac263818c99773
- /etc/dhcp/dhclient-enter-hooks.d/debug 95da2e2070e1c33847923dafef2a2921
- /etc/dhcp/dhclient-exit-hooks.d/rfc3442-classless-routes 9f5b3bd5f605e2debf1a7a88a705c1ba
  /etc/dhcp/dhclient-exit-hooks.d/debug 95da2e2070e1c33847923dafef2a2921
+ /etc/dhcp/dhclient-exit-hooks.d/rfc3442-classless-routes 9f5b3bd5f605e2debf1a7a88a705c1ba
+ /etc/dhcp/dhclient-enter-hooks.d/debug 95da2e2070e1c33847923dafef2a2921
 Description: ISC DHCP client
  This is the client from the Internet Software Consortium's implementation of
  DHCP. For more information visit http://www.isc.org.
