@@ -8,6 +8,7 @@
 [Unit]
 Description=Getty on %I
 BindTo=dev-%i.device
+ConditionKernelCommandLine=debug
 After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service
 
 # If additional gettys are spawned during boot then we should make
