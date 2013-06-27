@@ -161,8 +161,8 @@ for x in $( cmdline ); do
 
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
-		wget --timeout=5 "${prefs}" -O /opt/firefox/browser/defaults/preferences/prefs.js &&
-		logs "Set prefs: $(cat /opt/firefox/browser/defaults/preferences/prefs.js)"
+		echo "pref(\"autoadmin.global_config_url\",\"$prefs\");" >> /opt/firefox/mozilla.cfg
+		logs "Set autoconfig: $prefs"
 		;;
 
 	iptables=*)
@@ -206,24 +206,6 @@ EOC
 		;;
 	esac
 done
-
-if ! cmdline_has noclean
-then
-cat >> "$prefs" <<EOF
-// Enable private browsing and enable all sanitize on shutdown features just
-// to be sure we are wiping the slate clean.
-pref("privateBrowsingEnabled", true);
-pref("browser.privatebrowsing.autostart", true);
-pref("privacy.sanitize.sanitizeOnShutdown", true);
-pref("privacy.clearOnShutdown.offlineApps", true);
-pref("privacy.clearOnShutdown.passwords", true);
-pref("privacy.clearOnShutdown.siteSettings", true);
-// cpd = Clear Private Data
-pref("privacy.cpd.offlineApps", true);
-pref("privacy.cpd.passwords", true);
-pref("privacy.sanitize.sanitizeOnShutdown", true);
-EOF
-fi
 
 # Make sure /home has noexec and nodev, for extra security.
 # First, just try to remount, in case /home is already a separate filesystem
