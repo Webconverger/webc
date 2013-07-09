@@ -43,7 +43,7 @@ logs "Fetching git revision ${fetch_revision}"
 # Fetch the git revision. It will not be stored
 # in any local branch, just in FETCH_HEAD.
 rm -f /.git/FETCH_HEAD
-if ! git --git-dir "${git_repo}" fetch --quiet origin "${fetch_revision}" || ! git --git-dir "${git_repo}" rev-parse --verify --quiet FETCH_HEAD
+if ! git --git-dir "${git_repo}" fetch --depth=1 --quiet origin "${fetch_revision}" || ! git --git-dir "${git_repo}" rev-parse --verify --quiet FETCH_HEAD
 then
 # Fetching the revision failed, to prevent an
 # unbootable system, bail out now. Since we're not
@@ -64,10 +64,6 @@ then
 # refs when telling the server what we already
 # have).
 	git tag "fetched-${fetch_revision}-$(date '+%s')" FETCH_HEAD
-
-# TODO: Clean up tag list by removing tags that
-# are reachable from other tags / FETCH_HEAD
-# already?
 fi
 
 # Get the sha has of the latest revision we just fetched
