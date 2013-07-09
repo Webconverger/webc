@@ -67,21 +67,8 @@ then
 fi
 
 # Get the sha has of the latest revision we just fetched
-fetched_revision=$(git --git-dir "${git_repo}" rev-parse FETCH_HEAD)
-logs "Successfully fetched git revision (got ${fetched_revision})"
-
-if test -z "${update_revision}"
-then
-	git_revision="${fetched_revision}"
-	logs "Trying update to latest revision fetched (${git_revision})"
-elif git --git-dir "${git_repo}" rev-parse --verify --quiet "${update_revision}"; then
-	# Get the canonical sha hash
-	git_revision="$(git --git-dir "${git_repo}" rev-parse "${update_revision}")"
-	logs "Trying update to specific revision (${git_revision})"
-else
-	logs "Invalid update_revision (${update_revision}), skipping upgrade"
-	return
-fi
+git_revision=$(git --git-dir "${git_repo}" rev-parse FETCH_HEAD)
+logs "Successfully fetched git revision (got ${git_revision})"
 
 # TODO: Also enter this if when boot_append was changed
 if test "${current_git_revision}" != "${git_revision}"
