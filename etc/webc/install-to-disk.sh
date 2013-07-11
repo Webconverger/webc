@@ -52,7 +52,8 @@ _err() {
 describe_disk() {
 	local name=$(basename $1)
 	model=$(cat "/sys/block/${name}/device/model")
-	size=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1/1024/1024}')
+	# Convert from 512-byte sectors to GiB
+	size=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1*512/1024/1024/1024}')
 
 	echo "${model} (${size}GB)"
 }
