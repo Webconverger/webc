@@ -53,9 +53,10 @@ describe_disk() {
 	local name=$(basename $1)
 	model=$(cat "/sys/block/${name}/device/model")
 	# Convert from 512-byte sectors to GiB
-	size=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1*512/1024/1024/1024}')
+	size_gib=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1*512/1024/1024/1024}')
+	size_gb=$(cat "/sys/block/${name}/size" | awk '{printf "%0.2f", $1*512/1000/1000/1000}')
 
-	echo "${model} (${size}GB)"
+	echo "${model} (${size_gib}GiB / ${size_gb}GB)"
 }
 
 find_disk() {
