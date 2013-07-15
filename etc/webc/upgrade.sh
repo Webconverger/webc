@@ -87,7 +87,7 @@ else
 	return
 fi
 
-# TODO: Also enter this if when boot_params was changed
+# TODO: Also enter this if when boot_append was changed
 if test "${current_git_revision}" != "${git_revision}"
 then
 # The config says we should be running a different
