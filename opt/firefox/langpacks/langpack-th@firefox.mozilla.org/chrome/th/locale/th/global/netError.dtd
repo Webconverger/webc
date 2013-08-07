@@ -1,3 +1,7 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
 <!ENTITY loadError.label "การโหลดหน้าเว็บเกิดข้อผิดพลาด">
 <!ENTITY retry.label "โปรดลองอีกครั้ง">
 <!-- Specific error messages -->
@@ -7,7 +11,7 @@
 <!ENTITY connectionFailure.longDesc "<p>แม้ที่ตั้งไซต์ที่เรียกจะดูเหมือนถูกกฎ แต่เบราว์เซอร์ไม่สามารถเชื่อมต่อกับไซต์ดังกล่าวได้</p><ul><li>ไซต์อาจไม่ว่างชั่วคราว โปรดลองใหม่อีกครั้ง</li><li>หากไม่สามารถเรียกดูไซต์อื่น ๆ ได้ โปรดตรวจสอบการเชื่อมต่อเครือข่ายของเครื่องคอมพิวเตอร์ที่คุณใช้อยู่</li><li>หากเครื่องหรือเครือข่ายที่คุณใช้อยู่มีไฟร์วอลล์หรือพร็อกซีปกป้องอยู่ การตั้งค่าที่ไม่ถูกต้องอาจรบกวนการเรียกดูเว็บได้</li></ul>">
 
 <!ENTITY deniedPortAccess.title "พอร์ตถูกจำกัดการใช้เนื่องจากเหตุผลด้านความปลอดภัย">
-<!ENTITY deniedPortAccess.longDesc "<p>ที่อยู่ตั้งที่เรียกได้ระบุพอร์ตด้วย (เช่น <q>mozilla.org:80</q> สำหรับพอร์ต 80 ของ mozilla.org) ซึ่งโดยปกติจะใช้เพื่อวัตถุประสงค์อื่นที่มิใช่การเรียกดูเว็บ เบราว์เซอร์ได้ยกเลิกการร้องขอดังกล่าวเพื่อปกป้องคุณและเพื่อความปลอดภัย</p>">
+<!ENTITY deniedPortAccess.longDesc "<p>ที่อยู่ตั้งที่เรียกได้ระบุพอร์ตด้วย (เช่น <q>mozilla.org:80</q> สำหรับพอร์ต 80 ของ mozilla.org) ซึ่งโดยปกติจะใช้เพื่อวัตถุประสงค์<em>อื่น</em>ที่มิใช่การเรียกดูเว็บ เบราว์เซอร์ได้ยกเลิกการร้องขอดังกล่าวเพื่อปกป้องคุณและเพื่อความปลอดภัย</p>">
 
 <!ENTITY dnsNotFound.title "ไม่พบที่อยู่ไซต์ที่เรียก">
 <!ENTITY dnsNotFound.longDesc "<p>เบราว์เซอร์ไม่พบเซิร์ฟเวอร์โฮสต์สำหรับที่อยู่ที่เรียก</p><ul><li>คุณอาจป้อนชื่อโดเมนผิด (เช่น <q><strong>ww</strong>.mozilla.org</q> แทนที่จะเป็น <q><strong>www</strong>.mozilla.org</q>)</li><li>ที่อยู่ไซต์นั้นอาจไม่มีอีกต่อไปแล้วเนื่องจากโดเมนที่ได้จดทะเบียนไว้หมดอายุ</li><li>หากไม่สามารถเรียกดูไซต์อื่น ๆ ได้ โปรดตรวจสอบการเชื่อมต่อเครือข่ายและการตั้งค่าเซิร์ฟเวอร์ DNS ที่คุณใช้งานอยู่</li><li>หากเครื่องหรือเครือข่ายที่คุณใช้อยู่มีไฟร์วอลล์หรือพร็อกซีปกป้องอยู่ การตั้งค่าที่ไม่ถูกต้องอาจรบกวนการเรียกดูเว็บได้</li></ul>">
@@ -84,11 +88,10 @@
 
 <!ENTITY remoteXUL.title "รีโมท XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>โปรดติดต่อเจ้าของเว็บไซต์เพื่อแจ้งปัญหาข้างต้น</li></ul></p>">
-
-
 <!-- Include app-specific error messages - do not change this in localization!
      Some applications might override netErrorApp.dtd with their specific version,
-     this inclusion needs to be intact for that approach to work correctly. -->
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
 
 <!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
 %netErrorAppDTD;

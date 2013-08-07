@@ -115,7 +115,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "ಈ ಪುಟವನ್ನು ಪುಟಗುರುತು ಮಾಡು">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
-<!ENTITY sharePageCmd.commandkey "l">
+<!ENTITY markPageCmd.commandkey "l">
+<!ENTITY sharePageCmd.label "ಈ ಪುಟವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ">
+<!ENTITY sharePageCmd.commandkey "S">
+<!ENTITY sharePageCmd.accesskey "s">
+<!ENTITY shareLinkCmd.label "ಈ ಕೊಂಡಿಯನ್ನು ಹಂಚಿಕೊಳ್ಳಿ">
+<!ENTITY shareLinkCmd.accesskey "s">
+<!ENTITY shareImageCmd.label "ಈ ಚಿತ್ರವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ">
+<!ENTITY shareImageCmd.accesskey "s">
+<!ENTITY shareSelectCmd.label "ಆಯ್ಕೆಯನ್ನು ಹಂಚಿಕೊಳ್ಳಿ">
+<!ENTITY shareSelectCmd.accesskey "s">
+<!ENTITY shareVideoCmd.label "ಈ ವೀಡಿಯೊವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ">
+<!ENTITY shareVideoCmd.accesskey "s">
 <!ENTITY subscribeToPageMenupopup.label "ಈ ಪುಟಕ್ಕೆ ಚಂದಾದಾರನಾಗಿಸು">
 <!ENTITY subscribeToPageMenuitem.label "ಈ ಪುಟಕ್ಕೆ ಚಂದಾದಾರನಾಗಿಸು...">
 <!ENTITY addCurPagesCmd.label "ಎಲ್ಲಾ ಟ್ಯಾಬ್‌ಗಳನ್ನು ಪುಟಗುರುತು ಮಾಡು...">
@@ -206,6 +217,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY errorConsoleCmd.commandkey   "j">
 
 <!ENTITY remoteWebConsoleCmd.label    "ದೂರಸ್ಥ ಜಾಲ ಕನ್ಸೋಲ್‌">
+
+<!ENTITY browserConsoleCmd.label      "ಜಾಲವೀಕ್ಷಕ ಕನ್ಸೋಲ್">
 
 <!ENTITY inspectContextMenu.label     "ಪರೀಕ್ಷಕ ಘಟಕ">
 <!ENTITY inspectContextMenu.accesskey "Q">
@@ -426,7 +439,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY playPluginCmd.accesskey      "c">
 <!ENTITY hidePluginCmd.label          "ಈ ಪ್ಲಗ್ಇನ್ ಅನ್ನು ಅಡಗಿಸು">
 <!ENTITY hidePluginCmd.accesskey      "H">
-<!ENTITY copyLinkCmd.label            "ತಾಣದ ವಿಳಾಸವನ್ನು (ಲಿಂಕ್ ಲೋಕೇಶನ್)  ಕಾಪಿ ಮಾಡು">
+<!ENTITY copyLinkCmd.label            "ತಾಣದ ವಿಳಾಸವನ್ನು (ಲಿಂಕ್ ಲೋಕೇಶನ್) ಪ್ರತಿ ಮಾಡು">
 <!ENTITY copyLinkCmd.accesskey        "a">
 <!ENTITY copyImageCmd.label           "ಚಿತ್ರದ ತಾಣವನ್ನು ಕಾಪಿ ಮಾಡು">
 <!ENTITY copyImageCmd.accesskey       "o">
@@ -537,7 +550,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY quitApplicationCmd.label       "ತ್ಯಜಿಸು"> 
 <!ENTITY quitApplicationCmd.accesskey   "Q">
 <!ENTITY quitApplicationCmdMac.label    "ತ್ಯಜಿಸು">
-<!ENTITY quitApplicationCmdMac.key      "Q">
+<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
+<!ENTITY quitApplicationCmdUnix.key     "Q">
 
 <!ENTITY closeCmd.label                 "ಮುಚ್ಚು">  
 <!ENTITY closeCmd.key                   "W">  
@@ -556,7 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!-- On Windows we use the term "Options" to describe settings, but
      on Linux and Mac OS X we use "Preferences" - carry that distinction
      over into this string, which is used in the "popup blocked" info bar . -->
-<!ENTITY editPopupSettingsUnix.label "ಪುಟಿಕೆಯನ್ನು ನಿರ್ಬಂಧಿಸುವ (ಪಾಪ್ಅಪ್ ಬ್ಲಾಕರ್)ಆದ್ಯತೆಗಳನ್ನು ಸಂಪಾದಿಸು...">
+<!ENTITY editPopupSettingsUnix.label "ಪುಟಿಕೆಯನ್ನು ನಿರ್ಬಂಧಿಸುವ (ಪಾಪ್ಅಪ್ ಬ್ಲಾಕರ್) ಆದ್ಯತೆಗಳನ್ನು ಸಂಪಾದಿಸು...">
 <!ENTITY editPopupSettings.label "ಪುಟಿಕೆಯನ್ನು ನಿರ್ಬಂಧಿಸುವ (ಪಾಪ್ಅಪ್ ಬ್ಲಾಕರ್)ಆಯ್ಕೆಗಳನ್ನು ಸಂಪಾದಿಸು...">
 <!ENTITY editPopupSettings.accesskey "E">
 <!ENTITY dontShowMessage.accesskey "D">
@@ -631,12 +645,20 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.toggleNotifications.label "ಗಣಕತೆರೆ ಸೂಚನೆಗಳನ್ನು ತೋರಿಸು">
 <!ENTITY social.toggleNotifications.accesskey "n">
 
-<!ENTITY social.activated.undobutton.label "ರದ್ದು ಮಾಡು">
-<!ENTITY social.activated.undobutton.accesskey "U">
+<!ENTITY social.activated.description "<label/> ಇಂದ ಸೇವೆಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ. ನೀವು <label class='text-link'>ಆಡ್-ಆನ್ ವ್ಯವಸ್ಥಾಪಕ</label>ದಲ್ಲಿನ ಸೇವೆಗಳಿಗಾಗಿ ನಿಮ್ಮ ಸಿದ್ಧತೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಸಾಧ್ಯವಿರುತ್ತದೆ.">
+<!ENTITY social.activated.undo.label "ಓಹ್, ಇದನ್ನು ರದ್ದು ಮಾಡು!">
+<!ENTITY social.activated.undo.accesskey "U">
+<!ENTITY social.learnMore.label "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ...">
+<!ENTITY social.learnMore.accesskey "l">
+<!ENTITY social.closeNotificationItem.label "ಈಗ ಬೇಡ">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "ಮಾತುಕತೆಗಳತ್ತ ಗಮನ ಹರಿಸು">
 <!ENTITY social.chatBar.accesskey "c">
+<!-- labels are set dynamically, see browser.properties -->
+
+<!ENTITY social.markpage.accesskey "m">
+<!ENTITY social.marklink.accesskey "M">
 
 <!ENTITY getUserMedia.selectCamera.label "ಹಂಚಬೇಕಿರುವ ಕ್ಯಾಮೆರಾ:">
 <!ENTITY getUserMedia.selectCamera.accesskey "C">

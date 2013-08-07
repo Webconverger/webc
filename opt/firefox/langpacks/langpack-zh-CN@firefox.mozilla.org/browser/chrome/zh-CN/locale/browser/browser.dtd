@@ -115,7 +115,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "将此页加为书签">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
+<!ENTITY markPageCmd.commandkey "l">
+<!ENTITY sharePageCmd.label "分享此页面">
 <!ENTITY sharePageCmd.commandkey "l">
+<!ENTITY sharePageCmd.accesskey "s">
+<!ENTITY shareLinkCmd.label "分享此链接">
+<!ENTITY shareLinkCmd.accesskey "s">
+<!ENTITY shareImageCmd.label "分享此图片">
+<!ENTITY shareImageCmd.accesskey "s">
+<!ENTITY shareSelectCmd.label "分享选中段">
+<!ENTITY shareSelectCmd.accesskey "s">
+<!ENTITY shareVideoCmd.label "分享此视频">
+<!ENTITY shareVideoCmd.accesskey "s">
 <!ENTITY subscribeToPageMenupopup.label "订阅此页">
 <!ENTITY subscribeToPageMenuitem.label "订阅此页…">
 <!ENTITY addCurPagesCmd.label "将所有标签页加入书签…">
@@ -207,6 +218,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY remoteWebConsoleCmd.label    "远程 Web 控制台">
 
+<!ENTITY browserConsoleCmd.label      "浏览器控制台">
+
 <!ENTITY inspectContextMenu.label     "查看元素">
 <!ENTITY inspectContextMenu.accesskey "Q">
 
@@ -253,7 +266,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY editMenu.label         "编辑"> 
 <!ENTITY editMenu.accesskey       "E"> 
-<!ENTITY undoCmd.label            "撤消">  
+<!ENTITY undoCmd.label            "撤销">  
 <!ENTITY undoCmd.key            "Z">  
 <!ENTITY undoCmd.accesskey          "U"> 
 <!ENTITY redoCmd.label            "重做">  
@@ -397,7 +410,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarkThisLinkCmd.accesskey  "L">
 <!ENTITY bookmarkThisFrameCmd.label      "将此框架加为书签">
 <!ENTITY bookmarkThisFrameCmd.accesskey  "m">
-<!ENTITY emailPageCmd.label           "通过邮件发送链接… (E)">
+<!ENTITY emailPageCmd.label           "用邮件发送链接…">
 <!ENTITY emailPageCmd.accesskey       "E">
 <!ENTITY savePageCmd.label            "页面另存为…">
 <!ENTITY savePageCmd.accesskey        "A">
@@ -416,11 +429,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY saveVideoCmd.accesskey       "v">
 <!ENTITY saveAudioCmd.label           "音频另存为…">
 <!ENTITY saveAudioCmd.accesskey       "v">
-<!ENTITY emailImageCmd.label          "通过邮件发送图片… (g)">
+<!ENTITY emailImageCmd.label          "用邮件发送图片…">
 <!ENTITY emailImageCmd.accesskey      "g">
-<!ENTITY emailVideoCmd.label          "通过邮件发送视频… (a)">
+<!ENTITY emailVideoCmd.label          "用邮件发送视频…">
 <!ENTITY emailVideoCmd.accesskey      "a">
-<!ENTITY emailAudioCmd.label          "通过邮件发送音频… (a)">
+<!ENTITY emailAudioCmd.label          "用邮件发送音频…">
 <!ENTITY emailAudioCmd.accesskey      "a">
 <!ENTITY playPluginCmd.label          "激活此插件">
 <!ENTITY playPluginCmd.accesskey      "c">
@@ -536,7 +549,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY quitApplicationCmd.label       "退出"> 
 <!ENTITY quitApplicationCmd.accesskey   "Q">
 <!ENTITY quitApplicationCmdMac.label    "退出 &brandShortName;">
-<!ENTITY quitApplicationCmdMac.key      "Q">
+<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
+<!ENTITY quitApplicationCmdUnix.key     "Q">
 
 <!ENTITY closeCmd.label                 "关闭">  
 <!ENTITY closeCmd.key                   "W">  
@@ -630,12 +644,20 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.toggleNotifications.label "显示桌面通知">
 <!ENTITY social.toggleNotifications.accesskey "n">
 
-<!ENTITY social.activated.undobutton.label "撤销">
-<!ENTITY social.activated.undobutton.accesskey "U">
+<!ENTITY social.activated.description "来自 <label/> 的服务已启用。您可以在<label class='text-link'>附加组件管理器</label>中更改服务设置。">
+<!ENTITY social.activated.undo.label "啊哦，撤销这个操作！">
+<!ENTITY social.activated.undo.accesskey "U">
+<!ENTITY social.learnMore.label "了解更多…">
+<!ENTITY social.learnMore.accesskey "l">
+<!ENTITY social.closeNotificationItem.label "暂不">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "焦点聊天">
 <!ENTITY social.chatBar.accesskey "c">
+
+<!-- labels are set dynamically, see browser.properties -->
+<!ENTITY social.markpage.accesskey "m">
+<!ENTITY social.marklink.accesskey "M">
 
 <!ENTITY getUserMedia.selectCamera.label "共享的摄像头：">
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
@@ -645,7 +667,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY webrtcIndicatorButton.label "摄像头/麦克风访问">
 <!ENTITY webrtcIndicatorButton.tooltip "显示您正在共享您摄像头或麦克风的站点">
 
-<!ENTITY mixedContentBlocked.helplink "了解更多">
+<!ENTITY mixedContentBlocked.helplink "详细了解">
 <!ENTITY mixedContentBlocked.moreinfo "即使此内容被屏蔽，大多数网站仍能正常工作。">
 
 <!ENTITY pointerLock.notification.message "随时可以按 ESC 显示鼠标指针。">

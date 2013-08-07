@@ -1,7 +1,11 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
 <!-- LOCALIZATION NOTE : FILE Do not translate commandkeys --> 
-
 <!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
+
+
 <!ENTITY mainWindow.title "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
 <!ENTITY mainWindow.titlemodifier "&brandFullName;">
@@ -10,24 +14,24 @@
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(ดูเว็บแบบส่วนตัว)">
-
 <!-- Tab context menu -->
+
 <!ENTITY  reloadTab.label                    "เรียกแท็บนี้ใหม่">
 <!ENTITY  reloadTab.accesskey                "ร">
 <!ENTITY  reloadAllTabs.label                "เรียกทุกแท็บใหม่">
 <!ENTITY  reloadAllTabs.accesskey            "ท">
 <!ENTITY  closeOtherTabs.label               "ปิดแท็บอื่น">
 <!ENTITY  closeOtherTabs.accesskey           "อ">
-
-<!-- LOCALIZATION NOTE (pinAppTab.label, unpinAppTab.label): "Pin" is being
+<!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
 used as a metaphor for expressing the fact that these tabs are "pinned" to the
 left edge of the tabstrip. Really we just want the string to express the idea
 that this is a lightweight and reversible action that keeps your tab where you
 can reach it easily. -->
-<!ENTITY  pinAppTab.label                    "ตรึงแท็บ">
-<!ENTITY  pinAppTab.accesskey                "ต">
-<!ENTITY  unpinAppTab.label                  "เลิกตรึงแท็บ">
-<!ENTITY  unpinAppTab.accesskey              "ล">
+
+<!ENTITY  pinTab.label                       "ตรึงแท็บ">
+<!ENTITY  pinTab.accesskey                   "ต">
+<!ENTITY  unpinTab.label                     "เลิกตรึงแท็บ">
+<!ENTITY  unpinTab.accesskey                 "ล">
 <!ENTITY  moveToGroup.label                  "ย้ายไปยังกลุ่ม">
 <!ENTITY  moveToGroup.accesskey              "ย">
 <!ENTITY  moveToNewGroup.label               "กลุ่มใหม่">
@@ -77,6 +81,12 @@ can reach it easily. -->
 <!ENTITY pageInfoCmd.label "ข้อมูลหน้าเว็บ">
 <!ENTITY pageInfoCmd.accesskey "น">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
+These should match what Safari and other Apple applications use on OS X Lion. -->
+<!ENTITY enterFullScreenCmd.label "เข้าสู่ภาพเต็มหน้าจอ">
+<!ENTITY enterFullScreenCmd.accesskey "ต">
+<!ENTITY exitFullScreenCmd.label "ออกจากภาพเต็มหน้าจอ">
+<!ENTITY exitFullScreenCmd.accesskey "ต">
 <!ENTITY fullScreenCmd.label "เต็มจอ">
 <!ENTITY fullScreenCmd.accesskey "จ">
 <!ENTITY fullScreenCmd.macCommandKey "f">
@@ -90,7 +100,13 @@ can reach it easily. -->
 <!ENTITY fullScreenAutohide.accesskey "ซ">
 <!ENTITY fullScreenExit.label "ออกจากโหมดเต็มจอ">
 <!ENTITY fullScreenExit.accesskey "อ">
-<!ENTITY domFullScreenWarning.label "กด ESC เพื่อออกจากโหมดเต็มจอ">
+<!ENTITY fullscreenAllowButton.label "อนุญาต">
+<!ENTITY fullscreenExitButton.label "ไม่อนุญาต">
+<!ENTITY fullscreenApproval.value "อนุญาตให้แสดงผลเต็มจอหรือไม่?">
+
+<!ENTITY fullscreenExitHint.value "กด ESC เมื่อจะออกจากการแสดงผลเต็มจอ">
+<!ENTITY leaveDOMFullScreen.label "ออกจากการแสดงผลเต็มจอ">
+<!ENTITY leaveDOMFullScreen.accesskey "ม">
 
 <!ENTITY closeWindow.label "ปิดหน้าต่าง">
 <!ENTITY closeWindow.accesskey "ด">
@@ -99,6 +115,18 @@ can reach it easily. -->
 <!ENTITY bookmarksMenu.accesskey "น">
 <!ENTITY bookmarkThisPageCmd.label "คั่นหน้าเว็บนี้">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
+<!ENTITY markPageCmd.commandkey "I">
+<!ENTITY sharePageCmd.label "แบ่งปันหน้านี้">
+<!ENTITY sharePageCmd.commandkey "S">
+<!ENTITY sharePageCmd.accesskey "บ">
+<!ENTITY shareLinkCmd.label "แบ่งปันลิงก์นี้">
+<!ENTITY shareLinkCmd.accesskey "แ">
+<!ENTITY shareImageCmd.label "แบ่งปันภาพนี้">
+<!ENTITY shareImageCmd.accesskey "บ">
+<!ENTITY shareSelectCmd.label "แบ่งปันการเลือก">
+<!ENTITY shareSelectCmd.accesskey "บ">
+<!ENTITY shareVideoCmd.label "แบ่งปันวิดีโอนี้">
+<!ENTITY shareVideoCmd.accesskey "บ">
 <!ENTITY subscribeToPageMenupopup.label "บอกรับหน้านี้">
 <!ENTITY subscribeToPageMenuitem.label "บอกรับหน้านี้…">
 <!ENTITY addCurPagesCmd.label "คั่นทุกแท็บ…">
@@ -106,42 +134,44 @@ can reach it easily. -->
 <!ENTITY unsortedBookmarksCmd.label "ที่คั่นหน้าที่ไม่เรียงลำดับ">
 <!ENTITY bookmarksToolbarChevron.tooltip "แสดงที่คั่นหน้าอื่น ๆ ด้วย">
 
-<!ENTITY backCmd.label "ย้อนกลับ">
-<!ENTITY backCmd.accesskey "ย">
-<!ENTITY backButton.tooltip "ย้อนกลับไปหนึ่งหน้า">
-<!ENTITY forwardCmd.label "ถัดไป">
-<!ENTITY forwardCmd.accesskey "ถ">
-<!ENTITY forwardButton.tooltip "ถัดไปหนึ่งหน้า">
+<!ENTITY backCmd.label                "ย้อนกลับ">
+<!ENTITY backCmd.accesskey            "ย">
+<!ENTITY backButton.tooltip           "ย้อนกลับไปหนึ่งหน้า">
+<!ENTITY forwardCmd.label             "ถัดไป">
+<!ENTITY forwardCmd.accesskey         "ถ">
+<!ENTITY forwardButton.tooltip        "ถัดไปหนึ่งหน้า">
 <!ENTITY backForwardButtonMenu.tooltip "คลิกขวาหรือดึงลงเพื่อแสดงประวัติ">
 <!ENTITY backForwardButtonMenuMac.tooltip "ดึงลงเพื่อแสดงประวัติ">
-<!ENTITY reloadCmd.label "เรียกใหม่">
-<!ENTITY reloadCmd.accesskey "ร">
-<!ENTITY reloadButton.tooltip "เรียกหน้าปัจจุบันใหม่">
-<!ENTITY stopCmd.label "หยุด">
-<!ENTITY stopCmd.accesskey "ห">
-<!ENTITY stopCmd.macCommandKey ".">
-<!ENTITY stopButton.tooltip "หยุดการโหลดหน้านี้">
-<!ENTITY goEndCap.tooltip "ไปยังที่ตั้งที่ป้อน">
-<!ENTITY printButton.label "พิมพ์">
-<!ENTITY printButton.tooltip "พิมพ์หน้านี้">
+<!ENTITY reloadCmd.label              "เรียกใหม่">
+<!ENTITY reloadCmd.accesskey          "ร">
+<!ENTITY reloadButton.tooltip         "เรียกหน้าปัจจุบันใหม่">
+<!ENTITY stopCmd.label                "หยุด">
+<!ENTITY stopCmd.accesskey            "ห">
+<!ENTITY stopCmd.macCommandKey        ".">
+<!ENTITY stopButton.tooltip           "หยุดการโหลดหน้านี้">
+<!ENTITY goEndCap.tooltip             "ไปยังที่ตั้งที่ป้อน">
+<!ENTITY printButton.label            "พิมพ์">
+<!ENTITY printButton.tooltip          "พิมพ์หน้านี้">
 
 <!ENTITY backForwardItem.title        "ย้อนหลัง/เดินหน้า">
-<!ENTITY locationItem.title "ที่ตั้ง">
-<!ENTITY searchItem.title "ค้นหา">
-<!ENTITY throbberItem.title "ตัวบ่งชี้กิจกรรม">
-<!ENTITY bookmarksItem.title "ที่คั่นหน้า">
+<!ENTITY locationItem.title           "ที่ตั้ง">
+<!ENTITY searchItem.title             "ค้นหา">
+<!ENTITY throbberItem.title           "ตัวบ่งชี้กิจกรรม">
+<!ENTITY bookmarksItem.title          "ที่คั่นหน้า">
+<!-- Toolbar items --> 
 
-<!-- Toolbar items -->
 <!ENTITY appMenuButton.label          "เมนู">
 <!ENTITY appMenuButton.tooltip        "เปิดเมนู &brandShortName;">
-<!ENTITY homeButton.label "บ้าน">
+<!ENTITY homeButton.label             "บ้าน">
 
 <!ENTITY tabGroupsButton.label        "กลุ่มแท็บ">
 <!ENTITY tabGroupsButton.tooltip      "จัดกลุ่มแท็บของคุณ">
 
-<!ENTITY bookmarksButton.label "ที่คั่นหน้า">
-<!ENTITY bookmarksButton.tooltip "แสดงที่คั่นหน้า">
-<!ENTITY bookmarksButton.accesskey  "ว">
+<!ENTITY feedButton.label             "บอกรับ">
+<!ENTITY feedButton.tooltip           "บอกรับหน้านี้…">
+
+<!ENTITY bookmarksButton.label          "ที่คั่นหน้า">
+<!ENTITY bookmarksButton.tooltip        "แสดงที่คั่นหน้า">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "ที่คั่นหน้า">
@@ -149,55 +179,53 @@ can reach it easily. -->
 <!ENTITY bookmarksMenuButton.unsorted.label "ที่คั่นหน้าที่ยังไม่ได้เรียง">
 <!ENTITY viewBookmarksSidebar.label         "แสดงในแถบข้าง">
 <!ENTITY viewBookmarksToolbar.label         "ดูแถบเครื่องมือที่คั่นหน้า">
-
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
   -  shortcut keys on Linux. -->
+
 <!ENTITY bookmarksGtkCmd.commandkey "o">
 <!ENTITY bookmarksWinCmd.commandkey "i">
 
-<!ENTITY feedButton.label             "บอกรับ">
-<!ENTITY feedButton.tooltip "บอกรับหน้านี้…">
+<!ENTITY historyButton.label            "ประวัติ">
+<!ENTITY historyButton.tooltip          "แสดงหน้าที่ดูล่าสุด">
+<!ENTITY historySidebarCmd.commandKey   "h">
 
-<!ENTITY historyButton.label "ประวัติ">
-<!ENTITY historyButton.tooltip "แสดงหน้าที่ดูล่าสุด">
-<!ENTITY historySidebarCmd.accesskey "ป">
-<!ENTITY historySidebarCmd.commandKey "h">
+<!ENTITY toolsMenu.label              "เครื่องมือ">
+<!ENTITY toolsMenu.accesskey          "ค"> 
 
-<!ENTITY toolsMenu.label "เครื่องมือ">
-<!ENTITY toolsMenu.accesskey "ค">
-
-<!ENTITY keywordfield.label "ใส่คำสำคัญเพื่อค้นหา…">
-<!ENTITY keywordfield.accesskey "ค">
-<!ENTITY search.label "ค้นเว็บ">
-<!ENTITY search.accesskey "ค">
-<!ENTITY downloads.label "ดาวน์โหลด">
-<!ENTITY downloads.tooltip "แสดงความคืบหน้าของการดาวน์โหลดที่ดำเนินอยู่">
-<!ENTITY downloads.accesskey "ด">
-<!ENTITY downloads.commandkey "j">
-<!ENTITY downloadsUnix.commandkey "y">
-<!ENTITY addons.label "ส่วนเสริม">
-<!ENTITY addons.accesskey "ส">
+<!ENTITY keywordfield.label           "ใส่คำสำคัญเพื่อค้นหา…">
+<!ENTITY keywordfield.accesskey       "ค">
+<!ENTITY search.label                 "ค้นเว็บ">
+<!ENTITY search.accesskey             "ค">
+<!ENTITY downloads.label              "ดาวน์โหลด">
+<!ENTITY downloads.tooltip            "แสดงความคืบหน้าของการดาวน์โหลดที่ดำเนินอยู่">
+<!ENTITY downloads.accesskey          "ด">
+<!ENTITY downloads.commandkey         "j">
+<!ENTITY downloadsUnix.commandkey     "y">
+<!ENTITY addons.label                 "ส่วนเสริม">
+<!ENTITY addons.accesskey             "ส">
 <!ENTITY addons.commandkey            "a">
 
 <!ENTITY webDeveloperMenu.label       "นักพัฒนาเว็บ">
 <!ENTITY webDeveloperMenu.accesskey   "พ">
 
-<!ENTITY errorConsoleCmd.label "หน้าจอข้อผิดพลาด">
-<!ENTITY errorConsoleCmd.accesskey "จ">
-<!ENTITY errorConsoleCmd.commandkey "j">
+<!ENTITY devtoolsConnect.label        "เชื่อมต่อ…">
+<!ENTITY devtoolsConnect.accesskey    "ต">
 
-<!ENTITY webConsoleCmd.label          "เว็บคอนโซล">
-<!ENTITY webConsoleCmd.accesskey      "ว">
-<!ENTITY webConsoleCmd.commandkey     "k">
+<!ENTITY errorConsoleCmd.label        "คอนโซลข้อผิดพลาด">
+<!ENTITY errorConsoleCmd.accesskey    "ค">
+<!ENTITY errorConsoleCmd.commandkey   "j">
 
-<!ENTITY inspectMenu.label            "ตรวจดู">
-<!ENTITY inspectMenu.accesskey        "ต">
-<!ENTITY inspectMenu.commandkey       "I">
+<!ENTITY remoteWebConsoleCmd.label    "คอนโซลเว็บระยะไกล">
+
+<!ENTITY browserConsoleCmd.label      "คอนโซลเบราว์เซอร์">
 
 <!ENTITY inspectContextMenu.label     "ตรวจดูส่วนประกอบ">
 <!ENTITY inspectContextMenu.accesskey "ป">
 
+<!ENTITY responsiveDesignTool.label   "มุมมองการออกแบบเชิงตอบสนอง">
+<!ENTITY responsiveDesignTool.accesskey "ต">
+<!ENTITY responsiveDesignTool.commandkey "M">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -208,95 +236,76 @@ can reach it easily. -->
   -  "Scratchpad" in your locale. You should feel free to find a close
   -  approximation to it or choose a word (or words) that means
   -  "simple discardable text editor". -->
+
 <!ENTITY scratchpad.label             "กระดานทดลอง">
 <!ENTITY scratchpad.accesskey         "ล">
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
 
-<!ENTITY inspectCloseButton.tooltiptext "ปิดตัวตรวจดู">
+<!ENTITY devToolbarCloseButton.tooltiptext "ปิดแถบเครื่องมือนักพัฒนา">
+<!ENTITY devToolbarMenu.label              "แถบเครื่องมือนักพัฒนา">
+<!ENTITY devToolbarMenu.accesskey          "พ">
+<!ENTITY devToolbar.keycode                "VK_F2">
+<!ENTITY devToolbar.keytext                "F2">
+<!ENTITY devToolboxMenuItem.label          "สลับเครื่องมือ">
+<!ENTITY devToolboxMenuItem.accesskey      "ส">
 
-<!ENTITY inspectorHTMLCopyInner.label       "คัดลอก Inner HTML">
-<!ENTITY inspectorHTMLCopyInner.accesskey   "I">
- 
-<!ENTITY inspectorHTMLCopyOuter.label       "คัดลอก Outer HTML">
-<!ENTITY inspectorHTMLCopyOuter.accesskey   "O">
- 
-<!ENTITY inspectorHTMLDelete.label          "ลบโหนด">
-<!ENTITY inspectorHTMLDelete.accesskey      "D">
-
-<!-- LOCALIZATION NOTE (inspect3DViewButton.label): This button shows an
-  -  alternate view for the Inspector, creating a 3D visualization of the
-  -  webpage. -->
-<!ENTITY inspect3DViewButton.label     "มุมมอง 3 มิติ">
-<!ENTITY inspect3DViewButton.accesskey "ม">
-
-<!ENTITY inspectStyleButton.label     "สไตล์">
-<!ENTITY inspectStyleButton.accesskey "ส">
-
-<!-- LOCALIZATION NOTE (styleeditor.label): This menu item label appears
-  -  in the Tools menu. -->
-<!ENTITY styleeditor.label            "ตัวแก้ไขสไตล์">
-<!ENTITY styleeditor.accesskey        "ก">
-<!ENTITY styleeditor.keycode          "VK_F7">
-<!ENTITY styleeditor.keytext          "F7">
+<!ENTITY devToolbarToolsButton.tooltip     "สลับเครื่องมือนักพัฒนา">
+<!ENTITY devToolbarOtherToolsButton.label  "เครื่องมืออื่น">
 
 <!ENTITY getMoreDevtoolsCmd.label        "เพิ่มเครื่องมือ">
 <!ENTITY getMoreDevtoolsCmd.accesskey    "ม">
 
-<!ENTITY fileMenu.label "แฟ้ม">
-<!ENTITY fileMenu.accesskey "ฟ">
-<!ENTITY newNavigatorCmd.label "หน้าต่างใหม่">
-<!ENTITY newNavigatorCmd.key "N">
-<!ENTITY newNavigatorCmd.accesskey "ม">
+<!ENTITY fileMenu.label         "แฟ้ม"> 
+<!ENTITY fileMenu.accesskey       "ฟ">
+<!ENTITY newNavigatorCmd.label        "หน้าต่างใหม่">
+<!ENTITY newNavigatorCmd.key        "N">
+<!ENTITY newNavigatorCmd.accesskey      "ม">
+<!ENTITY newPrivateWindow.label     "หน้าต่างท่องเว็บแบบส่วนตัวใหม่">
+<!ENTITY newPrivateWindow.accesskey "น">
 
-<!ENTITY editMenu.label "แก้ไข">
-<!ENTITY editMenu.accesskey "ก">
-<!ENTITY undoCmd.label "เรียกคืน">
-<!ENTITY undoCmd.key "Z">
-<!ENTITY undoCmd.accesskey "ร">
-<!ENTITY redoCmd.label "ทำซ้ำ">
-<!ENTITY redoCmd.key "Y">
-<!ENTITY redoCmd.accesskey "ซ">
-<!ENTITY cutCmd.label "ตัด">
-<!ENTITY cutCmd.key "X">
-<!ENTITY cutCmd.accesskey "ต">
-<!ENTITY copyCmd.label "คัดลอก">
-<!ENTITY copyCmd.key "C">
-<!ENTITY copyCmd.accesskey "ค">
-<!ENTITY pasteCmd.label "วาง">
-<!ENTITY pasteCmd.key "V">
-<!ENTITY pasteCmd.accesskey "แ">
-<!ENTITY deleteCmd.label "ลบ">
-<!ENTITY deleteCmd.key "D">
-<!ENTITY deleteCmd.accesskey "ล">
-<!ENTITY selectAllCmd.label "เลือกทั้งหมด">
-<!ENTITY selectAllCmd.key "A">
-<!ENTITY selectAllCmd.accesskey "ท">
-<!ENTITY preferencesCmd2.label "ตัวเลือก">
-<!ENTITY preferencesCmd2.accesskey "ล">
-<!ENTITY preferencesCmdUnix.label "ปรับแต่ง">
-<!ENTITY preferencesCmdUnix.accesskey "ต">
+<!ENTITY editMenu.label         "แก้ไข"> 
+<!ENTITY editMenu.accesskey       "ก"> 
+<!ENTITY undoCmd.label            "เลิกทำ">  
+<!ENTITY undoCmd.key            "Z">  
+<!ENTITY undoCmd.accesskey          "ล"> 
+<!ENTITY redoCmd.label            "ทำซ้ำ">  
+<!ENTITY redoCmd.key            "Y">  
+<!ENTITY redoCmd.accesskey          "ซ"> 
+<!ENTITY cutCmd.label           "ตัด">  
+<!ENTITY cutCmd.key             "X">  
+<!ENTITY cutCmd.accesskey         "ต"> 
+<!ENTITY copyCmd.label            "คัดลอก">  
+<!ENTITY copyCmd.key            "C">  
+<!ENTITY copyCmd.accesskey          "ค"> 
+<!ENTITY pasteCmd.label           "วาง">  
+<!ENTITY pasteCmd.key           "V">  
+<!ENTITY pasteCmd.accesskey         "ว"> 
+<!ENTITY deleteCmd.label          "ลบ">  
+<!ENTITY deleteCmd.key            "D">  
+<!ENTITY deleteCmd.accesskey        "ล"> 
+<!ENTITY selectAllCmd.label         "เลือกทั้งหมด">  
+<!ENTITY selectAllCmd.key         "A">  
+<!ENTITY selectAllCmd.accesskey       "ท"> 
+<!ENTITY preferencesCmd2.label       "ตัวเลือก">
+<!ENTITY preferencesCmd2.accesskey     "ล">
+<!ENTITY preferencesCmdUnix.label       "ปรับแต่ง">
+<!ENTITY preferencesCmdUnix.accesskey     "ต"> 
 
-<!ENTITY clearRecentHistory.label            "ล้างประวัติเมื่อเร็ว ๆ นี้…">
-<!ENTITY clearRecentHistory.accesskey        "ล">
+<!ENTITY clearRecentHistory.label               "ล้างประวัติเมื่อเร็ว ๆ นี้…">
 
-<!-- LOCALIZATION NOTE : These two strings can share an access key beause they never appear together on the menu -->
-<!ENTITY privateBrowsingCmd.start.label         "เริ่มการดูเว็บแบบส่วนตัว">
-<!ENTITY privateBrowsingCmd.start.accesskey     "ส">
-<!ENTITY privateBrowsingCmd.stop.label          "เลิกการดูเว็บแบบส่วนตัว">
-<!ENTITY privateBrowsingCmd.stop.accesskey      "ส">
 <!ENTITY privateBrowsingCmd.commandkey          "P">
 
-<!ENTITY viewMenu.label "มุมมอง">
-<!ENTITY viewMenu.accesskey "ม">
+<!ENTITY viewMenu.label         "มุมมอง"> 
+<!ENTITY viewMenu.accesskey       "ม"> 
 <!ENTITY viewTabGroups.label            "กลุ่มแท็บ">
 <!ENTITY viewTabGroups.accesskey        "ล">
-<!ENTITY viewToolbarsMenu.label "แถบเครื่องมือ">
-<!ENTITY viewToolbarsMenu.accesskey "ค">
+<!ENTITY viewToolbarsMenu.label       "แถบเครื่องมือ"> 
+<!ENTITY viewToolbarsMenu.accesskey     "ค"> 
 <!ENTITY viewSidebarMenu.label "แถบข้าง">
 <!ENTITY viewSidebarMenu.accesskey "ง">
-<!ENTITY viewCustomizeToolbar.label "กำหนดเอง…">
-<!ENTITY viewCustomizeToolbar.accesskey "ก">
+<!ENTITY viewCustomizeToolbar.label       "กำหนดเอง…"> 
+<!ENTITY viewCustomizeToolbar.accesskey     "ก">
 <!ENTITY viewTabsOnTop.label            "แท็บอยู่ด้านบน">
 <!ENTITY viewTabsOnTop.accesskey        "บ">
 
@@ -316,26 +325,25 @@ can reach it easily. -->
 <!ENTITY appMenuToolbarLayout.label "รูปแบบแถบเครื่องมือ…">
 <!ENTITY appMenuSidebars.label "แถบข้าง">
 <!ENTITY appMenuFind.label "ค้นหา…">
-<!ENTITY appMenuUnsorted.label "ที่คั่นหน้าที่ยังไม่ได้เรียงลำดับ">
+<!ENTITY appMenuUnsorted.label "ที่คั่นหน้าที่ยังไม่จำแนก">
 <!ENTITY appMenuWebDeveloper.label "นักพัฒนาเว็บ">
 <!ENTITY appMenuGettingStarted.label "เริ่มต้น">
 <!ENTITY appMenuSafeMode.label "เริ่มใหม่และปิดใช้งานส่วนเสริม…">
 <!ENTITY appMenuSafeMode.accesskey "ร">
 
-<!ENTITY openCmd.commandkey "l">
-<!ENTITY urlbar.placeholder           "ไปยังเว็บไซต์">
-<!ENTITY urlbar.accesskey "d">
+<!ENTITY openCmd.commandkey           "l">
+<!ENTITY urlbar.placeholder2          "ค้นหาหรือป้อนที่อยู่">
+<!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "สลับไปยังแท็บ:">
-
-
-<!--
+<!-- 
   Comment duplicated from browser-sets.inc:
 
   Search Command Key Logic works like this:
 
   Unix: Ctrl+J (0.8, 0.9 support)
         Ctrl+K (cross platform binding)
-  Mac:  Ctrl+K (cross platform binding)
+  Mac:  Cmd+K (cross platform binding)
+        Cmd+Opt+F (platform convention)
   Win:  Ctrl+K (cross platform binding)
         Ctrl+E (IE compat)
 
@@ -346,160 +354,188 @@ can reach it easily. -->
   is a fundamental keybinding and we are maintaining a XP binding so that it is easy
   for people to switch to Linux.
 
-  Do *not* tamper with these values without talking to ben@mozilla.org
-
  -->
-<!ENTITY searchFocus.commandkey "k">
+
+<!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
-<!ENTITY searchFocusUnix.commandkey "j">
+<!ENTITY searchFocusUnix.commandkey   "j">
 
 <!ENTITY tabView.commandkey           "e">
 
-<!ENTITY openLinkCmd.label "เปิดลิงก์ในหน้าต่างใหม่">
-<!ENTITY openLinkCmd.accesskey "น">
+<!ENTITY openLinkCmdInTab.label       "เปิดลิงก์ในแท็บใหม่">
+<!ENTITY openLinkCmdInTab.accesskey   "ท">
+<!ENTITY openLinkCmd.label            "เปิดลิงก์ในหน้าต่างใหม่">
+<!ENTITY openLinkCmd.accesskey        "น">
+<!ENTITY openLinkInPrivateWindowCmd.label "เปิดลิงก์ในหน้าต่างท่องเว็บแบบส่วนตัวใหม่">
+<!ENTITY openLinkInPrivateWindowCmd.accesskey "น">
 <!ENTITY openLinkCmdInCurrent.label     "เปิดลิงก์">
 <!ENTITY openLinkCmdInCurrent.accesskey "ล">
-<!ENTITY openLinkCmdInTab.label "เปิดลิงก์ในแท็บใหม่">
-<!ENTITY openLinkCmdInTab.accesskey "ท">
-<!ENTITY openFrameCmd.label "เปิดกรอบในหน้าต่างใหม่">
-<!ENTITY openFrameCmd.accesskey "น">
-<!ENTITY openFrameCmdInTab.label "เปิดกรอบในแท็บใหม่">
-<!ENTITY openFrameCmdInTab.accesskey "ท">
-<!ENTITY showOnlyThisFrameCmd.label "แสดงเฉพาะกรอบนี้">
+<!ENTITY openFrameCmdInTab.label      "เปิดกรอบในแท็บใหม่">
+<!ENTITY openFrameCmdInTab.accesskey  "ท">
+<!ENTITY openFrameCmd.label           "เปิดกรอบในหน้าต่างใหม่">
+<!ENTITY openFrameCmd.accesskey       "น">
+<!ENTITY showOnlyThisFrameCmd.label     "แสดงเฉพาะกรอบนี้">
 <!ENTITY showOnlyThisFrameCmd.accesskey "ส">
-<!ENTITY reloadCmd.commandkey "r">
-<!ENTITY reloadFrameCmd.label "เรียกกรอบใหม่">
-<!ENTITY reloadFrameCmd.accesskey "ร">
+<!ENTITY reloadCmd.commandkey         "r">
+<!ENTITY reloadFrameCmd.label         "เรียกกรอบใหม่">
+<!ENTITY reloadFrameCmd.accesskey     "ร">
 <!ENTITY viewPartialSourceForSelectionCmd.label "ดูโค้ดที่เลือก">
-<!ENTITY viewPartialSourceForMathMLCmd.label "ดูโค้ด MathML">
+<!ENTITY viewPartialSourceForMathMLCmd.label    "ดูโค้ด MathML">
 <!-- LOCALIZATION NOTE (viewPartialSourceCmd.accesskey): This accesskey is used for both 
          viewPartialSourceForSelectionCmd.label and viewPartialSourceForMathMLCmd.label -->
 <!ENTITY viewPartialSourceCmd.accesskey "ก">
-<!ENTITY viewPageSourceCmd.label "ดูซอร์สโค้ด">
-<!ENTITY viewPageSourceCmd.accesskey "ซ">
-<!ENTITY viewFrameSourceCmd.label "ดูต้นฉบับเอกสารของกรอบ">
+<!ENTITY viewPageSourceCmd.label      "ดูซอร์สโค้ด">
+<!ENTITY viewPageSourceCmd.accesskey  "ซ">
+<!ENTITY viewFrameSourceCmd.label     "ดูต้นฉบับเอกสารของกรอบ">
 <!ENTITY viewFrameSourceCmd.accesskey "ก">
-<!ENTITY viewPageInfoCmd.label "ดูข้อมูลหน้าเว็บ">
-<!ENTITY viewPageInfoCmd.accesskey "ข">
-<!ENTITY viewFrameInfoCmd.label "ดูข้อมูลกรอบ">
-<!ENTITY viewFrameInfoCmd.accesskey "ข">
-<!ENTITY reloadImageCmd.label "เรียกดูภาพใหม่">
-<!ENTITY reloadImageCmd.accesskey "ร">
-<!ENTITY viewImageCmd.label "ดูภาพ">
+<!ENTITY viewPageInfoCmd.label        "ดูข้อมูลหน้าเว็บ">
+<!ENTITY viewPageInfoCmd.accesskey    "ข">
+<!ENTITY viewFrameInfoCmd.label       "ดูข้อมูลกรอบ">
+<!ENTITY viewFrameInfoCmd.accesskey   "ข">
+<!ENTITY reloadImageCmd.label         "เรียกดูภาพใหม่">
+<!ENTITY reloadImageCmd.accesskey     "ร">
+<!ENTITY viewImageCmd.label           "ดูภาพ">
+<!ENTITY viewImageCmd.accesskey       "ภ">
 <!ENTITY viewImageInfoCmd.label       "ดูข้อมูลภาพ">
 <!ENTITY viewImageInfoCmd.accesskey   "พ">
 <!ENTITY viewVideoCmd.label           "ดูวีดิทัศน์">
 <!ENTITY viewVideoCmd.accesskey       "ว">
-<!ENTITY viewImageCmd.accesskey "ภ">
-<!ENTITY viewBGImageCmd.label "ดูภาพพื้นหลัง">
-<!ENTITY viewBGImageCmd.accesskey "พ">
-<!ENTITY setDesktopBackgroundCmd.label "ตั้งเป็นภาพพื้นหลัง…">
-<!ENTITY setDesktopBackgroundCmd.accesskey "ต">
-<!ENTITY bookmarkPageCmd2.label "คั่นหน้าเว็บนี้">
-<!ENTITY bookmarkPageCmd2.accesskey "ค">
-<!ENTITY bookmarkThisLinkCmd.label "คั่นลิงก์นี้">
-<!ENTITY bookmarkThisLinkCmd.accesskey "ล">
-<!ENTITY bookmarkThisFrameCmd.label "คั่นกรอบนี้">
-<!ENTITY bookmarkThisFrameCmd.accesskey "อ">
-<!ENTITY sendPageCmd.label "ส่งลิงก์…">
-<!ENTITY sendPageCmd.accesskey "ส">
-<!ENTITY savePageCmd.label "บันทึกหน้าเป็น…">
-<!ENTITY savePageCmd.accesskey "ป">
+<!ENTITY viewBGImageCmd.label         "ดูภาพพื้นหลัง">
+<!ENTITY viewBGImageCmd.accesskey     "พ">
+<!ENTITY setDesktopBackgroundCmd.label      "ตั้งเป็นภาพพื้นหลัง…">
+<!ENTITY setDesktopBackgroundCmd.accesskey  "ต">
+<!ENTITY bookmarkPageCmd2.label       "คั่นหน้าเว็บนี้">
+<!ENTITY bookmarkPageCmd2.accesskey   "ค">
+<!ENTITY bookmarkThisLinkCmd.label      "คั่นลิงก์นี้">
+<!ENTITY bookmarkThisLinkCmd.accesskey  "ล">
+<!ENTITY bookmarkThisFrameCmd.label      "คั่นกรอบนี้">
+<!ENTITY bookmarkThisFrameCmd.accesskey  "อ">
+<!ENTITY emailPageCmd.label           "อีเมลลิงก์…">
+<!ENTITY emailPageCmd.accesskey       "ม">
+<!ENTITY savePageCmd.label            "บันทึกหน้าเป็น…">
+<!ENTITY savePageCmd.accesskey        "ป">
 <!-- alternate for content area context menu -->
-<!ENTITY savePageCmd.accesskey2 "น">
-<!ENTITY savePageCmd.commandkey "s">
-<!ENTITY saveFrameCmd.label "บันทึกกรอบเป็น…">
-<!ENTITY saveFrameCmd.accesskey "ก">
-<!ENTITY printFrameCmd.label "พิมพ์กรอบ…">
-<!ENTITY printFrameCmd.accesskey "พ">
-<!ENTITY saveLinkCmd.label "บันทึกลิงก์เป็น…">
-<!ENTITY saveLinkCmd.accesskey "ล">
-<!ENTITY sendLinkCmd.label "ส่งลิงก์…">
-<!ENTITY sendLinkCmd.accesskey "ส">
-<!ENTITY saveImageCmd.label "บันทึกรูปเป็น…">
-<!ENTITY saveImageCmd.accesskey "ท">
-<!ENTITY saveVideoCmd.label "บันทึกวีดิทัศน์เป็น…">
-<!ENTITY saveVideoCmd.accesskey "ป">
-<!ENTITY saveAudioCmd.label "บันทึกเสียงเป็น…">
-<!ENTITY saveAudioCmd.accesskey "ป">
-<!ENTITY sendImageCmd.label "ส่งรูป…">
-<!ENTITY sendImageCmd.accesskey "ส">
-<!ENTITY sendVideoCmd.label "ส่งวีดิทัศน์…">
-<!ENTITY sendVideoCmd.accesskey "ส">
-<!ENTITY sendAudioCmd.label "ส่งแฟ้มเสียง…">
-<!ENTITY sendAudioCmd.accesskey "ส">
-<!ENTITY copyLinkCmd.label "คัดลอกที่ตั้งลิงก์">
-<!ENTITY copyLinkCmd.accesskey "ต">
-<!ENTITY copyImageCmd.label "คัดลอกที่ตั้งภาพ">
-<!ENTITY copyImageCmd.accesskey "ค">
-<!ENTITY copyImageContentsCmd.label "คัดลอกภาพ">
-<!ENTITY copyImageContentsCmd.accesskey "ล">
-<!ENTITY copyVideoURLCmd.label "คัดลอก URL ของวีดิทัศน์">
-<!ENTITY copyVideoURLCmd.accesskey "ข">
-<!ENTITY copyAudioURLCmd.label "คัดลอก URL ของเสียง">
-<!ENTITY copyAudioURLCmd.accesskey "ข">
+<!ENTITY savePageCmd.accesskey2       "น">
+<!ENTITY savePageCmd.commandkey       "s">
+<!ENTITY saveFrameCmd.label           "บันทึกกรอบเป็น…">
+<!ENTITY saveFrameCmd.accesskey       "ก">
+<!ENTITY printFrameCmd.label          "พิมพ์กรอบ…">
+<!ENTITY printFrameCmd.accesskey      "พ">
+<!ENTITY saveLinkCmd.label            "บันทึกลิงก์เป็น…">
+<!ENTITY saveLinkCmd.accesskey        "ล">
+<!ENTITY saveImageCmd.label           "บันทึกรูปเป็น…">
+<!ENTITY saveImageCmd.accesskey       "ท">
+<!ENTITY saveVideoCmd.label           "บันทึกวีดิทัศน์เป็น…">
+<!ENTITY saveVideoCmd.accesskey       "ป">
+<!ENTITY saveAudioCmd.label           "บันทึกเสียงเป็น…">
+<!ENTITY saveAudioCmd.accesskey       "ป">
+<!ENTITY emailImageCmd.label          "อีเมลรูป…">
+<!ENTITY emailImageCmd.accesskey      "อ">
+<!ENTITY emailVideoCmd.label          "อีเมลวีดิทัศน์…">
+<!ENTITY emailVideoCmd.accesskey      "อ">
+<!ENTITY emailAudioCmd.label          "อีเมลเสียง…">
+<!ENTITY emailAudioCmd.accesskey      "อ">
+<!ENTITY playPluginCmd.label          "เรียกทำงานโปรแกรมเสริมนี้">
+<!ENTITY playPluginCmd.accesskey      "ร">
+<!ENTITY hidePluginCmd.label          "ซ่อนโปรแกรมเสริมนี้">
+<!ENTITY hidePluginCmd.accesskey      "ซ">
+<!ENTITY copyLinkCmd.label            "คัดลอกที่ตั้งลิงก์">
+<!ENTITY copyLinkCmd.accesskey        "ต">
+<!ENTITY copyImageCmd.label           "คัดลอกที่ตั้งภาพ">
+<!ENTITY copyImageCmd.accesskey       "ค">
+<!ENTITY copyImageContentsCmd.label   "คัดลอกภาพ">
+<!ENTITY copyImageContentsCmd.accesskey  "ล"> 
+<!ENTITY copyVideoURLCmd.label        "คัดลอก URL ของวีดิทัศน์">
+<!ENTITY copyVideoURLCmd.accesskey    "ข">
+<!ENTITY copyAudioURLCmd.label        "คัดลอก URL ของเสียง">
+<!ENTITY copyAudioURLCmd.accesskey    "ข">
 <!ENTITY copyEmailCmd.label           "คัดลอกที่อยู่อีเมล">
-<!ENTITY copyEmailCmd.accesskey "อ">
-<!ENTITY thisFrameMenu.label "กรอบนี้">
-<!ENTITY thisFrameMenu.accesskey "ก">
-
+<!ENTITY copyEmailCmd.accesskey       "อ">
+<!ENTITY thisFrameMenu.label              "กรอบนี้">
+<!ENTITY thisFrameMenu.accesskey          "ก">
 <!-- Media (video/audio) controls -->
-<!ENTITY mediaPlay.label "เล่น">
-<!ENTITY mediaPlay.accesskey "ล">
-<!ENTITY mediaPause.label "หยุดชั่วคราว">
-<!ENTITY mediaPause.accesskey "ช">
-<!ENTITY mediaMute.label "ปิดเสียง">
-<!ENTITY mediaMute.accesskey "ป">
-<!ENTITY mediaUnmute.label "เปิดเสียง">
-<!ENTITY mediaUnmute.accesskey "ด">
-<!ENTITY mediaShowControls.label "แสดงปุ่มควบคุม">
+<!-- LOCALIZATION NOTE: The access keys for "Play" and
+"Pause" are the same because the two context-menu
+items are mutually exclusive. -->
+
+<!ENTITY mediaPlay.label             "เล่น">
+<!ENTITY mediaPlay.accesskey         "ล">
+<!ENTITY mediaPause.label            "หยุดชั่วคราว">
+<!ENTITY mediaPause.accesskey        "ช">
+<!-- LOCALIZATION NOTE: The access keys for "Mute" and
+"Unmute" are the same because the two context-menu
+items are mutually exclusive. -->
+<!ENTITY mediaMute.label             "ปิดเสียง">
+<!ENTITY mediaMute.accesskey         "ป">
+<!ENTITY mediaUnmute.label           "เปิดเสียง">
+<!ENTITY mediaUnmute.accesskey       "ด">
+<!ENTITY mediaPlaybackRate.label     "ความเร็วในการเล่น">
+<!ENTITY mediaPlaybackRate.accesskey "ร">
+<!ENTITY mediaPlaybackRate050x.label "ภาพเคลื่อนไหวช้า (0.5×)">
+<!ENTITY mediaPlaybackRate050x.accesskey "ช">
+<!ENTITY mediaPlaybackRate100x.label "ความเร็วปกติ">
+<!ENTITY mediaPlaybackRate100x.accesskey "ป">
+<!ENTITY mediaPlaybackRate150x.label "ความเร็วสูง (1.5×)">
+<!ENTITY mediaPlaybackRate150x.accesskey "ส">
+<!-- LOCALIZATION NOTE: "Ludicrous Speed" is a reference to the
+movie "Space Balls" and is meant to say that this speed is very
+fast. -->
+<!ENTITY mediaPlaybackRate200x.label "ความเร็วจนน่าหัวเราะ (2×)">
+<!ENTITY mediaPlaybackRate200x.accesskey "น">
+<!-- LOCALIZATION NOTE: The access keys for "Show Controls" and
+"Hide Controls" are the same because the two context-menu
+items are mutually exclusive. -->
+<!ENTITY mediaShowControls.label     "แสดงปุ่มควบคุม">
 <!ENTITY mediaShowControls.accesskey "ส">
-<!ENTITY mediaHideControls.label "ซ่อนปุ่มควบคุม">
+<!ENTITY mediaHideControls.label     "ซ่อนปุ่มควบคุม">
 <!ENTITY mediaHideControls.accesskey "น">
 <!ENTITY videoFullScreen.label       "เต็มจอ">
 <!ENTITY videoFullScreen.accesskey   "ต">
 <!ENTITY videoSaveImage.label        "จับหน้าจอเป็น…">
 <!ENTITY videoSaveImage.accesskey    "า">
+<!-- LOCALIZATION NOTE: The access keys for "Show Statistics" and
+"Hide Statistics" are the same because the two context-menu
+items are mutually exclusive. -->
 <!ENTITY videoShowStats.label        "แสดงสถิติ">
 <!ENTITY videoShowStats.accesskey    "ถ">
 <!ENTITY videoHideStats.label        "ซ่อนสถิติ">
 <!ENTITY videoHideStats.accesskey    "ซ">
-
 <!-- LOCALIZATION NOTE :
 fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey2 and
 fullZoomResetCmd.commandkey2 are alternative acceleration keys for zoom.
 If shift key is needed with your locale popular keyboard for them,
 you can use these alternative items. Otherwise, their values should be empty.  -->
 
-<!ENTITY fullZoomEnlargeCmd.label "ขยาย">
-<!ENTITY fullZoomEnlargeCmd.accesskey "ข">
-<!ENTITY fullZoomEnlargeCmd.commandkey "+">
+
+<!ENTITY fullZoomEnlargeCmd.label       "ขยาย">
+<!ENTITY fullZoomEnlargeCmd.accesskey   "ข">
+<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
 <!-- + is above this key on many keyboards -->
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
+<!ENTITY fullZoomEnlargeCmd.commandkey2 "="> 
 <!ENTITY fullZoomEnlargeCmd.commandkey3 "">
 
-<!ENTITY fullZoomReduceCmd.label "ย่อ">
-<!ENTITY fullZoomReduceCmd.accesskey "ย">
-<!ENTITY fullZoomReduceCmd.commandkey "-">
-<!ENTITY fullZoomReduceCmd.commandkey2 "">
+<!ENTITY fullZoomReduceCmd.label        "ย่อ">
+<!ENTITY fullZoomReduceCmd.accesskey    "ย">
+<!ENTITY fullZoomReduceCmd.commandkey   "-">
+<!ENTITY fullZoomReduceCmd.commandkey2  "">
 
-<!ENTITY fullZoomResetCmd.label "กลับค่าเดิม">
-<!ENTITY fullZoomResetCmd.accesskey "ก">
-<!ENTITY fullZoomResetCmd.commandkey "0">
-<!ENTITY fullZoomResetCmd.commandkey2 "">
+<!ENTITY fullZoomResetCmd.label         "กลับค่าเดิม">
+<!ENTITY fullZoomResetCmd.accesskey     "ก">
+<!ENTITY fullZoomResetCmd.commandkey    "0">
+<!ENTITY fullZoomResetCmd.commandkey2   "">
 
-<!ENTITY fullZoomToggleCmd.label "ย่อ-ขยายเฉพาะข้อความ">
-<!ENTITY fullZoomToggleCmd.accesskey "ฉ">
-<!ENTITY fullZoom.label "ย่อ-ขยาย">
-<!ENTITY fullZoom.accesskey "ข">
+<!ENTITY fullZoomToggleCmd.label        "ย่อ-ขยายเฉพาะข้อความ">
+<!ENTITY fullZoomToggleCmd.accesskey    "ฉ">
+<!ENTITY fullZoom.label                 "ย่อ-ขยาย">
+<!ENTITY fullZoom.accesskey             "ข">
 
-<!ENTITY newTabButton.tooltip    "เปิดแท็บใหม่">
-<!ENTITY newWindowButton.tooltip "เปิดหน้าต่างใหม่">
-<!ENTITY sidebarCloseButton.tooltip "ปิดแถบข้าง">
+<!ENTITY newTabButton.tooltip           "เปิดแท็บใหม่">
+<!ENTITY newWindowButton.tooltip        "เปิดหน้าต่างใหม่">
+<!ENTITY sidebarCloseButton.tooltip     "ปิดแถบข้าง">
 
-<!ENTITY cutButton.tooltip "ตัด">
-<!ENTITY copyButton.tooltip "คัดลอก">
-<!ENTITY pasteButton.tooltip "วาง">
+<!ENTITY cutButton.tooltip              "ตัด">
+<!ENTITY copyButton.tooltip             "คัดลอก">
+<!ENTITY pasteButton.tooltip            "วาง">
 
 <!ENTITY fullScreenButton.tooltip       "แสดงหน้าต่างแบบเต็มหน้าจอ">
 
@@ -507,18 +543,19 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY zoomInButton.tooltip           "ขยาย">
 <!ENTITY zoomControls.label             "ควบคุมการย่อขยาย">
 
-<!ENTITY quitApplicationCmdWin.label "ออก">
-<!ENTITY quitApplicationCmdWin.accesskey "อ">
+<!ENTITY quitApplicationCmdWin.label       "ออก"> 
+<!ENTITY quitApplicationCmdWin.accesskey   "อ">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
-<!ENTITY quitApplicationCmd.label "ออก">
-<!ENTITY quitApplicationCmd.accesskey "อ">
-<!ENTITY quitApplicationCmdMac.label "ออกจาก &brandShortName;">
-<!ENTITY quitApplicationCmdMac.key "Q">
+<!ENTITY quitApplicationCmd.label       "ออก"> 
+<!ENTITY quitApplicationCmd.accesskey   "อ">
+<!ENTITY quitApplicationCmdMac.label    "ออกจาก &brandShortName;">
+<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
+<!ENTITY quitApplicationCmdUnix.key     "Q">
 
-<!ENTITY closeCmd.label "ปิด">
-<!ENTITY closeCmd.key "w">
-<!ENTITY closeCmd.accesskey "ป">
+<!ENTITY closeCmd.label                 "ปิด">  
+<!ENTITY closeCmd.key                   "w">  
+<!ENTITY closeCmd.accesskey             "ป">
 
 <!ENTITY pageStyleMenu.label "รูปแบบหน้า">
 <!ENTITY pageStyleMenu.accesskey "บ">
@@ -527,7 +564,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY pageStylePersistentOnly.label "รูปแบบพื้นฐาน">
 <!ENTITY pageStylePersistentOnly.accesskey "พ">
 
-<!ENTITY pageReportIcon.tooltip "เปลี่ยนการตั้งค่าการปิดกั้นหน้าต่างป็อปอัพของเว็บนี้">
+<!ENTITY pageReportIcon.tooltip            "เปลี่ยนการตั้งค่าการปิดกั้นหน้าต่างป็อปอัพของเว็บนี้">
 
 <!ENTITY allowPopups.accesskey "ป">
 <!-- On Windows we use the term "Options" to describe settings, but
@@ -538,16 +575,16 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editPopupSettings.accesskey "ก">
 <!ENTITY dontShowMessage.accesskey "ม">
 
-<!ENTITY bidiSwitchPageDirectionItem.label "สลับทิศทางหน้ากระดาษ">
-<!ENTITY bidiSwitchPageDirectionItem.accesskey "น">
-<!ENTITY bidiSwitchTextDirectionItem.label "สลับทิศทางข้อความ">
-<!ENTITY bidiSwitchTextDirectionItem.accesskey "ส">
-<!ENTITY bidiSwitchTextDirectionItem.commandkey "X">
+<!ENTITY bidiSwitchPageDirectionItem.label        "สลับทิศทางหน้ากระดาษ">
+<!ENTITY bidiSwitchPageDirectionItem.accesskey    "น">
+<!ENTITY bidiSwitchTextDirectionItem.label        "สลับทิศทางข้อความ">
+<!ENTITY bidiSwitchTextDirectionItem.accesskey    "ส">
+<!ENTITY bidiSwitchTextDirectionItem.commandkey   "X">
 
-<!ENTITY findOnCmd.label "หาในหน้านี้…">
+<!ENTITY findOnCmd.label     "หาในหน้านี้…">
 <!ENTITY findOnCmd.accesskey "ห">
 <!ENTITY findOnCmd.commandkey "f">
-<!ENTITY findAgainCmd.label "หาอีกครั้ง">
+<!ENTITY findAgainCmd.label  "หาอีกครั้ง">
 <!ENTITY findAgainCmd.accesskey "อ">
 <!ENTITY findAgainCmd.commandkey "g">
 <!ENTITY findAgainCmd.commandkey2 "VK_F3">
@@ -555,9 +592,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY spellAddDictionaries.label "เพิ่มพจนานุกรม…">
 <!ENTITY spellAddDictionaries.accesskey "พ">
 
-<!ENTITY editBookmark.done.label "เสร็จ">
-<!ENTITY editBookmark.cancel.label "ยกเลิก">
-<!ENTITY editBookmark.removeBookmark.accessKey "ล">
+<!ENTITY editBookmark.done.label                     "เสร็จ">
+<!ENTITY editBookmark.cancel.label                   "ยกเลิก">
+<!ENTITY editBookmark.removeBookmark.accessKey       "ล">
 
 <!ENTITY identity.unverifiedsite2 "เว็บไซต์นี้ไม่ระบุข้อมูลอัตลักษณ์">
 <!ENTITY identity.connectedTo "กำลังเชื่อมต่อไปยัง">
@@ -575,16 +612,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY identity.runBy "ให้บริการโดย">
 
 <!ENTITY identity.moreInfoLinkText "ข้อมูลเพิ่มเติม…">
-
-<!ENTITY downloadMonitor2.tooltip "คลิกเพื่อเปิดหน้าต่างดาวน์โหลด">
-
-<!ENTITY allTabs.filter.emptyText "ค้นแท็บ">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
-<!ENTITY tabsToolbar.label "แท็บเบราว์เซอร์">
 
-<!-- LOCALIZATION NOTE (syncTabsMenu.label): This appears in the history menu -->
-<!ENTITY syncTabsMenu.label     "แท็บจากเครื่องคอมพิวเตอร์อื่น">
+<!ENTITY tabsToolbar.label "แท็บเบราว์เซอร์">
+<!-- LOCALIZATION NOTE (syncTabsMenu2.label): This appears in the history menu -->
+
+<!ENTITY syncTabsMenu2.label     "แท็บจากอุปกรณ์อื่น">
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
@@ -597,126 +631,44 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY addonBarCloseButton.tooltip  "ปิดแถบส่วนเสริม">
 <!ENTITY toggleAddonBarCmd.key        "/">
 
-<!-- LOCALIZATION NOTE (htmlPanel.label): This is a label for a button that
-activates the Web Developer->Inspect UI's HTML Tree Panel. -->
-<!ENTITY htmlPanel.label              "HTML">
+<!ENTITY socialToolbar.title        "ปุ่มแถบเครื่องมือสังคม">
+<!ENTITY social.notLoggedIn.label   "ไม่ได้ล็อกอิน">
 
-<!-- LOCALIZATION NOTE (htmlPanel.tooltiptext): The text that appears when a user
-hovers over the HTML panel's toolbar button. -->
-<!ENTITY htmlPanel.tooltiptext        "แผง HTML">
+<!ENTITY social.ok.label       "ตกลง">
+<!ENTITY social.ok.accesskey   "ต">
 
-<!-- LOCALIZATION NOTE (htmlPanel.accesskey): The key bound to the HTML panel's
-toolbar button -->
-<!ENTITY htmlPanel.accesskey          "H">
+<!ENTITY social.toggleSidebar.label "แสดงแถบข้าง">
+<!ENTITY social.toggleSidebar.accesskey "ถ">
 
-<!ENTITY devToolbar.keycode                "VK_F2">
-<!ENTITY devToolbar.keytext                "F2">
+<!ENTITY social.addons.label "จัดการบริการ…">
 
-<!ENTITY devToolbarCloseButton.tooltiptext "Close Developer Toolbar">
-<!ENTITY devToolbarMenu.accesskey          "v">
-<!ENTITY devToolbarMenu.label              "Developer Toolbar">
-<!ENTITY devToolbarOtherToolsButton.label  "More Tools">
+<!ENTITY social.toggleNotifications.label "แสดงการแจ้งเตือน">
+<!ENTITY social.toggleNotifications.accesskey "ต">
 
-<!ENTITY devToolbarToolsButton.tooltip     "Toggle developer tools">
-<!ENTITY devToolboxMenuItem.accesskey      "T">
-<!ENTITY devToolboxMenuItem.label          "Toggle Tools">
-<!ENTITY devtoolsConnect.accesskey    "e">
-
-<!ENTITY devtoolsConnect.label        "Connect…">
-<!ENTITY emailAudioCmd.accesskey      "a">
-<!ENTITY emailAudioCmd.label          "Email Audio…">
-<!ENTITY emailImageCmd.accesskey      "g">
-<!ENTITY emailImageCmd.label          "Email Image…">
-<!ENTITY emailPageCmd.accesskey       "E">
-<!ENTITY emailPageCmd.label           "Email Link…">
-<!ENTITY emailVideoCmd.accesskey      "a">
-<!ENTITY emailVideoCmd.label          "Email Video…">
-<!ENTITY enterFullScreenCmd.accesskey "F">
-<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
-These should match what Safari and other Apple applications use on OS X Lion. -->
-<!ENTITY enterFullScreenCmd.label "Enter Full Screen">
-<!ENTITY exitFullScreenCmd.accesskey "F">
-<!ENTITY exitFullScreenCmd.label "Exit Full Screen">
-<!ENTITY fullscreenAllowButton.label "Allow">
-<!ENTITY fullscreenApproval.value "Allow fullscreen?">
-<!ENTITY fullscreenExitButton.label "Deny">
-
-<!ENTITY fullscreenExitHint.value "Press ESC at any time to exit fullscreen.">
-<!ENTITY getUserMedia.selectCamera.accesskey "C">
-
-<!ENTITY getUserMedia.selectCamera.label "Camera to share:">
-<!ENTITY getUserMedia.selectMicrophone.accesskey "M">
-<!ENTITY getUserMedia.selectMicrophone.label "Microphone to share:">
-<!ENTITY hidePluginCmd.accesskey      "H">
-<!ENTITY hidePluginCmd.label          "Hide this plugin">
-<!ENTITY leaveDOMFullScreen.accesskey "u">
-<!ENTITY leaveDOMFullScreen.label "Exit Full Screen">
-<!ENTITY mediaPlaybackRate.accesskey "l">
-<!ENTITY mediaPlaybackRate.label     "Play Speed">
-<!ENTITY mediaPlaybackRate050x.accesskey "S">
-<!ENTITY mediaPlaybackRate050x.label "Slow Motion (0.5×)">
-<!ENTITY mediaPlaybackRate100x.accesskey "N">
-<!ENTITY mediaPlaybackRate100x.label "Normal Speed">
-<!ENTITY mediaPlaybackRate150x.accesskey "H">
-<!ENTITY mediaPlaybackRate150x.label "High Speed (1.5×)">
-<!ENTITY mediaPlaybackRate200x.accesskey "L">
-<!-- LOCALIZATION NOTE: "Ludicrous Speed" is a reference to the
-movie "Space Balls" and is meant to say that this speed is very
-fast. -->
-<!ENTITY mediaPlaybackRate200x.label "Ludicrous Speed (2×)">
-
-<!ENTITY mixedContentBlocked.helplink "Learn more">
-<!ENTITY mixedContentBlocked.moreinfo "Most websites will still work properly even when this content is blocked.">
-<!ENTITY newPrivateWindow.accesskey "W">
-<!ENTITY newPrivateWindow.label     "New Private Window">
-<!ENTITY openLinkInPrivateWindowCmd.accesskey "P">
-<!ENTITY openLinkInPrivateWindowCmd.label "Open Link in New Private Window">
-<!ENTITY  pinTab.accesskey                   "P">
-
-<!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
-used as a metaphor for expressing the fact that these tabs are "pinned" to the
-left edge of the tabstrip. Really we just want the string to express the idea
-that this is a lightweight and reversible action that keeps your tab where you
-can reach it easily. -->
-<!ENTITY  pinTab.label                       "Pin Tab">
-<!ENTITY playPluginCmd.accesskey      "c">
-<!ENTITY playPluginCmd.label          "Activate this plugin">
-
-<!ENTITY pointerLock.notification.message "Press ESC at any time to show it again.">
-
-<!ENTITY remoteWebConsoleCmd.label    "Remote Web Console">
-<!ENTITY responsiveDesignTool.accesskey "R">
-<!ENTITY responsiveDesignTool.commandkey "M">
-
-<!ENTITY responsiveDesignTool.label   "Responsive Design View">
-<!ENTITY sharePageCmd.commandkey "l">
-<!ENTITY social.activated.undobutton.accesskey "U">
-
-<!ENTITY social.activated.undobutton.label "Undo">
-
-<!ENTITY social.addons.label "Manage Services…">
-<!ENTITY social.chatBar.accesskey "c">
+<!ENTITY social.activated.description "บริการจาก<label/>ถูกเปิดใช้งานแล้ว คุณสามารถเปลี่ยนแปลงการตั้งค่าของบริการใน<label class='text-link'>ตัวจัดการส่วนเสริม</label>">
+<!ENTITY social.activated.undo.label "โอ๊ะ เรียกคืนค่านี้!">
+<!ENTITY social.activated.undo.accesskey "ร">
+<!ENTITY social.learnMore.label "เรียนรู้เพิ่มเติม…">
+<!ENTITY social.learnMore.accesskey "ร">
+<!ENTITY social.closeNotificationItem.label "ไม่ใช่ตอนนี้">
 
 <!ENTITY social.chatBar.commandkey "c">
-<!ENTITY social.chatBar.label "Focus chats">
-<!ENTITY social.notLoggedIn.label   "Not logged in">
-<!ENTITY social.ok.accesskey   "O">
+<!ENTITY social.chatBar.label "มุ่งไปที่การพูดคุย">
+<!ENTITY social.chatBar.accesskey "ม">
+<!-- labels are set dynamically, see browser.properties -->
 
-<!ENTITY social.ok.label       "OK">
-<!ENTITY social.toggleNotifications.accesskey "n">
+<!ENTITY social.markpage.accesskey "m">
+<!ENTITY social.marklink.accesskey "M">
 
-<!ENTITY social.toggleNotifications.label "Show desktop notifications">
-<!ENTITY social.toggleSidebar.accesskey "s">
+<!ENTITY getUserMedia.selectCamera.label "แบ่งปันกล้อง:">
+<!ENTITY getUserMedia.selectCamera.accesskey "ก">
+<!ENTITY getUserMedia.selectMicrophone.label "แบ่งปันไมโครโฟน:">
+<!ENTITY getUserMedia.selectMicrophone.accesskey "ม">
 
-<!ENTITY social.toggleSidebar.label "Show sidebar">
+<!ENTITY webrtcIndicatorButton.label "เข้าถึงกล้อง / ไมโครโฟน">
+<!ENTITY webrtcIndicatorButton.tooltip "แสดงเว็บไซต์ที่คุณกำลังแบ่งปันกล้องหรือไมโครโฟนของคุณด้วย">
 
-<!ENTITY socialToolbar.title        "Social Toolbar Button">
+<!ENTITY mixedContentBlocked.helplink "เรียนรู้เพิ่มเติม">
+<!ENTITY mixedContentBlocked.moreinfo "เว็บไซต์ส่วนใหญ่จะทำงานอย่างถูกต้องแม้กระทั่งเนื้อหาถูกปิดกั้น">
 
-<!-- LOCALIZATION NOTE (syncTabsMenu2.label): This appears in the history menu -->
-<!ENTITY syncTabsMenu2.label     "Tabs From Other Devices">
-<!ENTITY  unpinTab.accesskey                 "b">
-<!ENTITY  unpinTab.label                     "Unpin Tab">
-<!ENTITY urlbar.placeholder2          "Search or enter address">
-
-<!ENTITY webrtcIndicatorButton.label "Camera / Microphone Access">
-<!ENTITY webrtcIndicatorButton.tooltip "Display sites you are currently sharing your camera or microphone with">
+<!ENTITY pointerLock.notification.message "กด ESC ได้ตลอดเวลาเพื่อแสดงอีกครั้ง">
