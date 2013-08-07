@@ -18,7 +18,7 @@ pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences
 pref("app.update.auto", false);
 pref("app.update.enabled", false);
 
-pref("keyword.URL", "https://duckduckgo.com/?t=webconverger&q=");
+pref("browser.search.defaultenginename", "DDG");
 
 pref("general.config.obscure_value", 0);
 pref("general.config.filename", "mozilla.cfg");
