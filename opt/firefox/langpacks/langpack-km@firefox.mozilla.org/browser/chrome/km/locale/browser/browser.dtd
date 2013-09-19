@@ -20,6 +20,11 @@
 <!ENTITY  reloadTab.accesskey                "ក">
 <!ENTITY  reloadAllTabs.label                "ផ្ទុក​ផ្ទាំង​ឡើង​វិញ​ទាំងអស់">
 <!ENTITY  reloadAllTabs.accesskey            "អ">
+<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
+direction in which tabs are closed, i.e. locales that use RTL mode should say
+left instead of right. -->
+<!ENTITY  closeTabsToTheEnd.label            "បិទ​ផ្ទាំង​ទៅ​ខាង​ស្ដាំ">
+<!ENTITY  closeTabsToTheEnd.accesskey        "i">
 <!ENTITY  closeOtherTabs.label               "បិទ​ផ្ទាំង​ផ្សេង​ទៀត">
 <!ENTITY  closeOtherTabs.accesskey           "ត">
 <!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
@@ -115,7 +120,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.accesskey "ណ">
 <!ENTITY bookmarkThisPageCmd.label "ចំណាំ​ទំព័រ​នេះ">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
-<!ENTITY sharePageCmd.commandkey "l">
+<!ENTITY markPageCmd.commandkey "l">
+<!ENTITY sharePageCmd.label "ចែករំលែក​ទំព័រ​នេះ">
+<!ENTITY sharePageCmd.commandkey "S">
+<!ENTITY sharePageCmd.accesskey "s">
+<!ENTITY shareLinkCmd.label "ចែករំលែក​ទំព័រ​នេះ">
+<!ENTITY shareLinkCmd.accesskey "s">
+<!ENTITY shareImageCmd.label "ចែករំលែក​រូបភាព​​នេះ">
+<!ENTITY shareImageCmd.accesskey "s">
+<!ENTITY shareSelectCmd.label "ចែករំលែក​ការ​ជ្រើស">
+<!ENTITY shareSelectCmd.accesskey "s">
+<!ENTITY shareVideoCmd.label "ចែករំលែក​វីដេអូ​នេះ">
+<!ENTITY shareVideoCmd.accesskey "s">
 <!ENTITY subscribeToPageMenupopup.label "ជាវ​ទំព័រ​នេះ">
 <!ENTITY subscribeToPageMenuitem.label "ជាវ​ទៅ​ទំព័រ​នេះ…">
 <!ENTITY addCurPagesCmd.label "ចំណាំ​ផ្ទាំង​ទាំងអស់…">
@@ -203,9 +219,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY errorConsoleCmd.label        "កុងសូល​កំហុស">
 <!ENTITY errorConsoleCmd.accesskey    "ស">
-<!ENTITY errorConsoleCmd.commandkey   "j">
 
 <!ENTITY remoteWebConsoleCmd.label    "កុងសូល​បណ្ដាញ​ពី​ចម្ងាយ">
+
+<!ENTITY browserConsoleCmd.label      "កុងសូល​កម្មវិធី​រុករក">
+<!ENTITY browserConsoleCmd.commandkey "j">
+<!ENTITY browserConsoleCmd.accesskey  "B">
 
 <!ENTITY inspectContextMenu.label     "ត្រួតពិនិត្យ​ធាតុ">
 <!ENTITY inspectContextMenu.accesskey "ត">
@@ -228,6 +247,10 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY scratchpad.accesskey         "S">
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
+<!-- LOCALIZATION NOTE (chromeDebuggerMenu.label): This is the label for the
+  -  application menu item that opens the browser debugger UI in the Tools menu. -->
+
+<!ENTITY chromeDebuggerMenu.label       "កម្មវិធី​បំបាត់​កំហុស​របស់​កម្មវិធី​រុករក">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "បិទ​ឧបករណ៍​អ្នក​អភិវឌ្ឍន៍">
 <!ENTITY devToolbarMenu.label              "ឧបករណ៍​អ្នក​អភិវឌ្ឍន៍">
@@ -255,7 +278,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY editMenu.accesskey       "ក"> 
 <!ENTITY undoCmd.label            "មិនធ្វើវិញ">  
 <!ENTITY undoCmd.key            "Z">  
-<!ENTITY undoCmd.accesskey          "ន"> 
+<!ENTITY undoCmd.accesskey          "U"> 
 <!ENTITY redoCmd.label            "ធ្វើ​វិញ">  
 <!ENTITY redoCmd.key            "Y">  
 <!ENTITY redoCmd.accesskey          "ញ"> 
@@ -537,7 +560,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY quitApplicationCmd.label       "បិទ"> 
 <!ENTITY quitApplicationCmd.accesskey   "ទ">
 <!ENTITY quitApplicationCmdMac.label    "បិទ &brandShortName;">
-<!ENTITY quitApplicationCmdMac.key      "ទ">
+<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
+<!ENTITY quitApplicationCmdUnix.key     "Q">
 
 <!ENTITY closeCmd.label                 "បិទ">  
 <!ENTITY closeCmd.key                   "W">  
@@ -631,12 +655,20 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.toggleNotifications.label "បង្ហាញ​ការ​ជូន​ដំណឹង​លើ​ផ្ទៃតុ">
 <!ENTITY social.toggleNotifications.accesskey "n">
 
-<!ENTITY social.activated.undobutton.label "មិនធ្វើវិញ">
-<!ENTITY social.activated.undobutton.accesskey "U">
+<!ENTITY social.activated.description "បាន​បើក​សេវាកម្ម​ពី <label/> ។ អ្នក​អាច​ប្ដូរ​ការ​កំណត់​របស់​អ្នក​សម្រាប់​សេវាកម្ម​ក្នុង <label class='text-link'>កម្មវិធី​គ្រប់គ្រង​ផ្នែក​បន្ថែម</label>។">
+<!ENTITY social.activated.undo.label "អូ មិន​អាច​ធ្វើ​វា​វិញ​បាន​ទេ!">
+<!ENTITY social.activated.undo.accesskey "ម">
+<!ENTITY social.learnMore.label "ស្វែងយល់​បន្ថែម...">
+<!ENTITY social.learnMore.accesskey "l">
+<!ENTITY social.closeNotificationItem.label "មិន​មែន​ឥឡូវ​នេះ​ទេ">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "ការ​ជជែក​ផ្ដោត">
 <!ENTITY social.chatBar.accesskey "ត">
+<!-- labels are set dynamically, see browser.properties -->
+
+<!ENTITY social.markpage.accesskey "m">
+<!ENTITY social.marklink.accesskey "M">
 
 <!ENTITY getUserMedia.selectCamera.label "ម៉ាស៊ីន​ថត​ដែល​ត្រូវ​ចែករំលែក ៖">
 <!ENTITY getUserMedia.selectCamera.accesskey "ម">
@@ -651,29 +683,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY pointerLock.notification.message "ចុច ESC ប្រសិនបើ​អ្នក​ចង់​បង្ហាញ​វា​ម្ដងទៀត។">
 
+<!ENTITY pluginNotification.showAll.label "បង្ហាញ​ទាំងអស់">
+<!ENTITY pluginNotification.showAll.accesskey "S">
+<!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
 
-<!ENTITY browserConsoleCmd.label      "Browser Console">
-<!ENTITY markPageCmd.commandkey "l">
-<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
-<!ENTITY quitApplicationCmdUnix.key     "Q">
-<!ENTITY shareImageCmd.accesskey "s">
-<!ENTITY shareImageCmd.label "Share This Image">
-<!ENTITY shareLinkCmd.accesskey "s">
-<!ENTITY shareLinkCmd.label "Share This Link">
-<!ENTITY sharePageCmd.accesskey "s">
-<!ENTITY sharePageCmd.label "Share This Page">
-<!ENTITY shareSelectCmd.accesskey "s">
-<!ENTITY shareSelectCmd.label "Share Selection">
-<!ENTITY shareVideoCmd.accesskey "s">
-<!ENTITY shareVideoCmd.label "Share This Video">
-
-<!ENTITY social.activated.description "Services from <label/> have been enabled. You can change your settings for services in the <label class='text-link'>Add-on Manager</label>.">
-<!ENTITY social.activated.undo.accesskey "U">
-<!ENTITY social.activated.undo.label "Oops, undo this!">
-<!ENTITY social.closeNotificationItem.label "Not Now">
-<!ENTITY social.learnMore.accesskey "l">
-<!ENTITY social.learnMore.label "Learn more…">
-<!ENTITY social.marklink.accesskey "M">
-
-<!-- labels are set dynamically, see browser.properties -->
-<!ENTITY social.markpage.accesskey "m">
+<!ENTITY pluginActivateNow.label "អនុញ្ញាត​ឥឡូវ">
+<!ENTITY pluginActivateAlways.label "អនុញ្ញាត និង​ចងចាំ">
+<!ENTITY pluginBlockNow.label "ទប់ស្កាត់​កម្មវិធីជំនួយ">

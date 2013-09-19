@@ -4,12 +4,15 @@
 # Alexandru Szasz <alexxed@gmail.com>
 # raulmalea <raul.malea@gmail.com>
 # Laudatti <Laudatti@gmail.com>
+# Cristian Silaghi <cristian.silaghi@mozilla.ro>
 #
 -->
 <!--
 # Reviewer(s):
 #
 # Alexandru Szasz <alexxed@gmail.com>
+# raulmalea <raul.malea@gmail.com>
+# Cristian Silaghi <cristian.silaghi@mozilla.ro>
 #
 -->
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
@@ -23,10 +26,11 @@
   - documentation on web development on the web. -->
 
 <!ENTITY window.title "Consolă web">
+<!ENTITY browserConsole.title "Consolă navigator">
 
-<!ENTITY networkPanel.requestURL                  "Adresa cererii">
-<!ENTITY networkPanel.requestMethod               "Metoda cererii">
-<!ENTITY networkPanel.statusCode                  "Cod de stare">
+<!ENTITY networkPanel.requestURLColon             "URL solicitat:">
+<!ENTITY networkPanel.requestMethodColon          "Metoda cererii:">
+<!ENTITY networkPanel.statusCodeColon             "Codul de stare:">
 
 <!ENTITY networkPanel.requestHeaders              "Antetele cererii">
 <!ENTITY networkPanel.requestCookie               "Cookie trimis">
@@ -34,6 +38,7 @@
 <!ENTITY networkPanel.requestFormData             "Date trimise de formular">
 
 <!ENTITY networkPanel.responseHeaders             "Antetele răspunsului">
+<!ENTITY networkPanel.responseCookie              "Cookie primit">
 <!ENTITY networkPanel.responseBody                "Conținutul răspunsului">
 <!ENTITY networkPanel.responseBodyCached          "Date în cache">
 <!ENTITY networkPanel.responseBodyUnknownType     "Tip necunoscut de conținut">
@@ -46,52 +51,50 @@
 <!ENTITY saveBodies.label     "Înregistrează cererile și conținutul răspunsurilor">
 <!ENTITY saveBodies.accesskey "l">
 
+<!-- LOCALIZATION NOTE (openURL.label): You can see this string in the Web
+   - Console context menu. -->
+<!ENTITY openURL.label     "Deschide URL în filă nouă">
+<!ENTITY openURL.accesskey "d">
+
 <!-- LOCALIZATION NOTE (btnPageNet.label): This string is used for the menu
   -  button that allows users to toggle the network logging output.
   -  This string and the following strings toggle various kinds of output
   -  filters. -->
 <!ENTITY btnPageNet.label   "Rețea">
 <!ENTITY btnPageNet.tooltip "Înregistrează accesul la rețea">
+<!ENTITY btnPageNet.accesskey "N">
+<!-- LOCALIZATION NOTE (btnPageNet.accesskeyMacOSX): This string is used as
+  -  access key for the menu button that allows users to toggle the network
+  -  logging output. On MacOSX accesskeys are available with Ctrl-*. Please make
+  -  sure you do not use the following letters: A, E, N and P. These are used
+  -  for editing commands in text inputs. -->
+<!ENTITY btnPageNet.accesskeyMacOSX "t">
 <!ENTITY btnPageCSS.label   "CSS">
 <!ENTITY btnPageCSS.tooltip "Înregistrează erorile de evaluare CSS">
+<!ENTITY btnPageCSS.accesskey "C">
 <!ENTITY btnPageJS.label    "JS">
 <!ENTITY btnPageJS.tooltip  "Înregistrează excepțiile JavaScript">
+<!ENTITY btnPageJS.accesskey  "j">
+<!ENTITY btnPageSecurity.label "Securitate">
+<!ENTITY btnPageSecurity.tooltip "Jurnal erori de securitate și avertismente">
+<!ENTITY btnPageSecurity.accesskey "S">
 
 <!-- LOCALIZATION NOTE (btnPageLogging): This is used as the text of the
   -  the toolbar. It shows or hides messages that the web developer inserted on
   -  the page for debugging purposes, using calls such console.log() and
   -  console.error(). -->
 <!ENTITY btnPageLogging.label   "Înregistrare în jurnal">
-<!ENTITY btnPageLogging.tooltip "Log messages sent to the window.console object">
+<!ENTITY btnPageLogging.tooltip "Jurnal mesaje trimise la obiectul window.console">
+<!ENTITY btnPageLogging.accesskey "L">
 <!ENTITY btnConsoleErrors       "Erori">
 <!ENTITY btnConsoleInfo         "Informații">
 <!ENTITY btnConsoleWarnings     "Avertismente">
 <!ENTITY btnConsoleLog          "Jurnal">
 
-<!-- LOCALIZATION NOTE (btnPosition.label): The label shown for the menu which
-  -  allows the user to toggle between the Web Console positioning types. -->
-<!ENTITY btnPosition.label     "Poziție">
-
-<!-- LOCALIZATION NOTE (btnPosition.tooltip): The tooltip shown when the user
-  -  hovers the Position button in the Web Console toolbar. -->
-<!ENTITY btnPosition.tooltip   "Poziționează consola web deasupra sau sub document">
-
-<!-- LOCALIZATION NOTE (positionMenu.above): When this option is selected the
-  -  Web Console interface is displayed above the web page. -->
-<!ENTITY positionMenu.above    "Deasupra">
-
-<!-- LOCALIZATION NOTE (positionMenu.below): When this option is selected the
-  -  Web Console interface is displayed below the web page. -->
-<!ENTITY positionMenu.below    "Sub">
-
-<!-- LOCALIZATION NOTE (positionMenu.window): When this option is selected the
-  -  Web Console interface is displayed in a floating panel. -->
-<!ENTITY positionMenu.window   "Fereastră">
-
-<!ENTITY filterBox.placeholder "Filtrează">
+<!ENTITY filterOutput.placeholder "Ieșire filtru">
 <!ENTITY btnClear.label        "Curăță">
-<!ENTITY btnClear.tooltip      "Clear the Web Console output">
-<!ENTITY btnClose.tooltip      "Close the Web Console">
+<!ENTITY btnClear.tooltip      "Curățați conținutul consolei web">
+<!ENTITY btnClear.accesskey    "r">
 
 <!ENTITY fullZoomEnlargeCmd.commandkey  "+">
 <!ENTITY fullZoomEnlargeCmd.commandkey2 "="> <!-- + is above this key on many keyboards -->
@@ -103,24 +106,10 @@
 <!ENTITY fullZoomResetCmd.commandkey    "0">
 <!ENTITY fullZoomResetCmd.commandkey2   "">
 
+<!ENTITY copyURLCmd.label     "Copiază adresa legăturii">
+<!ENTITY copyURLCmd.accesskey "c">
 
-<!ENTITY browserConsole.title "Browser Console">
-<!ENTITY btnPageSecurity.label "Security">
-<!ENTITY btnPageSecurity.tooltip "Log security errors and warnings">
+<!ENTITY closeCmd.key         "W">
+<!ENTITY findCmd.key          "F">
+<!ENTITY clearOutputCmd.key   "K">
 
-<!ENTITY closeCmd.key  "W">
-<!ENTITY copyURLCmd.accesskey "a">
-
-<!ENTITY copyURLCmd.label     "Copy Link Location">
-
-<!ENTITY filterOutput.placeholder "Filter output">
-<!ENTITY networkPanel.requestMethodColon          "Request Method:">
-
-<!ENTITY networkPanel.requestURLColon             "Request URL:">
-<!ENTITY networkPanel.responseCookie              "Received Cookie">
-<!ENTITY networkPanel.statusCodeColon             "Status Code:">
-<!ENTITY openURL.accesskey "T">
-
-<!-- LOCALIZATION NOTE (openURL.label): You can see this string in the Web
-   - Console context menu. -->
-<!ENTITY openURL.label     "Open URL in New Tab">
