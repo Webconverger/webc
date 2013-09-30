@@ -1,6 +1,7 @@
 // Uzbek standard keyboard
 //
 // Mashrab Kuvatov <kmashrab@uni-bremen.de>
+// Ruslan Rustamov <rustamov@ruslanmedia.com>
 //
 // History:
 //
@@ -29,6 +30,10 @@
 // official standard for it. It is a copy of "us" layout, where
 // apostrophe is replaced with U02BB.
 // 
+// April 23, 2013. Ruslan Rustamov <rustamov@ruslanmedia.com>
+
+// 02BB characters do not try on other systems. After my research I found a way around this // problem by making changes to them for 2018, 2019, 201E, 201C, and now I hope that such 
+// problems may arise.
 
 partial default alphanumeric_keys 
 xkb_symbols "cyrillic" {
@@ -94,5 +99,8 @@ partial alphanumeric_keys
 xkb_symbols "latin" {
     include "us"
     name[Group1]= "Uzbek (Latin)";
-    key <AC11>  { [0x010002BB, quotedbl] };
+    key <AC11>  { [0x01002018, quotedbl] };
+    key <TLDE>  { [0x01002019, asciitilde] };
+    key <AD11>  { [0x0100201E, braceleft] };
+    key <AD12>  { [0x0100201C, braceright] };
 };
