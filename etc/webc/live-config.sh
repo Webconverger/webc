@@ -111,6 +111,10 @@ for x in $( cmdline ); do
 		ln -s /etc/webc/extensions/scrollbars@kaply.com /opt/firefox/browser/extensions/
 		;;
 
+	grabdrag)
+		ln -s /etc/webc/extensions/grabdrag '/opt/firefox/browser/extensions/{477c4c36-24eb-11da-94d4-00e08161165f}'
+		;;
+
 	support)
 		echo '*/5 * * * * root /sbin/support' > /etc/cron.d/webc-support
 		;;
