@@ -20,6 +20,11 @@
 <!ENTITY  reloadTab.accesskey                "O">
 <!ENTITY  reloadAllTabs.label                "Oppdater alle faner">
 <!ENTITY  reloadAllTabs.accesskey            "d">
+<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
+direction in which tabs are closed, i.e. locales that use RTL mode should say
+left instead of right. -->
+<!ENTITY  closeTabsToTheEnd.label            "Lukk faner til høgre">
+<!ENTITY  closeTabsToTheEnd.accesskey        "u">
 <!ENTITY  closeOtherTabs.label               "Lukk andre faner">
 <!ENTITY  closeOtherTabs.accesskey           "a">
 
@@ -68,12 +73,9 @@ can reach it easily. -->
 <!ENTITY menubarCmd.label "Menylinje">
 <!ENTITY menubarCmd.accesskey "M">
 <!ENTITY navbarCmd.label "Navigasjon">
-<!ENTITY navbarCmd.accesskey "N">
 <!ENTITY personalbarCmd.label "Bokmerke">
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "Element i bokmerkelinja">
-<!ENTITY addonBarCmd.label "Utvidingslinje">
-<!ENTITY addonBarCmd.accesskey "U">
 
 <!ENTITY pageSourceCmd.label "Kjeldekode">
 <!ENTITY pageSourceCmd.accesskey "d">
@@ -102,9 +104,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.accesskey "v">
 <!ENTITY fullscreenAllowButton.label "Tillat">
 <!ENTITY fullscreenExitButton.label "Avslå">
-<!ENTITY fullscreenApproval.value "Tillate fullskjerm?">
 
-<!ENTITY fullscreenExitHint.value "Trykk ESC når som helst for å avslutte fullskjerm.">
+<!ENTITY fullscreenExitHint2.value "Trykk ESC når som helst for å avslutte.">
 <!ENTITY leaveDOMFullScreen.label "Avslutt fullskjerm">
 <!ENTITY leaveDOMFullScreen.accesskey "v">
 
@@ -156,22 +157,15 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY backForwardItem.title        "Tilbake/Fram">
 <!ENTITY locationItem.title           "Adresse">
 <!ENTITY searchItem.title             "Søk">
-<!ENTITY throbberItem.title           "Framdriftsindikator">
 <!ENTITY bookmarksItem.title          "Bokmerke">
 
 <!-- Toolbar items --> 
-<!ENTITY appMenuButton.label          "Meny">
-<!ENTITY appMenuButton.tooltip        "Opne &brandShortName;-menyen">
 <!ENTITY homeButton.label             "Startside">
 
 <!ENTITY tabGroupsButton.label        "Fanegrupper">
 <!ENTITY tabGroupsButton.tooltip      "Grupper faner">
 
-<!ENTITY feedButton.label             "Abonner">
-<!ENTITY feedButton.tooltip           "Abonner på denne sida …">
-
 <!ENTITY bookmarksButton.label          "Bokmerke">
-<!ENTITY bookmarksButton.tooltip        "Viser bokmerka dine">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Bokmerke">
@@ -187,7 +181,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksWinCmd.commandkey "i">
 
 <!ENTITY historyButton.label            "Historikk">
-<!ENTITY historyButton.tooltip          "Vis sider du har besøkt i det siste">
 <!ENTITY historySidebarCmd.commandKey   "h">
 
 <!ENTITY toolsMenu.label              "Verktøy">
@@ -195,8 +188,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY keywordfield.label           "Lag nøkkelord for dette søket …">
 <!ENTITY keywordfield.accesskey       "L">
-<!ENTITY search.label                 "Søk på Internett">
-<!ENTITY search.accesskey             "S">
+
 <!ENTITY downloads.label              "Nedlastingar">
 <!ENTITY downloads.tooltip            "Vis framdrifta til aktive nedlastingar">
 <!ENTITY downloads.accesskey          "N">
@@ -209,16 +201,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY webDeveloperMenu.label       "Nettsideutvikling">
 <!ENTITY webDeveloperMenu.accesskey   "N">
 
+<!ENTITY devToolsCmd.keycode          "VK_F12">
+<!ENTITY devToolsCmd.keytext          "F12">
+
 <!ENTITY devtoolsConnect.label        "Kople til …">
 <!ENTITY devtoolsConnect.accesskey    "o">
 
 <!ENTITY errorConsoleCmd.label        "Feilmeldingar">
 <!ENTITY errorConsoleCmd.accesskey    "F">
-<!ENTITY errorConsoleCmd.commandkey   "j">
 
 <!ENTITY remoteWebConsoleCmd.label    "Ekstern konsoll">
 
 <!ENTITY browserConsoleCmd.label      "Nettlesarkonsoll">
+<!ENTITY browserConsoleCmd.commandkey "j">
+<!ENTITY browserConsoleCmd.accesskey  "B">
 
 <!ENTITY inspectContextMenu.label     "Inspiser element">
 <!ENTITY inspectContextMenu.accesskey "I">
@@ -242,6 +238,10 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
 
+<!-- LOCALIZATION NOTE (chromeDebuggerMenu.label): This is the label for the
+  -  application menu item that opens the browser debugger UI in the Tools menu. -->
+<!ENTITY chromeDebuggerMenu.label       "Nettlesardebugger">
+
 <!ENTITY devToolbarCloseButton.tooltiptext "Lukk utviklar-verktøylinje">
 <!ENTITY devToolbarMenu.label              "Utviklar-verktøylinje">
 <!ENTITY devToolbarMenu.accesskey          "v">
@@ -249,6 +249,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Slå av/på verktøy">
 <!ENTITY devToolboxMenuItem.accesskey      "t">
+<!ENTITY devToolboxMenuItem.keycode        "I">
+<!ENTITY devToolboxMenuItem.keytext        "I">
 
 <!ENTITY devToolbarToolsButton.tooltip     "Slå av/på utviklarverktøy">
 <!ENTITY devToolbarOtherToolsButton.label  "Fleire verktøy">
@@ -306,8 +308,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewSidebarMenu.accesskey "d">
 <!ENTITY viewCustomizeToolbar.label       "Tilpass …"> 
 <!ENTITY viewCustomizeToolbar.accesskey     "T">
-<!ENTITY viewTabsOnTop.label            "Faner øvst">
-<!ENTITY viewTabsOnTop.accesskey        "F">
 
 <!ENTITY historyMenu.label "Historikk">
 <!ENTITY historyMenu.accesskey "s">
@@ -316,20 +316,10 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY historyUndoWindowMenu.label "Nyleg lukka vindauge">
 <!ENTITY historyRestoreLastSession.label "Bygg oppatt siste programøkt">
 
-<!ENTITY historyHomeCmd.label "Heim">
 <!ENTITY showAllHistoryCmd2.label "Vis all historikk">
 <!ENTITY showAllHistoryCmd.commandkey "h">
 
-<!ENTITY appMenuEdit.label "Rediger">
 <!ENTITY appMenuCustomize.label "Tilpass">
-<!ENTITY appMenuToolbarLayout.label "Verktøylinjeutsjånad …">
-<!ENTITY appMenuSidebars.label "Sidestolpar">
-<!ENTITY appMenuFind.label "Finn …">
-<!ENTITY appMenuUnsorted.label "Usorterte bokmerke">
-<!ENTITY appMenuWebDeveloper.label "Nettsideutviklar">
-<!ENTITY appMenuGettingStarted.label "Kom i gang">
-<!ENTITY appMenuSafeMode.label "Start på nytt utan utvidingar …">
-<!ENTITY appMenuSafeMode.accesskey "S">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Søk eller skriv inn adresse">
@@ -398,6 +388,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewImageCmd.accesskey       "V">
 <!ENTITY viewImageInfoCmd.label       "Vis bildeinfo">
 <!ENTITY viewImageInfoCmd.accesskey   "b">
+<!ENTITY viewImageDescCmd.label       "Vis skildring">
+<!ENTITY viewImageDescCmd.accesskey   "k">
 <!ENTITY viewVideoCmd.label           "Vis video">
 <!ENTITY viewVideoCmd.accesskey       "s">
 <!ENTITY viewBGImageCmd.label         "Vis bakgrunnsbilde">
@@ -410,8 +402,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarkThisLinkCmd.accesskey  "B">
 <!ENTITY bookmarkThisFrameCmd.label      "Bokmerk denne ramma">
 <!ENTITY bookmarkThisFrameCmd.accesskey  "B">
-<!ENTITY emailPageCmd.label           "Send lenkeadresse på e-post …   	  	">
-<!ENTITY emailPageCmd.accesskey       "E">
+<!ENTITY emailPageCmd.label           "Send lenkeadresse på e-post …">
+<!ENTITY emailPageCmd.accesskey       "e">
 <!ENTITY savePageCmd.label            "Lagre side som …">
 <!ENTITY savePageCmd.accesskey        "a">
 <!-- alternate for content area context menu -->
@@ -532,15 +524,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY newWindowButton.tooltip        "Opnar nytt vindauge">
 <!ENTITY sidebarCloseButton.tooltip     "Lukk sidestolpen">
 
-<!ENTITY cutButton.tooltip              "Klipp ut">
-<!ENTITY copyButton.tooltip             "Kopier">
-<!ENTITY pasteButton.tooltip            "Lim inn">
-
 <!ENTITY fullScreenButton.tooltip       "Vis vindauget i fullskjerm">
-
-<!ENTITY zoomOutButton.tooltip          "Mindre skrift">
-<!ENTITY zoomInButton.tooltip           "Større skrift">
-<!ENTITY zoomControls.label             "Skalering">
 
 <!ENTITY quitApplicationCmdWin.label       "Avslutt"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "t">
@@ -612,6 +596,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY identity.moreInfoLinkText "Meir informasjon …">
 
+<!ENTITY identity.permissions "Løyve">
+
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 <!ENTITY tabsToolbar.label "Nettlesarfaner">
@@ -627,9 +613,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncToolbarButton.label      "Sync">
 
-<!ENTITY addonBarCloseButton.tooltip  "Lukk utvidingslinje">
-<!ENTITY toggleAddonBarCmd.key        "/">
-
 <!ENTITY socialToolbar.title        "Sosial verktøylinje-knapp">
 <!ENTITY social.notLoggedIn.label   "Ikkje innlogga">
 
@@ -644,8 +627,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.toggleNotifications.label "Vis varsel">
 <!ENTITY social.toggleNotifications.accesskey "a">
 
-<!ENTITY social.activated.description "Tenester frå <label/> er påslått. Du kan endre tenesteinnstillingar <label class='text-link'>Utvidelsesbehandling</label>.
-  	">
+<!ENTITY social.activated.description "Tenester frå <label/> er påslått. Du kan endre tenesteinnstillingar <label class='text-link'>Utvidelsesbehandling</label>.">
 <!ENTITY social.activated.undo.label "Oops, angre dette!">
 <!ENTITY social.activated.undo.accesskey "O">
 <!ENTITY social.learnMore.label "Les meir …">
@@ -662,7 +644,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Kamera som vert delt:">
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
-<!ENTITY getUserMedia.selectMicrophone.label "Mikrofon som vert delt:">
+<!ENTITY getUserMedia.selectMicrophone.label "Mikrofon som blir delt:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
 
 <!ENTITY webrtcIndicatorButton.label "Kamera/mikrofontilgang">
@@ -673,22 +655,54 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY pointerLock.notification.message "Trykk ESC når som helst for å vise den igjen.">
 
-<!ENTITY browserConsoleCmd.accesskey  "B">
-<!ENTITY browserConsoleCmd.commandkey "j">
-
-<!-- LOCALIZATION NOTE (chromeDebuggerMenu.label): This is the label for the
-  -  application menu item that opens the browser debugger UI in the Tools menu. -->
-<!ENTITY chromeDebuggerMenu.label       "Browser Debugger">
-<!ENTITY  closeTabsToTheEnd.accesskey        "i">
-<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
-direction in which tabs are closed, i.e. locales that use RTL mode should say
-left instead of right. -->
-<!ENTITY  closeTabsToTheEnd.label            "Close Tabs to the Right">
-<!ENTITY pluginActivateAlways.label "Allow and Remember">
-
-<!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
-<!ENTITY pluginActivateNow.label "Allow Now">
-<!ENTITY pluginBlockNow.label "Block Plugin">
+<!ENTITY pluginNotification.showAll.label "Vis alle">
 <!ENTITY pluginNotification.showAll.accesskey "S">
 
-<!ENTITY pluginNotification.showAll.label "Show All">
+<!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
+<!ENTITY pluginActivateNow.label "Tillat no">
+<!ENTITY pluginActivateAlways.label "Tillat og hugs">
+<!ENTITY pluginBlockNow.label "Blokker programtillegg">
+
+<!-- LOCALIZATION NOTE: (pluginNotification.width): This is used to determine the
+     width of the plugin popup notification that can appear if a plugin has been
+     blocked on a page. Should be wide enough to fit the pluginActivateNow.label
+     and pluginActivateAlways.label strings above on a single line. This must be
+     a CSS length value. -->
+<!ENTITY pluginNotification.width "28em">
+
+<!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
+     kept here to avoid warnings from l10n tools like compare-locales on
+     l10n-central. They will be definitely removed when Australis is ready
+     for mozilla-aurora. -->
+
+<!ENTITY navbarCmd.accesskey           "N">
+<!ENTITY addonBarCmd.label             "Utvidingslinje">
+<!ENTITY addonBarCmd.accesskey         "U">
+<!ENTITY throbberItem.title            "Aktivitetsindikator">
+<!ENTITY appMenuButton.label           "Meny">
+<!ENTITY appMenuButton.tooltip         "Opne &brandShortName;-menyen">
+<!ENTITY feedButton.label              "Abonner">
+<!ENTITY feedButton.tooltip            "Abonner på denne sida …">
+<!ENTITY bookmarksButton.tooltip       "Viser bokmerka dine">
+<!ENTITY historyButton.tooltip         "Vis sider du har besøkt i det siste">
+<!ENTITY viewTabsOnTop.label           "Faner øvst">
+<!ENTITY viewTabsOnTop.accesskey       "F">
+<!ENTITY appMenuEdit.label             "Rediger">
+<!ENTITY appMenuToolbarLayout.label    "Verktøylinjeutsjånad …">
+<!ENTITY appMenuSidebars.label         "Sidestolpar">
+<!ENTITY appMenuFind.label             "Finn …">
+<!ENTITY appMenuUnsorted.label         "Usorterte bokmerke">
+<!ENTITY appMenuWebDeveloper.label     "Nettsideutviklar">
+<!ENTITY appMenuGettingStarted.label   "Kom i gang">
+<!ENTITY appMenuSafeMode.label         "Start på nytt utan utvidingar …">
+<!ENTITY appMenuSafeMode.accesskey     "S">
+<!ENTITY cutButton.tooltip             "Klipp ut">
+<!ENTITY copyButton.tooltip            "Kopier">
+<!ENTITY pasteButton.tooltip           "Lim inn">
+<!ENTITY zoomOutButton.tooltip         "Zoom ut">
+<!ENTITY zoomInButton.tooltip          "Zoom inn">
+<!ENTITY zoomControls.label            "Zoom-kontrollar">
+<!ENTITY addonBarCloseButton.tooltip   "Lukk utvidingslinje">
+<!ENTITY toggleAddonBarCmd.key         "/">
+<!-- end of strings to be removed post-Australis -->
+
