@@ -31,6 +31,17 @@ cmdline_get()
 	return $result
 }
 
+cmdline_get_all()
+{
+	local result=1
+	local value
+	for i in `cmdline`
+	do
+		test ${i/=*} = $1 && { echo -n " ${i#$1=}"; result=0; }
+	done
+	return $result
+}
+
 mac_address()
 {
 	for i in /sys/class/net/*/address
@@ -121,7 +132,7 @@ get_bootparams()
 	local rootfs_bootparams=$(git --git-dir "${git_repo}" show "${git_revision}:etc/webc/boot-cmdline" | grep -v "^#" | head -n 1)
 
 	# The bootparams to pass
-	echo "${rootfs_bootparams} $(cmdline_get boot_append) git-revision=${git_revision}"
+	echo "${rootfs_bootparams} $(cmdline_get_all boot_append) git-revision=${git_revision}"
 }
 
 # Extract a kernel and generate a bootloader configuration for a live boot of
