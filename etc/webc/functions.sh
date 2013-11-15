@@ -21,11 +21,14 @@ cmdline_has()
 
 cmdline_get()
 {
+	local result=1
+	local value
 	for i in `cmdline`
 	do
-		test ${i/=*} = $1 && { echo "${i#$1=}"; return 0; }
+		test ${i/=*} = $1 && { value="${i#$1=}"; result=0; }
 	done
-	return 1
+	echo "${value}"
+	return $result
 }
 
 mac_address()
