@@ -58,11 +58,3 @@ pref("network.protocol-handler.external.mailto", false);
 pref("network.protocol-handler.external.news", false);
 pref("network.protocol-handler.external.nntp", false);
 pref("network.protocol-handler.external.snews", false);
-
-//AGA
-pref("browser.feeds.showFirstRunUI", false); //disable initial RSS intro
-pref("browser.rights.3.shown", true); //don't show EULA
-pref("datareporting.healthreport.service.firstRun", false);
-pref("datareporting.healthreport.uploadEnabled", false);
-pref("datareporting.healthreport.service.enabled", false);
-pref("datareporting.policy.dataSubmissionEnabled", false)
