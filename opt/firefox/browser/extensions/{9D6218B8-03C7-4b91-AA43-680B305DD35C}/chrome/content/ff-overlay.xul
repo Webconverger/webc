@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://procon/skin/overlay.css" type="text/css"?>
+
+<!DOCTYPE overlay [
+    <!ENTITY % overlayDTD SYSTEM "chrome://procon/locale/overlay.dtd">
+    %overlayDTD;
+    <!ENTITY % aboutDTD SYSTEM "chrome://procon/locale/about.dtd">
+    %aboutDTD;
+]>
+
+<overlay id="procon-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script src="chrome://procon/content/overlay.js"/>
+    <script src="chrome://procon/content/ff-overlay.js"/>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="procon-strings" src="chrome://procon/locale/overlay.properties"/>
+    </stringbundleset>
+
+<!--AGA
+    <menupopup id="menu_ToolsPopup">
+        <menuitem 
+            id="procon-menu-button"
+            class="menuitem-iconic"
+            label="&procon.label;&#8230;"
+            oncommand="procon.onMenuItemCommand(event, null);"/>
+    </menupopup>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton
+            id="procon-toolbar-button"
+            class="toolbarbutton-1"
+            label="&procon.label;"
+            oncommand="procon.onToolbarButtonCommand(event);"/>
+    </toolbarpalette>
+-->
+
+    <popupset id="mainPopupSet">
+        <menupopup id="procon-notification-popup" position="after_end" onpopupshowing="procon.onNotificationPopupShowing(event);"> 
+            <menuitem label="&tempallowpage.label;" oncommand="procon.allowPage();"/>
+            <menuitem id="procon-notification-popup-domain-session" label="" oncommand="procon.allowDomain();"/>
+            <menuitem id="procon-notification-popup-domain-whitelist" label="" oncommand="procon.addWhitelistSite(this);"/>
+            <menuseparator/>
+            <menuitem label="&preferences.label;&#8230;" oncommand="procon.onMenuItemCommand(event);"/>
+        </menupopup>
+        <menupopup id="procon-status-popup">
+            <menuitem label="&about;&#8230;" oncommand="procon.openAbout()"/>
+            <menuseparator/>
+            <menuitem label="&preferences.label;&#8230;" oncommand="procon.onStatusbarButtonCommand()"/>
+            <menuseparator/>
+            <menuitem label="&addblacklistsite.label;" oncommand="procon.addBlacklistSite(this);"/>
+            <menuitem label="&addblacklistword.label;" oncommand="procon.addBlacklistWord(this);"/>
+            <menuitem label="&addwhitelistsite.label;" oncommand="procon.addWhitelistSite(this);"/>
+            <menuitem label="&addprofanitylistword.label;" oncommand="procon.addProfanitylistWord(this);"/>
+        </menupopup>
+<!--AGA
+        <popup id="contentAreaContextMenu">
+            <menu label="&procon.label;" insertafter="context-selectall">
+                <menupopup>
+                    <menuitem label="&addblacklistsite.label;" oncommand="procon.addBlacklistSite(this);"/>
+                    <menuitem label="&addblacklistword.label;" oncommand="procon.addBlacklistWord(this);"/>
+                    <menuitem label="&addwhitelistsite.label;" oncommand="procon.addWhitelistSite(this);"/>
+                    <menuseparator/>
+                    <menuitem label="&addprofanitylistword.label;" oncommand="procon.addProfanitylistWord(this);"/>
+                </menupopup>
+            </menu>
+        </popup>
+    </popupset>
+
+    <statusbar id="status-bar">
+        <statusbarpanel
+            id="procon-status"
+            oncommand="procon.onStatusbarButtonCommand()"
+            mousethrough="never"
+            insertbefore="resizerBottomRight"
+            class="statusbarpanel-iconic"
+            context="procon-status-popup"
+            tooltip="&procon.label;&#8230;">
+            <image
+                id="procon-status-img"
+                src="chrome://procon/skin/images/security_small.png"
+                style="width:16px;height:16px;margin-left:0px;margin-right:2px;"/>
+        </statusbarpanel>
+    </statusbar>
+-->
+</overlay>

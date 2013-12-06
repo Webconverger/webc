@@ -1,0 +1,47 @@
+<?xml version="1.0"?> 
+<!-- You may find the license in the LICENSE file -->
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://procon/skin/overlay.css" type="text/css"?>
+
+<!DOCTYPE prefwindow [
+    <!ENTITY % preferencesDTD SYSTEM "chrome://procon/locale/preferences.dtd">
+    %preferencesDTD;
+]>
+
+<prefwindow
+    id="procon-preferences"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+    title="&prefwindow.title;"
+    buttons="accept,cancel,extra2"
+    buttonlabelextra2="&donate.label;"
+    ondialogextra2="prefwindow.openDonationPage();"
+    persist="lastSelected screenX screenY"
+    onload="prefwindow.load();"
+    onunload="prefwindow.unload();"
+    ondialogaccept="prefwindow.accept();"
+    style="&prefwindow.styleWin;"
+    lastSelected="mainPane">
+
+    <prefpane id="mainPane" label="&mainPane.title;" src="chrome://procon/content/mainPane.xul" image="chrome://procon/skin/images/general.png"/><!--helpTopic="prefs-main"-->
+    <prefpane id="blacklistPane" label="&blacklistPane.title;" src="chrome://procon/content/blacklistPane.xul" image="chrome://procon/skin/images/blacklist.png"/>
+    <prefpane id="whitelistPane" label="&whitelistPane.title;" src="chrome://procon/content/whitelistPane.xul" image="chrome://procon/skin/images/whitelist.png"/>
+    <prefpane id="profanitylistPane" label="&profanitylistPane.title;" src="chrome://procon/content/profanitylistPane.xul" image="chrome://procon/skin/images/profanity.png"/>
+    <prefpane id="subscriptionsPane" label="&subscriptionsPane.title;" src="chrome://procon/content/subscriptionsPane.xul" image="chrome://procon/skin/images/subscriptions.png"/>
+
+    <button id="btn-extra" type="menu" label="&settings.label;" class="dialog-button" hidden="true">
+        <menupopup>
+            <menuitem id="import-menuitem" label="&import.label;" oncommand="io.import();"/>
+            <menuitem id="export-menuitem" label="&export.label;" oncommand="io.export();"/>
+            <menuseparator/>
+            <menuitem id="restore-menuitem" label="&restore.label;" oncommand="io.reset();"/>
+        </menupopup>
+    </button>
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="procon-strings" src="chrome://procon/locale/overlay.properties"/>
+    </stringbundleset>
+
+    <script type="application/javascript" src="chrome://procon/content/third_party/md5.js"/>
+    <script type="application/javascript" src="chrome://procon/content/common.js"/>
+    <script type="application/javascript" src="chrome://procon/content/preferences.js"/>
+</prefwindow>

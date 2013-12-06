@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!-- You may find the license in the LICENSE file -->
+<!DOCTYPE window SYSTEM "chrome://procon/locale/preferences.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <prefpane
+        id="mainPane"
+        label="&mainPane.title;"
+        onpaneload="mainPane.load();">
+
+        <preferences>
+            <preference id="pref-blacklist-enabled" name="extensions.procon.blacklist.enabled" type="bool"/>
+            <preference id="pref-blacklist-sites-enabled" name="extensions.procon.blacklist.sites.enabled" type="bool"/>
+            <preference id="pref-blacklist-words-enabled" name="extensions.procon.blacklist.words.enabled" type="bool"/>
+            <preference id="pref-whitelist-enabled" name="extensions.procon.whitelist.enabled" type="bool"/>
+            <preference id="pref-profanitylist-enabled" name="extensions.procon.profanitylist.enabled" type="bool"/>
+            <preference id="pref-subscriptions-enabled" name="extensions.procon.subscriptions.enabled" type="bool"/>
+            <preference id="pref-misc-menu-button" name="extensions.procon.misc.showMenuButton" type="bool"/>
+            <preference id="pref-misc-status-button" name="extensions.procon.misc.showStatusButton" type="bool"/>
+        </preferences>
+
+        <vbox id="mainPane-container" flex="1">
+            <hbox width="1">
+                <description flex="1">&pass.description;</description>
+                <button id="btn-set-pass" label="&passset.label;" oncommand="mainPane.setPassword(this)"/>
+                <button id="btn-rem-pass" label="&passremove.label;" oncommand="mainPane.removePassword(this)" hidden="true"/>
+            </hbox>
+            <groupbox>
+                <caption label="&contentfilter.label;"/>
+                <checkbox preference="pref-blacklist-enabled" label="&blacklist.label;" oncommand="mainPane.toggleStatus(this);"/>
+                <vbox style="margin-left:19px">
+                    <checkbox id="checkbox-blacklist-sites-enabled" preference="pref-blacklist-sites-enabled" label="&blocksites.label;"/>
+                    <checkbox id="checkbox-blacklist-words-enabled" preference="pref-blacklist-words-enabled" label="&blockwords.label;"/>
+                </vbox>
+                <checkbox preference="pref-whitelist-enabled" label="&whitelist.label;"/>
+            </groupbox>
+            <groupbox>
+                <caption label="&profanityfilter.label;"/>
+                <checkbox preference="pref-profanitylist-enabled" label="&profanitylist.label;"/>
+            </groupbox>
+            <groupbox>
+                <caption label="&subscriptions.label;"/>
+                <checkbox preference="pref-subscriptions-enabled" label="&subscriptionslist.label;"/>
+            </groupbox>
+            <groupbox>
+                <caption label="&misc.label;"/>
+                <checkbox preference="pref-misc-menu-button" label="&showmenu.label;"/>
+                <checkbox preference="pref-misc-status-button" label="&showstatus.label;"/>
+            </groupbox>
+        </vbox>
+    </prefpane>
+</overlay>

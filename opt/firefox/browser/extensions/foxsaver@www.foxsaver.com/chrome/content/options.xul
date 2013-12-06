@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://foxsaver/skin/foxsaver.css" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://foxsaver/locale/options.dtd">
+
+<dialog id="foxsaver-preference-window" title="&prefs.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload="FoxSaver.preferenceWindow.init()" ondialogaccept="return FoxSaver.preferenceWindow.setPrefs()">
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/name_space.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/yui/yahoo.js"/> 
+  <script type="application/x-javascript" src="chrome://foxsaver/content/yui/event.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/log.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/util.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/mozilla.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/ext/jsio.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/fs/preference.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/fs/preferenceWindow.js"/>
+
+  <tabbox flex="1" id="pref-tabs">
+    <tabs>
+      <tab label="&label.choose_photos;" selected="true"/>
+      <tab label="&label.other;" />
+    </tabs>
+    <tabpanels>
+      <tabpanel id="configuration-pane" orient="vertical">
+      <checkbox id="enable_foxsaver_photos" label="&prefs.enable_foxsaver_photos;" preftype="bool"/>
+      <groupbox>
+        <caption label="&prefs.user_dir;"/>
+          <hbox align="center">
+            <checkbox id="enable_user_photos" preftype="bool"/>
+            <textbox id="user_dir" flex="1" preftype="file"/>
+            <toolbarbutton class="browse-button toolbarbutton-1"
+              oncommand="var f=FoxSaver.Util.getFolder(this.previousSibling.value);if(f){this.previousSibling.value=f.path;this.previousSibling.file=f}else{this.previousSibling.value=null;}"/>
+          </hbox>
+          <hbox align="center">
+            <checkbox id="enable_user_photos2" preftype="bool"/>
+            <textbox id="user_dir2" flex="1" preftype="file"/>
+            <toolbarbutton class="browse-button toolbarbutton-1"
+              oncommand="var f=FoxSaver.Util.getFolder(this.previousSibling.value);if(f){this.previousSibling.value=f.path;this.previousSibling.file=f}else{this.previousSibling.value=null;}"/>
+          </hbox>
+          <hbox align="center">
+            <checkbox id="enable_user_photos3" preftype="bool"/>
+            <textbox id="user_dir3" flex="1" preftype="file"/>
+            <toolbarbutton class="browse-button toolbarbutton-1"
+              oncommand="var f=FoxSaver.Util.getFolder(this.previousSibling.value);if(f){this.previousSibling.value=f.path;this.previousSibling.file=f}else{this.previousSibling.value=null;}"/>
+          </hbox>
+          <hbox align="center">
+            <label value="&prefs.image_extensions;:" control="image_extensions"/>
+            <textbox id="image_extensions" preftype="string" maxwidth="80"/>
+          </hbox>
+        </groupbox>
+        <groupbox>
+          <caption label="&prefs.choose.rss;"/>
+          <hbox>
+            <checkbox id="enable_user_rss_sources" preftype="bool"/>
+            <textbox id="user_rss_urls" flex="1" preftype="string" multiline="true" rows="7"/>
+          </hbox>
+        </groupbox>
+        <!--hbox align="center">
+          <label value="&prefs.save_dir;:" control="save_dir" />
+            <textbox id="save_dir" flex="1" preftype="file"/>
+            <toolbarbutton class="browse-button toolbarbutton-1"
+              oncommand="var f=FoxSaver.Util.getFolder(this.previousSibling.value);if(f){this.previousSibling.value=f.path;this.previousSibling.file=f}"/>
+        </hbox-->
+        <groupbox>
+          <caption label="&prefs.user_web_page;"/>
+          <hbox>
+            <checkbox id="enable_user_web_page" preftype="bool"/>
+            <textbox id="user_web_page_url" flex="1" preftype="string" multiline="false" rows="1"/>
+          </hbox>
+        </groupbox>
+        <separator/>
+        <hbox pack="start">
+          <button label="&label.browse_cache;" oncommand="FoxSaver.preferenceWindow.browseCache();" class="browse-button" />
+        </hbox>
+      </tabpanel>
+      <tabpanel id="other-pane" orient="vertical">
+        <checkbox id="enable_foxsaver" label="&prefs.enable_foxsaver;" preftype="bool"/>
+        <hbox align="center">
+          <label value="&prefs.display_seconds;:" control="display_seconds" />
+		      <textbox id="display_seconds" preftype="int" maxwidth="30"/>
+        </hbox>
+        <hbox align="center">
+          <label value="&prefs.idle_minutes;:" control="idle_minutes"/>
+          <textbox id="idle_minutes" preftype="int" maxwidth="30"/>
+        </hbox>
+        <groupbox>
+          <caption label="&prefs.quiet_sites;:" control="quiet_sites"/>
+          <textbox id="quiet_sites" preftype="string" multiline="true" rows="7"/>
+        </groupbox>
+        <checkbox id="enable_search_page_image" label="&prefs.enable_search_page_image;" preftype="bool"/>
+        <checkbox id="disable_tooltip_to_stop" label="&prefs.disable_tooltip_to_stop;" preftype="bool"/>
+        <checkbox id="enable_auto_play_by_foxsaver_button" label="&prefs.enable_auto_play_by_foxsaver_button;" preftype="bool"/>
+        <checkbox id="has_fade_in_out" label="&prefs.has_fade_in_out;" preftype="bool"/>
+        <checkbox id="enable_random_tilting_image" label="&prefs.enable_random_tilting_image;" preftype="bool"/>
+        <checkbox id="enable_random_image_reflection" label="&prefs.enable_random_image_reflection;" preftype="bool"/>
+        <checkbox id="has_foxsaver_logo" label="&prefs.has_foxsaver_logo;" preftype="bool"/>
+        <checkbox id="switch_to_fullscreen_if_maximized" label="&prefs.switch_to_fullscreen_if_maximized;" preftype="bool"/>
+        <checkbox id="hide_sidebar_if_fullscreen" label="&prefs.hide_sidebar_if_fullscreen;" preftype="bool"/>
+        <checkbox id="stop_foxsaver_by_mouse_move" label="&prefs.stop_foxsaver_by_mouse_move;" preftype="bool"/>
+        <checkbox id="fit_small_pictures_to_screen" label="&prefs.fit_small_pictures_to_screen;" preftype="bool"/>
+      </tabpanel>
+    </tabpanels>
+  </tabbox>
+</dialog>
