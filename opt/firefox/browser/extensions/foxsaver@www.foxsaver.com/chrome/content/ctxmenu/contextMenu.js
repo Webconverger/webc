@@ -6,11 +6,11 @@ FoxSaver.contextMenu = function(B) {
     this.menuItem = document.getElementById(B);
     this.sepItem = document.getElementById("fsimgsep");
     this.sepItem.hidden = true;
-    this.menuItem.hidden = true;
+    if (this.menuItem) this.menuItem.hidden = true;
     this.href = null
 };
 FoxSaver.contextMenu.prototype.isMenuShown = function() {
-    return(!this.menuItem.hidden)
+    return(this.menuItem && !this.menuItem.hidden)
 };
 FoxSaver.contextMenu.prototype.lookupMethod = function() {
     if (Components.utils && Components.utils.lookupMethod) {
@@ -29,10 +29,10 @@ FoxSaver.contextMenu.prototype.prepareContextMenu = function(A) {
     }
     var C = this.isValidLink();
     if (C) {
-        this.menuItem.hidden = false;
+        if (this.menuItem) this.menuItem.hidden = false;
         this.sepItem.hidden = false
     } else {
-        this.menuItem.hidden = true;
+        if (this.menuItem) this.menuItem.hidden = true;
         this.sepItem.hidden = true
     }
 };

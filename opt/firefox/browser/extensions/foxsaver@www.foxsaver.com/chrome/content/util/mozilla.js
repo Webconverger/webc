@@ -12,13 +12,17 @@ FoxSaver.Util.isCurrentWindowInFront = function() {
     return false
 };
 FoxSaver.Util.hasOtherWindows = function() {
+
+  return false; //AGA
+   
     var A = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService();
     var C = A.QueryInterface(Components.interfaces.nsIWindowMediator);
     var D = C.getEnumerator(null);
     var B = 0;
-    while (D.hasMoreElements()) {
-        D.getNext();
-        B++
+    while (D.hasMoreElements() && B<2)
+    {
+     D.getNext();
+     B++
     }
     return B > 1 ? true : false
 };
@@ -31,8 +35,7 @@ FoxSaver.Util.newTab = function(A) {
     return B
 };
 FoxSaver.Util.isFullScreenOK = function(A) {
-    //return FoxSaver.Util.isMaximized(A) && !FoxSaver.Util.hasOtherWindows()
-    return FoxSaver.Util.isMaximized(A)
+    return FoxSaver.Util.isMaximized(A) && !FoxSaver.Util.hasOtherWindows();
 };
 FoxSaver.Util.isMaximized = function(E) {
     var A = 26;
@@ -77,9 +80,8 @@ FoxSaver.Util.isExtensionPresent = function(aGUID)
    }
  
    if (typeof(Components.utils)!='undefined' && typeof(Components.utils.import)!='undefined')
-   {
     Components.utils.import("resource://gre/modules/AddonManager.jsm", ascope);
-   }
+   
    ascope.AddonManager.getAddonByID(addonID, callback);
   }
   
@@ -97,7 +99,7 @@ FoxSaver.Util.isExtensionPresent = function(aGUID)
   getVersion(aGUID, cBack);
   
   var thread=Components.classes["@mozilla.org/thread-manager;1"].getService(Components.interfaces.nsIThreadManager).currentThread;
-  while (!done)
+  while (!done && thread)
    thread.processNextEvent(true);
    
   FoxSaver.log("extension '"+aGUID+(result ? "' present.":"' ABSENT"));
