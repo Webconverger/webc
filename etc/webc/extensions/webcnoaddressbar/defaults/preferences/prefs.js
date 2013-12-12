@@ -66,3 +66,4 @@ pref("datareporting.healthreport.service.firstRun", false);
 pref("datareporting.healthreport.uploadEnabled", false);
 pref("datareporting.healthreport.service.enabled", false);
 pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("browser.newtab.url","http://shops.amag.ru")
