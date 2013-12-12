@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# We're passed the version of the kernel being installed
+inst_kern=$1
+
+if [ -x /usr/sbin/dkms ]; then
+while read line; do
+   name=`echo "$line" | awk '{print $1}' | sed 's/,$//'`
+   vers=`echo "$line" | awk '{print $2}' | sed 's/,$//'`
+   arch=`echo "$line" | awk '{print $4}' | sed 's/:$//'`
+   echo "dkms: removing: $name $vers ($inst_kern) ($arch)" >&2
+   dkms remove -m $name -v $vers -k $inst_kern -a $arch
+done < <(dkms status -k $inst_kern 2>/dev/null | grep ": installed")
+fi
+
+rmdir --ignore-fail-on-non-empty \
+	"/lib/modules/$inst_kern/updates/dkms" \
+	"/lib/modules/$inst_kern/updates" 2>/dev/null
+
+exit 0

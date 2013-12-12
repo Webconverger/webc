@@ -116,7 +116,7 @@ Original-Vcs-Git: git://anonscm.debian.org/pkg-systemd/systemd.git -b debian
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: nvidia-kernel-3.8-0baureo1-486
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 9360
@@ -125,6 +125,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-modules (313.30+0-0baureo+1)
 Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Config-Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
 Provides: nvidia-kernel-313.30
 Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-486
 Pre-Depends: dpkg-lzip
@@ -178,6 +179,7 @@ Source: xorg-server
 Version: 2:1.12.4-6baureo1
 Replaces: xserver-xorg-core (<< 2:1.5.2)
 Depends: x11-common, xkb-data, x11-xkb-utils
+Pre-Depends: dpkg-lzip
 Recommends: xfonts-base, xauth
 Description: common files used by various X servers
  This package provides files necessary for all X.Org based X servers.
@@ -476,7 +478,7 @@ Description: X C Binding, shm extension
 Homepage: http://xcb.freedesktop.org
 
 Package: linux-image-3.8-0baureo1-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 82658
@@ -485,6 +487,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
 Version: 3.8.5-1~experimental.1~baureo1
+Config-Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -976,7 +979,7 @@ Original-Vcs-Git: git://live.debian.net/git/live-config.git
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: nvidia-kernel-3.8-0baureo1-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: non-free/kernel
 Installed-Size: 11685
@@ -985,6 +988,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-modules (313.30+0-0baureo+1)
 Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
+Config-Version: 313.30+0-0baureo+1+1~baureo1+3.8.5-1~experimental.1~baureo1
 Provides: nvidia-kernel-313.30
 Depends: nvidia-kernel-common (>= 20110213), linux-image-3.8-0baureo1-686-pae
 Pre-Depends: dpkg-lzip
@@ -1256,7 +1260,7 @@ Description: generic font configuration library - support binaries
  available to fontconfig applications.
 
 Package: linux-image-3.8-0baureo1-486
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 80938
@@ -1265,6 +1269,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: linux
 Version: 3.8.5-1~experimental.1~baureo1
+Config-Version: 3.8.5-1~experimental.1~baureo1
 Provides: linux-image, linux-modules-3.8-0baureo1-486
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: dpkg-lzip, debconf | debconf-2.0
@@ -2176,6 +2181,62 @@ Description: simple debconf wrapper for OpenSSL
  It is a simple wrapper for OpenSSL's certificate request utility that
  feeds it with the correct user variables.
 
+Package: linux-image-3.10-0.bpo.2-486
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 81035
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.10.5-1~bpo70+1
+Provides: linux-image, linux-modules-3.10-0.bpo.2-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.10, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Description: Linux 3.10 for older PCs
+ The Linux kernel 3.10 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Homepage: https://www.kernel.org/
+
+Package: dkms
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 191
+Maintainer: Dynamic Kernel Modules Support Team <pkg-dkms-maint@lists.alioth.debian.org>
+Architecture: all
+Version: 2.2.0.3-1.2
+Depends: module-init-tools, gcc, make | build-essential | dpkg-dev, coreutils (>= 7.4), patch
+Recommends: fakeroot, menu | sudo, linux-headers-686-pae | linux-headers-amd64 | linux-headers-generic | linux-headers, linux-image
+Conffiles:
+ /etc/dkms/framework.conf 4e72dd99504978161b561f69256c1696
+ /etc/dkms/template-dkms-mkdeb/Makefile d97acaeba72f667d3eb69695e9018243
+ /etc/dkms/template-dkms-mkdeb/debian/rules c385ec9e8f6c6745ad9b9665c38cbd84
+ /etc/dkms/template-dkms-mkdeb/debian/copyright de471e376ba2c3886424b5c4649c42d6
+ /etc/dkms/template-dkms-mkdeb/debian/README.Debian 6707f5716bc3a2d65fa1b05d81ba8add
+ /etc/dkms/template-dkms-mkdeb/debian/compat 84bc3da1b3e33a18e8d5e1bdd7a18d7a
+ /etc/dkms/template-dkms-mkdeb/debian/changelog f14e36c92f14270163eb20fa883d463e
+ /etc/dkms/template-dkms-mkdeb/debian/control 932cd11859c7c153a8c458325e74497f
+ /etc/dkms/template-dkms-mkdeb/debian/dirs ea7a90f4a1be2e0054c3d4920c29e33f
+ /etc/dkms/template-dkms-mkdeb/debian/prerm e7c0c39003edb2255d22a775efa907e5
+ /etc/dkms/template-dkms-mkdeb/debian/postinst 205c51f28c7327c0d13f5891fac55d04
+ /etc/kernel/postinst.d/dkms fa05cd89316f042b4ed12090e5aad896
+ /etc/kernel/prerm.d/dkms 97139ec74350d65636320b76a11b1f47
+ /etc/kernel/header_postinst.d/dkms fa05cd89316f042b4ed12090e5aad896
+ /etc/modprobe.d/dkms.conf 74452a1f23577a0bb30d764a895429d0
+ /etc/bash_completion.d/dkms fbb05514b62b89752809c57964679b3b
+Description: Dynamic Kernel Module Support Framework
+ DKMS is a framework designed to allow individual kernel modules to be upgraded
+ without changing the whole kernel. It is also very easy to rebuild modules as
+ you upgrade kernels.
+Homepage: http://linux.dell.com/dkms
+
 Package: libsamplerate0
 Status: install ok installed
 Priority: optional
@@ -2421,6 +2482,24 @@ Description: GDK Pixbuf library
   - Fast scaling and compositing of pixbufs.
   - Simple animation loading (ie. animated GIFs)
 Homepage: http://www.gtk.org/
+
+Package: libquadmath0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 503
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.7
+Version: 4.7.2-5
+Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.10)
+Pre-Depends: multiarch-support
+Description: GCC Quad-Precision Math Library
+ A library, which provides quad-precision mathematical functions on targets
+ supporting the __float128 datatype. The library is used to provide on such
+ targets the REAL(16) type in the GNU Fortran compiler.
+Homepage: http://gcc.gnu.org/
 
 Package: xorg
 Status: install ok installed
@@ -2849,6 +2928,7 @@ Source: xorg-server
 Version: 2:1.12.4-6baureo1
 Provides: xorg-input-abi-16, xorg-video-abi-12
 Depends: xserver-common (>= 2:1.12.4-6baureo1), keyboard-configuration, udev (>= 149), libaudit0 (>= 1.7.13), libc6 (>= 2.3.6-6~), libdrm2 (>= 2.3.1), libgcrypt11 (>= 1.4.5), libpciaccess0 (>= 0.12.902), libpixman-1-0 (>= 0.21.6), libselinux1 (>= 2.0.82), libudev0 (>= 154), libxau6, libxdmcp6, libxfont1 (>= 1:1.4.2)
+Pre-Depends: dpkg-lzip
 Recommends: libgl1-mesa-dri (>= 7.10.2-4)
 Suggests: xfonts-100dpi | xfonts-75dpi, xfonts-scalable
 Breaks: libgl1-mesa-dri (<< 7.10.2-4), libgl1-mesa-dri-experimental (<< 7.10.2-4), xserver-xorg-input, xserver-xorg-input-2, xserver-xorg-input-2.1, xserver-xorg-input-4, xserver-xorg-input-7, xserver-xorg-input-joystick (<= 1:1.5.0-3), xserver-xorg-input-synaptics (<= 1.2.2-1), xserver-xorg-input-tslib (<= 0.0.6-3), xserver-xorg-input-vmmouse (<= 1:12.6.5-4), xserver-xorg-input-wacom (<= 0.10.5+20100415-1), xserver-xorg-video, xserver-xorg-video-1.0, xserver-xorg-video-1.9, xserver-xorg-video-2, xserver-xorg-video-4, xserver-xorg-video-5, xserver-xorg-video-6, xserver-xorg-video-cyrix (<= 1:1.1.0-8), xserver-xorg-video-i810 (<< 2:2.4), xserver-xorg-video-imstt (<= 1:1.1.0-7), xserver-xorg-video-nsc (<= 1:2.8.3-4), xserver-xorg-video-sunbw2 (<= 1:1.1.0-5), xserver-xorg-video-v4l (<< 1:0.2.0), xserver-xorg-video-vga (<= 1:4.1.0-8)
@@ -3316,11 +3396,11 @@ Package: tzdata
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 1802
+Installed-Size: 1801
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 2013c-0wheezy1
+Version: 2013d-0wheezy1
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Provides: tzdata-wheezy
 Depends: debconf (>= 0.5) | debconf-2.0
@@ -4301,6 +4381,22 @@ Description: transitional dummy package
  This package is a dummy transitional package. It can be safely removed.
 Homepage: https://fedorahosted.org/liberation-fonts/
 
+Package: gcc-4.7
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 17427
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Version: 4.7.2-5
+Provides: c-compiler
+Depends: gcc-4.7-base (= 4.7.2-5), cpp-4.7 (= 4.7.2-5), binutils (>= 2.21.1), libgcc1 (>= 1:4.7.2-5), libgomp1 (>= 4.7.2-5), libitm1 (>= 4.7.2-5), libquadmath0 (>= 4.7.2-5), libc6 (>= 2.11), libgmp10, libmpc2, libmpfr4 (>= 3.1.0), zlib1g (>= 1:1.1.4)
+Recommends: libc6-dev (>= 2.13-5)
+Suggests: gcc-4.7-multilib, libmudflap0-4.7-dev (>= 4.7.2-5), gcc-4.7-doc (>= 4.7.2), gcc-4.7-locales (>= 4.7.2), libgcc1-dbg, libgomp1-dbg, libitm1-dbg, libquadmath0-dbg, libmudflap0-dbg, libcloog-ppl0 (>= 0.15.9-2~), libppl-c2, libppl7, binutils-gold (>= 2.21.1)
+Description: GNU C compiler
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+Homepage: http://gcc.gnu.org/
+
 Package: libclass-isa-perl
 Status: install ok installed
 Priority: standard
@@ -5021,13 +5117,13 @@ Package: curl
 Status: install ok installed
 Priority: optional
 Section: web
-Installed-Size: 359
+Installed-Size: 324
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
-Version: 7.26.0-1+wheezy3
+Version: 7.26.0-1+wheezy6
 Replaces: curl-ssl
 Provides: curl-ssl
-Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1+wheezy3), zlib1g (>= 1:1.1.4)
+Depends: libc6 (>= 2.7), libcurl3 (= 7.26.0-1+wheezy6), zlib1g (>= 1:1.1.4)
 Description: command line tool for transferring data with URL syntax
  curl is a command line tool for transferring data with URL syntax, supporting
  DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, POP3, POP3S,
@@ -6034,6 +6130,23 @@ Description: libraries for the Soprano RDF framework
  plugins, and a storage plugin for the Redland RDF Application Framework.
 Homepage: http://soprano.sourceforge.net
 
+Package: patch
+Status: install ok installed
+Priority: standard
+Section: vcs
+Installed-Size: 226
+Maintainer: Christoph Berg <myon@debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Version: 2.6.1-3
+Depends: libc6 (>= 2.3)
+Suggests: ed, diffutils-doc
+Description: Apply a diff file to an original
+ Patch will take a patch file containing any of the four forms
+ of difference listing produced by the diff program and apply
+ those differences to an original file, producing a patched
+ version.
+
 Package: libwebrtc-audio-processing-0
 Status: install ok installed
 Priority: extra
@@ -6273,7 +6386,7 @@ Description: X11 Input extension library
  git://anongit.freedesktop.org/git/xorg/lib/libXi
 
 Package: nvidia-glx
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: non-free/x11
 Installed-Size: 910
@@ -6282,6 +6395,7 @@ Bugs: mailto:bugs@lists.progress-linux.org
 Architecture: i386
 Source: nvidia-graphics-drivers
 Version: 313.30-1~baureo1
+Config-Version: 313.30-1~baureo1
 Provides: nvidia-glx-any
 Depends: libgl1-nvidia-glx (= 313.30-1~baureo1), xserver-xorg-video-nvidia (= 313.30-1~baureo1), nvidia-vdpau-driver (= 313.30-1~baureo1), nvidia-alternative (= 313.30-1~baureo1), nvidia-kernel-dkms (= 313.30-1~baureo1) | nvidia-kernel-313.30, nvidia-support
 Pre-Depends: dpkg-lzip, nvidia-installer-cleanup
@@ -8275,12 +8389,12 @@ Package: libcurl3
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 602
+Installed-Size: 563
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.26.0-1+wheezy3
+Version: 7.26.0-1+wheezy6
 Replaces: libcurl2 (<< 1:7.11.2-2), libcurl4
 Depends: libc6 (>= 2.11), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libldap-2.4-2 (>= 2.4.7), librtmp0 (>= 2.3), libssh2-1 (>= 1.2.6), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
@@ -10523,6 +10637,25 @@ Description: Utilities for configuring and using ALSA
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
 
+Package: gcc
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 41
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Source: gcc-defaults (1.120)
+Version: 4:4.7.2-1
+Provides: c-compiler
+Depends: cpp (>= 4:4.7.2-1), gcc-4.7 (>= 4.7.2-1~)
+Recommends: libc6-dev | libc-dev
+Suggests: gcc-multilib, make, manpages-dev, autoconf, automake1.9, libtool, flex, bison, gdb, gcc-doc
+Conflicts: gcc-doc (<< 1:2.95.3)
+Description: GNU C compiler
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+ .
+ This is a dependency package providing the default GNU C compiler.
+
 Package: nvidia-vdpau-driver
 Status: install ok installed
 Priority: optional
@@ -12262,6 +12395,34 @@ Original-Vcs-Browser: http://svn.debian.org/wsvn/kernel/dists/trunk/firmware-non
 Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: linux-image-3.10-0.bpo.3-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 85472
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.10.11-1~bpo70+1
+Provides: linux-image, linux-modules-3.10-0.bpo.3-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.10, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Description: Linux 3.10 for modern PCs
+ The Linux kernel 3.10 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Homepage: https://www.kernel.org/
+
 Package: libxxf86vm1
 Status: install ok installed
 Priority: optional
@@ -12668,6 +12829,28 @@ Description: GNU Bourne Again SHell
  The Programmable Completion Code, by Ian Macdonald, is now found in
  the bash-completion package.
 Homepage: http://tiswww.case.edu/php/chet/bash/bashtop.html
+
+Package: make
+Status: install ok installed
+Priority: standard
+Section: devel
+Installed-Size: 1139
+Maintainer: Manoj Srivastava <srivasta@debian.org>
+Architecture: i386
+Source: make-dfsg
+Version: 3.81-8.2
+Depends: libc6 (>= 2.3)
+Suggests: make-doc
+Description: An utility for Directing compilation.
+ GNU Make is an utility which controls the generation of executables and
+ other target files of a program from the program's source files. It
+ determines automatically which pieces of a large program need to be
+ (re)created, and issues the commands to (re)create them. Make is not
+ limited to programs and executable, it can be applied to any task
+ where a set of target files must be created based on a set of input
+ files, based on dependency and processing rules. Indeed, Make is a
+ general purpose dependency solver.
+Homepage: http://www.gnu.org/software/make/
 
 Package: libgmp10
 Status: install ok installed
@@ -13270,6 +13453,24 @@ Description: X.Org X server -- SiliconMotion display driver
  .
  This package is built from the X.org xf86-video-siliconmotion driver module.
 
+Package: binutils
+Status: install ok installed
+Priority: optional
+Section: devel
+Installed-Size: 13230
+Maintainer: Matthias Klose <doko@debian.org>
+Architecture: i386
+Version: 2.22-8
+Replaces: binutils-gold (<< 2.20.51.20100415)
+Provides: elf-binutils
+Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.0)
+Suggests: binutils-doc (>= 2.22-8)
+Conflicts: binutils-gold (<< 2.20.51.20100415), elf-binutils, gas, modutils (<< 2.4.19-1)
+Description: GNU assembler, linker and binary utilities
+ The programs in this package are used to assemble, link and manipulate
+ binary and object files.  They may be used in conjunction with a compiler
+ and various libraries to build programs.
+
 Package: nvidia-detect
 Status: install ok installed
 Priority: optional
@@ -13497,6 +13698,24 @@ Description: support for getting/setting POSIX.1e capabilities
  a partitioning of the all powerful root privilege into a set of distinct
  privileges.
 Homepage: http://sites.google.com/site/fullycapable/
+
+Package: libitm1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 145
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.7
+Version: 4.7.2-5
+Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.1.1)
+Pre-Depends: multiarch-support
+Description: GNU Transactional Memory Library
+ GNU Transactional Memory Library (libitm) provides transaction support for
+ accesses to the memory of a process, enabling easy-to-use synchronization of
+ accesses to shared memory by several threads.
+Homepage: http://gcc.gnu.org/
 
 Package: libkemoticons4
 Status: deinstall ok config-files

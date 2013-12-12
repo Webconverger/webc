@@ -46,6 +46,11 @@ can reach it easily. -->
 <!ENTITY  bookmarkAllTabs.accesskey          "T">
 <!ENTITY  undoCloseTab.label                 "টেব বন্ধ কৰা বাতিল কৰক">
 <!ENTITY  undoCloseTab.accesskey             "U">
+<!-- LOCALIZATION NOTE (undoCloseTabs.label) : This label is used
+when the previous tab-closing operation closed more than one tab. It
+replaces the undoCloseTab.label and will use the same accesskey as the
+undoCloseTab.label so users will not need to learn new keyboard controls. -->
+<!ENTITY  undoCloseTabs.label                "টেব বন্ধ কৰা বাতিল কৰক">
 <!ENTITY  closeTab.label                     "টেব বন্ধ কৰক">
 <!ENTITY  closeTab.accesskey                 "c">
 
@@ -73,12 +78,9 @@ can reach it easily. -->
 <!ENTITY menubarCmd.label "মেনু বাৰ">
 <!ENTITY menubarCmd.accesskey "M">
 <!ENTITY navbarCmd.label "দিশনিৰ্ণয় টুলবাৰ">
-<!ENTITY navbarCmd.accesskey "N">
 <!ENTITY personalbarCmd.label "পত্ৰচিহ্ন টুলবাৰ">
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "পত্ৰচিহ্ন টুলবাৰৰ বস্তুবোৰ">
-<!ENTITY addonBarCmd.label "এড-অন বাৰ">
-<!ENTITY addonBarCmd.accesskey "A">
 
 <!ENTITY pageSourceCmd.label "পৃষ্ঠাৰ উৎস">
 <!ENTITY pageSourceCmd.accesskey "o">
@@ -107,9 +109,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.accesskey "F">
 <!ENTITY fullscreenAllowButton.label "অনুমতি দিয়ক">
 <!ENTITY fullscreenExitButton.label "নাকচ কৰক">
-<!ENTITY fullscreenApproval.value "পূৰ্ণপৰ্দাৰ অনুমতি দিবনে?">
 
-<!ENTITY fullscreenExitHint.value "যিকোনো সময়ত পূৰ্ণপৰ্দা ত্যাগ কৰিবলে ESC টিপিব।">
+<!ENTITY fullscreenExitHint2.value "প্ৰস্থান কৰিবলৈ যিকোনো সময়ত ESC টিপক।">
 <!ENTITY leaveDOMFullScreen.label "পূৰ্ণপৰ্দা ত্যাগ কৰক">
 <!ENTITY leaveDOMFullScreen.accesskey "u">
 
@@ -161,22 +162,15 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY backForwardItem.title        "পিছলৈ/আগলৈ">
 <!ENTITY locationItem.title           "অৱস্থান">
 <!ENTITY searchItem.title             "সন্ধান কৰক">
-<!ENTITY throbberItem.title           "কাৰ্য্য নিৰ্দেশক">
 <!ENTITY bookmarksItem.title          "পত্ৰচিহ্নসমূহ">
 <!-- Toolbar items --> 
 
-<!ENTITY appMenuButton.label          "মেনু">
-<!ENTITY appMenuButton.tooltip        "&brandShortName; মেনু খোলক">
-<!ENTITY homeButton.label             "ঘৰ">
+<!ENTITY homeButton.label             "মূখ্য পৃষ্ঠা">
 
 <!ENTITY tabGroupsButton.label        "টেব দলসমূহ">
 <!ENTITY tabGroupsButton.tooltip      "আপোনাৰ টেবসমূহ দলবদ্ধ কৰক">
 
-<!ENTITY feedButton.label             "স্বাক্ষৰ কৰা">
-<!ENTITY feedButton.tooltip           "এই পৃষ্ঠালৈ স্বাক্ষৰ কৰক…">
-
 <!ENTITY bookmarksButton.label          "পত্ৰচিহ্নসমূহ">
-<!ENTITY bookmarksButton.tooltip        "আপোনাৰ পত্ৰচিহ্নসমূহ প্ৰদৰ্শন কৰক">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "পত্ৰচিহ্নসমূহ">
@@ -192,7 +186,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksWinCmd.commandkey "i">
 
 <!ENTITY historyButton.label            "ইতিহাস">
-<!ENTITY historyButton.tooltip          "আপুনি শেহতীয়াভাৱে দৰ্শন কৰা পৃষ্ঠাসমূহ প্ৰদৰ্শন কৰক">
 <!ENTITY historySidebarCmd.commandKey   "h">
 
 <!ENTITY toolsMenu.label              "সঁজুলিসমূহ">
@@ -200,8 +193,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY keywordfield.label           "এই সন্ধানৰ বাবে এটা কিৱাৰ্ড যোগ কৰক…">
 <!ENTITY keywordfield.accesskey       "K">
-<!ENTITY search.label                 "ৱেব সন্ধান">
-<!ENTITY search.accesskey             "S">
+
 <!ENTITY downloads.label              "ডাউনল'ডসমূহ">
 <!ENTITY downloads.tooltip            "চলি থকা ডাউনল'ডসমূহৰ প্ৰগতি দেখুৱাওক">
 <!ENTITY downloads.accesskey          "D">
@@ -213,6 +205,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY webDeveloperMenu.label       "ৱেব উন্নয়নকাৰী">
 <!ENTITY webDeveloperMenu.accesskey   "W">
+
+<!ENTITY devToolsCmd.keycode          "VK_F12">
+<!ENTITY devToolsCmd.keytext          "F12">
 
 <!ENTITY devtoolsConnect.label        "সংযোগ কৰক…">
 <!ENTITY devtoolsConnect.accesskey    "e">
@@ -255,10 +250,14 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbarCloseButton.tooltiptext "উন্নয়নকাৰী টুলবাৰ বন্ধ কৰক">
 <!ENTITY devToolbarMenu.label              "উন্নয়নকাৰী টুলবাৰ">
 <!ENTITY devToolbarMenu.accesskey          "v">
+<!ENTITY devAppMgrMenu.label               "এপ্লিকেচন ব্যৱস্থাপক">
+<!ENTITY devAppMgrMenu.accesskey           "a">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "সঁজুলিসমূহ ট'গল কৰক">
 <!ENTITY devToolboxMenuItem.accesskey      "T">
+<!ENTITY devToolboxMenuItem.keycode        "I">
+<!ENTITY devToolboxMenuItem.keytext        "I">
 
 <!ENTITY devToolbarToolsButton.tooltip     "উন্নয়নকাৰী সঁজুলিসমূহ ট'গল কৰক">
 <!ENTITY devToolbarOtherToolsButton.label  "অধিক সঁজুলি">
@@ -316,8 +315,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewSidebarMenu.accesskey "e">
 <!ENTITY viewCustomizeToolbar.label       "স্বনিৰ্বাচন…"> 
 <!ENTITY viewCustomizeToolbar.accesskey     "C">
-<!ENTITY viewTabsOnTop.label            "ওপৰত থকা টেবসমূহ">
-<!ENTITY viewTabsOnTop.accesskey        "T">
 
 <!ENTITY historyMenu.label "ইতিহাস">
 <!ENTITY historyMenu.accesskey "s">
@@ -326,20 +323,10 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY historyUndoWindowMenu.label "শেহতীয়াভাৱে বন্ধ কৰা উইন্ডোসমূহ">
 <!ENTITY historyRestoreLastSession.label "পুৰ্বৱৰ্তী অধিবেশন পুনৰ সংৰক্ষণ কৰক">
 
-<!ENTITY historyHomeCmd.label "ঘৰ">
 <!ENTITY showAllHistoryCmd2.label "সকলো ইতিহাস দেখুৱাওক">
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
-<!ENTITY appMenuEdit.label "সম্পাদন কৰক">
 <!ENTITY appMenuCustomize.label "স্বনিৰ্বাচন">
-<!ENTITY appMenuToolbarLayout.label "টুলবাৰ বিন্যাস…">
-<!ENTITY appMenuSidebars.label "কাষবাৰসমূহ">
-<!ENTITY appMenuFind.label "সন্ধান কৰক…">
-<!ENTITY appMenuUnsorted.label "অসজোৱা পত্ৰচিহ্নসমূহ">
-<!ENTITY appMenuWebDeveloper.label "ৱেব উন্নয়ণকাৰী">
-<!ENTITY appMenuGettingStarted.label "আৰম্ভণি">
-<!ENTITY appMenuSafeMode.label "এড-অন সমূহ অসামৰ্থবান থকাকে পুনৰাম্ভ কৰক…">
-<!ENTITY appMenuSafeMode.accesskey "R">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "ঠিকনা সন্ধান কৰক অথবা সুমুৱাওক">
@@ -408,6 +395,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewImageCmd.accesskey       "I">
 <!ENTITY viewImageInfoCmd.label       "ছবি তথ্য দৰ্শন কৰক">
 <!ENTITY viewImageInfoCmd.accesskey   "f">
+<!ENTITY viewImageDescCmd.label       "বিৱৰণ দৰ্শন কৰক">
+<!ENTITY viewImageDescCmd.accesskey   "D">
 <!ENTITY viewVideoCmd.label           "ভিডিঅ' দৰ্শন কৰক">
 <!ENTITY viewVideoCmd.accesskey       "I">
 <!ENTITY viewBGImageCmd.label         "পটভূমিৰ ছবি দৰ্শন কৰক">
@@ -543,15 +532,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY newWindowButton.tooltip        "এটা নতুন উইন্ডো খোলক">
 <!ENTITY sidebarCloseButton.tooltip     "কাষবাৰ বন্ধ কৰক">
 
-<!ENTITY cutButton.tooltip              "কাট">
-<!ENTITY copyButton.tooltip             "কপি">
-<!ENTITY pasteButton.tooltip            "পেইস্ট">
-
 <!ENTITY fullScreenButton.tooltip       "উইন্ডোক পূৰ্ণপৰ্দাত প্ৰদৰ্শন কৰক">
-
-<!ENTITY zoomOutButton.tooltip          "জুম আউট">
-<!ENTITY zoomInButton.tooltip           "জুম ইন">
-<!ENTITY zoomControls.label             "নিয়ন্ত্ৰণসমূহ জুম কৰক">
 
 <!ENTITY quitApplicationCmdWin.label       "প্ৰস্থান কৰক"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "x">
@@ -622,6 +603,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY identity.runBy "যাক চলোৱা হয়">
 
 <!ENTITY identity.moreInfoLinkText "অধিক তথ্য…">
+
+<!ENTITY identity.permissions "অনুমতিসমূহ">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -637,9 +620,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncSyncNowItem.label        "এতিয়া সংমিহলি কৰক">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncToolbarButton.label      "সংমিহলি কৰক">
-
-<!ENTITY addonBarCloseButton.tooltip  "এড-অন বাৰ বন্ধ কৰক">
-<!ENTITY toggleAddonBarCmd.key        "/">
 
 <!ENTITY socialToolbar.title        "সামাজিক টুলবাৰ বুটাম">
 <!ENTITY social.notLoggedIn.label   "লগিন অৱস্থাত নাই">
@@ -665,10 +645,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "চেটসমূহত ফকাচ কৰক">
 <!ENTITY social.chatBar.accesskey "c">
-<!-- labels are set dynamically, see browser.properties -->
 
-<!ENTITY social.markpage.accesskey "m">
-<!ENTITY social.marklink.accesskey "M">
+<!ENTITY social.markpageMenu.accesskey "P">
+<!ENTITY social.markpageMenu.label "পৃষ্ঠাক চিহ্নিত অৱস্থানত সংৰক্ষণ কৰক…">
+<!ENTITY social.marklinkMenu.accesskey "L">
+<!ENTITY social.marklinkMenu.label "লিঙ্কক চিহ্নিত অৱস্থানত সংৰক্ষণ কৰক…">
 
 <!ENTITY getUserMedia.selectCamera.label "অংশীদাৰী কৰিবলে কেমেৰা:">
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
@@ -690,22 +671,51 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY pluginActivateNow.label "এতিয়ায় অনুমতি দিয়ক">
 <!ENTITY pluginActivateAlways.label "অনুমতি দিয়ক আৰু মনত ৰাখক">
 <!ENTITY pluginBlockNow.label "প্লাগিন প্ৰতিৰোধ কৰক">
-
-<!ENTITY devToolboxMenuItem.keycode        "I">
-<!ENTITY devToolboxMenuItem.keytext        "I">
-
-<!ENTITY devToolsCmd.keycode          "VK_F12">
-<!ENTITY devToolsCmd.keytext          "F12">
-
-<!ENTITY fullscreenExitHint2.value "Press ESC at any time to exit.">
-
-<!ENTITY identity.permissions "Permissions">
-
 <!-- LOCALIZATION NOTE: (pluginNotification.width): This is used to determine the
      width of the plugin popup notification that can appear if a plugin has been
      blocked on a page. Should be wide enough to fit the pluginActivateNow.label
      and pluginActivateAlways.label strings above on a single line. This must be
      a CSS length value. -->
-<!ENTITY pluginNotification.width "28em">
-<!ENTITY viewImageDescCmd.accesskey   "D">
-<!ENTITY viewImageDescCmd.label       "View Description">
+
+<!ENTITY pluginNotification.width "32em">
+
+<!ENTITY tabCrashed.header "টেব স্খলন হৈছে">
+<!ENTITY tabCrashed.message "বাৰু, ই লজ্জাজনক। আমি এই ৱেব পৃষ্ঠা প্ৰদৰ্শন কৰাৰ চেষ্টা কৰিছো, কিন্তু ই প্ৰতিক্ৰিয়া কৰা নাই।">
+<!ENTITY tabCrashed.checkSendReport "&vendorShortName; ক ইয়াৰ বিষয়ে কওক যাতে তেওঁলোকে ইয়াক ঠিক কৰিব পাৰে।">
+<!ENTITY tabCrashed.tryAgain "পুনৰ চেষ্টা কৰক">
+<!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
+     kept here to avoid warnings from l10n tools like compare-locales on
+     l10n-central. They will be definitely removed when Australis is ready
+     for mozilla-aurora. -->
+
+
+<!ENTITY navbarCmd.accesskey           "N">
+<!ENTITY addonBarCmd.label             "এড-অন বাৰ">
+<!ENTITY addonBarCmd.accesskey         "A">
+<!ENTITY throbberItem.title            "কাৰ্য্য নিৰ্দেশক">
+<!ENTITY appMenuButton.label           "মেনু">
+<!ENTITY appMenuButton.tooltip         "&brandShortName; মেনু খোলক">
+<!ENTITY feedButton.label              "স্বাক্ষৰ কৰা">
+<!ENTITY feedButton.tooltip            "এই পৃষ্ঠালৈ স্বাক্ষৰ কৰক…">
+<!ENTITY bookmarksButton.tooltip       "আপোনাৰ পত্ৰচিহ্নসমূহ প্ৰদৰ্শন কৰক">
+<!ENTITY historyButton.tooltip         "আপুনি শেহতীয়াভাৱে দৰ্শন কৰা পৃষ্ঠাসমূহ প্ৰদৰ্শন কৰক">
+<!ENTITY viewTabsOnTop.label           "ওপৰত থকা টেবসমূহ">
+<!ENTITY viewTabsOnTop.accesskey       "T">
+<!ENTITY appMenuEdit.label             "সম্পাদন কৰক">
+<!ENTITY appMenuToolbarLayout.label    "টুলবাৰ বিন্যাস…">
+<!ENTITY appMenuSidebars.label         "কাষবাৰসমূহ">
+<!ENTITY appMenuFind.label             "সন্ধান কৰক…">
+<!ENTITY appMenuUnsorted.label         "অসজোৱা পত্ৰচিহ্নসমূহ">
+<!ENTITY appMenuWebDeveloper.label     "ৱেব উন্নয়ণকাৰী">
+<!ENTITY appMenuGettingStarted.label   "আৰম্ভণি">
+<!ENTITY appMenuSafeMode.label         "এড-অন সমূহ অসামৰ্থবান থকাকে পুনৰাম্ভ কৰক…">
+<!ENTITY appMenuSafeMode.accesskey     "R">
+<!ENTITY cutButton.tooltip             "কাট">
+<!ENTITY copyButton.tooltip            "কপি">
+<!ENTITY pasteButton.tooltip           "পেইস্ট">
+<!ENTITY zoomOutButton.tooltip         "জুম আউট">
+<!ENTITY zoomInButton.tooltip          "জুম ইন">
+<!ENTITY zoomControls.label            "নিয়ন্ত্ৰণসমূহ জুম কৰক">
+<!ENTITY addonBarCloseButton.tooltip   "এড-অন বাৰ বন্ধ কৰক">
+<!ENTITY toggleAddonBarCmd.key         "/">
+<!-- end of strings to be removed post-Australis -->
