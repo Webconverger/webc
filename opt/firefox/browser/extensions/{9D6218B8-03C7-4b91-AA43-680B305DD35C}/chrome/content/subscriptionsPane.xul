@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- You may find the license in the LICENSE file -->
+<!DOCTYPE window SYSTEM "chrome://procon/locale/preferences.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <prefpane
+        id="subscriptionsPane"
+        label="&subscriptionsPane.title;"
+        onpaneload="subscriptionsPane.load();">
+
+        <preferences>
+            <preference id="pref-subscriptions-urls" name="extensions.procon.subscriptions.urls" type="unichar"/>
+            <preference id="pref-subscriptions-lastUpdateTime" name="extensions.procon.subscriptions.lastUpdateTime" type="int"/>
+        </preferences>
+
+        <vbox width="1" flex="1">
+            <description>&subscriptions.description;</description>
+            <hbox align="center">
+                <description flex="1" id="last-updated-description"></description>
+                <button id="subscriptions-update-button" label="&updatesubscriptions.label;" oncommand="subscriptionsPane.updateSubscriptions();"/>
+            </hbox>
+            <listbox id="subscription-list" flex="1" onselect="subscriptionsPane.getSelectedListItem(this);">
+                <listhead>
+                    <listheader label="&urladdress.label;"/>
+                </listhead>
+            </listbox>
+            <hbox>
+                <textbox id="subscription-input" value="" flex="1" oninput="subscriptionsPane.activateButtons();"/>
+                <button id="subscription-add-button" label="&add.label;" oncommand="subscriptionsPane.addListItem();"/>
+                <button id="subscription-remove-button" label="&remove.label;" oncommand="subscriptionsPane.removeListItem();" disabled="true"/>
+            </hbox>
+        </vbox>
+    </prefpane>
+</overlay>
