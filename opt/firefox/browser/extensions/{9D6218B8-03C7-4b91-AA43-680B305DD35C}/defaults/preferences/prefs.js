@@ -42,5 +42,5 @@ pref("extensions.procon.profanitylist.words", "");
 pref("extensions.procon.misc.showMenuButton", false);
 pref("extensions.procon.misc.showStatusButton", false);
 pref("extensions.procon.subscriptions.enabled", true);
-pref("extensions.procon.subscriptions.urls", "[\"http%3A%2F%2Fshops.amag.ru%2Fkiosk%2Fwhitelistl.txt\"]");
+pref("extensions.procon.subscriptions.urls", "[\"http%3A%2F%2Fshops.amag.ru%2Fkiosk%2Fwhitelist.txt\"]");
 //pref("extensions.procon.general.password", "c6a36d49265f997f76401c4480d36afc") - don't work in global
