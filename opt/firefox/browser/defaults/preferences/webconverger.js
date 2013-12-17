@@ -28,6 +28,7 @@ pref("datareporting.healthreport.uploadEnabled", false);
 
 //AGA
 pref("browser.newtab.url","http://shops.amag.ru");
+pref("browser.newtab.preload",false); // If true newtab work like newtab.url=about:newtab
 pref("browser.feeds.showFirstRunUI", false);
 pref("datareporting.healthreport.service.firstRun", false);
 pref("datareporting.healthreport.service.enabled", false);
