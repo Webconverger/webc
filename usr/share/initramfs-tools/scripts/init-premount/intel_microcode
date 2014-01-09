@@ -1,0 +1,56 @@
+#!/bin/sh
+# processor-ucode-common initramfs-tools boot script
+# Copyright (C) 2012 Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+# Released under the GPL v2 or later license
+#
+# Triggers kernel firmware update requests for processor microcode
+# when required.
+#
+
+# dependencies: firmware loader, microcode kernel support (built-in/module)
+
+PREREQ=""
+
+prereqs()
+{
+   echo "$PREREQ"
+}
+
+case $1 in
+prereqs)
+   prereqs
+   exit 0
+   ;;
+esac
+
+# Only continue if we do possibly have firmware to install
+[ -d /lib/firmware/intel-ucode -o -d /lib/firmware/amd-ucode ] || exit 0
+
+# we don't need to run twice
+[ -e ${0%/*}/amd64-microcode ] && exit 0
+[ -e ${0%/*}/amd64_microcode ] && exit 0
+
+# module load will already have caused the microcode to be fetched
+{ while read -r module trash ; do [ "x$module" = "xmicrocode" ] && exit 0 ; done } < /proc/modules
+
+. /scripts/functions
+
+if [ -e /sys/devices/system/cpu/microcode/reload ] ; then
+    echo 1 > /sys/devices/system/cpu/microcode/reload || {
+	log_warning_msg "could not update the microcode of every processor"
+    }
+else
+    # Try all online processors, broken kernels need this,
+    # fixed kernels will accept it only on the BSP and update
+    # all processors anyway, and -EINVAL all others... but we
+    # don't know which one is the BSP, so we try all of them
+    # and hide errors, the kernel will log any real problem.
+
+    log_begin_msg "Requesting microcode update using per-core interface"
+    for i in /sys/devices/system/cpu/cpu[0-9]*/microcode/reload ; do
+	echo 1 2>/dev/null > "$i" || true
+    done
+    log_end_msg
+fi
+
+:
