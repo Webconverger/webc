@@ -130,6 +130,8 @@ for x in $( cmdline ); do
 		;;
 
 	printer=*)
+		systemctl unmask cups.service
+		/etc/init.d/cups start
 		IFS=, read -ra P <<< "${x#printer=}"
 		P[0]=$(/bin/busybox httpd -d ${P[0]})
 		P[1]=$(/bin/busybox httpd -d ${P[1]})
