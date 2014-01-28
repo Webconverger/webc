@@ -13027,6 +13027,32 @@ Description: a macro processing language
  generating `configure' scripts, but not for running them.
 Homepage: http://www.gnu.org/software/m4/
 
+Package: intel-microcode
+Status: install ok installed
+Priority: standard
+Section: non-free/admin
+Installed-Size: 733
+Maintainer: Henrique de Moraes Holschuh <hmh@debian.org>
+Architecture: i386
+Version: 1.20130906.1
+Recommends: iucode-tool
+Conflicts: microcode.ctl (<< 0.18~0)
+Conffiles:
+ /etc/default/intel-microcode eb26c21c0ca9b40423ec21f75dbf003c
+ /etc/kernel/preinst.d/intel-microcode 23bb17a181ed020f5f6b1d1cf8cc10c7
+Description: Processor microcode firmware for Intel CPUs
+ This package contains updated system processor microcode for
+ Intel i686 and Intel X86-64 processors.  Intel releases microcode
+ updates to correct processor behavior as documented in the
+ respective processor specification updates.
+ .
+ Installing iucode-tool is recommended, as it can automatically
+ limit the selection of Intel processor microcode files installed
+ into the initramfs, reducing initramfs bloat by a large factor.
+ .
+ For AMD processors, please refer to the amd64-microcode package.
+Homepage: http://feeds.downloadcenter.intel.com/rss/?p=483&lang=eng
+
 Package: libfontenc1
 Status: install ok installed
 Priority: optional

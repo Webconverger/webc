@@ -1,0 +1,90 @@
+#!/bin/sh
+# intel-microcode initramfs-tools hook script
+# Copyright (C) 2012 Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+# Released under the GPL v2 or later license
+#
+# Generates a copy of the minimal microcode for the current system if
+# possible, and installs it in the initramfs.
+#
+
+PREREQ=""
+IUCODE_CONFIG=/etc/default/intel-microcode
+
+prereqs()
+{
+   echo "$PREREQ"
+}
+
+case $1 in
+prereqs)
+   prereqs
+   exit 0
+   ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+verbose()
+{
+	if [ "${verbose}" = "y" ] ; then
+		echo "intel-microcode: $@"
+	fi
+	:
+}
+
+if [ "${verbose}" = "y" ] ; then
+	IUCODE_TOOL_OPTIONS="-v"
+else
+	IUCODE_TOOL_OPTIONS="-q"
+fi
+
+IUCODE_TOOL=$(command -v iucode_tool)
+if [ -z "${IUCODE_TOOL}" -a -x /usr/sbin/iucode_tool ] ; then
+	IUCODE_TOOL=/usr/sbin/iucode_tool
+fi
+
+IUCODE_FW_DIR=/lib/firmware/intel-ucode
+IUCODE_TOOL_EXTRA_OPTIONS=
+IUCODE_TOOL_SCANCPUS=yes
+[ -r ${IUCODE_CONFIG} ] && . ${IUCODE_CONFIG}
+
+if [ ! -x "${IUCODE_TOOL}" ] ; then
+	verbose "iucode_tool not found, advanced functionality not available"
+	IUCODE_TOOL=
+fi
+
+if [ -z "${IUCODE_TOOL}" -o "${IUCODE_TOOL_SCANCPUS}" != "yes" ] ; then
+	verbose "Adding microcode for all Intel processor models"
+else
+	verbose "Adding microcode for currently online Intel processors"
+	grep -q cpu/cpuid /proc/devices || modprobe cpuid
+	if grep -q cpu/cpuid /proc/devices ; then
+		IUCODE_TOOL_OPTIONS="${IUCODE_TOOL_OPTIONS} --scan-system"
+	else
+		# compatibility with iucode-tool << 0.8.2
+		echo "intel-microcode: cpuid MSR kernel support missing"
+		echo "intel-microcode: disabling IUCODE_TOOL_SCANCPUS option"
+	fi
+fi
+
+# Generate firmware dir
+mkdir -m 755 -p "${DESTDIR}${IUCODE_FW_DIR}"
+
+if [ -x "${IUCODE_TOOL}" ] ; then
+	( find /usr/share/misc -maxdepth 1 -type f -name 'intel-microcode*' -print0 ;
+	  find "${IUCODE_FW_DIR}" -maxdepth 0 -type d -print0 ) 2>/dev/null | \
+		xargs -0 -r -x \
+		   ${IUCODE_TOOL} ${IUCODE_TOOL_OPTIONS} \
+			--write-firmware="${DESTDIR}${IUCODE_FW_DIR}" \
+			${IUCODE_TOOL_EXTRA_OPTIONS}
+else
+	cp -rf "${IUCODE_FW_DIR}/." "${DESTDIR}${IUCODE_FW_DIR}/."
+fi
+
+if ! rmdir "${DESTDIR}${IUCODE_FW_DIR}" 2>/dev/null ; then
+	# The directory was not empty, so we have work to do
+	verbose "installing Intel processor microcode update support into initramfs..."
+	force_load microcode
+fi
+
+:

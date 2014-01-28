@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# /etc/kernel/preinst.d intel-microcode script
+# Copyright (C) 2012 Henrique de Moraes Holschuh <hmh@hmh.eng.br>
+# Released under the GPL v2 or later license
+#
+# This script makes sure the microcode and cpuid modules are
+# loaded, before the kernel image has a chance to replace them
+# with new ones that might not be compatible with the current
+# kernel.
+#
+# We need the microcode module to update microcode on postinst,
+# and the cpuid module for iucode_tool --scan-system.
+#
+
+modprobe -q microcode || true
+grep -q cpu/cpuid /proc/devices || modprobe -q cpuid || true
+
+:
