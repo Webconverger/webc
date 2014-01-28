@@ -258,8 +258,7 @@ update_cmdline() {
 	# Update $device
 	. "/etc/webc/webc.conf"
 
-#AGA	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url?V=$webc_version&D=$device&K=$kernel"
-	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url/cmdline.txt"
+	if curl -f -o /etc/webc/cmdline.tmp --retry 3 "$config_url?V=$webc_version&D=$device&K=$kernel"
 	then
 		# curl has a bug where it doesn't write an empty file
 		touch /etc/webc/cmdline.tmp
