@@ -41,6 +41,11 @@ while ! test -e /etc/webc/id; do
 	test $SECONDS -gt 30 && break
 done
 
+#AGA begin
+# Wait while I don't see my Web-server, all configurations must be available
+while (! cmdline_has debug)&&(! ping ${AGA_cfg_srv} -c 1 -w 5); do :; done 
+#AGA end
+
 # get the $webc_id
 . "/etc/webc/webc.conf"
 homepage="$install_qa_url" # default homepage
@@ -157,7 +162,11 @@ do
 		bgurl=*)
 			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
 				# only download if newer
-				wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+#AGA begin
+#				wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+# timeout must be longer when i work behinde router with DNS forwarding  
+				wget -N --timeout=10 "${bgurl}" -O /home/webc/bg.png.custom
+#AGA end
 				file /home/webc/bg.png.custom | grep -qs "image data" && {
 					cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
 					update_background /home/webc/bg.png
