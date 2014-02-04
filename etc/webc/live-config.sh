@@ -98,6 +98,10 @@ then
 	sed -i 's,// installButton,installButton,g' /etc/webc/extensions/webcnoaddressbar/content/wc.js /etc/webc/extensions/webconverger/content/wc.js
 fi
 
+#AGA begin
+test -e "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com" && rm -f "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com"
+ln -s /etc/webc/extensions/vkeyboard '/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com'
+#AGA end
 
 for x in $( cmdline ); do
 	case $x in
@@ -115,6 +119,15 @@ for x in $( cmdline ); do
 		ln -s /etc/webc/extensions/grabdrag '/opt/firefox/browser/extensions/{477c4c36-24eb-11da-94d4-00e08161165f}'
 		;;
 
+#AGA begin
+	bigbuttons)
+		ln -s /etc/webc/extensions/BigButtons '/opt/firefox/browser/extensions/BigButtons@kensaunders'
+		ln -s /etc/webc/extensions/ThemeFontsAndSize '/opt/firefox/browser/extensions/{f69e22c7-bc50-414a-9269-0f5c344cd94c}'
+		ln -s /etc/webc/extensions/zoompage '/opt/firefox/browser/extensions/zoompage@DW-dev'
+		test -e "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com" && rm -f "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com"
+		ln -s /etc/webc/extensions/vkeyboardB '/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com'
+		;;
+#AGA end
 	support)
 		echo '*/5 * * * * root /sbin/support' > /etc/cron.d/webc-support
 		;;

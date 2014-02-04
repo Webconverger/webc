@@ -1,0 +1,227 @@
+<?xml version="1.0"?> 
+
+<!--
+/************************************************************************/
+/*                                                                      */
+/*      Zoom Page  -  Firefox Extension  -  Options Window              */
+/*                                                                      */
+/*      XML for Options dialog                                          */
+/*                                                                      */
+/*      Copyright (C) 2009-2013  by  DW-dev                             */
+/*                                                                      */
+/*      Last Edit  -  30 Nov 2013                                       */
+/*                                                                      */
+/************************************************************************/
+-->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://zoompage/locale/zoompage.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="zoompage-options" title="&zoompage.optionstitle;"
+        onload="zoomPageOptions.initPrefs();" ondialogaccept="zoomPageOptions.savePrefs();"
+        buttons="accept,cancel" persist="screenX screenY"
+        windowtype="zoompage-options">
+    
+    <script type="application/x-javascript" src="chrome://global/content/nsUserSettings.js"/>
+    <script type="application/x-javascript" src="chrome://zoompage/content/zoompage-options.js"/>
+    
+    <tabbox>
+        
+        <tabs>
+            <tab label="  &zoompage.general;  "/>
+            <tab label="  &zoompage.zoomlevels;  "/>
+        </tabs>
+        
+        <tabpanels flex="0">
+        
+            <tabpanel orient="vertical">
+                
+                <groupbox flex="1">
+                    <caption label="&zoompage.zoommode;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-zoommode" oncommand="zoomPageOptions.onChangeZoomMode();">
+                            <menupopup>
+                                <menuitem label="&zoompage.defaultzoom; (&zoompage.defflag;/&zoompage.expflag;)" tooltiptext="&zoompage.defaultzoom.tip;" value="0"/>
+                                <menuitem label="&zoompage.fittowidthzoom; (&zoompage.ftwflag;/&zoompage.expflag;)" tooltiptext="&zoompage.fittowidthzoom.tip;" value="1"/>
+                                <menuitem label="&zoompage.defzoomsitespec; (&zoompage.defflag;/&zoompage.ssflag;)" tooltiptext="&zoompage.defzoomsitespec.tip;" value="2"/>
+                                <menuitem label="&zoompage.ftwzoomsitespec; (&zoompage.ftwflag;/&zoompage.ssflag;)" tooltiptext="&zoompage.ftwzoomsitespec.tip;" value="3"/>
+                            </menupopup>
+                        </menulist>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.imagezoommode;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-imagezoommode" oncommand="zoomPageOptions.onChangeImageZoomMode();">
+                            <menupopup>
+                                <menuitem label="&zoompage.defaultzoom; (&zoompage.defflag;/&zoompage.expflag;)" tooltiptext="&zoompage.imagedefzoom.tip;" value="0"/>
+                                <menuitem label="&zoompage.fittowindowzoom; (&zoompage.ftwflag;/&zoompage.expflag;)" tooltiptext="&zoompage.fittowidthzoom.tip;" value="1"/>
+                            </menupopup>
+                        </menulist>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.buttonstyle;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-buttonstyle">
+                            <menupopup>
+                                <menuitem label="&zoompage.style.c;" value="c"/>
+                                <menuitem label="&zoompage.style.n;" value="n"/>
+                                <menuitem label="&zoompage.style.s;" value="s"/>
+                                <menuitem label="&zoompage.style.t;" value="t"/>
+                                <menuitem label="&zoompage.style.m;" value="m"/>
+                            </menupopup>
+                        </menulist>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.displayindicators;"/>
+                    <grid style="margin: -4px 0px;">
+                        <columns>
+                            <column/>
+                            <column/>
+                            <column/>
+                            <column/>
+                        </columns>
+                        <rows style="margin-left: 1px;">
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.explabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-expprefix" label="&zoompage.expflag; &zoompage.prefix;"/>
+                            </row>
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.deflabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-defprefix" label="&zoompage.defflag; &zoompage.prefix;"/>
+                                <checkbox id="zoompage-defborder" label="&zoompage.defborder;"/>
+                            </row>
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.ftwlabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-ftwprefix" label="&zoompage.ftwflag; &zoompage.prefix;"/>
+                                <checkbox id="zoompage-ftwborder" label="&zoompage.ftwborder;"/>
+                            </row>
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.sslabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-ssprefix" label="&zoompage.ssflag; &zoompage.prefix;"/>
+                                <checkbox id="zoompage-ssborder" label="&zoompage.ssborder;"/>
+                            </row>
+                            <row style="margin: 2px 4px 2px 3px; border-top: 1px solid #D5DFE5;"/>
+                            <row style="margin: -2px 0px; ">
+                                <label value="&zoompage.fplabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-fpprefix" label="&zoompage.fpflag; &zoompage.prefix;"/>
+                            </row>
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.tolabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-toprefix" label="&zoompage.toflag; &zoompage.prefix;"/>
+                                <checkbox id="zoompage-toitalic" label="&zoompage.toitalic;"/>
+                                <checkbox id="zoompage-tored" label="&zoompage.tored;"/>
+                            </row>
+                            <row style="margin: 2px 4px 2px 3px; border-top: 1px solid #D5DFE5;"/>
+                            <row style="margin: -2px 0px;">
+                                <label value="&zoompage.pclabel;" style="margin-top: 4px;"/>
+                                <checkbox id="zoompage-pcsuffix" label="&zoompage.pcsuffix;"/>
+                            </row>
+                        </rows>
+                    </grid>
+                </groupbox>
+               
+                <groupbox>
+                    <caption label="&zoompage.swapclickactions;"/>
+                    <hbox>
+                        <checkbox id="zoompage-swapactions" label="&zoompage.swapactions;"/>
+                    </hbox>
+                </groupbox>
+                
+            </tabpanel>
+            
+            <tabpanel orient="vertical">
+    
+                <groupbox>
+                    <caption label="&zoompage.currentzoomlevels;"/>
+                    <caption label="&zoompage.currentzoomflags;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-zoomlevels" tooltip="zoompage-zoomlevels-tooltip" oncommand="zoomPageOptions.onChangeZoomLevels();" style="width: 500px; margin-right:6px;"/>
+                        <label id="zoompage-firefoxmarker" value="&zoompage.firefoxmarker;" hidden="true"/>
+                        <label id="zoompage-custommarker" value="&zoompage.custommarker;" hidden="true"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.customzoomlevels;"/>
+                    <hbox style="margin-left: 4px;">
+                        <textbox id="zoompage-customlevels" style="width:426px; padding-left: 5px; padding-right: 4px;"/>
+                        <button id="zoompage-customcopy" image="chrome://zoompage/skin/zoompage-copy.png" tooltiptext="&zoompage.customcopy.tip;" oncommand="zoomPageOptions.onCommandCustomCopy();" style="min-width: 26px; margin-left: 3px; margin-bottom: 1px;"/>
+                        <button id="zoompage-customvalidate" image="chrome://zoompage/skin/zoompage-validate.png" tooltiptext="&zoompage.customvalidate.tip;" oncommand="zoomPageOptions.onCommandCustomValidate();" style="min-width: 26px; margin-left: 1px; margin-bottom: 1px;"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.defaultzoomlevel;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-defaultlevel" oncommand="zoomPageOptions.onChangeZoomLevels();" style="width: 68px;"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.fittowidthzoomlevels;"/>
+                    <hbox>
+                        <vbox align="center">
+                            <label value="&zoompage.fittowidthmin;"/>
+                            <hbox style="margin-left: 4px;">
+                                <menulist id="zoompage-fittowidthmin" style="width: 68px;"/>
+                            </hbox>
+                        </vbox>
+                        <vbox style="width: 0px; margin: 1px 2px 1px 6px; border-right: 1px solid #D5DFE5;"/>
+                        <vbox align="center">
+                            <label value="&zoompage.fittowidthmax;"/>
+                            <hbox align="center">
+                                <label value="&zoompage.fittowidthhalf;"/>
+                                <menulist id="zoompage-fittowidthmax" tooltiptext="&zoompage.fittowidthhalf.tip;" oncommand="zoomPageOptions.onChangeZoomLevels();" style="width: 68px;"/>
+                                <label value=" - "/>
+                                <menulist id="zoompage-fittowidthful" tooltiptext="&zoompage.fittowidthfull.tip;" style="width: 68px;"/>
+                                <label value="&zoompage.fittowidthfull;"/>
+                            </hbox>
+                        </vbox>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.imgdefaultzoomlevel;"/>
+                    <hbox style="margin-left: 4px;">
+                        <menulist id="zoompage-imgdefaultlevel" oncommand="zoomPageOptions.onChangeZoomLevels();" style="width: 68px;"/>
+                    </hbox>
+                </groupbox>
+                
+                <groupbox>
+                    <caption label="&zoompage.imgfittowindowzoomlevels;"/>
+                    <hbox>
+                        <vbox  align="center">
+                            <label value="&zoompage.imgfittowindowmin;"/>
+                            <hbox style="margin-left: 4px;">
+                                <menulist id="zoompage-imgfittowindowmin" style="width: 68px;"/>
+                            </hbox>
+                        </vbox>
+                        <vbox style="width: 0px; margin: 1px 2px 1px 6px; border-right: 1px solid #D5DFE5;"/>
+                        <vbox  align="center">
+                            <label value="&zoompage.imgfittowindowmax;"/>
+                            <hbox style="margin-left: 4px;">
+                                <menulist id="zoompage-imgfittowindowmax" style="width: 68px;"/>
+                            </hbox>
+                        </vbox>
+                    </hbox>
+                </groupbox>
+                
+            </tabpanel>
+            
+        </tabpanels>
+        
+    </tabbox>
+
+    <tooltip id="zoompage-zoomlevels-tooltip" style="max-width: 480px;">
+        <label id="zoompage-zoomlevels-tooltip-label" crop="start"/>
+    </tooltip>
+    
+</dialog>

@@ -3,7 +3,9 @@
 pref("devtools.errorconsole.enabled", false);
 
 // X on top right
-pref("browser.tabs.closeButtons", 3);
+//AGA: return to X on each Tab
+//pref("browser.tabs.closeButtons", 3);
+pref("browser.tabs.closeButtons", 1);
 
 pref("devtools.gcli.hideIntro", true);
 pref("accessibility.typeaheadfind.flashBar", 0);
