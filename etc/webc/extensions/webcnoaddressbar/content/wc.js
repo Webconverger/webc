@@ -17,6 +17,8 @@ function installButton(toolbarId, id) {
 		stopButton.style.visibility = "visible";
 		// COMMENT BELOW OUT only if showprintbutton is explicity set
 		// installButton("nav-bar", "print-button");
+//AGA
+		installButton("nav-bar", "zoom-controls");
 		window.removeEventListener("load", startup, false);
 	}
 
