@@ -5241,6 +5241,34 @@ Description: Userspace interface to radeon-specific kernel DRM services -- runti
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI). The DRI is
  currently used on Linux to provide hardware-accelerated OpenGL drivers.
 
+Package: linux-image-3.12-0.bpo.1-686-pae
+Priority: optional
+Section: kernel
+Installed-Size: 105139
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.12.6-2~bpo70+1
+Provides: linux-modules-3.12-0.bpo.1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.12, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Size: 29183034
+Description: Linux 3.12 for modern PCs
+ The Linux kernel 3.12 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Homepage: https://www.kernel.org/
+
 Package: iceweasel-l10n-hy-am
 Priority: optional
 Section: localization
@@ -14300,6 +14328,29 @@ Description: Client library to control the FAM daemon
  This package provides a shared library to allow programs to connect to
  the FAM daemon and ask for files to be monitored.
 Homepage: http://oss.sgi.com/projects/fam/
+
+Package: linux-image-3.12-0.bpo.1-486
+Priority: optional
+Section: kernel
+Installed-Size: 103444
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.12.6-2~bpo70+1
+Provides: linux-modules-3.12-0.bpo.1-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.12, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Size: 28596914
+Description: Linux 3.12 for older PCs
+ The Linux kernel 3.12 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Homepage: https://www.kernel.org/
 
 Package: libiw30
 Priority: extra

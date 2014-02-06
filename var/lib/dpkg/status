@@ -2182,7 +2182,7 @@ Description: simple debconf wrapper for OpenSSL
  feeds it with the correct user variables.
 
 Package: linux-image-3.10-0.bpo.2-486
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 81035
@@ -2190,6 +2190,7 @@ Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: i386
 Source: linux
 Version: 3.10.5-1~bpo70+1
+Config-Version: 3.10.5-1~bpo70+1
 Provides: linux-image, linux-modules-3.10-0.bpo.2-486
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -4514,6 +4515,34 @@ Description: Userspace interface to radeon-specific kernel DRM services -- runti
  DRM services.  DRM stands for "Direct Rendering Manager", which is the
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI). The DRI is
  currently used on Linux to provide hardware-accelerated OpenGL drivers.
+
+Package: linux-image-3.12-0.bpo.1-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 105139
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.12.6-2~bpo70+1
+Provides: linux-modules-3.12-0.bpo.1-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), libc6-i686
+Suggests: linux-doc-3.12, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Description: Linux 3.12 for modern PCs
+ The Linux kernel 3.12 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
+Homepage: https://www.kernel.org/
 
 Package: libmount1
 Status: install ok installed
@@ -12225,6 +12254,29 @@ Description: Client library to control the FAM daemon
  the FAM daemon and ask for files to be monitored.
 Homepage: http://oss.sgi.com/projects/fam/
 
+Package: linux-image-3.12-0.bpo.1-486
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 103444
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.12.6-2~bpo70+1
+Provides: linux-modules-3.12-0.bpo.1-486
+Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~)
+Suggests: linux-doc-3.12, debian-kernel-handbook, grub-pc | extlinux | lilo
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Description: Linux 3.12 for older PCs
+ The Linux kernel 3.12 and modules for use on PCs with a single processor
+ not supporting PAE.
+ .
+ This kernel is not suitable for SMP (multi-processor, multi-core or
+ hyper-threaded) systems.
+Homepage: https://www.kernel.org/
+
 Package: libiw30
 Status: install ok installed
 Priority: extra
@@ -12396,7 +12448,7 @@ Original-Vcs-Svn: svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: linux-image-3.10-0.bpo.3-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 85472
@@ -12404,6 +12456,7 @@ Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: i386
 Source: linux
 Version: 3.10.11-1~bpo70+1
+Config-Version: 3.10.11-1~bpo70+1
 Provides: linux-image, linux-modules-3.10-0.bpo.3-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), initramfs-tools (>= 0.110~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
