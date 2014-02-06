@@ -4,6 +4,3 @@
 
 pref("general.useragent.locale", "zh-TW");
 
-//Fix bug 443588
-pref("browser.fixup.use-utf8", true);
-
