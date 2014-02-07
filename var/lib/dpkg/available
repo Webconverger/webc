@@ -1880,6 +1880,29 @@ Description: minimal subset of the Python language (default version)
  contained in this package.
 Homepage: http://www.python.org/
 
+Package: libdvdread4
+Priority: optional
+Section: libs
+Installed-Size: 171
+Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
+Architecture: i386
+Source: libdvdread
+Version: 4.2.0+20120521-2
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Recommends: libdvdnav4
+Suggests: libdvdcss2
+Size: 55458
+Description: library for reading DVDs
+ libdvdread provides the functionality that is required to access many DVDs. It
+ parses IFO files, reads NAV-blocks, and performs CSS authentication and
+ descrambling.
+ .
+ libdvdread probes for libdvdcss at runtime and if found, will use it to
+ decrypt sections of the DVD as necessary. libdvdcss needs to be installed from
+ third-party repositories (see README.css), it's not included in Debian.
+Homepage: http://github.com/microe/libdvdread
+
 Package: libv4l-0
 Priority: optional
 Section: libs
@@ -2985,6 +3008,22 @@ Description: SSL shared libraries
  apache-ssl, telnet-ssl and openssh.
  .
  It is part of the OpenSSL implementation of SSL.
+
+Package: liba52-0.7.4
+Priority: optional
+Section: libs
+Installed-Size: 112
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Source: a52dec
+Version: 0.7.4-16
+Depends: libc6 (>= 2.1.3)
+Size: 29662
+Description: library for decoding ATSC A/52 streams
+ liba52 is a free library for decoding ATSC A/52 streams. The A/52 standard is
+ used in a variety of applications, including digital television and DVD. It is
+ also known as AC-3.
+Homepage: http://liba52.sourceforge.net/
 
 Package: bzip2
 Priority: standard
@@ -6690,6 +6729,26 @@ Description: ALSA library additional plugins
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
 
+Package: libopencore-amrwb0
+Priority: optional
+Section: libs
+Installed-Size: 119
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: opencore-amr
+Version: 0.1.3-2
+Depends: libc6 (>= 2.1.3)
+Pre-Depends: multiarch-support
+Size: 52466
+Description: Adaptive Multi-Rate - Wideband speech codec - shared library
+ This library contains an implementation of the 3GPP TS 26.173 specification for
+ the Adaptive Multi-Rate - Wideband (AMR-WB) speech decoder. The implementation
+ is derived from the OpenCORE framework, part of the Google Android project.
+ .
+ This package contains the decoder shared library.
+Homepage: https://sourceforge.net/projects/opencore-amr/
+
 Package: linux-image-3.2.0-4baureo1-686-pae
 Priority: optional
 Section: kernel
@@ -6764,6 +6823,26 @@ Description: The Cairo 2D vector graphics library (GObject library)
  This package contains the GObject library, providing wrapper GObject types
  for all cairo types.
 Homepage: http://cairographics.org/
+
+Package: libcdio13
+Priority: optional
+Section: libs
+Installed-Size: 285
+Maintainer: Nicolas Boullis <nboullis@debian.org>
+Architecture: i386
+Source: libcdio
+Version: 0.83-4
+Depends: libc6 (>= 2.3)
+Size: 180838
+Description: library to read and control CD-ROM
+ This library is to encapsulate CD-ROM reading and
+ control. Applications wishing to be oblivious of the OS- and
+ device-dependant properties of a CD-ROM can use this library.
+ .
+ Some support for disk image types like BIN/CUE and NRG is available,
+ so applications that use this library also have the ability to read
+ disc images as though they were CD's.
+Homepage: http://www.gnu.org/software/libcdio/
 
 Package: libsqlite3-0
 Priority: standard
@@ -7745,6 +7824,36 @@ Description: AudioProcessing module from the WebRTC project.
   (http://code.google.com/p/webrtc/)
 Homepage: http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
 
+Package: gstreamer0.10-plugins-ugly
+Priority: optional
+Section: libs
+Installed-Size: 1397
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-ugly0.10 (0.10.19-2)
+Version: 0.10.19-2+b2
+Replaces: gstreamer0.10-lame, gstreamer0.10-plugins-bad (<< 0.10.10.2), gstreamer0.10-plugins-good (<< 0.10.9.2), gstreamer0.10-x264
+Depends: liba52-0.7.4, libc6 (>= 2.7), libcdio13 (>= 0.83), libdvdread4, libgcc1 (>= 1:4.1.1), libglib2.0-0 (>= 2.31.8), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36), libmad0 (>= 0.15.1b-3), libmp3lame0, libmpeg2-4, libopencore-amrnb0, libopencore-amrwb0, liborc-0.4-0 (>= 1:0.4.16), libsidplay1, libstdc++6 (>= 4.1.1), libtwolame0, libx264-123
+Conflicts: gstreamer0.10-lame, gstreamer0.10-plugins-bad (<< 0.10.5.2), gstreamer0.10-x264
+Size: 503642
+Description: GStreamer plugins from the "ugly" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains plugins from the "ugly" set, a set of
+ good-quality plug-ins that might pose distribution problems.
+Homepage: http://gstreamer.freedesktop.org/modules/gst-plugins-ugly.html
+Gstreamer-Decoders: application/vnd.rn-realmedia; application/x-pn-realaudio; application/x-rdt, media=(string)application, encoding-name=(string)X-REAL-RDT; application/x-rtp, media=(string){ application, video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)X-ASF-PF; audio/AMR; audio/AMR-WB; audio/ac3; audio/mpeg, mpegversion=(int)1, layer=(int)[ 1, 3 ]; audio/mpeg, mpegversion=(int)1, parsed=(boolean)false; audio/x-ac3; audio/x-lpcm; audio/x-private1-ac3; audio/x-private1-lpcm; audio/x-sid; video/mpeg, mpegversion=(int){ 1, 2 }, systemstream=(boolean){ true, false }; video/x-ms-asf
+Gstreamer-Elements: a52dec, ac3iec958, amrnbdec, amrnbenc, amrwbdec, asfdemux, cdiocddasrc, dvddemux, dvdlpcmdec, dvdreadsrc, dvdsubdec, dvdsubparse, lame, lamemp3enc, mad, mp3parse, mpeg2dec, mpegdemux, mpegparse, pnmsrc, rademux, rdtdepay, rdtmanager, rmdemux, rtpasfdepay, rtspreal, rtspwms, siddec, twolame, x264enc, xingmux
+Gstreamer-Encoders: audio/AMR; audio/mpeg, mpegversion=(int)1, layer=(int){ 2, 3 }; audio/x-iec958; audio/x-raw-int, endianness=(int)4321, signed=(boolean)true; video/x-h264, stream-format=(string){ byte-stream, avc }, alignment=(string){ au }, profile=(string){ high-10, high, main, constrained-baseline, high-10-intra }
+Gstreamer-Uri-Sources: cdda, dvd, pnm
+Gstreamer-Version: 0.10
+
 Package: libpango1.0-0
 Priority: optional
 Section: libs
@@ -7851,6 +7960,31 @@ Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-mainta
 Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/iceweasel.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
+
+Package: libtwolame0
+Priority: optional
+Section: libs
+Installed-Size: 184
+Maintainer: Debian MythTV Team <pkg-mythtv-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Source: twolame
+Version: 0.3.13-1
+Depends: libc6 (>= 2.1.3)
+Size: 56762
+Description: MPEG Audio Layer 2 encoding library
+ TwoLAME is an optimized MPEG Audio Layer 2 encoder. It is based on tooLAME by
+ Mike Cheng, which in turn is based upon the ISO dist10 code and portions of
+ LAME.
+ .
+ TwoLAME does NOT support MPEG Audio Layer 3 (MP3) encoding due to patent
+ issues surrounding MP3.
+ .
+ However, as most MPEG Audio players are able to play layer 2 (MP2) files,
+ TwoLAME makes a very good drop-in replacement for LAME and other layer 3
+ encoders.
+ .
+ This package contains the shared library.
+Homepage: http://www.twolame.org
 
 Package: iceweasel-l10n-hu
 Priority: optional
@@ -9449,6 +9583,26 @@ Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-mainta
 Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/iceweasel.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
+
+Package: libopencore-amrnb0
+Priority: optional
+Section: libs
+Installed-Size: 211
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: opencore-amr
+Version: 0.1.3-2
+Depends: libc6 (>= 2.3.4)
+Pre-Depends: multiarch-support
+Size: 103152
+Description: Adaptive Multi Rate speech codec - shared library
+ This library contains an implementation of the 3GPP TS 26.073 specification for
+ the Adaptive Multi Rate (AMR) speech codec. The implementation is derived from
+ the OpenCORE framework, part of the Google Android project.
+ .
+ This package contains the encoder/decoder shared library.
+Homepage: https://sourceforge.net/projects/opencore-amr/
 
 Package: libkparts4
 Priority: optional
@@ -12003,6 +12157,30 @@ Description: ATK accessibility toolkit
  This is the runtime part of ATK, needed to run applications built with it.
 Homepage: http://www.gtk.org/
 
+Package: libsidplay1
+Priority: extra
+Section: libs
+Installed-Size: 248
+Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
+Architecture: i386
+Source: libsidplay
+Version: 1.36.59-5
+Replaces: libsidplay1-c102 (<= 1.36.59-2), libsidplay1.36
+Depends: libc6 (>= 2.7-1), libgcc1 (>= 1:4.1.1-21), libstdc++6 (>= 4.2.1-4)
+Suggests: sidplay-base, xsidplay
+Conflicts: libsidplay1-c102 (<= 1.36.59-2), libsidplay1.36, sidplay (<= 1.36.36)
+Size: 72526
+Description: SID (MOS 6581) emulation library
+ This is a (shared) library that implements the emulation of the C64's
+ SID chip (MOS 6581) and CPU (6510). It is used by several "player"
+ applications, e.g. sidplay, which make it possible to listen to *really*
+ a lot (13.600+) of tunes, known from old and new C64 programs (as well
+ as Amiga compositions).
+ Find most of the available musics from your favourite games or demos
+ and more in the High Voltage SID Collection (HVSC). For downloads and
+ information about the volunteers, who maintain the collection, look at
+ the HVSC homepage http://www.hvsc.c64.org.
+
 Package: liblzma5
 Priority: required
 Section: libs
@@ -14348,6 +14526,28 @@ Description: GNOME configuration database system (support tools)
  gconf-merge-tree.
 Homepage: http://projects.gnome.org/gconf/
 
+Package: mime-support
+Priority: standard
+Section: net
+Installed-Size: 192
+Maintainer: Brian White <bcwhite@pobox.com>
+Architecture: all
+Version: 3.52-1
+Recommends: file (>= 3.27-3)
+Conflicts: a2ps (<< 4.10.4), metamail (<< 2.7-44)
+Size: 35490
+Description: MIME files 'mime.types' & 'mailcap', and support programs
+ As these files can be used by all MIME compliant programs, they
+ have been moved into their own package that others can depend upon.
+ .
+ Other packages add themselves as viewers/editors/composers/etc by
+ using the provided "update-mime" program.
+ .
+ In addition, the commands "see", "edit", "compose", and "print"
+ will display, alter, create, and print (respectively) any file using
+ a program determined from the entries in the mime.types and mailcap
+ files.
+
 Package: alsa-base
 Priority: optional
 Section: sound
@@ -14377,28 +14577,6 @@ Description: ALSA driver configuration files
  .
  ALSA is the Advanced Linux Sound Architecture.
 Homepage: http://www.alsa-project.org/
-
-Package: mime-support
-Priority: standard
-Section: net
-Installed-Size: 192
-Maintainer: Brian White <bcwhite@pobox.com>
-Architecture: all
-Version: 3.52-1
-Recommends: file (>= 3.27-3)
-Conflicts: a2ps (<< 4.10.4), metamail (<< 2.7-44)
-Size: 35490
-Description: MIME files 'mime.types' & 'mailcap', and support programs
- As these files can be used by all MIME compliant programs, they
- have been moved into their own package that others can depend upon.
- .
- Other packages add themselves as viewers/editors/composers/etc by
- using the provided "update-mime" program.
- .
- In addition, the commands "see", "edit", "compose", and "print"
- will display, alter, create, and print (respectively) any file using
- a program determined from the entries in the mime.types and mailcap
- files.
 
 Package: libldap-2.4-2
 Priority: standard
@@ -15930,6 +16108,43 @@ Description: Debian Font Manager -- automatic font configuration framework
  Font packages should register their fonts to Defoma in order to have them
  configured automatically for applications.
 
+Package: libmpeg2-4
+Priority: optional
+Section: libs
+Installed-Size: 192
+Maintainer: Loic Minier <lool@dooz.org>
+Architecture: i386
+Source: mpeg2dec
+Version: 0.4.1-3
+Depends: libc6 (>= 2.7-1)
+Size: 59504
+Description: MPEG1 and MPEG2 video decoder library
+ libmpeg2 is a library which can decode MPEG1 and MPEG2 video streams.
+ .
+ The main features in libmpeg2 are:
+ .
+  * Conformance - libmpeg2 is able to decode all mpeg streams that conform to
+    certain restrictions. For streams that follow these restrictions, libmpeg2
+    is probably 100% conformant to the mpeg standards - and there's a pretty
+    extensive test suite to check this.
+ .
+  * Speed - there has been huge efforts there, and libmpeg2 is probably the
+    fastest library around for what it does.
+ .
+  * Portability - most of the code is written in C, and when platform-specific
+    optimizations are used, there always is a generic C routine to fall back
+    on.  This should be portable to all architectures - at least we have heard
+    reports from people running this code on x86, ppc, sparc, arm and sh4.
+ .
+  * Reuseability - libmpeg2 is not intended to include any project-specific
+    code, but it should still include enough features to be used by very
+    diverse projects.
+ .
+ This package contains the libmpeg2 shared libraries.
+ .
+ http://libmpeg2.sourceforge.net/
+Homepage: http://libmpeg2.sourceforge.net/
+
 Package: libpixman-1-0
 Priority: optional
 Section: libs
@@ -16283,6 +16498,26 @@ Description: a macro processing language
  shell commands, doing arithmetic, etc.  Autoconf needs GNU `m4' for
  generating `configure' scripts, but not for running them.
 Homepage: http://www.gnu.org/software/m4/
+
+Package: libmad0
+Priority: optional
+Section: libs
+Installed-Size: 132
+Maintainer: Mad Maintainers <pkg-mad-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Source: libmad
+Version: 0.15.1b-7
+Depends: libc6 (>= 2.1.3)
+Size: 80028
+Description: MPEG audio decoder library
+ MAD is an MPEG audio decoder. It currently only supports the MPEG 1
+ standard, but fully implements all three audio layers (Layer I, Layer II,
+ and Layer III, the latter often colloquially known as MP3.)
+ .
+ MAD has the following special features:
+   - 100% fixed-point (integer) computation
+   - completely new implementation based on the ISO/IEC 11172-3 standard
+   - distributed under the terms of the GNU General Public License (GPL)
 
 Package: intel-microcode
 Priority: standard
