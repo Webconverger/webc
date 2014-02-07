@@ -1,0 +1,44 @@
+#! /bin/sh -e
+
+syssite=/usr/lib/python2.7/site-packages
+localsite=/usr/local/lib/python2.7/dist-packages
+
+case "$1" in
+    remove)
+	if [ "$DEBIAN_FRONTEND" != noninteractive ]; then
+	    echo "Unlinking and removing bytecode for runtime python2.7"
+	fi
+	for hook in /usr/share/python/runtime.d/*.rtremove; do
+	    [ -x $hook ] || continue
+	    $hook rtremove python2.7 || continue
+	done
+	dpkg -L python2.7-minimal \
+	    | awk '/\.py$/ {print $0"c\n" $0"o"}' \
+	    | xargs rm -f >&2
+
+	if which update-binfmts >/dev/null; then
+	    update-binfmts --package python2.7 --remove python2.7 /usr/bin/python2.7
+	fi
+
+	if [ -h $syssite ]; then
+	    rm -f $syssite
+	fi
+	[ -d $localsite ] && rmdir $localsite 2>/dev/null || true
+	[ -d $(dirname $localsite) ] && rmdir $(dirname $localsite) 2>/dev/null || true
+        ;;
+    upgrade)
+        dpkg -L python2.7-minimal \
+	    | awk '/\.py$/ {print $0"c\n" $0"o"}' \
+	    | xargs rm -f >&2
+        ;;
+    deconfigure)
+        ;;
+    failed-upgrade)
+        ;;
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+

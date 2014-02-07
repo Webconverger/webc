@@ -1,0 +1,25 @@
+#! /bin/sh -e
+
+
+# dpkg triggers support for update-mime
+if [ "$1" = "triggered" ]; then
+    test -x /usr/sbin/update-mime && /usr/sbin/update-mime --triggered
+    exit 0
+fi
+
+
+# Remove the old status directory (and any orphaned install-mime program)
+rm -fr /var/lib/mime
+rm -f  /usr/sbin/install-mime
+
+
+# Use "see" as alternative for "view"
+update-alternatives \
+    --install /usr/bin/view view /usr/bin/see 1 \
+    --slave /usr/share/man/man1/view.1.gz view.1.gz /usr/share/man/man1/see.1.gz
+
+
+# Run the update program
+if [ -x /usr/sbin/update-mime ]; then
+    /usr/sbin/update-mime --triggered
+fi

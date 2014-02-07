@@ -229,6 +229,27 @@ Description: PolicyKit Authorization API
  This package contains a library for accessing PolicyKit.
 Homepage: http://hal.freedesktop.org/docs/PolicyKit/
 
+Package: libraw1394-11
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 125
+Maintainer: Guus Sliepen <guus@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libraw1394
+Version: 2.0.9-1
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Suggests: libraw1394-doc
+Description: library for direct access to IEEE 1394 bus (aka FireWire)
+ libraw1394 is the only supported interface to the kernel side raw1394
+ of the Linux IEEE-1394 subsystem, which provides direct access to the
+ connected 1394 buses to user space.  Through libraw1394/raw1394,
+ applications can directly send to and receive from other nodes without
+ requiring a kernel driver for the protocol in question.
+Homepage: https://ieee1394.wiki.kernel.org/
+
 Package: shared-mime-info
 Status: install ok installed
 Priority: optional
@@ -1231,6 +1252,40 @@ Description: easy-to-use client-side URL transfer library (GnuTLS flavour)
  SSL support is provided by GnuTLS.
 Homepage: http://curl.haxx.se
 
+Package: libsoup2.4-1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 510
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libsoup2.4
+Version: 2.38.1-2
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.8), libxml2 (>= 2.7.4), zlib1g (>= 1:1.1.4), glib-networking (>= 2.32.0)
+Pre-Depends: multiarch-support
+Description: HTTP library implementation in C -- Shared library
+ It was originally part of a SOAP (Simple Object Access Protocol)
+ implementation called Soup, but the SOAP and non-SOAP parts have now been
+ split into separate packages.
+ .
+ libsoup uses the Glib main loop and is designed to work well with GTK+
+ applications.  This enables GNOME applications to access HTTP servers
+ on the network in a completely asynchronous fashion, very similar to
+ the GTK+ programming model (a synchronous operation mode is also
+ supported for those who want it).
+ .
+ Features:
+  * Both asynchronous (GMainLoop and callback-based) and synchronous APIs
+  * Automatically caches connections
+  * SSL Support using GnuTLS
+  * Proxy support, including authentication and SSL tunneling
+  * Client support for Digest, NTLM, and Basic authentication
+  * Server support for Digest and Basic authentication
+  * Basic client-side SOAP and XML-RPC support
+ .
+ This package contains the shared library.
+
 Package: fontconfig
 Status: install ok installed
 Priority: optional
@@ -1258,6 +1313,44 @@ Description: generic font configuration library - support binaries
  to test the matching rules (fc-match) and a program to dump the binary
  cache files in string form (fc-cat). It no longer makes fonts managed by defoma
  available to fontconfig applications.
+
+Package: libsoup-gnome2.4-1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 89
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libsoup2.4
+Version: 2.38.1-2
+Depends: libc6 (>= 2.1.3), libglib2.0-0 (>= 2.31.7), libgnome-keyring0 (>= 2.20.3), libsoup2.4-1 (>= 2.33.92), libsqlite3-0 (>= 3.5.9), libxml2 (>= 2.6.27), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Description: HTTP library implementation in C -- GNOME support library
+ It was originally part of a SOAP (Simple Object Access Protocol)
+ implementation called Soup, but the SOAP and non-SOAP parts have now been
+ split into separate packages.
+ .
+ libsoup uses the Glib main loop and is designed to work well with GTK+
+ applications.  This enables GNOME applications to access HTTP servers
+ on the network in a completely asynchronous fashion, very similar to
+ the GTK+ programming model (a synchronous operation mode is also
+ supported for those who want it).
+ .
+ The GNOME support library is used for features which are important to
+ GNOME apps, but which require GNOME-specific libraries that non-GNOME
+ apps may not want to add dependencies on.
+ .
+ Features:
+  * Both asynchronous (GMainLoop and callback-based) and synchronous APIs
+  * Automatically caches connections
+  * SSL Support using GnuTLS
+  * Proxy support, including authentication and SSL tunneling
+  * Client support for Digest, NTLM, and Basic authentication
+  * Server support for Digest and Basic authentication
+  * Basic client-side SOAP and XML-RPC support
+ .
+ This package contains the GNOME support shared library.
 
 Package: linux-image-3.8-0baureo1-486
 Status: deinstall ok config-files
@@ -1441,6 +1534,31 @@ Description: utility classes to deal with printing
  This package is part of the KDE Development Platform libraries module.
 Homepage: http://www.kde.org/
 
+Package: libgconf-2-4
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 564
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gconf
+Version: 3.2.5-1+build1
+Depends: libc6 (>= 2.4), libdbus-1-3 (>= 1.0.2), libdbus-glib-1-2 (>= 0.78), libglib2.0-0 (>= 2.31.0), gconf2-common (= 3.2.5-1+build1)
+Pre-Depends: multiarch-support
+Recommends: gconf-service
+Breaks: gconf2 (<< 3.2.3-2), libgconf2-4 (<< 3.2.3-2)
+Conflicts: libbonobo2-0 (<< 2.24)
+Description: GNOME configuration database system (shared libraries)
+ GConf is a configuration database system for storing application
+ preferences. It supports default or mandatory settings set by the
+ administrator, and changes to the database are instantly applied to all
+ running applications. It is written for the GNOME desktop but doesn't
+ require it.
+ .
+ This package contains the shared libraries.
+Homepage: http://projects.gnome.org/gconf/
+
 Package: libqtgui4
 Status: deinstall ok config-files
 Priority: optional
@@ -1537,6 +1655,27 @@ Description: utility libraries for X C Binding -- atom, aux and event
  libraries also provide client-side code which is not strictly part of
  the X protocol but which have traditionally been provided by Xlib.
 Homepage: http://xcb.freedesktop.org
+
+Package: python-minimal
+Status: install ok installed
+Priority: standard
+Section: python
+Installed-Size: 161
+Maintainer: Matthias Klose <doko@debian.org>
+Architecture: all
+Source: python-defaults
+Version: 2.7.3-4+deb7u1
+Replaces: python (<= 2.7.3-1~)
+Depends: python2.7-minimal (>= 2.7.3-1~), dpkg (>= 1.13.20)
+Recommends: python
+Breaks: idle (<< 2.6), python (<= 2.7.3-1~), python-all (<< 2.6), python-all-dbg (<< 2.6), python-all-dev (<< 2.6), python-dbg (<< 2.6), python-dev (<< 2.6), python-examples (<< 2.6), python-support (<< 1.0.10ubuntu2), python2.5-minimal (<< 2.5.5-7), python2.6-minimal (<< 2.6.5~rc2-2), python3.1-minimal (<< 3.1.2~rc1-2)
+Conflicts: python-central (<< 0.5.5)
+Description: minimal subset of the Python language (default version)
+ This package contains the interpreter and some essential modules.  It's used
+ in the boot process for some basic tasks.
+ See /usr/share/doc/python2.7-minimal/README.Debian for a list of the modules
+ contained in this package.
+Homepage: http://www.python.org/
 
 Package: libv4l-0
 Status: install ok installed
@@ -1791,6 +1930,28 @@ Description: userspace USB programming library
  of Linux kernel internals.
 Homepage: http://www.linux-usb.org/
 
+Package: libavc1394-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 79
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libavc1394
+Version: 0.5.4-2
+Depends: libc6 (>= 2.7), libraw1394-11
+Pre-Depends: multiarch-support
+Description: control IEEE 1394 audio/video devices
+ libavc1394 is a programming interface for the 1394 Trade Association AV/C
+ (Audio/Video Control) Digital Interface Command Set. It allows you to
+ remote control camcorders and similar devices connected to your computer
+ via an IEEE 1394 (aka Firewire) link.
+ .
+ This package includes the libraries needed to run executables using
+ libavc1394.
+Homepage: http://sourceforge.net/projects/libavc1394/
+
 Package: libgpg-error0
 Status: install ok installed
 Priority: standard
@@ -1808,6 +1969,26 @@ Description: library for common error values and messages in GnuPG components
  components.  Among these are GPG, GPGSM, GPGME, GPG-Agent, libgcrypt,
  pinentry, SmartCard Daemon and possibly more in the future.
 Homepage: http://www.gnupg.org/related_software/libgpg-error/
+
+Package: psmisc
+Status: install ok installed
+Priority: optional
+Section: admin
+Installed-Size: 660
+Maintainer: Craig Small <csmall@debian.org>
+Architecture: i386
+Version: 22.19-1+deb7u1
+Replaces: procps (<< 1:1.2)
+Depends: libc6 (>= 2.8), libtinfo5
+Description: utilities that use the proc file system
+ This package contains miscellaneous utilities that use the proc FS:
+ .
+  - fuser: identifies processes that are using files or sockets.
+  - killall: kills processes by name (e.g. "killall -HUP named").
+  - peekfd: shows the data traveling over a file descriptor.
+  - pstree: shows currently running processes as a tree.
+  - prtstat: print the contents of /proc/<pid>/stat
+Homepage: http://psmisc.sf.net/
 
 Package: epdfview
 Status: install ok installed
@@ -2164,6 +2345,24 @@ Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-supp
 Original-Vcs-Svn: svn://svn.debian.org/pkg-nvidia/packages/nvidia-support/trunk
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: libgudev-1.0-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 168
+Maintainer: Marco d'Itri <md@linux.it>
+Architecture: i386
+Multi-Arch: same
+Source: udev
+Version: 175-7.2
+Depends: libc6 (>= 2.2), libglib2.0-0 (>= 2.22.0), libudev0 (>= 165)
+Pre-Depends: multiarch-support
+Description: GObject-based wrapper library for libudev
+ This library makes it much simpler to use libudev from programs already using
+ GObject. It also makes it possible to easily use libudev from other
+ programming languages, such as Javascript, because of GObject introspection
+ support.
+
 Package: ssl-cert
 Status: install ok installed
 Priority: optional
@@ -2388,6 +2587,29 @@ Original-Uploaders: James McCoy <jamessan@debian.org>
 Original-Vcs-Browser: http://hg.debian.org/hg/pkg-vim/vim
 Original-Vcs-Hg: http://hg.debian.org/hg/pkg-vim/vim
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: libwavpack1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 209
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: wavpack
+Version: 4.60.1-3
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Description: audio codec (lossy and lossless) - library
+ WavPack is a completely open audio compression format providing lossless,
+ high-quality lossy, and a unique hybrid compression mode. Although the
+ technology is loosely based on previous versions of WavPack, the new version
+ 4 format has been designed from the ground up to offer unparalleled
+ performance and functionality.
+ .
+ This package contains the shared libraries necessary to run programs
+ using libwavpack.
+Homepage: http://www.wavpack.com
 
 Package: extlinux
 Status: install ok installed
@@ -2727,6 +2949,26 @@ Original-Vcs-Browser: http://bzr.debian.org/loggerhead/apt/debian-wheezy/
 Original-Vcs-Bzr: http://bzr.debian.org/apt/debian-wheezy/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: libdconf0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 85
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: d-conf
+Version: 0.12.1-3
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.18)
+Pre-Depends: multiarch-support
+Breaks: dconf-gsettings-backend (<< 0.10.0)
+Description: simple configuration storage system - runtime library
+ DConf is a low-level key/value database designed for storing desktop
+ environment settings.
+ .
+ This package contains the runtime library.
+Homepage: http://live.gnome.org/dconf
+
 Package: libxslt1.1
 Status: install ok installed
 Priority: optional
@@ -3052,6 +3294,21 @@ Description: The GNU bc arbitrary precision calculator language
  multi-character variable names, an `else' statement and full Boolean
  expressions.  GNU bc does not require the separate GNU dc program.
  Home page: http://directory.fsf.org/GNU/bc.html
+
+Package: glib-networking
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 172
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Version: 2.32.3-1
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.8), libgnutls26 (>= 2.12.17-0), libp11-kit0 (>= 0.11), libproxy0 (>= 0.2.3), glib-networking-services (>= 2.32.3-1), glib-networking-services (<< 2.32.3-1.1~), glib-networking-common (= 2.32.3-1), gsettings-desktop-schemas
+Breaks: libglib2.0-0 (<< 2.30.1-2)
+Description: network-related giomodules for GLib
+ This package contains various network related extensions for the GIO
+ library.
 
 Package: libdirac-encoder0
 Status: install ok installed
@@ -3430,6 +3687,30 @@ Description: libudev shared library
  This library provides access to udev device information.
 Original-Maintainer: Marco d'Itri <md@linux.it>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: python
+Status: install ok installed
+Priority: standard
+Section: python
+Installed-Size: 658
+Maintainer: Matthias Klose <doko@debian.org>
+Architecture: all
+Source: python-defaults
+Version: 2.7.3-4+deb7u1
+Replaces: python-dev (<< 2.6.5-2)
+Provides: python-ctypes, python-email, python-importlib, python-profiler, python-wsgiref
+Depends: python2.7 (>= 2.7.3-1~), python-minimal (= 2.7.3-4+deb7u1)
+Suggests: python-doc (= 2.7.3-4+deb7u1), python-tk (= 2.7.3-4+deb7u1)
+Breaks: python-bz2 (<< 1.1-8), python-csv (<< 1.0-4), python-email (<< 2.5.5-3), update-manager-core (<< 0.200.5-2)
+Conflicts: python-central (<< 0.5.5)
+Description: interactive high-level object-oriented language (default version)
+ Python, the high-level, interactive object oriented language,
+ includes an extensive class library with lots of goodies for
+ network programming, system administration, sounds and graphics.
+ .
+ This package is a dependency package, which depends on Debian's default
+ Python version (currently v2.7).
+Homepage: http://www.python.org/
 
 Package: libfontconfig1
 Status: install ok installed
@@ -4125,6 +4406,33 @@ Description: X11 Video extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXvMC
 
+Package: libgstreamer-plugins-base0.10-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 2676
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-base0.10
+Version: 0.10.36-1.1
+Replaces: gobject-introspection-repository (<< 0.6.5-2)
+Depends: libc6 (>= 2.7), libglib2.0-0 (>= 2.31.8), libgstreamer0.10-0 (>= 0.10.36), liborc-0.4-0 (>= 1:0.4.16), zlib1g (>= 1:1.1.4), iso-codes
+Pre-Depends: multiarch-support
+Suggests: libvisual-0.4-plugins, gstreamer-codec-install | gnome-codec-install
+Conflicts: gstreamer0.10-pulseaudio (<< 0.10.16-4), totem-gstreamer (<= 2.17.92-0ubuntu1)
+Description: GStreamer libraries from the "base" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains libraries from the "base" set, an essential
+ exemplary set of elements.
+Homepage: http://gstreamer.freedesktop.org
+
 Package: libgtk2.0-0
 Status: install ok installed
 Priority: optional
@@ -4227,6 +4535,31 @@ Description: Linux 2.6.32 for modern PCs
  (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; VIA
  C3 "Nehemiah" or C7 processors.
 
+Package: libtag1-vanilla
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 738
+Maintainer: Modestas Vainius <modax@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: taglib
+Version: 1.7.2-1
+Replaces: libtag1c2a (<< 1.5-5)
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Breaks: libtag1c2a (<< 1.5-5)
+Conflicts: libtag-extras0, libtag1-rusxmms
+Description: audio meta-data library - vanilla flavour
+ TagLib is a library for reading and editing the meta-data of several popular
+ audio formats. Currently it supports both ID3v1 and ID3v2 for MP3 files, Ogg
+ Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC, Speex, WavPack
+ TrueAudio, WAV, AIFF, MP4 and ASF files.
+ .
+ This is the runtime package for programs that use the TagLib Audio Meta-Data
+ Library. This package contains original and unpatched flavour of the library.
+Homepage: http://developer.kde.org/~wheeler/taglib.html
+
 Package: xserver-xorg-input-evdev
 Status: install ok installed
 Priority: optional
@@ -4247,6 +4580,30 @@ Description: X.Org X server -- evdev input driver
  <URL:http://www.X.org>
  .
  This package is built from the X.org xf86-input-evdev driver module.
+
+Package: gconf2-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 6783
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: gconf
+Version: 3.2.5-1+build1
+Depends: ucf
+Breaks: libgconf2-4 (<< 3.2.3-2)
+Conffiles:
+ /etc/gconf/2/evoldap.conf 17f55bd791cfb244e5a46e810107f364
+Description: GNOME configuration database system (common files)
+ GConf is a configuration database system for storing application
+ preferences. It supports default or mandatory settings set by the
+ administrator, and changes to the database are instantly applied to all
+ running applications. It is written for the GNOME desktop but doesn't
+ require it.
+ .
+ This package contains the default configuration and localization files.
+Homepage: http://projects.gnome.org/gconf/
 
 Package: libthai-data
 Status: install ok installed
@@ -4306,6 +4663,31 @@ Pre-Depends: multiarch-support
 Description: libkmod shared library
  This library provides an API for insertion, removal, configuration and
  listing of kernel modules.
+
+Package: libgnome-keyring-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 682
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: libgnome-keyring
+Version: 3.4.1-1
+Replaces: libgnome-keyring0 (<< 3.2.0-4)
+Breaks: libgnome-keyring0 (<< 3.2.0-4)
+Description: GNOME keyring services library - data files
+ gnome-keyring is a daemon in the session, similar to ssh-agent,
+ and other applications can use it to store passwords and other
+ sensitive information.
+ .
+ The program can manage several keyrings, each with its own master
+ password, and there is also a session keyring which is never stored to
+ disk, but forgotten when the session ends.
+ .
+ This package contains data files and translations for the GNOME keyring
+ library.
+Homepage: http://live.gnome.org/GnomeKeyring
 
 Package: libtdb1
 Status: install ok installed
@@ -4949,6 +5331,25 @@ Description: Traces the route taken by packets over an IPv4/IPv6 network
  problems.
 Homepage: http://traceroute.sourceforge.net/
 
+Package: python2.7
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 8676
+Maintainer: Matthias Klose <doko@debian.org>
+Architecture: i386
+Version: 2.7.3-6
+Replaces: python-profiler (<= 2.7.1-2)
+Provides: python-argparse, python2.7-argparse, python2.7-celementtree, python2.7-cjkcodecs, python2.7-ctypes, python2.7-elementtree, python2.7-profiler, python2.7-wsgiref
+Depends: python2.7-minimal (= 2.7.3-6), mime-support, libbz2-1.0, libc6 (>= 2.11), libdb5.1, libexpat1 (>= 2.1~beta3), libgcc1 (>= 1:4.1.1), libncursesw5 (>= 5.6+20070908), libreadline6 (>= 6.0), libsqlite3-0 (>= 3.5.9), libssl1.0.0 (>= 1.0.0), libtinfo5
+Suggests: python2.7-doc, binutils
+Breaks: python-virtualenv (<< 1.7.1.2-2~), vim-athena (<< 2:7.3.547-4), vim-gnome (<< 2:7.3.547-4), vim-gtk (<< 2:7.3.547-4), vim-nox (<< 2:7.3.547-4)
+Conflicts: python-profiler (<= 2.7.1-2)
+Description: Interactive high-level object-oriented language (version 2.7)
+ Version 2.7 of the high-level, interactive object oriented language,
+ includes an extensive class library with lots of goodies for
+ network programming, system administration, sounds and graphics.
+
 Package: tasksel
 Status: deinstall ok config-files
 Priority: important
@@ -5120,6 +5521,27 @@ Description: X11 Video extension library
  .
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXv
+
+Package: libdv4
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 179
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libdv
+Version: 1.0.0-6
+Depends: libc6 (>= 2.11)
+Pre-Depends: multiarch-support
+Suggests: libdv-bin, oss-compat
+Description: software library for DV format digital video (runtime lib)
+ The Quasar DV Codec (libdv) is a software decoder for DV format video, as
+ defined by the IEC 61834 and SMPTE 314M standards. DV is the encoding format
+ used by consumer-grade digital camcorders.
+ .
+ This package contains the library needed to run executables using libdv.
+Homepage: http://libdv.sourceforge.net/
 
 Package: libsolid4
 Status: deinstall ok config-files
@@ -5375,24 +5797,43 @@ Description: Common UNIX Printing System(tm) - Driver library
  drivers.
 Homepage: http://www.cups.org
 
+Package: libcairo-gobject2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 494
+Maintainer: Dave Beckett <dajobe@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: cairo
+Version: 1.12.2-3
+Depends: libc6 (>= 2.1.3), libcairo2 (>= 1.10.0), libglib2.0-0 (>= 2.14.0)
+Pre-Depends: multiarch-support
+Description: The Cairo 2D vector graphics library (GObject library)
+ Cairo is a multi-platform library providing anti-aliased
+ vector-based rendering for multiple target backends.
+ .
+ This package contains the GObject library, providing wrapper GObject types
+ for all cairo types.
+Homepage: http://cairographics.org/
+
 Package: libsqlite3-0
-Status: deinstall ok config-files
+Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 772
-Maintainer: Progress Developers <progress-devel@lists.progress-linux.org>
-Bugs: mailto:progress-bugs@lists.progress-linux.org
+Installed-Size: 824
+Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
 Architecture: i386
+Multi-Arch: same
 Source: sqlite3
-Version: 3.7.12.1-1~artax1
-Config-Version: 3.7.12.1-1~artax1
-Depends: libc6 (>= 2.3.6-6~)
+Version: 3.7.13-1+deb7u1
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
 Description: SQLite 3 shared library
  SQLite is a C library that implements an SQL database engine.
  Programs that link with the SQLite library can have SQL database
  access without running a separate RDBMS process.
 Homepage: http://www.sqlite.org/
-Original-Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
 
 Package: libtext-iconv-perl
 Status: install ok installed
@@ -6098,6 +6539,41 @@ Description: X.Org X server -- Rendition display driver
  .
  This package is built from the X.org xf86-video-rendition driver module.
 
+Package: libproxy0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 185
+Maintainer: Emilio Pozuelo Monfort <pochu@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libproxy
+Version: 0.3.1-6
+Depends: libc6 (>= 2.3.6-6~)
+Pre-Depends: multiarch-support
+Recommends: libmozjs10d | libwebkitgtk-1.0-0
+Description: automatic proxy configuration management library (shared)
+ libproxy is a lightweight library which makes it easy to develop
+ applications proxy-aware with a simple and stable API.
+ .
+ This package contains the shared library.
+Homepage: http://code.google.com/p/libproxy/
+
+Package: gsettings-desktop-schemas
+Status: install ok installed
+Priority: optional
+Section: gnome
+Installed-Size: 812
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Version: 3.4.2-3
+Depends: dconf-gsettings-backend | gsettings-backend
+Description: GSettings deskop-wide schemas
+ gsettings-desktop-schemas contains a collection of GSettings schemas for
+ settings shared by various components of a desktop.
+Homepage: http://www.gnome.org/
+
 Package: cups-filters
 Status: install ok installed
 Priority: optional
@@ -6414,6 +6890,30 @@ Description: X11 Input extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXi
 
+Package: gstreamer0.10-ffmpeg
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 384
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Version: 0.10.13-5
+Depends: libavcodec53 (>= 5:0.8-2~) | libavcodec-extra-53 (>= 5:0.8-2~), libavformat53 (>= 5:0.8-2~), libavutil51 (>= 5:0.8-2~), libc6 (>= 2.7), libglib2.0-0 (>= 2.31.8), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36), liborc-0.4-0 (>= 1:0.4.16), libpostproc52 (>= 5:0.8-2~), libswscale2 (>= 5:0.8-2~)
+Description: FFmpeg plugin for GStreamer
+ This GStreamer plugin supports a large number of audio and video compression
+ formats through the use of the FFmpeg library.  The plugin contains GStreamer
+ elements for decoding 90+ formats (AVI, MPEG, OGG, Matroska, ASF, ...),
+ demuxing 30+ formats and colorspace conversion.
+ .
+ http://www.ffmpeg.org/
+ http://gstreamer.freedesktop.org/
+ http://gstreamer.freedesktop.org/modules/gst-ffmpeg.html
+Gstreamer-Decoders: application/gxf; application/mxf; application/x-ape; application/x-gst_ff-RoQ; application/x-gst_ff-avs; application/x-gst_ff-daud; application/x-gst_ff-ea; application/x-gst_ff-ffm; application/x-gst_ff-film_cpk; application/x-gst_ff-idcin; application/x-gst_ff-ipmovie; application/x-gst_ff-mm; application/x-gst_ff-mmf; application/x-gst_ff-nut; application/x-gst_ff-nuv; application/x-gst_ff-psxstr; application/x-gst_ff-smk; application/x-gst_ff-sol; application/x-gst_ff-vmd; application/x-gst_ff-voc; application/x-gst_ff-wc3movie; application/x-gst_ff-wsaud; application/x-gst_ff-wsvqa; application/x-shockwave-flash; application/x-yuv4mpeg, y4mversion=(int)2; audio/AMR; audio/AMR-WB; audio/G722; audio/mpeg, mpegversion=(int)1, layer=(int){ 2, 1 }; audio/mpeg, mpegversion=(int)4, stream-format=(string)loas; audio/mpeg, mpegversion=(int){ 2, 4 }, stream-format=(string){ raw, adts, adif }; audio/ms-gsm; audio/qcelp; audio/x-adpcm, layout=(string){ yamaha, xa, thp, swf, sbpro4, sbpro3, sbpro2, microsoft, westwood, dvi, smjpeg, quicktime, iss, ea-sead, ea-eacs, dk4, dk3, amv, g726, g721, ea-xas, ea-r1, ea-maxis-xa, ea, ct, adx, 4xm, ea-r3 }; audio/x-aiff; audio/x-alac; audio/x-dpcm, layout=(string){ xan, sol, roq, interplay }; audio/x-ffmpeg-parsed-ape; audio/x-ffmpeg-parsed-musepack, streamversion=(int){ 8, 7 }; audio/x-flac; audio/x-gsm; audio/x-gst_ff-mp3adu; audio/x-gst_ff-mp3on4; audio/x-gst_ff-vmdaudio; audio/x-gst_ff-ws_snd1; audio/x-imc; audio/x-mace, maceversion=(int){ 6, 3 }; audio/x-mlp; audio/x-musepack, streamversion=(int)7; audio/x-nellymoser; audio/x-pn-realaudio, raversion=(int){ 2, 1, 8 }; audio/x-qdm2; audio/x-shorten; audio/x-sipro; audio/x-true-hd; audio/x-truespeech; audio/x-tta; audio/x-ttafile; audio/x-twin-vq; audio/x-vnd.sony.atrac1; audio/x-vnd.sony.atrac3; audio/x-wma, wmaversion=(int){ 2, 1, 3 }; audio/x-wms; image/bmp; image/jpeg; image/pbm; image/png; image/ppm; image/tiff; image/x-pcx; image/x-portable-anymap; image/x-portable-graymap; image/x-sgi; image/x-sun-raster; image/x-tga; unknown/unknown; video/mpeg, mpegversion=(int){ 4, [ 1, 2 ] }, systemstream=(boolean)false; video/sp5x; video/x-3ivx; video/x-4xm; video/x-aasc; video/x-amv; video/x-apple-video; video/x-asus, asusversion=(int){ 2, 1 }; video/x-ati-vcr, vcrversion=(int)1; video/x-camstudio; video/x-camtasia; video/x-cinepak; video/x-cirrus-logic-accupak; video/x-compressed-yuv; video/x-divx, divxversion=(int){ 3, [ 4, 5 ] }; video/x-dnxhd; video/x-dv, systemstream=(boolean)false; video/x-ffv, ffvversion=(int)1; video/x-flash-screen; video/x-flash-video, flvversion=(int)1; video/x-fraps; video/x-gst_ff-8bps; video/x-gst_ff-avs; video/x-gst_ff-cavs; video/x-gst_ff-ffvhuff; video/x-gst_ff-flic; video/x-gst_ff-idcinvideo; video/x-gst_ff-interplayvideo; video/x-gst_ff-mdec; video/x-gst_ff-mmvideo; video/x-gst_ff-pgmyuv; video/x-gst_ff-qpeg; video/x-gst_ff-roqvideo; video/x-gst_ff-snow; video/x-gst_ff-vmdvideo; video/x-gst_ff-vqavideo; video/x-gst_ff-wnv1; video/x-gst_ff-xl; video/x-h261; video/x-h263, variant=(string)itu; video/x-h264; video/x-huffyuv; video/x-indeo, indeoversion=(int){ 5, 3, 2 }; video/x-intel-h263, variant=(string)intel; video/x-kmvc; video/x-lagarith; video/x-loco; video/x-mimic; video/x-mjpeg-b; video/x-msmpeg, msmpegversion=(int){ 43, 42, 41 }; video/x-msvideocodec, msvideoversion=(int)1; video/x-mszh; video/x-nsv; video/x-nuv; video/x-pn-realvideo, systemstream=(boolean)false, rmversion=(int){ 4, 3, 2, 1 }; video/x-qdrw; video/x-rle, layout=(string){ quicktime, microsoft }; video/x-smc; video/x-svq, svqversion=(int){ 3, 1 }; video/x-truemotion, trueversion=(int){ 2, 1 }; video/x-ultimotion; video/x-vmnc; video/x-vp3; video/x-vp5; video/x-vp6; video/x-vp6-alpha; video/x-vp6-flash; video/x-vp8; video/x-wmv, wmvversion=(int){ 3, 2, 1 }; video/x-xan, wcversion=(int){ 4, 3 }; video/x-xvid; video/x-zlib; video/x-zmbv
+Gstreamer-Elements: ffaudioresample, ffdec_4xm, ffdec_8bps, ffdec_8svx_exp, ffdec_8svx_fib, ffdec_FRWU, ffdec_aac, ffdec_aac_latm, ffdec_aasc, ffdec_ac3, ffdec_adpcm_4xm, ffdec_adpcm_adx, ffdec_adpcm_ct, ffdec_adpcm_ea, ffdec_adpcm_ea_maxis_xa, ffdec_adpcm_ea_r1, ffdec_adpcm_ea_r2, ffdec_adpcm_ea_r3, ffdec_adpcm_ea_xas, ffdec_adpcm_ima_amv, ffdec_adpcm_ima_dk3, ffdec_adpcm_ima_dk4, ffdec_adpcm_ima_ea_eacs, ffdec_adpcm_ima_ea_sead, ffdec_adpcm_ima_iss, ffdec_adpcm_ima_qt, ffdec_adpcm_ima_smjpeg, ffdec_adpcm_ima_wav, ffdec_adpcm_ima_ws, ffdec_adpcm_ms, ffdec_adpcm_sbpro_2, ffdec_adpcm_sbpro_3, ffdec_adpcm_sbpro_4, ffdec_adpcm_swf, ffdec_adpcm_thp, ffdec_adpcm_xa, ffdec_adpcm_yamaha, ffdec_alac, ffdec_als, ffdec_amrnb, ffdec_amrwb, ffdec_amv, ffdec_anm, ffdec_ansi, ffdec_ape, ffdec_asv1, ffdec_asv2, ffdec_atrac1, ffdec_atrac3, ffdec_aura, ffdec_aura2, ffdec_avs, ffdec_bethsoftvid, ffdec_bfi, ffdec_binkaudio_dct, ffdec_binkaudio_rdft, ffdec_binkvideo, ffdec_bmp, ffdec_bmv_audio, ffdec_bmv_video, ffdec_c93, ffdec_camstudio, ffdec_camtasia, ffdec_cavs, ffdec_cdgraphics, ffdec_cinepak, ffdec_cljr, ffdec_cook, ffdec_cyuv, ffdec_dca, ffdec_dfa, ffdec_dnxhd, ffdec_dpx, ffdec_dsicinaudio, ffdec_dsicinvideo, ffdec_dvvideo, ffdec_dxa, ffdec_dxtory, ffdec_eac3, ffdec_eacmv, ffdec_eamad, ffdec_eatgq, ffdec_eatgv, ffdec_eatqi, ffdec_escape124, ffdec_ffv1, ffdec_ffvhuff, ffdec_flac, ffdec_flashsv, ffdec_flashsv2, ffdec_flic, ffdec_flv, ffdec_fraps, ffdec_g722, ffdec_g726, ffdec_gsm, ffdec_gsm_ms, ffdec_h261, ffdec_h263, ffdec_h263i, ffdec_h264, ffdec_huffyuv, ffdec_idcinvideo, ffdec_iff_byterun1, ffdec_iff_ilbm, ffdec_imc, ffdec_indeo2, ffdec_indeo3, ffdec_indeo4, ffdec_indeo5, ffdec_interplay_dpcm, ffdec_interplayvideo, ffdec_jpegls, ffdec_jv, ffdec_kgv1, ffdec_kmvc, ffdec_lagarith, ffdec_loco, ffdec_mace3, ffdec_mace6, ffdec_mdec, ffdec_mimic, ffdec_mjpeg, ffdec_mjpegb, ffdec_mlp, ffdec_mmvideo, ffdec_motionpixels, ffdec_mp1float, ffdec_mp2float, ffdec_mp3, ffdec_mp3adu, ffdec_mp3adufloat, ffdec_mp3float, ffdec_mp3on4, ffdec_mp3on4float, ffdec_mpc7, ffdec_mpc8, ffdec_mpeg2video, ffdec_mpeg4, ffdec_msmpeg4, ffdec_msmpeg4v1, ffdec_msmpeg4v2, ffdec_msrle, ffdec_msvideo1, ffdec_mszh, ffdec_mxpeg, ffdec_nellymoser, ffdec_nuv, ffdec_pam, ffdec_pbm, ffdec_pcm_lxf, ffdec_pcm_s8_planar, ffdec_pcx, ffdec_pgm, ffdec_pgmyuv, ffdec_pictor, ffdec_png, ffdec_ppm, ffdec_prores, ffdec_ptx, ffdec_qcelp, ffdec_qdm2, ffdec_qdraw, ffdec_qpeg, ffdec_qtrle, ffdec_r10k, ffdec_real_144, ffdec_real_288, ffdec_rl2, ffdec_roq_dpcm, ffdec_roqvideo, ffdec_rpza, ffdec_rv10, ffdec_rv20, ffdec_rv30, ffdec_rv40, ffdec_s302m, ffdec_sgi, ffdec_shorten, ffdec_sipr, ffdec_smackaud, ffdec_smackvid, ffdec_smc, ffdec_snow, ffdec_sol_dpcm, ffdec_sp5x, ffdec_sunrast, ffdec_svq1, ffdec_svq3, ffdec_targa, ffdec_thp, ffdec_tiertexseqvideo, ffdec_tiff, ffdec_tmv, ffdec_truehd, ffdec_truemotion1, ffdec_truemotion2, ffdec_truespeech, ffdec_tta, ffdec_twinvq, ffdec_txd, ffdec_ultimotion, ffdec_utvideo, ffdec_v410, ffdec_vb, ffdec_vble, ffdec_vc1, ffdec_vc1image, ffdec_vcr1, ffdec_vmdaudio, ffdec_vmdvideo, ffdec_vmnc, ffdec_vp3, ffdec_vp5, ffdec_vp6, ffdec_vp6a, ffdec_vp6f, ffdec_vp8, ffdec_vqavideo, ffdec_wmapro, ffdec_wmav1, ffdec_wmav2, ffdec_wmavoice, ffdec_wmv1, ffdec_wmv2, ffdec_wmv3, ffdec_wmv3image, ffdec_wnv1, ffdec_ws_snd1, ffdec_xan_dpcm, ffdec_xan_wc3, ffdec_xan_wc4, ffdec_xl, ffdec_xsub, ffdec_yop, ffdec_zlib, ffdec_zmbv, ffdeinterlace, ffdemux_4xm, ffdemux_RoQ, ffdemux_aiff, ffdemux_ape, ffdemux_avs, ffdemux_daud, ffdemux_ea, ffdemux_ffm, ffdemux_film_cpk, ffdemux_gxf, ffdemux_idcin, ffdemux_ipmovie, ffdemux_mm, ffdemux_mmf, ffdemux_mpc, ffdemux_mxf, ffdemux_nsv, ffdemux_nut, ffdemux_nuv, ffdemux_psxstr, ffdemux_smk, ffdemux_sol, ffdemux_swf, ffdemux_tta, ffdemux_vmd, ffdemux_voc, ffdemux_wc3movie, ffdemux_wsaud, ffdemux_wsvqa, ffdemux_yuv4mpegpipe, ffenc_a64multi, ffenc_a64multi5, ffenc_aac, ffenc_ac3, ffenc_ac3_fixed, ffenc_adpcm_adx, ffenc_adpcm_ima_qt, ffenc_adpcm_ima_wav, ffenc_adpcm_ms, ffenc_adpcm_swf, ffenc_adpcm_yamaha, ffenc_alac, ffenc_asv1, ffenc_asv2, ffenc_bmp, ffenc_cljr, ffenc_dnxhd, ffenc_dpx, ffenc_dvvideo, ffenc_eac3, ffenc_ffv1, ffenc_ffvhuff, ffenc_flashsv, ffenc_flv, ffenc_g722, ffenc_g726, ffenc_h261, ffenc_h263, ffenc_h263p, ffenc_huffyuv, ffenc_jpegls, ffenc_ljpeg, ffenc_mjpeg, ffenc_mp2, ffenc_mpeg1video, ffenc_mpeg2video, ffenc_mpeg4, ffenc_msmpeg4, ffenc_msmpeg4v2, ffenc_nellymoser, ffenc_pam, ffenc_pbm, ffenc_pcx, ffenc_pgm, ffenc_pgmyuv, ffenc_png, ffenc_ppm, ffenc_qtrle, ffenc_real_144, ffenc_roq_dpcm, ffenc_roqvideo, ffenc_rv10, ffenc_rv20, ffenc_sgi, ffenc_snow, ffenc_svq1, ffenc_targa, ffenc_tiff, ffenc_v410, ffenc_wmav1, ffenc_wmav2, ffenc_wmv1, ffenc_wmv2, ffenc_zmbv, ffmux_3g2, ffmux_3gp, ffmux_a64, ffmux_adts, ffmux_adx, ffmux_aiff, ffmux_amr, ffmux_asf, ffmux_asf_stream, ffmux_au, ffmux_avi, ffmux_avm2, ffmux_daud, ffmux_dv, ffmux_dvd, ffmux_ffm, ffmux_filmstrip, ffmux_flv, ffmux_gxf, ffmux_ipod, ffmux_ivf, ffmux_latm, ffmux_matroska, ffmux_md5, ffmux_mmf, ffmux_mov, ffmux_mp2, ffmux_mp3, ffmux_mp4, ffmux_mpeg, ffmux_mpegts, ffmux_mpjpeg, ffmux_mxf, ffmux_mxf_d10, ffmux_nut, ffmux_ogg, ffmux_oma, ffmux_psp, ffmux_rcv, ffmux_rm, ffmux_rso, ffmux_rtsp, ffmux_sap, ffmux_segment, ffmux_smjpeg, ffmux_sox, ffmux_spdif, ffmux_svcd, ffmux_swf, ffmux_vcd, ffmux_vob, ffmux_voc, ffmux_wav, ffmux_webm, ffmux_yuv4mpegpipe, ffvideoscale, postproc_ahdeblock, postproc_autolevels, postproc_avdeblock, postproc_cubicipoldeint, postproc_default, postproc_dering, postproc_ffmpegdeint, postproc_forcequant, postproc_hdeblock, postproc_linblenddeint, postproc_linipoldeint, postproc_lowpass5, postproc_mediandeint, postproc_tmpnoise, postproc_vdeblock, postproc_x1hdeblock, postproc_x1vdeblock
+Gstreamer-Encoders: application/gxf; application/mxf; application/ogg; application/x-gst_ff-a64; application/x-gst_ff-adts; application/x-gst_ff-adx; application/x-gst_ff-asf_stream; application/x-gst_ff-avm2; application/x-gst_ff-daud; application/x-gst_ff-dvd; application/x-gst_ff-ffm; application/x-gst_ff-filmstrip; application/x-gst_ff-ivf; application/x-gst_ff-latm; application/x-gst_ff-md5; application/x-gst_ff-mmf; application/x-gst_ff-mpjpeg; application/x-gst_ff-nut; application/x-gst_ff-oma; application/x-gst_ff-rcv; application/x-gst_ff-rso; application/x-gst_ff-rtsp; application/x-gst_ff-sap; application/x-gst_ff-smjpeg; application/x-gst_ff-sox; application/x-gst_ff-spdif; application/x-gst_ff-svcd; application/x-gst_ff-vcd; application/x-gst_ff-vob; application/x-gst_ff-voc; application/x-pn-realmedia, systemstream=(boolean)true; application/x-shockwave-flash; application/x-yuv4mpeg, y4mversion=(int)2; audio/G722; audio/mpeg, mpegversion=(int)4, stream-format=(string)raw, base-profile=(string)lc; audio/mpeg, mpegversion=(int)1, layer=(int)2; audio/x-ac3; audio/x-adpcm, layout=(string){ yamaha, swf, microsoft, dvi, quicktime, g726, adx }; audio/x-aiff; audio/x-alac; audio/x-amr-nb-sh; audio/x-au; audio/x-dpcm, layout=(string)roq; audio/x-eac3; audio/x-nellymoser; audio/x-pn-realaudio, raversion=(int)1; audio/x-wav; audio/x-wma, wmaversion=(int){ 2, 1 }; image/bmp; image/jpeg; image/pbm; image/png; image/ppm; image/tiff; image/x-pcx; image/x-portable-anymap; image/x-portable-graymap; image/x-sgi; image/x-tga; unknown/unknown; video/mpeg, mpegversion=(int){ 4, 2, 1 }, systemstream=(boolean)false; video/mpeg, systemstream=(boolean)true; video/mpegts, systemstream=(boolean)true; video/quicktime, variant=(string){ 3gpp, 3g2, psp, iso, apple, ipod }; video/webm; video/x-asus, asusversion=(int){ 2, 1 }; video/x-cirrus-logic-accupak; video/x-divx, divxversion=(int)5; video/x-dnxhd; video/x-dv, systemstream=(boolean){ true, false }; video/x-ffv, ffvversion=(int)1; video/x-flash-screen; video/x-flash-video, flvversion=(int)1; video/x-flv; video/x-gst_ff-ffvhuff; video/x-gst_ff-pgmyuv; video/x-gst_ff-roqvideo; video/x-gst_ff-snow; video/x-h261; video/x-h263, variant=(string)itu, h263version=(string){ h263p, h263 }; video/x-huffyuv; video/x-matroska; video/x-ms-asf; video/x-msmpeg, msmpegversion=(int){ 43, 42 }; video/x-msvideo; video/x-pn-realvideo, systemstream=(boolean)false, rmversion=(int){ 2, 1 }; video/x-rle, layout=(string)quicktime; video/x-svq, svqversion=(int)1; video/x-wmv, wmvversion=(int){ 2, 1 }; video/x-zmbv
+Gstreamer-Version: 0.10
+
 Package: nvidia-glx
 Status: deinstall ok config-files
 Priority: optional
@@ -6681,6 +7181,28 @@ Description: The Theora Video Compression Codec
  Thusnelda branch.
 Homepage: http://www.theora.org/
 
+Package: python2.7-minimal
+Status: install ok installed
+Priority: optional
+Section: python
+Installed-Size: 5246
+Maintainer: Matthias Klose <doko@debian.org>
+Architecture: i386
+Source: python2.7
+Version: 2.7.3-6
+Replaces: python2.7 (<< 2.7.1~rc1-2~)
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), zlib1g (>= 1:1.2.0)
+Recommends: python2.7
+Suggests: binfmt-support
+Conflicts: binfmt-support (<< 1.1.2)
+Conffiles:
+ /etc/python2.7/sitecustomize.py d6b276695157bde06a56ba1b2bc53670
+Description: Minimal subset of the Python language (version 2.7)
+ This package contains the interpreter and some essential modules.  It can
+ be used in the boot process for some basic tasks.
+ See /usr/share/doc/python2.7-minimal/README.Debian for a list of the modules
+ contained in this package.
+
 Package: libxcb-render0
 Status: install ok installed
 Priority: optional
@@ -6884,6 +7406,24 @@ Description: X C Binding, glx extension
   * Easy creation of new extensions: automatically generates interface from
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
+
+Package: libshout3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 113
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libshout
+Version: 2.2.2-8
+Depends: libc6 (>= 2.4), libogg0 (>= 1.0rc3), libspeex1 (>= 1.2~beta3-1), libtheora0 (>= 0.0.0.alpha7.dfsg), libvorbis0a (>= 1.1.2)
+Pre-Depends: multiarch-support
+Description: MP3/Ogg Vorbis broadcast streaming library
+ A library for communicating with and sending data to Icecast and Icecast 2
+ streaming audio servers.  It handles the socket connection, the timing of
+ the data transmission, and prevents bad data from getting to the server.
+Homepage: http://www.icecast.org/
 
 Package: libglapi-mesa
 Status: install ok installed
@@ -7343,6 +7883,29 @@ Description: interpreter for the PostScript language and for PDF - Library
  This package provides the Ghostscript library which makes the
  facilities of GPL Ghostscript available to applications.
 Homepage: http://www.ghostscript.com/
+
+Package: libxml2-doc
+Status: install ok installed
+Priority: optional
+Section: doc
+Installed-Size: 8424
+Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: libxml2
+Version: 2.8.0+dfsg1-7+nmu2
+Suggests: devhelp
+Description: Documentation for the GNOME XML library
+ XML is a metalanguage to let you design your own markup language.
+ A regular markup language defines a way to describe information in
+ a certain class of documents (eg HTML). XML lets you define your
+ own customized markup languages for many classes of document. It
+ can do this because it's written in SGML, the international standard
+ metalanguage for markup languages.
+ .
+ This package contains general information about the GNOME XML library
+ and more specific API references.
+Homepage: http://xmlsoft.org/
 
 Package: wget
 Status: install ok installed
@@ -8322,6 +8885,25 @@ Description: library that implements library compatibility checks for dlopen()
  SONAMEs of the same library can safely co-exist in the same symbol space.
  Shared library dependencies are also checked for compatibility.
 
+Package: glib-networking-services
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 60
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: glib-networking
+Version: 2.32.3-1
+Replaces: glib-networking (<< 2.30.1-2)
+Depends: libc6 (>= 2.0), libglib2.0-0 (>= 2.31.6), libproxy0 (>= 0.2.3), glib-networking-common (= 2.32.3-1)
+Recommends: glib-networking
+Breaks: glib-networking (<< 2.30.1-2)
+Description: network-related giomodules for GLib - D-Bus services
+ This package contains D-Bus services that are used by the GIO network
+ extensions in glib-networking, for actions that need to be done in a
+ separate process.
+
 Package: libnl-genl-3-200
 Status: install ok installed
 Priority: optional
@@ -8783,6 +9365,32 @@ Description: 75 dpi fonts for X
  This package requires the xfonts-utils package to prepare the font
  directories for use by an X server or X font server.
 
+Package: libiec61883-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 116
+Maintainer: Marcio Roberto Teixeira <marciotex@gmail.com>
+Architecture: i386
+Source: libiec61883
+Version: 1.2.0-0.1
+Depends: libc6 (>= 2.1.3), libraw1394-11
+Description: an partial implementation of IEC 61883
+ This library is an implementation of IEC 61883, part 1 (CIP, plug
+ registers, and CMP), part 2 (DV-SD), part 4 (MPEG2-TS), and part 6
+ (AMDTP). Outside of IIDC, nearly all FireWire multimedia devices use IEC
+ 61883 protocols.
+ .
+ The libiec61883 library provides a higher level API for streaming DV,
+ MPEG-2 and audio over Linux IEEE 1394. This includes both reception and
+ transmission. It uses the new "rawiso" API of libraw1394, which
+ transparently provides mmap-ed DMA for efficient data transfer. It also
+ represents the third generation of I/O technology for Linux 1394 for
+ these media types thereby removing the complexities of additional kernel
+ modules, /dev nodes, and procfs. It also consolidates features for plug
+ control registers and connection management that previously existed in
+ experimental form in an unreleased version of libavc1394.
+
 Package: bsdmainutils
 Status: install ok installed
 Priority: important
@@ -9011,6 +9619,32 @@ Description: Independent JPEG Group's JPEG runtime library
  .
  This package contains the shared library.
 
+Package: libgstreamer0.10-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 4019
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gstreamer0.10
+Version: 0.10.36-1.2
+Replaces: gobject-introspection-repository (<< 0.6.5-2)
+Depends: libc6 (>= 2.10), libglib2.0-0 (>= 2.31.8), libxml2 (>= 2.7.4)
+Pre-Depends: multiarch-support
+Suggests: gstreamer0.10-tools, gstreamer0.10-plugins-base
+Conflicts: gstreamer0.10-plugins-base (<< 0.10.25.2), libgstreamer-plugins-base0.10-0 (<< 0.10.11cvs20070110-0ubuntu5)
+Description: Core GStreamer libraries and elements
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the core library and elements.
+Homepage: http://gstreamer.freedesktop.org
+
 Package: xauth
 Status: install ok installed
 Priority: optional
@@ -9136,6 +9770,32 @@ Original-Uploaders:
 Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
 Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: gstreamer0.10-doc
+Status: install ok installed
+Priority: optional
+Section: doc
+Installed-Size: 26691
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: all
+Source: gstreamer0.10
+Version: 0.10.36-1.2
+Depends: libxml2-doc, libglib2.0-doc
+Recommends: libgstreamer0.10-dev (= 0.10.36-1.2)
+Description: GStreamer core documentation and manuals
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains documentation for core libraries and elements as
+ well as:
+  * the GStreamer Manual
+  * the GStreamer Plugin Writers Guide
+  * Various API docs
+Homepage: http://gstreamer.freedesktop.org
 
 Package: libblkid1
 Status: install ok installed
@@ -9448,6 +10108,30 @@ Description: JasPer JPEG-2000 runtime library
  JPEG-2000 format defined in ISO/IEC 15444-1:2000.
  .
  This package contains the shared library.
+
+Package: gconf-service
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 565
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: gconf
+Version: 3.2.5-1+build1
+Replaces: gconf2-common (<< 3.2.3-2)
+Depends: libc6 (>= 2.4), libdbus-1-3 (>= 1.0.2), libdbus-glib-1-2 (>= 0.78), libgconf-2-4 (= 3.2.5-1+build1), libglib2.0-0 (>= 2.31.0), libldap-2.4-2 (>= 2.4.7), libxml2 (>= 2.7.4), gconf2-common (= 3.2.5-1+build1)
+Breaks: gconf2-common (<< 3.2.3-2)
+Description: GNOME configuration database system (D-Bus service)
+ GConf is a configuration database system for storing application
+ preferences. It supports default or mandatory settings set by the
+ administrator, and changes to the database are instantly applied to all
+ running applications. It is written for the GNOME desktop but doesn't
+ require it.
+ .
+ This package contains the D-Bus enabled daemon that is used internally
+ by the GConf library to access configuration data.
+Homepage: http://projects.gnome.org/gconf/
 
 Package: git-man
 Status: install ok installed
@@ -9918,6 +10602,31 @@ Description: handheld device font with extensive style and language support
  optimal quality for screen text.
 Homepage: http://www.droidfonts.com/
 
+Package: dbus-x11
+Status: install ok installed
+Priority: optional
+Section: x11
+Installed-Size: 132
+Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: dbus
+Version: 1.6.8-1+deb7u1
+Depends: libc6 (>= 2.4), libx11-6, dbus
+Breaks: x11-common (<< 1:7.5+4)
+Conffiles:
+ /etc/X11/Xsession.d/75dbus_dbus-launch 75fd37a1791965dab99121373d918516
+Description: simple interprocess messaging system (X11 deps)
+ D-Bus is a message bus, used for sending messages between applications.
+ Conceptually, it fits somewhere in between raw sockets and CORBA in
+ terms of complexity.
+ .
+ This package contains the dbus-launch utility which is necessary for
+ packages using a D-Bus session bus.
+ .
+ See the dbus description for more information about D-Bus in general.
+Homepage: http://dbus.freedesktop.org/
+
 Package: xserver-xorg-video-mga
 Status: install ok installed
 Priority: optional
@@ -9937,6 +10646,25 @@ Description: X.Org X server -- MGA display driver
  <URL:http://www.X.org>
  .
  This package is built from the X.org xf86-video-mga driver module.
+
+Package: libgpm2
+Status: install ok installed
+Priority: standard
+Section: libs
+Installed-Size: 77
+Maintainer: Peter Samuelson <peter@p12n.org>
+Architecture: i386
+Multi-Arch: same
+Source: gpm
+Version: 1.20.4-6
+Depends: libc6 (>= 2.7)
+Pre-Depends: multiarch-support
+Suggests: gpm
+Description: General Purpose Mouse - shared library
+ This package provides a library that handles mouse requests
+ and delivers them to applications. See the description for the 'gpm'
+ package for more information.
+Homepage: http://www.nico.schottelius.org/software/gpm/
 
 Package: libdb5.1
 Status: install ok installed
@@ -10338,6 +11066,26 @@ Description: High-level library for managing Debian package information
  .
  This is the shared library.
 
+Package: iso-codes
+Status: install ok installed
+Priority: optional
+Section: misc
+Installed-Size: 15019
+Maintainer: Tobias Quathamer <toddy@debian.org>
+Architecture: all
+Multi-Arch: foreign
+Version: 3.41-1
+Suggests: isoquery
+Description: ISO language, territory, currency, script codes and their translations
+ This package provides the ISO 639 and ISO 639-3 language code lists,
+ the ISO 4217 currency code list, the ISO 3166 territory code list,
+ the ISO 3166-2 sub-territory list, and the ISO 15924 script code
+ list as XML files.
+ .
+ More importantly, it also provides their translations to be used by
+ other programs.
+Homepage: http://pkg-isocodes.alioth.debian.org/
+
 Package: linux-base
 Status: install ok installed
 Priority: optional
@@ -10416,6 +11164,23 @@ Description: module using libc functions for internationalization in Perl
  bindtextdomain(), bind_textdomain_codeset(), ngettext(), dcngettext()
  and dngettext().
 Homepage: http://search.cpan.org/dist/gettext/gettext.pm
+
+Package: glib-networking-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 658
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: glib-networking
+Version: 2.32.3-1
+Replaces: glib-networking (<< 2.30.1-2)
+Recommends: glib-networking
+Breaks: glib-networking (<< 2.30.1-2)
+Description: network-related giomodules for GLib - data files
+ This package contains data files and translations for the GIO network
+ extensions in glib-networking.
 
 Package: linux-image-3.7-0baureo1-686-pae
 Status: deinstall ok config-files
@@ -10558,6 +11323,31 @@ Description: Linux Kernel Device Mapper userspace library
  .
  This package contains a utility for modifying device mappings.
 Homepage: http://sources.redhat.com/lvm2/
+
+Package: gstreamer0.10-pulseaudio
+Status: install ok installed
+Priority: optional
+Section: sound
+Installed-Size: 854
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu1
+Provides: gstreamer0.10-audiosink, gstreamer0.10-audiosource
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.8), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36), libpulse0 (>= 0.99.4)
+Description: GStreamer plugin for PulseAudio
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the GStreamer plugin for PulseAudio, a sound server
+ for POSIX and WIN32 systems.
+Gstreamer-Elements: pulseaudiosink, pulsemixer, pulsesink, pulsesrc
+Gstreamer-Version: 0.10
 
 Package: eject
 Status: install ok installed
@@ -10990,6 +11780,35 @@ Description: X.Org X server -- Chips display driver
  .
  This package is built from the X.org xf86-video-chips driver module.
 
+Package: libvisual-0.4-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 380
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libvisual
+Version: 0.4.0-5
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Recommends: libvisual-0.4-plugins
+Breaks: libvisual-0.4-plugins (<< 0.4.0.dfsg.1-5)
+Description: Audio visualization framework
+ Libvisual is a generic visualization framework that allows
+ applications to easily access and manage visualization plugins.
+ Audio visualization is the process of making pretty moving images
+ that are correlated in some way to the audio currently being played
+ by a media player.  Most audio visualization is tied to a specific
+ application or media player, making it difficult to share code.
+ Libvisual allows applications to use existing visualization plugins
+ written for the libvisual framework.
+ .
+ This package contains the runtime libraries for libvisual.  Libvisual
+ is not very useful without visualization plugins, so it is highly
+ recommended to install the libvisual-0.4-plugins package.
+Homepage: http://sourceforge.net/projects/libvisual/
+
 Package: xserver-xorg-video-intel
 Status: install ok installed
 Priority: optional
@@ -11083,6 +11902,26 @@ Description: X.Org X server -- ATI Mach64 display driver
  .
  This package is built from the X.org xf86-video-mach64 driver module.
 
+Package: libcaca0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 1035
+Maintainer: Sam Hocevar <sho@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libcaca
+Version: 0.99.beta18-1
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libncursesw5 (>= 5.6+20070908), libslang2 (>= 2.0.7-1), libstdc++6 (>= 4.1.1), libtinfo5, zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Description: colour ASCII art library
+ libcaca is the Colour AsCii Art library. It provides high level functions
+ for colour text drawing, simple primitives for line, polygon and ellipse
+ drawing, as well as powerful image to text conversion routines.
+ .
+ This package contains the shared library for libcaca.
+Homepage: http://caca.zoy.org/wiki/libcaca
+
 Package: libcupscgi1
 Status: install ok installed
 Priority: optional
@@ -11162,6 +12001,30 @@ Description: shared low-level terminfo library for terminal handling
  .
  This package contains the shared low-level terminfo library.
 Homepage: http://invisible-island.net/ncurses/
+
+Package: libtag1c2a
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 33
+Maintainer: Modestas Vainius <modax@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: taglib
+Version: 1.7.2-1
+Depends: libtag1-vanilla (= 1.7.2-1) | libtag1-rusxmms (= 1.7.2-1)
+Conflicts: libtag-extras0
+Description: audio meta-data library
+ TagLib is a library for reading and editing the meta-data of several popular
+ audio formats. Currently it supports both ID3v1 and ID3v2 for MP3 files, Ogg
+ Vorbis comments and ID3 tags and Vorbis comments in FLAC, MPC, Speex, WavPack
+ TrueAudio, WAV, AIFF, MP4 and ASF files.
+ .
+ This package is the main metapackage for the TagLib Audio Meta-Data Library.
+ Packages using TagLib should depend on this package rather than specific
+ TagLib flavour. Vanilla (original) flavour is default. Alternatively you may
+ install RusXMMS flavour which can be found in the libtag1-rusxmms package.
+Homepage: http://developer.kde.org/~wheeler/taglib.html
 
 Package: libjbig2dec0
 Status: install ok installed
@@ -11251,6 +12114,33 @@ Description: Libav file format library
  It supports most existing file formats (AVI, MPEG, OGG, Matroska,
  ASF...).
 Homepage: http://libav.org/
+
+Package: gstreamer0.10-gconf
+Status: install ok installed
+Priority: optional
+Section: sound
+Installed-Size: 765
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu1
+Replaces: gstreamer0.10-plugins-good (<< 0.10.30-2)
+Depends: gconf2 (>= 2.28.1-2), gconf-service, libc6 (>= 2.3.6-6~), libgconf-2-4 (>= 2.31.1), libglib2.0-0 (>= 2.31.8), libgstreamer0.10-0 (>= 0.10.36)
+Conflicts: gstreamer0.10-plugins-good (<< 0.10.30-2)
+Description: GStreamer plugin for getting the sink/source information from GConf
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the GStreamer plugin for getting the information
+ about which sources or sinks should be used for audio and video from
+ GConf.
+Gstreamer-Elements: gconfaudiosink, gconfaudiosrc, gconfvideosink, gconfvideosrc
+Gstreamer-Version: 0.10
 
 Package: libpciaccess0
 Status: install ok installed
@@ -11437,6 +12327,56 @@ Description: Rasqal RDF query library
  memory leaks) and to track ongoing RDF query language work.
 Homepage: http://librdf.org/rasqal/
 
+Package: gconf2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 592
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: gconf
+Version: 3.2.5-1+build1
+Depends: gconf-service (= 3.2.5-1+build1), libc6 (>= 2.4), libgconf-2-4 (>= 2.31.1), libglib2.0-0 (>= 2.31.8), libxml2 (>= 2.7.4), psmisc, dbus-x11, python
+Suggests: gconf-defaults-service
+Conffiles:
+ /etc/xdg/autostart/gsettings-data-convert.desktop 93af602643026cd239b3571894b8945b
+Description: GNOME configuration database system (support tools)
+ GConf is a configuration database system for storing application
+ preferences. It supports default or mandatory settings set by the
+ administrator, and changes to the database are instantly applied to all
+ running applications. It is written for the GNOME desktop but doesn't
+ require it.
+ .
+ This package contains the command line tools: gconftool and
+ gconf-merge-tree.
+Homepage: http://projects.gnome.org/gconf/
+
+Package: mime-support
+Status: install ok installed
+Priority: standard
+Section: net
+Installed-Size: 192
+Maintainer: Brian White <bcwhite@pobox.com>
+Architecture: all
+Version: 3.52-1
+Recommends: file (>= 3.27-3)
+Conflicts: a2ps (<< 4.10.4), metamail (<< 2.7-44)
+Conffiles:
+ /etc/mime.types b5a7688ad3120eb95b0f18607fd4619e
+ /etc/mailcap.order ba07e08a7fe3741d0b8339127963190e
+Description: MIME files 'mime.types' & 'mailcap', and support programs
+ As these files can be used by all MIME compliant programs, they
+ have been moved into their own package that others can depend upon.
+ .
+ Other packages add themselves as viewers/editors/composers/etc by
+ using the provided "update-mime" program.
+ .
+ In addition, the commands "see", "edit", "compose", and "print"
+ will display, alter, create, and print (respectively) any file using
+ a program determined from the entries in the mime.types and mailcap
+ files.
+
 Package: alsa-base
 Status: install ok installed
 Priority: optional
@@ -11491,6 +12431,38 @@ Description: OpenLDAP libraries
  These are the run-time libraries for the OpenLDAP (Lightweight Directory
  Access Protocol) servers and clients.
 Homepage: http://www.openldap.org/
+
+Package: gstreamer0.10-plugins-base
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 2686
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-base0.10
+Version: 0.10.36-1.1
+Replaces: gstreamer0.10-plugins-bad (<< 0.10.3+cvs20060814-0ubuntu4)
+Provides: gstreamer0.10-audiosource, gstreamer0.10-videosource
+Depends: libc6 (>= 2.7), libcdparanoia0 (>= 3.10.2+debian), libglib2.0-0 (>= 2.31.8), libgstreamer0.10-0 (>= 0.10.36), libogg0 (>= 1.0rc3), liborc-0.4-0 (>= 1:0.4.16), libtheora0 (>= 1.0), libvisual-0.4-0 (>= 0.4.0-4), libvorbis0a (>= 1.1.2), libvorbisenc2 (>= 1.1.2), libxml2 (>= 2.7.4), libgstreamer-plugins-base0.10-0 (>= 0.10.36)
+Suggests: gvfs
+Description: GStreamer plugins from the "base" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the GStreamer plugins from the "base" set, an
+ essential exemplary set of elements.
+Homepage: http://gstreamer.freedesktop.org
+Gstreamer-Decoders: application/ogg; application/x-annodex; application/x-ass; application/x-ogg-avi; application/x-ogm-audio; application/x-ogm-text; application/x-ogm-video; application/x-ssa; application/x-subtitle; application/x-subtitle-dks; application/x-subtitle-mpl2; application/x-subtitle-qttext; application/x-subtitle-sami; application/x-subtitle-tmplayer; audio/x-vorbis; video/x-theora
+Gstreamer-Elements: adder, appsink, appsrc, audioconvert, audiorate, audioresample, audiotestsrc, cdparanoiasrc, decodebin, decodebin2, encodebin, ffmpegcolorspace, gdpdepay, gdppay, giosink, giosrc, giostreamsink, giostreamsrc, multifdsink, oggaviparse, oggdemux, oggmux, oggparse, ogmaudioparse, ogmtextparse, ogmvideoparse, playbin, playbin2, playsink, ssaparse, subparse, subtitleoverlay, tcpclientsink, tcpclientsrc, tcpserversink, tcpserversrc, theoradec, theoraenc, theoraparse, uridecodebin, videorate, videoscale, videotestsrc, volume, vorbisdec, vorbisenc, vorbisparse, vorbistag
+Gstreamer-Encoders: application/ogg; application/x-gdp; audio/x-vorbis; video/x-theora
+Gstreamer-Uri-Sinks: appsink, file
+Gstreamer-Uri-Sources: appsrc, cdda, file
+Gstreamer-Version: 0.10
 
 Package: libmhash2
 Status: install ok installed
@@ -11636,6 +12608,32 @@ Description: Qt 4 XML module
  and C++ implementations of SAX and DOM.
 Homepage: http://qt-project.org/
 
+Package: libgnome-keyring0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 213
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libgnome-keyring
+Version: 3.4.1-1
+Depends: libc6 (>= 2.3.6-6~), libdbus-1-3 (>= 1.1.1), libgcrypt11 (>= 1.4.5), libglib2.0-0 (>= 2.31.8), libgnome-keyring-common (= 3.4.1-1)
+Pre-Depends: multiarch-support
+Suggests: gnome-keyring
+Breaks: gnome-keyring (<< 3.0)
+Description: GNOME keyring services library
+ gnome-keyring is a daemon in the session, similar to ssh-agent,
+ and other applications can use it to store passwords and other
+ sensitive information.
+ .
+ The program can manage several keyrings, each with its own master
+ password, and there is also a session keyring which is never stored to
+ disk, but forgotten when the session ends.
+ .
+ This package contains shared libraries for GNOME.
+Homepage: http://live.gnome.org/GnomeKeyring
+
 Package: xserver-xorg-input-all
 Status: install ok installed
 Priority: optional
@@ -11749,6 +12747,47 @@ Description: X11 Testing -- Record extension library
  This module can be found at
  git://anongit.freedesktop.org/git/xorg/lib/libXtst
 
+Package: libcdparanoia0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 148
+Maintainer: Optical Media Tools Team <pkg-opt-media-team@lists.alioth.debian.org>
+Architecture: i386
+Source: cdparanoia
+Version: 3.10.2+debian-10.1
+Depends: libc6 (>= 2.3)
+Description: audio extraction tool for sampling CDs (library)
+ An audio extraction tool for sampling CDs. Unlike similar programs such as
+ cdda2wav, cdparanoia goes to great lengths to try to extract the audio
+ information without any artifacts such as jitter.
+ .
+ This package contains the library of cdparanoia, so that its routines
+ can be used by other programs.
+Homepage: http://www.xiph.org/paranoia/
+
+Package: libpostproc52
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 401
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libav
+Version: 6:0.8.10-1
+Replaces: libpostproc-extra-52
+Provides: libpostproc-extra-52
+Depends: libavutil51 (>= 6:0.8.3-1~), libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Breaks: libpostproc-extra-52 (<< 5:0.8.1-2)
+Description: Libav video postprocessing library
+ Libav is a complete, cross-platform solution to decode, encode, record,
+ convert and stream audio and video.
+ .
+ This is the video postprocessing library from Libav.
+Homepage: http://libav.org/
+
 Package: nano
 Status: install ok installed
 Priority: important
@@ -11824,6 +12863,29 @@ Original-Uploaders: Daniel Baumann <daniel@debian.org>
 Original-Vcs-Browser: http://live.debian.net/gitweb/?p=live-config.git
 Original-Vcs-Git: git://live.debian.net/git/live-config.git
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: dconf-gsettings-backend
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 80
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: d-conf
+Version: 0.12.1-3
+Replaces: libdconf0 (<< 0.7.3-2)
+Provides: gsettings-backend
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.18), dconf-service (>= 0.12.1-3), dconf-service (<< 0.12.1-3.1~), libdconf0 (= 0.12.1-3)
+Breaks: libdconf0 (<< 0.7.3-2), libglib2.0-0 (<< 2.30)
+Description: simple configuration storage system - GSettings back-end
+ DConf is a low-level key/value database designed for storing desktop
+ environment settings.
+ .
+ This package contains a back-end for GSettings. It is needed by
+ applications accessing settings through GSettings to set custom values
+ and listen for changes.
+Homepage: http://live.gnome.org/dconf
 
 Package: libnspr4-0d
 Status: install ok installed
@@ -12338,6 +13400,26 @@ Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-ntp/ntp/trunk/
 Original-Vcs-Svn: svn://svn.debian.org/pkg-ntp/ntp/trunk/
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: libaa1
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 161
+Maintainer: Gergely Nagy <algernon@madhouse-project.org>
+Architecture: i386
+Multi-Arch: same
+Source: aalib
+Version: 1.4p5-40
+Replaces: aalib1
+Provides: aalib1
+Depends: libc6 (>= 2.11), libgpm2 (>= 1.20.4), libncurses5 (>= 5.5-5~), libslang2 (>= 2.2.4), libtinfo5, libx11-6
+Pre-Depends: multiarch-support
+Description: ASCII art library
+ AAlib is a portable ASCII art graphics library. Internally, it works like
+ a graphics display, but the output is rendered into gorgeous platform
+ independent ASCII graphics.
+Homepage: http://aa-project.sourceforge.net/aalib/
+
 Package: libc6
 Status: install ok installed
 Priority: required
@@ -12529,6 +13611,38 @@ Original-Uploaders: Daniel Baumann <daniel@debian.org>
 Original-Vcs-Browser: http://live.debian.net/gitweb/?p=live-config.git
 Original-Vcs-Git: git://live.debian.net/git/live-config.git
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: gstreamer0.10-plugins-good
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 6135
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu1
+Replaces: gstreamer0.10-plugins-bad (<< 0.10.21.2), gstreamer0.10-plugins-good-doc (<< 0.10.6-2), gstreamer0.10-plugins-really-bad (<< 0.10.21.2)
+Provides: gstreamer0.10-audiosink, gstreamer0.10-audiosource, gstreamer0.10-videosink, gstreamer0.10-videosource, gstreamer0.10-visualization
+Depends: libaa1 (>= 1.4p5), libavc1394-0 (>= 0.5.3), libbz2-1.0, libc6 (>= 2.11), libcaca0 (>= 0.99.beta17-1), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.10.0), libdv4, libflac8 (>= 1.2.1), libgcc1 (>= 1:4.1.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.31.8), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36), libgudev-1.0-0 (>= 146), libiec61883-0 (>= 1.2.0), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libjpeg8 (>= 8c), liborc-0.4-0 (>= 1:0.4.16), libpng12-0 (>= 1.2.13-4), libraw1394-11, libshout3, libsoup-gnome2.4-1 (>= 2.27.4), libsoup2.4-1 (>= 2.26.1), libspeex1 (>= 1.2~beta3-1), libstdc++6 (>= 4.1.1), libtag1c2a (>= 1.5), libv4l-0 (>= 0.5.0), libwavpack1 (>= 4.40.0), libx11-6, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxml2 (>= 2.7.4), libxv1, zlib1g (>= 1:1.1.4), gstreamer0.10-plugins-base, gstreamer0.10-gconf
+Recommends: gstreamer0.10-x
+Conflicts: gstreamer0.10-plugins-bad (<< 0.10.21.2), gstreamer0.10-plugins-really-bad (<< 0.10.21.2)
+Description: GStreamer plugins from the "good" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the GStreamer plugins from the "good" set, a set
+ of good-quality plug-ins under the LGPL license.
+Gstreamer-Decoders: application/x-3gp; application/x-apetag; application/x-icy; application/x-id3; application/x-navi-animation; application/x-rtcp; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ AMR, AMR-WB }, encoding-params=(string)1, octet-align=(string)1, crc=(string){ 0, 1 }, robust-sorting=(string)0, interleaving=(string)0; application/x-rtp, media=(string){ video, audio, application }, payload=(int)[ 96, 127 ], encoding-name=(string)MPEG4-GENERIC, streamtype=(string){ 4, 5 }, mode=(string){ generic, CELP-cbr, CELP-vbr, AAC-lbr, AAC-hbr }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SPEEX, encoding-params=(string)1; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SIREN, dct-length=(int)320; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)ILBC, mode=(string){ 20, 30 }; application/x-rtp, media=(string){ video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)DV, encode=(string){ SD-VCR/525-60, SD-VCR/625-50, HD-VCR/1125-60, HD-VCR/1250-50, SDL-VCR/525-60, SDL-VCR/625-50, 306M/525-60, 306M/625-50, 314M-25/525-60, 314M-25/625-50, 314M-50/525-60, 314M-50/625-50 }; application/x-rtp, payload=(int)[ 96, 127 ], media=(string){ audio, video }, encoding-name=(string){ X-QT, X-QUICKTIME }; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string){ RAW, THEORA, X-SV3V-ES, X-SORENSON-VIDEO, X-SORENSONVIDEO, X-SorensonVideo, MP4V-ES, MP2T-ES, MP1S, JPEG, JPEG2000, H264, H263, H263-2000, MPV, H263-1998 }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ VORBIS, X-QDM, QCELP, MP4A-LATM, L16, MPA-ROBUST, X-MP3-DRAFT-00, X-MP3-DRAFT-01, X-MP3-DRAFT-02, X-MP3-DRAFT-03, X-MP3-DRAFT-04, X-MP3-DRAFT-05, X-MP3-DRAFT-06, MPA, PCMU, PCMA, GSM, G729, G726, G726-16, G726-24, G726-32, G726-40, AAL2-G726-16, AAL2-G726-24, AAL2-G726-32, AAL2-G726-40, G723, G722, CELT, BV16, BV32, AC3 }; application/x-rtp, media=(string)other, payload=(int)[ 96, 127 ], encoding-name=(string)MP1S; application/x-rtp, media=(string)video, payload=(int)34, encoding-name=(string)H263; application/x-rtp, media=(string)audio, payload=(int)0, encoding-name=(string)PCMU; application/x-rtp, media=(string)audio, payload=(int)8, encoding-name=(string)PCMA; application/x-rtp, media=(string)application, payload=(int)[ 96, 127 ], encoding-name=(string)X-GST; application/x-rtp, media=(string)audio, payload=(int){ 12, 10, 11, 14, 3, 18, 4, 9 }; application/x-rtp, media=(string)video, payload=(int){ 33, 26, 32 }; application/x-subtitle-avi; audio/ac3; audio/mpeg, mpegversion=(int){ 1, 2, 4 }; audio/x-ac3; audio/x-alaw; audio/x-amr-nb-sh; audio/x-amr-wb-sh; audio/x-au; audio/x-dts; audio/x-eac3; audio/x-flac; audio/x-m4a; audio/x-mulaw; audio/x-speex; audio/x-wav; audio/x-wavpack, framed=(boolean){ true, false }; audio/x-wavpack-correction, framed=(boolean)false; image/bmp; image/gif; image/jpeg, sof-marker=(int){ 0, 1, 2, 5, 6, 7, 9, 10, 13, 14 }; image/png; image/svg; image/svg+xml; image/tiff; image/vnd.wap.wbmp; image/x-MS-bmp; image/x-bitmap; image/x-bmp; image/x-cmu-raster; image/x-icon; image/x-pcx; image/x-pixmap; image/x-portable-anymap; image/x-portable-bitmap; image/x-portable-graymap; image/x-portable-pixmap; image/x-sun-raster; image/x-tga; multipart/x-mixed-replace; text/x-cmml, encoded=(boolean)true; video/mj2; video/quicktime; video/webm; video/x-dv, systemstream=(boolean){ false, true }; video/x-fli; video/x-flv; video/x-matroska; video/x-msvideo; video/x-smoke
+Gstreamer-Elements: 3gppmux, aacparse, aasink, ac3parse, agingtv, alawdec, alawenc, alpha, alphacolor, amrparse, apedemux, apev2mux, aspectratiocrop, asteriskh263, audioamplify, audiochebband, audiocheblimit, audiodynamic, audioecho, audiofirfilter, audioiirfilter, audioinvert, audiokaraoke, audiopanorama, audiowsincband, audiowsinclimit, auparse, autoaudiosink, autoaudiosrc, autovideosink, autovideosrc, avidemux, avimux, avisubtitle, breakmydata, cacasink, cairooverlay, cairorender, cairotextoverlay, cairotimeoverlay, capsdebug, capssetter, cmmldec, cmmlenc, cpureport, cutter, dcaparse, deinterlace, deinterleave, dicetv, dv1394src, dvdec, dvdemux, dynudpsink, edgetv, efence, equalizer-10bands, equalizer-3bands, equalizer-nbands, flacdec, flacenc, flacparse, flactag, flvdemux, flvmux, flxdec, gamma, gdkpixbufdec, gdkpixbufscale, gdkpixbufsink, goom, goom2k1, gppmux, gstrtpbin, gstrtpjitterbuffer, gstrtpptdemux, gstrtpsession, gstrtpssrcdemux, hdv1394src, icydemux, id3demux, id3v2mux, imagefreeze, interleave, ismlmux, jackaudiosink, jackaudiosrc, jpegdec, jpegenc, level, matroskademux, matroskamux, matroskaparse, mj2mux, monoscope, mp4mux, mpegaudioparse, mulawdec, mulawenc, multifilesink, multifilesrc, multipartdemux, multipartmux, multiudpsink, navigationtest, navseek, optv, oss4mixer, oss4sink, oss4src, ossmixer, osssink, osssrc, pngdec, pngenc, progressreport, pushfilesrc, qtdemux, qtmoovrecover, qtmux, quarktv, radioactv, revtv, rganalysis, rglimiter, rgvolume, rippletv, rndbuffersize, rtpL16depay, rtpL16pay, rtpac3depay, rtpac3pay, rtpamrdepay, rtpamrpay, rtpbvdepay, rtpbvpay, rtpceltdepay, rtpceltpay, rtpdec, rtpdepay, rtpdvdepay, rtpdvpay, rtpg722depay, rtpg722pay, rtpg723depay, rtpg723pay, rtpg726depay, rtpg726pay, rtpg729depay, rtpg729pay, rtpgsmdepay, rtpgsmpay, rtpgstdepay, rtpgstpay, rtph263depay, rtph263pay, rtph263pdepay, rtph263ppay, rtph264depay, rtph264pay, rtpilbcdepay, rtpilbcpay, rtpj2kdepay, rtpj2kpay, rtpjpegdepay, rtpjpegpay, rtpmp1sdepay, rtpmp2tdepay, rtpmp2tpay, rtpmp4adepay, rtpmp4apay, rtpmp4gdepay, rtpmp4gpay, rtpmp4vdepay, rtpmp4vpay, rtpmpadepay, rtpmpapay, rtpmparobustdepay, rtpmpvdepay, rtpmpvpay, rtppcmadepay, rtppcmapay, rtppcmudepay, rtppcmupay, rtpqcelpdepay, rtpqdm2depay, rtpsirendepay, rtpsirenpay, rtpspeexdepay, rtpspeexpay, rtpsv3vdepay, rtptheoradepay, rtptheorapay, rtpvorbisdepay, rtpvorbispay, rtpvrawdepay, rtpvrawpay, rtpxqtdepay, rtspsrc, shagadelictv, shapewipe, shout2send, smokedec, smokeenc, smpte, smptealpha, souphttpclientsink, souphttpsrc, spectrum, speexdec, speexenc, splitfilesrc, streaktv, taginject, testsink, udpsink, udpsrc, v4l2radio, v4l2sink, v4l2src, vertigotv, videobalance, videobox, videocrop, videoflip, videomixer, videomixer2, warptv, wavenc, wavpackdec, wavpackenc, wavpackparse, wavparse, webmmux, ximagesrc, y4menc
+Gstreamer-Encoders: application/pdf; application/postscript; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ AMR, AMR-WB }, encoding-params=(string)1, octet-align=(string)1, crc=(string)0, robust-sorting=(string)0, interleaving=(string)0, mode-set=(int)[ 0, 7 ], mode-change-period=(int)[ 1, 2147483647 ], mode-change-neighbor=(string){ 0, 1 }, maxptime=(int)[ 20, 2147483647 ], ptime=(int)[ 20, 2147483647 ]; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string)RAW, sampling=(string){ RGB, RGBA, BGR, BGRA, YCbCr-4:4:4, YCbCr-4:2:2, YCbCr-4:2:0, YCbCr-4:1:1 }, colorimetry=(string){ BT601-5, BT709-2, SMPTE240M }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SIREN, bitrate=(string)16000, dct-length=(int)320; application/x-rtp, media=(string){ video, audio, application }, payload=(int)[ 96, 127 ], encoding-name=(string)MPEG4-GENERIC, streamtype=(string){ 4, 5 }, mode=(string){ generic, CELP-cbr, CELP-vbr, AAC-lbr, AAC-hbr }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SPEEX, encoding-params=(string)1; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)ILBC, mode=(string){ 20, 30 }; application/x-rtp, media=(string){ video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)DV, encode=(string){ SD-VCR/525-60, SD-VCR/625-50, HD-VCR/1125-60, HD-VCR/1250-50, SDL-VCR/525-60, SDL-VCR/625-50, 306M/525-60, 306M/625-50, 314M-25/525-60, 314M-25/625-50, 314M-50/525-60, 314M-50/625-50 }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ VORBIS, MP4A-LATM, L16, MPA, PCMA, PCMU, GSM, G729, G726-16, G726-24, G726-32, G726-40, AAL2-G726-16, AAL2-G726-24, AAL2-G726-32, AAL2-G726-40, G723, CELT, BV16, BV32, AC3 }; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string){ THEORA, MP4V-ES, MP2T-ES, JPEG2000, H264, H263, H263-1998, H263-2000 }; application/x-rtp, media=(string)audio, encoding-name=(string)L16, payload=(int){ 10, 11 }; application/x-rtp, media=(string)video, payload=(int)26, encoding-name=(string)JPEG; application/x-rtp, media=(string)video, payload=(int)34, encoding-name=(string)H263; application/x-rtp, media=(string)video, payload=(int)32, encoding-name=(string)MPV; application/x-rtp, media=(string)audio, payload=(int)8, encoding-name=(string)PCMA; application/x-rtp, media=(string)audio, payload=(int)0, encoding-name=(string)PCMU; application/x-rtp, media=(string)audio, payload=(int)3, encoding-name=(string)GSM; application/x-rtp, media=(string)audio, payload=(int)18, encoding-name=(string)G729; application/x-rtp, media=(string)audio, payload=(int)4, encoding-name=(string)G723; application/x-rtp, media=(string)audio, encoding-name=(string)G722, payload=(int)9; application/x-rtp, media=(string)application, payload=(int)[ 96, 127 ], encoding-name=(string)X-GST; application/x-rtp, media=(string)audio, payload=(int)14; application/x-yuv4mpeg, y4mversion=(int)2; audio/x-alaw; audio/x-flac; audio/x-mulaw; audio/x-speex; audio/x-wav; audio/x-wavpack-correction, framed=(boolean)true; image/jpeg; image/png; image/svg+xml; multipart/x-mixed-replace; text/x-cmml, encoded=(boolean)true; video/mj2; video/quicktime; video/webm; video/x-flv; video/x-matroska; video/x-msvideo; video/x-smoke
+Gstreamer-Uri-Sinks: udp
+Gstreamer-Uri-Sources: dv, hdv, http, https, pushfile, radio, rtsp, rtsp-sdp, rtsph, rtspt, rtspu, udp, v4l2
+Gstreamer-Version: 0.10
 
 Package: libpng12-0
 Status: install ok installed
@@ -13019,6 +14133,33 @@ Description: X Window System font utility programs
   - mkfontdir, a program to generate fonts.dir files;
   - mkfontscale, a program to generate fonts.scale files;
   - fonttosfnt, a program to wrap bitmap fonts in a sfnt (TrueType) wrapper.
+
+Package: gstreamer0.10-x
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 785
+Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gst-plugins-base0.10
+Version: 0.10.36-1.1
+Provides: gstreamer0.10-videosink
+Depends: libc6 (>= 2.4), libcairo2 (>= 1.2.4), libglib2.0-0 (>= 2.31.8), libgstreamer0.10-0 (>= 0.10.36), libpango1.0-0 (>= 1.18.0), libx11-6, libxext6, libxv1, libgstreamer-plugins-base0.10-0 (>= 0.10.36)
+Description: GStreamer plugins for X11 and Pango
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains the GStreamer plugins for X11 video output, both
+ for standard Xlib support and for the Xv extension, as well as the
+ plugin for Pango-based text rendering and overlay.
+Homepage: http://gstreamer.freedesktop.org
+Gstreamer-Elements: clockoverlay, textoverlay, textrender, timeoverlay, ximagesink, xvimagesink
+Gstreamer-Version: 0.10
 
 Package: m4
 Status: install ok installed
@@ -13576,6 +14717,29 @@ Original-Vcs-Browser: http://svn.debian.org/wsvn/pkg-nvidia/packages/nvidia-grap
 Original-Vcs-Svn: svn://svn.debian.org/svn/pkg-nvidia/packages/nvidia-graphics-drivers/trunk
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: dconf-service
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 80
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: d-conf
+Version: 0.12.1-3
+Replaces: dconf-gsettings-backend (<< 0.10.0-2), libdconf0 (<< 0.7.3-2)
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.18), libdconf0 (= 0.12.1-3)
+Recommends: dconf-gsettings-backend
+Breaks: dconf-gsettings-backend (<< 0.10.0-2), libdconf0 (<< 0.7.3-2)
+Description: simple configuration storage system - D-Bus service
+ DConf is a low-level key/value database designed for storing desktop
+ environment settings.
+ .
+ This package contains the DConf service, which applications talk to
+ using D-Bus in order to obtain their settings. It is mostly used by the
+ GSettings backend.
+Homepage: http://live.gnome.org/dconf
+
 Package: less
 Status: install ok installed
 Priority: standard
@@ -13777,6 +14941,26 @@ Description: support for getting/setting POSIX.1e capabilities
  a partitioning of the all powerful root privilege into a set of distinct
  privileges.
 Homepage: http://sites.google.com/site/fullycapable/
+
+Package: libglib2.0-doc
+Status: install ok installed
+Priority: optional
+Section: doc
+Installed-Size: 17885
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: glib2.0
+Version: 2.33.12+really2.32.4-5
+Suggests: devhelp
+Description: Documentation files for the GLib library
+ GLib is a library containing many useful C routines for things such
+ as trees, hashes, lists, and strings.  It is a useful general-purpose
+ C library used by projects such as GTK+, GIMP, and GNOME.
+ .
+ This package contains the HTML documentation for the GLib library
+ in /usr/share/doc/libglib2.0-doc/ .
+Homepage: http://www.gtk.org/
 
 Package: libitm1
 Status: install ok installed

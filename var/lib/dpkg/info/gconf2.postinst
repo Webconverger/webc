@@ -1,0 +1,56 @@
+#!/bin/sh
+
+set -e
+
+signal_daemons()
+{
+    # Tell all running daemons to reload their databases
+    kill -s HUP `pidof gconfd-2` >/dev/null 2>&1 || true
+}
+
+if [ "$1" = triggered ]; then
+    for trigger in $2; do
+        case $trigger in
+            /usr/share/gconf/schemas)
+                gconf-schemas --register-all --no-signal
+                ;;
+            /usr/share/gconf/defaults)
+                update-gconf-defaults --no-signal
+                ;;
+            /usr/share/gconf/mandatory)
+                update-gconf-defaults --no-signal --mandatory
+                ;;
+        esac
+    done
+    signal_daemons
+    exit 0
+fi
+
+if [ "$1" = configure ] && dpkg --compare-versions "$2" lt 2.26.2-4; then
+    update-alternatives \
+        --install /usr/bin/gconftool gconftool /usr/bin/gconftool-2 25 \
+        --slave /usr/share/man/man1/gconftool.1.gz gconftool.1.gz \
+                /usr/share/man/man1/gconftool-2.1.gz
+fi
+
+
+
+for GCONF_DIR in \
+                 /etc/gconf/gconf.xml.mandatory \
+                 /etc/gconf/gconf.xml.defaults ; do
+  GCONF_TREE=$GCONF_DIR/%gconf-tree.xml
+  if [ ! -f "$GCONF_TREE" ]; then
+    gconf-merge-tree "$GCONF_DIR"
+    chmod 644 "$GCONF_TREE"
+    find "$GCONF_DIR" -mindepth 1 -maxdepth 1 -type d -exec rm -rf \{\} \;
+    rm -f "$GCONF_DIR/%gconf.xml"
+  fi
+done
+
+# Upon installation/upgrade, regenerate all databases, because in this case 
+# there will be no trigger run
+gconf-schemas --register-all --no-signal
+update-gconf-defaults --no-signal
+update-gconf-defaults --no-signal --mandatory
+signal_daemons
+

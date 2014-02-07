@@ -1,0 +1,17 @@
+#! /bin/sh
+set -e
+
+VERSION=${2#python}
+case "$VERSION" in
+    2.[45])
+	sitedir=/usr/lib/python$VERSION/site-packages;;
+    *)
+	sitedir=/usr/lib/python$VERSION/dist-packages
+esac
+
+if which python >/dev/null 2>&1 && which pycompile >/dev/null 2>&1; then
+    pycompile -V $VERSION $sitedir
+else
+    echo >&2 "python or pycompile not found in $(basename $0) hook."
+    exit 1
+fi

@@ -1,0 +1,6 @@
+# make sure python-central files are removed before new package is installed
+if [ "$1" = upgrade ] && [ -f /var/lib/pycentral/#PACKAGE#.pkgremove ]
+then
+	pycentral pkgremove #PACKAGE#
+	rm -f /var/lib/pycentral/#PACKAGE#.pkgremove
+fi

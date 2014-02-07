@@ -1,0 +1,29 @@
+#! /bin/sh -e
+
+if [ "$1" = "remove" ]; then
+
+    (find /usr/lib/python2.7 -name '*.py[co]' | xargs rm -f {}) 2>/dev/null || true
+
+    for d in `find /usr/lib/python2.7 -depth -type d -empty 2> /dev/null`; do \
+        while rmdir $d 2> /dev/null; do d=`dirname $d`; done; \
+    done
+
+    if [ -f /var/lib/python/python2.7_installed ]; then
+	rm -f /var/lib/python/python2.7_installed
+	rmdir --ignore-fail-on-non-empty /var/lib/python 2>/dev/null
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+    for d in `find /usr/lib/python2.7 -depth -type d -empty 2> /dev/null`; do \
+        while rmdir $d 2> /dev/null; do d=`dirname $d`; done; \
+    done
+    rm -f /etc/python2.7/site.py /etc/python2.7/sitecustomize.py
+    if [ -d /etc/python2.7 ]; then
+	rmdir --ignore-fail-on-non-empty /etc/python2.7 2>/dev/null
+    fi
+fi
+
+
+
+exit 0

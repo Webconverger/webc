@@ -1,0 +1,59 @@
+#! /bin/sh
+set -e
+
+# remove the python alternatives before installing our own python link
+
+update-alternatives --auto /usr/bin/python >/dev/null 2>&1 || true
+update-alternatives --remove python /usr/bin/python1.5 || true
+update-alternatives --remove python /usr/bin/python2.1 || true
+update-alternatives --remove python /usr/bin/python2.2 || true
+
+[ -L /usr/share/doc/python/html ] || rm -rf /usr/share/doc/python/html
+
+case "$1" in
+    upgrade)
+        if dpkg --compare-versions $2 lt 2.6.1-1~; then
+	    oldv=$(echo $2 | sed 's/^\(...\).*/\1/')
+	    if [ "$DEBIAN_FRONTEND" != noninteractive ]; then
+		echo "running python pre-rtupdate hooks for python2.7..."
+	    fi
+	    for hook in /usr/share/python/runtime.d/*.rtupdate; do
+		[ -x $hook ] || continue
+		if ! $hook pre-rtupdate python$oldv python2.7; then
+		    hb=$(basename $hook .rtupdate)
+		    echo >&2 "error running python pre-rtupdate hook $hb"
+		    echo >&2 "running python failed-pre-rtupdate hook $hb"
+		    $hook failed-pre-rtupdate python$oldv python2.7
+		    errors=yes
+		    break
+		fi
+	    done
+	    [ -z "$errors" ] || exit 3
+	fi
+
+	# 2.4.4-5 is the first version, which adds python2.5 as supported
+	# version; need to run an rtinstall python2.5 in the postinst.
+        if dpkg --compare-versions $2 lt 2.4.4-5 && [ -x /usr/bin/python2.5 ]; then
+	    version=$(dpkg -s python2.5-minimal | awk '/^Version:/ {print $2}')
+	    mkdir -p /var/lib/python
+	    echo "$version" > /var/lib/python/python2.5_already_installed
+	fi
+
+	# 2.5.4-6 is the first version, which adds python2.6 as supported
+	# version; need to run an rtinstall python2.6 in the postinst.
+        if dpkg --compare-versions $2 lt 2.5.4-6 && [ -x /usr/bin/python2.6 ]; then
+	    version=$(dpkg -s python2.6-minimal | awk '/^Version:/ {print $2}')
+	    mkdir -p /var/lib/python
+	    echo "$version" > /var/lib/python/python2.6_already_installed
+	fi
+
+	# 2.6.6-13 is now the first version, which adds python2.7 as supported
+	# version; need to run an rtinstall python2.7 in the postinst.
+        if dpkg --compare-versions $2 lt 2.6.6-13 && [ -x /usr/bin/python2.7 ]; then
+	    version=$(dpkg -s python2.7-minimal | awk '/^Version:/ {print $2}')
+	    mkdir -p /var/lib/python
+	    echo "$version" > /var/lib/python/python2.7_already_installed
+	fi
+esac
+
+

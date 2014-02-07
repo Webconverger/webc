@@ -1,0 +1,27 @@
+#! /bin/sh -e
+#
+# prerm script for the Debian python2.7-base package.
+# Written 1998 by Gregor Hoffleit <flight@debian.org>.
+#
+
+case "$1" in
+    remove|upgrade)
+	dpkg -L python2.7 \
+	    | awk '/\.py$/ {print $0"c\n" $0"o"}' \
+	    | xargs rm -f >&2
+        ;;
+    deconfigure)
+        ;;
+    failed-upgrade)
+        ;;
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+rmdir /usr/local/lib/python2.7/site-packages 2>/dev/null && \
+        rmdir /usr/local/lib/python2.7 2>/dev/null || \
+        true
+
+
