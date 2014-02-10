@@ -1,0 +1,16 @@
+#! /bin/sh
+set -e
+
+VERSION=${2#python}
+case "$VERSION" in
+    2.[45])
+	sitedir=/usr/lib/python$VERSION/site-packages;;
+    *)
+	sitedir=/usr/lib/python$VERSION/dist-packages
+esac
+
+if which python >/dev/null 2>&1 && which pyclean >/dev/null 2>&1; then
+	pyclean $sitedir
+else
+	find $sitedir -name '*.py[co]' -delete
+fi

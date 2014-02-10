@@ -1,0 +1,8 @@
+if which pyclean >/dev/null 2>&1; then
+	pyclean -p #PACKAGE# #ARGS#
+else
+	dpkg -L #PACKAGE# | grep \.py$ | while read file
+	do
+		rm -f "${file}"[co] >/dev/null
+  	done
+fi

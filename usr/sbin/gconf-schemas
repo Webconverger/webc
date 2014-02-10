@@ -1,0 +1,93 @@
+#! /usr/bin/python
+#
+# copyright (c) 2006 Josselin Mouette <joss@debian.org>
+# Licensed under the GNU Lesser General Public License, version 2.1
+# See COPYING for details
+
+from optparse import OptionParser
+import sys,os,os.path,shutil,tempfile
+
+parser = OptionParser(usage="usage: %prog --[un]register file1.schemas [file2.schemas [...]]")
+
+parser.add_option("--register", action="store_true", dest="register",
+                  help="register schemas to the GConf database",
+                  default=None)
+parser.add_option("--unregister", action="store_false", dest="register",
+                  help="unregister schemas from the GConf database",
+                  default=None)
+parser.add_option("--register-all", action="store_true", dest="register_all",
+                   help="clean up the GConf database and register all schemas again",
+                   default=False)
+parser.add_option("--no-signal", action="store_false", default=True, dest="signal",
+                  help="do not send SIGHUP the running gconfd-2 processes")
+(options, args) = parser.parse_args()
+
+if options.register==None and not options.register_all:
+  parser.error("You need to specify --register or --unregister.")
+
+if 'DPKG_RUNNING_VERSION' in os.environ and not options.register_all:
+    # This is what happens when we are called in an obsolete postinst/prerm script
+    # Do nothing, it will be done in the trigger
+    sys.exit(0)
+
+schema_location="/usr/share/gconf/schemas"
+defaults_dest="/var/lib/gconf/defaults"
+
+schemas = [ ]
+if options.register_all:
+  for f in os.listdir(schema_location):
+    if f.endswith(".schemas"):
+      schemas.append(os.path.join(schema_location,f))
+else:
+  for schema in args:
+    if not os.path.isabs(schema):
+      schema=os.path.join(schema_location,schema)
+    if os.path.isfile(schema):
+      schemas.append(schema)
+    else:
+      sys.stderr.write('Warning: %s could not be found.\n'%schema)
+
+if os.geteuid():
+  parser.error("You must be root to launch this program.")
+
+if options.register_all:
+  options.register=True
+  for f in os.listdir(defaults_dest):
+    os.remove(os.path.join(defaults_dest,f))
+  open(os.path.join(defaults_dest,"%gconf-tree.xml"),"w").close()
+
+if schemas:
+    tmp_home=tempfile.mkdtemp(prefix='gconf-')
+    env=os.environ.copy()
+    env['HOME'] = tmp_home
+    env['GCONF_CONFIG_SOURCE'] = 'xml:readwrite:'+defaults_dest
+    if options.register:
+      arg='--makefile-install-rule'
+    else:
+      arg='--makefile-uninstall-rule'
+
+    fd = os.open("/dev/null",os.O_WRONLY)
+    save_stdout=os.dup(1)
+    os.dup2(fd,1)
+    os.close(fd)
+    res=os.spawnvpe(os.P_WAIT,'gconftool-2',['gconftool-2',arg]+schemas,env)
+    os.dup2(save_stdout,1)
+    os.close(save_stdout)
+
+    shutil.rmtree(tmp_home)
+
+    if(res):
+      sys.exit(res)
+
+if options.register and options.signal:
+  # tell running processes to re-read the GConf database
+  import signal
+  try:
+    pids=os.popen('pidof gconfd-2').readlines()[0].split()
+    for pid in pids:
+      try:
+        os.kill(int(pid),signal.SIGHUP)
+      except OSError:
+        pass
+  except IndexError:
+    pass

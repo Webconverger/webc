@@ -1,0 +1,42 @@
+#! /bin/sh -e
+
+if [ "$1" = configure ]; then
+    (
+    files=$(dpkg -L python2.7 | sed -n '/^\/usr\/lib\/python2.7\/.*\.py$/p')
+	python2.7 /usr/lib/python2.7/py_compile.py $files
+	if grep -sq '^byte-compile[^#]*optimize' /etc/python/debian_config; then
+	    python2.7 -O /usr/lib/python2.7/py_compile.py $files
+	fi
+    )
+fi
+
+case "$1" in
+    configure|abort-upgrade|abort-remove|abort-deconfigure)
+
+        # Create empty directories in /usr/local
+        if [ ! -e /usr/local/lib/python2.7 ]; then
+            mkdir -p /usr/local/lib/python2.7 2> /dev/null || true
+            chmod 2775 /usr/local/lib/python2.7 2> /dev/null || true
+            chown root:staff /usr/local/lib/python2.7 2> /dev/null || true
+        fi
+        if [ ! -e /usr/local/lib/python2.7/site-packages ]; then
+            mkdir -p /usr/local/lib/python2.7/site-packages 2> /dev/null || true
+            chmod 2775 /usr/local/lib/python2.7/site-packages 2> /dev/null || true
+            chown root:staff /usr/local/lib/python2.7/site-packages 2> /dev/null || true
+        fi
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# Automatically added by dh_installmenu
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+
+
+exit 0

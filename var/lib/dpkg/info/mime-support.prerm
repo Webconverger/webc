@@ -1,0 +1,12 @@
+#! /bin/sh
+#
+# prerm file for mime-support
+
+if [ \( "$1" = "upgrade" -o "$1" = "remove" \) -a -L /usr/doc/mime-support ]; then
+    rm -f /usr/doc/mime-support
+fi
+
+if [ "$1" = "remove" ]; then
+    update-alternatives --remove view /usr/bin/see
+    rm -f /etc/mailcap
+fi

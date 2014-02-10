@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+if [ "$1" = "configure" ]; then
+	[ -x /dev/MAKEDEV ] && cd /dev && echo -n "Creating device node /dev/raw1394... " && ./MAKEDEV raw1394 && echo "done."
+fi
+
+# Automatically added by dh_makeshlibs
+if [ "$1" = "configure" ]; then
+	ldconfig
+fi
+# End automatically added section
+

@@ -1,0 +1,17 @@
+# $Id:$
+# In order to activate the session bus at X session launch
+# simply place use-session-dbus into your /etc/X11/Xsession.options file
+#
+
+STARTDBUS=
+DBUSLAUNCH=/usr/bin/dbus-launch
+
+if has_option use-session-dbus; then
+  if [ -x "$DBUSLAUNCH" ]; then
+    STARTDBUS=yes
+  fi
+fi
+
+if [ -n "$STARTDBUS" ]; then
+  STARTUP="$DBUSLAUNCH --exit-with-session $STARTUP"
+fi

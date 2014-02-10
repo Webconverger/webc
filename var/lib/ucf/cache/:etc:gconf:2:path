@@ -1,0 +1,55 @@
+######################
+# 1. Forced settings #
+######################
+
+# Settings forced by the local administrator
+xml:readonly:/etc/gconf/gconf.xml.mandatory
+
+# Other forced sources imagined by the local administrator
+include /etc/gconf/2/local-mandatory.path
+
+# Settings forced by Debian packages
+xml:readonly:/var/lib/gconf/debian.mandatory
+
+
+#######################
+# 2. User Preferences #
+#######################
+
+# mandatory path for sabayon
+include "$(HOME)/.gconf.path.mandatory"
+
+# mandatory path for desktop-profiles
+include $(ENV_MANDATORY_PATH)
+
+# Other sources imagined by the user
+include "$(HOME)/.gconf.path"
+
+# The default storage location, ~/.gconf
+# This should be the only readwrite source
+xml:readwrite:$(HOME)/.gconf
+
+# default path for sabayon
+include "$(HOME)/.gconf.path.defaults"
+
+# default path for desktop-profiles
+include $(ENV_DEFAULTS_PATH)
+
+
+######################
+# 3. System defaults #
+######################
+
+# Other default sources imagined by the local administrator
+include /etc/gconf/2/local-defaults.path
+
+# System administrator's defaults. This source also serves as a legacy
+# source for packages not using a recent dh_gconf, or for applications
+# installed by hand.
+xml:readonly:/etc/gconf/gconf.xml.defaults
+
+# Debian branding, including CDD or packaged branding
+xml:readonly:/var/lib/gconf/debian.defaults
+
+# Upstream application defaults
+xml:readonly:/var/lib/gconf/defaults

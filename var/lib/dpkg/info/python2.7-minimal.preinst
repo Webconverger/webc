@@ -1,0 +1,39 @@
+#!/bin/sh
+
+set -e
+
+syssite=/usr/lib/python2.7/site-packages
+oldsite=/usr/lib/python2.7/old-site-packages
+localsite=/usr/local/lib/python2.7/dist-packages
+syslink=../../${localsite#/usr/*}
+
+case "$1" in
+    install)
+	if [ -z "$2" ] && [ -d $syssite ] && [ ! -h $syssite ]; then
+	    echo "new installation of python2.7-minimal; $syssite is a directory"
+	    echo "which is expected a symlink to $localsite."
+	    echo "please find the package shipping files in $syssite and"
+	    echo "file a bug report to ship these in /usr/lib/python2.7/dist-packages instead"
+	    echo "aborting installation of python2.7-minimal"
+	    exit 1
+	fi
+
+	# remember newly installed runtime
+	mkdir -p /var/lib/python
+	touch /var/lib/python/python2.7_installed
+    ;;
+    upgrade)
+    ;;
+
+    abort-upgrade)
+    ;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+
+exit 0

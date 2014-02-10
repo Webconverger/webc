@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "purge" ];then
+    if [ -x /usr/bin/ucf ]; then
+        ucf --purge /etc/gconf/2/path
+    fi
+    if [ -d /etc/gconf/2 ]; then
+        rm -f /etc/gconf/2/path
+        rmdir -p --ignore-fail-on-non-empty /etc/gconf/2
+    fi
+    rm -rf /var/lib/gconf
+    rm -rf /etc/gconf/gconf.xml.mandatory
+    rm -rf /etc/gconf/gconf.xml.defaults
+fi
+
+

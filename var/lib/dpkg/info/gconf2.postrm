@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+  if [ -d /var/lib/gconf ]; then
+    find /var/lib/gconf -mindepth 2 -maxdepth 2 -exec rm -rf \{} \;
+  fi
+fi
+
+
