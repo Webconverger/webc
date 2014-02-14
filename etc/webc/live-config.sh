@@ -98,11 +98,6 @@ then
 	sed -i 's,// installButton,installButton,g' /etc/webc/extensions/webcnoaddressbar/content/wc.js /etc/webc/extensions/webconverger/content/wc.js
 fi
 
-#AGA begin
-test -e "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com" && rm -f "/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com"
-ln -s /etc/webc/extensions/vkeyboard '/opt/firefox/browser/extensions/vkeyboard@stlouis-shopper.com'
-#AGA end
-
 for x in $( cmdline ); do
 	case $x in
 
