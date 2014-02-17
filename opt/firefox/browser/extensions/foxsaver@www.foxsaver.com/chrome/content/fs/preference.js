@@ -231,7 +231,7 @@ FoxSaver.preference = {preferencesBranch: null, preferencesService: null, versio
         return this.getBool("fit_small_pictures_to_screen")
     }};
 DEF["disable_tooltip_to_stop"] = true;
-DEF["display_seconds"] = 30;
+DEF["display_seconds"] = 10;
 DEF["enable_auto_play_by_foxsaver_button"] = true;
 DEF["enable_foxsaver"] = true;
 DEF["enable_foxsaver_photos"] = false;
@@ -250,7 +250,7 @@ DEF["has_fade_in_out"] = true;
 DEF["has_foxsaver_logo"] = false;
 DEF["hide_sidebar_if_fullscreen"] = true;
 DEF["hide_status_bar_icon"] = true;
-DEF["idle_minutes"] = 3;
+DEF["idle_minutes"] = 1;
 DEF["image_extensions"] = "jpg,gif,png,jpeg";
 DEF["quiet_sites"] = "";
 DEF["user_dir"] = null;

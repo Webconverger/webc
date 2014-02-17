@@ -43,7 +43,7 @@ done
 
 #AGA begin
 # Wait while I don't see my Web-server, all configurations must be available
-while (! cmdline_has debug)&&(! ping ${AGA_cfg_srv} -c 1 -w 5); do :; done 
+while (! cmdline_has debug)&&(! ping ${AGA_cfg_srv} -c 1 -w 5); do :; done
 #AGA end
 
 # get the $webc_id
@@ -58,6 +58,14 @@ xset s on
 xset s blank
 xset s 600
 xset +dpms
+
+#AGA begin
+#
+sudo chmod 666 "$prefs"
+xrandr | grep '*+'| sed "s~\s*\([0-9]*\)x\([0-9]*\).*~pref(\"codetch.user_rss_urls\",\"${AGA_rss_url}/?screenW=\1\&screenH=\2\");~" >> "$prefs"
+sudo chmod 644 "$prefs"
+#AGA end
+
 
 for x in $(cmdline)
 do
