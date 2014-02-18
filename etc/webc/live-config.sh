@@ -167,9 +167,17 @@ for x in $( cmdline ); do
 
 	filter=*)
 		filter="$( /bin/busybox httpd -d ${x#filter=} )"
-		logs Setting up filter: $filter
-		curl -s "$filter" | xzcat | awk '{ print "address=/" $1 "/146.185.152.215" }' >> /etc/dnsmasq.conf
-		systemctl start dnsmasq.service
+		IP=146.185.152.215 # nl.webconverger.com
+		IFS=',' read -ra F <<< "$filter"
+		test "${F[1]}" && IP="${F[1]}"
+		if ! test "${F[0]}"
+		then
+			logs "ERROR: filter URL failed to be specified"
+		else
+			logs Setting up filter: ${F[0]} with $IP
+			curl -s "${F[0]}" | xzcat | awk -v ip="$IP" '{ print "address=/" $1 "/" ip }' >> /etc/dnsmasq.conf
+			systemctl start dnsmasq.service
+		fi
 		;;
 
 	prefs=*)
