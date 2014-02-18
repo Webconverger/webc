@@ -3318,6 +3318,22 @@ Description: MIT Kerberos runtime libraries - Crypto Library
  applications and Kerberos clients.
 Homepage: http://web.mit.edu/kerberos/
 
+Package: dnsmasq-base
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 769
+Maintainer: Simon Kelley <simon@thekelleys.org.uk>
+Architecture: i386
+Source: dnsmasq
+Version: 2.62-3+deb7u1
+Depends: libc6 (>= 2.11), libdbus-1-3 (>= 1.1.1), libidn11 (>= 1.13), libnetfilter-conntrack3, libnfnetlink0 (>= 1.0.0)
+Conflicts: dnsmasq (<< 2.41)
+Description: Small caching DNS proxy and DHCP/TFTP server
+ This package contains the dnsmasq executable and documentation, but
+ not the infrastructure required to run it as a system daemon. For
+ that, install the dnsmasq package.
+
 Package: bc
 Status: install ok installed
 Priority: standard
@@ -8018,29 +8034,6 @@ Description: interpreter for the PostScript language and for PDF - Library
  facilities of GPL Ghostscript available to applications.
 Homepage: http://www.ghostscript.com/
 
-Package: libxml2-doc
-Status: install ok installed
-Priority: optional
-Section: doc
-Installed-Size: 8424
-Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
-Architecture: all
-Multi-Arch: foreign
-Source: libxml2
-Version: 2.8.0+dfsg1-7+nmu2
-Suggests: devhelp
-Description: Documentation for the GNOME XML library
- XML is a metalanguage to let you design your own markup language.
- A regular markup language defines a way to describe information in
- a certain class of documents (eg HTML). XML lets you define your
- own customized markup languages for many classes of document. It
- can do this because it's written in SGML, the international standard
- metalanguage for markup languages.
- .
- This package contains general information about the GNOME XML library
- and more specific API references.
-Homepage: http://xmlsoft.org/
-
 Package: wget
 Status: install ok installed
 Priority: important
@@ -9605,6 +9598,23 @@ Description: utility to set/show the host name or domain name
  This package provides commands which can be used to display the system's
  DNS name, and to display or set its hostname or NIS domain name.
 
+Package: libnetfilter-conntrack3
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 124
+Maintainer: Alexander Wirt <formorer@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libnetfilter-conntrack
+Version: 1.0.1-1
+Depends: libc6 (>= 2.4), libnfnetlink0 (>= 1.0.0)
+Pre-Depends: multiarch-support
+Description: Netfilter netlink-conntrack library
+ libnetfilter_conntrack is a userspace library providing a programming
+ interface (API) to the in-kernel connection tracking state table.
+Homepage: http://www.netfilter.org/projects/libnetfilter_conntrack/
+
 Package: plymouth-drm
 Status: deinstall ok config-files
 Priority: optional
@@ -10497,6 +10507,34 @@ Description: SID (MOS 6581) emulation library
  and more in the High Voltage SID Collection (HVSC). For downloads and
  information about the volunteers, who maintain the collection, look at
  the HVSC homepage http://www.hvsc.c64.org.
+
+Package: dnsmasq
+Status: install ok installed
+Priority: optional
+Section: net
+Installed-Size: 120
+Maintainer: Simon Kelley <simon@thekelleys.org.uk>
+Architecture: all
+Version: 2.62-3+deb7u1
+Depends: netbase, adduser, dnsmasq-base (>= 2.62-3+deb7u1)
+Suggests: resolvconf
+Conflicts: resolvconf (<< 1.15)
+Conffiles:
+ /etc/init.d/dnsmasq 44f0b93bf73dea20706dedae399c3a74
+ /etc/default/dnsmasq 4da2f005c39ee591bb1a71c264947898
+ /etc/dnsmasq.conf 8cfe230931914e077c5ce660ba835875
+ /etc/resolvconf/update.d/dnsmasq c6248413f30d5c188cd7cb0a89ca4ea6
+ /etc/dbus-1/system.d/dnsmasq.conf 9a18c8a761c2262dbf0c8b3345a85242
+ /etc/insserv.conf.d/dnsmasq 530a424ac064ea9d86f235d12ecc227a
+Description: Small caching DNS proxy and DHCP/TFTP server
+ Dnsmasq is a lightweight, easy to configure, DNS forwarder and DHCP
+ server. It is designed to provide DNS and optionally, DHCP, to a
+ small network. It can serve the names of local machines which are
+ not in the global DNS. The DHCP server integrates with the DNS
+ server and allows machines with DHCP-allocated addresses
+ to appear in the DNS with names configured either in each host or
+ in a central configuration file. Dnsmasq supports static and dynamic
+ DHCP leases and BOOTP/TFTP for network booting of diskless machines.
 
 Package: liblzma5
 Status: install ok installed
@@ -15150,26 +15188,6 @@ Description: support for getting/setting POSIX.1e capabilities
  a partitioning of the all powerful root privilege into a set of distinct
  privileges.
 Homepage: http://sites.google.com/site/fullycapable/
-
-Package: libglib2.0-doc
-Status: install ok installed
-Priority: optional
-Section: doc
-Installed-Size: 17885
-Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
-Architecture: all
-Multi-Arch: foreign
-Source: glib2.0
-Version: 2.33.12+really2.32.4-5
-Suggests: devhelp
-Description: Documentation files for the GLib library
- GLib is a library containing many useful C routines for things such
- as trees, hashes, lists, and strings.  It is a useful general-purpose
- C library used by projects such as GTK+, GIMP, and GNOME.
- .
- This package contains the HTML documentation for the GLib library
- in /usr/share/doc/libglib2.0-doc/ .
-Homepage: http://www.gtk.org/
 
 Package: libitm1
 Status: install ok installed
