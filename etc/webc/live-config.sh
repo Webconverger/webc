@@ -165,6 +165,13 @@ for x in $( cmdline ); do
 			fi
 		;;
 
+	filter=*)
+		filter="$( /bin/busybox httpd -d ${x#filter=} )"
+		logs Setting up filter: $filter
+		curl -s "$filter" | xzcat | awk '{ print "address=/" $1 "/146.185.152.215" }' >> /etc/dnsmasq.conf
+		systemctl start dnsmasq.service
+		;;
+
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
 		echo "pref(\"autoadmin.global_config_url\",\"$prefs\");" >> /opt/firefox/mozilla.cfg
