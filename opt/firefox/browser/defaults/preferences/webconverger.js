@@ -33,4 +33,4 @@ pref("browser.feeds.showFirstRunUI", false);
 pref("datareporting.healthreport.service.firstRun", false);
 pref("datareporting.healthreport.service.enabled", false);
 pref("datareporting.policy.dataSubmissionEnabled", false);
-pref("browse.sessionstore.resume_from_crash", false);
+pref("browser.sessionstore.resume_from_crash", false);
