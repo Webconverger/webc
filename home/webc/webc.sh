@@ -24,6 +24,15 @@ wm="/usr/bin/dwm.web" # default
 #	update_background() { xloadimage -quiet -onroot -center "$1"; }
 #	xsetroot -solid white
 #fi
+
+# I use nettops. As thay was made on notebook's chipsets, thay have virtual LVDS. And i have the problem with screen resolution.   
+if (xrandr | grep -qs "LVDS")&&(xrandr | grep -qs "VGA") ; then
+  AGA_LVDS=$(xrandr | grep "LVDS" | sed "s~^\(LVDS.*\) connected.*~\1~")
+  AGA_VGA=$(xrandr | grep "VGA" | sed "s~^\(VGA.*\) connected.*~\1~")
+  test "$AGA_LVDS" != "" && xrandr --output $AGA_LVDS --off
+  test "$AGA_VGA" != "" && xrandr --output ${AGA_VGA} --auto
+fi
+
 AGA_screenW=$(xrandr | grep '*+'| sed "s~\s*\([0-9]*\)x\([0-9]*\).*~\1~")
 AGA_screenH=$(xrandr | grep '*+'| sed "s~\s*\([0-9]*\)x\([0-9]*\).*~\2~")
 neon=${AGA_screenW}x${AGA_screenH}
