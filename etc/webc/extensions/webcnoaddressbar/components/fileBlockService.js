@@ -10,6 +10,71 @@ const observerService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIO
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+function isExtensionPresent(aGUID)
+{
+ var result=false;
+ var done=false;
+ /*if (navigator.plugins)
+ {
+  for (var i=0; i<navigator.plugins.length && result==false; i++)
+  {
+   result=(navigator.plugins[i].name==A);
+  }
+ }*/
+ 
+ try
+ {
+  // Firefox 4 and later; Mozilla 2 and later
+  function getVersion(addonID, callback)
+  {
+   var ascope={};
+
+   if (typeof(Components.classes["@mozilla.org/extensions/manager;1"])!='undefined')
+   {
+    var extMan=Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces.nsIExtensionManager);
+    var ext=extMan.getItemForID(addonID);
+    ext.QueryInterface(Components.interfaces.nsIUpdateItem);
+    callback(ext);
+    return;
+   }
+ 
+   if (typeof(Components.utils)!='undefined' && typeof(Components.utils.import)!='undefined')
+    Components.utils.import("resource://gre/modules/AddonManager.jsm", ascope);
+   
+   ascope.AddonManager.getAddonByID(addonID, callback);
+  }
+  
+  function cBack(addon)
+  {
+   if (addon)
+    result=true;
+   
+   done=true;
+  }
+
+  //getVersion(aGUID, function(ver) {version=ver; done=true});
+  getVersion(aGUID, cBack);
+  
+  var thread=Components.classes["@mozilla.org/thread-manager;1"].getService(Components.interfaces.nsIThreadManager).currentThread;
+  while (!done && thread)
+   thread.processNextEvent(true);
+   
+ }
+ catch (ex)
+ {
+  // Firefox 3.6 and before; Mozilla 1.9.2 and before
+  var extMan=Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces.nsIExtensionManager);
+  var ext=extMan.getItemForID(addonID);
+  if (typeof(ext)!='undefined')
+  {
+   //ext.QueryInterface(Components.interfaces.nsIUpdateItem);
+   result=true;
+  }
+ }
+
+ return result;
+};
+
 function FileBlock() {
 }
 
@@ -65,6 +130,10 @@ FileBlock.prototype = {
                   .get("CurProcD", Ci.nsILocalFile);
 
     this.appDir = ioService.newFileURI(appDir).spec;
+    
+    if (isExtensionPresent("foxsaver@www.foxsaver.com"))
+     this.whitelist.push(this.profileDir+"foxsaver\/cache\/");
+    
   },
 
   shouldLoad: function(aContentType, aContentLocation, aRequestOrigin, aContext, aMimeTypeGuess, aExtra) {
@@ -80,8 +149,8 @@ FileBlock.prototype = {
       }
     }
     /* Allow profile dir, temp dir, and application dir */
-    if (aContentLocation.spec.match(this.profileDir) &&
-          aContentLocation.spec.match(this.appDir) &&
+    if (aContentLocation.spec.match(this.profileDir) ||
+          aContentLocation.spec.match(this.appDir) ||
           aContentLocation.spec.match(this.tempDir)) {
       return Ci.nsIContentPolicy.ACCEPT;
     }
@@ -107,8 +176,8 @@ FileBlock.prototype = {
       }
     }
     /* Allow profile dir, temp dir, and application dir */
-    if (aContentLocation.spec.match(this.profileDir) &&
-          aContentLocation.spec.match(this.appDir) &&
+    if (aContentLocation.spec.match(this.profileDir) ||
+          aContentLocation.spec.match(this.appDir) ||
           aContentLocation.spec.match(this.tempDir)) {
       return Ci.nsIContentPolicy.ACCEPT;
     }

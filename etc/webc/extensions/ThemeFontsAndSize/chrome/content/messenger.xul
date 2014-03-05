@@ -1,0 +1,59 @@
+﻿<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://themefontsizechanger/locale/themefontsizechanger.dtd">
+<?xml-stylesheet href="chrome://themefontsizechanger/skin/themefontsizechanger.css" type="text/css"?>
+<overlay id="themefontsizechanger-overlay"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<script type="application/x-javascript" src="chrome://themefontsizechanger/content/themefontsizechanger.js"/>
+	<script type="application/x-javascript" src="chrome://themefontsizechanger/content/overlay.js"/>
+	<!--
+	<keyset>
+		<key id="themefontsizechanger-action-key" modifiers="accel alt" key="r" oncommand="ThemeFontSizeChanger.enableThemeFontSizeChanger(event);" />
+	</keyset>
+	-->
+	<toolbarpalette id="BrowserToolbarPalette">
+		<toolbarbutton id="themefontsizechanger-toolbarbutton" label="Theme Font &amp; Size Changer" tooltiptext="&themefontsizechanger.ThemeFontSizeChanger;" type="button" oncommand="ThemeFontSizeChanger.handleStatusClick(event);">
+		</toolbarbutton>
+	</toolbarpalette>
+
+	<statusbar id="status-bar">
+		<statusbarpanel id="themefontsizechanger-statusbar" onclick="ThemeFontSizeChanger.handleStatusClick(event);" src="chrome://themefontsizechanger/skin/statusbaricon.png" tooltiptext="&themefontsizechanger.ThemeFontSizeChanger;"  class="statusbarpanel-menu-iconic" style="cursor:pointer;"/>
+	</statusbar>
+
+	<popupset id="mainPopupSet">
+		<menupopup id="themefontsizechanger-statusbar-menu" onpopupshowing="ThemeFontSizeChanger.updateCheckedState(event)" oncommand="try{ThemeFontSizeChanger.changeFontSize(event.target.value);}catch(e){alert(e)};">
+				<menuitem type="checkbox" value="-moz-use-system-font" label="Normal"/>
+				<!--<menuseparator />-->
+				<menuitem type="checkbox" value="9" label="9"/>
+				<menuitem type="checkbox" value="10" label="10"/>
+				<menuitem type="checkbox" value="11" label="11"/>
+				<menuitem type="checkbox" value="12" label="12"/>
+				<menuitem type="checkbox" value="13" label="13"/>
+				<menuitem type="checkbox" value="14" label="14"/>
+				<menuitem type="checkbox" value="15" label="15"/>
+				<menuitem type="checkbox" value="16" label="16"/>
+				<menuitem type="checkbox" value="17" label="17"/>
+				<menuitem type="checkbox" value="18" label="18"/>
+				<menuitem type="checkbox" value="20" label="20"/>
+				<menuitem type="checkbox" value="22" label="22"/>
+				<menuitem type="checkbox" value="24" label="24"/>
+				<menuitem type="checkbox" value="26" label="26"/>
+				<menuitem type="checkbox" value="28" label="28"/>
+				<menuitem type="checkbox" value="30" label="30"/>
+				<menuitem type="checkbox" value="32" label="32"/>
+				<menuitem type="checkbox" value="34" label="34"/>
+				<menuitem type="checkbox" value="36" label="36"/>
+				<menuitem value="40" label="40"/>	
+		</menupopup>		
+	</popupset>	
+
+	<menupopup id="taskPopup">
+		<menuitem id="themefontsizechanger-tools-menuitem" label="&themefontsizechanger.ThemeFontSizeChanger;" insertafter="addonsManager" class="menuitem-iconic" accesskey="t" oncommand="ThemeFontSizeChanger.handleStatusClick(event);"/>
+	</menupopup>
+
+	<toolbarpalette id="MailToolbarPalette">
+		<toolbarbutton id="themefontsizechanger-toolbarbutton" label="Theme Font &amp; Size Changer" tooltiptext="&themefontsizechanger.ThemeFontSizeChanger;" type="button" oncommand="ThemeFontSizeChanger.handleStatusClick(event);">
+		</toolbarbutton>
+	</toolbarpalette>	
+		
+</overlay>

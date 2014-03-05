@@ -11,7 +11,7 @@ pref("toolkit.telemetry.prompted", 2);
 pref("toolkit.telemetry.rejected", true);
 pref("toolkit.telemetry.enabled", false);
 
-pref("browser.newtab.url", "about:blank");
+//AGA pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences/homepage.properties");
 
 // Disable updates, since we use git
@@ -25,3 +25,12 @@ pref("general.config.filename", "mozilla.cfg");
 
 // Disable https://blog.mozilla.org/metrics/2012/09/21/firefox-health-report/
 pref("datareporting.healthreport.uploadEnabled", false);
+
+//AGA
+pref("browser.newtab.url","http://shops.amag.ru");
+pref("browser.newtab.preload",false); // If true newtab work like newtab.url=about:newtab
+pref("browser.feeds.showFirstRunUI", false);
+pref("datareporting.healthreport.service.firstRun", false);
+pref("datareporting.healthreport.service.enabled", false);
+pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("browser.sessionstore.resume_from_crash", false);

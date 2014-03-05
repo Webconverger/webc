@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- You may find the license in the LICENSE file -->
+<!DOCTYPE window SYSTEM "chrome://procon/locale/preferences.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <prefpane
+        id="blacklistPane"
+        label="&blacklistPane.title;"
+        onpaneload="blacklistPane.load();">
+
+        <preferences>
+            <preference id="pref-blacklist-sites" name="extensions.procon.blacklist.sites" type="unichar"/>
+            <preference id="pref-blacklist-words" name="extensions.procon.blacklist.words" type="unichar"/>
+            <preference id="pref-blacklist-stop-all" name="extensions.procon.blacklist.advanced.limitNetAccess" type="bool"/>
+            <preference id="pref-blacklist-render-delay" name="extensions.procon.blacklist.advanced.renderDelay" type="bool"/>
+            <preference id="pref-blacklist-warning-details" name="extensions.procon.blacklist.advanced.showDetails" type="bool"/>
+            <preference id="pref-blacklist-warning-custom" name="extensions.procon.blacklist.advanced.customWarning" type="bool"/>
+            <preference id="pref-blacklist-warning-custom-msg" name="extensions.procon.blacklist.advanced.customWarningMsg" type="unichar"/>
+            <preference id="pref-blacklist-redirect" name="extensions.procon.blacklist.advanced.redirect" type="bool"/>
+            <preference id="pref-blacklist-redirect-address" name="extensions.procon.blacklist.advanced.redirectURL" type="unichar"/>
+            <preference id="pref-blacklist-examine-meta" name="extensions.procon.blacklist.advanced.examineMeta" type="bool"/>
+        </preferences>
+
+        <tabbox flex="1">
+            <tabs>
+                <tab label="&blockedsites.label;"/>
+                <tab label="&blockedwords.label;"/>
+                <tab label="&advanced.label;&#8230;"/>
+            </tabs>
+
+            <tabpanels flex="1">
+                <tabpanel flex="1">
+                    <vbox flex="1">
+                        <hbox>
+                            <vbox width="1" flex="1">
+                                <description>&blockedsites.description;</description>
+                            </vbox>
+                        </hbox>
+                        <textbox preference="pref-blacklist-sites" flex="1" multiline="true" rows="15" value=""/>
+                    </vbox>
+                </tabpanel>
+
+                <tabpanel flex="1">
+                    <vbox flex="1">
+                        <hbox>
+                            <vbox width="1" flex="1">
+                                <description>&blockedwords.description;</description>
+                            </vbox>
+                        </hbox>
+                        <textbox preference="pref-blacklist-words" flex="1" multiline="true" rows="15" value=""/>
+                    </vbox>
+                </tabpanel>
+
+                <tabpanel flex="1">
+                    <vbox flex="1">
+                        <groupbox>
+                            <caption label="&contentfilter.label;"/>
+                            <checkbox preference="pref-blacklist-stop-all" label="&advanced.stopall.label;"/>
+                            <checkbox preference="pref-blacklist-render-delay" label="&advanced.renderdelay.label;"/>
+                            <checkbox preference="pref-blacklist-warning-details" label="&advanced.explainblocked.label;"/>
+                            <checkbox id="checkbox-blacklist-warning-custom" preference="pref-blacklist-warning-custom" label="&advanced.customwarning.label;" oncommand="blacklistPane.toggleStatus('checkbox-blacklist-warning-custom');"/>
+                            <vbox style="margin-left:24px">
+                                <textbox id="textbox-blacklist-warning-custom-msg" preference="pref-blacklist-warning-custom-msg" flex="1" value=""/>
+                            </vbox>
+                            <checkbox id="checkbox-blacklist-redirect" preference="pref-blacklist-redirect" label="&advanced.redirect.label;" oncommand="blacklistPane.toggleStatus('checkbox-blacklist-redirect');"/>
+                            <vbox style="margin-left:24px">
+                                <textbox id="textbox-blacklist-redirect-address" preference="pref-blacklist-redirect-address" flex="1" value=""/>
+                            </vbox>
+                        </groupbox>
+                        <groupbox>
+                            <caption label="&blockedwords.label;"/>
+                            <checkbox label="&advanced.examinemeta.label;" preference="pref-blacklist-examine-meta"/>
+                        </groupbox>
+                    </vbox>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </prefpane>
+</overlay>

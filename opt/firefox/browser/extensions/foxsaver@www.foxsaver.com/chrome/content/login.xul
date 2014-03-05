@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://foxsaver/locale/options.dtd">
+<dialog 
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns:html="http://www.w3.org/1999/xhtml" 
+	id="foxsaver-login-dialog" 
+	title="&prefs.logintitle;" 
+	orient="vertical"
+	autostretch="true" 
+	persist="screenX,screenY"
+	buttons="accept,cancel" 
+	ondialogaccept="return FoxSaver.loginDlg.onSubmitBtn();" 
+	onload="FoxSaver.loginDlg.init();"
+	width="500"
+	height="250">
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/name_space.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/yui/yahoo.js"/> 
+  <script type="application/x-javascript" src="chrome://foxsaver/content/yui/event.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/yui/connection.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/log.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/util/util.js"/>
+
+  <script type="application/x-javascript" src="chrome://foxsaver/content/fs/preference.js"/>
+  <script type="application/x-javascript" src="chrome://foxsaver/content/fs/loginDlg.js"/>
+
+  <label value="&prefs.login.hello;" id="loginmessage" />
+  
+  <groupbox>
+  <label value="&prefs.login.username;" />
+  <hbox><textbox id="login_uname"  value="" flex="1" /></hbox>
+  <label value="&prefs.login.userpwd;" />
+  <hbox><textbox id="login_upwd" type="password" value="" flex="1" /></hbox>
+  </groupbox>
+
+</dialog>

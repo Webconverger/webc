@@ -84,14 +84,18 @@ find_disk() {
 partition_disk() {
 	local disk="$1"
 	_logs "partitioning ${disk}"
-	/sbin/sfdisk $disk <<EOF
-,,L,*
+#AGA
+	/sbin/sfdisk -uM $disk <<EOF
+,1000,L,*
+,1000,L
 EOF
 }
 verify_partition() {
 	local disk="$1"
 	_logs "verifying partitions on ${disk}"
 	test -e ${disk}1
+#AGA
+        test -e ${disk}2
 	# /sbin/sfdisk -V -q $disk  # never times out when 0 partitions exist
 }	
 md5() { md5sum | awk '{ print $1 }'; }
@@ -155,13 +159,27 @@ install_root /mnt/root
 install_extlinux /mnt/root $partition $disk
 verify_extlinux_mbr $disk
 
+#AGA begin 
+home_partition="${disk}2"
+_logs "building filesystem on $home_partition"
+mke2fs -j $home_partition
+_logs "mounting $home_partition on /mnt/home"
+test -d /mnt/home || mkdir /mnt/home
+mount $home_partition /mnt/home
+echo "/home" > /mnt/home/live-persistence.conf
+#AGA end
+
 _logs "unmounting partitions"
 swapoff /mnt/root/swap
 umount /mnt/root
+#AGA
+umount /mnt/home
 unset SWAPON MOUNTED
 
 _logs "install complete"
 e2label $partition install
+#AGA
+e2label $home_partition persistence
 _logs $(blkid)
 _logs "press enter to reboot..."
 read DUMMY

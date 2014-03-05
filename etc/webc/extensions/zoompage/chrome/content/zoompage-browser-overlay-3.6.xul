@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+
+<!--
+/************************************************************************/
+/*                                                                      */
+/*      Zoom Page  -  Firefox Extension  -  Main Window                 */
+/*                                                                      */
+/*      XUL for Main Window overlay                                     */
+/*                                                                      */
+/*      Copyright (C) 2009-2014  by  DW-dev                             */
+/*                                                                      */
+/*      Last Edit  -  21 Jan 2014                                       */
+/*                                                                      */
+/************************************************************************/
+-->
+
+<?xml-stylesheet href="chrome://zoompage/skin/zoompage-buttons-3.6.css" type="text/css"?>
+<?xml-stylesheet href="chrome://zoompage/skin/zoompage-menu.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://zoompage/locale/zoompage.dtd">
+
+<overlay id="zoompage-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    
+    <script src="chrome://zoompage/content/zoompage-browser.js" type="application/x-javascript"/>
+    
+    <popupset id="mainPopupSet">
+        
+        <menupopup id="zoompage-zoommenupopup" onpopupshown="zoomPage.onMenuPopupShowing();"/>
+        
+        <menupopup id="zoompage-modemenupopup"/>
+        
+        <tooltip id="zoompage-zoomdisplay-tip" onpopupshowing="zoomPage.onTooltipPopupShowing(this);">
+            <label id="zoompage-zoomdisplay-tip-1a" value="&zoompage.zoommenu;" style="text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-1b" value="&zoompage.zoomreset;" style="text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-2a" value="&zoompage.middleclick.zm;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-2b" value="&zoompage.middleclick.zr;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-3a" value="&zoompage.shiftclick.dp;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-3b" value="&zoompage.shiftclick.fw;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-3c" value="&zoompage.shiftclick.fx;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-4a" value="&zoompage.rightclick.fp;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+            <label id="zoompage-zoomdisplay-tip-4b" value="&zoompage.rightclick.to;" style="margin-top: -2px; font-size: 11px; color: #808080; text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-options-tip">
+            <label value="&zoompage.options;" style="text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-defaultzoom-tip">
+            <label value="&zoompage.defaultzoom;" style="text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-fittowidth-tip">
+            <label value="&zoompage.fittowidth;" style="text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-fittowindow-tip">
+            <label value="&zoompage.fittowindow;" style="text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-defzoomsitespec-tip">
+            <label value="&zoompage.defzoomsitespec;" style="text-align: center;"/>
+        </tooltip>
+        
+        <tooltip id="zoompage-ftwzoomsitespec-tip">
+            <label value="&zoompage.ftwzoomsitespec;" style="text-align: center;"/>
+        </tooltip>
+        
+    </popupset>
+    
+    <window id="main-window">
+        <box id="zoompage-strings" insertafter="mainPopupSet" hidden="true">
+            <label id="zoompage-expflag" value="&zoompage.expflag;"/>
+            <label id="zoompage-defflag" value="&zoompage.defflag;"/>
+            <label id="zoompage-ftwflag" value="&zoompage.ftwflag;"/>
+            <label id="zoompage-ssflag" value="&zoompage.ssflag;"/>
+            <label id="zoompage-fpflag" value="&zoompage.fpflag;"/>
+            <label id="zoompage-toflag" value="&zoompage.toflag;"/>
+        </box>
+    </window>
+    
+    <toolbar id="PersonalToolbar">
+<!--
+        <toolbaritem id="zoompage-debug-info" class="chromeclass-toolbar-additional" style="width: 400px; margin: 3px 5px 2px; padding: 2px 5px; border: 1px solid #C0C0C0;"/>
+-->
+    </toolbar>
+    
+    <statusbar id="status-bar">
+        
+        <hbox id="zoompage-item">
+            
+            <statusbarpanel id="zoompage-zoomout" class="statusbarpanel-iconic" 
+                            tooltiptext="&zoompage.zoomout;"
+                            oncommand="FullZoom.reduce();" 
+                            src="chrome://zoompage/skin/zoompage-zoomout-icon-c.png"/>
+            
+            <stack>
+                <statusbarpanel id="zoompage-zoomdisplay" class="statusbarpanel-iconic-text"
+                                label="" tooltip="zoompage-zoomdisplay-tip"
+                                onclick="zoomPage.onDisplayClick(event);" ondblclick="zoomPage.onDisplayDblClick(event);" oncontextmenu="zoomPage.onDisplayContextMenu(event);"/>
+                <statusbarpanel id="zoompage-percent" class="statusbarpanel-iconic-text" label="100%"
+                                style="pointer-events: none;"/>
+            </stack>
+            
+            <statusbarpanel id="zoompage-zoomin" class="statusbarpanel-iconic" 
+                            tooltiptext="&zoompage.zoomin;"
+                            oncommand="FullZoom.enlarge();"
+                            src="chrome://zoompage/skin/zoompage-zoomin-icon-c.png"/>
+            
+        </hbox>
+        
+    </statusbar>
+
+</overlay>

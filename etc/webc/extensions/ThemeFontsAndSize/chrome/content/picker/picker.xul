@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+  -   Version: MPL 1.1/GPL 2.0/LGPL 2.1
+  -
+  - The contents of this file are subject to the Mozilla Public License Version
+  - 1.1 (the "License"); you may not use this file except in compliance with
+  - the License. You may obtain a copy of the License at
+  - http://www.mozilla.org/MPL/
+  - 
+  - Software distributed under the License is distributed on an "AS IS" basis,
+  - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+  - for the specific language governing rights and limitations under the
+  - License.
+  -
+  - The Original Code is Rainbow.
+  -
+  - The Initial Developer of the Original Code is
+  - Heather Arthur.
+  - Portions created by the Initial Developer are Copyright (C) 2009
+  - the Initial Developer. All Rights Reserved.
+  -
+  - Contributor(s):
+  -
+  - Alternatively, the contents of this file may be used under the terms of
+  - either the GNU General Public License Version 2 or later (the "GPL"), or
+  - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+  - in which case the provisions of the GPL or the LGPL are applicable instead
+  - of those above. If you wish to allow use of your version of this file only
+  - under the terms of either the GPL or the LGPL, and not to allow others to
+  - use your version of this file under the terms of the MPL, indicate your
+  - decision by deleting the provisions above and replace them with the notice
+  - and other provisions required by the GPL or the LGPL. If you do not delete
+  - the provisions above, a recipient may use your version of this file under
+  - the terms of any one of the MPL, the GPL or the LGPL.
+  - 
+  - ***** t END LICENSE BLOCK ***** -->
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://themefontsizechanger/skin/picker.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://themefontsizechanger/locale/picker.dtd">
+
+<window id="themefontsizechangerrainbow-picker-window" 
+        title="&picker.title;"
+        windowtype="themefontsizechangerrainbow:picker"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        persist=""
+        onload="picker.init();"
+        onunload="picker.unload();">
+
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/colorCommon.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/common.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/picker.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/selector.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/inspector.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/wrap.js"/>
+ <script type="application/x-javascript" src="chrome://themefontsizechanger/content/picker/fonts.js"/>
+
+ <stringbundleset id="stringbundleset">
+   <stringbundle id="themefontsizechangerrainbow-strings" src="chrome://themefontsizechanger/locale/picker.properties"/>
+ </stringbundleset>
+
+ <menupopup id="picker-context">
+      <menu label="null"
+            accesskey="null"> 
+      <menupopup>
+        <menuitem id="themefontsizechangerrainbow-context-hex" label="null"
+                  oncommand="picker.changeFormat('hex')"/>
+        <menuitem id="themefontsizechangerrainbow-context-plain" label="null"
+                  accesskey="null"
+                  oncommand="picker.changeFormat('plain')"/>
+        <menuitem id="themefontsizechangerrainbow-context-rgb" label="null"
+                  accesskey="null"
+                  oncommand="picker.changeFormat('rgb')"/>
+        <menuitem id="themefontsizechangerrainbow-context-per" label="null"
+                  accesskey="null"
+                  oncommand="picker.changeFormat('per')"/>
+        <menuitem id="themefontsizechangerrainbow-context-hsl" label="null"
+                  accesskey="null"
+                  oncommand="picker.changeFormat('hsl')" />
+       </menupopup>
+      </menu>
+  </menupopup>
+
+<tooltip id="contrast-tooltip">
+  <vbox>
+   <label value="null"/>
+   <label id="contrast-minimum" value="null"/>
+  <grid>
+    <columns>
+      <column/>
+      <column/>
+    </columns>
+    <rows>
+     <row>
+       <label value="null"/>
+       <label value="7"/>
+     </row>
+     <row>
+       <label value="null"/>
+       <label value="5"/>
+     </row>
+    </rows>
+  </grid>
+  </vbox>
+</tooltip>
+
+<vbox context="picker-context">
+
+<toolbar id="color-navigator" hidden="true">
+    <hbox id="history-buttons">
+      <toolbarbutton id="back-button" label=" null "
+                     disabled="true" onclick="picker.back();"/>
+      <toolbarbutton id="forward-button" label=" null "
+                     disabled="true" onclick="picker.forward();"/>
+    </hbox>
+
+    <textbox id="display-string"
+             tabindex="1"
+             onchange="picker.stringChanged();"
+             onpaste="setTimeout(function() { picker.stringChanged(); }, 20);"/>
+    <toolbarbutton id="copy-button" label="null"
+                   accesskey="null"
+                   oncommand="picker.copy();"/>
+    <toolbarbutton id="bookmark-button" label="null"
+                   accesskey="null"
+                   oncommand="picker.bookmark();"/>
+    <spacer flex="1"/>
+    <toolbarbutton id="selector-button" tooltiptext="null"
+                   type="checkbox"
+                   oncommand="selector.start();">
+         <div id="selector-icon"/>
+    </toolbarbutton>
+    <toolbarbutton id="inspector-button" tooltiptext="null"
+                   oncommand="inspector.start();"/>
+  </toolbar>
+
+<vbox id="container">
+ <grid>
+   <columns>
+     <column/>
+     <column/>
+   </columns>
+   <rows>
+     <row>
+       <spacer/><label id="selector-element" value=" "/>
+     </row>
+     <row>
+       <vbox id="left-box">
+       <hbox id="picker-display">
+         <vbox align="center">
+          <box id="gradient-display">
+            <html:div id="picker-box" style="position: relative;">
+              <html:div id="gradients-box">
+                <html:img id="bottom-gradient" onclick="picker.gradientClick(event);"
+                          src="chrome://themefontsizechanger/skin/sat-bottom.png"/>
+                <html:img id="top-gradient" onclick="picker.gradientClick(event);"
+                          style="position: absolute; top: 0px; left: 0px; z-index: 2;"/>
+                <html:img id="pix-sel" src="chrome://themefontsizechanger/skin/box_thin.png"
+                          style="position: absolute; top: 0px; left: 0px; z-index: 3;"
+                          onclick="picker.gradientClick(event);"/>
+              </html:div>
+            </html:div>
+          </box>
+        </vbox>
+        <box id="bar-display">
+          <html:div id="bar-box" style="position: relative;">
+            <html:img id="bar" onclick="picker.barClick(event);"
+                      src="chrome://themefontsizechanger/skin/hue-bar.png"/>
+            <html:img id="top-bar" onclick="picker.barClick(event);"
+                      src="chrome://themefontsizechanger/skin/sat-bar-top.png"
+                      style="position: absolute; top: 0px; left: 0px; z-index: 2; opacity: 0;"/>
+            <html:img id="bar-sel" src="chrome://themefontsizechanger/skin/arrows.png"
+                      style="position: absolute; top: 0px; left: 0px; z-index: 3"
+                      onclick="picker.barClick(event);"/>
+          </html:div>
+        </box>
+      </hbox>
+    </vbox>
+
+    <vbox id="selection-display" align="center">
+      <vbox id="values-display"   style="width:100px;">
+      <hbox>
+        <vbox id="display-color-1"
+              ondragstart="picker.dragStart(event);" flex="1"
+              onclick="picker.selectDisplay(this)"
+              ondblclick="picker.comparisonDisplay()"
+              ondrop="picker.cloneDisplay(event)"
+              ondragover="return false;"
+              class="highlight" align="center">
+          <label id="display-element" hidden="true">
+          </label>
+          <vbox flex="1" pack="end">
+          <vbox id="display-text"
+              onclick="picker.selectDisplay(this, event)" hidden="true">
+          </vbox>
+         </vbox>
+        </vbox>
+        <vbox id="display-color-2"
+              ondragstart="picker.dragStart(event);" flex="1"
+              onclick="picker.selectDisplay(this)"
+              ondblclick="picker.comparisonDisplay()"
+              ondrop="picker.cloneDisplay(event)"
+              ondragover="return false;"
+              hidden="true"/>
+      </hbox>
+      <vbox align="end" flex="1" >
+         <label id="contrast" value="   " tooltip="contrast-tooltip"/>
+      </vbox>
+
+      <vbox id="values-box" >
+        <hbox align="center" class="values-row">
+          <vbox align="center">
+              <vbox class="value-box" onclick="picker.selectField('r');">
+	            <label value="R" tooltiptext="&picker.red;"/>
+              </vbox>
+	          <textbox id="r" integer="true" maximum="255" size="2" tabindex="2"
+                       onchange="picker.fieldChange(this, 255);"
+                       onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">
+            <vbox class="value-box" onclick="picker.selectField('g');">  
+              <label value="G" tooltiptext="&picker.green;"/>
+            </vbox>
+	          <textbox id="g" integer="true" maximum="255" size="2" tabindex="3"
+                       onchange="picker.fieldChange(this);"
+                       onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">
+            <vbox class="value-box" onclick="picker.selectField('b');">   
+              <label value="B" tooltiptext="&picker.blue;"/>
+            </vbox>
+            <textbox id="b" integer="true" maximum="255" size="2" tabindex="4"
+                     onchange="picker.fieldChange(this);"
+                     onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+        </hbox>
+        <hbox align="center" id="hsl-row" class="values-row">
+          <vbox align="center">
+            <vbox class="value-box" onclick="picker.selectField('h');">
+	          <label value="H" tooltiptext="&picker.hue;"/>
+            </vbox>
+	        <textbox id="h" integer="true" maximum="360" size="2" tabindex="8"
+                   onchange="picker.fieldChange(this);"
+                   onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">
+            <vbox class="value-box" onclick="picker.selectField('s');">
+              <label value="S" tooltiptext="&picker.sat;"/>
+            </vbox>
+	        <textbox id="s" maximum="100" size="2" tabindex="9"
+                     onchange="picker.fieldChange(this);"
+                     onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">
+            <vbox class="value-box" onclick="picker.selectField('l');">
+              <label value="L" tooltiptext="&picker.light;"/>
+            </vbox>
+            <textbox id="l" maximum="100" size="2" tabindex="10"
+                     onchange="picker.fieldChange(this);"
+                     onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+        </hbox>
+        <hbox align="center" id="hsv-row" class="values-row">
+          <vbox align="center" >
+             <vbox id="radio-h" class="value-box selection-box"
+                   onclick="picker.selectField('hv');">
+	           <label value="H" class="selected"
+                      tooltiptext="&picker.hue;"/>
+             </vbox>
+	         <textbox id="hv" integer="true" maximum="360" size="2" tabindex="5"
+                      onchange="picker.fieldChange(this);"
+                      onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">  
+            <vbox id="radio-s" class="value-box selection-box"
+                    onclick="picker.selectField('sv');">
+              <label value="S" tooltiptext="&picker.sat;"/>
+            </vbox>
+	        <textbox id="sv" maximum="100" size="2" tabindex="6"
+                     onchange="picker.fieldChange(this);"
+                     onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+          <vbox align="center">            
+            <vbox id="radio-v" class="value-box selection-box"
+                    onclick="picker.selectField('v');">
+              <label value="V" tooltiptext="&picker.val;"/>
+            </vbox>
+	      <textbox id="v" maximum="100" size="2" tabindex="7"
+                   onchange="picker.fieldChange(this);"
+                   onkeypress="picker.keyPressed(event, this);"/>
+          </vbox>
+        </hbox>
+        <hbox align="center" id="opacity-row" class="values-row" hidden="true">
+          <hbox align="center" pack="end" flex="1">
+	          <label value="opacity:"  onclick="picker.selectField('a');"/>
+	          <textbox id="a" integer="true" maximum="100" size="2" tabindex="11"
+                     onchange="picker.fieldChange(this);"
+                     onkeypress="picker.keyPressed(event, this);"/>
+          </hbox>
+        </hbox>
+        </vbox>
+      </vbox>
+    </vbox>
+  </row>
+ </rows>
+</grid>
+</vbox>
+</vbox>
+</window>

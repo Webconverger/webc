@@ -1,0 +1,1 @@
+/etc/webc/extensions/vkeyboard
