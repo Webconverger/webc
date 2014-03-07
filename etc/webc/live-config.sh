@@ -166,16 +166,19 @@ for x in $( cmdline ); do
 		;;
 
 	filter=*)
+		# Not to be used in conjuction with hosts=
+		# dns= trumps filter
 		filter="$( /bin/busybox httpd -d ${x#filter=} )"
-		IP=146.185.152.215 # nl.webconverger.com
 		IFS=',' read -ra F <<< "$filter"
 		test "${F[1]}" && IP="${F[1]}"
-		if ! test "${F[0]}"
+		if ! test "${F[0]}" -a "$IP"
 		then
-			logs "ERROR: filter URL failed to be specified"
+			logs "ERROR: filter URL failed to be specified: ${F[0]},$IP"
 		else
 			logs Setting up filter: ${F[0]} with $IP
 			curl -s "${F[0]}" | xzcat | awk -v ip="$IP" '{ print "address=/" $1 "/" ip }' >> /etc/dnsmasq.conf
+			mv /etc/resolv.conf /etc/resolv.dnsmasq.conf
+			echo "nameserver 127.0.0.1" > /etc/resolv.conf
 			systemctl start dnsmasq.service
 		fi
 		;;
