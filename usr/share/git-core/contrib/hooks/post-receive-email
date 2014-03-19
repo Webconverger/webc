@@ -2,10 +2,19 @@
 #
 # Copyright (c) 2007 Andy Parkins
 #
-# An example hook script to mail out commit update information.  This hook
-# sends emails listing new revisions to the repository introduced by the
-# change being reported.  The rule is that (for branch updates) each commit
-# will appear on one email and one email only.
+# An example hook script to mail out commit update information.
+#
+# NOTE: This script is no longer under active development.  There
+# is another script, git-multimail, which is more capable and
+# configurable and is largely backwards-compatible with this script;
+# please see "contrib/hooks/multimail/".  For instructions on how to
+# migrate from post-receive-email to git-multimail, please see
+# "README.migrate-from-post-receive-email" in that directory.
+#
+# This hook sends emails listing new revisions to the repository
+# introduced by the change being reported.  The rule is that (for
+# branch updates) each commit will appear on one email and one email
+# only.
 #
 # This hook is stored in the contrib/hooks directory.  Your distribution
 # will have put this somewhere standard.  You should make this script
@@ -465,7 +474,7 @@ generate_delete_branch_email()
 	echo "       was  $oldrev"
 	echo ""
 	echo $LOGBEGIN
-	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
+	git diff-tree -s --always --encoding=UTF-8 --pretty=oneline $oldrev
 	echo $LOGEND
 }
 
@@ -541,11 +550,11 @@ generate_atag_email()
 		# performed on them
 		if [ -n "$prevtag" ]; then
 			# Show changes since the previous release
-			git shortlog --encoding=UTF-8 "$prevtag..$newrev"
+			git shortlog "$prevtag..$newrev"
 		else
 			# No previous tag, show all the changes since time
 			# began
-			git shortlog --encoding=UTF-8 "$newrev"
+			git shortlog $newrev
 		fi
 		;;
 	*)
@@ -565,7 +574,7 @@ generate_delete_atag_email()
 	echo "       was  $oldrev"
 	echo ""
 	echo $LOGBEGIN
-	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
+	git diff-tree -s --always --encoding=UTF-8 --pretty=oneline $oldrev
 	echo $LOGEND
 }
 
@@ -611,7 +620,7 @@ generate_general_email()
 	echo ""
 	if [ "$newrev_type" = "commit" ]; then
 		echo $LOGBEGIN
-		git diff-tree --encoding=UTF-8 --root -s --pretty=oneline $newrev
+		git diff-tree -s --always --encoding=UTF-8 --pretty=medium $newrev
 		echo $LOGEND
 	else
 		# What can we do here?  The tag marks an object that is not
@@ -630,7 +639,7 @@ generate_delete_general_email()
 	echo "       was  $oldrev"
 	echo ""
 	echo $LOGBEGIN
-	git diff-tree --encoding=UTF-8 -s --pretty=oneline $oldrev
+	git diff-tree -s --always --encoding=UTF-8 --pretty=oneline $oldrev
 	echo $LOGEND
 }
 

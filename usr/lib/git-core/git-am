@@ -6,7 +6,7 @@ SUBDIRECTORY_OK=Yes
 OPTIONS_KEEPDASHDASH=
 OPTIONS_SPEC="\
 git am [options] [(<mbox>|<Maildir>)...]
-git am [options] (--resolved | --skip | --abort)
+git am [options] (--continue | --skip | --abort)
 --
 i,interactive   run interactively
 b,binary*       (historical option -- no-op)
@@ -102,7 +102,7 @@ stop_here_user_resolve () {
 	    printf '%s\n' "$resolvemsg"
 	    stop_here $1
     fi
-    eval_gettextln "When you have resolved this problem, run \"\$cmdline --resolved\".
+    eval_gettextln "When you have resolved this problem, run \"\$cmdline --continue\".
 If you prefer to skip this patch, run \"\$cmdline --skip\" instead.
 To restore the original branch and stop patching, run \"\$cmdline --abort\"."
 
@@ -446,6 +446,8 @@ done
 # If the dotest directory exists, but we have finished applying all the
 # patches in them, clear it out.
 if test -d "$dotest" &&
+   test -f "$dotest/last" &&
+   test -f "$dotest/next" &&
    last=$(cat "$dotest/last") &&
    next=$(cat "$dotest/next") &&
    test $# != 0 &&
@@ -454,7 +456,7 @@ then
    rm -fr "$dotest"
 fi
 
-if test -d "$dotest"
+if test -d "$dotest" && test -f "$dotest/last" && test -f "$dotest/next"
 then
 	case "$#,$skip$resolved$abort" in
 	0,*t*)
@@ -504,7 +506,24 @@ then
 	esac
 	rm -f "$dotest/dirtyindex"
 else
-	# Make sure we are not given --skip, --resolved, nor --abort
+	# Possible stray $dotest directory in the independent-run
+	# case; in the --rebasing case, it is upto the caller
+	# (git-rebase--am) to take care of stray directories.
+	if test -d "$dotest" && test -z "$rebasing"
+	then
+		case "$skip,$resolved,$abort" in
+		,,t)
+			rm -fr "$dotest"
+			exit 0
+			;;
+		*)
+			die "$(eval_gettext "Stray \$dotest directory found.
+Use \"git am --abort\" to remove it.")"
+			;;
+		esac
+	fi
+
+	# Make sure we are not given --skip, --continue, nor --abort
 	test "$skip$resolved$abort" = "" ||
 		die "$(gettext "Resolve operation not in progress, we are not resuming.")"
 
@@ -651,7 +670,7 @@ do
 	#  - patch is the patch body.
 	#
 	# When we are resuming, these files are either already prepared
-	# by the user, or the user can tell us to do so by --resolved flag.
+	# by the user, or the user can tell us to do so by --continue flag.
 	case "$resume" in
 	'')
 		if test -f "$dotest/rebasing"
@@ -778,13 +797,6 @@ To restore the original branch and stop patching run \"\$cmdline --abort\"."
 	    action=yes
 	fi
 
-	if test -f "$dotest/final-commit"
-	then
-		FIRSTLINE=$(sed 1q "$dotest/final-commit")
-	else
-		FIRSTLINE=""
-	fi
-
 	if test $action = skip
 	then
 		go_next
@@ -795,6 +807,13 @@ To restore the original branch and stop patching run \"\$cmdline --abort\"."
 	then
 		"$GIT_DIR"/hooks/applypatch-msg "$dotest/final-commit" ||
 		stop_here $this
+	fi
+
+	if test -f "$dotest/final-commit"
+	then
+		FIRSTLINE=$(sed 1q "$dotest/final-commit")
+	else
+		FIRSTLINE=""
 	fi
 
 	say "$(eval_gettext "Applying: \$FIRSTLINE")"
@@ -904,5 +923,10 @@ if test -s "$dotest"/rewritten; then
     fi
 fi
 
-rm -fr "$dotest"
-git gc --auto
+# If am was called with --rebasing (from git-rebase--am), it's up to
+# the caller to take care of housekeeping.
+if ! test -f "$dotest/rebasing"
+then
+	rm -fr "$dotest"
+	git gc --auto
+fi

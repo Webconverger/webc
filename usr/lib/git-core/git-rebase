@@ -13,6 +13,7 @@ git-rebase --continue | --abort | --skip | --edit-todo
  Available options are
 v,verbose!         display a diffstat of what changed upstream
 q,quiet!           be quiet. implies --no-stat
+autostash!         automatically stash/stash pop before and after
 onto=!             rebase onto given branch instead of upstream
 p,preserve-merges! try to recreate merges instead of ignoring them
 s,strategy=!       use the given merge strategy
@@ -64,6 +65,7 @@ apply_dir="$GIT_DIR"/rebase-apply
 verbose=
 diffstat=
 test "$(git config --bool rebase.stat)" = true && diffstat=t
+autostash="$(git config --bool rebase.autostash || echo false)"
 git_am_opt=
 rebase_root=
 force_rebase=
@@ -82,6 +84,8 @@ keep_empty=
 test "$(git config --bool rebase.autosquash)" = "true" && autosquash=t
 
 read_basic_state () {
+	test -f "$state_dir/head-name" &&
+	test -f "$state_dir/onto" &&
 	head_name=$(cat "$state_dir"/head-name) &&
 	onto=$(cat "$state_dir"/onto) &&
 	# We always write to orig-head, but interactive rebase used to write to
@@ -143,13 +147,48 @@ move_to_original_branch () {
 	esac
 }
 
-run_specific_rebase () {
+finish_rebase () {
+	if test -f "$state_dir/autostash"
+	then
+		stash_sha1=$(cat "$state_dir/autostash")
+		if git stash apply $stash_sha1 2>&1 >/dev/null
+		then
+			echo "$(gettext 'Applied autostash.')"
+		else
+			git stash store -m "autostash" -q $stash_sha1 ||
+			die "$(eval_gettext "Cannot store \$stash_sha1")"
+			gettext 'Applying autostash resulted in conflicts.
+Your changes are safe in the stash.
+You can run "git stash pop" or "git stash drop" at any time.
+'
+		fi
+	fi
+	git gc --auto &&
+	rm -rf "$state_dir"
+}
+
+run_specific_rebase_internal () {
 	if [ "$interactive_rebase" = implied ]; then
 		GIT_EDITOR=:
 		export GIT_EDITOR
 		autosquash=
 	fi
+	# On FreeBSD, the shell's "return" returns from the current
+	# function, not from the current file inclusion.
+	# run_specific_rebase_internal has the file inclusion as a
+	# last statement, so POSIX and FreeBSD's return will do the
+	# same thing.
 	. git-rebase--$type
+}
+
+run_specific_rebase () {
+	run_specific_rebase_internal
+	ret=$?
+	if test $ret -eq 0
+	then
+		finish_rebase
+	fi
+	exit $ret
 }
 
 run_pre_rebase_hook () {
@@ -240,6 +279,9 @@ do
 		;;
 	--stat)
 		diffstat=t
+		;;
+	--autostash)
+		autostash=true
 		;;
 	-v)
 		verbose=t
@@ -341,7 +383,7 @@ abort)
 		;;
 	esac
 	output git reset --hard $orig_head
-	rm -r "$state_dir"
+	finish_rebase
 	exit
 	;;
 edit-todo)
@@ -400,7 +442,7 @@ then
 		shift
 		;;
 	esac
-	upstream=`git rev-parse --verify "${upstream_name}^0"` ||
+	upstream=$(peel_committish "${upstream_name}") ||
 	die "$(eval_gettext "invalid upstream \$upstream_name")"
 	upstream_arg="$upstream_name"
 else
@@ -436,7 +478,7 @@ case "$onto_name" in
 	fi
 	;;
 *)
-	onto=$(git rev-parse --verify "${onto_name}^0") ||
+	onto=$(peel_committish "$onto_name") ||
 	die "$(eval_gettext "Does not point to a valid commit: \$onto_name")"
 	;;
 esac
@@ -473,12 +515,24 @@ case "$#" in
 		head_name="detached HEAD"
 		branch_name=HEAD ;# detached
 	fi
-	orig_head=$(git rev-parse --verify "${branch_name}^0") || exit
+	orig_head=$(git rev-parse --verify HEAD) || exit
 	;;
 *)
 	die "BUG: unexpected number of arguments left to parse"
 	;;
 esac
+
+if test "$autostash" = true && ! (require_clean_work_tree) 2>/dev/null
+then
+	stash_sha1=$(git stash create "autostash") ||
+	die "$(gettext 'Cannot autostash')"
+
+	mkdir -p "$state_dir" &&
+	echo $stash_sha1 >"$state_dir/autostash" &&
+	stash_abbrev=$(git rev-parse --short $stash_sha1) &&
+	echo "$(eval_gettext 'Created autostash: $stash_abbrev')" &&
+	git reset --hard
+fi
 
 require_clean_work_tree "rebase" "$(gettext "Please commit or stash them.")"
 
@@ -497,8 +551,11 @@ then
 	if test -z "$force_rebase"
 	then
 		# Lazily switch to the target branch if needed...
-		test -z "$switch_to" || git checkout "$switch_to" --
+		test -z "$switch_to" ||
+		GIT_REFLOG_ACTION="$GIT_REFLOG_ACTION: checkout $switch_to" \
+			git checkout "$switch_to" --
 		say "$(eval_gettext "Current branch \$branch_name is up to date.")"
+		finish_rebase
 		exit 0
 	else
 		say "$(eval_gettext "Current branch \$branch_name is up to date, rebase forced.")"
@@ -522,7 +579,9 @@ test "$type" = interactive && run_specific_rebase
 
 # Detach HEAD and reset the tree
 say "$(gettext "First, rewinding head to replay your work on top of it...")"
-git checkout -q "$onto^0" || die "could not detach HEAD"
+
+GIT_REFLOG_ACTION="$GIT_REFLOG_ACTION: checkout $onto_name" \
+	git checkout -q "$onto^0" || die "could not detach HEAD"
 git update-ref ORIG_HEAD $orig_head
 
 # If the $onto is a proper descendant of the tip of the branch, then
@@ -531,6 +590,7 @@ if test "$mb" = "$orig_head"
 then
 	say "$(eval_gettext "Fast-forwarded \$branch_name to \$onto_name.")"
 	move_to_original_branch
+	finish_rebase
 	exit 0
 fi
 

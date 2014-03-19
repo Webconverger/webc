@@ -32,8 +32,9 @@ valid_custom_tool()
 valid_tool() {
 	case "$1" in
 	firefox | iceweasel | seamonkey | iceape | \
-	chrome | google-chrome | chromium | chromium-browser |\
-	konqueror | opera | w3m | elinks | links | lynx | dillo | open | start)
+	chrome | google-chrome | chromium | chromium-browser | \
+	konqueror | opera | w3m | elinks | links | lynx | dillo | open | \
+	start | cygstart | xdg-open)
 		;; # happy
 	*)
 		valid_custom_tool "$1" || return 1
@@ -111,7 +112,7 @@ fi
 
 if test -z "$browser" ; then
 	if test -n "$DISPLAY"; then
-		browser_candidates="firefox iceweasel google-chrome chrome chromium chromium-browser konqueror opera seamonkey iceape w3m elinks links lynx dillo"
+		browser_candidates="firefox iceweasel google-chrome chrome chromium chromium-browser konqueror opera seamonkey iceape w3m elinks links lynx dillo xdg-open"
 		if test "$KDE_FULL_SESSION" = "true"; then
 			browser_candidates="konqueror $browser_candidates"
 		fi
@@ -119,13 +120,17 @@ if test -z "$browser" ; then
 		browser_candidates="w3m elinks links lynx"
 	fi
 	# SECURITYSESSIONID indicates an OS X GUI login session
-	if test -n "$SECURITYSESSIONID" \
-		-o "$TERM_PROGRAM" = "Apple_Terminal" ; then
+	if test -n "$SECURITYSESSIONID" || test -n "$TERM_PROGRAM"
+	then
 		browser_candidates="open $browser_candidates"
 	fi
 	# /bin/start indicates MinGW
 	if test -x /bin/start; then
 		browser_candidates="start $browser_candidates"
+	fi
+	# /usr/bin/cygstart indicates Cygwin
+	if test -x /usr/bin/cygstart; then
+		browser_candidates="cygstart $browser_candidates"
 	fi
 
 	for i in $browser_candidates; do
@@ -174,7 +179,7 @@ konqueror)
 		;;
 	esac
 	;;
-w3m|elinks|links|lynx|open)
+w3m|elinks|links|lynx|open|cygstart|xdg-open)
 	"$browser_path" "$@"
 	;;
 start)
