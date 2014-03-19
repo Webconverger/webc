@@ -165,6 +165,24 @@ for x in $( cmdline ); do
 			fi
 		;;
 
+	filter=*)
+		# Not to be used in conjuction with hosts=
+		# dns= trumps filter
+		filter="$( /bin/busybox httpd -d ${x#filter=} )"
+		IFS=',' read -ra F <<< "$filter"
+		test "${F[1]}" && IP="${F[1]}"
+		if ! test "${F[0]}" -a "$IP"
+		then
+			logs "ERROR: filter URL failed to be specified: ${F[0]},$IP"
+		else
+			logs Setting up filter: ${F[0]} with $IP
+			curl -s "${F[0]}" | xzcat | awk -v ip="$IP" '{ print "address=/" $1 "/" ip }' >> /etc/dnsmasq.conf
+			mv /etc/resolv.conf /etc/resolv.dnsmasq.conf
+			echo "nameserver 127.0.0.1" > /etc/resolv.conf
+			systemctl start dnsmasq.service
+		fi
+		;;
+
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
 		echo "pref(\"autoadmin.global_config_url\",\"$prefs\");" >> /opt/firefox/mozilla.cfg

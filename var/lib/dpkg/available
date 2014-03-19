@@ -3897,6 +3897,22 @@ Description: MIT Kerberos runtime libraries - Crypto Library
  applications and Kerberos clients.
 Homepage: http://web.mit.edu/kerberos/
 
+Package: dnsmasq-base
+Priority: optional
+Section: net
+Installed-Size: 769
+Maintainer: Simon Kelley <simon@thekelleys.org.uk>
+Architecture: i386
+Source: dnsmasq
+Version: 2.62-3+deb7u1
+Depends: libc6 (>= 2.11), libdbus-1-3 (>= 1.1.1), libidn11 (>= 1.13), libnetfilter-conntrack3, libnfnetlink0 (>= 1.0.0)
+Conflicts: dnsmasq (<< 2.41)
+Size: 365708
+Description: Small caching DNS proxy and DHCP/TFTP server
+ This package contains the dnsmasq executable and documentation, but
+ not the infrastructure required to run it as a system daemon. For
+ that, install the dnsmasq package.
+
 Package: bc
 Priority: standard
 Section: math
@@ -11039,6 +11055,23 @@ Description: utility to set/show the host name or domain name
  This package provides commands which can be used to display the system's
  DNS name, and to display or set its hostname or NIS domain name.
 
+Package: libnetfilter-conntrack3
+Priority: extra
+Section: libs
+Installed-Size: 124
+Maintainer: Alexander Wirt <formorer@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libnetfilter-conntrack
+Version: 1.0.1-1
+Depends: libc6 (>= 2.4), libnfnetlink0 (>= 1.0.0)
+Pre-Depends: multiarch-support
+Size: 39526
+Description: Netfilter netlink-conntrack library
+ libnetfilter_conntrack is a userspace library providing a programming
+ interface (API) to the in-kernel connection tracking state table.
+Homepage: http://www.netfilter.org/projects/libnetfilter_conntrack/
+
 Package: plymouth-drm
 Priority: optional
 Section: misc
@@ -12180,6 +12213,27 @@ Description: SID (MOS 6581) emulation library
  and more in the High Voltage SID Collection (HVSC). For downloads and
  information about the volunteers, who maintain the collection, look at
  the HVSC homepage http://www.hvsc.c64.org.
+
+Package: dnsmasq
+Priority: optional
+Section: net
+Installed-Size: 120
+Maintainer: Simon Kelley <simon@thekelleys.org.uk>
+Architecture: all
+Version: 2.62-3+deb7u1
+Depends: netbase, adduser, dnsmasq-base (>= 2.62-3+deb7u1)
+Suggests: resolvconf
+Conflicts: resolvconf (<< 1.15)
+Size: 16384
+Description: Small caching DNS proxy and DHCP/TFTP server
+ Dnsmasq is a lightweight, easy to configure, DNS forwarder and DHCP
+ server. It is designed to provide DNS and optionally, DHCP, to a
+ small network. It can serve the names of local machines which are
+ not in the global DNS. The DHCP server integrates with the DNS
+ server and allows machines with DHCP-allocated addresses
+ to appear in the DNS with names configured either in each host or
+ in a central configuration file. Dnsmasq supports static and dynamic
+ DHCP leases and BOOTP/TFTP for network booting of diskless machines.
 
 Package: liblzma5
 Priority: required
