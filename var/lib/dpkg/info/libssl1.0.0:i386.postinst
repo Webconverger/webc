@@ -57,41 +57,56 @@ filerc() {
 if [ "$1" = "configure" ]
 then
     if [ ! -z "$2" ]; then
-	if dpkg --compare-versions "$2" lt 0.9.8g-9 && dpkg --compare-versions "$2" gt 0.9.8c-4etch3; then
-	    db_version 2.0
-
-	    echo -n "Checking for services that may need to be restarted..."
-
-	    check="sendmail openssh-server"
-	    check="$check apache2-common ssh-nonfree exim4"
-	    check="$check apache-ssl libapache-mod-ssl openvpn spamassassin"
-	    check="$check courier-imap-ssl courier-mta-ssl courier-pop-ssl"
-	    check="$check postfix cyrus21-imapd cyrus21-pop3d"
-	    check="$check postgresql-7.4 postgresql-8.0 postgresql-8.1"
-	    check="$check postgresql-8.2"
-	    check="$check racoon dovecot-common bind9"
-	    check="$check ntp openntpd clamcour nagios-nrpe-server"
-	    check="$check clamav-freshclam clamav-daemon"
-	    check="$check fetchmail ftpd-ssl slapd"
-	    check="$check proftpd proftpd-ldap proftpd-mysql proftpd-pgsql"
-	    check="$check partimage-server conserver-server tor"
-	    check="$check stunnel4"
-	    # Only get the ones that are installed, and configured
-	    check=$(dpkg -s $check 2> /dev/null | egrep '^Package:|^Status:' | awk '{if ($1 ~ /^Package:/) { package=$2 } else if ($0 ~ /^Status: .* installed$/) { print package }}')
-	    # apache2 ships its init script in apache2-common, but the
-	    # script is apache2
-	    check=$(echo $check | sed 's/apache2-common/apache2/g')
-	    # For mod-ssl apache has to be restarted
-	    check=$(echo $check | sed 's/libapache-mod-ssl/apache/g')
-	    # The name of proftpd-{ldap,mysql,pgsql} init script is
-	    # same as "proftpd".
-	    check=$(echo $check | sed 's/proftpd-.*/proftpd/g')
-            # dovecot-common ships its init script, but the
-	    # script name is dovecot for dovecot-{imapd,pop3d}.
-	    check=$(echo $check | sed 's/dovecot-common/dovecot/g')
-	    # openssh-server's init script it called ssh
-	    check=$(echo $check | sed 's/openssh-server/ssh/g')
-	    echo "done."
+	if dpkg --compare-versions "$2" lt 1.0.1e-2+deb7u6; then
+            db_version 2.0
+            echo -n "Checking for services that may need to be restarted..."
+            check="amanda-server anon-proxy apache2-common apache-ssl"
+            check="$check apf-firewall asterisk bacula-director-common"
+            check="$check bacula-fd bacula-sd bind9 bip boinc-client"
+            check="$check boxbackup-client boxbackup-server bozo cfengine2"
+            check="$check cfengine3 citadel-server clamav-daemon clamav-freshclam"
+            check="$check clamcour collectd-core conserver-server courier-imap-ssl"
+            check="$check courier-mta-ssl courier-pop-ssl cyrus21-imapd"
+            check="$check cyrus21-pop3d cyrus-common cyrus-imspd dovecot-core"
+            check="$check ejabberd exim4 fetchmail freeradius ftpd-ssl gatling"
+            check="$check globus-gatekeeper inn inn2 libapache-mod-ssl lighttpd lldpd"
+            check="$check lwresd monit myproxy-server nagios-nrpe-server nginx-common"
+            check="$check ntp openntpd openssh-server openvpn partimage-server"
+            check="$check postfix postgresql-7.4 postgresql-8.0 postgresql-8.1"
+            check="$check postgresql-8.2 postgresql-9.1 postgresql-9.2 postgresql-9.3"
+            check="$check proftpd proftpd-ldap"
+            check="$check proftpd-mysql proftpd-pgsql racoon sendmail slapd"
+            check="$check spamassassin ssh-nonfree stunnel4 syslog-ng tor unbound"
+            check="$check vsftpd"
+            # Only get the ones that are installed, and configured
+            check=$(dpkg -s $check 2> /dev/null | egrep '^Package:|^Status:' | awk '{if ($1 ~ /^Package:/) { package=$2 } else if ($0 ~ /^Status: .* installed$/) { print package }}')
+            # init script rewrites
+            check=$(echo $check | sed "
+                    # apache2 ships its init script in apache2-common, but the
+                    # script is apache2
+                    s/apache2-common/apache2/g;
+                    # For mod-ssl apache has to be restarted
+                    s/libapache-mod-ssl/apache/g;
+                    # The name of proftpd-{ldap,mysql,pgsql} init script is
+                    # same as "proftpd".
+                    s/proftpd-.*/proftpd/g;
+                    # dovecot-core ships its init script, but the
+                    # script name is dovecot for dovecot-{imapd,pop3d}.
+                    s/dovecot-core/dovecot/g;
+                    # openssh-server's init script it called ssh
+                    s/openssh-server/ssh/g;
+                    # bacula-director-common's init is bacula-director
+                    s/bacula-director-common/bacula-director/g;
+                    # citadel server
+                    s/citadel-server/citadel/g;
+                    # collectd
+                    s/collectd-core/collectd/g;
+                    # cyrus
+                    s/cyrus-common/cyrus-imapd/g;
+                    # nginx
+                    s/nginx-common/nginx/g;
+              ")
+            echo "done."
 
 	    echo "Checking init scripts..."
 	    for service in $check; do
