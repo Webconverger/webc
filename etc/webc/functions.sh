@@ -53,6 +53,14 @@ mac_address()
 
 
 usb_serials() {
+
+USBID_override=$(cmdline_get USBID_override)
+if test "$USBID_override"
+then
+	echo "$USBID_override"
+	return
+fi
+
 for i in /sys/bus/usb/devices/*/serial
 do
 	for j in $(dirname $i)/*/host*/target*/*/block/sd*
