@@ -27,4 +27,15 @@ function installButton(toolbarId, id) {
 	window.addEventListener("load", startup, false);
 	window.addEventListener("unload", shutdown, false);
 })();
+// Disable shift click from opening window
+// Fixes https://github.com/Webconverger/webconverger-addon/issues/18
+var ffWhereToOpenLink = whereToOpenLink;
+
+whereToOpenLink = function(e, ignoreButton, ignoreAlt) {
+	var where = ffWhereToOpenLink(e, ignoreButton, ignoreAlt);
+	if (where == "window") {
+		where = "tab";
+	}
+	return where;
+}
 
