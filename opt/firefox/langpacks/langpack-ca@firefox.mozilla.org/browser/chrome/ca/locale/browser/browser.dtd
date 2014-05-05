@@ -14,6 +14,9 @@
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Navegació privada)">
+
+<!ENTITY appmenu.tooltip                     "Obre el menú">
+<!ENTITY navbarOverflow.label                "Més eines...">
 <!-- Tab context menu -->
 
 <!ENTITY  reloadTab.label                    "Torna a carregar la pestanya">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Pestanya nova">
 <!ENTITY tabCmd.accesskey "t">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Obre una ubicació…">
-<!ENTITY openLocationCmd.accesskey "a">
 <!ENTITY openFileCmd.label "Obre un fitxer…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Mostra totes les pestanyes">
 <!ENTITY showAllTabsCmd.accesskey "a">
 
+<!ENTITY fxaSignIn.label "Inicia la sessió a &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Torna a connectar a &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel.heading "El &brandShortName; està sincronitzant">
+<!ENTITY syncStartPanel.subTitle "Podeu gestionar el &syncBrand.shortName.label; a les Opcions.">
+<!ENTITY syncStartPanel.subTitleUnix "Podeu gestionar el &syncBrand.shortName.label; a les Preferències.">
+<!ENTITY syncErrorPanel.heading "No s'ha pogut connectar al &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Inicieu la sessió per reprendre la sincronització.">
+<!ENTITY syncErrorPanel.signInButton.label "Inicia la sessió">
+<!ENTITY syncErrorPanel.signInButton.accesskey "I">
+
+
 <!ENTITY fullScreenMinimize.tooltip "Minimitza">
 <!ENTITY fullScreenRestore.tooltip "Restaura">
 <!ENTITY fullScreenClose.tooltip "Tanca">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Adreces d'interès">
 <!ENTITY bookmarksMenu.accesskey "r">
 <!ENTITY bookmarkThisPageCmd.label "Afegeix a les adreces d'interès">
+<!ENTITY editThisBookmarkCmd.label "Edita aquesta adreça d'interès">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Comparteix aquesta pàgina">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "s">
 <!ENTITY shareVideoCmd.label "Comparteix aquest vídeo">
 <!ENTITY shareVideoCmd.accesskey "v">
+<!ENTITY feedsMenu.label "Subscriu-m'hi">
 <!ENTITY subscribeToPageMenupopup.label "Subscriu-me a la pàgina">
 <!ENTITY subscribeToPageMenuitem.label "Subscriu-me a la pàgina…">
 <!ENTITY addCurPagesCmd.label "Afegeix-hi totes les pestanyes…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Imprimeix">
 <!ENTITY printButton.tooltip          "Imprimeix aquesta pàgina">
 
-<!ENTITY backForwardItem.title        "Enrere/Endavant">
 <!ENTITY locationItem.title           "Ubicació">
 <!ENTITY searchItem.title             "Cerca">
-<!ENTITY bookmarksItem.title          "Adreces d'interès">
 <!-- Toolbar items --> 
 
 <!ENTITY homeButton.label             "Inici">
 
 <!ENTITY tabGroupsButton.label        "Grups de pestanyes">
-<!ENTITY tabGroupsButton.tooltip      "Agrupa les pestanyes">
 
 <!ENTITY bookmarksButton.label          "Adreces d'interès">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Adreces d'interès">
-<!ENTITY bookmarksMenuButton.tooltip        "Mostra les vostres adreces d'interès">
 <!ENTITY bookmarksMenuButton.unsorted.label "Adreces d'interès desordenades">
-<!ENTITY viewBookmarksSidebar.label         "Mostra en la barra lateral">
+<!ENTITY viewBookmarksSidebar2.label        "Mostra la barra lateral de les adreces d'interès">
 <!ENTITY viewBookmarksToolbar.label         "Mostra la barra de les adreces d'interès">
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
@@ -322,9 +332,38 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Personalitza">
+<!ENTITY appMenuCustomize.tooltip "Personalitza el menú i les barres d'eines">
+<!ENTITY appMenuCustomizeExit.label "Surt de la personalització">
+<!ENTITY appMenuCustomizeExit.tooltip "Acaba la personalització">
+<!ENTITY appMenuHistory.label "Historial">
+<!ENTITY appMenuHistory.showAll.label "Mostra tot l'historial">
+<!ENTITY appMenuHistory.clearRecent.label "Neteja l'historial recent…">
+<!ENTITY appMenuHistory.restoreSession.label "Restaura la sessió anterior">
+<!ENTITY appMenuHistory.viewSidebar.label "Mostra la barra lateral de l'historial">
+<!ENTITY appMenuHelp.tooltip "Obre el menú d'ajuda">
+
+<!ENTITY customizeMenu.addToToolbar.label "Afegeix a la barra d'eines">
+<!ENTITY customizeMenu.addToToolbar.accesskey "A">
+<!ENTITY customizeMenu.addToPanel.label "Afegeix al menú">
+<!ENTITY customizeMenu.addToPanel.accesskey "m">
+<!ENTITY customizeMenu.moveToToolbar.label "Mou a la barra d'eines">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "o">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Mou al menú">
+<!ENTITY customizeMenu.moveToPanel.accesskey "o">
+<!ENTITY customizeMenu.removeFromToolbar.label "Elimina de la barra d'eines">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "E">
+<!ENTITY customizeMenu.removeFromMenu.label "Elimina del menú">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "E">
+<!ENTITY customizeMenu.addMoreItems.label "Afegeix més elements…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "A">
 
 <!ENTITY openCmd.commandkey           "l">
-<!ENTITY urlbar.placeholder2          "Cerqueu o escriviu una adreça">
+<!ENTITY urlbar.placeholder2          "Escriviu una cerca o adreça">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Canvia a la pestanya:">
 <!-- 
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Envia l'enllaç per correu…">
 <!ENTITY emailPageCmd.accesskey       "E">
 <!ENTITY switchToMetroCmd.label       "Reinicia el &brandShortName; amb l'estil del Windows 8">
-<!ENTITY switchToMetroCmd2.label      "Reinicia el &brandShortName; pel Windows 8 tàctil">
 <!ENTITY savePageCmd.label            "Anomena i desa la pàgina…">
 <!ENTITY savePageCmd.accesskey        "s">
 <!-- alternate for content area context menu -->
@@ -533,6 +571,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "Surt"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "u">
+<!ENTITY quitApplicationCmdWin.tooltip     "Surt del &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Surt"> 
@@ -624,7 +663,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Sincronització">
 
 <!ENTITY socialToolbar.title        "Botó de barra social">
-<!ENTITY social.notLoggedIn.label   "No s'ha iniciat la sessió">
 
 <!ENTITY social.ok.label       "D'acord">
 <!ENTITY social.ok.accesskey   "o">
@@ -643,6 +681,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Més informació…">
 <!ENTITY social.learnMore.accesskey "M">
 <!ENTITY social.closeNotificationItem.label "Ara no">
+
+
+
+<!ENTITY customizeMode.tabTitle "Personalitza el &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Menú i barres d'eines">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Eines i funcions addicionals">
+<!ENTITY customizeMode.menuAndToolbars.empty "Voleu més eines?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Trieu-les d'entre els milers de complements">
+<!ENTITY customizeMode.restoreDefaults "Restaura els valors per defecte">
+<!ENTITY customizeMode.toolbars "Mostra/amaga les barres d'eines">
+<!ENTITY customizeMode.titlebar "Barra de títol">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Focus del xat">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.message "S'està intentant mostrar aquesta pàgina web, però no respon.">
 <!ENTITY tabCrashed.checkSendReport "Notifiqueu la fallada a &vendorShortName; per intentar solucionar-la">
 <!ENTITY tabCrashed.tryAgain "Torna-ho a provar">
+
+<!ENTITY uiTour.infoPanel.close "Tanca">
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -720,4 +771,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Controls del zoom">
 <!ENTITY addonBarCloseButton.tooltip   "Tanca la barra de complements">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Enrere/Endavant">
+<!ENTITY viewBookmarksSidebar.label    "Mostra en la barra lateral">
+<!ENTITY bookmarksItem.title           "Adreces d'interès">
+<!ENTITY openLocationCmd.label         "Obre una ubicació…">
+<!ENTITY openLocationCmd.accesskey     "a">
+<!ENTITY bookmarksMenuButton.tooltip   "Mostra les vostres adreces d'interès">
+<!ENTITY switchToMetroCmd2.label       "Reinicia el &brandShortName; per al Windows 8 tàctil">
+<!ENTITY tabGroupsButton.tooltip       "Agrupa les pestanyes">
 <!-- end of strings to be removed post-Australis -->

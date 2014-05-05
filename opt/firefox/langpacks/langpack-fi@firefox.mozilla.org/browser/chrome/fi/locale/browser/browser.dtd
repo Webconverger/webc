@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Yksityinen selaus)">
 
+<!ENTITY appmenu.tooltip                     "Avaa valikko">
+<!ENTITY navbarOverflow.label                "Lisää työkaluja…">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "Päivitä välilehti">
 <!ENTITY  reloadTab.accesskey                "P">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label  "Uusi välilehti">
 <!ENTITY tabCmd.accesskey  "v">
 <!ENTITY tabCmd.commandkey  "t">
-<!ENTITY openLocationCmd.label  "Avaa sijainti…">
-<!ENTITY openLocationCmd.accesskey  "A">
 <!ENTITY openFileCmd.label  "Avaa tiedosto…">
 <!ENTITY openFileCmd.accesskey  "d">
 <!ENTITY openFileCmd.commandkey  "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Näytä kaikki välilehdet">
 <!ENTITY showAllTabsCmd.accesskey "N">
 
+<!ENTITY fxaSignIn.label "Kirjaudu sisään &syncBrand.shortName.label;-palveluun">
+<!ENTITY fxaSignInError.label "Palauta yhteys &syncBrand.shortName.label;-palveluun">
+<!ENTITY syncStartPanel.heading "&brandShortName; synkroinoi tietoja">
+<!ENTITY syncStartPanel.subTitle "Hallinnoi &syncBrand.shortName.label;-palvelua asetuksista.">
+<!ENTITY syncStartPanel.subTitleUnix "Hallinnoi &syncBrand.shortName.label; -palvelua asetuksista.">
+<!ENTITY syncErrorPanel.heading "Yhteyden muodostaminen &syncBrand.shortName.label;-palveluun epäonnistui">
+<!ENTITY syncErrorPanel.subTitle "Kirjaudu sisään jatkaaksesi synkronointia.">
+<!ENTITY syncErrorPanel.signInButton.label "Kirjaudu sisään">
+<!ENTITY syncErrorPanel.signInButton.accesskey "K">
+
+
 <!ENTITY fullScreenMinimize.tooltip  "Pienennä ikkuna">
 <!ENTITY fullScreenRestore.tooltip  "Palauta">
 <!ENTITY fullScreenClose.tooltip  "Sulje">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label  "Kirjanmerkit">
 <!ENTITY bookmarksMenu.accesskey  "K">
 <!ENTITY bookmarkThisPageCmd.label "Lisää sivu kirjanmerkkeihin">
+<!ENTITY editThisBookmarkCmd.label "Muokkaa kirjanmerkkiä">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Jaa sivu">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "a">
 <!ENTITY shareVideoCmd.label "Jaa video">
 <!ENTITY shareVideoCmd.accesskey "v">
+<!ENTITY feedsMenu.label "Tilaa">
 <!ENTITY subscribeToPageMenupopup.label "Tilaa sivu">
 <!ENTITY subscribeToPageMenuitem.label "Tilaa sivu…">
 <!ENTITY addCurPagesCmd.label "Lisää välilehdet kirjanmerkkeihin…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label             "Tulosta">
 <!ENTITY printButton.tooltip           "Tulosta sivu">
 
-<!ENTITY backForwardItem.title        "Edellinen/Seuraava">
 <!ENTITY locationItem.title            "Osoite">
 <!ENTITY searchItem.title              "Etsi">
-<!ENTITY bookmarksItem.title           "Kirjanmerkit">
 
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label             "Aloitussivu">
 
 <!ENTITY tabGroupsButton.label        "Välilehtiryhmät">
-<!ENTITY tabGroupsButton.tooltip      "Ryhmittele välilehtesi">
 
 <!ENTITY bookmarksButton.label           "Kirjanmerkit">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Kirjanmerkit">
-<!ENTITY bookmarksMenuButton.tooltip        "Näytä kirjanmerkit">
 <!ENTITY bookmarksMenuButton.unsorted.label "Järjestelemättömät kirjanmerkit">
-<!ENTITY viewBookmarksSidebar.label         "Avaa sivupalkkiin">
+<!ENTITY viewBookmarksSidebar2.label        "Näytä kirjanmerkkien sivupaneeli">
 <!ENTITY viewBookmarksToolbar.label         "Näytä kirjanmerkkipalkki">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Muokkaa">
+<!ENTITY appMenuCustomize.tooltip "Muokkaa valikkoa ja työkalupalkkeja">
+<!ENTITY appMenuCustomizeExit.label "Lopeta muokkaus">
+<!ENTITY appMenuCustomizeExit.tooltip "Lopeta muokkaus">
+<!ENTITY appMenuHistory.label "Sivuhistoria">
+<!ENTITY appMenuHistory.showAll.label "Näytä täydellinen sivuhistoria">
+<!ENTITY appMenuHistory.clearRecent.label "Poista viimeaikaisia historiatietoja…">
+<!ENTITY appMenuHistory.restoreSession.label "Palauta edellinen istunto">
+<!ENTITY appMenuHistory.viewSidebar.label "Näytä sivuhistoriapaneeli">
+<!ENTITY appMenuHelp.tooltip "Avaa ohjevalikko">
+
+<!ENTITY customizeMenu.addToToolbar.label "Lisää työkalupalkkiin">
+<!ENTITY customizeMenu.addToToolbar.accesskey "L">
+<!ENTITY customizeMenu.addToPanel.label "Lisää valikkoon">
+<!ENTITY customizeMenu.addToPanel.accesskey "v">
+<!ENTITY customizeMenu.moveToToolbar.label "Siirrä työkalupalkkiin">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "S">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Siirrä valikkoon">
+<!ENTITY customizeMenu.moveToPanel.accesskey "a">
+<!ENTITY customizeMenu.removeFromToolbar.label "Poista työkalupalkista">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "P">
+<!ENTITY customizeMenu.removeFromMenu.label "Poista valikosta">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "o">
+<!ENTITY customizeMenu.addMoreItems.label "Lisää toimintoja…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "t">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Kirjoita osoite tai hakutermi">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Lähetä linkki…">
 <!ENTITY emailPageCmd.accesskey       "L">
 <!ENTITY switchToMetroCmd.label       "Käynnistä &brandShortName; uudestaan Windows 8 -tyylisenä">
-<!ENTITY switchToMetroCmd2.label      "Käynnistä &brandShortName; uudestaan kosketuskäyttöversiona">
 <!ENTITY savePageCmd.label             "Tallenna sivu nimellä…">
 <!ENTITY savePageCmd.accesskey         "n">
 <!-- alternate for content area context menu -->
@@ -530,13 +568,14 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY fullScreenButton.tooltip       "Suurenna ikkunan koko ruudun kokoiseksi">
 
-<!ENTITY quitApplicationCmdWin.label        "Lopeta">
-<!ENTITY quitApplicationCmdWin.accesskey    "L">
+<!ENTITY quitApplicationCmdWin.label        "Sulje">
+<!ENTITY quitApplicationCmdWin.accesskey    "S">
+<!ENTITY quitApplicationCmdWin.tooltip     "Sulje &brandShortName;">
 <!ENTITY goBackCmd.commandKey  "Ö">
 <!ENTITY goForwardCmd.commandKey  "Ä">
-<!ENTITY quitApplicationCmd.label        "Lopeta">
-<!ENTITY quitApplicationCmd.accesskey    "L">
-<!ENTITY quitApplicationCmdMac.label    "Lopeta &brandShortName;">
+<!ENTITY quitApplicationCmd.label        "Sulje">
+<!ENTITY quitApplicationCmd.accesskey    "S">
+<!ENTITY quitApplicationCmdMac.label    "Sulje &brandShortName;">
 <!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
 <!ENTITY quitApplicationCmdUnix.key     "Q">
 
@@ -614,7 +653,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!-- LOCALIZATION NOTE (syncTabsMenu2.label): This appears in the history menu -->
 <!ENTITY syncTabsMenu2.label     "Välilehdet muissa laitteissa">
 
-<!ENTITY syncBrand.shortName.label    "Sync-palvelu">
+<!ENTITY syncBrand.shortName.label    "Sync">
 
 <!ENTITY syncSetup.label              "Määritä &syncBrand.shortName.label;n asetukset…">
 <!ENTITY syncSetup.accesskey          "M">
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Synkronoi">
 
 <!ENTITY socialToolbar.title        "Yhteisötyökalujen painike">
-<!ENTITY social.notLoggedIn.label   "Ei kirjauduttu sisään">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -642,6 +680,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Lue lisää…">
 <!ENTITY social.learnMore.accesskey "L">
 <!ENTITY social.closeNotificationItem.label "Ei nyt">
+
+
+
+<!ENTITY customizeMode.tabTitle "Muokkaa &brandShortName;ia">
+<!ENTITY customizeMode.menuAndToolbars.label "Valikko ja työkalupalkki">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Lisää työkaluja ja ominaisuuksia">
+<!ENTITY customizeMode.menuAndToolbars.empty "Haluatko muita työkaluja?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Valitse tuhansista lisäosista">
+<!ENTITY customizeMode.restoreDefaults "Palauta oletukset">
+<!ENTITY customizeMode.toolbars "Näytä / Piilota työkalupalkkeja">
+<!ENTITY customizeMode.titlebar "Otsikkopalkki">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Keskustelut">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport "Lähetä &vendorShortName;lle kaatumisilmoitus, jotta ongelma voidaan korjata.">
 <!ENTITY tabCrashed.tryAgain "Yritä uudestaan">
 
+<!ENTITY uiTour.infoPanel.close "Sulje">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -719,5 +770,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Suurennuksen säädöt">
 <!ENTITY addonBarCloseButton.tooltip   "Sulje lisäosapalkki">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Edellinen/Seuraava">
+<!ENTITY viewBookmarksSidebar.label    "Näytä sivupaneelissa">
+<!ENTITY bookmarksItem.title           "Kirjanmerkit">
+<!ENTITY openLocationCmd.label         "Avaa sijainti…">
+<!ENTITY openLocationCmd.accesskey     "s">
+<!ENTITY bookmarksMenuButton.tooltip   "Näytä kirjanmerkit">
+<!ENTITY switchToMetroCmd2.label       "Relaunch in &brandShortName; for Windows 8 Touch">
+<!ENTITY tabGroupsButton.tooltip       "Ryhmittele välilehtesi">
 <!-- end of strings to be removed post-Australis -->
 

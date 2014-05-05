@@ -14,6 +14,8 @@
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Einkavöfrun)">
+<!ENTITY appmenu.tooltip "Opna valmynd">
+<!ENTITY navbarOverflow.label "Fleiri verkfæri…">
 <!-- Tab context menu -->
 <!ENTITY reloadTab.label "Endurnýja flipa">
 <!ENTITY reloadTab.accesskey "r">
@@ -50,8 +52,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Nýr flipi">
 <!ENTITY tabCmd.accesskey "f">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Opna tengil…">
-<!ENTITY openLocationCmd.accesskey "t">
 <!ENTITY openFileCmd.label "Opna skrá…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
@@ -87,6 +87,15 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenCmd.macCommandKey "f">
 <!ENTITY showAllTabsCmd.label "Sýna alla flipa">
 <!ENTITY showAllTabsCmd.accesskey "A">
+<!ENTITY fxaSignIn.label "Skráðu þig inn í &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Endurtengjast við &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel.heading "&brandShortName; er að samstilla">
+<!ENTITY syncStartPanel.subTitle "Þú getur sýslað með &syncBrand.shortName.label; í valkostum.">
+<!ENTITY syncStartPanel.subTitleUnix "Þú getur sýslað með &syncBrand.shortName.label; í valkostum.">
+<!ENTITY syncErrorPanel.heading "Get ekki tengst við &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Skráðu þig inn til að halda áfram samstillingu.">
+<!ENTITY syncErrorPanel.signInButton.label "Innskráning">
+<!ENTITY syncErrorPanel.signInButton.accesskey "s">
 <!ENTITY fullScreenMinimize.tooltip "Minnka">
 <!ENTITY fullScreenRestore.tooltip "Endurheimta">
 <!ENTITY fullScreenClose.tooltip "Loka">
@@ -104,6 +113,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Bókamerki">
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "Setja síðu í bókamerki">
+<!ENTITY editThisBookmarkCmd.label "Breyta bókamerki">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Deila þessari síðu">
@@ -117,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "v">
 <!ENTITY shareVideoCmd.label "Deila þessu myndbandi">
 <!ENTITY shareVideoCmd.accesskey "s">
+<!ENTITY feedsMenu.label "Gerast áskrifandi">
 <!ENTITY subscribeToPageMenupopup.label "Gerast áskrifandi að þessari síðu">
 <!ENTITY subscribeToPageMenuitem.label "Gerast áskrifandi að þessari síðu…">
 <!ENTITY addCurPagesCmd.label "Setja flipa í bókamerki…">
@@ -141,20 +152,16 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY goEndCap.tooltip "Hoppa á tengilinn sem er í staðsetningarslánni">
 <!ENTITY printButton.label "Prenta">
 <!ENTITY printButton.tooltip "Prenta síðu">
-<!ENTITY backForwardItem.title "Til baka/Áfram">
 <!ENTITY locationItem.title "Staðsetning">
 <!ENTITY searchItem.title "Leita">
-<!ENTITY bookmarksItem.title "Bókamerki">
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label "Heim">
 <!ENTITY tabGroupsButton.label "Flipahópar">
-<!ENTITY tabGroupsButton.tooltip "Setja flipa í hópa">
 <!ENTITY bookmarksButton.label "Bókamerki">
 <!ENTITY bookmarksCmd.commandkey "b">
 <!ENTITY bookmarksMenuButton.label "Bókamerki">
-<!ENTITY bookmarksMenuButton.tooltip "Birta bókamerkin þín">
 <!ENTITY bookmarksMenuButton.unsorted.label "Óröðuð bókamerki">
-<!ENTITY viewBookmarksSidebar.label "Sýna í hliðslá">
+<!ENTITY viewBookmarksSidebar2.label "Birta bókamerki í hliðslá">
 <!ENTITY viewBookmarksToolbar.label "Skoða bókamerkjaslá">
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
@@ -312,6 +319,34 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd2.label "Skoða alla ferla">
 <!ENTITY showAllHistoryCmd.commandkey "H">
 <!ENTITY appMenuCustomize.label "Sérsníða">
+<!ENTITY appMenuCustomize.tooltip "Sérsníða valmynd og tækjaslár">
+<!ENTITY appMenuCustomizeExit.label "Hætta að sérsníða">
+<!ENTITY appMenuCustomizeExit.tooltip "Klára að sérsníða">
+<!ENTITY appMenuHistory.label "Ferill">
+<!ENTITY appMenuHistory.showAll.label "Skoða alla ferla">
+<!ENTITY appMenuHistory.clearRecent.label "Hreinsa nýlega ferla…">
+<!ENTITY appMenuHistory.restoreSession.label "Sækja fyrri vafralotu">
+<!ENTITY appMenuHistory.viewSidebar.label "Birta feril í hliðslá">
+<!ENTITY appMenuHelp.tooltip "Opna hjálparvalmynd">
+<!ENTITY customizeMenu.addToToolbar.label "Bæta við í tækjaslá">
+<!ENTITY customizeMenu.addToToolbar.accesskey "a">
+<!ENTITY customizeMenu.addToPanel.label "Bæta við valmynd">
+<!ENTITY customizeMenu.addToPanel.accesskey "m">
+<!ENTITY customizeMenu.moveToToolbar.label "Færa yfir á verkfæraslá">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "F">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Færa yfir á valmynd">
+<!ENTITY customizeMenu.moveToPanel.accesskey "F">
+<!ENTITY customizeMenu.removeFromToolbar.label "Fjarlægja frá verkfæraslá">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "r">
+<!ENTITY customizeMenu.removeFromMenu.label "Fjarlægja frá valmynd">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "r">
+<!ENTITY customizeMenu.addMoreItems.label "Bæta við fleiri hlutum…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "a">
 <!ENTITY openCmd.commandkey "l">
 <!ENTITY urlbar.placeholder2 "Leita eða sláðu inn veffang">
 <!ENTITY urlbar.accesskey "d">
@@ -393,7 +428,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label "Senda tengil…">
 <!ENTITY emailPageCmd.accesskey "e">
 <!ENTITY switchToMetroCmd.label "Endurkeyra með &brandShortName; Windows 8 þema">
-<!ENTITY switchToMetroCmd2.label "Endurræsa í &brandShortName; fyrir Windows 8 Touch">
 <!ENTITY savePageCmd.label "Vista síðu sem…">
 <!ENTITY savePageCmd.accesskey "V">
 <!-- alternate for content area context menu -->
@@ -513,6 +547,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY quitApplicationCmdWin.label "Hætta">
  
 <!ENTITY quitApplicationCmdWin.accesskey "H">
+<!ENTITY quitApplicationCmdWin.tooltip "Hætta í &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label "Hætta">
@@ -590,7 +625,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncSyncNowItem.accesskey "S">
 <!ENTITY syncToolbarButton.label "Sync">
 <!ENTITY socialToolbar.title "Samfélags tækjaslá hnappur">
-<!ENTITY social.notLoggedIn.label "Ekki innskráður">
 <!ENTITY social.ok.label "Í lagi">
 <!ENTITY social.ok.accesskey "O">
 <!ENTITY social.toggleSidebar.label "Sýna hliðarslá">
@@ -604,6 +638,14 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Fræðast meira…">
 <!ENTITY social.learnMore.accesskey "F">
 <!ENTITY social.closeNotificationItem.label "Ekki núna">
+<!ENTITY customizeMode.tabTitle "Sérsníða &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Valmynd og tækjaslár">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Viðbótar verkfæri og eiginleikar">
+<!ENTITY customizeMode.menuAndToolbars.empty "Viltu fleiri verkfæri?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Veldu viðbætur í þúsundatali">
+<!ENTITY customizeMode.restoreDefaults "Endurstilla sjálfgefin gildi">
+<!ENTITY customizeMode.toolbars "Sýna / Fela verkfæraslár">
+<!ENTITY customizeMode.titlebar "Titilstika">
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Sýna spjall">
 <!ENTITY social.chatBar.accesskey "p">
@@ -636,6 +678,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.message "Já, þetta er vandræðalegt. Reynt var að birta vefsíðuna, en hún svarar ekki.">
 <!ENTITY tabCrashed.checkSendReport "Láttu &vendorShortName; vita um af þessu hruni þannig að hann geti lagað það.">
 <!ENTITY tabCrashed.tryAgain "Reyna aftur">
+<!ENTITY uiTour.infoPanel.close "Loka">
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -670,5 +713,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label "Aðdráttar stýringar">
 <!ENTITY addonBarCloseButton.tooltip "Loka viðbótarslá">
 <!ENTITY toggleAddonBarCmd.key "/">
+<!ENTITY backForwardItem.title "Til baka/Áfram">
+<!ENTITY viewBookmarksSidebar.label "Sýna í hliðslá">
+<!ENTITY bookmarksItem.title "Bókamerki">
+<!ENTITY openLocationCmd.label "Opna tengil…">
+<!ENTITY openLocationCmd.accesskey "t">
+<!ENTITY bookmarksMenuButton.tooltip "Birta bókamerkin þín">
+<!ENTITY switchToMetroCmd2.label "Endurræsa í &brandShortName; fyrir Windows 8 Touch">
+<!ENTITY tabGroupsButton.tooltip "Setja flipa í hópa">
 <!-- end of strings to be removed post-Australis -->
 

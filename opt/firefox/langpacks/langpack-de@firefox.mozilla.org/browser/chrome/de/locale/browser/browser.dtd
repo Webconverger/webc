@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privater Modus)">
 
+<!ENTITY appmenu.tooltip                     "Menü öffnen">
+<!ENTITY navbarOverflow.label                "Mehr Werkzeuge…">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label        			"Tab neu laden">
 <!ENTITY  reloadTab.accesskey         		"d">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Neuer Tab">
 <!ENTITY tabCmd.accesskey "T">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Adresse öffnen…">
-<!ENTITY openLocationCmd.accesskey "A">
 <!ENTITY openFileCmd.label "Datei öffnen…">
 <!ENTITY openFileCmd.accesskey "f">
 <!ENTITY openFileCmd.commandkey "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Alle Tabs anzeigen">
 <!ENTITY showAllTabsCmd.accesskey "z">
 
+<!ENTITY fxaSignIn.label "Bei &syncBrand.shortName.label; anmelden">
+<!ENTITY fxaSignInError.label "Mit &syncBrand.shortName.label; neu verbinden">
+<!ENTITY syncStartPanel.heading "&brandShortName; synchronisiert jetzt.">
+<!ENTITY syncStartPanel.subTitle "&syncBrand.shortName.label; kann in den Einstellungen verwaltet werden.">
+<!ENTITY syncStartPanel.subTitleUnix "&syncBrand.shortName.label; kann in den Einstellungen verwaltet werden.">
+<!ENTITY syncErrorPanel.heading "Es konnte keine Verbindung mit &syncBrand.shortName.label; hergestellt werden.">
+<!ENTITY syncErrorPanel.subTitle "Bitte anmelden, um mit der Synchronisation fortzufahren.">
+<!ENTITY syncErrorPanel.signInButton.label "Anmelden">
+<!ENTITY syncErrorPanel.signInButton.accesskey "A">
+
+
 <!ENTITY fullScreenMinimize.tooltip "Minimieren">
 <!ENTITY fullScreenRestore.tooltip "Wiederherstellen">
 <!ENTITY fullScreenClose.tooltip "Schließen">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Lesezeichen">
 <!ENTITY bookmarksMenu.accesskey "L">
 <!ENTITY bookmarkThisPageCmd.label "Lesezeichen hinzufügen">
+<!ENTITY editThisBookmarkCmd.label "Lesezeichen bearbeiten">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Seite teilen">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "t">
 <!ENTITY shareVideoCmd.label "Video teilen">
 <!ENTITY shareVideoCmd.accesskey "e">
+<!ENTITY feedsMenu.label "Abonnieren">
 <!ENTITY subscribeToPageMenupopup.label "Diese Seite abonnieren">
 <!ENTITY subscribeToPageMenuitem.label "Diese Seite abonnieren…">
 <!ENTITY addCurPagesCmd.label "Lesezeichen für alle Tabs hinzufügen…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Drucken">
 <!ENTITY printButton.tooltip          "Diese Seite drucken">
 
-<!ENTITY backForwardItem.title        "Zurück/Vorwärts">
 <!ENTITY locationItem.title           "Adresse">
 <!ENTITY searchItem.title             "Suchen">
-<!ENTITY bookmarksItem.title          "Lesezeichen">
 
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label             "Startseite">
 
 <!ENTITY tabGroupsButton.label         "Tab-Gruppen">
-<!ENTITY tabGroupsButton.tooltip       "Tabs gruppieren">
 
 <!ENTITY bookmarksButton.label          "Lesezeichen">
 <!ENTITY bookmarksCmd.commandkey "B">
 
 <!ENTITY bookmarksMenuButton.label          "Lesezeichen">
-<!ENTITY bookmarksMenuButton.tooltip        "Lesezeichen anzeigen">
 <!ENTITY bookmarksMenuButton.unsorted.label "Unsortierte Lesezeichen">
-<!ENTITY viewBookmarksSidebar.label         "In der Sidebar anzeigen">
+<!ENTITY viewBookmarksSidebar2.label        "Lesezeichen-Sidebar anzeigen">
 <!ENTITY viewBookmarksToolbar.label         "Lesezeichen-Symbolleiste anzeigen">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -262,7 +272,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY fileMenu.label         "Datei"> 
 <!ENTITY fileMenu.accesskey       "D">
-<!ENTITY newNavigatorCmd.label        "Neues Fenster">
+<!ENTITY newNavigatorCmd.label        "&#xad;Neues Fenster">
 <!ENTITY newNavigatorCmd.key        "N">
 <!ENTITY newNavigatorCmd.accesskey      "N">
 <!ENTITY newPrivateWindow.label     "Neues privates Fenster">
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Anpassen">
+<!ENTITY appMenuCustomize.tooltip "Das Menü und die Symbolleisten anpassen">
+<!ENTITY appMenuCustomizeExit.label "Anpassung abschließen">
+<!ENTITY appMenuCustomizeExit.tooltip "Anpassung abschließen">
+<!ENTITY appMenuHistory.label "Chronik">
+<!ENTITY appMenuHistory.showAll.label "Gesamte Chronik anzeigen">
+<!ENTITY appMenuHistory.clearRecent.label "Neueste Chronik löschen…">
+<!ENTITY appMenuHistory.restoreSession.label "Vorherige Sitzung wiederherstellen">
+<!ENTITY appMenuHistory.viewSidebar.label "Chronik-Sidebar öffnen">
+<!ENTITY appMenuHelp.tooltip "Menü &quot;Hilfe&quot; öffnen">
+
+<!ENTITY customizeMenu.addToToolbar.label "Zu Symbolleiste hinzufügen">
+<!ENTITY customizeMenu.addToToolbar.accesskey "S">
+<!ENTITY customizeMenu.addToPanel.label "Zu Menü hinzufügen">
+<!ENTITY customizeMenu.addToPanel.accesskey "M">
+<!ENTITY customizeMenu.moveToToolbar.label "In Symbolleiste verschieben">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "v">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "In Menü verschieben">
+<!ENTITY customizeMenu.moveToPanel.accesskey "v">
+<!ENTITY customizeMenu.removeFromToolbar.label "Aus Symbolleiste entfernen">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "e">
+<!ENTITY customizeMenu.removeFromMenu.label "Aus Menü entfernen">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "e">
+<!ENTITY customizeMenu.addMoreItems.label "Mehr Einträge hinzufügen…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "E">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Suche oder Adresse eingeben">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Link per E-Mail senden…">
 <!ENTITY emailPageCmd.accesskey       "s">
 <!ENTITY switchToMetroCmd.label       "&brandShortName; im Windows-8-Stil neu starten">
-<!ENTITY switchToMetroCmd2.label      "Als &brandShortName; für Windows 8 Touch neu starten">
 <!ENTITY savePageCmd.label            "Seite speichern unter…">
 <!ENTITY savePageCmd.accesskey        "u">
 <!-- alternate for content area context menu -->
@@ -532,6 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "Beenden"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "B">
+<!ENTITY quitApplicationCmdWin.tooltip     "&brandShortName; beenden">
 <!ENTITY goBackCmd.commandKey "Ö">
 <!ENTITY goForwardCmd.commandKey "Ä">
 <!ENTITY quitApplicationCmd.label       "Beenden"> 
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Synchronisieren">
 
 <!ENTITY socialToolbar.title        "Soziale-Netzwerke-Symbolleiste">
-<!ENTITY social.notLoggedIn.label   "Nicht angemeldet">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -642,6 +680,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Weitere Informationen…">
 <!ENTITY social.learnMore.accesskey "W">
 <!ENTITY social.closeNotificationItem.label "Nicht jetzt">
+
+
+
+<!ENTITY customizeMode.tabTitle "&brandShortName; anpassen">
+<!ENTITY customizeMode.menuAndToolbars.label "Menü und Symbolleisten">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Weitere Werkzeuge und Funktionen">
+<!ENTITY customizeMode.menuAndToolbars.empty "Wollen Sie mehr Werkzeuge?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Wählen Sie aus Tausenden von Add-ons.">
+<!ENTITY customizeMode.restoreDefaults "Standard wiederherstellen">
+<!ENTITY customizeMode.toolbars "Symbolleisten ein-/ausblenden">
+<!ENTITY customizeMode.titlebar "Titelleiste">
 
 <!ENTITY social.chatBar.commandkey "C">
 <!ENTITY social.chatBar.label "Chats fokussieren">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport "Absturzbericht an &vendorShortName; senden, sodass das Problem behoben werden kann">
 <!ENTITY tabCrashed.tryAgain "Erneut versuchen">
 
+<!ENTITY uiTour.infoPanel.close "Schließen">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -719,5 +770,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Zoom-Einstellungen">
 <!ENTITY addonBarCloseButton.tooltip   "Add-on-Leiste schließen">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Zurück/Vorwärts">
+<!ENTITY viewBookmarksSidebar.label    "In der Sidebar anzeigen">
+<!ENTITY bookmarksItem.title           "Lesezeichen">
+<!ENTITY openLocationCmd.label         "Adresse öffnen…">
+<!ENTITY openLocationCmd.accesskey     "A">
+<!ENTITY bookmarksMenuButton.tooltip   "Lesezeichen anzeigen">
+<!ENTITY switchToMetroCmd2.label       "Als &brandShortName; für Windows 8 Touch neu starten">
+<!ENTITY tabGroupsButton.tooltip       "Tabs gruppieren">
 <!-- end of strings to be removed post-Australis -->
 

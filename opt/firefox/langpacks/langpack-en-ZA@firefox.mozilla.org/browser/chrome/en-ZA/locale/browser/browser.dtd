@@ -14,6 +14,9 @@
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Private Browsing)">
+
+<!ENTITY appmenu.tooltip                     "Open menu">
+<!ENTITY navbarOverflow.label                "More tools…">
 <!-- Tab context menu -->
 
 <!ENTITY  reloadTab.label                    "Reload Tab">
@@ -46,11 +49,6 @@ can reach it easily. -->
 <!ENTITY  bookmarkAllTabs.accesskey          "T">
 <!ENTITY  undoCloseTab.label                 "Undo Close Tab">
 <!ENTITY  undoCloseTab.accesskey             "U">
-<!-- LOCALIZATION NOTE (undoCloseTabs.label) : This label is used
-when the previous tab-closing operation closed more than one tab. It
-replaces the undoCloseTab.label and will use the same accesskey as the
-undoCloseTab.label so users will not need to learn new keyboard controls. -->
-<!ENTITY  undoCloseTabs.label                "Undo Close Tabs">
 <!ENTITY  closeTab.label                     "Close Tab">
 <!ENTITY  closeTab.accesskey                 "C">
 
@@ -59,8 +57,6 @@ undoCloseTab.label so users will not need to learn new keyboard controls. -->
 <!ENTITY tabCmd.label "New Tab">
 <!ENTITY tabCmd.accesskey "T">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Open Location…">
-<!ENTITY openLocationCmd.accesskey "L">
 <!ENTITY openFileCmd.label "Open File…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
@@ -100,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Show All Tabs">
 <!ENTITY showAllTabsCmd.accesskey "A">
 
+<!ENTITY fxaSignIn.label "Sign in to &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Reconnect to &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel.heading "&brandShortName; is now syncing">
+<!ENTITY syncStartPanel.subTitle "You can manage &syncBrand.shortName.label; in Options.">
+<!ENTITY syncStartPanel.subTitleUnix "You can manage &syncBrand.shortName.label; in Preferences.">
+<!ENTITY syncErrorPanel.heading "Cannot connect to &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Please sign in to resume syncing.">
+<!ENTITY syncErrorPanel.signInButton.label "Sign In">
+<!ENTITY syncErrorPanel.signInButton.accesskey "S">
+
+
 <!ENTITY fullScreenMinimize.tooltip "Minimise">
 <!ENTITY fullScreenRestore.tooltip "Restore">
 <!ENTITY fullScreenClose.tooltip "Close">
@@ -120,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Bookmarks">
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "Bookmark This Page">
+<!ENTITY editThisBookmarkCmd.label "Edit This Bookmark">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Share This Page">
@@ -133,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "S">
 <!ENTITY shareVideoCmd.label "Share This Video">
 <!ENTITY shareVideoCmd.accesskey "S">
+<!ENTITY feedsMenu.label "Subscribe">
 <!ENTITY subscribeToPageMenupopup.label "Subscribe to This Page">
 <!ENTITY subscribeToPageMenuitem.label "Subscribe to This Page…">
 <!ENTITY addCurPagesCmd.label "Bookmark All Tabs…">
@@ -159,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Print">
 <!ENTITY printButton.tooltip          "Print this page">
 
-<!ENTITY backForwardItem.title        "Back/Forward">
 <!ENTITY locationItem.title           "Location">
 <!ENTITY searchItem.title             "Search">
-<!ENTITY bookmarksItem.title          "Bookmarks">
 <!-- Toolbar items --> 
 
 <!ENTITY homeButton.label             "Home">
 
 <!ENTITY tabGroupsButton.label        "Tab Groups">
-<!ENTITY tabGroupsButton.tooltip      "Group your tabs">
 
 <!ENTITY bookmarksButton.label          "Bookmarks">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Bookmarks">
-<!ENTITY bookmarksMenuButton.tooltip        "Display your bookmarks">
 <!ENTITY bookmarksMenuButton.unsorted.label "Unsorted Bookmarks">
-<!ENTITY viewBookmarksSidebar.label         "Show in Sidebar">
+<!ENTITY viewBookmarksSidebar2.label        "View Bookmarks Sidebar">
 <!ENTITY viewBookmarksToolbar.label         "View Bookmarks Toolbar">
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
@@ -242,10 +247,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY scratchpad.accesskey         "S">
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
-<!-- LOCALIZATION NOTE (chromeDebuggerMenu.label): This is the label for the
-  -  application menu item that opens the browser debugger UI in the Tools menu. -->
+<!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser toolbox UI in the Tools menu. -->
 
-<!ENTITY chromeDebuggerMenu.label       "Browser Debugger">
+<!ENTITY browserToolboxMenu.label     "Browser Toolbox">
+<!ENTITY browserToolboxMenu.accesskey "e">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Close Developer Toolbar">
 <!ENTITY devToolbarMenu.label              "Developer Toolbar">
@@ -256,7 +262,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Toggle Tools">
 <!ENTITY devToolboxMenuItem.accesskey      "T">
-<!ENTITY devToolboxMenuItem.keycode        "I">
 <!ENTITY devToolboxMenuItem.keytext        "I">
 
 <!ENTITY devToolbarToolsButton.tooltip     "Toggle developer tools">
@@ -327,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Customise">
+<!ENTITY appMenuCustomize.tooltip "Customise the Menu and Toolbars">
+<!ENTITY appMenuCustomizeExit.label "Exit Customise">
+<!ENTITY appMenuCustomizeExit.tooltip "Finish Customizing">
+<!ENTITY appMenuHistory.label "History">
+<!ENTITY appMenuHistory.showAll.label "Show All History">
+<!ENTITY appMenuHistory.clearRecent.label "Clear Recent History…">
+<!ENTITY appMenuHistory.restoreSession.label "Restore Previous Session">
+<!ENTITY appMenuHistory.viewSidebar.label "View History Sidebar">
+<!ENTITY appMenuHelp.tooltip "Open Help Menu">
+
+<!ENTITY customizeMenu.addToToolbar.label "Add to Toolbar">
+<!ENTITY customizeMenu.addToToolbar.accesskey "A">
+<!ENTITY customizeMenu.addToPanel.label "Add to Menu">
+<!ENTITY customizeMenu.addToPanel.accesskey "M">
+<!ENTITY customizeMenu.moveToToolbar.label "Move to Toolbar">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "o">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Move to Menu">
+<!ENTITY customizeMenu.moveToPanel.accesskey "o">
+<!ENTITY customizeMenu.removeFromToolbar.label "Remove from Toolbar">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "R">
+<!ENTITY customizeMenu.removeFromMenu.label "Remove from Menu">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "R">
+<!ENTITY customizeMenu.addMoreItems.label "Add More Items…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "A">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Search or enter address">
@@ -411,6 +445,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarkThisFrameCmd.accesskey  "m">
 <!ENTITY emailPageCmd.label           "Email Link…">
 <!ENTITY emailPageCmd.accesskey       "E">
+<!ENTITY switchToMetroCmd.label       "Relaunch in Windows 8 style &brandShortName;">
 <!ENTITY savePageCmd.label            "Save Page As…">
 <!ENTITY savePageCmd.accesskey        "A">
 <!-- alternate for content area context menu -->
@@ -536,6 +571,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "Exit"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "x">
+<!ENTITY quitApplicationCmdWin.tooltip     "Exit &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Quit"> 
@@ -605,6 +641,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY identity.moreInfoLinkText "More Information…">
 
 <!ENTITY identity.permissions "Permissions">
+<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
+     localized title of this SUMO article
+     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
+
+<!ENTITY identity.help.tooltip "How do I tell if my connection to a website is secure?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -622,7 +663,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Sync">
 
 <!ENTITY socialToolbar.title        "Social Toolbar Button">
-<!ENTITY social.notLoggedIn.label   "Not logged in">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -641,6 +681,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Learn more…">
 <!ENTITY social.learnMore.accesskey "L">
 <!ENTITY social.closeNotificationItem.label "Not Now">
+
+
+
+<!ENTITY customizeMode.tabTitle "Customise &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Menu and toolbars">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Additional Tools and Features">
+<!ENTITY customizeMode.menuAndToolbars.empty "Want more tools?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Choose from thousands of add-ons">
+<!ENTITY customizeMode.restoreDefaults "Restore Defaults">
+<!ENTITY customizeMode.toolbars "Show / Hide Toolbars">
+<!ENTITY customizeMode.titlebar "Title Bar">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Focus chats">
@@ -683,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.message "Well, this is embarrassing. We tried to display this Web page, but it's not responding.">
 <!ENTITY tabCrashed.checkSendReport "Tell &vendorShortName; about this crash so they can fix it.">
 <!ENTITY tabCrashed.tryAgain "Try Again">
+
+<!ENTITY uiTour.infoPanel.close "Close">
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -718,17 +771,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Zoom Controls">
 <!ENTITY addonBarCloseButton.tooltip   "Close Add-on Bar">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Back/Forward">
+<!ENTITY viewBookmarksSidebar.label    "Show in Sidebar">
+<!ENTITY bookmarksItem.title           "Bookmarks">
+<!ENTITY openLocationCmd.label         "Open Location…">
+<!ENTITY openLocationCmd.accesskey     "L">
+<!ENTITY bookmarksMenuButton.tooltip   "Display your bookmarks">
+<!ENTITY switchToMetroCmd2.label       "Relaunch in &brandShortName; for Windows 8 Touch">
+<!ENTITY tabGroupsButton.tooltip       "Group your tabs">
 <!-- end of strings to be removed post-Australis -->
-
-<!ENTITY browserToolboxMenu.accesskey "e">
-
-<!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser toolbox UI in the Tools menu. -->
-<!ENTITY browserToolboxMenu.label     "Browser Toolbox">
-
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-<!ENTITY identity.help.tooltip "How do I tell if my connection to a website is secure?">
-<!ENTITY switchToMetroCmd.label       "Relaunch in Windows 8 style &brandShortName;">
-<!ENTITY switchToMetroCmd2.label      "Relaunch in &brandShortName; for Windows 8 Touch">

@@ -7,28 +7,67 @@
 
 <!ENTITY closeCmd.key  "W">
 
-<!ENTITY toolboxCloseButton.tooltip    "Close Developer Tools">
-<!ENTITY toolboxOptionsButton.key      "O">
-<!ENTITY toolboxNextTool.key           "]">
-<!ENTITY toolboxPreviousTool.key       "[">
-
-<!ENTITY toolboxZoomIn.key             "+">
-<!ENTITY toolboxZoomIn.key2            "="> <!-- + is above this key on many keyboards -->
-<!ENTITY toolboxZoomOut.key            "-">
-<!ENTITY toolboxZoomReset.key          "0">
+<!ENTITY toolboxCloseButton.tooltip  "סגירת כלי הפיתוח">
 
 <!-- LOCALIZATION NOTE (options.context.advancedSettings): This is the label for
   -  the heading of the advanced settings group in the options panel. -->
-<!ENTITY options.context.advancedSettings "Advanced settings">
+<!ENTITY options.context.advancedSettings "הגדרות מתקדמות">
+
+<!-- LOCALIZATION NOTE (options.context.requiresRestart2): This is the requires
+  -  restart label at right of settings that require a browser restart to be
+  -  effective. -->
+<!ENTITY options.context.requiresRestart2  "נדרשת הפעלת הדפדפן מחדש">
+
+<!-- LOCALIZATION NOTE (options.restartButton.label): This is the label for the
+  -  restart button next to options.context.requiresRestart2 label. -->
+<!ENTITY options.restartButton.label  "הפעלה מחדש כעת">
+
+<!-- LOCALIZATION NOTE (options.context.triggersPageRefresh2): This is the
+  -  triggers page refresh label next to the settings in the advanced settings
+  -  group in the options panel which trigger page reload. -->
+<!ENTITY options.context.triggersPageRefresh2  "הפעלה זו בלבד, הדף ייטען מחדש">
+
+<!-- LOCALIZATION NOTE (options.enableRemote.label3): This is the label for the
+  -  checkbox that toggles remote debugging, i.e. devtools.debugger.remote-enabled
+  -  boolean preference in about:config, in the options panel. -->
+<!ENTITY options.enableRemote.label3    "הפעלת מנפה שגיאות מרוחק">
+<!ENTITY options.enableRemote.tooltip   "הפעלת אפשרות זו תאפשר לכלי המפתחים לבצע ניפוי שגיאות לעותק מרוחק של Firefox כגון Firefox OS">
+
+<!-- LOCALIZATION NOTE (options.disableJavaScript.label2,
+  -  options.disableJavaScript.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles JavaScript on or off. -->
+<!ENTITY options.disableJavaScript.label2    "נטרול JavaScript">
+<!ENTITY options.disableJavaScript.tooltip   "הפעלת אפשרות זו תנטרל את JavaScript בלשונית הנוכחית. אם הלשונית או ארגז הכלים יסגרו הגדרה זו תישכח.">
+
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
+  -  the heading of group of checkboxes corresponding to the default developer
+  -  tools. -->
+<!ENTITY options.selectDefaultTools.label     "כלי מפתחים בררת מחדל">
+
+<!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
+  -  the heading of group of checkboxes corresponding to the developer tools
+  -  added by add-ons. This heading is hidden when there is no developer tool
+  -  installed by add-ons. -->
+<!ENTITY options.selectAdditionalTools.label  "כלי מפתחים שהותקנו על־ידי תוספות">
+
+<!-- LOCALIZATION NOTE (options.toolNotSupported.label): This is the label for
+  -  the explanation of the * marker on a tool which is currently not supported
+  -  for the target of the toolbox. -->
+<!ENTITY options.toolNotSupported.label  "* לא נתמך עבור המטרה הנוכחית של ארגז הכלים">
+
+<!-- LOCALIZATION NOTE (options.webconsole.label): This is the label for the
+  -  heading of the group of Web Console preferences in the options panel. -->
+<!ENTITY options.webconsole.label            "מסוף רשת">
 
 <!-- LOCALIZATION NOTE (options.context.inspector): This is the label for
   -  the heading of the Inspector group in the options panel. -->
 <!ENTITY options.context.inspector "Inspector">
 
-<!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
-  -  dropdown list that controls the default color unit used in the inspector.
-  -  This label is visible in the options panel. -->
-<!ENTITY options.defaultColorUnit.label "Default color unit">
+<!-- LOCALIZATION NOTE (options.context.triggersPageRefresh): This is the
+  -  triggers page refresh footnote under the advanced settings group in the
+  -  options panel and is used for settings that trigger page reload. -->
+<!ENTITY options.context.triggersPageRefresh  "* Current session only, reloads the page">
+<!ENTITY options.darkTheme.label             "Dark theme">
 
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.accesskey): This is the access
   -  key for a dropdown list that controls the default color unit used in the
@@ -43,19 +82,30 @@
   -  'Default color unit' dropdown list and is visible in the options panel. -->
 <!ENTITY options.defaultColorUnit.hsl "HSL(A)">
 
-<!-- LOCALIZATION NOTE (options.defaultColorUnit.rgb): This is used in the
-  -  'Default color unit' dropdown list and is visible in the options panel. -->
-<!ENTITY options.defaultColorUnit.rgb "RGB(A)">
+<!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
+  -  dropdown list that controls the default color unit used in the inspector.
+  -  This label is visible in the options panel. -->
+<!ENTITY options.defaultColorUnit.label "Default color unit">
 
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.name): This is used in
   -  the 'Default color unit' dropdown list and is visible in the options panel.
   -  -->
 <!ENTITY options.defaultColorUnit.name "Color Names">
 
-<!-- LOCALIZATION NOTE (options.context.triggersPageRefresh2): This is the
-  -  triggers page refresh label next to the settings in the advanced settings
-  -  group in the options panel which trigger page reload. -->
-<!ENTITY options.context.triggersPageRefresh2  "Current session only, reloads the page">
+<!-- LOCALIZATION NOTE (options.defaultColorUnit.rgb): This is used in the
+  -  'Default color unit' dropdown list and is visible in the options panel. -->
+<!ENTITY options.defaultColorUnit.rgb "RGB(A)">
+
+<!-- LOCALIZATION NOTE (options.disableCache.label,
+  -  options.disableCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the cache on or off. -->
+<!ENTITY options.disableCache.label     "Disable Cache *">
+<!ENTITY options.disableCache.tooltip   "Turning this option on will disable the cache for the current tab. If the tab or the toolbox is closed then this setting will be forgotten.">
+
+<!-- LOCALIZATION NOTE (options.disableJavaScript.label,
+  -  options.disableJavaScript.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles JavaScript on or off. -->
+<!ENTITY options.disableJavaScript.label     "Disable JavaScript *">
 
 <!-- LOCALIZATION NOTE (options.enableChrome.label3): This is the label for the
   -  checkbox that toggles chrome debugging, i.e. devtools.chrome.enabled
@@ -63,61 +113,23 @@
 <!ENTITY options.enableChrome.label3    "Enable chrome debugging">
 <!ENTITY options.enableChrome.tooltip   "Turning this option on will allow you to use various developer tools in browser context">
 
-<!-- LOCALIZATION NOTE (options.enableRemote.label3): This is the label for the
-  -  checkbox that toggles remote debugging, i.e. devtools.debugger.remote-enabled
-  -  boolean preference in about:config, in the options panel. -->
-<!ENTITY options.enableRemote.label3    "Enable remote debugging">
-<!ENTITY options.enableRemote.tooltip   "Turning this option on will allow the developer tools to debug remote Firefox instance like Firefox OS">
-
-<!-- LOCALIZATION NOTE (options.disableJavaScript.label2,
-  -  options.disableJavaScript.tooltip): This is the options panel label and
-  -  tooltip for the checkbox that toggles JavaScript on or off. -->
-<!ENTITY options.disableJavaScript.label2    "Disable JavaScript">
-<!ENTITY options.disableJavaScript.tooltip   "Turning this option on will disable JavaScript for the current tab. If the tab or the toolbox is closed then this setting will be forgotten.">
-
-<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
-  -  the heading of group of checkboxes corresponding to the default developer
-  -  tools. -->
-<!ENTITY options.selectDefaultTools.label     "Default Firefox Developer Tools">
-
-<!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
-  -  the heading of group of checkboxes corresponding to the developer tools
-  -  added by add-ons. This heading is hidden when there is no developer tool
-  -  installed by add-ons. -->
-<!ENTITY options.selectAdditionalTools.label  "Developer Tools installed by add-ons">
-
-<!-- LOCALIZATION NOTE (options.toolNotSupported.label): This is the label for
-  -  the explanation of the * marker on a tool which is currently not supported
-  -  for the target of the toolbox. -->
-<!ENTITY options.toolNotSupported.label  "* Not supported for current toolbox target">
-
-<!-- LOCALIZATION NOTE (options.selectDevToolsTheme.label): This is the label for
-  -  the heading of the radiobox corresponding to the theme of the developer
-  -  tools. -->
-<!ENTITY options.selectDevToolsTheme.label   "Choose DevTools theme:">
-<!ENTITY options.darkTheme.label             "Dark theme">
-<!ENTITY options.lightTheme.label            "Light theme">
-
-<!-- LOCALIZATION NOTE (options.webconsole.label): This is the label for the
-  -  heading of the group of Web Console preferences in the options panel. -->
-<!ENTITY options.webconsole.label            "Web Console">
-
 <!-- LOCALIZATION NOTE (options.enablePersistentLogging.label): This is the
   -  label for the checkbox that toggles persistent logs in the Web Console,
   -  i.e. devtools.webconsole.persistlog a boolean preference in about:config,
   -  in the options panel. -->
 <!ENTITY options.enablePersistentLogging.label    "Enable persistent logs">
 <!ENTITY options.enablePersistentLogging.tooltip  "If you enable this option the Web Console will not clear the output each time you navigate to a new page">
-
-<!-- LOCALIZATION NOTE (options.timestampMessages.label): This is the
-   - label for the checkbox that toggles timestamps in the Web Console -->
-<!ENTITY options.timestampMessages.label      "Enable timestamps">
-<!ENTITY options.timestampMessages.tooltip    "If you enable this option commands and output in the Web Console will display a timestamp">
+<!ENTITY options.lightTheme.label            "Light theme">
 
 <!-- LOCALIZATION NOTE (options.profiler.label): This is the label for the
   -  heading of the group of JavaScript Profiler preferences in the options
   -  panel. -->
 <!ENTITY options.profiler.label            "JavaScript Profiler">
+
+<!-- LOCALIZATION NOTE (options.selectDevToolsTheme.label): This is the label for
+  -  the heading of the radiobox corresponding to the theme of the developer
+  -  tools. -->
+<!ENTITY options.selectDevToolsTheme.label   "Choose DevTools theme:">
 
 <!-- LOCALIZATION NOTE (options.showPlatformData.label): This is the
   -  label for the checkbox that toggles the display of the platform data in the,
@@ -126,3 +138,31 @@
 <!ENTITY options.showPlatformData.label    "Show Gecko platform data">
 <!ENTITY options.showPlatformData.tooltip  "If you enable this option the JavaScript Profiler reports will include
 Gecko platform symbols">
+
+<!-- LOCALIZATION NOTE (options.styleeditor.label): This is the label for the
+  -  heading of the group of Style Editor preferences in the options
+  -  panel. -->
+<!ENTITY options.styleeditor.label            "Style Editor">
+
+<!-- LOCALIZATION NOTE (options.stylesheetAutocompletion.label): This is the
+   - label for the checkbox that toggles autocompletion of css in the Style Editor -->
+<!ENTITY options.stylesheetAutocompletion.label      "Autocomplete CSS">
+<!ENTITY options.stylesheetAutocompletion.tooltip    "Autocomplete CSS properties, values and selectors in Style Editor as you type">
+
+<!-- LOCALIZATION NOTE (options.stylesheetSourceMaps.label): This is the
+   - label for the checkbox that toggles showing original sources in the Style Editor -->
+<!ENTITY options.stylesheetSourceMaps.label      "Show original sources">
+<!ENTITY options.stylesheetSourceMaps.tooltip    "Show original sources (e.g. Sass files) in the Style Editor and Inspector">
+
+<!-- LOCALIZATION NOTE (options.timestampMessages.label): This is the
+   - label for the checkbox that toggles timestamps in the Web Console -->
+<!ENTITY options.timestampMessages.label      "Enable timestamps">
+<!ENTITY options.timestampMessages.tooltip    "If you enable this option commands and output in the Web Console will display a timestamp">
+<!ENTITY toolboxNextTool.key           "]">
+<!ENTITY toolboxOptionsButton.key      "O">
+<!ENTITY toolboxPreviousTool.key       "[">
+
+<!ENTITY toolboxZoomIn.key             "+">
+<!ENTITY toolboxZoomIn.key2            "="> <!-- + is above this key on many keyboards -->
+<!ENTITY toolboxZoomOut.key            "-">
+<!ENTITY toolboxZoomReset.key          "0">

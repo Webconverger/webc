@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privat nettlesing)">
 
+<!ENTITY appmenu.tooltip                     "Åpne meny">
+<!ENTITY navbarOverflow.label                "Flere verktøy …">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "Oppdater fane">
 <!ENTITY  reloadTab.accesskey                "O">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Ny fane">
 <!ENTITY tabCmd.accesskey "f">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Åpne adresse …">
-<!ENTITY openLocationCmd.accesskey "d">
 <!ENTITY openFileCmd.label "Åpne fil …">
 <!ENTITY openFileCmd.accesskey "Å">
 <!ENTITY openFileCmd.commandkey "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Vis alle faner">
 <!ENTITY showAllTabsCmd.accesskey "V">
 
+<!ENTITY fxaSignIn.label "Logg inn på &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Koble til &syncBrand.shortName.label; på nytt">
+<!ENTITY syncStartPanel.heading "&brandShortName; synkroniserer">
+<!ENTITY syncStartPanel.subTitle "Du kan stille inn &syncBrand.shortName.label; i Innstillinger.">
+<!ENTITY syncStartPanel.subTitleUnix "Du kan stille inn &syncBrand.shortName.label; i Innstillinger.">
+<!ENTITY syncErrorPanel.heading "Klarte ikke koble til &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Logg inn for å fortsette synkronisering.">
+<!ENTITY syncErrorPanel.signInButton.label "Logg inn">
+<!ENTITY syncErrorPanel.signInButton.accesskey "L">
+
+
 <!ENTITY fullScreenMinimize.tooltip "Minimer">
 <!ENTITY fullScreenRestore.tooltip "Gjenopprett">
 <!ENTITY fullScreenClose.tooltip "Lukk">
@@ -115,7 +127,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Bokmerker">
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "Bokmerk denne siden">
-<!ENTITY bookmarkThisPageCmd.commandkey "d">
+<!ENTITY editThisBookmarkCmd.label "Rediger dette bokmerket">
+<!ENTITY bookmarkThisPageCmd.commandkey "R">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Del denne siden">
 <!ENTITY sharePageCmd.commandkey "S">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "u">
 <!ENTITY shareVideoCmd.label "Del denne videoen">
 <!ENTITY shareVideoCmd.accesskey "v">
+<!ENTITY feedsMenu.label "Abonner">
 <!ENTITY subscribeToPageMenupopup.label "Abonner på denne siden">
 <!ENTITY subscribeToPageMenuitem.label "Abonner på denne siden …">
 <!ENTITY addCurPagesCmd.label "Bokmerk alle faner …">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Skriv ut">
 <!ENTITY printButton.tooltip          "Skriv ut denne siden">
 
-<!ENTITY backForwardItem.title        "Tilbake/frem">
 <!ENTITY locationItem.title           "Adresse">
 <!ENTITY searchItem.title             "Søk">
-<!ENTITY bookmarksItem.title          "Bokmerker">
 
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label             "Startside">
 
 <!ENTITY tabGroupsButton.label        "Fanegrupper">
-<!ENTITY tabGroupsButton.tooltip      "Grupper faner">
 
 <!ENTITY bookmarksButton.label          "Bokmerker">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Bokmerker">
-<!ENTITY bookmarksMenuButton.tooltip        "Vis mine bokmerker">
 <!ENTITY bookmarksMenuButton.unsorted.label "Usorterte bokmerker">
-<!ENTITY viewBookmarksSidebar.label         "Vis i sidestolpen">
+<!ENTITY viewBookmarksSidebar2.label        "Vis bokmerkesidestolpen">
 <!ENTITY viewBookmarksToolbar.label         "Vis bokmerkeverktøylinje">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "h">
 
 <!ENTITY appMenuCustomize.label "Tilpass">
+<!ENTITY appMenuCustomize.tooltip "Tilpass meny og verktøylinjer">
+<!ENTITY appMenuCustomizeExit.label "Avslutt tilpasning">
+<!ENTITY appMenuCustomizeExit.tooltip "Fullfør tilpasning">
+<!ENTITY appMenuHistory.label "Historikk">
+<!ENTITY appMenuHistory.showAll.label "Vis all historikk">
+<!ENTITY appMenuHistory.clearRecent.label "Tøm nylig historikk …">
+<!ENTITY appMenuHistory.restoreSession.label "Gjenopprett forrige programøkt">
+<!ENTITY appMenuHistory.viewSidebar.label "Vis historikksidestolpe">
+<!ENTITY appMenuHelp.tooltip "Åpne hjelpemeny">
+
+<!ENTITY customizeMenu.addToToolbar.label "Legg til i verktøylinje">
+<!ENTITY customizeMenu.addToToolbar.accesskey "L">
+<!ENTITY customizeMenu.addToPanel.label "Legg til i meny">
+<!ENTITY customizeMenu.addToPanel.accesskey "e">
+<!ENTITY customizeMenu.moveToToolbar.label "Flytt til verktøylinje">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "F">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Flytt til meny">
+<!ENTITY customizeMenu.moveToPanel.accesskey "t">
+<!ENTITY customizeMenu.removeFromToolbar.label "Fjern fra verktøylinje">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "n">
+<!ENTITY customizeMenu.removeFromMenu.label "Fjern fra meny">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "a">
+<!ENTITY customizeMenu.addMoreItems.label "Legg til flere …">
+<!ENTITY customizeMenu.addMoreItems.accesskey "L">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Søk eller skriv inn adresse">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Send lenke på e-post …">
 <!ENTITY emailPageCmd.accesskey       "S">
 <!ENTITY switchToMetroCmd.label       "Gjenåpne i Windows 8-stil &brandShortName;">
-<!ENTITY switchToMetroCmd2.label      "Gjenåpne i &brandShortName; for Windows 8 Touch">
 <!ENTITY savePageCmd.label            "Lagre side som …">
 <!ENTITY savePageCmd.accesskey        "a">
 <!-- alternate for content area context menu -->
@@ -532,6 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "Avslutt"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "t">
+<!ENTITY quitApplicationCmdWin.tooltip     "Avslutt &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Avslutt"> 
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Sync">
 
 <!ENTITY socialToolbar.title        "Sosial verktøylinje-knapp">
-<!ENTITY social.notLoggedIn.label   "Ikke innlogget">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -643,9 +681,20 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.accesskey "L">
 <!ENTITY social.closeNotificationItem.label "Ikke nå">
 
+
+
+<!ENTITY customizeMode.tabTitle "Tilpass &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Meny og verktøylinjer">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Flere verktøy og funksjoner">
+<!ENTITY customizeMode.menuAndToolbars.empty "Vil du ha flere verktøy?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Velg fra tusenvis av utvidelser">
+<!ENTITY customizeMode.restoreDefaults "Tilbakestill standarder">
+<!ENTITY customizeMode.toolbars "Vis / skjul verktøylinjer">
+<!ENTITY customizeMode.titlebar "Tittellinje">
+
 <!ENTITY social.chatBar.commandkey "c">
-<!ENTITY social.chatBar.label "Focus nettprat">
-<!ENTITY social.chatBar.accesskey "c">
+<!ENTITY social.chatBar.label "Fokuser på nettprat">
+<!ENTITY social.chatBar.accesskey "F">
 
 <!ENTITY social.markpageMenu.accesskey "s">
 <!ENTITY social.markpageMenu.label "Lagre side til …">
@@ -680,10 +729,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
      a CSS length value. -->
 <!ENTITY pluginNotification.width "28em">
 
-<!ENTITY tabCrashed.header "Fane krasjet">
+<!ENTITY tabCrashed.header "Fanen krasjet">
 <!ENTITY tabCrashed.message "Vel, dette er pinlig. Vi prøvde vise nettsiden, men den svarer ikke.">
 <!ENTITY tabCrashed.checkSendReport "Fortell &vendorShortName; om dette krasjet så de kan rette det.">
 <!ENTITY tabCrashed.tryAgain "Prøv igjen">
+
+<!ENTITY uiTour.infoPanel.close "Lukk">
 
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
@@ -719,5 +770,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Zoom-kontroller">
 <!ENTITY addonBarCloseButton.tooltip   "Lukk utvidelseslinje">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Tilbake/frem">
+<!ENTITY viewBookmarksSidebar.label    "Vis i sidestolpe">
+<!ENTITY bookmarksItem.title           "Bokmerker">
+<!ENTITY openLocationCmd.label         "Åpne adresse …">
+<!ENTITY openLocationCmd.accesskey     "n">
+<!ENTITY bookmarksMenuButton.tooltip   "Vis i bokmerker">
+<!ENTITY switchToMetroCmd2.label       "Åpne på nytt i &brandShortName; for Windows 8 Touch">
+<!ENTITY tabGroupsButton.tooltip       "Grupper fanene">
 <!-- end of strings to be removed post-Australis -->
 

@@ -6,6 +6,8 @@
 <!ENTITY mainWindow.titlemodifier "&brandFullName;">
 <!ENTITY mainWindow.titlemodifiermenuseparator " - ">
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Navegación privada)">
+<!ENTITY appmenu.tooltip "Abrir menú">
+<!ENTITY navbarOverflow.label "Más herramientas…">
 <!ENTITY reloadTab.label "Recargar pestaña">
 <!ENTITY reloadTab.accesskey "g">
 <!ENTITY reloadAllTabs.label "Recargar todas las pestañas">
@@ -33,8 +35,6 @@
 <!ENTITY tabCmd.label "Nueva pestaña">
 <!ENTITY tabCmd.accesskey "T">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Abrir dirección…">
-<!ENTITY openLocationCmd.accesskey "d">
 <!ENTITY openFileCmd.label "Abrir archivo…">
 <!ENTITY openFileCmd.accesskey "b">
 <!ENTITY openFileCmd.commandkey "o">
@@ -68,6 +68,15 @@
 <!ENTITY fullScreenCmd.macCommandKey "f">
 <!ENTITY showAllTabsCmd.label "Mostrar todas las pestañas">
 <!ENTITY showAllTabsCmd.accesskey "A">
+<!ENTITY fxaSignIn.label "Conectarse a &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Reconectar a &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel.heading "&brandShortName; está sincronizando ahora">
+<!ENTITY syncStartPanel.subTitle "Puede administrar &syncBrand.shortName.label; en Opciones.">
+<!ENTITY syncStartPanel.subTitleUnix "Puede administrar &syncBrand.shortName.label; en Preferencias.">
+<!ENTITY syncErrorPanel.heading "No se puede conectar a &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Por favor, inicie sesión para continuar sincronizando.">
+<!ENTITY syncErrorPanel.signInButton.label "Conectarse">
+<!ENTITY syncErrorPanel.signInButton.accesskey "C">
 <!ENTITY fullScreenMinimize.tooltip "Minimizar">
 <!ENTITY fullScreenRestore.tooltip "Restaurar">
 <!ENTITY fullScreenClose.tooltip "Cerrar">
@@ -85,6 +94,7 @@
 <!ENTITY bookmarksMenu.label "Marcadores">
 <!ENTITY bookmarksMenu.accesskey "M">
 <!ENTITY bookmarkThisPageCmd.label "Añadir esta página a marcadores">
+<!ENTITY editThisBookmarkCmd.label "Editar este marcador">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Compartir esta página">
@@ -98,6 +108,7 @@
 <!ENTITY shareSelectCmd.accesskey "t">
 <!ENTITY shareVideoCmd.label "Compartir este vídeo">
 <!ENTITY shareVideoCmd.accesskey "t">
+<!ENTITY feedsMenu.label "Suscribirse">
 <!ENTITY subscribeToPageMenupopup.label "Suscribirse a esta página">
 <!ENTITY subscribeToPageMenuitem.label "Suscribirse a esta página…">
 <!ENTITY addCurPagesCmd.label "Añadir pestañas a marcadores…">
@@ -122,19 +133,15 @@
 <!ENTITY goEndCap.tooltip "Ir a la URL de la barra de direcciones">
 <!ENTITY printButton.label "Imprimir">
 <!ENTITY printButton.tooltip "Imprimir esta página">
-<!ENTITY backForwardItem.title "Atrás/Adelante">
 <!ENTITY locationItem.title "Dirección">
 <!ENTITY searchItem.title "Buscar">
-<!ENTITY bookmarksItem.title "Marcadores">
 <!ENTITY homeButton.label "Inicio">
 <!ENTITY tabGroupsButton.label "Grupos de pestañas">
-<!ENTITY tabGroupsButton.tooltip "Agrupar pestañas">
 <!ENTITY bookmarksButton.label "Marcadores">
 <!ENTITY bookmarksCmd.commandkey "b">
 <!ENTITY bookmarksMenuButton.label "Marcadores">
-<!ENTITY bookmarksMenuButton.tooltip "Mostrar sus marcadores">
 <!ENTITY bookmarksMenuButton.unsorted.label "Marcadores sin ordenar">
-<!ENTITY viewBookmarksSidebar.label "Mostrar en la barra lateral">
+<!ENTITY viewBookmarksSidebar2.label "Ver el panel lateral de marcadores">
 <!ENTITY viewBookmarksToolbar.label "Ver la barra de marcadores">
 <!ENTITY bookmarksGtkCmd.commandkey "o">
 <!ENTITY bookmarksWinCmd.commandkey "i">
@@ -243,6 +250,29 @@
 <!ENTITY showAllHistoryCmd2.label "Mostrar todo el historial">
 <!ENTITY showAllHistoryCmd.commandkey "H">
 <!ENTITY appMenuCustomize.label "Personalizar">
+<!ENTITY appMenuCustomize.tooltip "Personalizar el menú y barras de herramientas">
+<!ENTITY appMenuCustomizeExit.label "Terminar personalización">
+<!ENTITY appMenuCustomizeExit.tooltip "Terminar personalización">
+<!ENTITY appMenuHistory.label "Historial">
+<!ENTITY appMenuHistory.showAll.label "Mostrar todo el historial">
+<!ENTITY appMenuHistory.clearRecent.label "Limpiar el historial reciente…">
+<!ENTITY appMenuHistory.restoreSession.label "Restaurar sesión anterior">
+<!ENTITY appMenuHistory.viewSidebar.label "Ver panel lateral del historial">
+<!ENTITY appMenuHelp.tooltip "Abrir menú de ayuda">
+<!ENTITY customizeMenu.addToToolbar.label "Añadir a la barra de herramientas">
+<!ENTITY customizeMenu.addToToolbar.accesskey "b">
+<!ENTITY customizeMenu.addToPanel.label "Añadir al menú">
+<!ENTITY customizeMenu.addToPanel.accesskey "d">
+<!ENTITY customizeMenu.moveToToolbar.label "Mover a la barra de herramientas">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "o">
+<!ENTITY customizeMenu.moveToPanel.label "Mover al menú">
+<!ENTITY customizeMenu.moveToPanel.accesskey "o">
+<!ENTITY customizeMenu.removeFromToolbar.label "Eliminar de la barra de herramientas">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "">
+<!ENTITY customizeMenu.removeFromMenu.label "Eliminar del menú">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "E">
+<!ENTITY customizeMenu.addMoreItems.label "Añadir más elementos…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "A">
 <!ENTITY openCmd.commandkey "l">
 <!ENTITY urlbar.placeholder2 "Término de búsqueda o dirección">
 <!ENTITY urlbar.accesskey "d">
@@ -302,7 +332,6 @@
 <!ENTITY emailPageCmd.label "Enviar enlace…">
 <!ENTITY emailPageCmd.accesskey "E">
 <!ENTITY switchToMetroCmd.label "Relanzar en &brandShortName; estilo Windows 8">
-<!ENTITY switchToMetroCmd2.label "Relanzar en &brandShortName; para Windows 8 táctil">
 <!ENTITY savePageCmd.label "Guardar como…">
 <!ENTITY savePageCmd.accesskey "A">
 <!ENTITY savePageCmd.accesskey2 "d">
@@ -396,6 +425,7 @@
 <!ENTITY fullScreenButton.tooltip "Mostrar la ventana en pantalla completa">
 <!ENTITY quitApplicationCmdWin.label "Salir">
 <!ENTITY quitApplicationCmdWin.accesskey "S">
+<!ENTITY quitApplicationCmdWin.tooltip "Salir de &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label "Salir">
@@ -449,7 +479,6 @@
 <!ENTITY syncSyncNowItem.accesskey "z">
 <!ENTITY syncToolbarButton.label "Sync">
 <!ENTITY socialToolbar.title "Botón de la barra de herramientas social">
-<!ENTITY social.notLoggedIn.label "Sesión no iniciada">
 <!ENTITY social.ok.label "Aceptar">
 <!ENTITY social.ok.accesskey "A">
 <!ENTITY social.toggleSidebar.label "Mostrar barra lateral">
@@ -463,6 +492,14 @@
 <!ENTITY social.learnMore.label "Saber más…">
 <!ENTITY social.learnMore.accesskey "m">
 <!ENTITY social.closeNotificationItem.label "No ahora">
+<!ENTITY customizeMode.tabTitle "Personalizar &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Menú y barras de herramientas">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Herramientas y características adicionales">
+<!ENTITY customizeMode.menuAndToolbars.empty "¿Quiere más herramientas?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Elija de entre miles de complementos">
+<!ENTITY customizeMode.restoreDefaults "Restaurar predeterminados">
+<!ENTITY customizeMode.toolbars "Mostrar / ocultar barras de herramientas">
+<!ENTITY customizeMode.titlebar "Barra de título">
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Enfocar conversaciones">
 <!ENTITY social.chatBar.accesskey "c">
@@ -489,6 +526,7 @@
 <!ENTITY tabCrashed.message "Esto es embarazoso. Hemos intentado mostrar esta página web, pero no está respondiendo.">
 <!ENTITY tabCrashed.checkSendReport "Informar a &vendorShortName; sobre este fallo para que puedan arreglarlo.">
 <!ENTITY tabCrashed.tryAgain "Reintentar">
+<!ENTITY uiTour.infoPanel.close "Cerrar">
 <!ENTITY navbarCmd.accesskey "N">
 <!ENTITY addonBarCmd.label "Barra de complementos">
 <!ENTITY addonBarCmd.accesskey "A">
@@ -518,3 +556,11 @@
 <!ENTITY zoomControls.label "Controles de tamaño">
 <!ENTITY addonBarCloseButton.tooltip "Cerrar la barra de complementos">
 <!ENTITY toggleAddonBarCmd.key "/">
+<!ENTITY backForwardItem.title "Atrás/Adelante">
+<!ENTITY viewBookmarksSidebar.label "Mostrar en la barra lateral">
+<!ENTITY bookmarksItem.title "Marcadores">
+<!ENTITY openLocationCmd.label "Abrir dirección…">
+<!ENTITY openLocationCmd.accesskey "d">
+<!ENTITY bookmarksMenuButton.tooltip "Mostrar sus marcadores">
+<!ENTITY switchToMetroCmd2.label "Relanzar en &brandShortName; para Windows 8 táctil">
+<!ENTITY tabGroupsButton.tooltip "Agrupe sus pestañas">

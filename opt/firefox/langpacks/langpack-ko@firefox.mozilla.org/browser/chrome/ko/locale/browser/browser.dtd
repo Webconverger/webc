@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(사생활 보호 모드)">
 
+<!ENTITY appmenu.tooltip                     "메뉴 열기">
+<!ENTITY navbarOverflow.label                "더 많은 도구…">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "현재 탭 새로 고침">
 <!ENTITY  reloadTab.accesskey                "R">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "새 탭">
 <!ENTITY tabCmd.accesskey "T">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "주소 열기…">
-<!ENTITY openLocationCmd.accesskey "L">
 <!ENTITY openFileCmd.label "파일 열기…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "모든 탭 표시">
 <!ENTITY showAllTabsCmd.accesskey "A">
 
+<!ENTITY fxaSignIn.label "&syncBrand.shortName.label;에 로그인">
+<!ENTITY fxaSignInError.label "&syncBrand.shortName.label;에 다시 연결">
+<!ENTITY syncStartPanel.heading "&brandShortName;를 동기화하고 있습니다">
+<!ENTITY syncStartPanel.subTitle "설정에서 &syncBrand.shortName.label;를 관리할 수 있습니다.">
+<!ENTITY syncStartPanel.subTitleUnix "환경 설정에서 &syncBrand.shortName.label;를 관리할 수 있습니다.">
+<!ENTITY syncErrorPanel.heading "&syncBrand.shortName.label;에 연결할 수 없음">
+<!ENTITY syncErrorPanel.subTitle "동기화를 계속하려면 로그인을 해 주십시오.">
+<!ENTITY syncErrorPanel.signInButton.label "로그인">
+<!ENTITY syncErrorPanel.signInButton.accesskey "S">
+
+
 <!ENTITY fullScreenMinimize.tooltip "최소화">
 <!ENTITY fullScreenRestore.tooltip "복구">
 <!ENTITY fullScreenClose.tooltip "닫기">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "북마크">
 <!ENTITY bookmarksMenu.accesskey "B">
 <!ENTITY bookmarkThisPageCmd.label "현재 페이지 북마크에 추가">
+<!ENTITY editThisBookmarkCmd.label "이 북마크 편집">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "현재 페이지 공유">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "s">
 <!ENTITY shareVideoCmd.label "현재 동영상 공유">
 <!ENTITY shareVideoCmd.accesskey "s">
+<!ENTITY feedsMenu.label "구독">
 <!ENTITY subscribeToPageMenupopup.label "현재 페이지 구독하기">
 <!ENTITY subscribeToPageMenuitem.label "현재 페이지 구독하기…">
 <!ENTITY addCurPagesCmd.label "모든 탭 북마크 추가…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.tooltip          "현재 페이지 인쇄">
 <!ENTITY printButton.label            "인쇄">
 
-<!ENTITY backForwardItem.title        "뒤로/앞으로">
 <!ENTITY locationItem.title           "주소">
 <!ENTITY searchItem.title             "검색">
-<!ENTITY bookmarksItem.title          "북마크">
 
 <!-- Toolbar items -->
 <!ENTITY homeButton.label             "홈">
 
 <!ENTITY tabGroupsButton.label        "탭 그룹">
-<!ENTITY tabGroupsButton.tooltip      "탭 그룹으로 보기">
 
 <!ENTITY bookmarksButton.label          "북마크">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "북마크">
-<!ENTITY bookmarksMenuButton.tooltip        "북마크 표시">
 <!ENTITY bookmarksMenuButton.unsorted.label "미분류 북마크">
-<!ENTITY viewBookmarksSidebar.label         "탐색창에 표시">
+<!ENTITY viewBookmarksSidebar2.label        "북마크 탐색창 보기">
 <!ENTITY viewBookmarksToolbar.label         "도구 모음에 표시">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command        
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "사용자 설정">
+<!ENTITY appMenuCustomize.tooltip "메뉴와 도구 상자 사용자 설정">
+<!ENTITY appMenuCustomizeExit.label "사용자 설정 종료">
+<!ENTITY appMenuCustomizeExit.tooltip "사용자 설정 완료">
+<!ENTITY appMenuHistory.label "방문 기록">
+<!ENTITY appMenuHistory.showAll.label "방문 기록 보기">
+<!ENTITY appMenuHistory.clearRecent.label "최근 방문 기록 삭제…">
+<!ENTITY appMenuHistory.restoreSession.label "이전 세션 복원">
+<!ENTITY appMenuHistory.viewSidebar.label "방문 기록 탐색창 보기">
+<!ENTITY appMenuHelp.tooltip "도움말 메뉴 열기">
+
+<!ENTITY customizeMenu.addToToolbar.label "도구 상자에 추가">
+<!ENTITY customizeMenu.addToToolbar.accesskey "A">
+<!ENTITY customizeMenu.addToPanel.label "메뉴에 추가">
+<!ENTITY customizeMenu.addToPanel.accesskey "M">
+<!ENTITY customizeMenu.moveToToolbar.label "도구 상자로 옮기기">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "o">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "메뉴로 옮기기">
+<!ENTITY customizeMenu.moveToPanel.accesskey "o">
+<!ENTITY customizeMenu.removeFromToolbar.label "도구 상자에서 제거">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "R">
+<!ENTITY customizeMenu.removeFromMenu.label "메뉴에서 제거">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "R">
+<!ENTITY customizeMenu.addMoreItems.label "더 많은 아이템 추가…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "A">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "검색어나 주소 입력">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "메일로 링크 보내기…">
 <!ENTITY emailPageCmd.accesskey       "E">
 <!ENTITY switchToMetroCmd.label       "&brandShortName; 메트로 버전 전환">
-<!ENTITY switchToMetroCmd2.label      "윈도8 &brandShortName;로 전환">
 <!ENTITY savePageCmd.label            "다른 이름으로 저장…">
 <!ENTITY savePageCmd.accesskey        "A">
 <!-- alternate for content area context menu -->
@@ -532,6 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "종료">
 <!ENTITY quitApplicationCmdWin.accesskey   "x">
+<!ENTITY quitApplicationCmdWin.tooltip     "&brandShortName; 종료">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "종료">
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "동기화">
 
 <!ENTITY socialToolbar.title        "소셜 도구 모음 버튼">
-<!ENTITY social.notLoggedIn.label   "로그인 안 됨">
 
 <!ENTITY social.ok.label       "확인">
 <!ENTITY social.ok.accesskey   "O">
@@ -642,6 +680,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "더 알아보기…">
 <!ENTITY social.learnMore.accesskey "l">
 <!ENTITY social.closeNotificationItem.label "나중에">
+
+
+
+<!ENTITY customizeMode.tabTitle "&brandShortName; 사용자 설정">
+<!ENTITY customizeMode.menuAndToolbars.label "메뉴와 도구 모음">
+<!ENTITY customizeMode.menuAndToolbars.header2 "부가적인 도구와 기능">
+<!ENTITY customizeMode.menuAndToolbars.empty "다른 도구를 찾으십니까?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "수천 개의 부가기능에서 고르기">
+<!ENTITY customizeMode.restoreDefaults "기본값으로 복원">
+<!ENTITY customizeMode.toolbars "도구 모음 보이거나 숨기기">
+<!ENTITY customizeMode.titlebar "제목창">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "채팅 창">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport "&vendorShortName;에서 이를 고칠 수 있도록 알려주십시오.">
 <!ENTITY tabCrashed.tryAgain "다시 시도">
 
+<!ENTITY uiTour.infoPanel.close "닫기">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -717,7 +768,15 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomOutButton.tooltip         "축소">
 <!ENTITY zoomInButton.tooltip          "확대">
 <!ENTITY zoomControls.label            "크기 조정">
-<!ENTITY addonBarCloseButton.tooltip  "부가 기능 모음 닫기">
-<!ENTITY toggleAddonBarCmd.key        "/">
+<!ENTITY addonBarCloseButton.tooltip   "부가 기능 모음 닫기">
+<!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "뒤로/앞으로">
+<!ENTITY viewBookmarksSidebar.label    "탐색창에 표시">
+<!ENTITY bookmarksItem.title           "북마크">
+<!ENTITY openLocationCmd.label         "주소 열기…">
+<!ENTITY openLocationCmd.accesskey     "L">
+<!ENTITY bookmarksMenuButton.tooltip   "북마크 표시">
+<!ENTITY switchToMetroCmd2.label       "윈도8 &brandShortName;로 전환">
+<!ENTITY tabGroupsButton.tooltip       "탭 그룹으로 보기">
 <!-- end of strings to be removed post-Australis -->
 

@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix	"(プライベートブラウジング)">
 
+<!ENTITY appmenu.tooltip                     "メニューを開きます">
+<!ENTITY navbarOverflow.label                "その他のツール...">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "タブを再読み込み">
 <!ENTITY  reloadTab.accesskey                "R">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label			"新しいタブ"><!-- 表示カ所によりアクセスキーが異なる -->
 <!ENTITY tabCmd.accesskey		"T">
 <!ENTITY tabCmd.commandkey		"t">
-<!ENTITY openLocationCmd.label		"URL を開く...">
-<!ENTITY openLocationCmd.accesskey	"L">
 <!ENTITY openFileCmd.label		"ファイルを開く...">
 <!ENTITY openFileCmd.accesskey		"O">
 <!ENTITY openFileCmd.commandkey		"o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label		"すべてのタブを表示">
 <!ENTITY showAllTabsCmd.accesskey	"A">
 
+<!ENTITY fxaSignIn.label		"&syncBrand.shortName.label; にサインイン">
+<!ENTITY fxaSignInError.label		"&syncBrand.shortName.label; に再接続">
+<!ENTITY syncStartPanel.heading		"&brandShortName; は同期中です">
+<!ENTITY syncStartPanel.subTitle	"オプションで &syncBrand.shortName.label; を管理できます。">
+<!ENTITY syncStartPanel.subTitleUnix	"設定で &syncBrand.shortName.label; を管理できます。">
+<!ENTITY syncErrorPanel.heading		"&syncBrand.shortName.label; に接続できません">
+<!ENTITY syncErrorPanel.subTitle	"同期を再開するにはサインインしてください。">
+<!ENTITY syncErrorPanel.signInButton.label	"サインイン">
+<!ENTITY syncErrorPanel.signInButton.accesskey	"S">
+
+
 <!ENTITY fullScreenMinimize.tooltip	"最小化">
 <!ENTITY fullScreenRestore.tooltip	"元に戻す">
 <!ENTITY fullScreenClose.tooltip	"閉じる">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label		"ブックマーク">
 <!ENTITY bookmarksMenu.accesskey	"B">
 <!ENTITY bookmarkThisPageCmd.label	"このページをブックマーク">
+<!ENTITY editThisBookmarkCmd.label	"このブックマークを編集">
 <!ENTITY bookmarkThisPageCmd.commandkey	"d">
 <!ENTITY markPageCmd.commandkey		"l">
 <!ENTITY sharePageCmd.label		"このページを共有">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey	"s">
 <!ENTITY shareVideoCmd.label		"この動画を共有">
 <!ENTITY shareVideoCmd.accesskey	"s">
+<!ENTITY feedsMenu.label		"購読">
 <!ENTITY subscribeToPageMenupopup.label	"このページを購読">
 <!ENTITY subscribeToPageMenuitem.label	"このページを購読...">
 <!ENTITY addCurPagesCmd.label		"すべてのタブをブックマーク...">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "印刷">
 <!ENTITY printButton.tooltip          "このページを印刷します">
 
-<!ENTITY backForwardItem.title        "戻る/進む">
 <!ENTITY locationItem.title           "ロケーションバー">
 <!ENTITY searchItem.title             "検索">
-<!ENTITY bookmarksItem.title          "ブックマーク">
 
 <!-- Toolbar items -->
 <!ENTITY homeButton.label             "ホーム">
 
 <!ENTITY tabGroupsButton.label        "タブグループ">
-<!ENTITY tabGroupsButton.tooltip      "タブをグループ分けして管理できます">
 
 <!ENTITY bookmarksButton.label		"ブックマーク">
 <!ENTITY bookmarksCmd.commandkey	"b">
 
 <!ENTITY bookmarksMenuButton.label          "ブックマーク">
-<!ENTITY bookmarksMenuButton.tooltip        "ブックマークを表示します">
 <!ENTITY bookmarksMenuButton.unsorted.label "未整理のブックマーク">
-<!ENTITY viewBookmarksSidebar.label         "ブックマークをサイドバーに表示します">
+<!ENTITY viewBookmarksSidebar2.label        "ブックマークサイドバーを表示">
 <!ENTITY viewBookmarksToolbar.label         "ブックマークツールバーを表示">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -321,7 +331,36 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd2.label	"すべての履歴を表示"><!-- (^^; -->
 <!ENTITY showAllHistoryCmd.commandkey	"H">
 
-<!ENTITY appMenuCustomize.label		"カスタマイズ">
+<!ENTITY appMenuCustomize.label			"カスタマイズ">
+<!ENTITY appMenuCustomize.tooltip		"メニューとツールバーをカスタマイズします">
+<!ENTITY appMenuCustomizeExit.label		"カスタマイズを終了">
+<!ENTITY appMenuCustomizeExit.tooltip		"カスタマイズを完了します">
+<!ENTITY appMenuHistory.label			"履歴">
+<!ENTITY appMenuHistory.showAll.label		"すべての履歴を表示">
+<!ENTITY appMenuHistory.clearRecent.label	"最近の履歴を消去...">
+<!ENTITY appMenuHistory.restoreSession.label	"以前のセッションを復元">
+<!ENTITY appMenuHistory.viewSidebar.label	"履歴サイドバーを表示">
+<!ENTITY appMenuHelp.tooltip			"ヘルプメニューを開きます">
+
+<!ENTITY customizeMenu.addToToolbar.label	"ツールバーを追加">
+<!ENTITY customizeMenu.addToToolbar.accesskey	"A">
+<!ENTITY customizeMenu.addToPanel.label		"メニューを追加">
+<!ENTITY customizeMenu.addToPanel.accesskey	"M">
+<!ENTITY customizeMenu.moveToToolbar.label	"ツールバーに移動">
+<!ENTITY customizeMenu.moveToToolbar.accesskey	"o">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label	"メニューに移動">
+<!ENTITY customizeMenu.moveToPanel.accesskey	"o">
+<!ENTITY customizeMenu.removeFromToolbar.label	"ツールバーから削除">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey	"R">
+<!ENTITY customizeMenu.removeFromMenu.label	"メニューから削除">
+<!ENTITY customizeMenu.removeFromMenu.accesskey	"R">
+<!ENTITY customizeMenu.addMoreItems.label	"その他の項目を追加...">
+<!ENTITY customizeMenu.addMoreItems.accesskey	"A">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "URL または検索語句を入力します">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "ページの URL をメールで送信...">
 <!ENTITY emailPageCmd.accesskey       "E">
 <!ENTITY switchToMetroCmd.label       "Windows 8 スタイルの &brandShortName; に切り替え">
-<!ENTITY switchToMetroCmd2.label      "&brandShortName; for Windows 8 タッチ に切り替え">
 <!ENTITY savePageCmd.label            "名前を付けてページを保存...">
 <!ENTITY savePageCmd.accesskey        "A">
 <!-- alternate for content area context menu -->
@@ -532,6 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label	"終了">
 <!ENTITY quitApplicationCmdWin.accesskey	"x">
+<!ENTITY quitApplicationCmdWin.tooltip	"&brandShortName; を終了します">
 <!ENTITY goBackCmd.commandKey		"[">
 <!ENTITY goForwardCmd.commandKey	"]">
 <!ENTITY quitApplicationCmd.label       "終了">
@@ -624,7 +663,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Sync">
 
 <!ENTITY socialToolbar.title        "ソーシャルツールバーボタン">
-<!ENTITY social.notLoggedIn.label   "ログインしていません">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -643,6 +681,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label			"詳細...">
 <!ENTITY social.learnMore.accesskey		"l">
 <!ENTITY social.closeNotificationItem.label	"後で">
+
+
+
+<!ENTITY customizeMode.tabTitle			"&brandShortName; をカスタマイズ">
+<!ENTITY customizeMode.menuAndToolbars.label	"メニューとツールバー">
+<!ENTITY customizeMode.menuAndToolbars.header2	"追加のツールと機能">
+<!ENTITY customizeMode.menuAndToolbars.empty	"その他のツールを入手">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink	"たくさんのアドオンから選択">
+<!ENTITY customizeMode.restoreDefaults		"既定値に戻す">
+<!ENTITY customizeMode.toolbars			"ツールバーを表示 / 隠す">
+<!ENTITY customizeMode.titlebar			"タイトルバー">
 
 <!ENTITY social.chatBar.commandkey		"c">
 <!ENTITY social.chatBar.label			"チャットを入力">
@@ -686,6 +735,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport		"&vendorShortName; にクラッシュ内容を送信する。">
 <!ENTITY tabCrashed.tryAgain			"再試行">
 
+<!ENTITY uiTour.infoPanel.close			"閉じる">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -720,4 +771,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "拡大/縮小コントロール">
 <!ENTITY addonBarCloseButton.tooltip   "アドオンバーを閉じます">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "戻る/進む">
+<!ENTITY viewBookmarksSidebar.label    "ブックマークをサイドバーに表示します">
+<!ENTITY bookmarksItem.title           "ブックマーク">
+<!ENTITY openLocationCmd.label         "URL を開く...">
+<!ENTITY openLocationCmd.accesskey     "L">
+<!ENTITY bookmarksMenuButton.tooltip   "ブックマークを表示します">
+<!ENTITY switchToMetroCmd2.label       "&brandShortName; for Windows 8 タッチ に切り替え">
+<!ENTITY tabGroupsButton.tooltip       "タブをグループ分けして管理できます">
 <!-- end of strings to be removed post-Australis -->

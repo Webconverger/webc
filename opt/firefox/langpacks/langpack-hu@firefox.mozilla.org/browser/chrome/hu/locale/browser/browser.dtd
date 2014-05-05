@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privát böngészés)">
 
+<!ENTITY appmenu.tooltip                     "Menü megnyitása">
+<!ENTITY navbarOverflow.label                "További eszközök…">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "Lap frissítése">
 <!ENTITY reloadTab.accesskey                "r">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Új lap">
 <!ENTITY tabCmd.accesskey "l">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Hely megnyitása…">
-<!ENTITY openLocationCmd.accesskey "H">
 <!ENTITY openFileCmd.label "Fájl megnyitása…">
 <!ENTITY openFileCmd.accesskey "F">
 <!ENTITY openFileCmd.commandkey "o">
@@ -89,11 +90,22 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY enterFullScreenCmd.accesskey "B">
 <!ENTITY exitFullScreenCmd.label "Kilépés a teljes képernyős módból">
 <!ENTITY exitFullScreenCmd.accesskey "K">
-<!ENTITY fullScreenCmd.label "Teljes képernyős üzemmód">
+<!ENTITY fullScreenCmd.label "Teljes képernyő">
 <!ENTITY fullScreenCmd.accesskey "T">
 <!ENTITY fullScreenCmd.macCommandKey "f">
 <!ENTITY showAllTabsCmd.label "Az összes böngészőlap megjelenítése">
 <!ENTITY showAllTabsCmd.accesskey "m">
+
+<!ENTITY fxaSignIn.label "Jelentkezzen be a &syncBrand.shortName.label;be">
+<!ENTITY fxaSignInError.label "Újracsatlakozás a &syncBrand.shortName.label;hez">
+<!ENTITY syncStartPanel.heading "A &brandShortName; szinkronizál">
+<!ENTITY syncStartPanel.subTitle "A &syncBrand.shortName.label; a Beállítások alatt kezelhető.">
+<!ENTITY syncStartPanel.subTitleUnix "A &syncBrand.shortName.label; a Beállítások alatt kezelhető.">
+<!ENTITY syncErrorPanel.heading "Nem lehet csatlakozni a &syncBrand.shortName.label;hez">
+<!ENTITY syncErrorPanel.subTitle "Jelentkezzen be a szinkronizálás folytatásához.">
+<!ENTITY syncErrorPanel.signInButton.label "Bejelentkezés">
+<!ENTITY syncErrorPanel.signInButton.accesskey "B">
+
 
 <!ENTITY fullScreenMinimize.tooltip "Kis méret">
 <!ENTITY fullScreenRestore.tooltip "Helyreállítás">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Könyvjelzők">
 <!ENTITY bookmarksMenu.accesskey "K">
 <!ENTITY bookmarkThisPageCmd.label "Oldal hozzáadása a könyvjelzőkhöz">
+<!ENTITY editThisBookmarkCmd.label "Könyvjelző szerkesztése">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Oldal megosztása">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "m">
 <!ENTITY shareVideoCmd.label "Videó megosztása">
 <!ENTITY shareVideoCmd.accesskey "m">
+<!ENTITY feedsMenu.label "Feliratkozás">
 <!ENTITY subscribeToPageMenupopup.label "Feliratkozás erre az oldalra">
 <!ENTITY subscribeToPageMenuitem.label "Feliratkozás erre az oldalra…">
 <!ENTITY addCurPagesCmd.label "Minden lap egy könyvjelzőbe…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Nyomtatás">
 <!ENTITY printButton.tooltip          "Oldal kinyomtatása">
 
-<!ENTITY backForwardItem.title        "Előre/Vissza">
 <!ENTITY locationItem.title           "Hely">
 <!ENTITY searchItem.title             "Keresés">
-<!ENTITY bookmarksItem.title          "Könyvjelzők">
 
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label             "Kezdőlap">
 
 <!ENTITY tabGroupsButton.label        "Lapcsoportok">
-<!ENTITY tabGroupsButton.tooltip      "Lapok csoportosítása">
 
 <!ENTITY bookmarksButton.label          "Könyvjelzők">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Könyvjelzők">
-<!ENTITY bookmarksMenuButton.tooltip        "Könyvjelzők megjelenítése">
 <!ENTITY bookmarksMenuButton.unsorted.label "Nem rendezett könyvjelzők">
-<!ENTITY viewBookmarksSidebar.label         "Megjelenítés az oldalsávon">
+<!ENTITY viewBookmarksSidebar2.label        "Könyvjelzők oldalsáv megjelenítése">
 <!ENTITY viewBookmarksToolbar.label         "Könyvjelző eszköztár megjelenítése">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Testreszabás">
+<!ENTITY appMenuCustomize.tooltip "A menü és az eszköztárak testreszabása">
+<!ENTITY appMenuCustomizeExit.label "Kilépés a testreszabásból">
+<!ENTITY appMenuCustomizeExit.tooltip "Testreszabás befejezése">
+<!ENTITY appMenuHistory.label "Előzmény">
+<!ENTITY appMenuHistory.showAll.label "Minden előzmény megjelenítése">
+<!ENTITY appMenuHistory.clearRecent.label "Előzmények törlése…">
+<!ENTITY appMenuHistory.restoreSession.label "Előző munkamenet helyreállítása">
+<!ENTITY appMenuHistory.viewSidebar.label "Előzmények oldalsáv megjelenítése">
+<!ENTITY appMenuHelp.tooltip "Súgó menü megnyitása">
+
+<!ENTITY customizeMenu.addToToolbar.label "Hozzáadás az eszköztárhoz">
+<!ENTITY customizeMenu.addToToolbar.accesskey "H">
+<!ENTITY customizeMenu.addToPanel.label "Hozzáadás a menühöz">
+<!ENTITY customizeMenu.addToPanel.accesskey "M">
+<!ENTITY customizeMenu.moveToToolbar.label "Áthelyezés az eszköztárra">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "e">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Áthelyezés a menübe">
+<!ENTITY customizeMenu.moveToPanel.accesskey "n">
+<!ENTITY customizeMenu.removeFromToolbar.label "Eltávolítás az eszköztárról">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "e">
+<!ENTITY customizeMenu.removeFromMenu.label "Eltávolítás a menüből">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "e">
+<!ENTITY customizeMenu.addMoreItems.label "További elemek hozzáadása…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "T">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Keresés vagy cím">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Hivatkozás küldése e-mailben…">
 <!ENTITY emailPageCmd.accesskey       "d">
 <!ENTITY switchToMetroCmd.label       "Újraindítás Windows 8 stílusú &brandShortName;ban">
-<!ENTITY switchToMetroCmd2.label      "Újraindítás &brandShortName; for Windows 8 Touch-ban">
 <!ENTITY savePageCmd.label            "Oldal mentése…">
 <!ENTITY savePageCmd.accesskey        "m">
 <!-- alternate for content area context menu -->
@@ -485,7 +523,7 @@ items are mutually exclusive. -->
 <!ENTITY mediaShowControls.accesskey "V">
 <!ENTITY mediaHideControls.label     "Vezérlők elrejtése">
 <!ENTITY mediaHideControls.accesskey "V">
-<!ENTITY videoFullScreen.label       "Teljes képernyős üzemmód">
+<!ENTITY videoFullScreen.label       "Teljes képernyő">
 <!ENTITY videoFullScreen.accesskey   "T">
 <!ENTITY videoSaveImage.label        "Pillanatkép mentése más néven…">
 <!ENTITY videoSaveImage.accesskey    "P">
@@ -528,10 +566,11 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY newWindowButton.tooltip        "Új ablak megnyitása">
 <!ENTITY sidebarCloseButton.tooltip     "Oldalsáv bezárása">
 
-<!ENTITY fullScreenButton.tooltip       "Ablak megjelenítése teljes képernyős üzemmódban">
+<!ENTITY fullScreenButton.tooltip       "Ablak megjelenítése teljes képernyős módban">
 
 <!ENTITY quitApplicationCmdWin.label       "Kilépés"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "K">
+<!ENTITY quitApplicationCmdWin.tooltip     "Kilépés a &brandShortName;ból">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Kilépés"> 
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Sync">
 
 <!ENTITY socialToolbar.title        "Közösségi eszköztár gomb">
-<!ENTITY social.notLoggedIn.label   "Nincs bejelentkezve">
 
 <!ENTITY social.ok.label       "OK">
 <!ENTITY social.ok.accesskey   "O">
@@ -642,6 +680,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "További tudnivalók…">
 <!ENTITY social.learnMore.accesskey "T">
 <!ENTITY social.closeNotificationItem.label "Most nem">
+
+
+
+<!ENTITY customizeMode.tabTitle "A &brandShortName; testreszabása">
+<!ENTITY customizeMode.menuAndToolbars.label "Menü és eszköztárak">
+<!ENTITY customizeMode.menuAndToolbars.header2 "További eszközök és funkciók">
+<!ENTITY customizeMode.menuAndToolbars.empty "További eszközöket szeretne?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Válasszon több ezer kiegészítő közül">
+<!ENTITY customizeMode.restoreDefaults "Alapértelmezett értékek visszaállítása">
+<!ENTITY customizeMode.toolbars "Eszköztárak megjelenítése/elrejtése">
+<!ENTITY customizeMode.titlebar "Címsor">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Csevegések fókuszba">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport "Értesítse a &vendorShortName;t, hogy kijavíthassák a hibát">
 <!ENTITY tabCrashed.tryAgain "Próbálja újra">
 
+<!ENTITY uiTour.infoPanel.close "Bezárás">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -719,5 +770,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Nagyítás">
 <!ENTITY addonBarCloseButton.tooltip   "Kiegészítősáv bezárása">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Előre/Vissza">
+<!ENTITY viewBookmarksSidebar.label    "Megjelenítés az oldalsávon">
+<!ENTITY bookmarksItem.title           "Könyvjelzők">
+<!ENTITY openLocationCmd.label         "Hely megnyitása…">
+<!ENTITY openLocationCmd.accesskey     "H">
+<!ENTITY bookmarksMenuButton.tooltip   "Könyvjelzők megjelenítése">
+<!ENTITY switchToMetroCmd2.label       "Újraindítás &brandShortName; for Windows 8 Touch-ban">
+<!ENTITY tabGroupsButton.tooltip       "Lapok csoportosítása">
 <!-- end of strings to be removed post-Australis -->
 

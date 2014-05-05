@@ -15,6 +15,9 @@
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privata retesplorado)">
 
+<!ENTITY appmenu.tooltip                     "Malfermi menuon">
+<!ENTITY navbarOverflow.label                "Pli da iloj…">
+
 <!-- Tab context menu -->
 <!ENTITY  reloadTab.label                    "Reŝargi langeton">
 <!ENTITY  reloadTab.accesskey                "R">
@@ -54,8 +57,6 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Nova langeto">
 <!ENTITY tabCmd.accesskey "v">
 <!ENTITY tabCmd.commandkey "t">
-<!ENTITY openLocationCmd.label "Malfermi retadreson…">
-<!ENTITY openLocationCmd.accesskey "r">
 <!ENTITY openFileCmd.label "Malfermi dosieron…">
 <!ENTITY openFileCmd.accesskey "d">
 <!ENTITY openFileCmd.commandkey "o">
@@ -95,6 +96,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "Montri ĉiujn langetojn">
 <!ENTITY showAllTabsCmd.accesskey "m">
 
+<!ENTITY fxaSignIn.label "Komenci seancon en &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Reconnect to &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel.heading "&brandShortName; nun spegulas">
+<!ENTITY syncStartPanel.subTitle "Vi povas administri &syncBrand.shortName.label; en Elektebloj.">
+<!ENTITY syncStartPanel.subTitleUnix "Vi povas administri &syncBrand.shortName.label; en Preferoj.">
+<!ENTITY syncErrorPanel.heading "La konekto al &syncBrand.shortName.label; ne eblas">
+<!ENTITY syncErrorPanel.subTitle "Bonvolu komenci seancon por daŭrigi la speguladon.">
+<!ENTITY syncErrorPanel.signInButton.label "Komenci seancon">
+<!ENTITY syncErrorPanel.signInButton.accesskey "K">
+
+
 <!ENTITY fullScreenMinimize.tooltip "Malplejgrandigi">
 <!ENTITY fullScreenRestore.tooltip "Normala grando">
 <!ENTITY fullScreenClose.tooltip "Fermi">
@@ -115,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "Legosignoj">
 <!ENTITY bookmarksMenu.accesskey "L">
 <!ENTITY bookmarkThisPageCmd.label "Aldoni legosignon por tiu ĉi paĝo">
+<!ENTITY editThisBookmarkCmd.label "Redakti tiun ĉi legosignon">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Dividi tiun ĉi paĝon">
@@ -128,6 +141,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "e">
 <!ENTITY shareVideoCmd.label "Dividi filmeton">
 <!ENTITY shareVideoCmd.accesskey "f">
+<!ENTITY feedsMenu.label "Aboni">
 <!ENTITY subscribeToPageMenupopup.label "Aboni tiun ĉi paĝon">
 <!ENTITY subscribeToPageMenuitem.label "Aboni tiun ĉi paĝon…">
 <!ENTITY addCurPagesCmd.label "Aldoni legosignon por ĉiuj langetoj…">
@@ -154,24 +168,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "Presi">
 <!ENTITY printButton.tooltip          "Presi ĉi tiun paĝon">
 
-<!ENTITY backForwardItem.title        "Malantaŭen/antaŭen">
 <!ENTITY locationItem.title           "Retadreso">
 <!ENTITY searchItem.title             "Serĉi">
-<!ENTITY bookmarksItem.title          "Legosignoj">
 
 <!-- Toolbar items --> 
 <!ENTITY homeButton.label             "Eka paĝo">
 
 <!ENTITY tabGroupsButton.label        "Grupoj de langetoj">
-<!ENTITY tabGroupsButton.tooltip      "Grupigi viajn langetojn">
 
 <!ENTITY bookmarksButton.label          "Legosignoj">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Legosignoj">
-<!ENTITY bookmarksMenuButton.tooltip        "Montri viajn legosignojn">
 <!ENTITY bookmarksMenuButton.unsorted.label "Neordigitaj legosignoj">
-<!ENTITY viewBookmarksSidebar.label         "Montri en la flanka strio">
+<!ENTITY viewBookmarksSidebar2.label        "Montri flankan strion de legosignoj">
 <!ENTITY viewBookmarksToolbar.label         "Montri ilaron de legosignoj">
 
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
@@ -322,6 +332,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Persone agordi">
+<!ENTITY appMenuCustomize.tooltip "Persone agordi la menuon kaj ilarstriojn">
+<!ENTITY appMenuCustomizeExit.label "Fini persone agordi">
+<!ENTITY appMenuCustomizeExit.tooltip "Fini la personan agordon">
+<!ENTITY appMenuHistory.label "Historio">
+<!ENTITY appMenuHistory.showAll.label "Montri tutan historion">
+<!ENTITY appMenuHistory.clearRecent.label "Viŝi ĵusan historion…">
+<!ENTITY appMenuHistory.restoreSession.label "Restarigi antaŭan seancon">
+<!ENTITY appMenuHistory.viewSidebar.label "Montri la flankan strion de historio">
+<!ENTITY appMenuHelp.tooltip "Malfermi menuon de helpo">
+
+<!ENTITY customizeMenu.addToToolbar.label "Aldoni al ilarstrio">
+<!ENTITY customizeMenu.addToToolbar.accesskey "A">
+<!ENTITY customizeMenu.addToPanel.label "Aldoni al menuo">
+<!ENTITY customizeMenu.addToPanel.accesskey "m">
+<!ENTITY customizeMenu.moveToToolbar.label "Movi al la ilarstrio">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "i">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "Movi al menuo">
+<!ENTITY customizeMenu.moveToPanel.accesskey "o">
+<!ENTITY customizeMenu.removeFromToolbar.label "Forigi el ilarstrio">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "f">
+<!ENTITY customizeMenu.removeFromMenu.label "Forigi el menuo">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "F">
+<!ENTITY customizeMenu.addMoreItems.label "Aldoni pli da elementoj…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "e">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Serĉu ion aŭ tajpu adreson">
@@ -407,7 +446,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailPageCmd.label           "Sendi ligilon retpoŝte…">
 <!ENTITY emailPageCmd.accesskey       "S">
 <!ENTITY switchToMetroCmd.label       "Restartigi &brandShortName; kun la stilo de Windows 8">
-<!ENTITY switchToMetroCmd2.label      "Restartigi en &brandShortName; por Windows 8 Touch">
 <!ENTITY savePageCmd.label            "Konservi paĝon kiel…">
 <!ENTITY savePageCmd.accesskey        "K">
 <!-- alternate for content area context menu -->
@@ -532,6 +570,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY quitApplicationCmdWin.label       "Eliri"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "l">
+<!ENTITY quitApplicationCmdWin.tooltip     "Fini &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Fini"> 
@@ -623,7 +662,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncToolbarButton.label      "Speguli">
 
 <!ENTITY socialToolbar.title        "Butono de socia ilaro">
-<!ENTITY social.notLoggedIn.label   "Ne konektita">
 
 <!ENTITY social.ok.label       "Akcepti">
 <!ENTITY social.ok.accesskey   "A">
@@ -642,6 +680,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.label "Pli da informo…">
 <!ENTITY social.learnMore.accesskey "i">
 <!ENTITY social.closeNotificationItem.label "Nun ne">
+
+
+
+<!ENTITY customizeMode.tabTitle "Persone agordi &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.label "Menuo kaj ilaraj strioj">
+<!ENTITY customizeMode.menuAndToolbars.header2 "Aldonaj iloj kaj trajtoj">
+<!ENTITY customizeMode.menuAndToolbars.empty "Ĉu vi volas pli da iloj?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "Elekti inter miloj de aldonaĵoj">
+<!ENTITY customizeMode.restoreDefaults "Reuzi normajn valorojn">
+<!ENTITY customizeMode.toolbars "Montri / kaŝi ilarojn">
+<!ENTITY customizeMode.titlebar "Titolstrio">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Focus chats">
@@ -685,6 +734,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.checkSendReport "Raporti al &vendorShortName; pri tiu ĉi paneo, tiel ke ili povos fari ion por eviti ĝin.">
 <!ENTITY tabCrashed.tryAgain "Klopodi denove">
 
+<!ENTITY uiTour.infoPanel.close "Fermi">
+
 <!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
      kept here to avoid warnings from l10n tools like compare-locales on
      l10n-central. They will be definitely removed when Australis is ready
@@ -719,5 +770,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY zoomControls.label            "Regado de pligrandigilo">
 <!ENTITY addonBarCloseButton.tooltip   "Fermi strion de aldonaĵoj">
 <!ENTITY toggleAddonBarCmd.key         "/">
+<!ENTITY backForwardItem.title         "Malantaŭen/antaŭen">
+<!ENTITY viewBookmarksSidebar.label    "Montri en la flanka strio">
+<!ENTITY bookmarksItem.title           "Legosignoj">
+<!ENTITY openLocationCmd.label         "Malfermi retadreson…">
+<!ENTITY openLocationCmd.accesskey     "r">
+<!ENTITY bookmarksMenuButton.tooltip   "Montri viajn legosignojn">
+<!ENTITY switchToMetroCmd2.label       "Restartigi en &brandShortName; por Windows 8 Touch">
+<!ENTITY tabGroupsButton.tooltip       "Grupigi viajn langetojn">
 <!-- end of strings to be removed post-Australis -->
 
