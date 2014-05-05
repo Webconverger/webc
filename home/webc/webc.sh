@@ -120,6 +120,11 @@ do
 			xset -dpms
 			;;
 
+		numlock)
+			logs "numlock set"
+			/usr/bin/numlockx
+			;;
+
 		blank=*)
 			secondstillblank=$((${x#blank=} * 60))
 			logs "screen will blank after $secondstillblank seconds"
