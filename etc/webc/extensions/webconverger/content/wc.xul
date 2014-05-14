@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE window SYSTEM "chrome://browser/locale/browser.dtd">
+
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-<window id="downloadManager" hidden="true" disabled="true"></window>
+<window id="downloadManager" hidden="true" disabled="true">
+</window>
 
-<script src="wc.js" />
+<script src="wc.js"/>
 
 <menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
 <menuitem id="menu_preferences" disabled="true"/>
@@ -88,50 +91,50 @@
 </commandset>
 
 <keyset id="mainKeyset">
-<key id="addBookmarkAsKb" disabled="true"/>
-<key id="bookmarkAllTabsKb" disabled="true"/>
-<key id="focusURLBar" disabled="false"/>
-<key id="focusURLBar2" disabled="false"/>
+<key id="restart" keycode="VK_F10" oncommand="goQuitApplication();"/>
+<key id="key_newNavigator" disabled="true"/>
+<key id="key_newNavigatorTab" disabled="false"/>
+<key id="focusURLBar" disabled="true"/>
+<key id="focusURLBar2" disabled="true"/>
+<key id="key_search" disabled="true"/>
+<key id="key_search2" disabled="true"/>
+<key id="key_openDownloads" disabled="true"/>
+<key id="openFileKb" disabled="true"/>
+<key id="key_savePage" disabled="true"/>
+<key id="key_close" disabled="false"/>
+<key id="key_closeWindow" disabled="false"/>
+<key id="key_undo" disabled="true"/>
+<key id="key_redo" disabled="true"/>
+<key id="key_cut" disabled="true"/>
+<key id="key_copy" disabled="true"/>
+<key id="key_paste" disabled="true"/>
+<key id="key_delete" disabled="true"/>
+<key id="key_selectAll" disabled="true"/>
 <key id="goBackKb" disabled="true"/>
 <key id="goForwardKb" disabled="true"/>
 <key id="goHome" keycode="VK_HOME" command="Browser:Home" modifiers="alt"/>
-<key id="key_close" disabled="false"/>
-<key id="key_closeWindow" disabled="false"/>
-<key id="key_copy" disabled="true"/>
-<key id="key_cut" disabled="true"/>
-<key id="key_debugger" disabled="true"/>
-<key id="key_delete" disabled="true"/>
-<key id="key_errorConsole" oncommand=""/>
 <key id="key_fullScreen" disabled="true"/>
-<key id="key_gotoHistory" command="doNothing();"/>
-<key id="key_inspect" disabled="true"/>
-<key id="key_newNavigator" disabled="true"/>
-<key id="key_newNavigatorTab" disabled="false"/>
-<key id="key_openAddons" disabled="true"/>
-<key id="key_openDownloads" disabled="true"/>
-<key id="key_paste" disabled="true"/>
-<key id="key_redo" disabled="true"/>
-<key id="key_sanitize" disabled="true"/>
-<key id="key_savePage" disabled="true"/>
-<key id="key_scratchpad" disabled="true"/>
-<key id="key_search" disabled="true"/>
-<key id="key_search2" disabled="true"/>
-<key id="key_selectAll" disabled="true"/>
-<key id="key_styleeditor" disabled="true"/>
-<key id="key_switchTextDirection" disabled="true"/>
-<key id="key_textZoomEnlarge" disabled="true"/>
-<key id="key_textZoomReduce" disabled="true"/>
-<key id="key_textZoomReset" disabled="true"/>
-<key id="key_undo" disabled="true"/>
-<key id="key_undoCloseTab" disabled="false"/>
 <key id="key_viewSource" disabled="true"/>
 <key id="key_webConsole" disabled="true"/>
+<key id="key_inspect" disabled="true"/>
+<key id="key_debugger" disabled="true"/>
+<key id="key_scratchpad" disabled="true"/>
+<key id="key_styleeditor" disabled="true"/>
+<key id="key_openAddons" disabled="true"/>
+<key id="addBookmarkAsKb" disabled="true"/>
 <key id="manBookmarkKb" disabled="true"/>
-<key id="openFileKb" disabled="true"/>
-<key id="restart" keycode="VK_F10" oncommand="goQuitApplication();"/>
 <key id="showAllHistoryKb" disabled="true"/>
+<key id="bookmarkAllTabsKb" disabled="true"/>
+<key id="key_textZoomReduce" disabled="true"/>
+<key id="key_textZoomEnlarge" disabled="true"/>
+<key id="key_textZoomReset" disabled="true"/>
+<key id="key_switchTextDirection" disabled="true"/>
+<key id="key_sanitize" disabled="true"/>
+<key id="key_undoCloseTab" disabled="false"/>
+<key id="key_gotoHistory" command="doNothing();"/>
 <key id="viewBookmarksSidebarKb" command="doNothing();"/>
 <key id="viewBookmarksSidebarWinKb" command="doNothing();"/>
+<key id="key_errorConsole" oncommand=""/>
 </keyset>
 
 <tabs id="tabbrowser-tabs" ondragstart="event.preventDefault();event.stopPropagation();"/>
@@ -145,4 +148,17 @@
 <menuitem id="context-inspect" style="display: none;"/>
 <menuitem id="javascriptConsole" style="display: none;"/>
 </menupopup>
+
+<toolbox id="navigator-toolbox">
+
+
+
+  <toolbar id="webconverger-toolbar" class="chromeclass-toolbar" toolbarname="Webconverger Toolbar">
+<toolbarbutton id="wc-print" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&printButton.tooltip;"
+                 command="cmd_print"
+                 hidden="true"
+                 />
+</toolbar>
+</toolbox>
 </overlay>

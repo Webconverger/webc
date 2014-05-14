@@ -1,11 +1,3 @@
-function installButton(toolbarId, id) {
-	var toolbar = document.getElementById(toolbarId);
-	var before = null;
-	toolbar.insertItem(id, before);
-	toolbar.setAttribute("currentset", toolbar.currentSet);
-	document.persist(toolbar.id, "currentset");
-}
-
 (function() {
 	function startup() {
 		var navigatorToolbox = document.getElementById("navigator-toolbox");
