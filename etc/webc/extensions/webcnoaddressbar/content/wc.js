@@ -11,12 +11,13 @@ function installButton(toolbarId, id) {
 		var navigatorToolbox = document.getElementById("navigator-toolbox");
 		navigatorToolbox.iconsize = "small";
 		navigatorToolbox.setAttribute("iconsize", "small");
-		var reloadButton = document.getElementById("reload-button");
-		reloadButton.style.visibility = "visible";
-		var stopButton = document.getElementById("stop-button");
-		stopButton.style.visibility = "visible";
-		// COMMENT BELOW OUT only if showprintbutton is explicity set
-		// installButton("nav-bar", "print-button");
+		var showPrintButton = false;
+		try {
+			showPrintButton = Services.prefs.getBoolPref("extensions.webconverger.showprintbutton");
+		} catch (e) {}
+		if (showPrintButton) {
+			document.getElementById("wc-print").removeAttribute("hidden");
+		}
 		window.removeEventListener("load", startup, false);
 	}
 

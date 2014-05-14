@@ -93,9 +93,10 @@ if ! dpkg -s cups 2>/dev/null >/dev/null; then
 	echo 'pref("print.show_print_progress", false);' >> "$prefs"
 fi
 
+// https://github.com/Webconverger/webconverger-addon/issues/17
 if cmdline_has showprintbutton
 then
-	sed -i 's,// installButton,installButton,g' /etc/webc/extensions/webcnoaddressbar/content/wc.js /etc/webc/extensions/webconverger/content/wc.js
+	echo 'pref("extensions.webconverger.showprintbutton", true);' >> "$prefs"
 fi
 
 

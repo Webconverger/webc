@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE window SYSTEM "chrome://browser/locale/browser.dtd">
+
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <window id="downloadManager" hidden="true" disabled="true">
@@ -146,4 +148,40 @@
 <menuitem id="context-inspect" style="display: none;"/>
 <menuitem id="javascriptConsole" style="display: none;"/>
 </menupopup>
+
+<toolbox id="navigator-toolbox">
+  <toolbar id="webconverger-toolbar" class="chromeclass-toolbar" toolbarname="Webconverger Toolbar">
+  <toolbarbutton id="wc-back"
+                 class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&backButton.tooltip;"
+                 command="Browser:BackOrBackDuplicate"
+                 oncommand="BrowserBack(event)"
+                 context="backForwardMenu"
+                 />
+  <toolbarbutton id="wc-forward"
+                 class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&forwardButton.tooltip;"
+                 command="Browser:ForwardOrForwardDuplicate"
+                 context="backForwardMenu"
+                 />
+  <toolbarbutton id="wc-reload" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&stopButton.tooltip;"
+                 command="Browser:ReloadOrDuplicate"
+                 />
+  <toolbarbutton id="wc-stop"
+                 class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&stopButton.tooltip;"
+                 command="Browser:Stop"
+                 />
+  <toolbarbutton id="wc-print" class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 tooltiptext="&printButton.tooltip;"
+                 command="cmd_print"
+                 hidden="true"
+                 />
+  <toolbarbutton id="wc-home"
+                 class="toolbarbutton-1 chromeclass-toolbar-additional"
+                 oncommand="BrowserGoHome(event)"
+                 />
+</toolbar>
+</toolbox>
 </overlay>
