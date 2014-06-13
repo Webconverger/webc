@@ -105,11 +105,11 @@ setup_unionfs ()
 				if [ "${UNIONTYPE}" != "unionmount" ]
 				then
 					mpoint="${croot}/${imagename}"
-					rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
 					_log_msg mpoint: $mpoint
 				else
 					mpoint="${rootmnt}"
 				fi
+				rootfslist="${mpoint} ${rootfslist}"
 
 				mkdir -p "${mpoint}"
 				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
