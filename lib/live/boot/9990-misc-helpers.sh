@@ -8,7 +8,7 @@ is_live_path ()
 
 	if [ -d "${DIRECTORY}"/"${LIVE_MEDIA_PATH}" ]
 	then
-		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2
+		for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs2 git
 		do
 			if [ "$(echo ${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM})" != "${DIRECTORY}/${LIVE_MEDIA_PATH}/*.${FILESYSTEM}" ]
 			then
@@ -87,6 +87,7 @@ mount_images_in_directory ()
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext3" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.ext4" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.jffs2" ||
+		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.git" ||
 		match_files_in_dir "${directory}/${LIVE_MEDIA_PATH}/*.dir"
 	then
 		[ -n "${mac}" ] && adddirectory="${directory}/${LIVE_MEDIA_PATH}/${mac}"
