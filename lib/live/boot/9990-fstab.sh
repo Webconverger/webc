@@ -6,14 +6,14 @@ Fstab ()
 {
 	# FIXME: stop hardcoding overloading of initramfs-tools functions
 	. /scripts/functions
-	. /lib/live/boot/initramfs-tools.sh
+	. /lib/live/boot/9990-initramfs-tools.sh
 
 	if [ -n "${NOFSTAB}" ]
 	then
 		return
 	fi
 
-	if [ -e /run ]
+	if [ -e /root/etc/fstab.d ]
 	then
 		# wheezy
 		_FSTAB="/root/etc/fstab.d/live"

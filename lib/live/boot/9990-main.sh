@@ -2,7 +2,7 @@
 
 # set -e
 
-mountroot ()
+Main ()
 {
 	if [ -x /scripts/local-top/cryptroot ]
 	then
@@ -19,21 +19,24 @@ mountroot ()
 	. /live.vars
 
 	_CMDLINE="$(cat /proc/cmdline)"
-	Cmdline
+	Cmdline_old
 
-	case "${LIVE_DEBUG}" in
-		true)
-			set -x
-			;;
-	esac
+	Debug
 
-	case "${LIVE_READ_ONLY}" in
-		true)
-			Read_only
-			;;
-	esac
+	Read_only
 
 	Select_eth_device
+
+	if [ -e /conf/param.conf ]
+	then
+		. /conf/param.conf
+	fi
+
+	if [ -n "${FUSE_MOUNT}" ]
+	then
+		# fuse does not work with klibc mount
+		ln -f /bin/mount.util-linux /bin/mount
+	fi
 
 	# Needed here too because some things (*cough* udev *cough*)
 	# changes the timeout
@@ -91,11 +94,7 @@ mountroot ()
 		panic "Unable to find a medium containing a live file system"
 	fi
 
-	case "${LIVE_VERIFY_CHECKSUMS}" in
-		true)
-			Verify_checksums "${livefs_root}"
-			;;
-	esac
+	Verify_checksums "${livefs_root}"
 
 	if [ "${TORAM}" ]
 	then
@@ -136,10 +135,23 @@ mountroot ()
 		mount_images_in_directory "${livefs_root}" "${rootmnt}" "${mac}"
 	fi
 
+	# At this point /root should contain the final root filesystem.
+	# Move all mountpoints below /live into /root/lib/live/mount.
+	# This has to be done after mounting the root filesystem to /
+	# otherwise these mount points won't be accessible from the running system.
+	for _MOUNT in $(cat /proc/mounts | cut -f 2 -d " " | grep -e "^/live/")
+	do
+		local newmount
+		newmount="${rootmnt}/lib/live/mount/${_MOUNT#/live/}"
+		mkdir -p "${newmount}"
+		mount -o move "${_MOUNT}" "${newmount}" > /dev/null 2>&1 || \
+		mount -o bind "${_MOUNT}" "${newmount}" > /dev/null || \
+		log_warning_msg "W: failed to move or bindmount ${_MOUNT} to ${newmount}"
+	done
 
 	if [ -n "${ROOT_PID}" ]
 	then
-		echo "${ROOT_PID}" > "${rootmnt}"/live/root.pid
+		echo "${ROOT_PID}" > "${rootmnt}"/lib/live/root.pid
 	fi
 
 	log_end_msg
@@ -152,25 +164,12 @@ mountroot ()
 			;;
 	esac
 
-	# Move to the new root filesystem so that programs there can get at it.
-	if [ ! -d /root/live/image ]
-	then
-		mkdir -p /root/live/image
-		mount --move /live/image /root/live/image
-	fi
 
 	# aufs2 in kernel versions around 2.6.33 has a regression:
 	# directories can't be accessed when read for the first the time,
 	# causing a failure for example when accessing /var/lib/fai
 	# when booting FAI, this simple workaround solves it
 	ls /root/* >/dev/null 2>&1
-
-	# Move findiso directory to the new root filesystem so that programs there can get at it.
-	if [ -d /live/findiso ] && [ ! -d /root/live/findiso ]
-	then
-		mkdir -p /root/live/findiso
-		mount -n --move /live/findiso /root/live/findiso
-	fi
 
 	# if we do not unmount the ISO we can't run "fsck /dev/ice" later on
 	# because the mountpoint is left behind in /proc/mounts, so let's get
@@ -179,10 +178,10 @@ mountroot ()
 	then
 		losetup -d /dev/loop0
 
-		if is_mountpoint /root/live/findiso
+		if is_mountpoint /root/lib/live/mount/findiso
 		then
-			umount /root/live/findiso
-			rmdir --ignore-fail-on-non-empty /root/live/findiso \
+			umount /root/lib/live/mount/findiso
+			rmdir --ignore-fail-on-non-empty /root/lib/live/mount/findiso \
 				>/dev/null 2>&1 || true
 		fi
 	fi
@@ -202,11 +201,7 @@ mountroot ()
 	Fstab
 	Netbase
 
-	case "${LIVE_SWAPON}" in
-		true)
-			Swapon
-			;;
-	esac
+	Swap
 
 	case "${UNIONFS}" in
 		unionfs-fuse)

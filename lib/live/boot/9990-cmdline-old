@@ -2,30 +2,11 @@
 
 #set -e
 
-Cmdline ()
+Cmdline_old ()
 {
 	for _PARAMETER in ${_CMDLINE}
 	do
 		case "${_PARAMETER}" in
-			live-boot.read-only|read-only)
-				LIVE_READ_ONLY="true"
-				;;
-
-			live-boot.swapon)
-				LIVE_SWAPON="true"
-				;;
-
-			live-boot.verify-checksums|verify-checksums)
-				LIVE_VERIFY_CHECKSUMS="true"
-				;;
-
-			# Special options
-			live-boot.debug|debug)
-				LIVE_DEBUG="true"
-				;;
-
-
-			# parameters below need review (FIXME)
 			skipconfig)
 				NOFSTAB="true"
 				NONETWORKING="true"
@@ -207,8 +188,6 @@ Cmdline ()
 				;;
 
 			persistence-label=*)
-				old_root_overlay_label="${_PARAMETER#persistence-label=*}"
-				old_home_overlay_label="${_PARAMETER#persistence-label=*}"
 				custom_overlay_label="${_PARAMETER#persistence-label=*}"
 				;;
 
@@ -220,11 +199,6 @@ Cmdline ()
 			quickusbmodules)
 				QUICKUSBMODULES="true"
 				export QUICKUSBMODULES
-				;;
-
-			showmounts)
-				SHOWMOUNTS="true"
-				export SHOWMOUNTS
 				;;
 
 			todisk=*)
@@ -267,12 +241,6 @@ Cmdline ()
 				UNIONTYPE="${_PARAMETER#union=}"
 				export UNIONTYPE
 				;;
-
-			git-revision=*)
-				GIT_REVISION="${_PARAMETER#git-revision=}"
-				export GIT_REVISION
-				;;
-
 		esac
 	done
 

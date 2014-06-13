@@ -2,11 +2,34 @@
 
 #set -e
 
-Swapon ()
+Swap ()
 {
-	_DEVICES="/dev/sd* /dev/vd*"
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-boot.swap=*|swap=*)
+				LIVE_SWAP="true"
+				LIVE_SWAP_DEVICES="${_PARAMETER#*swap=}"
+				;;
 
-	if [ -e /run ]
+			live-boot.swap|swap)
+				LIVE_SWAP="true"
+				;;
+		esac
+	done
+
+	case "${LIVE_SWAP}" in
+		true)
+			;;
+
+		*)
+			return 0
+			;;
+	esac
+
+	LIVE_SWAP_DEVICES="${LIVE_SWAP_DEVICES:-/dev/sd* /dev/vd*}"
+
+	if [ -e /root/etc/fstab.d ]
 	then
 		# wheezy
 		_FSTAB="/root/etc/fstab.d/swap"
@@ -15,7 +38,7 @@ Swapon ()
 		_FSTAB="/root/etc/fstab"
 	fi
 
-	for _DEVICE in ${_DEVICES}
+	for _DEVICE in $(echo ${LIVE_SWAP_DEVICES} | sed -e 's|,| |g')
 	do
 		if [ ! -b "${_DEVICE}" ]
 		then
@@ -41,7 +64,7 @@ Swapon ()
 	fi
 
 	# Add new swap entries
-	for _DEVICE in _SWAP_DEVICES
+	for _DEVICE in ${_SWAP_DEVICES}
 	do
 		echo "${_DEVICE} swap swap defaults 0 0" >> "${_FSTAB}"
 	done

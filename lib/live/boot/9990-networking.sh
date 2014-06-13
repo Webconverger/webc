@@ -110,7 +110,13 @@ do_netsetup ()
 	else
 		for interface in ${DEVICE}; do
 			ipconfig -t "$ETHDEV_TIMEOUT" ${interface} | tee /netboot-${interface}.config
+
+			# squeeze
 			[ -e /tmp/net-${interface}.conf ] && . /tmp/net-${interface}.conf
+
+			# wheezy
+			[ -e /run/net-${interface}.conf ] && . /run/net-${interface}.conf
+
 			if [ "$IPV4ADDR" != "0.0.0.0" ]
 			then
 				break
@@ -122,7 +128,13 @@ do_netsetup ()
 	do
 		# source relevant ipconfig output
 		OLDHOSTNAME=${HOSTNAME}
+
+		# squeeze
 		[ -e /tmp/net-${interface}.conf ] && . /tmp/net-${interface}.conf
+
+		# wheezy
+		[ -e /run/net-${interface}.conf ] && . /run/net-${interface}.conf
+
 		[ -z ${HOSTNAME} ] && HOSTNAME=${OLDHOSTNAME}
 		export HOSTNAME
 

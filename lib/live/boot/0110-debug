@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#set -e
+
+Debug ()
+{
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-boot.debug|debug)
+				LIVE_DEBUG="true"
+				;;
+		esac
+	done
+
+	case "${LIVE_DEBUG}" in
+		true)
+			;;
+
+		*)
+			return 0
+			;;
+	esac
+
+	# Write the trace output
+	set -x
+}

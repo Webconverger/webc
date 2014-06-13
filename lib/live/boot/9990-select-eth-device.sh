@@ -6,7 +6,7 @@ Select_eth_device ()
 	bootconf=$(egrep '^BOOT=' /conf/initramfs.conf | tail -1)
 
 	# can be superseded by command line (used by Debian-Live's netboot for example)
-	for ARGUMENT in $(cat /proc/cmdline)
+	for ARGUMENT in ${_CMDLINE}
 	do
 		case "${ARGUMENT}" in
 			netboot=*)
@@ -40,13 +40,13 @@ Select_eth_device ()
 	fi
 
 	# If user force to use specific device, write it
-	for ARGUMENT in $(cat /proc/cmdline)
+	for ARGUMENT in ${_CMDLINE}
 	do
 		case "${ARGUMENT}" in
 			live-netdev=*)
 				NETDEV="${ARGUMENT#live-netdev=}"
 				echo "DEVICE=$NETDEV" >> /conf/param.conf
-				echo "Found live-netdev parameter in /proc/cmdline. Force to use network device $NETDEV."
+				echo "Found live-netdev parameter, forcing to to use network device $NETDEV."
 				return
 				;;
 		esac

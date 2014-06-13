@@ -1,0 +1,56 @@
+#!/bin/sh
+
+#set -e
+
+Read_only ()
+{
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-boot.read-only=*|read-only=*)
+				LIVE_READ_ONLY="true"
+				LIVE_READ_ONLY_DEVICES="${_PARAMETER#*read-only=}"
+				;;
+
+			live-boot.read-only|read-only)
+				LIVE_READ_ONLY="true"
+				;;
+		esac
+	done
+
+	case "${LIVE_READ_ONLY}" in
+		true)
+			;;
+
+		*)
+			return 0
+			;;
+	esac
+
+	# Marking some block devices as read-only to ensure that nothing
+	# gets written as linux still writes to 'only' read-only mounted filesystems.
+	LIVE_READ_ONLY_DEVICES="${LIVE_READ_ONLY_DEVICES:-/dev/sd* /dev/vd*}"
+
+	for _DEVICE in $(echo ${LIVE_READ_ONLY_DEVICES} | sed -e 's|,| |g')
+	do
+		if [ ! -b "${_DEVICE}" ]
+		then
+			continue
+		fi
+
+		echo -n "live-boot: Setting ${_DEVICE} read-only..." > /dev/console
+
+		blockdev --setro ${_DEVICE}
+		_RETURN="${?}"
+
+		case "${_RETURN}" in
+			0)
+				echo " done, use 'blockdev --setrw ${_DEVICE}' to set read-write." > /dev/console
+				;;
+
+			*)
+				echo " failed." > /dev/console
+				;;
+		esac
+	done
+}

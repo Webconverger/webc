@@ -7,7 +7,8 @@ do_iscsi()
 	do_netsetup
 	#modprobe ib_iser
 	modprobe iscsi_tcp
-	local debugopt=""
+	local debugopt
+	debugopt=""
 	[ "${DEBUG}" = "true" ] && debugopt="-d 8"
 	#FIXME this name is supposed to be unique - some date + ifconfig hash?
 	ISCSI_INITIATORNAME="iqn.1993-08.org.debian.live:01:$(echo "${HWADDR}" | sed -e s/://g)"
@@ -21,12 +22,14 @@ do_iscsi()
 	then
 		panic "Failed to log into iscsi target"
 	fi
-	local host="$(ls -d /sys/class/scsi_host/host*/device/iscsi_host:host* \
-			    /sys/class/scsi_host/host*/device/iscsi_host/host* | sed -e 's:/device.*::' -e 's:.*host::')"
+	local host
+	host="$(ls -d /sys/class/scsi_host/host*/device/iscsi_host:host* \
+		      /sys/class/scsi_host/host*/device/iscsi_host/host* | sed -e 's:/device.*::' -e 's:.*host::')"
 	if [ -n "${host}" ]
 	then
-		local devices=""
-		local i=0
+		local devices i
+		devices=""
+		i=0
 		while [ -z "${devices}" -a $i -lt 60 ]
 		do
 			sleep 1

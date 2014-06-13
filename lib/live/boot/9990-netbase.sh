@@ -11,11 +11,12 @@ Netbase ()
 
 	# FIXME: stop hardcoding overloading of initramfs-tools functions
 	. /scripts/functions
-	. /lib/live/boot/initramfs-tools.sh
+	. /lib/live/boot/9990-initramfs-tools.sh
 
 	log_begin_msg "Preconfiguring networking"
 
 	IFFILE="/root/etc/network/interfaces"
+	DNSFILE="/root/etc/resolv.conf"
 
 	if [ "${STATICIP}" = "frommedia" ] && [ -e "${IFFILE}" ]
 	then
@@ -43,6 +44,7 @@ EOF
 			ifaddress="$(echo ${ifline} | cut -f2 -d ':')"
 			ifnetmask="$(echo ${ifline} | cut -f3 -d ':')"
 			ifgateway="$(echo ${ifline} | cut -f4 -d ':')"
+			nameserver="$(echo ${ifline} | cut -f5 -d ':')"
 
 cat >> "${IFFILE}" << EOF
 allow-hotplug ${ifname}
@@ -59,6 +61,17 @@ cat >> "${IFFILE}" << EOF
 
 EOF
 
+			fi
+
+			if [ -n "${nameserver}" ]
+			then
+				if [ -e "${DNSFILE}" ]
+				then
+					grep -v ^nameserver "${DNSFILE}" > "${DNSFILE}.tmp"
+					mv "${DNSFILE}.tmp" "${DNSFILE}"
+				fi
+
+				echo "nameserver ${nameserver}" >> "${DNSFILE}"
 			fi
 		done
 	else
@@ -121,21 +134,6 @@ EOF
 			fi
 		fi
 	fi
-
-	#if [ ! -x /root/usr/sbin/NetworkManager ]
-	#then
-	#	for i in eth0 eth1 eth2 ath0 wlan0
-	#	do
-	#		grep -q "iface ${i}" ${IFFILE} && continue
-	#
-	#cat >> "${IFFILE}" << EOF
-	#allow-hotplug ${i}
-	#iface ${i} inet dhcp
-	#
-	#EOF
-	#
-	#	done
-	#fi
 
 	log_end_msg
 }

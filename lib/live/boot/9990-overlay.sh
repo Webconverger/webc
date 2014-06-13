@@ -36,7 +36,7 @@ setup_unionfs ()
 	croot="/"
 
 	# Let's just mount the read-only file systems first
-	rofslist=""
+	rootfslist=""
 
 	if [ -z "${PLAIN_ROOT}" ]
 	then
@@ -55,7 +55,7 @@ setup_unionfs ()
 			done
 		else
 			# ${MODULE}.module does not exist, create a list of images
-			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 			do
 				for IMAGE in "${image_directory}"/*."${FILESYSTEM}"
 				do
@@ -68,7 +68,7 @@ setup_unionfs ()
 
 			if [ -n "${addimage_directory}" ] && [ -d "${addimage_directory}" ]
 			then
-				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 				do
 					for IMAGE in "${addimage_directory}"/*."${FILESYSTEM}"
 					do
@@ -98,61 +98,10 @@ setup_unionfs ()
 			run_scripts /scripts/live-realpremount
 			log_end_msg
 
-
-			if [ "${image##*.}" = "git" ]
-			then
-				_log_msg git
-				if [ "${UNIONTYPE}" != "unionmount" ]
-				then
-					mpoint="${croot}/${imagename}"
-					rofsstring="${mpoint}=${roopt}:${rofsstring}" && rofslist="${mpoint} ${rofslist}"
-					_log_msg mpoint: $mpoint
-				else
-					mpoint="${rootmnt}"
-				fi
-
-				mkdir -p "${mpoint}"
-				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
-				# Replace /etc/mtab with a symlink to
-				# /proc/mounts. This prevents fuse from
-				# calling /bin/mount to update the mtab,
-				# using options that busybox mount does
-				# not understand...
-				ln -sf /proc/mounts /etc/mtab
-
-				# Make sure fuse keeps persistent inode
-				# numbers to not confuse git. This is
-				# needed in debug mode, when the files
-				# exposed by git-fs are the working
-				# copy for the git repository
-				# bindmounted into /.git. In this case,
-				# git gets confused and becomes slow
-				# when inode numbers change. Since we
-				# can't change this option after
-				# mounting when we decide we need /.git,
-				# we just set it always and accept the
-				# extra (small) memory overhead.
-				#
-				# https://github.com/Webconverger/webc/issues/115
-				gitfs_opt="$gitfs_opt,noforget"
-
-				if [ -n "$GIT_REVISION" ]; then
-					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
-				fi
-
-				#ulimit -c unlimited # enable core dumps
-				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
-				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
-
-				log_end_msg
-				#maybe_break gitfs
-				#openvt -c 3 -- /bin/sh
-
-			elif [ -d "${image}" ]
+			if [ -d "${image}" ]
 			then
 				# it is a plain directory: do nothing
-				rofslist="${image} ${rofslist}"
+				rootfslist="${image} ${rootfslist}"
 			elif [ -f "${image}" ]
 			then
 				if losetup --help 2>&1 | grep -q -- "-r\b"
@@ -177,12 +126,12 @@ setup_unionfs ()
 				case "${UNIONTYPE}" in
 					unionmount)
 						mpoint="${rootmnt}"
-						rofslist="${rootmnt} ${rofslist}"
+						rootfslist="${rootmnt} ${rootfslist}"
 						;;
 
 					*)
 						mpoint="${croot}/${imagename}"
-						rofslist="${mpoint} ${rofslist}"
+						rootfslist="${mpoint} ${rootfslist}"
 						;;
 				esac
 
@@ -198,7 +147,7 @@ setup_unionfs ()
 		log_begin_msg "Mounting \"${image_directory}\" on \"${croot}/filesystem\""
 		mount -t $(get_fstype "${image_directory}") -o ro,noatime "${image_directory}" "${croot}/filesystem" || \
 			panic "Can not mount ${image_directory} on ${croot}/filesystem" && \
-			rofslist="${croot}/filesystem ${rofslist}"
+			rootfslist="${croot}/filesystem ${rootfslist}"
 		# probably broken:
 		mount -o bind ${croot}/filesystem $mountpoint
 		log_end_msg
@@ -206,9 +155,8 @@ setup_unionfs ()
 
 	# tmpfs file systems
 	touch /etc/fstab
-	mkdir -p /live
-	mount -t tmpfs tmpfs /live
 	mkdir -p /live/overlay
+	mount -t tmpfs tmpfs /live/overlay
 
 	# Looking for persistence devices or files
 	if [ -n "${PERSISTENCE}" ] && [ -z "${NOPERSISTENCE}" ]
@@ -241,49 +189,58 @@ setup_unionfs ()
 			done
 		fi
 
-		case "${PERSISTENCE_MEDIA}" in
-			removable)
-				whitelistdev="$(removable_dev)"
-				;;
+		local whitelistdev
+		whitelistdev=""
+		if [ -n "${PERSISTENCE_MEDIA}" ]
+		then
+			case "${PERSISTENCE_MEDIA}" in
+				removable)
+					whitelistdev="$(removable_dev)"
+					;;
 
-			removable-usb)
-				whitelistdev="$(removable_usb_dev)"
-				;;
-
-			*)
-				whitelistdev=""
-				;;
-		esac
+				removable-usb)
+					whitelistdev="$(removable_usb_dev)"
+					;;
+			esac
+			if [ -z "${whitelistdev}" ]
+			then
+				whitelistdev="ignore_all_devices"
+			fi
+		fi
 
 		if is_in_comma_sep_list overlay ${PERSISTENCE_METHOD}
 		then
 			overlays="${old_root_overlay_label} ${old_home_overlay_label} ${custom_overlay_label}"
 		fi
 
-		local overlay_devices=""
-		for media in $(find_persistence_media "${overlays}" "${whitelistdev}")
-		do
-			media="$(echo ${media} | tr ":" " ")"
+		local overlay_devices
+		overlay_devices=""
+		if [ "${whitelistdev}" != "ignore_all_devices" ]
+		then
+			for media in $(find_persistence_media "${overlays}" "${whitelistdev}")
+			do
+				media="$(echo ${media} | tr ":" " ")"
 
-			case ${media} in
-				${old_root_overlay_label}=*)
-					device="${media#*=}"
-					fix_backwards_compatibility ${device} / union
-					overlay_devices="${overlay_devices} ${device}"
-					;;
+				case ${media} in
+					${old_root_overlay_label}=*)
+						device="${media#*=}"
+						fix_backwards_compatibility ${device} / union
+						overlay_devices="${overlay_devices} ${device}"
+						;;
 
-				${old_home_overlay_label}=*)
-					device="${media#*=}"
-					fix_backwards_compatibility ${device} /home bind
-					overlay_devices="${overlay_devices} ${device}"
-					;;
+					${old_home_overlay_label}=*)
+						device="${media#*=}"
+						fix_backwards_compatibility ${device} /home bind
+						overlay_devices="${overlay_devices} ${device}"
+						;;
 
-				${custom_overlay_label}=*)
-					device="${media#*=}"
-					overlay_devices="${overlay_devices} ${device}"
-					;;
-			 esac
-		done
+					${custom_overlay_label}=*)
+						device="${media#*=}"
+						overlay_devices="${overlay_devices} ${device}"
+						;;
+				 esac
+			done
+		fi
 	elif [ -n "${NFS_COW}" ] && [ -z "${NOPERSISTENCE}" ]
 	then
 		# check if there are any nfs options
@@ -341,19 +298,19 @@ setup_unionfs ()
 		fi
 	fi
 
-	rofscount=$(echo ${rofslist} |wc -w)
+	rootfscount=$(echo ${rootfslist} |wc -w)
 
-	rofs=${rofslist%% }
+	rootfs=${rootfslist%% }
 
 	if [ -n "${EXPOSED_ROOT}" ]
 	then
-		if [ ${rofscount} -ne 1 ]
+		if [ ${rootfscount} -ne 1 ]
 		then
-			panic "only one RO file system supported with exposedroot: ${rofslist}"
+			panic "only one RO file system supported with exposedroot: ${rootfslist}"
 		fi
 
-		mount --bind ${rofs} ${rootmnt} || \
-			panic "bind mount of ${rofs} failed"
+		mount --bind ${rootfs} ${rootmnt} || \
+			panic "bind mount of ${rootfs} failed"
 
 		if [ -z "${SKIP_UNION_MOUNTS}" ]
 		then
@@ -378,16 +335,17 @@ setup_unionfs ()
 		then
 			# FIXME: handle PERSISTENCE_READONLY
 			unionmountopts="-t ${cow_fstype} -o noatime,union,${cow_mountopt} ${cowdevice}"
-			mount_full $unionmountopts "${unionmountpoint}"
+			# unionmount only works with util-linux mount
+			mount.util-linux $unionmountopts "${unionmountpoint}"
 		else
 			cow_dir="/live/overlay${dir}"
-			rofs_dir="${rofs}${dir}"
+			rootfs_dir="${rootfs}${dir}"
 			mkdir -p ${cow_dir}
 			if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
 			then
-				do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rofs_dir}
+				do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rootfs_dir}
 			else
-				do_union ${unionmountpoint} ${cow_dir} ${rofs_dir}
+				do_union ${unionmountpoint} ${cow_dir} ${rootfs_dir}
 			fi
 		fi || panic "mount ${UNIONTYPE} on ${unionmountpoint} failed with option ${unionmountopts}"
 	done
@@ -395,49 +353,51 @@ setup_unionfs ()
 	# Correct the permissions of /:
 	chmod 0755 "${rootmnt}"
 
-	live_rofs_list=""
-	# SHOWMOUNTS is necessary for custom mounts with the union option
-	# Since we may want to do custom mounts in user-space it's best to always enable SHOWMOUNTS
-	if true #[ -n "${SHOWMOUNTS}" ] || ( [ -n "${PERSISTENCE}" ] && [ -z "${NOPERSISTENCE}" ] 1)
+	# Correct the permission of /tmp:
+	if [ -d "${rootmnt}/tmp" ]
 	then
-		# XXX: is the for loop really necessary? rofslist can only contain one item (see above XXX about EXPOSEDROOT) and this is also assumed elsewhere above (see use of $rofs above).
-		for d in ${rofslist}
-		do
-			live_rofs="/live/rofs/${d##*/}"
-			live_rofs_list="${live_rofs_list} ${live_rofs}"
-			mkdir -p "${live_rofs}"
-			case d in
-				*.dir)
-					# do nothing # mount -o bind "${d}" "${live_rofs}"
-					;;
-				*)
-					case "${UNIONTYPE}" in
-						unionfs-fuse)
-							mount -o bind "${d}" "${live_rofs}"
-							;;
-
-						*)
-							mount -o move "${d}" "${live_rofs}"
-							;;
-					esac
-					;;
-			esac
-		done
+		chmod 1777 "${rootmnt}"/tmp
 	fi
+
+	live_rootfs_list=""
+	for d in ${rootfslist}
+	do
+		live_rootfs="/live/rootfs/${d##*/}"
+		live_rootfs_list="${live_rootfs_list} ${live_rootfs}"
+		mkdir -p "${live_rootfs}"
+		case d in
+			*.dir)
+				# do nothing # mount -o bind "${d}" "${live_rootfs}"
+				;;
+			*)
+				case "${UNIONTYPE}" in
+					unionfs-fuse)
+						mount -o bind "${d}" "${live_rootfs}"
+						;;
+
+					*)
+						mount -o move "${d}" "${live_rootfs}"
+						;;
+				esac
+				;;
+		esac
+	done
 
 	# Adding custom persistence
 	if [ -n "${PERSISTENCE}" ] && [ -z "${NOPERSISTENCE}" ]
 	then
-		local custom_mounts="/tmp/custom_mounts.list"
+		local custom_mounts
+		custom_mounts="/tmp/custom_mounts.list"
 		rm -rf ${custom_mounts} 2> /dev/null
 
 		# Gather information about custom mounts from devies detected as overlays
 		get_custom_mounts ${custom_mounts} ${overlay_devices}
 
-		[ -n "${DEBUG}" ] && cp ${custom_mounts} "/live/persistence"
+		[ -n "${DEBUG}" ] && cp ${custom_mounts} "/lib/live/mount/persistence"
 
 		# Now we do the actual mounting (and symlinking)
-		local used_overlays=""
+		local used_overlays
+		used_overlays=""
 		used_overlays=$(activate_custom_mounts ${custom_mounts})
 		rm ${custom_mounts}
 
@@ -451,11 +411,8 @@ setup_unionfs ()
 		done
 	fi
 
-	mkdir -p "${rootmnt}/live"
-	mount -o move /live "${rootmnt}/live" >/dev/null 2>&1 || mount -o bind /live "${rootmnt}/live" || log_warning_msg "Unable to move or bind /live to ${rootmnt}/live"
-
-	# shows cow fs on /overlay (FIXME: do we still need/want this? probably yes)
-	mkdir -p "${rootmnt}/live/overlay"
-	mount -o move /live/overlay "${rootmnt}/live/overlay" >/dev/null 2>&1 || mount -o bind /overlay "${rootmnt}/live/overlay" || log_warning_msg "Unable to move or bind /overlay to ${rootmnt}/live/overlay"
-
+        # ensure that a potentially stray tmpfs gets removed
+        # otherways, initramfs-tools is unable to remove /live
+        # and fails to boot
+        umount /live/overlay || true
 }
