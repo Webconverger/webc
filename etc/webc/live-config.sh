@@ -184,6 +184,12 @@ for x in $( cmdline ); do
 		fi
 		;;
 
+	whitelist=*)
+		whitelist="$( /bin/busybox httpd -d ${x#whitelist=} )"
+		echo 'pref("extensions.webconverger.whitelist", "'$whitelist'");' >> "$prefs"
+		logs "Set whitelist: $whitelist"
+		;;
+
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
 		echo "pref(\"autoadmin.global_config_url\",\"$prefs\");" >> /opt/firefox/mozilla.cfg
