@@ -13,48 +13,9 @@
   %globalDTD;
 ]>
 
-<!-- ***** BEGIN LICENSE BLOCK *****
-   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
-   -
-   - The contents of this file are subject to the Mozilla Public License Version
-   - 1.1 (the "License"); you may not use this file except in compliance with
-   - the License. You may obtain a copy of the License at
-   - http://www.mozilla.org/MPL/
-   -
-   - Software distributed under the License is distributed on an "AS IS" basis,
-   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-   - for the specific language governing rights and limitations under the
-   - License.
-   -
-   - The Original Code is mozilla.org code.
-   -
-   - The Initial Developer of the Original Code is
-   - Netscape Communications Corporation.
-   - Portions created by the Initial Developer are Copyright (C) 1998
-   - the Initial Developer. All Rights Reserved.
-   -
-   - Contributor(s):
-   -   Adam Lock <adamlock@netscape.com>
-   -   William R. Price <wrprice@alumni.rice.edu>
-   -   Henrik Skupin <mozilla@hskupin.info>
-   -   Jeff Walden <jwalden+code@mit.edu>
-   -   Johnathan Nightingale <johnath@mozilla.com>
-   -   Ehsan Akhgari <ehsan.akhgari@gmail.com>
-   -   Steffen Wilberg <steffen.wilberg@web.de>
-   -
-   - Alternatively, the contents of this file may be used under the terms of
-   - either the GNU General Public License Version 2 or later (the "GPL"), or
-   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
-   - in which case the provisions of the GPL or the LGPL are applicable instead
-   - of those above. If you wish to allow use of your version of this file only
-   - under the terms of either the GPL or the LGPL, and not to allow others to
-   - use your version of this file under the terms of the MPL, indicate your
-   - decision by deleting the provisions above and replace them with the notice
-   - and other provisions required by the LGPL or the GPL. If you do not delete
-   - the provisions above, a recipient may use your version of this file under
-   - the terms of any one of the MPL, the GPL or the LGPL.
-   -
-   - ***** END LICENSE BLOCK ***** -->
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -114,12 +75,8 @@
 
       function retryThis(buttonEl)
       {
-        // If this is the "Offline mode" page, go online!
-        if (getErrorCode() == "netOffline") {
-          window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                .getInterface(Components.interfaces.nsIDOMWindowUtils)
-                .goOnline();
-        }
+        // Note: The application may wish to handle switching off "offline mode"
+        // before this event handler runs, but using a capturing event handler.
 
         // Session history has the URL of the page that failed
         // to load, not the one of the error page. So, just call
@@ -317,7 +274,7 @@
         <h1 id="et_dnsNotFound">&dnsNotFound.title;</h1>
         <h1 id="et_fileNotFound">&fileNotFound.title;</h1>
         <h1 id="et_malformedURI">&malformedURI.title;</h1>
-        <h1 id="et_protocolNotFound">&protocolNotFound.title;</h1>
+        <h1 id="et_unknownProtocolFound">&unknownProtocolFound.title;</h1>
         <h1 id="et_connectionFailure">&connectionFailure.title;</h1>
         <h1 id="et_netTimeout">&netTimeout.title;</h1>
         <h1 id="et_redirectLoop">&redirectLoop.title;</h1>
@@ -343,7 +300,7 @@
         <div id="ed_dnsNotFound">&dnsNotFound.longDesc;</div>
         <div id="ed_fileNotFound">&fileNotFound.longDesc;</div>
         <div id="ed_malformedURI">&malformedURI.longDesc;</div>
-        <div id="ed_protocolNotFound">&protocolNotFound.longDesc;</div>
+        <div id="ed_unknownProtocolFound">&unknownProtocolFound.longDesc;</div>
         <div id="ed_connectionFailure">&connectionFailure.longDesc;</div>
         <div id="ed_netTimeout">&netTimeout.longDesc;</div>
         <div id="ed_redirectLoop">&redirectLoop.longDesc;</div>
@@ -395,6 +352,21 @@
 
       <!-- Retry Button -->
       <button id="errorTryAgain" autocomplete="off" onclick="retryThis(this);">&retry.label;</button>
+      <script>
+        // Only do autofocus if we're the toplevel frame; otherwise we
+        // don't want to call attention to ourselves!  The key part is
+        // that autofocus happens on insertion into the tree, so we
+        // can remove the button, add @autofocus, and reinsert the
+        // button.
+        if (window.top == window) {
+            var button = document.getElementById("errorTryAgain");
+            var nextSibling = button.nextSibling;
+            var parent = button.parentNode;
+            parent.removeChild(button);
+            button.setAttribute("autofocus", "true");
+            parent.insertBefore(button, nextSibling);
+        }
+      </script>
 
     </div>
 
@@ -403,13 +375,12 @@
     - an onload handler. This is because error pages are loaded as
     - LOAD_BACKGROUND, which means that onload handlers will not be executed.
     -->
-    <script type="application/javascript">
+<script type="application/javascript">
+initPage();
+setTimeout(function() {
+		location.reload(true);
+		}, 10000); // If and when the Internet fails, lets retry every 10 seconds
+</script>
 
-	initPage();
-
-	setTimeout(location.reload, 10000);
-
-	</script>
-
-  </body>
+</body>
 </html>

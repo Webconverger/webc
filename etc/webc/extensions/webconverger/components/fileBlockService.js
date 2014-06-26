@@ -91,8 +91,12 @@ FileBlock.prototype = {
     }
     // Only allow these three about URLs
     if (aContentLocation.scheme == "about") {
-      if (/^about:certerror/.test(aContentLocation.spec) ||
+      if (aContentLocation.spec == "about:" ||
+          /^about:certerror/.test(aContentLocation.spec) ||
           /^about:neterror/.test(aContentLocation.spec) ||
+          /^about:buildconfig/.test(aContentLocation.spec) ||
+          /^about:credits/.test(aContentLocation.spec) ||
+          /^about:license/.test(aContentLocation.spec) ||
 //          /^about:srcdoc/.test(aContentLocation.spec) || // Needed for Australis
 //          /^about:customizing/.test(aContentLocation.spec) || // Needed for Australis
           /^about:blank/.test(aContentLocation.spec)) {
