@@ -1,3 +1,7 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+   
 <!-- Note: each tab panel must contain unique accesskeys -->
 
 <!ENTITY generalTab.label                "Опште">
@@ -5,13 +9,13 @@
 <!ENTITY accessibility.label             "Приступачност">
 
 <!ENTITY useCursorNavigation.label       "Увек користи стрелице за кретање по страницама">
-<!ENTITY useCursorNavigation.accesskey   "У">
+<!ENTITY useCursorNavigation.accesskey   "с">
 <!ENTITY searchStartTyping.label         "Тражи текст када почнем да куцам">
 <!ENTITY searchStartTyping.accesskey     "Т">
-<!ENTITY blockAutoRefresh.label          "Упозори ме када сајтови покушају да преусмере или поново учитају страну">
+<!ENTITY blockAutoRefresh.label          "Упозори ме када сајтови покушају да преусмере или поново учитају страницу">
 <!ENTITY blockAutoRefresh.accesskey      "У">
 
-<!ENTITY browsing.label                  "Преглед">
+<!ENTITY browsing.label                  "Прегледање">
 
 <!ENTITY useAutoScroll.label             "Користи аутоматско померање">
 <!ENTITY useAutoScroll.accesskey         "К">
@@ -20,24 +24,41 @@
 <!ENTITY allowHWAccel.label              "Користи хардверско убрзање, кад је доступно">
 <!ENTITY allowHWAccel.accesskey          "х">
 <!ENTITY checkSpelling.label             "Проверавај правопис док куцам">
-<!ENTITY checkSpelling.accesskey         "П">
+<!ENTITY checkSpelling.accesskey         "ц">
 
-<!ENTITY systemDefaults.label            "Изворне системске вредности">
+<!ENTITY systemDefaults.label            "Подразумеване системске вредности">
 <!ENTITY alwaysCheckDefault.label        "При покретању провери да ли је &brandShortName; подразумевани прегледач"><!--XXX-->
-<!ENTITY alwaysCheckDefault.accesskey    "У">
-<!ENTITY checkNow.label                  "Провери сад">
-<!ENTITY checkNow.accesskey              "П">
-<!ENTITY submitCrashes.label             "Пошаљи извештај о рушењу">
-<!ENTITY submitCrashes.accesskey         "р">
-<!ENTITY submitTelemetry.label           "Слање података о перформансама">
-<!ENTITY submitTelemetry.accesskey       "ф">
+<!ENTITY alwaysCheckDefault.accesskey    "и">
+<!ENTITY setDefault.label                "Постави &brandShortName; као свој подразумевани веб прегледач">
+<!ENTITY setDefault.accesskey            "п">
+<!ENTITY isDefault.label                 "&brandShortName; је тренутно Ваш подразумевани веб прегледач">
+
+<!ENTITY dataChoicesTab.label            "Избор података">
+
+<!ENTITY healthReportSection.label       "&brandShortName; извештај здравља">
+<!ENTITY healthReportDesc.label          "Помаже Вам да разумете перформансе свог прегледача и поделите податке са &vendorShortName;-ом о здрављу свог прегледача">
+<!ENTITY enableHealthReport.label        "Омогући &brandShortName; извештај здравља">
+<!ENTITY enableHealthReport.accesskey    "з">
+<!ENTITY healthReportLearnMore.label     "Сазнајте више">
+
+<!ENTITY telemetrySection.label          "Телеметрија">
+<!ENTITY telemetryDesc.label             "Делите податке о перформансама, коришћењу, хардверу и подешавањима који се тичу Вашег прегледача са &vendorShortName;-ом да бисте нам помогли да учинимо &brandShortName; бољим">
+<!ENTITY enableTelemetry.label           "Омогући телеметрију">
+<!ENTITY enableTelemetry.accesskey       "л">
+<!ENTITY telemetryLearnMore.label        "Сазнајте више">
+
+<!ENTITY crashReporterSection.label      "Извештач о рушењу">
+<!ENTITY crashReporterDesc.label         "&brandShortName; шаље извештаје о рушењу да би помогао &vendorShortName;-и да учини Ваш прегледач још стабилнијим и још сигурнијим.">
+<!ENTITY enableCrashReporter.label       "Омогући извештач о рушењу">
+<!ENTITY enableCrashReporter.accesskey   "р">
+<!ENTITY crashReporterLearnMore.label    "Сазнајте више">
 
 <!ENTITY networkTab.label                "Мрежа">
 
-<!ENTITY connection.label                "Веза">
+<!ENTITY connection.label                "Конекција">
 
-<!ENTITY connectionDesc.label            "Подешавање начина везе са Интернетом за &brandShortName;">
-<!ENTITY connectionSettings.label        "Подешавања…">
+<!ENTITY connectionDesc.label            "Подешавање начина како се &brandShortName; конектује на интернет">
+<!ENTITY connectionSettings.label        "Поставке…">
 <!ENTITY connectionSettings.accesskey    "П">
 
 <!ENTITY httpCache.label                 "Кеширан веб садржај">
@@ -52,7 +73,7 @@
 -->
 <!ENTITY limitCacheSizeBefore.label      "Ограничи кеш на">
 <!ENTITY limitCacheSizeBefore.accesskey  "О">
-<!ENTITY limitCacheSizeAfter.label       "МБ простора">
+<!ENTITY limitCacheSizeAfter.label       "MB простора">
 <!ENTITY clearCacheNow.label             "Очисти сад">
 <!ENTITY clearCacheNow.accesskey         "с">
 <!ENTITY clearOfflineAppCacheNow.label   "Очисти сад">
@@ -60,31 +81,38 @@
 <!ENTITY overrideSmartCacheSize.label    "Занемари аутоматско управљање кешом">
 <!ENTITY overrideSmartCacheSize.accesskey "З">
 
-<!ENTITY updateTab.label                 "Обнављања">
+<!ENTITY updateTab.label                 "Надоградње">
 
-<!ENTITY updateApp.label                 "Доградње за &brandShortName;:">
-<!ENTITY updateAuto.label                "Аутоматски инсталирај доградње (препоручено)">
-<!ENTITY updateAuto.accesskey            "A">
-<!ENTITY updateCheck.label               "Проверавај доградње, али ме питај да ли да их инсталирам">
+<!ENTITY updateApp.label                 "&brandShortName; надоградње:">
+<!-- Note either updateAuto1 is used or (updateAutoMetro and updateAutoDesktop),
+     so re-using accesss key in updateAuto1 is OK. updateAutoDesktop can be found
+     in preferences.properties -->
+<!ENTITY updateAuto1.label               "Аутоматски инсталирај надоградње (препоручено: повећана сигурност)">
+<!ENTITY updateAuto1.accesskey           "А">
+<!ENTITY updateAutoMetro.label           "Аутоматски инсталирај надоградње за десктоп и Windows 8 &brandShortName; стилове">
+<!ENTITY updateAutoMetro.accesskey       "с">
+<!ENTITY updateCheck.label               "Проверавај надоградње, али ме питај да ли да их инсталирам">
 <!ENTITY updateCheck.accesskey           "д">
-<!ENTITY updateManual.label              "Никад не проверавај доградње (не препоручује се)">
+<!ENTITY updateManual.label              "Никад не проверавај надоградње (не препоручује се)">
 <!ENTITY updateManual.accesskey          "Н">
 
 <!ENTITY updateAutoAddonWarn.label       "Упозори ме ако ће ово да онемогући било који додатак">
 <!ENTITY updateAutoAddonWarn.accesskey   "з">
 
-<!ENTITY updateHistory.label             "Прикажи историјат унапређења">
-<!ENTITY updateHistory.accesskey         "И">
+<!ENTITY updateAutoMetroWarn.label       "(Windows 8 &brandShortName; стил не проверава компатабилност са додацима)">
 
-<!ENTITY useService.label                "Употреба позадинских сервиса за инсталацију доградњи">
+<!ENTITY updateHistory.label             "Прикажи историјат надоградњи">
+<!ENTITY updateHistory.accesskey         "и">
+
+<!ENTITY useService.label                "Употреби позадинске сервисе за инсталацију надоградњи">
 <!ENTITY useService.accesskey            "з">
 
-<!ENTITY updateOthers.label              "Аутоматски догради:">
+<!ENTITY updateOthers.label              "Аутоматски надогради:">
 <!ENTITY enableSearchUpdate.label        "Механизме претраге">
 <!ENTITY enableSearchUpdate.accesskey    "М">
 
-<!ENTITY offlineNotify.label             "Обавести ме када веб-сајт затражи да смести податке за коришћење ван мреже">
-<!ENTITY offlineNotify.accesskey         "T">
+<!ENTITY offlineNotify.label             "Обавести ме када веб сајт затражи да смести податке за коришћење ван мреже">
+<!ENTITY offlineNotify.accesskey         "О">
 <!ENTITY offlineNotifyExceptions.label   "Изузеци">
 <!ENTITY offlineNotifyExceptions.accesskey "И">
 
@@ -94,59 +122,15 @@
 <!ENTITY offlineAppsListRemove.accesskey "У">
 <!ENTITY offlineAppRemove.confirm        "Уклони податке о сајту">
 
-<!ENTITY encryptionTab.label             "Шифровање">
-
-<!ENTITY protocols.label                 "Протоколи">
-<!ENTITY useSSL3.label                   "Користи SSL 3.0">
-<!ENTITY useSSL3.accesskey               "3">
-<!ENTITY useTLS1.label                   "Користи TLS 1.0">
-<!ENTITY useTLS1.accesskey               "1">
-<!ENTITY certificates.label              "Сертификати">
+<!ENTITY certificateTab.label            "Сертификати">
 <!ENTITY certSelection.description       "Када сервер затражи мој лични сертификат:">
 <!ENTITY certs.auto                      "Изабери аутоматски">
 <!ENTITY certs.auto.accesskey            "и">
 <!ENTITY certs.ask                       "Питај ме сваки пут">
 <!ENTITY certs.ask.accesskey             "т">
 <!ENTITY viewCerts.label                 "Преглед сертификата">
-<!ENTITY viewCerts.accesskey             "П">
-<!ENTITY viewCRLs.label                  "Списак опозива">
-<!ENTITY viewCRLs.accesskey              "С">
-<!ENTITY verify2.label                   "Вредновање">
+<!ENTITY viewCerts.accesskey             "ф">
+<!ENTITY verify2.label                   "Валидација">
 <!ENTITY verify2.accesskey               "В">
 <!ENTITY viewSecurityDevices.label       "Безбедоносни уређаји">
 <!ENTITY viewSecurityDevices.accesskey   "Б">
-
-
-<!ENTITY certificateTab.label            "Certificates">
-<!ENTITY crashReporterDesc.label         "&brandShortName; submits crash reports to help &vendorShortName; make your browser more stable and secure">
-<!ENTITY crashReporterLearnMore.label    "Learn More">
-
-<!ENTITY crashReporterSection.label      "Crash Reporter">
-
-<!ENTITY dataChoicesTab.label            "Data Choices">
-<!ENTITY enableCrashReporter.accesskey   "C">
-<!ENTITY enableCrashReporter.label       "Enable Crash Reporter">
-<!ENTITY enableHealthReport.accesskey    "R">
-<!ENTITY enableHealthReport.label        "Enable &brandShortName; Health Report">
-<!ENTITY enableTelemetry.accesskey       "T">
-<!ENTITY enableTelemetry.label           "Enable Telemetry">
-<!ENTITY healthReportDesc.label          "Helps you understand your browser performance and shares data with &vendorShortName; about your browser health">
-<!ENTITY healthReportLearnMore.label     "Learn More">
-
-<!ENTITY healthReportSection.label       "&brandShortName; Health Report">
-<!ENTITY isDefault.label                 "&brandShortName; is currently your default browser">
-<!ENTITY setDefault.accesskey            "d">
-<!ENTITY setDefault.label                "Make &brandShortName; the default browser">
-<!ENTITY telemetryDesc.label             "Shares performance, usage, hardware and customization data about your browser with &vendorShortName; to help us make &brandShortName; better">
-<!ENTITY telemetryLearnMore.label        "Learn More">
-
-<!ENTITY telemetrySection.label          "Telemetry">
-<!ENTITY updateAuto1.accesskey           "A">
-<!-- Note either updateAuto1 is used or (updateAutoMetro and updateAutoDesktop),
-     so re-using accesss key in updateAuto1 is OK. updateAutoDesktop can be found
-     in preferences.properties -->
-<!ENTITY updateAuto1.label               "Automatically install updates (recommended: improved security)">
-<!ENTITY updateAutoMetro.accesskey       "s">
-<!ENTITY updateAutoMetro.label           "Automatically update from desktop and Windows 8 style &brandShortName;">
-
-<!ENTITY updateAutoMetroWarn.label       "(Windows 8 style &brandShortName; does not check add-on compatibility)">

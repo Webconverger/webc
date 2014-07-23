@@ -10,3 +10,4 @@ pref("browser.search.order.5", "chrome://browser-region/locale/region.properties
 pref("browser.search.order.6", "chrome://browser-region/locale/region.properties");
 pref("browser.search.order.7", "chrome://browser-region/locale/region.properties");
 pref("browser.search.order.8", "chrome://browser-region/locale/region.properties");
+pref("browser.search.order.9", "chrome://browser-region/locale/region.properties");
