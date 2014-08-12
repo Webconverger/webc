@@ -36,16 +36,45 @@ do
 		export HTTP_PROXY=${x#http_proxy=}
 		export http_proxy=${HTTP_PROXY}
 		git config --system http.proxy ${HTTP_PROXY}
-		HOST_PORT=${HTTP_PROXY##*//}
-		PROXY_HOST=${HOST_PORT%%:*}
-		PROXY_PORT=${HOST_PORT##*:}
 
-		logger PROXY SETTINGS: $HTTP_PROXY $PROXY_HOST $PROXY_PORT
+		logger Configuring for proxy $HTTP_PROXY
+
+		url=$(echo $HTTP_PROXY | sed -e 's,http://,,' -e 's,https://,,')
+
+		# extract the user and password (if any)
+		userpass="`echo $url | grep @ | cut -d@ -f1`"
+		pass=`echo $userpass | grep : | cut -d: -f2`
+		if [ -n "$pass" ]; then
+			user=`echo $userpass | grep : | cut -d: -f1`
+		else
+			user=$userpass
+		fi
+		# echo userpass: $userpass
+		# echo user: $user
+		# echo pass: $pass
+
+		# echo userpass: $userpass
+		hostport=$(echo $url | cut -d @ -f 2)
+		# echo hostport: $hostport
+		port=`echo $hostport | grep : | cut -d: -f2`
+		if [ -n "$port" ]; then
+			host=`echo $hostport | grep : | cut -d: -f1`
+		else
+			host=$hostport
+		fi
+
+		logger Username:  $user
+		logger Password: $pass
+		logger Proxy host: $host
+		logger Proxy port: $port
+
 		echo "pref(\"network.proxy.type\", 1);"  >> $prefs
-		echo "pref(\"network.proxy.http\", \"$PROXY_HOST\");" >> $prefs
-		echo "pref(\"network.proxy.http_port\", $PROXY_PORT);" >> $prefs
-		echo "pref(\"network.proxy.ssl\", \"$PROXY_HOST\");" >> $prefs
-		echo "pref(\"network.proxy.ssl_port\", $PROXY_PORT);" >> $prefs
+		echo "pref(\"network.proxy.http\", \"$host\");" >> $prefs
+		echo "pref(\"network.proxy.http_port\", $port);" >> $prefs
+		echo "pref(\"network.proxy.ssl\", \"$host\");" >> $prefs
+		echo "pref(\"network.proxy.ssl_port\", $port);" >> $prefs
+		test "$user" && echo 'pref("extensions.webconverger.proxyusername", "'$user'");' >> "$prefs"
+		test "$pass" && echo 'pref("extensions.webconverger.proxypassword", "'$pass'");' >> "$prefs"
 		;;
 	esac
 done

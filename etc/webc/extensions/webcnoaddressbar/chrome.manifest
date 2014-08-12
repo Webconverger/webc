@@ -1,4 +1,5 @@
 content webconverger                                               content/
+resource webconverger modules/
 overlay chrome://browser/content/browser.xul    chrome://webconverger/content/wc.xul
 style chrome://browser/content/browser.xul chrome://webconverger/content/wc.css
 style chrome://global/content/config.xul chrome://webconverger/content/blank.css
@@ -26,3 +27,7 @@ category content-policy policy @webconverger.com/fileblock-service;1
 
 component {c9201eeb-fbbd-459d-91d2-61e758e49ea2} components/aboutHome.js
 contract @mozilla.org/network/protocol/about;1?what=home {c9201eeb-fbbd-459d-91d2-61e758e49ea2}
+
+component {a41ae9a1-4eec-4c6b-b0e4-4c3033115d2c} components/webconvergerService.js
+contract @webconverger.com/webconverger-service;2 {a41ae9a1-4eec-4c6b-b0e4-4c3033115d2c}
+category profile-after-change WebconvergerService @webconverger.com/webconverger-service;2
