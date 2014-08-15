@@ -9,13 +9,23 @@ if [ "$1" = remove ]; then
 	    suidunregister -s libc6 /usr/libexec/pt_chown
 	fi
     fi
+    # When both the multiarch and the corresponding biarch packages are
+    # installed, removing the multiarch package will remove the dynamic
+    # linker. Recreate it in the postinst.
     ARCH=${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)}
-    if [ "${ARCH}" = "i386" ]; then
-	if [ -f /lib32/ld-linux.so.2 ] && [ ! -f /lib/ld-linux.so.2 ]; then
-	    ln -sf /lib32/ld-linux.so.2 /lib/ld-linux.so.2
-	elif [ -h /lib/ld-linux.so.2 ] && [ ! -f /lib/ld-linux.so.2 ]; then
-	    rm /lib/ld-linux.so.2
-	fi
+    case "${ARCH}" in
+        kfreebsd-i386 | s390 | powerpc)
+            target="/lib32/ld.so.1"
+            ;;
+        i386 | sparc)
+            target="/lib32/ld-linux.so.2"
+            ;;
+        *)
+            target="$(dpkg-query -L libc6-${ARCH} 2>/dev/null | grep -E '/lib.*/ld-[0-9.]+\.so$' || true)"
+            ;;
+    esac
+    if [ -f "$target" ] && ! [ -f /lib/ld-linux.so.2 ] ; then
+        ln -sf ${target#$(dirname /lib/ld-linux.so.2)/} /lib/ld-linux.so.2
     fi
 fi
 

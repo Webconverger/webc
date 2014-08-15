@@ -298,8 +298,15 @@ then
 
     # Try to detect copies of the libc library in the various places
     # the dynamic linker uses.
-    ldfile=$(readlink -e /lib/ld-linux.so.2)
-    ldbytes=$(head -c 20 /lib/ld-linux.so.2 | od -c)
+    ldfile=$(readlink -m /lib/ld-linux.so.2)
+    if test -f "$file"; then
+        ldbytes=$(head -c 20 /lib/ld-linux.so.2 | od -c)
+    else
+        # If the symlink to the dynamic linker is dangling or missing, set
+        # ldbytes to an empty string, the test below will fail and all the
+        # libraries found will be ignored.
+        ldbytes=""
+    fi
     libcfiles=$(dpkg-query -L $(package_name) 2>/dev/null)
 
     dirs="/lib/i386-linux-gnu /lib /lib/tls /lib32 /lib64 /usr/local/lib /usr/local/lib32 /usr/local/lib64"
@@ -334,6 +341,26 @@ then
             echo "please remove that copy of the C library and try again."
             echo
             exit 1
+        fi
+    fi
+
+    # ldconfig might have broken the ld.so symlink in case a biarch package
+    # of the same architecture than the native one has been installed (e.g.:
+    # libc6-amd64:i386 on amd64). Try to detect this by checking that the 
+    # ld.so symlink correctly points to ld-*.so in the slib directory, and 
+    # disabling ldconfig if it is not the case and the new version hasn't
+    # been unpacked yet. The symlink will be fixed when unpacking the new 
+    # libc version and ldconfig will be re-enabled when a new fixed version
+    # is unpacked.
+    if ! readlink -m /lib/ld-linux.so.2 | grep -qE '/lib/i386-linux-gnu/ld-[0-9.]+\.so' ; then
+        # The unpack order is not guaranteed, only disable ldconfig if 
+        # a "broken" version is installed.
+        libc_bin_version=$(dpkg-query -W -f='${Version}' libc-bin)
+        if dpkg --compare-versions "$libc_bin_version" lt "2.13-38+deb7u2"; then
+            echo "Warning: found a potentially broken dynamic loader symlink,"
+            echo "disabling ldconfig to avoid a possible system breakage. It"
+            echo "will be reenabled when a new version of libc-bin is unpacked." 
+            ln -sf /bin/true /sbin/ldconfig
         fi
     fi
 fi

@@ -37,15 +37,17 @@ DBusSend() {
 	local DBUS_PATH="$3"
 	local METHOD="$4"
 
-	test -x /usr/bin/dbus-send || return 1
-
 	local DBUS_SESS	
-	for p in $(pidof "$PROC_NAME"); do
-		test -r /proc/$p/environ || continue
-		DBUS_SESS=$(grep -a -z "DBUS_SESSION_BUS_ADDRESS=" /proc/$p/environ || :)
-		test "$DBUS_SESS" != "" || continue
-		su $(ps -o user= $p) -s /bin/sh -c "$DBUS_SESS dbus-send --print-reply --dest='$DEST' '$DBUS_PATH' '$METHOD'"
-	done
+	getXuser
+	if test "$XUSER" != "" && test -x /usr/bin/dbus-send; then
+		serverpid=$(pgrep -n -u $XUSER "$PROC_NAME")
+		if test "$serverpid" != ""; then
+			DBUS_SESS=$(su - $XUSER -c "grep -a -z DBUS_SESSION_BUS_ADDRESS /proc/$serverpid/environ || :")
+			if test "$DBUS_SESS" != "" && su - $XUSER -s /bin/sh -c "export \"$DBUS_SESS\"; $DBUS_SESS dbus-send --print-reply --dest='$DEST' '$DBUS_PATH' '$METHOD'"; then
+				return 0
+			fi
+		fi
+	fi
 }
 
 # Ask kde if the powerdevil module is loaded
@@ -62,5 +64,7 @@ PowerDevilRunning() {
 # for (We can't check the MediaKeys plugin, since that has been around for
 # longer).
 GnomeSettingsDaemonPowerRunning() {
-	DBusSend gnome-settings-daemon org.gnome.SettingsDaemon /org/gnome/SettingsDaemon/Power org.freedesktop.DBus.Introspectable.Introspect | grep -q 'interface name="org.gnome.SettingsDaemon.Power"'
+	# only check for gnome-settings- instead of gnome-settings-daemon
+	# because /proc/<pid>/stat only lists the first 15 characters
+	DBusSend gnome-settings- org.gnome.SettingsDaemon /org/gnome/SettingsDaemon/Power org.freedesktop.DBus.Introspectable.Introspect | grep -q 'interface name="org.gnome.SettingsDaemon.Power"'
 }
