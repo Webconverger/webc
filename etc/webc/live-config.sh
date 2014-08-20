@@ -19,10 +19,11 @@ sub_literal() {
 
 # Make /.git available for debugging and development
 mount_git () {
-
+	root_overlay=/lib/live/mount/overlay
+	git_overlay=/lib/live/mount/git-overlay
 	# Sanity checks
 	[ -d "$git_repo" ] || return
-	[ -d /live/overlay ] || return
+	[ -d "$root_overlay" ] || return
 	[ -n "$current_git_revision" ] || return
 
 
@@ -47,10 +48,10 @@ mount_git () {
 		# a change and push it out before the reboot. We can't
 		# include this in the main aufs mount, since aufs
 		# doesn't handle (bind)mounts in subdirectories.
-		mkdir /live/git-overlay
-		mount -o rw,noatime,mode=755 -t tmpfs tmpfs /live/git-overlay
+		mkdir "$git_overlay"
+		mount -o rw,noatime,mode=755 -t tmpfs tmpfs "$git_overlay"
 		umount /.git
-		mount -t aufs -o noatime,dirs=/live/git-overlay=rw:$git_repo=rr aufs "/.git"
+		mount -t aufs -o noatime,dirs=$git_overlay=rw:$git_repo=rr aufs "/.git"
 	fi
 
 	# Make sure that HEAD corresponds to the commit
@@ -69,7 +70,7 @@ mount_git () {
 	# Make sure that aufs doesn't forget about filename to inode
 	# mappings, since that confuses git. git-fs should also be
 	# mounted with the noforget option.
-	mount -o remount,xino=/live/overlay/.aufs.xino /
+	mount -o remount,xino=${root_overlay}/.aufs.xino /
 }
 
 process_options()
