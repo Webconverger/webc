@@ -318,8 +318,8 @@ wait_for $live_config_pipe 2>/dev/null
 
 cmdline_has debug && set -x
 
-# Try to make /live/image writable
-mount -o remount,rw /live/image
+# Try to make ${live_image} writable
+mount -o remount,rw ${live_image}
 
 cmdline_has noconfig || update_cmdline
 process_options
@@ -327,7 +327,7 @@ process_options
 echo ACK > $live_config_pipe
 
 # if writable
-if touch /live/image
+if touch ${live_image}
 then
 	# Cache cmdline in case subsequent boots can't reach $config_url
 	cp "$config_runtime" "$config_cached"
@@ -336,7 +336,7 @@ then
 	# Kicks off an upgrade
 	mkfifo $upgrade_pipe
 else
-# /live/image could not be made writable (e.g. live version: booting
+# ${live_image} could not be made writable (e.g. live version: booting
 # from an iso fs), so just use the new config downloaded
 # and skip all the other stuff below
 	logs "CONFIG: Not a writable boot medium. Could not cache configuration nor upgrade."

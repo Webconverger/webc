@@ -47,7 +47,7 @@ if ! git --git-dir "${git_repo}" fetch --depth=1 --quiet origin "${fetch_revisio
 then
 # Fetching the revision failed, to prevent an
 # unbootable system, bail out now. Since we're not
-# updating /live/image/live/webc-cmdline, this will be
+# updating $live_image/live/webc-cmdline, this will be
 # retried after the next reboot.
 	logs "Fetching git revision ${fetch_revision} failed"
 	return
@@ -77,11 +77,11 @@ then
 # revision than we're currently running, so change our
 # bootloader config to make sure that happens.
 
-if test -f /live/image/boot/live.cfg.in
+if test -f $live_image/boot/live.cfg.in
 then
 # This is the "live" version, which
 # offers a boot menu
-	if ! generate_live_config /live/image "${git_repo}" "${git_revision}"
+	if ! generate_live_config $live_image "${git_repo}" "${git_revision}"
 	then
 		logs "Updating bootloader config failed!"
 		return
@@ -90,7 +90,7 @@ else
 # This is the "installed" version, which
 # does not show a boot prompt and just
 # boots the default entry
-	if ! generate_installed_config /live/image "${git_repo}" "${git_revision}"
+	if ! generate_installed_config $live_image "${git_repo}" "${git_revision}"
 	then
 		logs "Updating bootloader config failed!"
 		return
