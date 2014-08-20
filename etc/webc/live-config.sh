@@ -19,16 +19,15 @@ sub_literal() {
 
 # Make /.git available for debugging and development
 mount_git () {
-	GIT_REPO=/live/image/live/filesystem.git
 
 	# Sanity checks
-	[ -d "$GIT_REPO" ] || return
+	[ -d "$git_repo" ] || return
 	[ -d /live/overlay ] || return
 	[ -n "$current_git_revision" ] || return
 
 
 	mkdir /.git
-	mount --bind "$GIT_REPO" /.git
+	mount --bind "$git_repo" /.git
 
 	# Try to make /.git read-write, by simply remounting it, or by
 	# using a second aufs. Note that mount will return success even
@@ -51,7 +50,7 @@ mount_git () {
 		mkdir /live/git-overlay
 		mount -o rw,noatime,mode=755 -t tmpfs tmpfs /live/git-overlay
 		umount /.git
-		mount -t aufs -o noatime,dirs=/live/git-overlay=rw:$GIT_REPO=rr aufs "/.git"
+		mount -t aufs -o noatime,dirs=/live/git-overlay=rw:$git_repo=rr aufs "/.git"
 	fi
 
 	# Make sure that HEAD corresponds to the commit

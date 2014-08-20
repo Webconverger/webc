@@ -119,8 +119,6 @@ install_extlinux() {
 
 	_logs "generating extlinux configuration"
 
-	git_repo=/live/image/live/filesystem.git
-
 	# Extract kernel and initrd and generate extlinux config
 	generate_installed_config "${dir}" "${git_repo}" "${current_git_revision}"
 }
@@ -129,7 +127,7 @@ install_root() {
 	local dir="$1"
 	_logs "copying files to ${dir}"
 	mkdir -p "${dir}/live"
-	cp -r /live/image/live/filesystem.git ${dir}/live/
+	cp -r ${git_repo} ${dir}/live/
 }
 
 # Trap any shell exits with the failed handler
