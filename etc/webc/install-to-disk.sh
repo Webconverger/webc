@@ -123,11 +123,26 @@ install_extlinux() {
 	generate_installed_config "${dir}" "${git_repo}" "${current_git_revision}"
 }
 
-install_root() {
-	local dir="$1"
-	_logs "copying files to ${dir}"
-	mkdir -p "${dir}/live"
-	cp -r ${git_repo} ${dir}/live/
+setup_root() {
+	local mount=$1
+	local partition=$2
+	_logs "building filesystem on $partition"
+	mke2fs -j $partition
+
+	_logs "mounting $partition on $mount"
+	test -d $mount || mkdir $mount
+	mount $partition $mount
+	MOUNTED=1
+
+	_logs "enabling swap on ${mount}/swap"
+	dd if=/dev/zero of=${mount}/swap bs=1M count=256
+	mkswap ${mount}/swap
+	swapon ${mount}/swap
+	SWAPON=1
+
+	_logs "copying files to ${mount}"
+	mkdir -p "${mount}/live"
+	cp -r ${git_repo} ${mount}/live/
 }
 
 # Trap any shell exits with the failed handler
@@ -135,22 +150,12 @@ trap failed_install EXIT
 
 clear_screen
 disk=$( find_disk )
+root_partition=${disk}1
+root_mount=/mnt/root
 partition_disk $disk
 verify_partition $disk
-partition="${disk}1"
-_logs "building filesystem on $partition"
-mke2fs -j $partition
-_logs "mounting $partition on /mnt/root"
-test -d /mnt/root || mkdir /mnt/root
-MOUNTED=1
-mount $partition /mnt/root
-dd if=/dev/zero of=/mnt/root/swap bs=1M count=256
-_logs "enabling swap on /mnt/root/swap"
-mkswap /mnt/root/swap
-swapon /mnt/root/swap
-SWAPON=1
-install_root /mnt/root
-install_extlinux /mnt/root $partition $disk
+setup_root $root_mount $root_partition
+install_extlinux $root_mount $root_partition $disk
 verify_extlinux_mbr $disk
 
 _logs "unmounting partitions"
@@ -159,7 +164,7 @@ umount /mnt/root
 unset SWAPON MOUNTED
 
 _logs "install complete"
-e2label $partition install
+e2label $root_partition install
 _logs $(blkid)
 _logs "press enter to reboot..."
 read DUMMY
