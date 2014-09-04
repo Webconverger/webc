@@ -13,7 +13,8 @@ FileBlock.prototype = {
   whitelist: [],
   initialize: function() {
     this.appDir = Services.io.newFileURI(Services.dirsvc.get("CurProcD", Ci.nsIFile)).spec;
-    this.profileDir = Services.io.newFileURI(Services.dirsvc.get("ProfD", Ci.nsIFile)).spec;
+    var profileDir = Services.dirsvc.get("ProfD", Ci.nsIFile);
+    this.profileDir = Services.io.newFileURI(profileDir).spec
     this.tempDir = Services.io.newFileURI(Services.dirsvc.get("TmpD", Ci.nsIFile)).spec;
     try {
       var whitelist = Services.prefs.getCharPref("extensions.webconverger.whitelist");
