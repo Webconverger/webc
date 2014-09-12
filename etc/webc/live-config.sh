@@ -223,6 +223,7 @@ for x in $( cmdline ); do
 		;;
 
 	cron=*)
+		logs CRON: $x
 		cron="$( echo ${x#cron=} | sed 's,%20, ,g' )"
 		cat <<EOC > /etc/cron.d/webc-$RANDOM
 SHELL=/bin/bash
