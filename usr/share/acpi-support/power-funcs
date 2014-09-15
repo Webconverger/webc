@@ -64,20 +64,23 @@ getXuser() {
 	fi
 
 	if [ x"$user" != x ]; then
-        	for pid in `ps -U $user -o pid=`; do
+        	for pid in `ps -U "$user" -o pid=`; do
 			if grep -z -q XAUTHORITY /proc/$pid/environ; then
-				export `grep -z XAUTHORITY /proc/$pid/environ`
+				XAUTHORITY="$(grep -z XAUTHORITY /proc/$pid/environ | cut -d= -f2-)"
+				export XAUTHORITY
 				break
 			fi
 		done
-		if [ -z $XAUTHORITY ]; then
-			eval userhome=~$user
-			export XAUTHORITY=$userhome/.Xauthority
+		if [ -z "$XAUTHORITY" ]; then
+			userhome="$(getent passwd "$user" | cut -d: -f6)"
+			XAUTHORITY="$userhome/.Xauthority"
+			export XAUTHORITY
 		fi
 	else
 		export XAUTHORITY=
 	fi
-	export XUSER=$user
+	XUSER="$user"
+	export XUSER
 }
 
 # getXconsole: get the information for the active X console, if any.
@@ -93,7 +96,8 @@ getXconsole() {
 	displaynum=$(ck-list-sessions | awk 'BEGIN { active = 0; } /^Session/ { active = 0; } /active = TRUE/ { active = 1; } active && /x11-display = '\':.+\''/ { gsub(/'\':*'/,"",$3); print $3; exit (0); }')
 
 	if [ "$displaynum" ]; then
-		export DISPLAY=:$displaynum
+		DISPLAY=":$displaynum"
+		export DISPLAY
 		getXuser
 	fi
 }
