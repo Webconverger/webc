@@ -1,4 +1,8 @@
 pref("browser.display.background_color", "#000000");
+
+pref("devtools.errorconsole.enabled", false);
+
+pref("devtools.gcli.hideIntro", true);
 pref("accessibility.typeaheadfind.flashBar", 0);
 pref("app.update.enabled", false);
 pref("browser.download.dir", "/dev/null");
@@ -21,17 +25,13 @@ pref("network.cookie.prefsMigrated", true);
 pref("pref.advanced.javascript.disable_button.advanced", false);
 pref("pref.privacy.disable_button.view_cookies", false);
 pref("security.warn_viewing_mixed", false);
+pref("security.warn_viewing_mixed.show_once", false);
 pref("security.warn_entering_secure", false);
 pref("security.warn_leaving_secure", false);
 pref("security.warn_submit_insecure", false);
 pref("signon.rememberSignons", false);
 
-// Update manually
 pref("extensions.update.enabled", false);
-pref("xpinstall.enabled", false);
-
-// Use LANG environment variable to choose locale
-pref("intl.locale.matchOS", true);
 
 // Disable default browser checking.
 pref("browser.shell.checkDefaultBrowser", false);
@@ -41,5 +41,19 @@ pref("browser.link.open_newwindow", 3);
 pref("browser.link.open_external",3);
 pref("browser.link.open_newwindow.restriction", 0);
 
-// do not prompt for permission to use Appcache
-pref("browser.offline-apps.notify", false);
+// Block extension installs
+pref("xpinstall.enabled", false);
+
+// Prevent slow script dialogs
+pref("dom.max_chrome_script_run_time", 0);
+pref("dom.max_script_run_time", 0);
+
+// Disable the popup window that shows up when F7 is pressed
+pref("accessibility.browsewithcaret_shortcut.enabled", false);
+
+pref("network.protocol-handler.external.mailto", false);
+pref("network.protocol-handler.external.news", false);
+pref("network.protocol-handler.external.nntp", false);
+pref("network.protocol-handler.external.snews", false);
+
+pref("plugin.default.state", 2);
