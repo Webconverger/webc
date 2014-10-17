@@ -55,3 +55,5 @@ pref("network.protocol-handler.external.mailto", false);
 pref("network.protocol-handler.external.news", false);
 pref("network.protocol-handler.external.nntp", false);
 pref("network.protocol-handler.external.snews", false);
+
+pref("plugin.default.state", 2);

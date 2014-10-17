@@ -64,7 +64,6 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 	focusElement(content);
 }
 
-
 (function() {
 	function startup() {
 		var navigatorToolbox = document.getElementById("navigator-toolbox");
@@ -73,13 +72,27 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 		var showPrintButton = false;
 		try {
 			showPrintButton = Services.prefs.getBoolPref("extensions.webconverger.showprintbutton");
-		} catch (e) {}
+		} catch(e) {}
 		if (showPrintButton) {
 			CustomizableUI.addWidgetToArea("print-button", "nav-bar");
 		} else {
 			CustomizableUI.removeWidgetFromArea("print-button");
 		}
 		window.removeEventListener("load", startup, false);
+		// var insertAfter = document.getElementById("alltabs-button");
+		// document.getElementById("alltabs-button");
+		// var allTabsButton = document.getElementById("alltabs-button");
+		// var spacer = document.createElement("spacer");
+		// spacer.setAttribute("flex", "1");
+		// insertAfter.parentNode.appendChild(spacer);
+		// var box = document.createElement("box");
+		// box.setAttribute("pack", "center");
+		// box.setAttribute("align", "center");
+		// var image = document.createElement("image");
+		// image.setAttribute("src", "chrome://webconverger/content/webclogo.png");
+		// image.setAttribute("tooltiptext", "Webconverger");
+		// box.appendChild(image);
+		// insertAfter.parentNode.appendChild(box);
 	}
 
 	function shutdown() {
