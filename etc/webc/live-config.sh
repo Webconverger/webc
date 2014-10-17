@@ -190,6 +190,15 @@ for x in $( cmdline ); do
 		logs "Set whitelist: $whitelist"
 		;;
 
+	tabswitch=*)
+		secondinterval="$( /bin/busybox httpd -d ${x#tabswitch=} )"
+		if test "$secondinterval" -gt 0
+		then
+			echo 'pref("extensions.webconverger.tabswitchinterval", '$secondinterval');' >> "$prefs"
+			logs "Set tabswitch: $secondinterval"
+		fi
+		;;
+
 	prefs=*)
 		prefs="$( /bin/busybox httpd -d ${x#prefs=} )"
 		echo "pref(\"autoadmin.global_config_url\",\"$prefs\");" >> /opt/firefox/mozilla.cfg
