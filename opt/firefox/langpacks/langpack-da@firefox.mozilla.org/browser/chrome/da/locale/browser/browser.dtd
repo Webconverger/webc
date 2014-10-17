@@ -82,6 +82,13 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "Bogmærkelinje-elementer">
 
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "Genindlæs alle faneblade">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "a">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Bogmærk alle faneblade…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "o">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "Fortryd lukning af faneblad">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "l">
+
 <!ENTITY pageSourceCmd.label "Sidens kildekode">
 <!ENTITY pageSourceCmd.accesskey "k">
 <!ENTITY pageSourceCmd.commandkey "u">
@@ -251,7 +258,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
   -  application menu item that opens the browser toolbox UI in the Tools menu. -->
-<!ENTITY browserToolboxMenu.label     "Browserværktøj">
+<!ENTITY browserToolboxMenu.label     "Browserværktøjer">
 <!ENTITY browserToolboxMenu.accesskey "o">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Luk udviklerlinjen">
@@ -259,6 +266,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbarMenu.accesskey          "U">
 <!ENTITY devAppMgrMenu.label               "App-manager">
 <!ENTITY devAppMgrMenu.accesskey           "a">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Vis værktøjer">
@@ -327,7 +336,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY historyUndoMenu.label "Senest lukkede faneblade">
 <!-- LOCALIZATION NOTE (historyUndoWindowMenu): see bug 394759 -->
 <!ENTITY historyUndoWindowMenu.label "Senest lukkede vinduer">
-<!ENTITY historyRestoreLastSession.label "Genskab forrige session">
+<!ENTITY historyRestoreLastSession.label "Gendan forrige session">
 
 <!ENTITY showAllHistoryCmd2.label "Vis historik">
 <!ENTITY showAllHistoryCmd.commandkey "H">
@@ -337,12 +346,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY appMenuCustomize.label "Tilpas">
 <!ENTITY appMenuCustomize.tooltip "Tilpas menu og værktøjslinjer">
-<!ENTITY appMenuCustomizeExit.label "Forlad tilpasning">
+<!ENTITY appMenuCustomizeExit.label "Afslut tilpasning">
 <!ENTITY appMenuCustomizeExit.tooltip "Afslut tilpasning">
 <!ENTITY appMenuHistory.label "Historik">
 <!ENTITY appMenuHistory.showAll.label "Vis al historik">
 <!ENTITY appMenuHistory.clearRecent.label "Ryd seneste historik…">
-<!ENTITY appMenuHistory.restoreSession.label "Genskab forrige session">
+<!ENTITY appMenuHistory.restoreSession.label "Gendan forrige session">
 <!ENTITY appMenuHistory.viewSidebar.label "Vis sidepanelet Historik">
 <!ENTITY appMenuHelp.tooltip "Åbn menuen Hjælp">
 
@@ -704,11 +713,16 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Kamera til deling:">
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
+<!ENTITY getUserMedia.selectWindowOrScreen.label "Vindue eller skærm til deling:">
+<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "V">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon til deling:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.allWindowsShared.message "Alle synlige vinduer på din skærm vil blive delt.">
 
 <!ENTITY webrtcIndicatorButton.label "Adgang til kamera/mikrofon">
 <!ENTITY webrtcIndicatorButton.tooltip "Vis de websteder, som du i øjeblikket deler dit kamera og/eller din mikrofon med">
+
+<!ENTITY loopCallButton.tooltip "Inviter nogen til at snakke">
 
 <!ENTITY mixedContentBlocked.moreinfo "De fleste websteder vil stadig fungere korrekt, selvom dette indhold er blokeret.">
 
@@ -735,3 +749,28 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.tryAgain "Prøv igen">
 
 <!ENTITY uiTour.infoPanel.close "Luk">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Glem de seneste:">
+<!ENTITY panicButton.view.5min                    "Fem minutter">
+<!ENTITY panicButton.view.2hr                     "To timer">
+<!ENTITY panicButton.view.day                     "24 timer">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
+     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
+     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
+     The translation should do the same. -->
+<!ENTITY panicButton.view.mainActionDesc          "Handlingen vil:">
+<!ENTITY panicButton.view.deleteCookies           "Slette seneste <html:strong>cookies</html:strong>">
+<!ENTITY panicButton.view.deleteHistory           "Slette seneste <html:strong>historik</html:strong>">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Lukke alle <html:strong>faneblade</html:strong> og <html:strong>vinduer</html:strong>">
+<!ENTITY panicButton.view.openNewWindow           "Åbne et nyt rent vindue">
+
+<!ENTITY panicButton.view.undoWarning             "Denne handling kan ikke fortrydes.">
+<!ENTITY panicButton.view.forgetButton            "Glem!">
+
+<!ENTITY panicButton.thankyou.msg1                "Din seneste historik er ryddet.">
+<!ENTITY panicButton.thankyou.msg2                "Sikker surfing!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Tak!">

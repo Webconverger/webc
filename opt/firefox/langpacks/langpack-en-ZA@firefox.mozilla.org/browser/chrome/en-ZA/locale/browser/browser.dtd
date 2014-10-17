@@ -29,7 +29,7 @@ left instead of right. -->
 <!ENTITY  closeTabsToTheEnd.label            "Close Tabs to the Right">
 <!ENTITY  closeTabsToTheEnd.accesskey        "i">
 <!ENTITY  closeOtherTabs.label               "Close Other Tabs">
-<!ENTITY  closeOtherTabs.accesskey           "O">
+<!ENTITY  closeOtherTabs.accesskey           "o">
 <!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
 used as a metaphor for expressing the fact that these tabs are "pinned" to the
 left edge of the tabstrip. Really we just want the string to express the idea
@@ -57,6 +57,10 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "New Tab">
 <!ENTITY tabCmd.accesskey "T">
 <!ENTITY tabCmd.commandkey "t">
+<!-- LOCALIZATION NOTE (openLocationCmd.label): "Open Location" is only
+displayed on OS X, and only on windows that aren't main browser windows, or
+when there are no windows but Firefox is still running. -->
+<!ENTITY openLocationCmd.label "Open Location…">
 <!ENTITY openFileCmd.label "Open File…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
@@ -78,6 +82,13 @@ can reach it easily. -->
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "Bookmarks Toolbar Items">
 
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "Reload All Tabs">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "A">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Bookmark All Tabs…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "T">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "Undo Close Tab">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "U">
+
 <!ENTITY pageSourceCmd.label "Page Source">
 <!ENTITY pageSourceCmd.accesskey "o">
 <!ENTITY pageSourceCmd.commandkey "u">
@@ -98,9 +109,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY fxaSignIn.label "Sign in to &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Reconnect to &syncBrand.shortName.label;">
-<!ENTITY syncStartPanel.heading "&brandShortName; is now syncing">
-<!ENTITY syncStartPanel.subTitle "You can manage &syncBrand.shortName.label; in Options.">
-<!ENTITY syncStartPanel.subTitleUnix "You can manage &syncBrand.shortName.label; in Preferences.">
+<!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; enabled">
+<!ENTITY syncStartPanel2.subTitle "&brandShortName; will begin syncing momentarily.">
 <!ENTITY syncErrorPanel.heading "Cannot connect to &syncBrand.shortName.label;">
 <!ENTITY syncErrorPanel.subTitle "Please sign in to resume syncing.">
 <!ENTITY syncErrorPanel.signInButton.label "Sign In">
@@ -132,15 +142,15 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY markPageCmd.commandkey "l">
 <!ENTITY sharePageCmd.label "Share This Page">
 <!ENTITY sharePageCmd.commandkey "S">
-<!ENTITY sharePageCmd.accesskey "S">
+<!ENTITY sharePageCmd.accesskey "s">
 <!ENTITY shareLinkCmd.label "Share This Link">
-<!ENTITY shareLinkCmd.accesskey "S">
+<!ENTITY shareLinkCmd.accesskey "s">
 <!ENTITY shareImageCmd.label "Share This Image">
-<!ENTITY shareImageCmd.accesskey "S">
+<!ENTITY shareImageCmd.accesskey "s">
 <!ENTITY shareSelectCmd.label "Share Selection">
 <!ENTITY shareSelectCmd.accesskey "S">
 <!ENTITY shareVideoCmd.label "Share This Video">
-<!ENTITY shareVideoCmd.accesskey "S">
+<!ENTITY shareVideoCmd.accesskey "s">
 <!ENTITY feedsMenu.label "Subscribe">
 <!ENTITY subscribeToPageMenupopup.label "Subscribe to This Page">
 <!ENTITY subscribeToPageMenuitem.label "Subscribe to This Page…">
@@ -150,18 +160,14 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksToolbarChevron.tooltip "Show more bookmarks">
 
 <!ENTITY backCmd.label                "Back">
-<!ENTITY backCmd.accesskey            "B">
 <!ENTITY backButton.tooltip           "Go back one page">
 <!ENTITY forwardCmd.label             "Forward">
-<!ENTITY forwardCmd.accesskey         "F">
 <!ENTITY forwardButton.tooltip        "Go forward one page">
 <!ENTITY backForwardButtonMenu.tooltip "Right-click or pull down to show history">
 <!ENTITY backForwardButtonMenuMac.tooltip "Pull down to show history">
 <!ENTITY reloadCmd.label              "Reload">
-<!ENTITY reloadCmd.accesskey          "R">
 <!ENTITY reloadButton.tooltip         "Reload current page">
 <!ENTITY stopCmd.label                "Stop">
-<!ENTITY stopCmd.accesskey            "S">
 <!ENTITY stopCmd.macCommandKey        ".">
 <!ENTITY stopButton.tooltip           "Stop loading this page">
 <!ENTITY goEndCap.tooltip             "Go to the address in the Location Bar">
@@ -200,7 +206,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY keywordfield.accesskey       "K">
 
 <!ENTITY downloads.label              "Downloads">
-<!ENTITY downloads.tooltip            "Display the progress of ongoing downloads">
 <!ENTITY downloads.accesskey          "D">
 <!ENTITY downloads.commandkey         "j">
 <!ENTITY downloadsUnix.commandkey     "y">
@@ -232,6 +237,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY responsiveDesignTool.label   "Responsive Design View">
 <!ENTITY responsiveDesignTool.accesskey "R">
 <!ENTITY responsiveDesignTool.commandkey "M">
+
+<!ENTITY eyedropper.label   "Eyedropper">
+<!ENTITY eyedropper.accesskey "y">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -258,6 +266,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbarMenu.accesskey          "v">
 <!ENTITY devAppMgrMenu.label               "App Manager">
 <!ENTITY devAppMgrMenu.accesskey           "A">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Toggle Tools">
@@ -438,14 +448,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY setDesktopBackgroundCmd.label      "Set As Desktop Background…">
 <!ENTITY setDesktopBackgroundCmd.accesskey  "S">
 <!ENTITY bookmarkPageCmd2.label       "Bookmark This Page">
-<!ENTITY bookmarkPageCmd2.accesskey   "m">
 <!ENTITY bookmarkThisLinkCmd.label      "Bookmark This Link">
 <!ENTITY bookmarkThisLinkCmd.accesskey  "L">
 <!ENTITY bookmarkThisFrameCmd.label      "Bookmark This Frame">
 <!ENTITY bookmarkThisFrameCmd.accesskey  "m">
 <!ENTITY emailPageCmd.label           "Email Link…">
 <!ENTITY emailPageCmd.accesskey       "E">
-<!ENTITY switchToMetroCmd.label       "Relaunch in Windows 8 style &brandShortName;">
 <!ENTITY savePageCmd.label            "Save Page As…">
 <!ENTITY savePageCmd.accesskey        "A">
 <!-- alternate for content area context menu -->
@@ -460,7 +468,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY saveImageCmd.label           "Save Image As…">
 <!ENTITY saveImageCmd.accesskey       "v">
 <!ENTITY saveVideoCmd.label           "Save Video As…">
-<!ENTITY saveVideoCmd.accesskey       "V">
+<!ENTITY saveVideoCmd.accesskey       "v">
 <!ENTITY saveAudioCmd.label           "Save Audio As…">
 <!ENTITY saveAudioCmd.accesskey       "v">
 <!ENTITY emailImageCmd.label          "Email Image…">
@@ -468,7 +476,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailVideoCmd.label          "Email Video…">
 <!ENTITY emailVideoCmd.accesskey      "a">
 <!ENTITY emailAudioCmd.label          "Email Audio…">
-<!ENTITY emailAudioCmd.accesskey      "A">
+<!ENTITY emailAudioCmd.accesskey      "a">
 <!ENTITY playPluginCmd.label          "Activate this plugin">
 <!ENTITY playPluginCmd.accesskey      "c">
 <!ENTITY hidePluginCmd.label          "Hide this plugin">
@@ -563,11 +571,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY fullZoom.label                 "Zoom">
 <!ENTITY fullZoom.accesskey             "Z">
 
-<!ENTITY newTabButton.tooltip           "Open a new tab">
-<!ENTITY newWindowButton.tooltip        "Open a new window">
 <!ENTITY sidebarCloseButton.tooltip     "Close sidebar">
-
-<!ENTITY fullScreenButton.tooltip       "Display the window in full screen">
 
 <!ENTITY quitApplicationCmdWin.label       "Exit"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "x">
@@ -615,6 +619,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY findAgainCmd.accesskey "g">
 <!ENTITY findAgainCmd.commandkey "g">
 <!ENTITY findAgainCmd.commandkey2 "VK_F3">
+<!ENTITY findSelectionCmd.commandkey "e">
 
 <!ENTITY spellAddDictionaries.label "Add Dictionaries…">
 <!ENTITY spellAddDictionaries.accesskey "A">
@@ -660,6 +665,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncSetup.accesskey          "Y">
 <!ENTITY syncSyncNowItem.label        "Sync Now">
 <!ENTITY syncSyncNowItem.accesskey    "S">
+<!ENTITY syncReAuthItem.label         "Reconnect to &syncBrand.shortName.label;…">
+<!ENTITY syncReAuthItem.accesskey     "R">
 <!ENTITY syncToolbarButton.label      "Sync">
 
 <!ENTITY socialToolbar.title        "Social Toolbar Button">
@@ -668,7 +675,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.ok.accesskey   "O">
 
 <!ENTITY social.toggleSidebar.label "Show sidebar">
-<!ENTITY social.toggleSidebar.accesskey "S">
+<!ENTITY social.toggleSidebar.accesskey "s">
 
 <!ENTITY social.addons.label "Manage Services…">
 
@@ -685,7 +692,6 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 
 <!ENTITY customizeMode.tabTitle "Customise &brandShortName;">
-<!ENTITY customizeMode.menuAndToolbars.label "Menu and toolbars">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Additional Tools and Features">
 <!ENTITY customizeMode.menuAndToolbars.empty "Want more tools?">
 <!ENTITY customizeMode.menuAndToolbars.emptyLink "Choose from thousands of add-ons">
@@ -704,13 +710,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Camera to share:">
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
+<!ENTITY getUserMedia.selectWindowOrScreen.label "Window or screen to share:">
+<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "W">
 <!ENTITY getUserMedia.selectMicrophone.label "Microphone to share:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.allWindowsShared.message "All visible windows on your screen will be shared.">
 
 <!ENTITY webrtcIndicatorButton.label "Camera / Microphone Access">
 <!ENTITY webrtcIndicatorButton.tooltip "Display sites you are currently sharing your camera or microphone with">
 
-<!ENTITY mixedContentBlocked.helplink "Learn more">
+<!ENTITY loopCallButton.tooltip "Invite someone to talk">
+
 <!ENTITY mixedContentBlocked.moreinfo "Most websites will still work properly even when this content is blocked.">
 
 <!ENTITY pointerLock.notification.message "Press ESC at any time to show it again.">
@@ -736,56 +746,52 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY tabCrashed.tryAgain "Try Again">
 
 <!ENTITY uiTour.infoPanel.close "Close">
-<!-- LOCALIZATION NOTE: the following strings are unused in Australis, they're
-     kept here to avoid warnings from l10n tools like compare-locales on
-     l10n-central. They will be definitely removed when Australis is ready
-     for mozilla-aurora. -->
 
-
-<!ENTITY navbarCmd.accesskey           "N">
-<!ENTITY addonBarCmd.label             "Add-on Bar">
-<!ENTITY addonBarCmd.accesskey         "A">
-<!ENTITY throbberItem.title            "Activity Indicator">
-<!ENTITY appMenuButton.label           "Menu">
-<!ENTITY appMenuButton.tooltip         "Open &brandShortName; menu">
-<!ENTITY feedButton.label              "Subscribe">
-<!ENTITY feedButton.tooltip            "Subscribe to this page…">
-<!ENTITY bookmarksButton.tooltip       "Display your bookmarks">
-<!ENTITY historyButton.tooltip         "Display pages you've viewed recently">
-<!ENTITY viewTabsOnTop.label           "Tabs on Top">
-<!ENTITY viewTabsOnTop.accesskey       "T">
-<!ENTITY appMenuEdit.label             "Edit">
-<!ENTITY appMenuToolbarLayout.label    "Toolbar Layout…">
 <!ENTITY appMenuSidebars.label         "Sidebars">
-<!ENTITY appMenuFind.label             "Find…">
-<!ENTITY appMenuUnsorted.label         "Unsorted Bookmarks">
-<!ENTITY appMenuWebDeveloper.label     "Web Developer">
-<!ENTITY appMenuGettingStarted.label   "Getting Started">
-<!ENTITY appMenuSafeMode.label         "Restart with Add-ons Disabled…">
-<!ENTITY appMenuSafeMode.accesskey     "R">
-<!ENTITY cutButton.tooltip             "Cut">
-<!ENTITY copyButton.tooltip            "Copy">
-<!ENTITY pasteButton.tooltip           "Paste">
-<!ENTITY zoomOutButton.tooltip         "Zoom out">
-<!ENTITY zoomInButton.tooltip          "Zoom in">
-<!ENTITY zoomControls.label            "Zoom Controls">
-<!ENTITY addonBarCloseButton.tooltip   "Close Add-on Bar">
-<!ENTITY toggleAddonBarCmd.key         "/">
-<!ENTITY backForwardItem.title         "Back/Forward">
-<!ENTITY viewBookmarksSidebar.label    "Show in Sidebar">
-<!ENTITY bookmarksItem.title           "Bookmarks">
-<!ENTITY openLocationCmd.label         "Open Location…">
-<!ENTITY openLocationCmd.accesskey     "L">
-<!ENTITY bookmarksMenuButton.tooltip   "Display your bookmarks">
+
 <!ENTITY switchToMetroCmd2.label       "Relaunch in &brandShortName; for Windows 8 Touch">
-<!ENTITY tabGroupsButton.tooltip       "Group your tabs">
-<!-- end of strings to be removed post-Australis -->
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
 
-<!ENTITY eyedropper.accesskey "Y">
 
-<!ENTITY eyedropper.label   "Eyedropper">
-<!ENTITY findSelectionCmd.commandkey "e">
-<!ENTITY syncReAuthItem.accesskey     "R">
-<!ENTITY syncReAuthItem.label         "Reconnect to &syncBrand.shortName.label;…">
-<!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; enabled">
-<!ENTITY syncStartPanel2.subTitle "&brandShortName; will begin syncing momentarily.">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
+     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
+     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
+     The translation should do the same. -->
+
+
+
+
+
+<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+
+
+
+
+
+
+<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
+
+<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
+<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
+<!ENTITY panicButton.view.2hr                     "Two hours">
+<!ENTITY panicButton.view.5min                    "Five minutes">
+<!ENTITY panicButton.view.day                     "24 hours">
+<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
+<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
+<!ENTITY panicButton.view.forgetButton            "Forget!">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
+     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
+     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
+     The translation should do the same. -->
+<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
+<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">

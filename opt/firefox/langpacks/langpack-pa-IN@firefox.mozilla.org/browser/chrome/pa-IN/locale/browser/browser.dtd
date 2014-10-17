@@ -76,6 +76,14 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "ਬੁੱਕਮਾਰਕ ਟੂਲਬਾਰ ਆਈਟਮਾਂ">
 
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "Reload All Tabs">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "A">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Bookmark All Tabs…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "T">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "Undo Close Tab">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "U">
+
+
 <!ENTITY pageSourceCmd.label "ਸਫ਼ਾ ਸਰੋਤ">
 <!ENTITY pageSourceCmd.accesskey "o">
 <!ENTITY pageSourceCmd.commandkey "u">
@@ -210,7 +218,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY webDeveloperMenu.label       "ਵੈੱਬ ਡਿਵੈਲਪਰ">
 <!ENTITY webDeveloperMenu.accesskey   "W">
 <!ENTITY devAppMgrMenu.label               "ਐਪ ਮੈਨੇਜਰ">
-<!ENTITY devAppMgrMenu.accesskey           "a">
+<!ENTITY devAppMgrMenu.accesskey           "A">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
 <!ENTITY devToolsCmd.keycode          "VK_F12">
 <!ENTITY devToolsCmd.keytext          "F12">
 
@@ -733,11 +743,16 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "ਸਾਂਝਾ ਕਰਨ ਲਈ ਕੈਮਰਾ:">
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
+<!ENTITY getUserMedia.selectWindowOrScreen.label "ਵਿੰਡੋ ਜਾਂ ਸਕਰੀਨ ਸਾਂਝੀ ਕਰੋ:">
+<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "W">
 <!ENTITY getUserMedia.selectMicrophone.label "ਸਾਂਝਾ ਕਰਨ ਲਈ ਮਾਈਕਰੋਫੋਨ:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.allWindowsShared.message "ਆਪਣੀ ਸਕਰੀਨ ਤੋਂ ਸਭ ਵਿਖਾਈ ਦਿੰਦੀਆਂ ਵਿੰਡੋਜ਼ ਨੂੰ ਸਾਂਝਾ ਕੀਤਾ ਕੀਤਾ ਜਾਵੇਗਾ।">
 
 <!ENTITY webrtcIndicatorButton.label "ਕੈਮਰਾ/ਮਾਈਕਰੋਫੋਨ ਵਰਤੋਂ">
 <!ENTITY webrtcIndicatorButton.tooltip "ਸਾਈਟਾਂ ਵੇਖਾਉਂਦਾ ਹੈ, ਜਿੰਨ੍ਹਾਂ ਲਈ ਤੁਸੀਂ ਆਪਣਾ ਕੈਮਰਾ ਤੇ ਮਾਈਕਰੋਫੋਨ ਇਸ ਸਮੇਂ ਸਾਂਝਾ ਕਰ ਰਹੇ ਹੋ">
+
+<!ENTITY loopCallButton.tooltip "ਕਿਸੇ ਨੂੰ ਗੱਲ ਕਰਨ ਲਈ ਸੱਦਾ ਦਿਓ">
 
 <!ENTITY mixedContentBlocked.moreinfo "ਬਹੁਤੀਆਂ ਵੈੱਬਸਾਈਟਾਂ ਹਾਲੇ ਵੀ ਠੀਕ ਢੰਗ ਨਾਲ ਕੰਮ ਕਰਨਗੀਆਂ, ਭਾਵੇਂ ਕਿ ਇਹ ਸਮੱਗਰੀ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਈ ਹੈ।">
 
@@ -766,3 +781,29 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY uiTour.infoPanel.close "ਬੰਦ ਕਰੋ">
 
 <!ENTITY appMenuSidebars.label         "ਬਾਹੀਆਂ">
+
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "ਭੁੱਲ ਜਾਓ ਆਖਰੀ:">
+<!ENTITY panicButton.view.5min                    "ਪੰਜ ਮਿੰਟ">
+<!ENTITY panicButton.view.2hr                     "ਦੋ ">
+<!ENTITY panicButton.view.day                     "24 ਘੰਟੇ">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
+     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
+     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
+     The translation should do the same. -->
+<!ENTITY panicButton.view.mainActionDesc          "ਜਾਰੀ ਰੱਖਣ ਨਾਲ ਹੋਵੇਗਾ:">
+<!ENTITY panicButton.view.deleteCookies           "ਤਾਜ਼ਾ <html:strong>ਕੂਕੀਜ਼</html:strong> ਹਟਾਉਣਾ">
+<!ENTITY panicButton.view.deleteHistory           "ਤਾਜ਼ਾ <html:strong>ਅਤੀਤ</html:strong> ਹਟਾਉਣਾ">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "ਸਭ ਤਾਜ਼ਾ <html:strong>ਟੈਬਾਂ</html:strong> ਅਤੇ <html:strong>ਵਿੰਡੋ</html:strong> ਬੰਦ ਕਰਨੀਆਂ">
+<!ENTITY panicButton.view.openNewWindow           "ਨਵੀਂ ਸਾਫ਼ ਵਿੰਡੋ ਖੋਲ੍ਹਣੀ">
+
+<!ENTITY panicButton.view.undoWarning             "ਇਹ ਕਾਰਵਾਈ ਨੂੰ ਵਾਪਿਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ ਹੈ।">
+<!ENTITY panicButton.view.forgetButton            "ਭੁੱਲ ਜਾਉ!">
+
+<!ENTITY panicButton.thankyou.msg1                "ਤੁਹਾਡੇ ਤਾਜ਼ਾ ਅਤੀਤ ਨੂੰ ਸਾਫ਼ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।">
+<!ENTITY panicButton.thankyou.msg2                "ਸੁਰੱਖਿਅਤ ਬਰਾਊਜ਼ਿੰਗ!">
+<!ENTITY panicButton.thankyou.buttonlabel         "ਧੰਨਵਾਦ!">

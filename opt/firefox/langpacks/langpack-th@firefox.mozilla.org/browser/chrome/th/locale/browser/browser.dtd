@@ -14,12 +14,20 @@
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(ดูเว็บแบบส่วนตัว)">
+
+<!ENTITY appmenu.tooltip                     "เปิดเมนู">
+<!ENTITY navbarOverflow.label                "เครื่องมืออื่น…">
 <!-- Tab context menu -->
 
 <!ENTITY  reloadTab.label                    "เรียกแท็บนี้ใหม่">
 <!ENTITY  reloadTab.accesskey                "ร">
 <!ENTITY  reloadAllTabs.label                "เรียกทุกแท็บใหม่">
 <!ENTITY  reloadAllTabs.accesskey            "ท">
+<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
+direction in which tabs are closed, i.e. locales that use RTL mode should say
+left instead of right. -->
+<!ENTITY  closeTabsToTheEnd.label            "ปิดแท็บด้านขวา">
+<!ENTITY  closeTabsToTheEnd.accesskey        "ข">
 <!ENTITY  closeOtherTabs.label               "ปิดแท็บอื่น">
 <!ENTITY  closeOtherTabs.accesskey           "อ">
 <!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
@@ -49,8 +57,10 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "แท็บใหม่">
 <!ENTITY tabCmd.accesskey "ท">
 <!ENTITY tabCmd.commandkey "t">
+<!-- LOCALIZATION NOTE (openLocationCmd.label): "Open Location" is only
+displayed on OS X, and only on windows that aren't main browser windows, or
+when there are no windows but Firefox is still running. -->
 <!ENTITY openLocationCmd.label "เปิดที่ตั้ง…">
-<!ENTITY openLocationCmd.accesskey "ต">
 <!ENTITY openFileCmd.label "เปิดแฟ้ม…">
 <!ENTITY openFileCmd.accesskey "ป">
 <!ENTITY openFileCmd.commandkey "o">
@@ -68,12 +78,16 @@ can reach it easily. -->
 <!ENTITY menubarCmd.label "แถบเมนู">
 <!ENTITY menubarCmd.accesskey "ถ">
 <!ENTITY navbarCmd.label "แถบเครื่องมือนำทาง">
-<!ENTITY navbarCmd.accesskey "น">
 <!ENTITY personalbarCmd.label "แถบเครื่องมือที่คั่นหน้า">
 <!ENTITY personalbarCmd.accesskey "ค">
 <!ENTITY bookmarksToolbarItem.label "แถบเครื่องมือรายการที่คั่นหน้า">
-<!ENTITY addonBarCmd.label "แถบส่วนเสริม">
-<!ENTITY addonBarCmd.accesskey "ส">
+
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "เรียกทุกแท็บใหม่">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "ท">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "คั่นหน้าเว็บทุกแท็บ…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "บ">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "เรียกคืนแท็บที่เพิ่งปิด">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "ด">
 
 <!ENTITY pageSourceCmd.label "ซอร์สโค้ด">
 <!ENTITY pageSourceCmd.accesskey "ซ">
@@ -93,6 +107,16 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.label "แสดงแท็บทั้งหมด">
 <!ENTITY showAllTabsCmd.accesskey "ม">
 
+<!ENTITY fxaSignIn.label "เข้าใช้ &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "เชื่อมต่อ &syncBrand.shortName.label; ใหม่">
+<!ENTITY syncStartPanel2.heading "เปิดใช้งาน &syncBrand.shortName.label; แล้ว">
+<!ENTITY syncStartPanel2.subTitle "&brandShortName; จะทำการซิงก์ในไม่ช้า">
+<!ENTITY syncErrorPanel.heading "ไม่สามารถเชื่อมต่อกับ &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "โปรดลงชื่อเข้าใช้งานเพื่อดำเนินการซิงก์">
+<!ENTITY syncErrorPanel.signInButton.label "เข้าระบบ">
+<!ENTITY syncErrorPanel.signInButton.accesskey "ข">
+
+
 <!ENTITY fullScreenMinimize.tooltip "ย่อหาย">
 <!ENTITY fullScreenRestore.tooltip "คืนสภาพ">
 <!ENTITY fullScreenClose.tooltip "ปิด">
@@ -103,6 +127,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullscreenAllowButton.label "อนุญาต">
 <!ENTITY fullscreenExitButton.label "ไม่อนุญาต">
 
+<!ENTITY fullscreenExitHint2.value "กด ESC เพื่อออก">
 <!ENTITY leaveDOMFullScreen.label "ออกจากการแสดงผลเต็มจอ">
 <!ENTITY leaveDOMFullScreen.accesskey "ม">
 
@@ -112,6 +137,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksMenu.label "ที่คั่นหน้า">
 <!ENTITY bookmarksMenu.accesskey "น">
 <!ENTITY bookmarkThisPageCmd.label "คั่นหน้าเว็บนี้">
+<!ENTITY editThisBookmarkCmd.label "แก้ไขที่คั่นหน้า">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "I">
 <!ENTITY sharePageCmd.label "แบ่งปันหน้านี้">
@@ -125,57 +151,43 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY shareSelectCmd.accesskey "บ">
 <!ENTITY shareVideoCmd.label "แบ่งปันวิดีโอนี้">
 <!ENTITY shareVideoCmd.accesskey "บ">
+<!ENTITY feedsMenu.label "บอกรับ">
 <!ENTITY subscribeToPageMenupopup.label "บอกรับหน้านี้">
 <!ENTITY subscribeToPageMenuitem.label "บอกรับหน้านี้…">
 <!ENTITY addCurPagesCmd.label "คั่นทุกแท็บ…">
 <!ENTITY showAllBookmarks2.label "แสดงที่คั่นหน้าทั้งหมด">
-<!ENTITY unsortedBookmarksCmd.label "ที่คั่นหน้าที่ไม่เรียงลำดับ">
+<!ENTITY unsortedBookmarksCmd.label "ที่คั่นหน้าที่ยังไม่ได้เรียง">
 <!ENTITY bookmarksToolbarChevron.tooltip "แสดงที่คั่นหน้าอื่น ๆ ด้วย">
 
 <!ENTITY backCmd.label                "ย้อนกลับ">
-<!ENTITY backCmd.accesskey            "ย">
 <!ENTITY backButton.tooltip           "ย้อนกลับไปหนึ่งหน้า">
 <!ENTITY forwardCmd.label             "ถัดไป">
-<!ENTITY forwardCmd.accesskey         "ถ">
 <!ENTITY forwardButton.tooltip        "ถัดไปหนึ่งหน้า">
 <!ENTITY backForwardButtonMenu.tooltip "คลิกขวาหรือดึงลงเพื่อแสดงประวัติ">
 <!ENTITY backForwardButtonMenuMac.tooltip "ดึงลงเพื่อแสดงประวัติ">
 <!ENTITY reloadCmd.label              "เรียกใหม่">
-<!ENTITY reloadCmd.accesskey          "ร">
 <!ENTITY reloadButton.tooltip         "เรียกหน้าปัจจุบันใหม่">
 <!ENTITY stopCmd.label                "หยุด">
-<!ENTITY stopCmd.accesskey            "ห">
 <!ENTITY stopCmd.macCommandKey        ".">
 <!ENTITY stopButton.tooltip           "หยุดการโหลดหน้านี้">
 <!ENTITY goEndCap.tooltip             "ไปยังที่ตั้งที่ป้อน">
 <!ENTITY printButton.label            "พิมพ์">
 <!ENTITY printButton.tooltip          "พิมพ์หน้านี้">
 
-<!ENTITY backForwardItem.title        "ย้อนหลัง/เดินหน้า">
 <!ENTITY locationItem.title           "ที่ตั้ง">
 <!ENTITY searchItem.title             "ค้นหา">
-<!ENTITY throbberItem.title           "ตัวบ่งชี้กิจกรรม">
-<!ENTITY bookmarksItem.title          "ที่คั่นหน้า">
 <!-- Toolbar items --> 
 
-<!ENTITY appMenuButton.label          "เมนู">
-<!ENTITY appMenuButton.tooltip        "เปิดเมนู &brandShortName;">
 <!ENTITY homeButton.label             "บ้าน">
 
 <!ENTITY tabGroupsButton.label        "กลุ่มแท็บ">
-<!ENTITY tabGroupsButton.tooltip      "จัดกลุ่มแท็บของคุณ">
-
-<!ENTITY feedButton.label             "บอกรับ">
-<!ENTITY feedButton.tooltip           "บอกรับหน้านี้…">
 
 <!ENTITY bookmarksButton.label          "ที่คั่นหน้า">
-<!ENTITY bookmarksButton.tooltip        "แสดงที่คั่นหน้า">
 <!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "ที่คั่นหน้า">
-<!ENTITY bookmarksMenuButton.tooltip        "แสดงที่คั่นหน้าของคุณ">
 <!ENTITY bookmarksMenuButton.unsorted.label "ที่คั่นหน้าที่ยังไม่ได้เรียง">
-<!ENTITY viewBookmarksSidebar.label         "แสดงในแถบข้าง">
+<!ENTITY viewBookmarksSidebar2.label        "ดูแถบข้างที่คั่นหน้า">
 <!ENTITY viewBookmarksToolbar.label         "ดูแถบเครื่องมือที่คั่นหน้า">
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
@@ -185,7 +197,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksWinCmd.commandkey "i">
 
 <!ENTITY historyButton.label            "ประวัติ">
-<!ENTITY historyButton.tooltip          "แสดงหน้าที่ดูล่าสุด">
 <!ENTITY historySidebarCmd.commandKey   "h">
 
 <!ENTITY toolsMenu.label              "เครื่องมือ">
@@ -193,8 +204,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY keywordfield.label           "ใส่คำสำคัญเพื่อค้นหา…">
 <!ENTITY keywordfield.accesskey       "ค">
+
 <!ENTITY downloads.label              "ดาวน์โหลด">
-<!ENTITY downloads.tooltip            "แสดงความคืบหน้าของการดาวน์โหลดที่ดำเนินอยู่">
 <!ENTITY downloads.accesskey          "ด">
 <!ENTITY downloads.commandkey         "j">
 <!ENTITY downloadsUnix.commandkey     "y">
@@ -204,6 +215,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY webDeveloperMenu.label       "นักพัฒนาเว็บ">
 <!ENTITY webDeveloperMenu.accesskey   "พ">
+
+<!ENTITY devToolsCmd.keycode          "VK_F12">
+<!ENTITY devToolsCmd.keytext          "F12">
 
 <!ENTITY devtoolsConnect.label        "เชื่อมต่อ…">
 <!ENTITY devtoolsConnect.accesskey    "ต">
@@ -223,6 +237,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY responsiveDesignTool.label   "มุมมองการออกแบบเชิงตอบสนอง">
 <!ENTITY responsiveDesignTool.accesskey "ต">
 <!ENTITY responsiveDesignTool.commandkey "M">
+
+<!ENTITY eyedropper.label   "ตัวเลือกสี">
+<!ENTITY eyedropper.accesskey "ว">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -238,14 +255,24 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY scratchpad.accesskey         "ล">
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
+<!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser toolbox UI in the Tools menu. -->
+
+<!ENTITY browserToolboxMenu.label     "กล่องเครื่องมือเบราว์เซอร์">
+<!ENTITY browserToolboxMenu.accesskey "e">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "ปิดแถบเครื่องมือนักพัฒนา">
 <!ENTITY devToolbarMenu.label              "แถบเครื่องมือนักพัฒนา">
 <!ENTITY devToolbarMenu.accesskey          "พ">
+<!ENTITY devAppMgrMenu.label               "ตัวจัดการแอป">
+<!ENTITY devAppMgrMenu.accesskey           "A">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "สลับเครื่องมือ">
 <!ENTITY devToolboxMenuItem.accesskey      "ส">
+<!ENTITY devToolboxMenuItem.keytext        "I">
 
 <!ENTITY devToolbarToolsButton.tooltip     "สลับเครื่องมือนักพัฒนา">
 <!ENTITY devToolbarOtherToolsButton.label  "เครื่องมืออื่น">
@@ -303,8 +330,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewSidebarMenu.accesskey "ง">
 <!ENTITY viewCustomizeToolbar.label       "กำหนดเอง…"> 
 <!ENTITY viewCustomizeToolbar.accesskey     "ก">
-<!ENTITY viewTabsOnTop.label            "แท็บอยู่ด้านบน">
-<!ENTITY viewTabsOnTop.accesskey        "บ">
 
 <!ENTITY historyMenu.label "ประวัติ">
 <!ENTITY historyMenu.accesskey "ป">
@@ -316,16 +341,36 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllHistoryCmd2.label "แสดงประวัติทั้งหมด">
 <!ENTITY showAllHistoryCmd.commandkey "H">
 
-<!ENTITY appMenuEdit.label "แก้ไข">
 <!ENTITY appMenuCustomize.label "ปรับแต่ง">
-<!ENTITY appMenuToolbarLayout.label "รูปแบบแถบเครื่องมือ…">
-<!ENTITY appMenuSidebars.label "แถบข้าง">
-<!ENTITY appMenuFind.label "ค้นหา…">
-<!ENTITY appMenuUnsorted.label "ที่คั่นหน้าที่ยังไม่จำแนก">
-<!ENTITY appMenuWebDeveloper.label "นักพัฒนาเว็บ">
-<!ENTITY appMenuGettingStarted.label "เริ่มต้น">
-<!ENTITY appMenuSafeMode.label "เริ่มใหม่และปิดใช้งานส่วนเสริม…">
-<!ENTITY appMenuSafeMode.accesskey "ร">
+<!ENTITY appMenuCustomize.tooltip "ปรับแต่งเมนูและแถบเครื่องมือ">
+<!ENTITY appMenuCustomizeExit.label "ออกจากการปรับแต่ง">
+<!ENTITY appMenuCustomizeExit.tooltip "เสร็จสิ้นขั้นตอนการปรับแต่ง">
+<!ENTITY appMenuHistory.label "ประวัติ">
+<!ENTITY appMenuHistory.showAll.label "แสดงประวัติทั้งหมด">
+<!ENTITY appMenuHistory.clearRecent.label "ล้างประวัติเมื่อเร็ว ๆ นี้…">
+<!ENTITY appMenuHistory.restoreSession.label "เรียกคืนวาระที่แล้ว">
+<!ENTITY appMenuHistory.viewSidebar.label "ดูแถบข้างประวัติ">
+<!ENTITY appMenuHelp.tooltip "เปิดเมนูช่วยเหลือ">
+
+<!ENTITY customizeMenu.addToToolbar.label "เพิ่มไปยังแถบเครื่องมือ">
+<!ENTITY customizeMenu.addToToolbar.accesskey "พ">
+<!ENTITY customizeMenu.addToPanel.label "เพิ่มไปยังเมนู">
+<!ENTITY customizeMenu.addToPanel.accesskey "ม">
+<!ENTITY customizeMenu.moveToToolbar.label "ย้ายไปยังแถบเครื่องมือ">
+<!ENTITY customizeMenu.moveToToolbar.accesskey "ย">
+<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
+     same context menu as menubarCmd and personalbarCmd, so they should have
+     different access keys. customizeMenu.moveToToolbar and 
+     customizeMenu.moveToPanel are mutually exclusive, so can share access
+     keys.  -->
+<!ENTITY customizeMenu.moveToPanel.label "ย้ายไปยังเมนู">
+<!ENTITY customizeMenu.moveToPanel.accesskey "ป">
+<!ENTITY customizeMenu.removeFromToolbar.label "เอาออกจากแถบเครื่องมือ">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "อ">
+<!ENTITY customizeMenu.removeFromMenu.label "เอาออกจากเมนู">
+<!ENTITY customizeMenu.removeFromMenu.accesskey "จ">
+<!ENTITY customizeMenu.addMoreItems.label "เพิ่มรายการ…">
+<!ENTITY customizeMenu.addMoreItems.accesskey "พ">
 
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "ค้นหาหรือป้อนที่อยู่">
@@ -394,6 +439,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewImageCmd.accesskey       "ภ">
 <!ENTITY viewImageInfoCmd.label       "ดูข้อมูลภาพ">
 <!ENTITY viewImageInfoCmd.accesskey   "พ">
+<!ENTITY viewImageDescCmd.label       "ดูคำอธิบาย">
+<!ENTITY viewImageDescCmd.accesskey   "ย">
 <!ENTITY viewVideoCmd.label           "ดูวีดิทัศน์">
 <!ENTITY viewVideoCmd.accesskey       "ว">
 <!ENTITY viewBGImageCmd.label         "ดูภาพพื้นหลัง">
@@ -401,7 +448,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY setDesktopBackgroundCmd.label      "ตั้งเป็นภาพพื้นหลัง…">
 <!ENTITY setDesktopBackgroundCmd.accesskey  "ต">
 <!ENTITY bookmarkPageCmd2.label       "คั่นหน้าเว็บนี้">
-<!ENTITY bookmarkPageCmd2.accesskey   "ค">
 <!ENTITY bookmarkThisLinkCmd.label      "คั่นลิงก์นี้">
 <!ENTITY bookmarkThisLinkCmd.accesskey  "ล">
 <!ENTITY bookmarkThisFrameCmd.label      "คั่นกรอบนี้">
@@ -421,7 +467,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY saveLinkCmd.accesskey        "ล">
 <!ENTITY saveImageCmd.label           "บันทึกรูปเป็น…">
 <!ENTITY saveImageCmd.accesskey       "ท">
-<!ENTITY saveVideoCmd.label           "บันทึกวีดิทัศน์เป็น…">
+<!ENTITY saveVideoCmd.label           "บันทึกวิดีโอเป็น…">
 <!ENTITY saveVideoCmd.accesskey       "ป">
 <!ENTITY saveAudioCmd.label           "บันทึกเสียงเป็น…">
 <!ENTITY saveAudioCmd.accesskey       "ป">
@@ -525,22 +571,11 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY fullZoom.label                 "ย่อ-ขยาย">
 <!ENTITY fullZoom.accesskey             "ข">
 
-<!ENTITY newTabButton.tooltip           "เปิดแท็บใหม่">
-<!ENTITY newWindowButton.tooltip        "เปิดหน้าต่างใหม่">
 <!ENTITY sidebarCloseButton.tooltip     "ปิดแถบข้าง">
-
-<!ENTITY cutButton.tooltip              "ตัด">
-<!ENTITY copyButton.tooltip             "คัดลอก">
-<!ENTITY pasteButton.tooltip            "วาง">
-
-<!ENTITY fullScreenButton.tooltip       "แสดงหน้าต่างแบบเต็มหน้าจอ">
-
-<!ENTITY zoomOutButton.tooltip          "ย่อ">
-<!ENTITY zoomInButton.tooltip           "ขยาย">
-<!ENTITY zoomControls.label             "ควบคุมการย่อขยาย">
 
 <!ENTITY quitApplicationCmdWin.label       "ออก"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "อ">
+<!ENTITY quitApplicationCmdWin.tooltip     "ออกจาก &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "ออก"> 
@@ -584,6 +619,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY findAgainCmd.accesskey "อ">
 <!ENTITY findAgainCmd.commandkey "g">
 <!ENTITY findAgainCmd.commandkey2 "VK_F3">
+<!ENTITY findSelectionCmd.commandkey "e">
 
 <!ENTITY spellAddDictionaries.label "เพิ่มพจนานุกรม…">
 <!ENTITY spellAddDictionaries.accesskey "พ">
@@ -608,6 +644,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY identity.runBy "ให้บริการโดย">
 
 <!ENTITY identity.moreInfoLinkText "ข้อมูลเพิ่มเติม…">
+
+<!ENTITY identity.permissions "การอนุญาต">
+<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
+     localized title of this SUMO article
+     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
+
+<!ENTITY identity.help.tooltip "ฉันจะรู้ได้อย่างไรว่าการเชื่อมต่อของฉันไปที่เว็บไซต์จะมั่นคงปลอดภัย">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -622,13 +665,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY syncSetup.accesskey          "ต">
 <!ENTITY syncSyncNowItem.label        "ผสานข้อมูลเดี๋ยวนี้">
 <!ENTITY syncSyncNowItem.accesskey    "ผ">
+<!ENTITY syncReAuthItem.label         "เชื่อมต่อกับ &syncBrand.shortName.label; อีกครั้ง">
+<!ENTITY syncReAuthItem.accesskey     "เ">
 <!ENTITY syncToolbarButton.label      "ผสาน">
 
-<!ENTITY addonBarCloseButton.tooltip  "ปิดแถบส่วนเสริม">
-<!ENTITY toggleAddonBarCmd.key        "/">
-
 <!ENTITY socialToolbar.title        "ปุ่มแถบเครื่องมือสังคม">
-<!ENTITY social.notLoggedIn.label   "ไม่ได้ล็อกอิน">
 
 <!ENTITY social.ok.label       "ตกลง">
 <!ENTITY social.ok.accesskey   "ต">
@@ -648,155 +689,91 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.accesskey "ร">
 <!ENTITY social.closeNotificationItem.label "ไม่ใช่ตอนนี้">
 
+
+
+<!ENTITY customizeMode.tabTitle "ปรับแต่ง &brandShortName;">
+<!ENTITY customizeMode.menuAndToolbars.header2 "เพิ่มเครื่องมือและคุณสมบัติ">
+<!ENTITY customizeMode.menuAndToolbars.empty "อยากได้เครื่องมือเพิ่ม?">
+<!ENTITY customizeMode.menuAndToolbars.emptyLink "เลือกจากส่วนเสริมที่มีนับพัน">
+<!ENTITY customizeMode.restoreDefaults "เรียกคืนค่าปริยาย">
+<!ENTITY customizeMode.toolbars "แสดง / ซ่อน แถบเครื่องมือ">
+<!ENTITY customizeMode.titlebar "แถบหัวเรื่อง">
+
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "มุ่งไปที่การพูดคุย">
 <!ENTITY social.chatBar.accesskey "ม">
-<!-- labels are set dynamically, see browser.properties -->
 
-<!ENTITY social.markpage.accesskey "m">
-<!ENTITY social.marklink.accesskey "M">
+<!ENTITY social.markpageMenu.accesskey "ป">
+<!ENTITY social.markpageMenu.label "บันทึกหน้าเป็น…">
+<!ENTITY social.marklinkMenu.accesskey "ล">
+<!ENTITY social.marklinkMenu.label "บันทึกลิงก์เป็น…">
 
 <!ENTITY getUserMedia.selectCamera.label "แบ่งปันกล้อง:">
 <!ENTITY getUserMedia.selectCamera.accesskey "ก">
+<!ENTITY getUserMedia.selectWindowOrScreen.label "หน้าต่างหรือหน้าจอที่ใช้ร่วมกัน">
+<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "น">
 <!ENTITY getUserMedia.selectMicrophone.label "แบ่งปันไมโครโฟน:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "ม">
+<!ENTITY getUserMedia.allWindowsShared.message "หน้าตาที่ปรากฏอยู่ทั้งหมดบนหน้าจอของคุณจะถูกใช้ร่วมกัน">
 
 <!ENTITY webrtcIndicatorButton.label "เข้าถึงกล้อง / ไมโครโฟน">
 <!ENTITY webrtcIndicatorButton.tooltip "แสดงเว็บไซต์ที่คุณกำลังแบ่งปันกล้องหรือไมโครโฟนของคุณด้วย">
 
-<!ENTITY mixedContentBlocked.helplink "เรียนรู้เพิ่มเติม">
+<!ENTITY loopCallButton.tooltip "เชิญบางคนเพื่อการสนทนา">
+
 <!ENTITY mixedContentBlocked.moreinfo "เว็บไซต์ส่วนใหญ่จะทำงานอย่างถูกต้องแม้กระทั่งเนื้อหาถูกปิดกั้น">
 
 <!ENTITY pointerLock.notification.message "กด ESC ได้ตลอดเวลาเพื่อแสดงอีกครั้ง">
 
-<!-- LOCALIZATION NOTE (chromeDebuggerMenu.label): This is the label for the
-  -  application menu item that opens the browser debugger UI in the Tools menu. -->
-<!ENTITY chromeDebuggerMenu.label       "ตัวดีบักเบราเซอร์">
-
-<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
-direction in which tabs are closed, i.e. locales that use RTL mode should say
-left instead of right. -->
-<!ENTITY  closeTabsToTheEnd.label            "ปิดแท็บด้านขวา">
-<!ENTITY  closeTabsToTheEnd.accesskey        "ข">
-
-<!ENTITY devToolboxMenuItem.keycode        "I">
-<!ENTITY devToolboxMenuItem.keytext        "I">
-
-<!ENTITY devToolsCmd.keycode          "VK_F12">
-<!ENTITY devToolsCmd.keytext          "F12">
-
-<!ENTITY fullscreenExitHint2.value "กด ESC เพื่อออก">
-
-<!ENTITY identity.permissions "การอนุญาต">
-
-<!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
-<!ENTITY pluginActivateNow.label "อนุญาตทันที">
-<!ENTITY pluginActivateAlways.label "อนุญาตและจำไว้">
-<!ENTITY pluginBlockNow.label "ปิดกั้นโปรแกรมเสริม">
-
 <!ENTITY pluginNotification.showAll.label "แสดงทั้งหมด">
 <!ENTITY pluginNotification.showAll.accesskey "ม">
+<!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
 
-<!-- LOCALIZATION NOTE (undoCloseTabs.label) : This label is used
-when the previous tab-closing operation closed more than one tab. It
-replaces the undoCloseTab.label and will use the same accesskey as the
-undoCloseTab.label so users will not need to learn new keyboard controls. -->
-<!ENTITY  undoCloseTabs.label                "ยกเลิกการปิดแท็บ">
-
-<!ENTITY viewImageDescCmd.label       "ดูคำอธิบาย">
-<!ENTITY viewImageDescCmd.accesskey   "ย">
-
-<!ENTITY appMenuCustomize.tooltip "Customize the Menu and Toolbars">
-<!ENTITY appMenuCustomizeExit.label "Exit Customize">
-<!ENTITY appMenuCustomizeExit.tooltip "Finish Customizing">
-<!ENTITY appMenuHelp.tooltip "Open Help Menu">
-<!ENTITY appMenuHistory.clearRecent.label "Clear Recent History…">
-<!ENTITY appMenuHistory.label "History">
-<!ENTITY appMenuHistory.restoreSession.label "Restore Previous Session">
-<!ENTITY appMenuHistory.showAll.label "Show All History">
-<!ENTITY appMenuHistory.viewSidebar.label "View History Sidebar">
-
-<!ENTITY appmenu.tooltip                     "Open menu">
-<!ENTITY browserToolboxMenu.accesskey "e">
-
-<!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser toolbox UI in the Tools menu. -->
-<!ENTITY browserToolboxMenu.label     "Browser Toolbox">
-<!ENTITY customizeMenu.addMoreItems.accesskey "A">
-<!ENTITY customizeMenu.addMoreItems.label "Add More Items…">
-<!ENTITY customizeMenu.addToPanel.accesskey "M">
-<!ENTITY customizeMenu.addToPanel.label "Add to Menu">
-<!ENTITY customizeMenu.addToToolbar.accesskey "A">
-
-<!ENTITY customizeMenu.addToToolbar.label "Add to Toolbar">
-<!ENTITY customizeMenu.moveToPanel.accesskey "o">
-<!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
-     same context menu as menubarCmd and personalbarCmd, so they should have
-     different access keys. customizeMenu.moveToToolbar and 
-     customizeMenu.moveToPanel are mutually exclusive, so can share access
-     keys.  -->
-<!ENTITY customizeMenu.moveToPanel.label "Move to Menu">
-<!ENTITY customizeMenu.moveToToolbar.accesskey "o">
-<!ENTITY customizeMenu.moveToToolbar.label "Move to Toolbar">
-<!ENTITY customizeMenu.removeFromMenu.accesskey "R">
-<!ENTITY customizeMenu.removeFromMenu.label "Remove from Menu">
-<!ENTITY customizeMenu.removeFromToolbar.accesskey "R">
-<!ENTITY customizeMenu.removeFromToolbar.label "Remove from Toolbar">
-<!ENTITY customizeMode.menuAndToolbars.empty "Want more tools?">
-<!ENTITY customizeMode.menuAndToolbars.emptyLink "Choose from thousands of add-ons">
-<!ENTITY customizeMode.menuAndToolbars.header2 "Additional Tools and Features">
-<!ENTITY customizeMode.restoreDefaults "Restore Defaults">
-
-
-
-<!ENTITY customizeMode.tabTitle "Customize &brandShortName;">
-<!ENTITY customizeMode.titlebar "Title Bar">
-<!ENTITY customizeMode.toolbars "Show / Hide Toolbars">
-<!ENTITY devAppMgrMenu.accesskey           "A">
-<!ENTITY devAppMgrMenu.label               "App Manager">
-<!ENTITY editThisBookmarkCmd.label "Edit This Bookmark">
-<!ENTITY eyedropper.accesskey "Y">
-
-<!ENTITY eyedropper.label   "Eyedropper">
-<!ENTITY feedsMenu.label "Subscribe">
-<!ENTITY findSelectionCmd.commandkey "e">
-
-<!ENTITY fxaSignIn.label "Sign in to &syncBrand.shortName.label;">
-<!ENTITY fxaSignInError.label "Reconnect to &syncBrand.shortName.label;">
-
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-<!ENTITY identity.help.tooltip "How do I tell if my connection to a website is secure?">
-<!ENTITY navbarOverflow.label                "More tools…">
-
+<!ENTITY pluginActivateNow.label "อนุญาตสำหรับครั้งนี้">
+<!ENTITY pluginActivateAlways.label "อนุญาตและจำไว้">
+<!ENTITY pluginBlockNow.label "ปิดกั้นโปรแกรมเสริม">
 <!-- LOCALIZATION NOTE: (pluginNotification.width): This is used to determine the
      width of the plugin popup notification that can appear if a plugin has been
      blocked on a page. Should be wide enough to fit the pluginActivateNow.label
      and pluginActivateAlways.label strings above on a single line. This must be
      a CSS length value. -->
-<!ENTITY pluginNotification.width "28em">
-<!ENTITY quitApplicationCmdWin.tooltip     "Exit &brandShortName;">
-<!ENTITY social.marklinkMenu.accesskey "L">
-<!ENTITY social.marklinkMenu.label "Save Link To…">
 
-<!ENTITY social.markpageMenu.accesskey "P">
-<!ENTITY social.markpageMenu.label "Save Page To…">
+<!ENTITY pluginNotification.width "26em">
 
-<!ENTITY switchToMetroCmd2.label       "Relaunch in &brandShortName; for Windows 8 Touch">
-<!ENTITY syncErrorPanel.heading "Cannot connect to &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.signInButton.accesskey "S">
-<!ENTITY syncErrorPanel.signInButton.label "Sign In">
-<!ENTITY syncErrorPanel.subTitle "Please sign in to resume syncing.">
-<!ENTITY syncReAuthItem.accesskey     "R">
-<!ENTITY syncReAuthItem.label         "Reconnect to &syncBrand.shortName.label;…">
-<!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; enabled">
-<!ENTITY syncStartPanel2.subTitle "&brandShortName; will begin syncing momentarily.">
-<!ENTITY tabCrashed.checkSendReport "Tell &vendorShortName; about this crash so they can fix it.">
+<!ENTITY tabCrashed.header "แท็บขัดข้อง">
+<!ENTITY tabCrashed.message "อืม แย่จริงนะ เราพยายามจะแสดงผลหน้าเว็บ แต่มันไม่ยอมตอบสนอง">
+<!ENTITY tabCrashed.checkSendReport "แจ้งการขัดข้องนี้ให้ &vendorShortName; ทราบ เพื่อดำเนินการแก้ไข">
+<!ENTITY tabCrashed.tryAgain "ลองใหม่">
 
-<!ENTITY tabCrashed.header "Tab crashed">
-<!ENTITY tabCrashed.message "Well, this is embarrassing. We tried to display this Web page, but it's not responding.">
-<!ENTITY tabCrashed.tryAgain "Try Again">
+<!ENTITY uiTour.infoPanel.close "ปิด">
 
-<!ENTITY uiTour.infoPanel.close "Close">
-<!ENTITY viewBookmarksSidebar2.label        "View Bookmarks Sidebar">
+<!ENTITY appMenuSidebars.label         "แถบข้าง">
+
+<!ENTITY switchToMetroCmd2.label       "เรียกใหม่ใน &brandShortName; สำหรับ Windows 8 Touch">
+
+
+<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
+
+<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
+<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
+<!ENTITY panicButton.view.2hr                     "Two hours">
+<!ENTITY panicButton.view.5min                    "Five minutes">
+<!ENTITY panicButton.view.day                     "24 hours">
+<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
+<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
+<!ENTITY panicButton.view.forgetButton            "Forget!">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
+     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
+     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
+     The translation should do the same. -->
+<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
+
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
+<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+
+<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
