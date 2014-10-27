@@ -1,6 +1,6 @@
 // based on a keyboard map from an 'xkb/symbols/dk' file
 
-partial default alphanumeric_keys
+default  partial alphanumeric_keys
 xkb_symbols "basic" {
 
     include "latin(type2)"
@@ -42,8 +42,16 @@ xkb_symbols "nodeadkeys" {
 
 };
 
+partial alphanumeric_keys
+xkb_symbols "winkeys" {
+
+    include "dk(basic)"
+    name[Group1] = "Danish (Winkeys)";
+    include "eurosign(5)"
+};
+
 // Copied from macintosh_vndr/dk
-partial alphanumeric_keys 
+partial alphanumeric_keys
 xkb_symbols "mac" {
 
     include "dk"
@@ -55,7 +63,7 @@ xkb_symbols "mac" {
 };
 
 
-partial alphanumeric_keys 
+partial alphanumeric_keys
 xkb_symbols "mac_nodeadkeys" {
     include "dk(mac)"
     name[Group1]= "Danish (Macintosh, eliminate dead keys)";
@@ -64,9 +72,17 @@ xkb_symbols "mac_nodeadkeys" {
     key <AD12>	{ [diaeresis, asciicircum,   asciitilde,  dead_macron ]	};
 };
 
-partial alphanumeric_keys 
+partial alphanumeric_keys
 xkb_symbols "dvorak" {
     include "no(dvorak)"
 
     name[Group1]= "Danish (Dvorak)";
+    key <AD12> { [  asciitilde, asciicircum, dead_diaeresis, dead_tilde ] };
+};
+
+// EXTRAS:
+
+partial alphanumeric_keys
+	xkb_symbols "sun_type6" {
+	include "sun_vndr/dk(sun_type6)"
 };

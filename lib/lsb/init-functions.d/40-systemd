@@ -1,21 +1,18 @@
 # -*-Shell-script-*-
 # /lib/lsb/init-functions
 
-if [ -e /sys/fs/cgroup/systemd ]; then
-    # Some init scripts use "set -e" and "set -u", we don't want that
-    # here
-    set +e
-    set +u
+_use_systemctl=0
+if [ -d /run/systemd/system ]; then
 
-    if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
+    if [ -n "${DPKG_MAINTSCRIPT_PACKAGE:-}" ]; then
     # If we are called by a maintainer script, chances are good that a
     # new or updated sysv init script was installed.  Reload daemon to
     # pick up any changes.
-        systemctl daemon-reload
+        systemctl daemon-reload || true
     fi
 
     # Redirect SysV init scripts when executed by the user
-    if [ $PPID -ne 1 ] && [ -z "$init" ] && [ -z "$_SYSTEMCTL_SKIP_REDIRECT" ]; then
+    if [ $PPID -ne 1 ] && [ -z "${init:-}" ] && [ -z "${_SYSTEMCTL_SKIP_REDIRECT:-}" ]; then
         case $(readlink -f "$0") in
             /etc/init.d/*)
                 _use_systemctl=1
@@ -23,7 +20,7 @@ if [ -e /sys/fs/cgroup/systemd ]; then
                 # but can through the init script.
                 prog=${0##*/}
                 service="${prog%.sh}.service"
-                if [ "$(systemctl -p CanReload show $service 2>/dev/null)" = "CanReload=no" ] && [ "$1" = "reload" ]; then
+                if [ "$(systemctl -p CanReload show $service 2>/dev/null)" = "CanReload=no" ] && [ "${1:-}" = "reload" ]; then
                     _use_systemctl=0
                 fi
                 ;;
@@ -31,8 +28,6 @@ if [ -e /sys/fs/cgroup/systemd ]; then
     else
         export _SYSTEMCTL_SKIP_REDIRECT="true"
     fi
-else
-    _use_systemctl=0
 fi
 
 systemctl_redirect () {
@@ -73,6 +68,11 @@ systemctl_redirect () {
 }
 
 if [ "$_use_systemctl" = "1" ]; then
+    # Some init scripts use "set -e" and "set -u", we don't want that
+    # here
+    set +e
+    set +u
+
     if  [ "x$1" = xstart -o \
         "x$1" = xstop -o \
         "x$1" = xrestart -o \

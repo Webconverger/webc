@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # zgrep -- a wrapper around a grep program that decompresses files as needed
 # Adapted from a version sent by Charles Levert <charles@comm.polymtl.ca>
@@ -28,10 +28,10 @@ case $1 in
 esac
 PATH=$bindir:$PATH
 
-grep='${GREP-grep}'
+grep='${GREP-'\''/bin/grep'\''}'
 
-version='zgrep (gzip) 1.5
-Copyright (C) 2010-2012 Free Software Foundation, Inc.
+version='zgrep (gzip) 1.6
+Copyright (C) 2010-2013 Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
@@ -65,7 +65,7 @@ while test $# -ne 0; do
   optarg=
 
   case $option in
-  (-[0123456789EFGHIKLPRTUVZabchilnoqrsuvwxyz]?*)
+  (-[0123456789EFGHIKLPRTUVZabchilnoqrsuvwxyz]*[!0123456789]*)
     arg2=-\'$(expr "X$option" : 'X-.[0-9]*\(.*\)' | sed "$escape")
     eval "set -- $arg2 "'${1+"$@"}'
     option=$(expr "X$option" : 'X\(-.[0-9]*\)');;

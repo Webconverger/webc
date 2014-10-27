@@ -2,7 +2,7 @@
 
 ### BEGIN INIT INFO
 # Provides:		plymouth
-# Required-Start:	$remote_fs $all
+# Required-Start:	udev $remote_fs $all
 # Required-Stop:	$remote_fs
 # Should-Start:		$x-display-manager
 # Should-Stop:		$x-display-manager
@@ -21,6 +21,8 @@ if [ -r "/etc/default/${NAME}" ]
 then
 	. "/etc/default/${NAME}"
 fi
+
+. /lib/lsb/init-functions
 
 set -e
 
@@ -51,7 +53,7 @@ case "${1}" in
 			true)
 				if ! plymouth --ping
 				then
-					/sbin/plymouthd --mode=shutdown --attach-to-session
+					/sbin/plymouthd --mode=shutdown --tty=tty1
 				fi
 
 				RUNLEVEL="$(/sbin/runlevel | cut -d " " -f 2)"

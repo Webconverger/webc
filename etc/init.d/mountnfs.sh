@@ -94,7 +94,8 @@ case "$1" in
         echo "Error: argument '$1' not supported" >&2
         exit 3
         ;;
-    stop)
+    stop|status)
+        # No-op
         ;;
     *)
         echo "Usage: $0 start|stop" >&2
@@ -102,4 +103,4 @@ case "$1" in
         ;;
 esac
 
-: exit 0
+:

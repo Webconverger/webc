@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ "$1" = "configure" ]; then
+    { egrep -s -l '^[[:space:]]*REGDOMAIN=EU\b' /etc/default/crda ;
+      egrep -s -l '^[[:space:]]*options[[:space:]]+cfg80211\b.*\bieee80211_regdom=EU\b' /etc/modprobe.conf /etc/modprobe.d/*.conf; } | \
+    while read conf; do
+	echo >&2 "W: $conf selects the 'EU' wireless regulatory domain, which no longer exists."
+	echo >&2 "W: It should be changed to select a specific country (ISO 3166 alpha-2 code)."
+    done
+fi
+
+

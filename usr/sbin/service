@@ -11,6 +11,7 @@
 # Copyright (C) 2006 Red Hat, Inc. All rights reserved.
 # Copyright (C) 2008 Canonical Ltd.
 #   * August 2008 - Dustin Kirkland <kirkland@canonical.com>
+# Copyright (C) 2013 Michael Stapelberg <stapelberg@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,10 +48,16 @@ SERVICE=
 ACTION=
 SERVICEDIR="/etc/init.d"
 OPTIONS=
+is_systemd=
+
 
 if [ $# -eq 0 ]; then
    echo "${USAGE}" >&2
    exit 1
+fi
+
+if [ -d /run/systemd/system ]; then
+   is_systemd=1
 fi
 
 cd /
@@ -74,13 +81,14 @@ while [ $# -gt 0 ]; do
               *)
                 if ! is_ignored_file "${SERVICE}" \
 		    && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-                        if ! grep -qs "\(^\|\W\)status)" "$SERVICE"; then
+                        out=$(env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+                        retval=$?
+                        if echo "$out" | egrep -iq "usage:"; then
                           #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
                           echo " [ ? ]  $SERVICE" 1>&2
                           continue
                         else
-                          out=$(env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
-                          if [ "$?" = "0" -a -n "$out" ]; then
+                          if [ "$retval" = "0" -a -n "$out" ]; then
                             #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
                             echo " [ + ]  $SERVICE"
                             continue
@@ -90,7 +98,7 @@ while [ $# -gt 0 ]; do
                             continue
                           fi
                         fi
-                  #env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+                  #env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
                 fi
                 ;;
             esac
@@ -98,10 +106,16 @@ while [ $# -gt 0 ]; do
           exit 0
        elif [ $# -eq 2 -a "${2}" = "--full-restart" ]; then
           SERVICE="${1}"
-          if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-            env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" stop
-            env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" start
-            exit $?
+          # On systems using systemd, we just perform a normal restart:
+          # A restart with systemd is already a full restart.
+          if [ -n "$is_systemd" ]; then
+             ACTION="restart"
+          else
+             if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+               env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" stop
+               env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" start
+               exit $?
+             fi
           fi
        elif [ -z "${SERVICE}" ]; then
          SERVICE="${1}"
@@ -115,26 +129,106 @@ while [ $# -gt 0 ]; do
    esac
 done
 
+# Operate against system upstart, not session
+unset UPSTART_SESSION
 if [ -r "/etc/init/${SERVICE}.conf" ] && which initctl >/dev/null \
-   && initctl version | grep -q upstart
+   && initctl version 2>/dev/null | grep -q upstart \
+   && initctl status ${SERVICE} 2>/dev/null 1>/dev/null
 then
    # Upstart configuration exists for this job and we're running on upstart
    case "${ACTION}" in
-      start|stop|restart|status|reload)
+      start|stop|status|reload)
          # Action is a valid upstart action
          exec ${ACTION} ${SERVICE} ${OPTIONS}
       ;;
-      force-reload)
-         # Upstart just uses reload for force-reload
-         exec reload ${SERVICE} ${OPTIONS}
+      restart|force-reload)
+        # Map restart to the usual sysvinit behavior.
+        # Map force-reload to restart as per Debian policy 9.3.2,
+        # since there is no way to know if "reload" is supported
+         stop ${SERVICE} ${OPTIONS} || :
+         exec start ${SERVICE} ${OPTIONS}
       ;;
    esac
 fi
 
-# Otherwise, use the traditional sysvinit
-if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-   exec env -i LANG="$LANG" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" ${ACTION} ${OPTIONS}
-else
-   echo "${SERVICE}: unrecognized service" >&2
-   exit 1
+
+run_via_sysvinit() {
+   # Otherwise, use the traditional sysvinit
+   if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+      exec env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" ${ACTION} ${OPTIONS}
+   else
+      echo "${SERVICE}: unrecognized service" >&2
+      exit 1
+   fi
+}
+
+update_openrc_started_symlinks() {
+   # maintain the symlinks of /run/openrc/started so that
+   # rc-status works with the service command as well
+   if [ -d /run/openrc/started ] ; then
+      case "${ACTION}" in
+      start)
+         if [ ! -h /run/openrc/started/$SERVICE ] ; then
+            ln -s $SERVICEDIR/$SERVICE /run/openrc/started/$SERVICE || true
+         fi
+      ;;
+      stop)
+         rm /run/openrc/started/$SERVICE || true
+      ;;
+      esac
+   fi
+}
+
+# When this machine is running systemd, standard service calls are turned into
+# systemctl calls.
+if [ -n "$is_systemd" ]
+then
+   UNIT="${SERVICE%.sh}.service"
+   case "${ACTION}" in
+      restart|status)
+         exec systemctl ${ACTION} ${UNIT}
+      ;;
+      start|stop)
+         # Follow the principle of least surprise for SysV people:
+         # When running "service foo stop" and foo happens to be a service that
+         # has one or more .socket files, we also stop the .socket units.
+         # Users who need more control will use systemctl directly.
+         for unit in $(systemctl list-unit-files --full --type=socket 2>/dev/null | sed -ne 's/\.socket\s*[a-z]*\s*$/.socket/p'); do
+             if [ "$(systemctl -p Triggers show $unit)" = "Triggers=${UNIT}" ]; then
+                systemctl ${ACTION} $unit
+             fi
+         done
+         exec systemctl ${ACTION} ${UNIT}
+      ;;
+      reload)
+         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+         if [ "$_canreload" = "CanReload=no" ]; then
+            # The reload action falls back to the sysv init script just in case
+            # the systemd service file does not (yet) support reload for a
+            # specific service.
+            run_via_sysvinit
+         else
+            exec systemctl reload "${UNIT}"
+         fi
+         ;;
+      force-stop)
+         exec systemctl --signal=KILL kill "${UNIT}"
+         ;;
+      force-reload)
+         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+         if [ "$_canreload" = "CanReload=no" ]; then
+            exec systemctl restart "${UNIT}"
+         else
+            exec systemctl reload "${UNIT}"
+         fi
+         ;;
+      *)
+         # We try to run non-standard actions by running
+         # the init script directly.
+         run_via_sysvinit
+         ;;
+   esac
 fi
+
+update_openrc_started_symlinks
+run_via_sysvinit

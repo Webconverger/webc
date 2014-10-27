@@ -56,9 +56,9 @@ def parse_versions(vstring, add_exact=False):
                 raise ValueError('error parsing Python-Version attribute')
             op, v = m.group(1), m.group(2)
             vmaj, vmin = v.split('.')
-            # Don't silently ignore Python 3 versions for Squeeze.
-            #if int(vmaj) > 2:
-            #    continue
+            # Don't silently ignore Python 3 versions.
+            if int(vmaj) > 2:
+                raise ValueError('error parsing Python-Version attribute, Python 3 version found')
             if op in (None, '='):
                 exact_versions.add(v)
             else:
@@ -172,7 +172,7 @@ def default_version(version_only=False):
         try:
             debian_default = read_default('default-version')
         except ValueError:
-            debian_default = "python2.6"
+            debian_default = "python2.7"
         if not _default_version in (debian_default, os.path.join('/usr/bin', debian_default)):
             raise ValueError, "/usr/bin/python does not match the python default version. It must be reset to point to %s" % debian_default
         _default_version = debian_default
@@ -278,11 +278,11 @@ def extract_pyversion_attribute(fn, pkg):
     if pkg == 'Source':
         if sversion == None:
             raise MissingVersionValueError, \
-                  'missing X(S)-Python-Version in control file'
+                  'no X(S)-Python-Version in control file'
         return sversion
     if version == None:
         raise MissingVersionValueError, \
-              'missing XB-Python-Version for package `%s' % pkg
+              'no XB-Python-Version for package `%s' % pkg
     return version
 
 # compatibility functions to parse debian/pyversions

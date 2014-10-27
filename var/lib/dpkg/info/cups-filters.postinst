@@ -22,7 +22,42 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
+migrate_lp_modules_conf () {
+  if [ "$LOAD_LP_MODULE" = "yes" ]; then
+    if [ -f /proc/devices -a -f /proc/modules -a -x /sbin/modprobe ]; then
+      modprobe -q -b lp || true
+      modprobe -q -b ppdev || true
+      modprobe -q -b parport_pc || true
+    fi
+    # Yes is default in the configfile, don't touch it
+  else
+    # Comment out the modules loading in the modules-conf.d configuration file
+    cat > /etc/modules-load.d/cups-filters.conf <<EOF
+# Parallel printer driver modules loading for cups
+# LOAD_LP_MODULE was not 'yes' in /etc/default/cups
+# lp
+# ppdev
+# parport_pc
+EOF
+  fi
+}
+
 if [ "$1" = "configure" ]; then
+
+  # Migrate the LP_LOAD_MODULES away from cups' default
+  if dpkg --compare-versions "$2" lt "1.0.46-1~"; then
+    if [ -r /etc/default/cups ]; then
+      . /etc/default/cups
+      migrate_lp_modules_conf
+      # Comment out the LOAD_LP_MODULE variable from /etc/default/cups, consider it moved
+      sed -i -e 's%^\([^#]*\)\(LOAD_LP_MODULE=\)%# LOAD_LP_MODULE has migrated to /etc/modules-load.d/cups-filters.conf\n# \1\2%g' /etc/default/cups
+    elif [ -r /etc/default/cups.dpkg-bak ]; then
+      . /etc/default/cups.dpkg-bak
+      migrate_lp_modules_conf
+      # Delete /etc/default/cups.dpkg-bak, consider it moved
+      rm -f /etc/default/cups.dpkg-bak
+    fi
+  fi
 
   if [ -r /var/run/cups/cups.sock ]; then
     # Restart CUPS (to register new and updated MIME rules)

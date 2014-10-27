@@ -1,0 +1,104 @@
+#!/bin/sh
+set -e
+
+catdir=/var/cache/man
+
+ensure_catdir () {
+    if [ ! -d $catdir ]; then
+	# Make sure the cat directory exists.
+	install -d -o man -g root -m 02755 $catdir
+    fi
+}
+
+run_mandb () {
+    if [ ! -e /var/lib/man-db/auto-update ]; then
+	echo "Not building database; man-db/auto-update is not 'true'." >&2
+	return 0
+    fi
+    local message="$1"
+    shift
+    [ "$message" ] && echo "$message" >&2
+    # start-stop-daemon isn't available when running from debootstrap.
+    perl -e '@pwd = getpwnam("man"); $) = $( = $pwd[3]; $> = $< = $pwd[2];
+	     exec "/usr/bin/mandb", @ARGV' -- "$@" || true
+}
+
+if [ "$1" = triggered ]; then
+    ensure_catdir
+    # We don't print a status message here, as dpkg already said
+    # "Processing triggers for man-db ...".
+    run_mandb "" -pq
+    exit 0
+fi
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+[ "$1" = configure ] || exit 0
+
+maybesetuid='man mandb'
+
+db_get man-db/install-setuid
+
+if [ "$RET" = true ]; then
+    # man and mandb are to be installed setuid man.
+    owner=man:root
+    mode=4755
+else
+    # man and mandb are not to be installed setuid.
+    owner=root:root
+    mode=0755
+fi
+
+for x in $maybesetuid; do
+    # No statoverrides available or none exist for us ...
+    if ! dpkg-statoverride --list /usr/bin/$x >/dev/null; then
+	chown $owner /usr/bin/$x || true
+	chmod $mode  /usr/bin/$x
+    fi
+done
+
+if [ -e /etc/cron.daily/man.moved-by-preinst ]; then
+    rm /etc/cron.daily/man.moved-by-preinst
+fi
+if [ -e /etc/cron.weekly/catman.moved-by-preinst ]; then
+    rm /etc/cron.weekly/catman.moved-by-preinst
+fi
+
+ensure_catdir
+
+# debconf forms the interface used to suppress man-db updates during
+# automatic package builds (see https://bugs.debian.org/554914), but we
+# cache that value in the file system to avoid having to use debconf when
+# processing triggers.
+db_get man-db/auto-update
+if [ "$RET" = true ]; then
+    touch /var/lib/man-db/auto-update
+else
+    rm -f /var/lib/man-db/auto-update
+fi
+
+build_db=0
+
+if [ ! -f $catdir/index.db ]; then
+    # Build the database from scratch on fresh installs.
+    build_db=1
+elif dpkg --compare-versions "$2" lt 2.7.0; then
+    # At 2.7.0, the database version number changed to 2.7.0.
+    build_db=1
+fi
+
+if [ $build_db -eq 1 ]; then
+    # Chances are we're being run from debootstrap, which will have problems
+    # if mandb runs backgrounded for too long (bug #100616).
+    run_mandb "Building database of manual pages ..." -cq
+else
+    # Otherwise, just update the database in the foreground. It's unlikely
+    # to take very long, and configuration needs to cover everything that
+    # happens when we're triggered.
+    run_mandb "Updating database of manual pages ..." -pq
+fi
+
+
+
+exit 0

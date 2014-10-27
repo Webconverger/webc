@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Gnome_power_manager ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/gnome-power-manager.list ] || \
-	   [ -e /var/lib/live/config/gnome-power-manager ]
-	then
-		return
-	fi
-
-	echo -n " gnome-power-manager"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -28,11 +21,21 @@ Gnome_power_manager ()
 				;;
 		esac
 	done
-
-	Configure_gnome_power_manager
 }
 
-Configure_gnome_power_manager ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-power-manager.list ] || \
+	   [ -e /var/lib/live/config/gnome-power-manager ]
+	then
+		exit 0
+	fi
+
+	echo -n " gnome-power-manager"
+}
+
+Config ()
 {
 	# Not authorizing the user to hibernate the computer
 	# (might damage existing swap partitions).
@@ -42,4 +45,6 @@ Configure_gnome_power_manager ()
 	touch /var/lib/live/config/gnome-power-manager
 }
 
-Gnome_power_manager
+Cmdline
+Init
+Config

@@ -1,7 +1,19 @@
-#!/bin/sh
+#! /bin/sh
+
 set -e
+
+if [ "configure" = "$1" -a "x$2" != "x" ]; then
+    if dpkg --compare-versions $2  lt 1.12.1+dfsg-2\
+        && test -f /usr/etc/gss/mech; then
+	cp /usr/etc/gss/mech /etc/gss/mech
+	fi
+    fi
+
 # Automatically added by dh_makeshlibs
 if [ "$1" = "configure" ]; then
 	ldconfig
 fi
 # End automatically added section
+
+
+exit 0

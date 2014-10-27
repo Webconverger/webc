@@ -2,6 +2,12 @@
 
 ret="$?"
 
+# Prevent recursive loops, where these values are set to this script
+p="$(which sensible-editor)"
+[ "$(which $EDITOR || true)" = "$p" ] && EDITOR=
+[ "$(which $VISUAL || true)" = "$p" ] && VISUAL=
+[ "$(which $SELECTED_EDITOR || true)" = "$p" ] && SELECTED_EDITOR=
+
 if [ -n "$VISUAL" ]; then
 	${VISUAL} "$@"
 	ret="$?"
@@ -10,7 +16,13 @@ if [ -n "$VISUAL" ]; then
 	fi
 fi
 
-${EDITOR:-editor} "$@"
+if [ -r ~/.selected_editor ]; then
+	. ~/.selected_editor 2>/dev/null || true
+elif [ -z "$EDITOR" ] && [ -z "$SELECTED_EDITOR" ] && [ -t 0 ]; then
+	select-editor && . ~/.selected_editor 2>/dev/null || true
+fi
+
+${EDITOR:-${SELECTED_EDITOR:-editor}} "$@"
 ret="$?"
 if [ "$ret" -eq 126 ] || [ "$ret" -eq 127 ]; then
 	nano "$@"

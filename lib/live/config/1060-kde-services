@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Kde_services ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /usr/share/kde4 ] || \
-	   [ -e /var/lib/live/config/kde-services ]
-	then
-		return
-	fi
-
-	echo -n " kde-services"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.keyboard-layouts=*|keyboard-layouts=*)
@@ -32,11 +25,21 @@ Kde_services ()
 				;;
 		esac
 	done
-
-	Configure_kde_services
 }
 
-Configure_kde_services ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /usr/bin/kwriteconfig ] || \
+	   [ -e /var/lib/live/config/kde-services ]
+	then
+		exit 0
+	fi
+
+	echo -n " kde-services"
+}
+
+Config ()
 {
 	# Enabling keyboard selector
 	if echo "${LIVE_KEYBOARD_LAYOUTS}" | grep -qs ','
@@ -59,18 +62,27 @@ EOF
 		fi
 	fi
 
-	# Disabling unnecessary KDE services
-	rm -f /usr/share/autostart/kab2kabc.desktop
-	rm -f /usr/share/autostart/kaddressbookmigrator.desktop
-	rm -f /usr/share/autostart/korgac.desktop
-	rm -f /usr/share/autostart/printer-applet.desktop
-	rm -f /usr/share/autostart/nepomukserver.desktop
-	rm -f /usr/share/kde4/services/kwalletd.desktop
-	rm -f /usr/share/kde4/services/kded/kpackagekitd.desktop
-	rm -f /usr/share/kde4/services/kded/freespacenotifier.desktop
-	rm -f /usr/share/kde4/services/plasma-runner-contacts.desktop  # starts akonadi
-	rm -f /usr/share/kde4/services/kded/notificationhelper.desktop
-	rm -f /usr/share/kde4/services/plasma-dataengine-calendar.desktop # starts akonadi
+	# Disable addressbook migrator
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file kres-migratorrc --group Migration --key Enabled --type bool false
+
+	# Disable korganizer reminder daemon
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file korgacrc --group "General" --key "Autostart" --type bool false
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file korgacrc --group "General" --key "Enabled" --type bool false
+
+	# Disable nepomuk
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file nepomukserverrc --group "Basic Settings" --key "Start Nepomuk" --type bool false
+
+	# Disbable nepomuk krunner plugin (depends on nepomuk)
+	#sudo -u "${LIVE_USERNAME}" kwriteconfig --file krunnerrc --group "Plugins" --key "nepomuksearchEnabled" --type bool false
+
+	# Disable freespace notifier
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file kdedrc --group Module-freespacenotifier --key autoload --type bool false
+
+	# Disable searching contacts through krunner (depends on akonadi)
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file krunnerrc --group "Plugins" --key "kabccontactsEnabled" --type bool false
+
+	# Disable searching calendar events through krunner (depends on akonadi)
+	sudo -u "${LIVE_USERNAME}" kwriteconfig --file krunnerrc --group "Plugins" --key "org.kde.events_runnerEnabled" --type bool false
 
 	# should enable kxkb in ~/.kde/share/config/kxkbrc
 	# if multiple layouts are specified. gnome does it per default.
@@ -79,4 +91,6 @@ EOF
 	touch /var/lib/live/config/kde-services
 }
 
-Kde_services
+Cmdline
+Init
+Config

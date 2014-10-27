@@ -22,7 +22,6 @@ case "$1" in
 	#
 	rm -f \
 		/etc/default/rcS \
-		/etc/nologin \
 		/etc/motd.tail \
 		/etc/motd.static
 
@@ -66,7 +65,6 @@ case "$1" in
 	update-rc.d mountall-bootclean.sh  remove >/dev/null || exit $?
 	update-rc.d mountall.sh            remove >/dev/null || exit $?
 	update-rc.d checkfs.sh             remove >/dev/null || exit $?
-	update-rc.d mtab.sh                remove >/dev/null || exit $?
 	update-rc.d checkroot-bootclean.sh remove >/dev/null || exit $?
 	update-rc.d checkroot.sh           remove >/dev/null || exit $?
 	update-rc.d mountdevsubfs.sh       remove >/dev/null || exit $?
@@ -77,6 +75,15 @@ case "$1" in
 	;;
 esac
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/bootlogd 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
 
 
 :

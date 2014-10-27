@@ -1,0 +1,63 @@
+#!/bin/sh
+
+set -e -u
+
+DUMMY_PRINTER_NAME=test-printer0
+DRIVER_REGEXP='^.*'
+PDFS_PATH=/usr/share/cups/data/
+LPINFO_RUN=true
+DRIVERS_LIST=''
+
+while getopts 'n:r:p:l:h' flag; do
+  case "${flag}" in
+    n) DUMMY_PRINTER_NAME="${OPTARG}" ;;
+    r) DRIVER_REGEXP="${OPTARG}" ;;
+    p) PDFS_PATH="${OPTARG}" ;;
+    l) LPINFO_RUN=false; DRIVERS_LIST=${OPTARG} ;;
+    h) echo "Usage: $0 [-n printer_name] [-r '^driver_regexp'] [-p ./pdf-path] [-l drivers_list]";
+       return 1;;
+  esac
+done
+
+if $LPINFO_RUN; then
+  # textonly can't print PDF
+  # pdftoijs is currently buggy !?
+  DRIVERS_LIST=$(lpinfo -m | cut -f1 -d' ' | grep -v 'textonly' | grep -v 'pdftoijs' | grep -E $DRIVER_REGEXP)
+fi
+
+cleanup() {
+    # Delete it
+    echo -n "Interrupted, delete test printer:"
+    /usr/sbin/lpadmin -x $DUMMY_PRINTER_NAME 2>/dev/null || :
+    echo " done."
+}
+
+trap cleanup EXIT INT
+
+for driver in $DRIVERS_LIST; do
+
+    echo "* Driver $driver"
+
+    echo -n " - Create test printer:"
+    # Create dummy printer
+    /usr/sbin/lpadmin -p $DUMMY_PRINTER_NAME -E -m $driver -v file:///dev/null
+    echo " done."
+    
+    for file in $(find $PDFS_PATH -name '*.pdf') ; do
+        echo -n " - Print test job with $file: "
+        # Print the default testprint to it, get request id
+        rid=$(/usr/bin/lp -d $DUMMY_PRINTER_NAME $file | sed -e 's/^.*request id is \(.*\) (.*)$/\1/g')
+    
+        # Wait for the print to finish
+        while /usr/bin/lpstat | grep -q "^$rid "; do
+            /bin/sleep 1s
+            echo -n "."
+        done
+        echo " done."
+    done
+
+    # Delete it
+    echo -n " - Delete test printer:"
+    /usr/sbin/lpadmin -x $DUMMY_PRINTER_NAME
+    echo " done."
+done

@@ -6,7 +6,7 @@ Select_eth_device ()
 	bootconf=$(egrep '^BOOT=' /conf/initramfs.conf | tail -1)
 
 	# can be superseded by command line (used by Debian-Live's netboot for example)
-	for ARGUMENT in ${_CMDLINE}
+	for ARGUMENT in ${LIVE_BOOT_CMDLINE}
 	do
 		case "${ARGUMENT}" in
 			netboot=*)
@@ -26,31 +26,40 @@ Select_eth_device ()
 
 	# Available Ethernet interfaces ?
 	l_interfaces=""
-	echo "Waiting for ethernet card(s) up... If this fails, maybe the ethernet card is not supported by the kernel `uname -r`?"
-	while [ -z "$l_interfaces" ]
-	do
-		l_interfaces="$(cd /sys/class/net/ && ls -d eth* 2>/dev/null)"
-	done
 
-	if [ $(echo $l_interfaces | wc -w) -lt 2 ]
+	# See if we can derive the boot device
+	Device_from_bootif
+
+	if [ -z "$DEVICE" ]
 	then
-		# only one interface : no choice
-		echo "DEVICE=$l_interfaces" >> /conf/param.conf
-		return
-	fi
+		echo "Waiting for ethernet card(s) up... If this fails, maybe the ethernet card is not supported by the kernel `uname -r`?"
+		while [ -z "$l_interfaces" ]
+		do
+			l_interfaces="$(cd /sys/class/net/ && ls -d eth* 2>/dev/null)"
+		done
 
-	# If user force to use specific device, write it
-	for ARGUMENT in ${_CMDLINE}
-	do
-		case "${ARGUMENT}" in
-			live-netdev=*)
+		if [ $(echo $l_interfaces | wc -w) -lt 2 ]
+		then
+			# only one interface : no choice
+			echo "DEVICE=$l_interfaces" >> /conf/param.conf
+			return
+		fi
+
+		# If user force to use specific device, write it
+		for ARGUMENT in ${LIVE_BOOT_CMDLINE}
+		do
+			case "${ARGUMENT}" in
+				live-netdev=*)
 				NETDEV="${ARGUMENT#live-netdev=}"
 				echo "DEVICE=$NETDEV" >> /conf/param.conf
 				echo "Found live-netdev parameter, forcing to to use network device $NETDEV."
 				return
 				;;
-		esac
-	done
+			esac
+		done
+	else
+		l_interfaces="$DEVICE"
+	fi
 
 	found_eth_dev=""
 	while true

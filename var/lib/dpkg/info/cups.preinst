@@ -1,18 +1,17 @@
 #!/bin/sh
-
 set -e
-
-case "$1" in
-upgrade)
-    if dpkg --compare-versions "$2" le "1.5.3-2.7~" && [ -e /etc/cups/cupsd.conf ]; then
-        # Move cupsd.conf away as it becomes a non-conffile
-        mv /etc/cups/cupsd.conf /etc/cups/cupsd.conf.conffile-bak
-    fi
-esac
-
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/cups/acroread.conf 1.6.2-9~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/cups/pdftops.conf 1.6.2-9~ -- "$@"
+# End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.3-2.1~ -- "$@"
 # End automatically added section
-
-
-exit 0
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/logrotate.d/cups /etc/logrotate.d/cups-daemon 1.6.1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/logrotate.d/cups 1.6.2-3~ -- "$@"
+# End automatically added section

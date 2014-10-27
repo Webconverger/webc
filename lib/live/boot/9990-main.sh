@@ -2,7 +2,7 @@
 
 # set -e
 
-Main ()
+Live ()
 {
 	if [ -x /scripts/local-top/cryptroot ]
 	then
@@ -16,9 +16,7 @@ Main ()
 	tail -f boot.log >&7 &
 	tailpid="${!}"
 
-	. /live.vars
-
-	_CMDLINE="$(cat /proc/cmdline)"
+	LIVE_BOOT_CMDLINE="${LIVE_BOOT_CMDLINE:-$(cat /proc/cmdline)}"
 	Cmdline_old
 
 	Debug
@@ -30,12 +28,6 @@ Main ()
 	if [ -e /conf/param.conf ]
 	then
 		. /conf/param.conf
-	fi
-
-	if [ -n "${FUSE_MOUNT}" ]
-	then
-		# fuse does not work with klibc mount
-		ln -f /bin/mount.util-linux /bin/mount
 	fi
 
 	# Needed here too because some things (*cough* udev *cough*)
@@ -186,10 +178,16 @@ Main ()
 		fi
 	fi
 
-	if [ -f /etc/resolv.conf ] && [ ! -s ${rootmnt}/etc/resolv.conf ]
+	if [ -L /root/etc/resolv.conf ] ; then
+		# assume we have resolvconf
+		DNSFILE="${rootmnt}/etc/resolvconf/resolv.conf.d/base"
+	else
+		DNSFILE="${rootmnt}/etc/resolv.conf"
+	fi
+	if [ -f /etc/resolv.conf ] && [ ! -s ${DNSFILE} ]
 	then
-		log_begin_msg "Copying /etc/resolv.conf to ${rootmnt}/etc/resolv.conf"
-		cp -v /etc/resolv.conf ${rootmnt}/etc/resolv.conf
+		log_begin_msg "Copying /etc/resolv.conf to ${DNSFILE}"
+		cp -v /etc/resolv.conf ${DNSFILE}
 		log_end_msg
 	fi
 

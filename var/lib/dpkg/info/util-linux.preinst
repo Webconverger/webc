@@ -1,40 +1,13 @@
-#! /bin/sh
-
+#!/bin/sh
 set -e
 
-# Remove a no-longer used conffile
-rm_conffile() {
-    local PKGNAME="$1"
-    local CONFFILE="$2"
-
-    [ -e "$CONFFILE" ] || return 0
-
-    local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
-    local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
-            sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
-    if [ "$md5sum" != "$old_md5sum" ]; then
-        echo "Obsolete conffile $CONFFILE has been modified by you."
-        echo "Saving as $CONFFILE.dpkg-bak ..."
-        mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
-    else
-        echo "Removing obsolete conffile $CONFFILE ..."
-        rm -f "$CONFFILE"
-    fi
-}
-
-if [ "$1" = install ] || [ "$1" = upgrade ]; then
-	if [ -e "/etc/udev/rules.d/85-hwclock.rules" ]; then
-		if [ "`md5sum \"/etc/udev/rules.d/85-hwclock.rules\" | sed -e \"s/ .*//\"`" = \
-		     "`dpkg-query -W -f='${Conffiles}' util-linux | sed -n -e \"\\\\' /etc/udev/rules.d/85-hwclock.rules's/.* //p\"`" ]
-		then
-			rm -f "/etc/udev/rules.d/85-hwclock.rules"
-		fi
-	fi
-
-	if dpkg --compare-versions "$2" lt "2.20.1-5"; then
-	    rm_conffile util-linux "/etc/init.d/hwclockfirst.sh"
-	fi
-	update-rc.d hwclockfirst.sh remove >/dev/null
+# We once shipped fstrim.timer in 2.25.2-2. Undo the timer getting enabled
+# and purge the helper state, if upgrading from that version.
+if [ "$1" = "upgrade" ] && [ "$2" = "2.25.2-2" ] && \
+		[ -x /usr/bin/deb-systemd-helper ] && \
+		deb-systemd-helper debian-installed fstrim.timer; then
+	deb-systemd-helper disable fstrim.timer
+	deb-systemd-helper purge fstrim.timer
 fi
 
 

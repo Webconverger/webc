@@ -2,7 +2,7 @@
 #
 #  script for aspell hash autorebuild in Debian systems
 #
-# Copyright 2004-2010 Agustin Martin Domingo <agmartin@debian.org>
+# Copyright 2004-2014 Agustin Martin Domingo <agmartin@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,6 +24,12 @@ my $debug;
 my $dry_run;
 my $force;
 my $triggered;
+my $usrlibdir   = "/usr/lib/aspell";
+my $usrsharedir = "/usr/share/aspell";
+my $varlibdir   = "/var/lib/aspell";
+my $compatdir   = "$varlibdir";
+my $datadir     = "$usrlibdir";             # The data dir
+my $program     = "aspell-autobuildhash";
 
 sub usage {
   print STDERR "\nUsage:\taspell-autobuildhash [options]\n"
@@ -65,21 +71,29 @@ sub myerror {
 # ---------------------------------------------------------------------
 
 sub autorebuild {
-  my $lang      = shift ||                              # The dictionary name
+  my $lang            = shift ||                         # The dictionary name
     myerror("aspell-autobuildhash","No argument passed to function autorebuild");
-  my $data      = "/usr/lib/aspell";                    # The data/lib dir
-  my $langsfile = "/usr/share/aspell/$lang.contents";   # The subdicts file
-  my $options   = " --per-conf=/dev/null ";             # Make sure no personal conf is used at all
-  my @sublangs  = ();
+  my $old_remove_data = shift;
+  my $langsfile       = "$usrsharedir/$lang.contents";   # The subdicts file
+  my $options         = " --per-conf=/dev/null ";        # Make sure no personal conf is used at all
+  my %new_remove_data = ();
+  my @sublangs        = ();
 
   $options     .= " --dont-validate-affixes " unless $debug;
 
-  myerror "aspell data dir $data does not exist" unless ( -d $data );
+  myerror "$program: aspell data dir $datadir does not exist" unless ( -d $datadir );
 
+  # Import registered removal data.
+  foreach my $entry ( keys %{$old_remove_data} ){
+    $new_remove_data{$entry}++;
+    $new_remove_data{'fake-remove'}{$entry}++;
+  }
+
+  # Check if there is a contents file for this compat name
   if ( -e $langsfile ){
-    open (LANGSFILE, "< $langsfile") || die "Could not open $langsfile for reading";
-    @sublangs = <LANGSFILE>;
-    close LANGSFILE;
+    open (my $LANGSFILE, "< $langsfile") || die "Could not open $langsfile for reading";
+    @sublangs = <$LANGSFILE>;
+    close $LANGSFILE;
   } else {
     push @sublangs, $lang;
   }
@@ -92,12 +106,13 @@ sub autorebuild {
     s/\s+$//;
 
     my $sublang = $_;
-    my $base    = "/usr/share/aspell/$sublang";     # The wordlist basename
-    my $hash    = "/var/lib/aspell/$sublang.rws";   # The hash file
+    my $base    = "$usrsharedir/$sublang";     # The wordlist basename
+    my $hash    = "$varlibdir/$sublang.rws";   # The hash file
+    my $link    = "$usrlibdir/$sublang.rws";   # The link to the hash file
     my $msg     = '';
     my $unpack  = '';
 
-    print STDERR "aspell-autobuildhash: processing: $lang [$sublang]\n";
+    print STDERR "aspell-autobuildhash: processing: $lang [$sublang].\n";
 
     if ( -e "$base.mwl.gz" ){
       $unpack = "zcat $base.mwl.gz";
@@ -106,26 +121,41 @@ sub autorebuild {
     } elsif ( -e "$base.cwl.gz") {
       $unpack = "zcat $base.cwl.gz | precat";
     } else {
-      mymessage($lang,"Could not find any of $base.{mwl,wl,cwl}.gz");
-      return 0;
+      mymessage($lang,"$program: Could not find any of $base.{mwl,wl,cwl}.gz");
+      return;
     }
 
     #$unpack = "$unpack | aspell clean strict";
-    my $command = "$unpack | aspell $options --local-data-dir=$data --lang=$lang create master $hash";
+    my $command = "$unpack | aspell $options --local-data-dir=$datadir --lang=$lang create master $hash";
     if ( $dry_run ){
       print STDERR "$command\n";
+      $new_remove_data{'fake-remove'}{"$hash"}++;
+      $new_remove_data{'fake-remove'}{"$link"}++;
     } else {
       debugprint(" - command: $command");
-      system ("$command") == 0
-	or $msg = "Could not build the hash file for $sublang" ;
+      if ( system ("$command") == 0 ){
+	$new_remove_data{'remove'}{$hash}++;
+	if ( -w  "$usrlibdir" ){
+	  symlink($hash,$link) unless -e $link;
+	} else {
+	  print STDERR "$program warning: Non writable \"$usrlibdir\". Not setting symlink";
+	}
+	if ( -l "$link" ){
+	  # Make sure link is recorded
+	  $new_remove_data{'remove'}{"$link"}++;
+	}
+      } else {
+	$msg = "$program: Could not build the hash file for $sublang" ;
+      }
     }
 
     if ( $msg ){                 # Do not break postinst if hash cannot be built
       mymessage ($lang,$msg);    # Just inform about that
-      return 0;
+      return;
     }
   }
-  return 1;
+  $new_remove_data{'status'} = "ok";
+  return \%new_remove_data;
 }
 
 # ---------------------------------------------------------------------
@@ -137,9 +167,9 @@ sub get_aspell_compat {
   my $aspellcompatfile = "/usr/share/aspell/aspell.compat";
 
   if ( -e $aspellcompatfile ){
-    open (COMPAT,"$aspellcompatfile");
-    chomp ( $aspell_compat = <COMPAT> );
-    close COMPAT;
+    open (my $COMPAT,"$aspellcompatfile");
+    chomp ( $aspell_compat = <$COMPAT> );
+    close $COMPAT;
   }
   return $aspell_compat;
 }
@@ -152,17 +182,17 @@ use Debian::DictionariesCommon qw(dico_checkroot dico_activate_trigger);
 use Debconf::Client::ConfModule q(:all);
 use Getopt::Long;
 
-# Check if we are root
-dico_checkroot();
-
 GetOptions ('debug'     => \$debug,
 	    'dry-run'   => \$dry_run,
 	    'force'     => \$force,
 	    'triggered' => \$triggered
 ) or usage();
 
-my $compatdir     = "/var/lib/aspell";
-my $aspell_compat = get_aspell_compat();
+# Check if we are root
+dico_checkroot() unless $dry_run;
+
+my %old_remove_data = ();
+my $aspell_compat   = get_aspell_compat();
 
 unless ( $triggered or $force ) {
   exit if dico_activate_trigger("aspell-autobuildhash");
@@ -176,24 +206,53 @@ if ( system("which aspell > /dev/null 2>&1" ) == 0 ){
     $lang    =~ s/\.compat$//;
     $lang    =~ s/.*\///;
 
-    open (COMPAT,"$compat");
-    my $lang_compat =  <COMPAT>;
-    close COMPAT;
+    # Parse compat file
+    open (my $COMPAT,"$compat");
+    my $lang_compat =  <$COMPAT>;
+    close $COMPAT;
     chomp $lang_compat if $lang_compat;
     $lang_compat = 0 unless $lang_compat;
 
+    # Parse dict remove file if available
+    my $remove_file     = "$varlibdir/$lang.remove";
+    my %old_remove_data = ();
+    if ( -e "$remove_file" ){
+      open (my $REMOVE,"$remove_file");
+      while (<$REMOVE>){
+        chomp;
+        next if m/^\s*$/;
+        s/^\s+//;
+        s/\s+$//;
+        if ( -e "$_" ){
+          $old_remove_data{$_}++;
+        } else {
+          print STDERR "$program: \"$_\" in $remove_file not found. Upgrading info.\n";
+        }
+      }
+      close $REMOVE;
+    }
+
+    #
     if ( $force || $aspell_compat ne $lang_compat ){
       print STDERR "--\n" if ( $debug or $dry_run );
       debugprint "$lang => compat: \"$compat\", aspell_compat: [$aspell_compat]; lang_compat: [$lang_compat]";
-      if ( autorebuild($lang) ){
+      my $new_remove_data = autorebuild($lang,\%old_remove_data);
+      if ( defined $new_remove_data->{'status'} ){
 	my $newcompat = $aspell_compat || 0;
 	if ( $dry_run ){
-	  print STDERR "$newcompat > $compat\n"
+	  print STDERR "$newcompat > $compat\n";
+	  print STDERR "Remove: \n", join("\n",sort keys %{$new_remove_data->{'fake-remove'}}) ,"\n";
 	} else {
-	  open (COMPAT,">","$compat");
-	  print COMPAT "$newcompat\n";
-	  close COMPAT;
+	  # Update compat file
+	  open (my $COMPAT,">","$compat");
+	  print $COMPAT "$newcompat\n";
+	  close $COMPAT;
 	  debugprint "Updated $compat to $newcompat";
+	  # Update remove file
+	  open (my $REMOVE,">","$remove_file")
+	    or die "$program: Could not open \"$remove_file\" for write.";
+	  print $REMOVE join("\n",sort keys %{$new_remove_data->{'remove'}}),"\n";
+	  close $REMOVE;
 	}
       } else {
 	debugprint " *=* $compat not updated because of an error";
@@ -201,7 +260,7 @@ if ( system("which aspell > /dev/null 2>&1" ) == 0 ){
     }
   }
 } else {
-  debugprint " aspell is not installed. Doing nothing";
+  debugprint "$program:  aspell is not installed. Doing nothing";
 }
 
 __END__
@@ -315,5 +374,13 @@ F</usr/share/aspell/aspell.compat>.
 
 Agustin Martin <agmartin@debian.org>
 
-=cut
+=head1 COPYRIGHT
 
+Copyright (C) 2004-2013 Agustin Martin <agmartin@debian.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+=cut

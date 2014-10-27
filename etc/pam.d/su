@@ -47,10 +47,9 @@ session       required   pam_env.so readenv=1 envfile=/etc/default/locale
 # "nopen" stands to avoid reporting new mail when su'ing to another user
 session    optional   pam_mail.so nopen
 
-# Sets up user limits, please uncomment and read /etc/security/limits.conf
-# to enable this functionality.
+# Sets up user limits according to /etc/security/limits.conf
 # (Replaces the use of /etc/limits in old login)
-# session    required   pam_limits.so
+session    required   pam_limits.so
 
 # The standard Unix authentication modules, used with
 # NIS (man nsswitch) as well as normal /etc/passwd and

@@ -7,12 +7,193 @@ Name: adduser/title
 Template: adduser/title
 Owners: adduser
 
+Name: b43-fwcutter/install-unconditional
+Template: b43-fwcutter/install-unconditional
+Value: true
+Owners: b43-fwcutter
+
+Name: base-passwd/group-add
+Template: base-passwd/group-add
+Owners: base-passwd
+
+Name: base-passwd/group-change-gid
+Template: base-passwd/group-change-gid
+Owners: base-passwd
+
+Name: base-passwd/group-move
+Template: base-passwd/group-move
+Owners: base-passwd
+
+Name: base-passwd/group-remove
+Template: base-passwd/group-remove
+Owners: base-passwd
+
+Name: base-passwd/system/user/backup/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = backup
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/bin/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = bin
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/daemon/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = daemon
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/games/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = games
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/gnats/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = gnats
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/irc/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = irc
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/list/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = list
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/lp/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = lp
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/mail/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = mail
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/man/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = man
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/news/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = news
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/nobody/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = nobody
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/proxy/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = proxy
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/sys/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = sys
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/uucp/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = uucp
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/system/user/www-data/shell/_bin_sh/_usr_sbin_nologin
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+Variables:
+ name = www-data
+ new_shell = /usr/sbin/nologin
+ old_shell = /bin/sh
+
+Name: base-passwd/user-add
+Template: base-passwd/user-add
+Owners: base-passwd
+
+Name: base-passwd/user-change-gecos
+Template: base-passwd/user-change-gecos
+Owners: base-passwd
+
+Name: base-passwd/user-change-gid
+Template: base-passwd/user-change-gid
+Owners: base-passwd
+
+Name: base-passwd/user-change-home
+Template: base-passwd/user-change-home
+Owners: base-passwd
+
+Name: base-passwd/user-change-shell
+Template: base-passwd/user-change-shell
+Owners: base-passwd
+
+Name: base-passwd/user-change-uid
+Template: base-passwd/user-change-uid
+Owners: base-passwd
+
+Name: base-passwd/user-move
+Template: base-passwd/user-move
+Owners: base-passwd
+
+Name: base-passwd/user-remove
+Template: base-passwd/user-remove
+Owners: base-passwd
+
 Name: ca-certificates/enable_crts
 Template: ca-certificates/enable_crts
-Value: cacert.org/cacert.org.crt, debconf.org/ca.crt, mozilla/A-Trust-nQual-03.crt, mozilla/ACEDICOM_Root.crt, mozilla/AC_Raíz_Certicámara_S.A..crt, mozilla/Actalis_Authentication_Root_CA.crt, mozilla/AddTrust_External_Root.crt, mozilla/AddTrust_Low-Value_Services_Root.crt, mozilla/AddTrust_Public_Services_Root.crt, mozilla/AddTrust_Qualified_Certificates_Root.crt, mozilla/AffirmTrust_Commercial.crt, mozilla/AffirmTrust_Networking.crt, mozilla/AffirmTrust_Premium.crt, mozilla/AffirmTrust_Premium_ECC.crt, mozilla/America_Online_Root_Certification_Authority_1.crt, mozilla/America_Online_Root_Certification_Authority_2.crt, mozilla/ApplicationCA_-_Japanese_Government.crt, mozilla/Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.crt, mozilla/Baltimore_CyberTrust_Root.crt, mozilla/Buypass_Class_2_CA_1.crt, mozilla/Buypass_Class_2_Root_CA.crt, mozilla/Buypass_Class_3_CA_1.crt, mozilla/Buypass_Class_3_Root_CA.crt, mozilla/CA_Disig.crt, mozilla/CNNIC_ROOT.crt, mozilla/COMODO_Certification_Authority.crt, mozilla/COMODO_ECC_Certification_Authority.crt, mozilla/Camerfirma_Chambers_of_Commerce_Root.crt, mozilla/Camerfirma_Global_Chambersign_Root.crt, mozilla/Certigna.crt, mozilla/Certinomis_-_Autorité_Racine.crt, mozilla/Certplus_Class_2_Primary_CA.crt, mozilla/Certum_Root_CA.crt, mozilla/Certum_Trusted_Network_CA.crt, mozilla/Chambers_of_Commerce_Root_-_2008.crt, mozilla/ComSign_CA.crt, mozilla/ComSign_Secured_CA.crt, mozilla/Comodo_AAA_Services_root.crt, mozilla/Comodo_Secure_Services_root.crt, mozilla/Comodo_Trusted_Services_root.crt, mozilla/Cybertrust_Global_Root.crt, mozilla/DST_ACES_CA_X6.crt, mozilla/DST_Root_CA_X3.crt, mozilla/Deutsche_Telekom_Root_CA_2.crt, mozilla/DigiCert_Assured_ID_Root_CA.crt, mozilla/DigiCert_Global_Root_CA.crt, mozilla/DigiCert_High_Assurance_EV_Root_CA.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_1.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_3.crt, mozilla/E-Guven_Kok_Elektronik_Sertifika_Hizmet_Saglayicisi.crt, mozilla/EBG_Elektronik_Sertifika_Hizmet_Sağlayıcısı.crt, mozilla/EC-ACC.crt, mozilla/EE_Certification_Centre_Root_CA.crt, mozilla/Entrust.net_Premium_2048_Secure_Server_CA.crt, mozilla/Entrust.net_Secure_Server_CA.crt, mozilla/Entrust_Root_Certification_Authority.crt, mozilla/Equifax_Secure_CA.crt, mozilla/Equifax_Secure_Global_eBusiness_CA.crt, mozilla/Equifax_Secure_eBusiness_CA_1.crt, mozilla/Equifax_Secure_eBusiness_CA_2.crt, mozilla/Firmaprofesional_Root_CA.crt, mozilla/GTE_CyberTrust_Global_Root.crt, mozilla/GeoTrust_Global_CA.crt, mozilla/GeoTrust_Global_CA_2.crt, mozilla/GeoTrust_Primary_Certification_Authority.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G2.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G3.crt, mozilla/GeoTrust_Universal_CA.crt, mozilla/GeoTrust_Universal_CA_2.crt, mozilla/GlobalSign_Root_CA.crt, mozilla/GlobalSign_Root_CA_-_R2.crt, mozilla/GlobalSign_Root_CA_-_R3.crt, mozilla/Global_Chambersign_Root_-_2008.crt, mozilla/Go_Daddy_Class_2_CA.crt, mozilla/Go_Daddy_Root_Certificate_Authority_-_G2.crt, mozilla/Hellenic_Academic_and_Research_Institutions_RootCA_2011.crt, mozilla/Hongkong_Post_Root_CA_1.crt, mozilla/IGC_A.crt, mozilla/Izenpe.com.crt, mozilla/Juur-SK.crt, mozilla/Microsec_e-Szigno_Root_CA.crt, mozilla/Microsec_e-Szigno_Root_CA_2009.crt, mozilla/NetLock_Arany_=Class_Gold=_Főtanúsítvány.crt, mozilla/NetLock_Business_=Class_B=_Root.crt, mozilla/NetLock_Express_=Class_C=_Root.crt, mozilla/NetLock_Notary_=Class_A=_Root.crt, mozilla/NetLock_Qualified_=Class_QA=_Root.crt, mozilla/Network_Solutions_Certificate_Authority.crt, mozilla/OISTE_WISeKey_Global_Root_GA_CA.crt, mozilla/QuoVadis_Root_CA.crt, mozilla/QuoVadis_Root_CA_2.crt, mozilla/QuoVadis_Root_CA_3.crt, mozilla/RSA_Root_Certificate_1.crt, mozilla/RSA_Security_2048_v3.crt, mozilla/Root_CA_Generalitat_Valenciana.crt, mozilla/S-TRUST_Authentication_and_Encryption_Root_CA_2005_PN.crt, mozilla/SecureSign_RootCA11.crt, mozilla/SecureTrust_CA.crt, mozilla/Secure_Global_CA.crt, mozilla/Security_Communication_EV_RootCA1.crt, mozilla/Security_Communication_RootCA2.crt, mozilla/Security_Communication_Root_CA.crt, mozilla/Sonera_Class_1_Root_CA.crt, mozilla/Sonera_Class_2_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA_-_G2.crt, mozilla/Starfield_Class_2_CA.crt, mozilla/Starfield_Root_Certificate_Authority_-_G2.crt, mozilla/Starfield_Services_Root_Certificate_Authority_-_G2.crt, mozilla/StartCom_Certification_Authority.crt, mozilla/StartCom_Certification_Authority_G2.crt, mozilla/SwissSign_Gold_CA_-_G2.crt, mozilla/SwissSign_Platinum_CA_-_G2.crt, mozilla/SwissSign_Silver_CA_-_G2.crt, mozilla/Swisscom_Root_CA_1.crt, mozilla/T-TeleSec_GlobalRoot_Class_3.crt, mozilla/TC_TrustCenter_Class_2_CA_II.crt, mozilla/TC_TrustCenter_Class_3_CA_II.crt, mozilla/TC_TrustCenter_Universal_CA_I.crt, mozilla/TC_TrustCenter_Universal_CA_III.crt, mozilla/TDC_Internet_Root_CA.crt, mozilla/TDC_OCES_Root_CA.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_1.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2.crt, mozilla/TWCA_Root_Certification_Authority.crt, mozilla/Taiwan_GRCA.crt, mozilla/Thawte_Premium_Server_CA.crt, mozilla/Thawte_Server_CA.crt, mozilla/Trustis_FPS_Root_CA.crt, mozilla/TÜBİTAK_UEKAE_Kök_Sertifika_Hizmet_Sağlayıcısı_-_Sürüm_3.crt, mozilla/UTN_DATACorp_SGC_Root_CA.crt, mozilla/UTN_USERFirst_Email_Root_CA.crt, mozilla/UTN_USERFirst_Hardware_Root_CA.crt, mozilla/ValiCert_Class_1_VA.crt, mozilla/ValiCert_Class_2_VA.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5.crt, mozilla/VeriSign_Universal_Root_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_4_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Visa_eCommerce_Root.crt, mozilla/WellsSecure_Public_Root_Certificate_Authority.crt, mozilla/Wells_Fargo_Root_CA.crt, mozilla/XRamp_Global_CA_Root.crt, mozilla/certSIGN_ROOT_CA.crt, mozilla/ePKI_Root_Certification_Authority.crt, mozilla/thawte_Primary_Root_CA.crt, mozilla/thawte_Primary_Root_CA_-_G2.crt, mozilla/thawte_Primary_Root_CA_-_G3.crt, spi-inc.org/spi-ca-2003.crt, spi-inc.org/spi-cacert-2008.crt
+Value: mozilla/A-Trust-nQual-03.crt, mozilla/ACCVRAIZ1.crt, mozilla/ACEDICOM_Root.crt, mozilla/AC_Raíz_Certicámara_S.A..crt, mozilla/Actalis_Authentication_Root_CA.crt, mozilla/AddTrust_External_Root.crt, mozilla/AddTrust_Low-Value_Services_Root.crt, mozilla/AddTrust_Public_Services_Root.crt, mozilla/AddTrust_Qualified_Certificates_Root.crt, mozilla/AffirmTrust_Commercial.crt, mozilla/AffirmTrust_Networking.crt, mozilla/AffirmTrust_Premium.crt, mozilla/AffirmTrust_Premium_ECC.crt, mozilla/America_Online_Root_Certification_Authority_1.crt, mozilla/America_Online_Root_Certification_Authority_2.crt, mozilla/ApplicationCA_-_Japanese_Government.crt, mozilla/Atos_TrustedRoot_2011.crt, mozilla/Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.crt, mozilla/Baltimore_CyberTrust_Root.crt, mozilla/Buypass_Class_2_CA_1.crt, mozilla/Buypass_Class_2_Root_CA.crt, mozilla/Buypass_Class_3_CA_1.crt, mozilla/Buypass_Class_3_Root_CA.crt, mozilla/CA_Disig.crt, mozilla/CA_Disig_Root_R1.crt, mozilla/CA_Disig_Root_R2.crt, mozilla/CNNIC_ROOT.crt, mozilla/COMODO_Certification_Authority.crt, mozilla/COMODO_ECC_Certification_Authority.crt, mozilla/Camerfirma_Chambers_of_Commerce_Root.crt, mozilla/Camerfirma_Global_Chambersign_Root.crt, mozilla/Certigna.crt, mozilla/Certinomis_-_Autorité_Racine.crt, mozilla/Certplus_Class_2_Primary_CA.crt, mozilla/Certum_Root_CA.crt, mozilla/Certum_Trusted_Network_CA.crt, mozilla/Chambers_of_Commerce_Root_-_2008.crt, mozilla/China_Internet_Network_Information_Center_EV_Certificates_Root.crt, mozilla/ComSign_CA.crt, mozilla/ComSign_Secured_CA.crt, mozilla/Comodo_AAA_Services_root.crt, mozilla/Comodo_Secure_Services_root.crt, mozilla/Comodo_Trusted_Services_root.crt, mozilla/Cybertrust_Global_Root.crt, mozilla/D-TRUST_Root_Class_3_CA_2_2009.crt, mozilla/D-TRUST_Root_Class_3_CA_2_EV_2009.crt, mozilla/DST_ACES_CA_X6.crt, mozilla/DST_Root_CA_X3.crt, mozilla/Deutsche_Telekom_Root_CA_2.crt, mozilla/DigiCert_Assured_ID_Root_CA.crt, mozilla/DigiCert_Assured_ID_Root_G2.crt, mozilla/DigiCert_Assured_ID_Root_G3.crt, mozilla/DigiCert_Global_Root_CA.crt, mozilla/DigiCert_Global_Root_G2.crt, mozilla/DigiCert_Global_Root_G3.crt, mozilla/DigiCert_High_Assurance_EV_Root_CA.crt, mozilla/DigiCert_Trusted_Root_G4.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_1.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_3.crt, mozilla/E-Guven_Kok_Elektronik_Sertifika_Hizmet_Saglayicisi.crt, mozilla/E-Tugra_Certification_Authority.crt, mozilla/EBG_Elektronik_Sertifika_Hizmet_Sağlayıcısı.crt, mozilla/EC-ACC.crt, mozilla/EE_Certification_Centre_Root_CA.crt, mozilla/Entrust.net_Premium_2048_Secure_Server_CA.crt, mozilla/Entrust_Root_Certification_Authority.crt, mozilla/Equifax_Secure_CA.crt, mozilla/Equifax_Secure_Global_eBusiness_CA.crt, mozilla/Equifax_Secure_eBusiness_CA_1.crt, mozilla/GTE_CyberTrust_Global_Root.crt, mozilla/GeoTrust_Global_CA.crt, mozilla/GeoTrust_Global_CA_2.crt, mozilla/GeoTrust_Primary_Certification_Authority.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G2.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G3.crt, mozilla/GeoTrust_Universal_CA.crt, mozilla/GeoTrust_Universal_CA_2.crt, mozilla/GlobalSign_Root_CA.crt, mozilla/GlobalSign_Root_CA_-_R2.crt, mozilla/GlobalSign_Root_CA_-_R3.crt, mozilla/Global_Chambersign_Root_-_2008.crt, mozilla/Go_Daddy_Class_2_CA.crt, mozilla/Go_Daddy_Root_Certificate_Authority_-_G2.crt, mozilla/Hellenic_Academic_and_Research_Institutions_RootCA_2011.crt, mozilla/Hongkong_Post_Root_CA_1.crt, mozilla/IGC_A.crt, mozilla/Izenpe.com.crt, mozilla/Juur-SK.crt, mozilla/Microsec_e-Szigno_Root_CA.crt, mozilla/Microsec_e-Szigno_Root_CA_2009.crt, mozilla/NetLock_Arany_=Class_Gold=_Főtanúsítvány.crt, mozilla/NetLock_Business_=Class_B=_Root.crt, mozilla/NetLock_Express_=Class_C=_Root.crt, mozilla/NetLock_Notary_=Class_A=_Root.crt, mozilla/NetLock_Qualified_=Class_QA=_Root.crt, mozilla/Network_Solutions_Certificate_Authority.crt, mozilla/OISTE_WISeKey_Global_Root_GA_CA.crt, mozilla/PSCProcert.crt, mozilla/QuoVadis_Root_CA.crt, mozilla/QuoVadis_Root_CA_1_G3.crt, mozilla/QuoVadis_Root_CA_2.crt, mozilla/QuoVadis_Root_CA_2_G3.crt, mozilla/QuoVadis_Root_CA_3.crt, mozilla/QuoVadis_Root_CA_3_G3.crt, mozilla/RSA_Security_2048_v3.crt, mozilla/Root_CA_Generalitat_Valenciana.crt, mozilla/S-TRUST_Authentication_and_Encryption_Root_CA_2005_PN.crt, mozilla/SG_TRUST_SERVICES_RACINE.crt, mozilla/SecureSign_RootCA11.crt, mozilla/SecureTrust_CA.crt, mozilla/Secure_Global_CA.crt, mozilla/Security_Communication_EV_RootCA1.crt, mozilla/Security_Communication_RootCA2.crt, mozilla/Security_Communication_Root_CA.crt, mozilla/Sonera_Class_1_Root_CA.crt, mozilla/Sonera_Class_2_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA_-_G2.crt, mozilla/Starfield_Class_2_CA.crt, mozilla/Starfield_Root_Certificate_Authority_-_G2.crt, mozilla/Starfield_Services_Root_Certificate_Authority_-_G2.crt, mozilla/StartCom_Certification_Authority.crt, mozilla/StartCom_Certification_Authority_2.crt, mozilla/StartCom_Certification_Authority_G2.crt, mozilla/SwissSign_Gold_CA_-_G2.crt, mozilla/SwissSign_Platinum_CA_-_G2.crt, mozilla/SwissSign_Silver_CA_-_G2.crt, mozilla/Swisscom_Root_CA_1.crt, mozilla/Swisscom_Root_CA_2.crt, mozilla/Swisscom_Root_EV_CA_2.crt, mozilla/T-TeleSec_GlobalRoot_Class_2.crt, mozilla/T-TeleSec_GlobalRoot_Class_3.crt, mozilla/TC_TrustCenter_Class_2_CA_II.crt, mozilla/TC_TrustCenter_Class_3_CA_II.crt, mozilla/TC_TrustCenter_Universal_CA_I.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_1.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2007.crt, mozilla/TWCA_Global_Root_CA.crt, mozilla/TWCA_Root_Certification_Authority.crt, mozilla/Taiwan_GRCA.crt, mozilla/TeliaSonera_Root_CA_v1.crt, mozilla/Thawte_Premium_Server_CA.crt, mozilla/Thawte_Server_CA.crt, mozilla/Trustis_FPS_Root_CA.crt, mozilla/TÜBİTAK_UEKAE_Kök_Sertifika_Hizmet_Sağlayıcısı_-_Sürüm_3.crt, mozilla/UTN_DATACorp_SGC_Root_CA.crt, mozilla/UTN_USERFirst_Email_Root_CA.crt, mozilla/UTN_USERFirst_Hardware_Root_CA.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5.crt, mozilla/VeriSign_Universal_Root_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_2.crt, mozilla/Verisign_Class_4_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Visa_eCommerce_Root.crt, mozilla/WellsSecure_Public_Root_Certificate_Authority.crt, mozilla/WoSign.crt, mozilla/WoSign_China.crt, mozilla/XRamp_Global_CA_Root.crt, mozilla/certSIGN_ROOT_CA.crt, mozilla/ePKI_Root_Certification_Authority.crt, mozilla/thawte_Primary_Root_CA.crt, mozilla/thawte_Primary_Root_CA_-_G2.crt, mozilla/thawte_Primary_Root_CA_-_G3.crt, spi-inc.org/spi-cacert-2008.crt
 Owners: ca-certificates
 Variables:
- enable_crts = cacert.org/cacert.org.crt, debconf.org/ca.crt, mozilla/A-Trust-nQual-03.crt, mozilla/ACEDICOM_Root.crt, mozilla/AC_Raíz_Certicámara_S.A..crt, mozilla/Actalis_Authentication_Root_CA.crt, mozilla/AddTrust_External_Root.crt, mozilla/AddTrust_Low-Value_Services_Root.crt, mozilla/AddTrust_Public_Services_Root.crt, mozilla/AddTrust_Qualified_Certificates_Root.crt, mozilla/AffirmTrust_Commercial.crt, mozilla/AffirmTrust_Networking.crt, mozilla/AffirmTrust_Premium.crt, mozilla/AffirmTrust_Premium_ECC.crt, mozilla/America_Online_Root_Certification_Authority_1.crt, mozilla/America_Online_Root_Certification_Authority_2.crt, mozilla/ApplicationCA_-_Japanese_Government.crt, mozilla/Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.crt, mozilla/Baltimore_CyberTrust_Root.crt, mozilla/Buypass_Class_2_CA_1.crt, mozilla/Buypass_Class_2_Root_CA.crt, mozilla/Buypass_Class_3_CA_1.crt, mozilla/Buypass_Class_3_Root_CA.crt, mozilla/CA_Disig.crt, mozilla/CNNIC_ROOT.crt, mozilla/COMODO_Certification_Authority.crt, mozilla/COMODO_ECC_Certification_Authority.crt, mozilla/Camerfirma_Chambers_of_Commerce_Root.crt, mozilla/Camerfirma_Global_Chambersign_Root.crt, mozilla/Certigna.crt, mozilla/Certinomis_-_Autorité_Racine.crt, mozilla/Certplus_Class_2_Primary_CA.crt, mozilla/Certum_Root_CA.crt, mozilla/Certum_Trusted_Network_CA.crt, mozilla/Chambers_of_Commerce_Root_-_2008.crt, mozilla/ComSign_CA.crt, mozilla/ComSign_Secured_CA.crt, mozilla/Comodo_AAA_Services_root.crt, mozilla/Comodo_Secure_Services_root.crt, mozilla/Comodo_Trusted_Services_root.crt, mozilla/Cybertrust_Global_Root.crt, mozilla/DST_ACES_CA_X6.crt, mozilla/DST_Root_CA_X3.crt, mozilla/Deutsche_Telekom_Root_CA_2.crt, mozilla/DigiCert_Assured_ID_Root_CA.crt, mozilla/DigiCert_Global_Root_CA.crt, mozilla/DigiCert_High_Assurance_EV_Root_CA.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_1.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_3.crt, mozilla/E-Guven_Kok_Elektronik_Sertifika_Hizmet_Saglayicisi.crt, mozilla/EBG_Elektronik_Sertifika_Hizmet_Sağlayıcısı.crt, mozilla/EC-ACC.crt, mozilla/EE_Certification_Centre_Root_CA.crt, mozilla/Entrust.net_Premium_2048_Secure_Server_CA.crt, mozilla/Entrust.net_Secure_Server_CA.crt, mozilla/Entrust_Root_Certification_Authority.crt, mozilla/Equifax_Secure_CA.crt, mozilla/Equifax_Secure_Global_eBusiness_CA.crt, mozilla/Equifax_Secure_eBusiness_CA_1.crt, mozilla/Equifax_Secure_eBusiness_CA_2.crt, mozilla/Firmaprofesional_Root_CA.crt, mozilla/GTE_CyberTrust_Global_Root.crt, mozilla/GeoTrust_Global_CA.crt, mozilla/GeoTrust_Global_CA_2.crt, mozilla/GeoTrust_Primary_Certification_Authority.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G2.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G3.crt, mozilla/GeoTrust_Universal_CA.crt, mozilla/GeoTrust_Universal_CA_2.crt, mozilla/GlobalSign_Root_CA.crt, mozilla/GlobalSign_Root_CA_-_R2.crt, mozilla/GlobalSign_Root_CA_-_R3.crt, mozilla/Global_Chambersign_Root_-_2008.crt, mozilla/Go_Daddy_Class_2_CA.crt, mozilla/Go_Daddy_Root_Certificate_Authority_-_G2.crt, mozilla/Hellenic_Academic_and_Research_Institutions_RootCA_2011.crt, mozilla/Hongkong_Post_Root_CA_1.crt, mozilla/IGC_A.crt, mozilla/Izenpe.com.crt, mozilla/Juur-SK.crt, mozilla/Microsec_e-Szigno_Root_CA.crt, mozilla/Microsec_e-Szigno_Root_CA_2009.crt, mozilla/NetLock_Arany_=Class_Gold=_Főtanúsítvány.crt, mozilla/NetLock_Business_=Class_B=_Root.crt, mozilla/NetLock_Express_=Class_C=_Root.crt, mozilla/NetLock_Notary_=Class_A=_Root.crt, mozilla/NetLock_Qualified_=Class_QA=_Root.crt, mozilla/Network_Solutions_Certificate_Authority.crt, mozilla/OISTE_WISeKey_Global_Root_GA_CA.crt, mozilla/QuoVadis_Root_CA.crt, mozilla/QuoVadis_Root_CA_2.crt, mozilla/QuoVadis_Root_CA_3.crt, mozilla/RSA_Root_Certificate_1.crt, mozilla/RSA_Security_2048_v3.crt, mozilla/Root_CA_Generalitat_Valenciana.crt, mozilla/S-TRUST_Authentication_and_Encryption_Root_CA_2005_PN.crt, mozilla/SecureSign_RootCA11.crt, mozilla/SecureTrust_CA.crt, mozilla/Secure_Global_CA.crt, mozilla/Security_Communication_EV_RootCA1.crt, mozilla/Security_Communication_RootCA2.crt, mozilla/Security_Communication_Root_CA.crt, mozilla/Sonera_Class_1_Root_CA.crt, mozilla/Sonera_Class_2_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA_-_G2.crt, mozilla/Starfield_Class_2_CA.crt, mozilla/Starfield_Root_Certificate_Authority_-_G2.crt, mozilla/Starfield_Services_Root_Certificate_Authority_-_G2.crt, mozilla/StartCom_Certification_Authority.crt, mozilla/StartCom_Certification_Authority_G2.crt, mozilla/SwissSign_Gold_CA_-_G2.crt, mozilla/SwissSign_Platinum_CA_-_G2.crt, mozilla/SwissSign_Silver_CA_-_G2.crt, mozilla/Swisscom_Root_CA_1.crt, mozilla/T-TeleSec_GlobalRoot_Class_3.crt, mozilla/TC_TrustCenter_Class_2_CA_II.crt, mozilla/TC_TrustCenter_Class_3_CA_II.crt, mozilla/TC_TrustCenter_Universal_CA_I.crt, mozilla/TC_TrustCenter_Universal_CA_III.crt, mozilla/TDC_Internet_Root_CA.crt, mozilla/TDC_OCES_Root_CA.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_1.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2.crt, mozilla/TWCA_Root_Certification_Authority.crt, mozilla/Taiwan_GRCA.crt, mozilla/Thawte_Premium_Server_CA.crt, mozilla/Thawte_Server_CA.crt, mozilla/Trustis_FPS_Root_CA.crt, mozilla/TÜBİTAK_UEKAE_Kök_Sertifika_Hizmet_Sağlayıcısı_-_Sürüm_3.crt, mozilla/UTN_DATACorp_SGC_Root_CA.crt, mozilla/UTN_USERFirst_Email_Root_CA.crt, mozilla/UTN_USERFirst_Hardware_Root_CA.crt, mozilla/ValiCert_Class_1_VA.crt, mozilla/ValiCert_Class_2_VA.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5.crt, mozilla/VeriSign_Universal_Root_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_4_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Visa_eCommerce_Root.crt, mozilla/WellsSecure_Public_Root_Certificate_Authority.crt, mozilla/Wells_Fargo_Root_CA.crt, mozilla/XRamp_Global_CA_Root.crt, mozilla/certSIGN_ROOT_CA.crt, mozilla/ePKI_Root_Certification_Authority.crt, mozilla/thawte_Primary_Root_CA.crt, mozilla/thawte_Primary_Root_CA_-_G2.crt, mozilla/thawte_Primary_Root_CA_-_G3.crt, spi-inc.org/spi-ca-2003.crt, spi-inc.org/spi-cacert-2008.crt
+ enable_crts = mozilla/A-Trust-nQual-03.crt, mozilla/ACCVRAIZ1.crt, mozilla/ACEDICOM_Root.crt, mozilla/AC_Raíz_Certicámara_S.A..crt, mozilla/Actalis_Authentication_Root_CA.crt, mozilla/AddTrust_External_Root.crt, mozilla/AddTrust_Low-Value_Services_Root.crt, mozilla/AddTrust_Public_Services_Root.crt, mozilla/AddTrust_Qualified_Certificates_Root.crt, mozilla/AffirmTrust_Commercial.crt, mozilla/AffirmTrust_Networking.crt, mozilla/AffirmTrust_Premium.crt, mozilla/AffirmTrust_Premium_ECC.crt, mozilla/America_Online_Root_Certification_Authority_1.crt, mozilla/America_Online_Root_Certification_Authority_2.crt, mozilla/ApplicationCA_-_Japanese_Government.crt, mozilla/Atos_TrustedRoot_2011.crt, mozilla/Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.crt, mozilla/Baltimore_CyberTrust_Root.crt, mozilla/Buypass_Class_2_CA_1.crt, mozilla/Buypass_Class_2_Root_CA.crt, mozilla/Buypass_Class_3_CA_1.crt, mozilla/Buypass_Class_3_Root_CA.crt, mozilla/CA_Disig.crt, mozilla/CA_Disig_Root_R1.crt, mozilla/CA_Disig_Root_R2.crt, mozilla/CNNIC_ROOT.crt, mozilla/COMODO_Certification_Authority.crt, mozilla/COMODO_ECC_Certification_Authority.crt, mozilla/Camerfirma_Chambers_of_Commerce_Root.crt, mozilla/Camerfirma_Global_Chambersign_Root.crt, mozilla/Certigna.crt, mozilla/Certinomis_-_Autorité_Racine.crt, mozilla/Certplus_Class_2_Primary_CA.crt, mozilla/Certum_Root_CA.crt, mozilla/Certum_Trusted_Network_CA.crt, mozilla/Chambers_of_Commerce_Root_-_2008.crt, mozilla/China_Internet_Network_Information_Center_EV_Certificates_Root.crt, mozilla/ComSign_CA.crt, mozilla/ComSign_Secured_CA.crt, mozilla/Comodo_AAA_Services_root.crt, mozilla/Comodo_Secure_Services_root.crt, mozilla/Comodo_Trusted_Services_root.crt, mozilla/Cybertrust_Global_Root.crt, mozilla/D-TRUST_Root_Class_3_CA_2_2009.crt, mozilla/D-TRUST_Root_Class_3_CA_2_EV_2009.crt, mozilla/DST_ACES_CA_X6.crt, mozilla/DST_Root_CA_X3.crt, mozilla/Deutsche_Telekom_Root_CA_2.crt, mozilla/DigiCert_Assured_ID_Root_CA.crt, mozilla/DigiCert_Assured_ID_Root_G2.crt, mozilla/DigiCert_Assured_ID_Root_G3.crt, mozilla/DigiCert_Global_Root_CA.crt, mozilla/DigiCert_Global_Root_G2.crt, mozilla/DigiCert_Global_Root_G3.crt, mozilla/DigiCert_High_Assurance_EV_Root_CA.crt, mozilla/DigiCert_Trusted_Root_G4.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_1.crt, mozilla/Digital_Signature_Trust_Co._Global_CA_3.crt, mozilla/E-Guven_Kok_Elektronik_Sertifika_Hizmet_Saglayicisi.crt, mozilla/E-Tugra_Certification_Authority.crt, mozilla/EBG_Elektronik_Sertifika_Hizmet_Sağlayıcısı.crt, mozilla/EC-ACC.crt, mozilla/EE_Certification_Centre_Root_CA.crt, mozilla/Entrust.net_Premium_2048_Secure_Server_CA.crt, mozilla/Entrust_Root_Certification_Authority.crt, mozilla/Equifax_Secure_CA.crt, mozilla/Equifax_Secure_Global_eBusiness_CA.crt, mozilla/Equifax_Secure_eBusiness_CA_1.crt, mozilla/GTE_CyberTrust_Global_Root.crt, mozilla/GeoTrust_Global_CA.crt, mozilla/GeoTrust_Global_CA_2.crt, mozilla/GeoTrust_Primary_Certification_Authority.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G2.crt, mozilla/GeoTrust_Primary_Certification_Authority_-_G3.crt, mozilla/GeoTrust_Universal_CA.crt, mozilla/GeoTrust_Universal_CA_2.crt, mozilla/GlobalSign_Root_CA.crt, mozilla/GlobalSign_Root_CA_-_R2.crt, mozilla/GlobalSign_Root_CA_-_R3.crt, mozilla/Global_Chambersign_Root_-_2008.crt, mozilla/Go_Daddy_Class_2_CA.crt, mozilla/Go_Daddy_Root_Certificate_Authority_-_G2.crt, mozilla/Hellenic_Academic_and_Research_Institutions_RootCA_2011.crt, mozilla/Hongkong_Post_Root_CA_1.crt, mozilla/IGC_A.crt, mozilla/Izenpe.com.crt, mozilla/Juur-SK.crt, mozilla/Microsec_e-Szigno_Root_CA.crt, mozilla/Microsec_e-Szigno_Root_CA_2009.crt, mozilla/NetLock_Arany_=Class_Gold=_Főtanúsítvány.crt, mozilla/NetLock_Business_=Class_B=_Root.crt, mozilla/NetLock_Express_=Class_C=_Root.crt, mozilla/NetLock_Notary_=Class_A=_Root.crt, mozilla/NetLock_Qualified_=Class_QA=_Root.crt, mozilla/Network_Solutions_Certificate_Authority.crt, mozilla/OISTE_WISeKey_Global_Root_GA_CA.crt, mozilla/PSCProcert.crt, mozilla/QuoVadis_Root_CA.crt, mozilla/QuoVadis_Root_CA_1_G3.crt, mozilla/QuoVadis_Root_CA_2.crt, mozilla/QuoVadis_Root_CA_2_G3.crt, mozilla/QuoVadis_Root_CA_3.crt, mozilla/QuoVadis_Root_CA_3_G3.crt, mozilla/RSA_Security_2048_v3.crt, mozilla/Root_CA_Generalitat_Valenciana.crt, mozilla/S-TRUST_Authentication_and_Encryption_Root_CA_2005_PN.crt, mozilla/SG_TRUST_SERVICES_RACINE.crt, mozilla/SecureSign_RootCA11.crt, mozilla/SecureTrust_CA.crt, mozilla/Secure_Global_CA.crt, mozilla/Security_Communication_EV_RootCA1.crt, mozilla/Security_Communication_RootCA2.crt, mozilla/Security_Communication_Root_CA.crt, mozilla/Sonera_Class_1_Root_CA.crt, mozilla/Sonera_Class_2_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA.crt, mozilla/Staat_der_Nederlanden_Root_CA_-_G2.crt, mozilla/Starfield_Class_2_CA.crt, mozilla/Starfield_Root_Certificate_Authority_-_G2.crt, mozilla/Starfield_Services_Root_Certificate_Authority_-_G2.crt, mozilla/StartCom_Certification_Authority.crt, mozilla/StartCom_Certification_Authority_2.crt, mozilla/StartCom_Certification_Authority_G2.crt, mozilla/SwissSign_Gold_CA_-_G2.crt, mozilla/SwissSign_Platinum_CA_-_G2.crt, mozilla/SwissSign_Silver_CA_-_G2.crt, mozilla/Swisscom_Root_CA_1.crt, mozilla/Swisscom_Root_CA_2.crt, mozilla/Swisscom_Root_EV_CA_2.crt, mozilla/T-TeleSec_GlobalRoot_Class_2.crt, mozilla/T-TeleSec_GlobalRoot_Class_3.crt, mozilla/TC_TrustCenter_Class_2_CA_II.crt, mozilla/TC_TrustCenter_Class_3_CA_II.crt, mozilla/TC_TrustCenter_Universal_CA_I.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_1.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2.crt, mozilla/TURKTRUST_Certificate_Services_Provider_Root_2007.crt, mozilla/TWCA_Global_Root_CA.crt, mozilla/TWCA_Root_Certification_Authority.crt, mozilla/Taiwan_GRCA.crt, mozilla/TeliaSonera_Root_CA_v1.crt, mozilla/Thawte_Premium_Server_CA.crt, mozilla/Thawte_Server_CA.crt, mozilla/Trustis_FPS_Root_CA.crt, mozilla/TÜBİTAK_UEKAE_Kök_Sertifika_Hizmet_Sağlayıcısı_-_Sürüm_3.crt, mozilla/UTN_DATACorp_SGC_Root_CA.crt, mozilla/UTN_USERFirst_Email_Root_CA.crt, mozilla/UTN_USERFirst_Hardware_Root_CA.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G4.crt, mozilla/VeriSign_Class_3_Public_Primary_Certification_Authority_-_G5.crt, mozilla/VeriSign_Universal_Root_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_1_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_2_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G2.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Verisign_Class_3_Public_Primary_Certification_Authority_2.crt, mozilla/Verisign_Class_4_Public_Primary_Certification_Authority_-_G3.crt, mozilla/Visa_eCommerce_Root.crt, mozilla/WellsSecure_Public_Root_Certificate_Authority.crt, mozilla/WoSign.crt, mozilla/WoSign_China.crt, mozilla/XRamp_Global_CA_Root.crt, mozilla/certSIGN_ROOT_CA.crt, mozilla/ePKI_Root_Certification_Authority.crt, mozilla/thawte_Primary_Root_CA.crt, mozilla/thawte_Primary_Root_CA_-_G2.crt, mozilla/thawte_Primary_Root_CA_-_G3.crt, spi-inc.org/spi-cacert-2008.crt
 
 Name: ca-certificates/new_crts
 Template: ca-certificates/new_crts
@@ -874,7 +1055,7 @@ Owners: console-setup
 
 Name: cupsys/backend
 Template: cupsys/backend
-Value: ipp, ipp14, lpd, socket, usb, snmp, dnssd
+Value: lpd, socket, usb, snmp, dnssd
 Owners: cups
 
 Name: cupsys/raw-print
@@ -922,6 +1103,10 @@ Name: debian-installer/user-setup-udeb/title
 Template: debian-installer/user-setup-udeb/title
 Owners: user-setup
 
+Name: dictionaries-common/debconf_database_corruption
+Template: dictionaries-common/debconf_database_corruption
+Owners: dictionaries-common
+
 Name: dictionaries-common/default-ispell
 Template: dictionaries-common/default-ispell
 Owners: dictionaries-common
@@ -938,17 +1123,8 @@ Name: dictionaries-common/ispell-autobuildhash-message
 Template: dictionaries-common/ispell-autobuildhash-message
 Owners: dictionaries-common
 
-Name: dictionaries-common/move_old_usr_dict
-Template: dictionaries-common/move_old_usr_dict
-Owners: dictionaries-common
-
 Name: dictionaries-common/old_wordlist_link
 Template: dictionaries-common/old_wordlist_link
-Owners: dictionaries-common
-
-Name: dictionaries-common/remove_old_usr_dict_link
-Template: dictionaries-common/remove_old_usr_dict_link
-Value: false
 Owners: dictionaries-common
 
 Name: dictionaries-common/selecting_ispell_wordlist_default
@@ -958,6 +1134,16 @@ Owners: dictionaries-common
 Name: extlinux/install
 Template: extlinux/install
 Value: false
+Owners: extlinux
+
+Name: extlinux/no-bootloader-integration
+Template: extlinux/no-bootloader-integration
+Value: 
+Owners: extlinux
+Flags: seen
+
+Name: extlinux/title
+Template: extlinux/title
 Owners: extlinux
 
 Name: finish-install/progress/user-setup
@@ -1066,7 +1252,7 @@ Template: keyboard-configuration/model
 Value: Generic 105-key (Intl) PC
 Owners: keyboard-configuration
 Variables:
- CHOICES = A4Tech KB-21, A4Tech KBS-8, A4Tech Wireless Desktop RFKB-23, Acer AirKey V, Acer C300, Acer Ferrari 4000, Acer Laptop, Advance Scorpius KI, Amiga, Apple, Apple Aluminium Keyboard (ANSI), Apple Aluminium Keyboard (ISO), Apple Aluminium Keyboard (JIS), Apple Laptop, Asus Laptop, Atari TT, Azona RF2300 wireless Internet Keyboard, BTC 5090, BTC 5113RF Multimedia, BTC 5126T, BTC 6301URF, BTC 9000, BTC 9000A, BTC 9001AH, BTC 9019U, BTC 9116U Mini Wireless Internet and Gaming, BenQ X-Touch, BenQ X-Touch 730, BenQ X-Touch 800, Brother Internet Keyboard, Cherry B.UNLIMITED, Cherry Blue Line CyBo@rd, Cherry Blue Line CyBo@rd (alternate option), Cherry CyBo@rd USB-Hub, Cherry CyMotion Expert, Cherry CyMotion Master Linux, Cherry CyMotion Master XPress, Chicony Internet Keyboard, Chicony KB-9885, Chicony KU-0108, Chicony KU-0420, Classmate PC, Compaq Easy Access Keyboard, Compaq Internet Keyboard (13 keys), Compaq Internet Keyboard (18 keys), Compaq Internet Keyboard (7 keys), Compaq iPaq Keyboard, Creative Desktop Wireless 7000, DTK2000, Dell, Dell 101-key PC, Dell Laptop/notebook Inspiron 6xxx/8xxx, Dell Laptop/notebook Precision M series, Dell Latitude series laptop, Dell Precision M65, Dell SK-8125, Dell SK-8135, Dell USB Multimedia Keyboard, Dexxa Wireless Desktop Keyboard, Diamond 9801 / 9802 series, Ennyah DKB-1008, Everex STEPnote, FL90, Fujitsu-Siemens Computers AMILO laptop, Generic 101-key PC, Generic 102-key (Intl) PC, Generic 104-key PC, Generic 105-key (Intl) PC, Genius Comfy KB-12e, Genius Comfy KB-16M / Genius MM Keyboard KWD-910, Genius Comfy KB-21e-Scroll, Genius KB-19e NB, Genius KKB-2050HS, Gyration, HTC Dream, Happy Hacking Keyboard, Happy Hacking Keyboard for Mac, Hewlett-Packard Internet Keyboard, Hewlett-Packard Mini 110 Notebook, Hewlett-Packard Omnibook 500 FA, Hewlett-Packard Omnibook 5xx, Hewlett-Packard Omnibook 6000/6100, Hewlett-Packard Omnibook XE3 GC, Hewlett-Packard Omnibook XE3 GF, Hewlett-Packard Omnibook XT1000, Hewlett-Packard Pavilion ZT11xx, Hewlett-Packard Pavilion dv5, Hewlett-Packard SK-250x Multimedia Keyboard, Hewlett-Packard nx9020, Honeywell Euroboard, Htc Dream phone, IBM Rapid Access, IBM Rapid Access II, IBM Space Saver, IBM ThinkPad 560Z/600/600E/A22E, IBM ThinkPad R60/T60/R61/T61, IBM ThinkPad Z60m/Z60t/Z61m/Z61t, Keytronic FlexPro, Kinesis, Laptop/notebook Compaq (eg. Armada) Laptop Keyboard, Laptop/notebook Compaq (eg. Presario) Internet Keyboard, Laptop/notebook eMachines m68xx, Logitech Access Keyboard, Logitech Cordless Desktop, Logitech Cordless Desktop (alternate option), Logitech Cordless Desktop EX110, Logitech Cordless Desktop LX-300, Logitech Cordless Desktop Navigator, Logitech Cordless Desktop Optical, Logitech Cordless Desktop Pro (alternate option 2), Logitech Cordless Desktop iTouch, Logitech Cordless Freedom/Desktop Navigator, Logitech G15 extra keys via G15daemon, Logitech Generic Keyboard, Logitech Internet 350 Keyboard, Logitech Internet Keyboard, Logitech Internet Navigator Keyboard, Logitech Media Elite Keyboard, Logitech Ultra-X Cordless Media Desktop Keyboard, Logitech Ultra-X Keyboard, Logitech diNovo Edge Keyboard, Logitech diNovo Keyboard, Logitech iTouch, Logitech iTouch Cordless Keyboard (model Y-RB6), Logitech iTouch Internet Navigator Keyboard SE, Logitech iTouch Internet Navigator Keyboard SE (USB), MacBook/MacBook Pro, MacBook/MacBook Pro (Intl), Macintosh, Macintosh Old, Memorex MX1998, Memorex MX2500 EZ-Access Keyboard, Memorex MX2750, Microsoft Comfort Curve Keyboard 2000, Microsoft Internet Keyboard, Microsoft Internet Keyboard Pro\, Swedish, Microsoft Natural, Microsoft Natural Keyboard Elite, Microsoft Natural Keyboard Pro / Microsoft Internet Keyboard Pro, Microsoft Natural Keyboard Pro OEM, Microsoft Natural Keyboard Pro USB / Microsoft Internet Keyboard Pro, Microsoft Natural Wireless Ergonomic Keyboard 4000, Microsoft Natural Wireless Ergonomic Keyboard 7000, Microsoft Office Keyboard, Microsoft Wireless Multimedia Keyboard 1.0A, Northgate OmniKey 101, OLPC, Ortek MCK-800 MM/Internet keyboard, PC-98xx Series, Propeller Voyager (KTEZ-1000), QTronix Scorpius 98N+, SILVERCREST Multimedia Wireless Keyboard, SK-1300, SK-2500, SK-6200, SK-7100, SVEN Ergonomic 2500, SVEN Slim 303, Samsung SDM 4500P, Samsung SDM 4510P, Sanwa Supply SKB-KG3, Sun Type 4, Sun Type 5, Sun Type 5/6, Super Power Multimedia Keyboard, Symplon PaceBook (tablet PC), Targa Visionary 811, Toshiba Satellite S3000, Trust Direct Access Keyboard, Trust Slimline, Trust Wireless Keyboard Classic, TypeMatrix EZ-Reach 2020, TypeMatrix EZ-Reach 2030 PS2, TypeMatrix EZ-Reach 2030 USB, TypeMatrix EZ-Reach 2030 USB (102/105:EU mode), TypeMatrix EZ-Reach 2030 USB (106:JP mode), Unitek KB-1925, ViewSonic KU-306 Internet Keyboard, Winbook Model XP5, Yahoo! Internet Keyboard
+ CHOICES = A4Tech KB-21, A4Tech KBS-8, A4Tech Wireless Desktop RFKB-23, Acer AirKey V, Acer C300, Acer Ferrari 4000, Acer Laptop, Advance Scorpius KI, Amiga, Apple, Apple Aluminium Keyboard (ANSI), Apple Aluminium Keyboard (ISO), Apple Aluminium Keyboard (JIS), Apple Laptop, Asus Laptop, Atari TT, Azona RF2300 wireless Internet Keyboard, BTC 5090, BTC 5113RF Multimedia, BTC 5126T, BTC 6301URF, BTC 9000, BTC 9000A, BTC 9001AH, BTC 9019U, BTC 9116U Mini Wireless Internet and Gaming, BenQ X-Touch, BenQ X-Touch 730, BenQ X-Touch 800, Brother Internet Keyboard, Cherry B.UNLIMITED, Cherry Blue Line CyBo@rd, Cherry Blue Line CyBo@rd (alternate option), Cherry CyBo@rd USB-Hub, Cherry CyMotion Expert, Cherry CyMotion Master Linux, Cherry CyMotion Master XPress, Chicony Internet Keyboard, Chicony KB-9885, Chicony KU-0108, Chicony KU-0420, Classmate PC, Compaq Easy Access Keyboard, Compaq Internet Keyboard (13 keys), Compaq Internet Keyboard (18 keys), Compaq Internet Keyboard (7 keys), Compaq iPaq Keyboard, Creative Desktop Wireless 7000, DTK2000, Dell, Dell 101-key PC, Dell Laptop/notebook Inspiron 6xxx/8xxx, Dell Laptop/notebook Precision M series, Dell Latitude series laptop, Dell Precision M65, Dell SK-8125, Dell SK-8135, Dell USB Multimedia Keyboard, Dexxa Wireless Desktop Keyboard, Diamond 9801 / 9802 series, Ennyah DKB-1008, Everex STEPnote, FL90, Fujitsu-Siemens Computers AMILO laptop, Generic 101-key PC, Generic 102-key (Intl) PC, Generic 104-key PC, Generic 105-key (Intl) PC, Genius Comfy KB-12e, Genius Comfy KB-16M / Genius MM Keyboard KWD-910, Genius Comfy KB-21e-Scroll, Genius KB-19e NB, Genius KKB-2050HS, Gyration, HTC Dream, Happy Hacking Keyboard, Happy Hacking Keyboard for Mac, Hewlett-Packard Internet Keyboard, Hewlett-Packard Mini 110 Notebook, Hewlett-Packard Omnibook 500 FA, Hewlett-Packard Omnibook 5xx, Hewlett-Packard Omnibook 6000/6100, Hewlett-Packard Omnibook XE3 GC, Hewlett-Packard Omnibook XE3 GF, Hewlett-Packard Omnibook XT1000, Hewlett-Packard Pavilion ZT11xx, Hewlett-Packard Pavilion dv5, Hewlett-Packard SK-250x Multimedia Keyboard, Hewlett-Packard nx9020, Honeywell Euroboard, Htc Dream phone, IBM Rapid Access, IBM Rapid Access II, IBM Space Saver, IBM ThinkPad 560Z/600/600E/A22E, IBM ThinkPad R60/T60/R61/T61, IBM ThinkPad Z60m/Z60t/Z61m/Z61t, Keytronic FlexPro, Kinesis, Laptop/notebook Compaq (eg. Armada) Laptop Keyboard, Laptop/notebook Compaq (eg. Presario) Internet Keyboard, Laptop/notebook eMachines m68xx, Logitech Access Keyboard, Logitech Cordless Desktop, Logitech Cordless Desktop (alternate option), Logitech Cordless Desktop EX110, Logitech Cordless Desktop LX-300, Logitech Cordless Desktop Navigator, Logitech Cordless Desktop Optical, Logitech Cordless Desktop Pro (alternate option 2), Logitech Cordless Desktop iTouch, Logitech Cordless Freedom/Desktop Navigator, Logitech G15 extra keys via G15daemon, Logitech Generic Keyboard, Logitech Internet 350 Keyboard, Logitech Internet Keyboard, Logitech Internet Navigator Keyboard, Logitech Media Elite Keyboard, Logitech Ultra-X Cordless Media Desktop Keyboard, Logitech Ultra-X Keyboard, Logitech diNovo Edge Keyboard, Logitech diNovo Keyboard, Logitech iTouch, Logitech iTouch Cordless Keyboard (model Y-RB6), Logitech iTouch Internet Navigator Keyboard SE, Logitech iTouch Internet Navigator Keyboard SE (USB), MacBook/MacBook Pro, MacBook/MacBook Pro (Intl), Macintosh, Macintosh Old, Memorex MX1998, Memorex MX2500 EZ-Access Keyboard, Memorex MX2750, Microsoft Comfort Curve Keyboard 2000, Microsoft Internet Keyboard, Microsoft Internet Keyboard Pro\, Swedish, Microsoft Natural, Microsoft Natural Keyboard Elite, Microsoft Natural Keyboard Pro / Microsoft Internet Keyboard Pro, Microsoft Natural Keyboard Pro OEM, Microsoft Natural Keyboard Pro USB / Microsoft Internet Keyboard Pro, Microsoft Natural Wireless Ergonomic Keyboard 4000, Microsoft Natural Wireless Ergonomic Keyboard 7000, Microsoft Office Keyboard, Microsoft Wireless Multimedia Keyboard 1.0A, Northgate OmniKey 101, OLPC, Ortek MCK-800 MM/Internet keyboard, PC-98xx Series, Propeller Voyager (KTEZ-1000), QTronix Scorpius 98N+, SILVERCREST Multimedia Wireless Keyboard, SK-1300, SK-2500, SK-6200, SK-7100, SVEN Ergonomic 2500, SVEN Slim 303, Samsung SDM 4500P, Samsung SDM 4510P, Sanwa Supply SKB-KG3, Sun Type 4, Sun Type 5, Sun Type 6 (Japanese layout), Sun Type 6 USB (Japanese layout), Sun Type 6 USB (Unix layout), Sun Type 6/7 USB, Sun Type 6/7 USB (European layout), Sun Type 7 USB, Sun Type 7 USB (European layout), Sun Type 7 USB (Japanese layout) / Japanese 106-key, Sun Type 7 USB (Unix layout), Super Power Multimedia Keyboard, Symplon PaceBook (tablet PC), Targa Visionary 811, Toshiba Satellite S3000, Trust Direct Access Keyboard, Trust Slimline, Trust Wireless Keyboard Classic, TypeMatrix EZ-Reach 2020, TypeMatrix EZ-Reach 2030 PS2, TypeMatrix EZ-Reach 2030 USB, TypeMatrix EZ-Reach 2030 USB (102/105:EU mode), TypeMatrix EZ-Reach 2030 USB (106:JP mode), Unitek KB-1925, ViewSonic KU-306 Internet Keyboard, Winbook Model XP5, Yahoo! Internet Keyboard
 
 Name: keyboard-configuration/modelcode
 Template: keyboard-configuration/modelcode
@@ -1123,7 +1309,7 @@ Value: English (US)
 Owners: keyboard-configuration
 Flags: seen
 Variables:
- CHOICES = English (US), English (US) - Cherokee, English (US) - English (Colemak), English (US) - English (Dvorak alternative international no dead keys), English (US) - English (Dvorak international with dead keys), English (US) - English (Dvorak), English (US) - English (Macintosh), English (US) - English (US\, alternative international), English (US) - English (US\, international with dead keys), English (US) - English (US\, with euro on 5), English (US) - English (classic Dvorak), English (US) - English (international AltGr dead keys), English (US) - English (layout toggle on multiply/divide key), English (US) - English (left handed Dvorak), English (US) - English (programmer Dvorak), English (US) - English (right handed Dvorak), English (US) - Russian (US\, phonetic), English (US) - Serbo-Croatian (US), Other
+ CHOICES = English (US), English (US) - Cherokee, English (US) - English (Colemak), English (US) - English (Dvorak alternative international no dead keys), English (US) - English (Dvorak), English (US) - English (Dvorak\, international with dead keys), English (US) - English (Macintosh), English (US) - English (US\, alternative international), English (US) - English (US\, international with dead keys), English (US) - English (US\, with euro on 5), English (US) - English (Workman), English (US) - English (Workman\, international with dead keys), English (US) - English (classic Dvorak), English (US) - English (international AltGr dead keys), English (US) - English (left handed Dvorak), English (US) - English (programmer Dvorak), English (US) - English (right handed Dvorak), English (US) - English (the divide/multiply keys toggle the layout), English (US) - Russian (US\, phonetic), English (US) - Serbo-Croatian (US), Other
 
 Name: keyboard-configuration/variantcode
 Template: keyboard-configuration/variantcode
@@ -1170,15 +1356,15 @@ Owners: libpam-runtime
 
 Name: libpam0g/restart-failed
 Template: libpam0g/restart-failed
-Owners: libpam0g
+Owners: libpam0g, libpam0g:i386
 
 Name: libpam0g/restart-services
 Template: libpam0g/restart-services
-Owners: libpam0g
+Owners: libpam0g, libpam0g:i386
 
 Name: libpam0g/xdm-needs-restart
 Template: libpam0g/xdm-needs-restart
-Owners: libpam0g
+Owners: libpam0g, libpam0g:i386
 
 Name: libpaper/defaultpaper
 Template: libpaper/defaultpaper
@@ -1188,7 +1374,7 @@ Owners: libpaper1, libpaper1:i386
 Name: libraries/restart-without-asking
 Template: libraries/restart-without-asking
 Value: true
-Owners: libc6, libc6:i386, libpam0g
+Owners: libc6, libc6:i386, libpam0g, libpam0g:i386
 Flags: seen
 
 Name: libslp1/multicast
@@ -1501,6 +1687,15 @@ Owners: ssl-cert
 Name: make-ssl-cert/vulnerable_prng
 Template: make-ssl-cert/vulnerable_prng
 Owners: ssl-cert
+
+Name: man-db/auto-update
+Template: man-db/auto-update
+Owners: man-db
+
+Name: man-db/install-setuid
+Template: man-db/install-setuid
+Value: false
+Owners: man-db
 
 Name: nvidia-installer-cleanup/delete-nvidia-installer
 Template: nvidia-installer-cleanup/delete-nvidia-installer

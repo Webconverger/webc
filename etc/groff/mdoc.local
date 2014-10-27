@@ -1,0 +1,21 @@
+.\" This file is loaded after doc.tmac.
+.\" Put any local modifications to doc.tmac here.
+.
+.if n \{\
+.  \" Debian: Map \(oq to ' rather than ` in nroff mode for devices other
+.  \" than utf8.
+.  if !'\*[.T]'utf8' \
+.    tr \[oq]'
+.
+.  \" Debian: Disable the use of SGR (ANSI colour) escape sequences by
+.  \" grotty.
+.  if '\V[GROFF_SGR]'' \
+.    output x X tty: sgr 0
+.
+.  \" Debian: Strictly, "-" is a hyphen while "\-" is a minus sign, and the
+.  \" former may not always be rendered in the form expected for things like
+.  \" command-line options.  Uncomment this if you want to make sure that
+.  \" manual pages you're writing are clear of this problem.
+.  \" if '\*[.T]'utf8' \
+.  \"   char - \[hy]
+.\}

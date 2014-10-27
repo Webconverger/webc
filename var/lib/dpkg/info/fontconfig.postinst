@@ -9,19 +9,9 @@ if [ "$1" = triggered ]; then
   exit 0
 fi
 
-  
+
 
 if [ "$1" = configure ]; then
-  if dpkg --compare-versions "$2" lt-nl 2.4.0-1; then
-  printf "Cleaning up old fontconfig caches... "
-  for dir in /usr/share/fonts /var/lib/defoma/fontconfig.d /usr/X11R6/lib/X11/fonts /usr/local/share/fonts ; do
-  	if [ -d $dir ]; then
-	    find $dir -name fonts.cache-1 -exec rm -f \{\} \;
-	    find $dir -depth -mindepth 1 -type d -exec rmdir --ignore-fail-on-non-empty \{\} \;
-	fi
-  done
-  printf "done.\n"
-  fi
   # Force regeneration of all fontconfig cache files.
   mkdir -p /var/cache/fontconfig
   printf "Regenerating fonts cache... "

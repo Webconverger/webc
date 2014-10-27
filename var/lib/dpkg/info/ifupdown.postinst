@@ -7,6 +7,10 @@ report() { echo "${MYNAME}: $*" ; }
 report_warn() { report "Warning: $*" >&2 ; }
 report_err() { report "Error: $*" >&2 ; }
 
+if [ "$1" = configure ]; then
+  addgroup --quiet --system netdev || true
+fi
+
 # Create /etc/network/run 
 if [ "$1" = configure -a ! -d /etc/network/run ]; then
   if [ -e /etc/network/run -o -L /etc/network/run ]; then
@@ -17,9 +21,12 @@ if [ "$1" = configure -a ! -d /etc/network/run ]; then
   # The best choice is to use /run/network
   # That must be supported everywhere
 
-  [ -d /run/network ] || mkdir -p /run/network
+  if [ ! -d /run/network ]; then
+    mkdir -p /run/network
+    chown root:netdev /run/network
+  fi
   ln -s /run/network /etc/network/run
-fi 
+fi
 
 [ -L /etc/network/run.dpkg-old ] && echo "Removing old symlink /etc/network/run.dpkg-old..." && rm -f /etc/network/run.dpkg-old
 
@@ -96,21 +103,14 @@ fi
 
 # Generic stuff done on all configurations
 if [ "$1" = "configure" ] ; then
-  if [ -f /etc/network/interfaces ] ; then
-    # TODO: This should be handled with debconf and the script
-    # could introduce the line there directly
-    if ! grep -q "^[[:space:]]*iface[[:space:]]\+lo0\?[[:space:]]\+inet[[:space:]]\+loopback\>" /etc/network/interfaces ; then
-      report_warn "No 'iface lo' definition found in /etc/network/interfaces"
-    fi
-    if ! grep -q "^[[:space:]]*\(allow-\|\)auto[[:space:]]\+\(.*[[:space:]]\+\|\)lo0\?\([[:space:]]\+\|$\)" /etc/network/interfaces ; then
-      report_warn "No 'auto lo' statement found in /etc/network/interfaces"
-    fi
-  else  # ! -f /etc/network/interfaces
+  # We don't need loopback interface definition anymore as
+  # ifupdown handles loopback interface on its own from now
+  if [ ! -f /etc/network/interfaces ] ; then
     if [ -z "$2" ]; then
       echo "Creating /etc/network/interfaces."
       echo "# interfaces(5) file used by ifup(8) and ifdown(8)" > /etc/network/interfaces
-      echo "auto lo" >> /etc/network/interfaces
-      echo "iface lo inet loopback" >> /etc/network/interfaces
+      echo "# Include files from /etc/network/interfaces.d:" >> /etc/network/interfaces
+      echo "source-directory /etc/network/interfaces.d" >> /etc/network/interfaces
     else
       report_warn "/etc/network/interfaces does not exist"
     fi
@@ -124,7 +124,7 @@ fi
 
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/networking" ]; then
-	update-rc.d networking start 40 S . start 35 0 6 . >/dev/null || exit $?
+	update-rc.d networking defaults >/dev/null || exit $?
 fi
 # End automatically added section
 # Automatically added by dh_installdeb

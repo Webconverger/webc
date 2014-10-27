@@ -1,7 +1,7 @@
 #!/bin/sh -e
 ### BEGIN INIT INFO
 # Provides:          networking ifupdown
-# Required-Start:    mountkernfs $local_fs
+# Required-Start:    mountkernfs $local_fs urandom
 # Required-Stop:     $local_fs
 # Default-Start:     S
 # Default-Stop:      0 6
@@ -12,6 +12,7 @@
 PATH="/sbin:/bin"
 RUN_DIR="/run/network"
 IFSTATE="$RUN_DIR/ifstate"
+STATEDIR="$RUN_DIR/state"
 
 [ -x /sbin/ifup ] || exit 0
 [ -x /sbin/ifdown ] || exit 0
@@ -24,6 +25,7 @@ VERBOSE=no
 
 [ -f /etc/default/networking ] && . /etc/default/networking
 
+verbose=""
 [ "$VERBOSE" = yes ] && verbose=-v
 
 process_exclusions() {
@@ -46,6 +48,9 @@ check_ifstate() {
 	if ! mkdir -p "$RUN_DIR" ; then
 	    log_failure_msg "can't create $RUN_DIR"
 	    exit 1
+	fi
+	if ! chown root:netdev "$RUN_DIR" ; then
+	    log_warning_msg "can't chown $RUN_DIR"
 	fi
     fi
     if [ ! -r "$IFSTATE" ] ; then
@@ -100,9 +105,14 @@ ifup_hotplug () {
 			    do
 				    link=${iface##:*}
 				    link=${link##.*}
-				    if [ -e "/sys/class/net/$link" ] && [ "$(cat /sys/class/net/$link/operstate)" = up ]
+				    if [ -e "/sys/class/net/$link" ]
 				    then
+					# link detection does not work unless we up the link
+					ip link set "$iface" up || true
+					if [ "$(cat /sys/class/net/$link/operstate)" = up ]
+					then
 					    echo "$iface"
+					fi
 				    fi
 			    done)
 	    if [ -n "$ifaces" ]
@@ -128,6 +138,11 @@ start)
 	set -f
 	exclusions=$(process_exclusions)
 	log_action_begin_msg "Configuring network interfaces"
+	if [ -x /sbin/udevadm ]; then
+		if [ -n "$(ifquery --list --exclude=lo)" ] || [ -n "$(ifquery --list --allow=hotplug)" ]; then
+			udevadm settle || true
+		fi
+	fi
 	if ifup -a $exclusions $verbose && ifup_hotplug $exclusions $verbose
 	then
 	    log_action_end_msg $?
@@ -152,10 +167,13 @@ stop)
 	;;
 
 reload)
+	if init_is_upstart; then
+		exit 1
+	fi
 	process_options
 
 	log_action_begin_msg "Reloading network interfaces configuration"
-	state=$(cat /run/network/ifstate)
+	state=$(ifquery --state)
 	ifdown -a --exclude=lo $verbose || true
 	if ifup --exclude=lo $state $verbose ; then
 	    log_action_end_msg $?

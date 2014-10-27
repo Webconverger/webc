@@ -105,16 +105,22 @@ check_kernel_features() {
 
   if [ -e /proc/kallsyms ]; then
 
-  local needed_symbols='sys_inotify_init sys_signalfd'
+  local needed_symbols='inotify_init signalfd accept4 open_by_handle_at timerfd_create epoll_create'
   local missing_symbol=0
   for symbol in $needed_symbols; do
-    if ! egrep -q "^[a-fA-F0-9]+ T \.?${symbol}$" /proc/kallsyms; then
+    if ! egrep -q "^[a-fA-F0-9]+ T \.?sys_${symbol}$" /proc/kallsyms; then
       missing_symbol=1
       abort_install=1
       break
     fi
   done
 
+  fi
+
+  local missing_devtmpfs=0
+  if ! grep -q '[[:space:]]devtmpfs$' /proc/filesystems; then
+    missing_devtmpfs=1
+    abort_install=1
   fi
 
   local sysfs_deprecated=0
@@ -127,11 +133,24 @@ check_kernel_features() {
 
   if [ "$missing_symbol" -eq 1 ]; then
     cat <<END
-Since release 146, udev requires support for the following features in
+Since release 198, udev requires support for the following features in
 the running kernel:
 
-- inotify(2)       (CONFIG_INOTIFY_USER)
-- signalfd(2)      (CONFIG_SIGNALFD)
+- inotify(2)            (CONFIG_INOTIFY_USER)
+- signalfd(2)           (CONFIG_SIGNALFD)
+- accept4(2)
+- open_by_handle_at(2)  (CONFIG_FHANDLE)
+- timerfd_create(2)     (CONFIG_TIMERFD)
+- epoll_create(2)       (CONFIG_EPOLL)
+END
+  fi
+
+  if [ "$missing_devtmpfs" -eq 1 ]; then
+    cat <<END
+Since release 176, udev requires support for the following features in
+the running kernel:
+
+- devtmpfs         (CONFIG_DEVTMPFS)
 END
   fi
 
@@ -182,18 +201,10 @@ mv_conffile() {
   fi
 }
 
-replace_sysfs_attr() {
-  local file=$1
-  [ -f $file ] || return 0
-  egrep '^[^#].+\<SYSFS\{' $file || return 0
-
-  sed -r -e '/^#/!s/\<SYSFS(\{[^}]+}==)/ATTR\1/g' < $file > $file.tmp
-  mv $file.tmp $file
-}
-
 mask_systemd_service() {
   if [ -x '/bin/systemctl' -a -d '/run/systemd/system/' ]; then
-    ln -s /dev/null /run/systemd/system/udev.service
+    ln -sf /dev/null /run/systemd/system/systemd-udevd.service
+    ln -sf /dev/null /run/systemd/system/udev.service
     systemctl daemon-reload || true
   fi
 }
@@ -211,71 +222,31 @@ check_version() {
   # $2 is non-empty when installing from the "config-files" state
   [ "$2" ] || return 0
 
-  if dpkg --compare-versions $2 lt 175-7.1; then
-
-  if dpkg --compare-versions $2 lt 175-1; then
-
-  if dpkg --compare-versions $2 lt 168-2; then
-
-  # these must be checked first to allow aborting before changing anything
-  if chrooted; then
-    echo 'Running in a chroot, skipping the kernel versions checks!'
-  else
-    check_kernel_version
-    check_kernel_features
-  fi
-
-  if dpkg --compare-versions $2 lt 157-1; then
-
-  if dpkg --compare-versions $2 lt 150-1; then
-
-  if dpkg --compare-versions $2 lt 0.140-1; then
-
-  if dpkg --compare-versions $2 lt 0.124-1; then
-    echo 'Upgrading udev from packages older than 0.124-1 is not supported.'
-    echo 'Please purge the package and then reinstall it.'
-    exit 1
-  fi
-
-  # lt 0.140-1
-  rm_conffile /etc/modprobe.d/display_class
-  rm_conffile /etc/modprobe.d/pnp-hotplug
-  mv_conffile /etc/modprobe.d/blacklist /etc/modprobe.d/blacklist.conf
-
-  for file in 50-udev 60-persistent-input 60-persistent-storage \
-      60-persistent-storage-tape 60-persistent-v4l 91-permissions 80-drivers \
-      75-cd-aliases-generator 75-persistent-net-generator 95-late; do
-    rm_conffile /etc/udev/rules.d/$file.rules
-  done
-
-  # SYSFS is equivalent to ATTRS, and multiple ATTRS attributes do not match
-  # when the keys are from different kobjects like in this case.
-  replace_sysfs_attr /etc/udev/rules.d/70-persistent-net.rules
-
-  fi # 0.140-1
-
-  # lt 146-1
-  rm_conffile /etc/scsi_id.config
-
-  fi # 146-1
-
-  # suppress errors when the new rules files contain options not supported by
-  # the old daemon
-  if ! chrooted; then
-    udevadm control --log-priority=0 || true
-  fi
-
-  fi # 157-1
-
+  if dpkg --compare-versions $2 lt 204-4; then
+    # these must be checked first to allow aborting before changing anything
+    if chrooted; then
+      echo 'Running in a chroot, skipping the kernel versions checks!'
+    else
+      check_kernel_version
+      check_kernel_features
+    fi
   fi # 168-2
 
-  # lt 175-1
-  rm_conffile /etc/modprobe.d/blacklist.conf
-
+  if dpkg --compare-versions $2 lt 175-1; then
+    rm_conffile /etc/modprobe.d/blacklist.conf
   fi # 175-1
 
-  stop_on_upstart_upgrade
+  if dpkg --compare-versions $2 lt 175-7.1; then
+    stop_on_upstart_upgrade
   fi # 175-7.1
+
+  if dpkg --compare-versions $2 lt 204-4; then
+    # suppress errors when the new rules files contain options not supported by
+    # the old daemon
+    if ! chrooted; then
+      udevadm control --log-priority=0 || true
+    fi
+  fi # 204-4
 }
 
 case "$1" in
@@ -294,5 +265,11 @@ case "$1" in
     ;;
 esac
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
+# End automatically added section
 
 

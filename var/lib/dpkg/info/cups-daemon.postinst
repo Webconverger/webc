@@ -1,0 +1,214 @@
+#! /bin/sh
+
+set -e
+
+if [ "$1" = configure ]; then
+    # Set up lpadmin group.
+    if [ -z "`getent group lpadmin`" ]; then 
+	addgroup --system lpadmin
+    fi
+
+    for i in /etc/cups/classes.conf /etc/cups/printers.conf
+    do
+        if [ -f $i ] && ! dpkg-statoverride --list $i > /dev/null; then
+            chown root:lp $i; chmod 600 $i
+        fi
+    done
+
+    # symlink snakeoil SSL certificate if present
+    if [ -e /etc/ssl/certs/ssl-cert-snakeoil.pem -a \
+	  -e /etc/ssl/private/ssl-cert-snakeoil.key -a \
+	  -n "`getent group ssl-cert`" -a ! -e /etc/cups/ssl/server.crt \
+	  -a ! -e /etc/cups/ssl/server.key -a ! -h /etc/cups/ssl/server.crt \
+	  -a ! -h /etc/cups/ssl/server.key ]; then
+	 ln -s /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/cups/ssl/server.crt
+	 ln -s /etc/ssl/private/ssl-cert-snakeoil.key /etc/cups/ssl/server.key
+    fi
+
+    # Clear cache if we upgrade to 1.4.x
+    if dpkg --compare-versions "$2" lt-nl "1.4.1-5"; then
+	rm /var/cache/cups/* 2> /dev/null || :
+    fi
+
+    # Clear PPD cache if we upgrade to 1.5.x
+    if dpkg --compare-versions "$2" lt-nl "1.5.0-3"; then
+	rm /var/cache/cups/ppds.dat 2> /dev/null || :
+    fi
+
+    # Manage printcap file and associated symlinks
+    if [ -e /etc/cups/cupsd.conf ]; then
+	if [ -e /etc/printcap.cups ]; then
+	    rm -f /etc/printcap.cups
+	fi
+	if [ -L /etc/printcap -a ! -e /etc/printcap ]; then
+	    rm -f /etc/printcap
+	fi
+
+	printcap_file=`egrep '^Printcap ' /etc/cups/cupsd.conf | awk '{print $2}' | tail -n 1`
+	if [ -z "$printcap_file" ]; then
+	    printcap_file=/var/run/cups/printcap
+	fi
+	if [ ! -e /etc/printcap -a -e $printcap_file ]; then
+	    ln -s $printcap_file /etc/printcap
+	fi
+    fi
+
+    # Create default cupsd.conf if it doesn't exist
+    if [ ! -r /etc/cups/cupsd.conf ]; then
+        if dpkg --compare-versions "$2" le "1.6.1" && [ -e /etc/cups/cupsd.conf.conffile-bak ]; then
+            # Move cupsd.conf back as it is now a non-conffile
+            mv /etc/cups/cupsd.conf.conffile-bak /etc/cups/cupsd.conf
+        else
+            cp /usr/share/cups/cupsd.conf.default /etc/cups/cupsd.conf
+        fi
+    fi
+
+    # Remove lines from cupsd.conf which got obsolete in CUPS 1.6.x and would
+    # prevent the CUPS daemon from starting due to being invalid now.
+    if dpkg --compare-versions "$2" le "1.6.4"; then
+        # Backup pre-1.6 cupsd.conf for cups-browsed upgrade path
+        cp /etc/cups/cupsd.conf /etc/cups/cupsd.conf.pre16-bak
+
+        cat /etc/cups/cupsd.conf | grep -Eiv '^\s*Browse(Order|Allow|Deny|Poll|RemoteProtocols)' > /etc/cups/cupsd.conf.new
+        if [ -r /etc/cups/cupsd.conf.new ]; then
+            if ! diff -q /etc/cups/cupsd.conf /etc/cups/cupsd.conf.new > /dev/null 2>&1; then
+                mv -f /etc/cups/cupsd.conf.new /etc/cups/cupsd.conf
+            else
+                rm /etc/cups/cupsd.conf.new
+            fi
+        fi
+        # Also the argument "cups" for BrowseLocalProtocols is obsolete. Remove the
+        # argument and put "dnssd" if there are no arguments left.
+        cat /etc/cups/cupsd.conf | perl -p -e 's/^(\s*BrowseLocalProtocols.*?)\s+cups/$1/i; s/^(\s*BrowseLocalProtocols)(\s*)$/$1 dnssd$2/i' > /etc/cups/cupsd.conf.new
+        if [ -r /etc/cups/cupsd.conf.new ]; then
+            if ! diff -q /etc/cups/cupsd.conf /etc/cups/cupsd.conf.new > /dev/null 2>&1; then
+                mv -f /etc/cups/cupsd.conf.new /etc/cups/cupsd.conf
+            else
+                rm /etc/cups/cupsd.conf.new
+            fi
+        fi
+    fi
+
+    if dpkg --compare-versions "$2" le "1.7.1-9~" && [ -x /usr/sbin/logrotate ]; then
+        rotatemax=$(grep '^\s*rotate' /etc/logrotate.d/cups-daemon | sed -e 's/^\s*rotate\s*\(\d*\)/\1/g')
+        for logfiletype in access_log error_log cups-pdf_log error_log page_log; do
+            for biggest_non_gzipped in $(seq $rotatemax -1 1); do
+                if [ -f /var/log/cups/$logfiletype.$biggest_non_gzipped ]; then
+                    max=$((rotatemax-biggest_non_gzipped))
+                    for i in $(seq 1 $max); do
+                        new=$((i+biggest_non_gzipped))
+                        if [ -f /var/log/cups/$logfiletype.$i.gz ]; then
+                            mv /var/log/cups/$logfiletype.$i.gz /var/log/cups/$logfiletype.$new.gz
+                        fi
+                    done
+                    for i in $(seq 1 $biggest_non_gzipped); do
+                        if [ -f /var/log/cups/$logfiletype.$i ]; then
+                          gzip -f /var/log/cups/$logfiletype.$i
+                        fi
+                    done
+                    break;
+                fi
+            done
+        done
+    fi
+
+    # Remove cups.path leftover symlink
+    if dpkg --compare-versions "$2" lt "1.7.4-3~" ; then
+        rm -f /etc/systemd/system/multi-user.target.wants/cups.path
+    fi
+fi
+
+# Automatically added by dh_apparmor
+if [ "$1" = "configure" ]; then
+    APP_PROFILE="/etc/apparmor.d/usr.sbin.cupsd"
+    if [ -f "$APP_PROFILE" ]; then
+        # Add the local/ include
+        LOCAL_APP_PROFILE="/etc/apparmor.d/local/usr.sbin.cupsd"
+
+        test -e "$LOCAL_APP_PROFILE" || {
+            tmp=`mktemp`
+        cat <<EOM > "$tmp"
+# Site-specific additions and overrides for usr.sbin.cupsd.
+# For more details, please see /etc/apparmor.d/local/README.
+EOM
+            mkdir `dirname "$LOCAL_APP_PROFILE"` 2>/dev/null || true
+            mv -f "$tmp" "$LOCAL_APP_PROFILE"
+            chmod 644 "$LOCAL_APP_PROFILE"
+        }
+
+        # Reload the profile, including any abstraction updates
+        if aa-status --enabled 2>/dev/null; then
+            apparmor_parser -r -T -W "$APP_PROFILE" || true
+        fi
+    fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask cups.service >/dev/null || true
+
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled cups.service; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable cups.service >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state cups.service >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask cups.path >/dev/null || true
+
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled cups.path; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable cups.path >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state cups.path >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask cups.socket >/dev/null || true
+
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled cups.socket; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable cups.socket >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state cups.socket >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/cups" ]; then
+	update-rc.d cups defaults >/dev/null
+	invoke-rc.d cups start || exit $?
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+	deb-systemd-invoke start cups.path >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/cups/cupsd.conf.default 1.7.1-3~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/cups 1.7.1-6~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/pam.d/cups-daemon /etc/pam.d/cups 1.7.3-2~ -- "$@"
+# End automatically added section
+
+
+exit 0

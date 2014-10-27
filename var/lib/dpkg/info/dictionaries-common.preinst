@@ -32,6 +32,13 @@ case "$1" in install|upgrade)
     ;;
 esac
 
+# Automatically added by dh_installemacsen
+if ( [ "$1" = "install" ] || [ "$1" = "upgrade" ] ) \
+	&& [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common ]
+then
+	/usr/lib/emacsen-common/emacs-package-install --preinst dictionaries-common
+fi
+# End automatically added section
 
 
 # Local Variables:

@@ -152,7 +152,7 @@ read_fstab_entry () {
 }
 
 # Mount kernel and device file systems.
-# $1: mount mode (mount, remount, mtab)
+# $1: mount mode (mount, remount)
 # $2: file system type
 # $3: alternative file system type (or empty string if none)
 # $4: mount point
@@ -176,7 +176,8 @@ domount () {
 
 	if [ "$PRIFSTYPE" = proc ]; then
 		case "$KERNEL" in
-			Linux|GNU) FSTYPE=proc ;;
+			Linux)     FSTYPE=proc ;;
+			GNU)       FSTYPE=proc; FS_OPTS="-ocompatible" ;;
 			*FreeBSD)  FSTYPE=linprocfs ;;
 			*)         FSTYPE=procfs ;;
 		esac
@@ -190,7 +191,6 @@ domount () {
 	elif [ "$PRIFSTYPE" = tmpfs ]; then
 		# always accept tmpfs, to mount /run before /proc
 		case "$KERNEL" in
-			GNU)	FSTYPE=none ;; # for now
 			*)	FSTYPE=$PRIFSTYPE ;;
 		esac
 	elif grep -E -qs "$PRIFSTYPE\$" /proc/filesystems; then
@@ -265,32 +265,6 @@ domount () {
 				mount $MOUNTFLAGS -oremount $CALLER_OPTS $FSTAB_OPTS $MTPT
 			fi
 			;;
-	        mtab)
-			# Update mtab with correct mount options if
-			# the filesystem is mounted
-			MOUNTFLAGS="-f"
-
-			if mountpoint -q "$MTPT"; then
-				# Already recorded?
-				if ! grep -E -sq "^([^ ]+) +$MTPT +" /etc/mtab < /dev/null
-				then
-					mount $MOUNTFLAGS -t $FSTYPE $CALLER_OPTS $FSTAB_OPTS $FS_OPTS $DEVNAME $MTPT < /dev/null
-				fi
-			fi
-			;;
-	        fstab)
-			# Generate fstab with default mount options.
-			# Note does not work for bind mounts, and does
-			# not work if the fstab already has an entry
-			# for the filesystem.
-
-			if ! read_fstab_entry "$MTPT" "$FSTYPE"; then
-				CALLER_OPTS="$(echo "$CALLER_OPTS" | sed -e 's/^-o//')"
-				echo "Creating /etc/fstab entry for $MTPT to replace default in /etc/default/tmpfs (deprecated)" >&2
-	                        echo "# This mount for $MTPT replaces the default configured in /etc/default/tmpfs"
-	                        echo "$DEVNAME	$MTPT	$FSTYPE	$CALLER_OPTS	0	0"
-			fi
-			;;
 	esac
 }
 
@@ -299,15 +273,7 @@ domount () {
 #
 pre_mountall ()
 {
-	# RAMRUN and RAMLOCK on /var/run and /var/lock are obsoleted by
-	# /run.  Note that while RAMRUN is no longer used (/run is always
-	# a tmpfs), RAMLOCK is still functional, but will cause a second
-	# tmpfs to be mounted on /run/lock.
-
-	# /lib/init/rw is obsolete and replaced by /run.  It's no
-	# longer used as a mountpoint, so attempt to remove it if
-	# possible (this will fail if root is read only).
-	rmdir /lib/init/rw >/dev/null 2>&1 || true
+    :
 }
 
 # If the device/inode are the same, a bind mount already exists or the
@@ -541,7 +507,7 @@ mount_lock ()
 	KERNEL="$(uname -s)"
 	NODEV="nodev,"
 	case "$KERNEL" in
-		*FreeBSD)  NODEV="" ;;
+		*FreeBSD|GNU)  NODEV="" ;;
 	esac
 
 	# Mount /run/lock as tmpfs if enabled.  This prevents user DoS
@@ -598,7 +564,7 @@ mount_shm ()
 	KERNEL="$(uname -s)"
 	NODEV="nodev,"
 	case "$KERNEL" in
-		*FreeBSD)  NODEV="" ;;
+		*FreeBSD|GNU)  NODEV="" ;;
 	esac
 
 	if [ yes = "$RAMSHM" ]; then
@@ -679,7 +645,7 @@ mount_tmp ()
 	KERNEL="$(uname -s)"
 	NODEV="nodev,"
 	case "$KERNEL" in
-		*FreeBSD)  NODEV="" ;;
+		*FreeBSD|GNU)  NODEV="" ;;
 	esac
 
 	# Mount /tmp as tmpfs if enabled.
@@ -693,4 +659,18 @@ mount_tmp ()
 			chmod "$TMP_MODE" /tmp
 		fi
 	fi
+}
+
+is_fastboot_active() {
+	if [ -f /fastboot ] ; then
+	    return 0
+	fi
+	for cmd in $(cat /proc/cmdline) ; do
+	    case "$cmd" in
+		fastboot)
+		    return 0
+		    ;;
+	    esac
+	done
+	return 1
 }

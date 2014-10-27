@@ -2,7 +2,6 @@
 
 ACTION!="add", GOTO="mtd_probe_end"
 
-KERNEL=="mtd*ro", IMPORT{program}="mtd_probe $tempnode"
-KERNEL=="mtd*ro", ENV{MTD_FTL}=="smartmedia", RUN+="/sbin/modprobe -bv sm_ftl"
+KERNEL=="mtd*ro", IMPORT{program}="mtd_probe $devnode"
 
 LABEL="mtd_probe_end"

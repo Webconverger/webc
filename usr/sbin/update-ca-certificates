@@ -26,13 +26,13 @@ fresh=0
 while [ $# -gt 0 ];
 do
   case $1 in
-  --verbose|-v)
-  	verbose=1;;
-  --fresh|-f)
-	fresh=1;;
-  --help|-h|*)
-	echo "$0: [--verbose] [--fresh]"
-	exit;;
+    --verbose|-v)
+      verbose=1;;
+    --fresh|-f)
+      fresh=1;;
+    --help|-h|*)
+      echo "$0: [--verbose] [--fresh]"
+      exit;;
   esac
   shift
 done
@@ -69,7 +69,8 @@ add() {
     ln -sf "$CERT" "$PEM"
     echo +$PEM >> "$ADDED"
   fi
-  cat "$CERT" >> "$TEMPBUNDLE"
+  # Add trailing newline to certificate, if it is missing (#635570)
+  sed -e '$a\' "$CERT" >> "$TEMPBUNDLE"
 }
 
 remove() {
@@ -87,13 +88,13 @@ if [ "$fresh" = 1 ]; then
   echo -n "Clearing symlinks in $ETCCERTSDIR..."
   find . -type l -print | while read symlink
   do
-     case $(readlink $symlink) in
-     $CERTSDIR*) rm -f $symlink;;
-     esac
+    case $(readlink $symlink) in
+      $CERTSDIR*) rm -f $symlink;;
+    esac
   done
   find . -type l -print | while read symlink
   do
-     test -f $symlink || rm -f $symlink
+    test -f $symlink || rm -f $symlink
   done
   echo "done."
 fi
@@ -121,7 +122,7 @@ done
 # administrator.
 if [ -d "$LOCALCERTSDIR" ]
 then
-  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | while read crt
+  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | sort | while read crt
   do
     add "$crt"
   done
@@ -145,6 +146,8 @@ fi
 
 chmod 0644 "$TEMPBUNDLE"
 mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
+# Restore proper SELinux label after moving the file
+[ -x /sbin/restorecon ] && /sbin/restorecon "$CERTBUNDLE" >/dev/null 2>&1
 
 echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
 

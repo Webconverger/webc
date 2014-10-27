@@ -47,7 +47,11 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_config_tree_find_node@Base 2:1.02.74
  dm_config_tree_find_str@Base 2:1.02.74
  dm_config_tree_find_str_allow_empty@Base 2:1.02.74
+ dm_config_value_is_bool@Base 2:1.02.78
  dm_config_write_node@Base 2:1.02.74
+ dm_config_write_node_out@Base 2:1.02.78
+ dm_config_write_one_node@Base 2:1.02.77
+ dm_config_write_one_node_out@Base 2:1.02.78
  dm_cookie_supported@Base 2:1.02.36
  dm_count_chars@Base 2:1.02.74
  dm_create_dir@Base 2:1.02.24
@@ -67,6 +71,9 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_get_library_version@Base 2:1.02.20
  dm_get_name_mangling_mode@Base 2:1.02.74
  dm_get_next_target@Base 2:1.02.20
+ dm_get_status_cache@Base 2:1.02.85
+ dm_get_status_raid@Base 2:1.02.78
+ dm_get_status_snapshot@Base 2:1.02.78
  dm_get_status_thin@Base 2:1.02.74
  dm_get_status_thin_pool@Base 2:1.02.74
  dm_get_suspended_counter@Base 2:1.02.65
@@ -110,9 +117,12 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_log_is_non_default@Base 2:1.02.36
  dm_log_with_errno@Base 2:1.02.36
  dm_log_with_errno_init@Base 2:1.02.36
+ dm_make_percent@Base 2:1.02.88
  dm_malloc_aux@Base 2:1.02.20
  dm_malloc_aux_debug@Base 2:1.02.20
  dm_mknodes@Base 2:1.02.20
+ dm_mountinfo_read@Base 2:1.02.78
+ dm_percent_to_float@Base 2:1.02.88
  dm_pool_abandon_object@Base 2:1.02.20
  dm_pool_alloc@Base 2:1.02.20
  dm_pool_alloc_aligned@Base 2:1.02.20
@@ -136,12 +146,16 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_regex_match@Base 2:1.02.20
  dm_report_field_int32@Base 2:1.02.27
  dm_report_field_int@Base 2:1.02.27
+ dm_report_field_percent@Base 2:1.02.88
  dm_report_field_set_value@Base 2:1.02.27
  dm_report_field_string@Base 2:1.02.27
+ dm_report_field_string_list@Base 2:1.02.88
+ dm_report_field_string_list_unsorted@Base 2:1.02.90
  dm_report_field_uint32@Base 2:1.02.27
  dm_report_field_uint64@Base 2:1.02.27
  dm_report_free@Base 2:1.02.27
  dm_report_init@Base 2:1.02.27
+ dm_report_init_with_selection@Base 2:1.02.88
  dm_report_object@Base 2:1.02.27
  dm_report_output@Base 2:1.02.27
  dm_report_set_output_field_name_prefix@Base 2:1.02.27
@@ -158,17 +172,22 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_sysfs_dir@Base 2:1.02.74
  dm_task_add_target@Base 2:1.02.20
  dm_task_create@Base 2:1.02.20
+ dm_task_deferred_remove@Base 2:1.02.90
  dm_task_destroy@Base 2:1.02.20
  dm_task_enable_checks@Base 2:1.02.65
  dm_task_get_deps@Base 2:1.02.20
  dm_task_get_driver_version@Base 2:1.02.20
  dm_task_get_info@Base 2:1.02.20
+ dm_task_get_info_with_deferred_remove@Base 2:1.02.90
+ dm_task_get_message_response@Base 2:1.02.82
  dm_task_get_name@Base 2:1.02.20
  dm_task_get_name_mangled@Base 2:1.02.74
  dm_task_get_name_unmangled@Base 2:1.02.74
  dm_task_get_names@Base 2:1.02.20
  dm_task_get_read_ahead@Base 2:1.02.24
  dm_task_get_uuid@Base 2:1.02.20
+ dm_task_get_uuid_mangled@Base 2:1.02.77
+ dm_task_get_uuid_unmangled@Base 2:1.02.77
  dm_task_get_versions@Base 2:1.02.20
  dm_task_no_flush@Base 2:1.02.20
  dm_task_no_open_count@Base 2:1.02.20
@@ -210,6 +229,7 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_tree_free@Base 2:1.02.20
  dm_tree_get_cookie@Base 2:1.02.36
  dm_tree_next_child@Base 2:1.02.20
+ dm_tree_node_add_cache_target@Base 2:1.02.85
  dm_tree_node_add_crypt_target@Base 2:1.02.36
  dm_tree_node_add_error_target@Base 2:1.02.20
  dm_tree_node_add_linear_target@Base 2:1.02.20
@@ -217,6 +237,7 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_tree_node_add_mirror_target_log@Base 2:1.02.20
  dm_tree_node_add_null_area@Base 2:1.02.67
  dm_tree_node_add_raid_target@Base 2:1.02.67
+ dm_tree_node_add_raid_target_with_params@Base 2:1.02.78
  dm_tree_node_add_replicator_dev_target@Base 2:1.02.63
  dm_tree_node_add_replicator_target@Base 2:1.02.63
  dm_tree_node_add_snapshot_merge_target@Base 2:1.02.44
@@ -236,11 +257,14 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_tree_node_set_callback@Base 2:1.02.74
  dm_tree_node_set_presuspend_node@Base 2:1.02.63
  dm_tree_node_set_read_ahead@Base 2:1.02.24
+ dm_tree_node_set_thin_external_origin@Base 2:1.02.77
+ dm_tree_node_set_thin_pool_discard@Base 2:1.02.77
  dm_tree_node_set_udev_flags@Base 2:1.02.74
  dm_tree_node_size_changed@Base 2:1.02.36
  dm_tree_preload_children@Base 2:1.02.20
  dm_tree_retry_remove@Base 2:1.02.74
  dm_tree_set_cookie@Base 2:1.02.36
+ dm_tree_set_optional_uuid_suffixes@Base 2:1.02.88
  dm_tree_skip_lockfs@Base 2:1.02.20
  dm_tree_suspend_children@Base 2:1.02.20
  dm_tree_use_no_flush_suspend@Base 2:1.02.20
@@ -253,6 +277,8 @@ libdevmapper.so.1.02.1 libdevmapper1.02.1 #MINVER#
  dm_udev_wait@Base 2:1.02.36
  dm_unescape_colons_and_at_signs@Base 2:1.02.74
  dm_unescape_double_quotes@Base 2:1.02.74
+ dm_units_to_factor@Base 2:1.02.88
  dm_uuid_prefix@Base 2:1.02.74
+ dm_vasprintf@Base 2:1.02.77
  dm_zalloc_aux@Base 2:1.02.63
  dm_zalloc_aux_debug@Base 2:1.02.63

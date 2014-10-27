@@ -18,7 +18,7 @@ case "$1" in
 	# handle lingering dhclient.conf from lenny (this can be safely removed
 	# after the wheezy release)
 	if [ -e /etc/dhcp/dhclient.conf ] && \
-		[ "`md5sum /etc/dhcp/dhclient.conf  | cut -d\  -f1`" = 6e3910d75cd5cde0042ecb6d48492ae9 ]; then
+		[ "`md5sum /etc/dhcp/dhclient.conf  | awk '{print $1;}'`" = 6e3910d75cd5cde0042ecb6d48492ae9 ]; then
 		sed -i -e 's/rfc3442-classless-static-routes;/rfc3442-classless-static-routes, ntp-servers;/' /etc/dhcp/dhclient.conf
 	fi
 

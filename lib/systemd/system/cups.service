@@ -1,0 +1,12 @@
+[Unit]
+Description=CUPS Printing Service
+Documentation=man:cupsd(8) man:cupsd.conf(5)
+Requires=cups.socket
+
+[Service]
+ExecStart=/usr/sbin/cupsd -f
+PrivateTmp=true
+
+[Install]
+Also=cups.socket cups.path
+WantedBy=printer.target

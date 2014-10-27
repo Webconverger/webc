@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+# Clean up a cron job that the old man package apparently left around.
+if [ -e /etc/cron.daily/man ]; then
+    echo "  Removing /etc/cron.daily/man cron job from obsolete man package."
+    mv /etc/cron.daily/man /etc/cron.daily/man.moved-by-preinst
+fi
+
+# Clean up a cron job left around by man-db from some time ago.
+if [ -e /etc/cron.weekly/catman ]; then
+    echo "  Removing obsolete /etc/cron.weekly/catman cron job."
+    mv /etc/cron.weekly/catman /etc/cron.weekly/catman.moved-by-preinst
+fi
+
+# Migrate old statoverrides to new paths.
+if dpkg --compare-versions "$2" lt 2.5.5-4; then
+    for x in $maybesetuid; do
+	overrides="$(dpkg-statoverride --list /usr/lib/man-db/$x || true)"
+	[ "$overrides" ] || continue
+	echo "$overrides" | while read owner group mode file; do
+	    dpkg-statoverride --remove "$file" || true
+	    dpkg-statoverride --add "$owner" "$group" "$mode" /usr/bin/$x || true
+	done
+    done
+fi
+
+
+
+exit 0

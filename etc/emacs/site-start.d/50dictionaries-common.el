@@ -22,19 +22,19 @@
     (autoload 'flyspell-mode "flyspell" nil t)
     (autoload 'flyspell-prog-mode "flyspell" nil t)
 
-    ;; Load the Debian emacsen cache file, containing entries for each
-    ;; installed dictionary.
-    ;; Since this might result in a call to debian-ispell do this only if
-    ;; it exists, that is, if package is not removed
-
+    ;; Load Debian emacsen cache file, with entries for installed dictionaries
+    ;; This might result in a call to debian-ispell, so do this only if
+    ;;  a) It exists, that is, package is not removed.
+    ;;  b) Not in installations under dpkg control, otherwise we might get some
+    ;;     bogus errors on installation because of #132355 and friends.
     (if (file-exists-p "/usr/share/emacs/site-lisp/dictionaries-common/debian-ispell.el")
-	(let ((coding-system-for-read 'raw-text)) ;; Read these as data streams
-	  (load "debian-ispell" t)
-	  (load debian-dict-entries t))
+	(if (getenv "DPKG_RUNNING_VERSION")
+	    (message "Info: Skip debian-el loading if run under dpkg control.")
+	  (let ((coding-system-for-read 'raw-text)) ;; Read these as data streams
+	    (load "debian-ispell" t)
+	    (load debian-dict-entries t)))
       (message "Info: Package dictionaries-common removed but not purged."))))
 
 ;;; Previous code for loading ispell.el and refreshing spell-checking
 ;;; pulldown menus has been removed from this file since it should no
 ;;; longer be needed.
-
-

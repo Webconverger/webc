@@ -37,13 +37,16 @@ KERNEL!="card*", GOTO="sound_end"
 
 ENV{SOUND_INITIALIZED}="1"
 
+IMPORT{builtin}="hwdb"
 SUBSYSTEMS=="usb", IMPORT{builtin}="usb_id"
-SUBSYSTEMS=="usb", ENV{ID_VENDOR_FROM_DATABASE}=="", IMPORT{program}="usb-db %p"
 SUBSYSTEMS=="usb", GOTO="skip_pci"
 
-SUBSYSTEMS=="pci", ENV{ID_VENDOR_FROM_DATABASE}=="", IMPORT{program}="pci-db %p"
-SUBSYSTEMS=="pci", ENV{ID_BUS}="pci", ENV{ID_VENDOR_ID}="$attr{vendor}", ENV{ID_MODEL_ID}="$attr{device}"
+SUBSYSTEMS=="firewire", ATTRS{vendor_name}=="?*", ATTRS{model_name}=="?*", \
+  ENV{ID_BUS}="firewire", ENV{ID_VENDOR}="$attr{vendor_name}", ENV{ID_MODEL}="$attr{model_name}"
+SUBSYSTEMS=="firewire", ATTRS{guid}=="?*", ENV{ID_ID}="firewire-$attr{guid}"
+SUBSYSTEMS=="firewire", GOTO="skip_pci"
 
+SUBSYSTEMS=="pci", ENV{ID_BUS}="pci", ENV{ID_VENDOR_ID}="$attr{vendor}", ENV{ID_MODEL_ID}="$attr{device}"
 LABEL="skip_pci"
 
 ENV{ID_SERIAL}=="?*", ENV{ID_USB_INTERFACE_NUM}=="?*", ENV{ID_ID}="$env{ID_BUS}-$env{ID_SERIAL}-$env{ID_USB_INTERFACE_NUM}-$attr{id}"

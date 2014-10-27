@@ -1,23 +1,20 @@
 <DIV CLASS="indent">
 
-<H2 CLASS="title">{op=modify-printer?Modifica {printer_name}:Aggiungi stampante}</H2>
+<H2 CLASS="title">{op=modify-printer?Modifica {printer_name}:Aggiungi una stampante}</H2>
 
-{CUPS_GET_DEVICES_DONE?:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
-ALT="Busy Indicator"> Ricerca stampanti...</P>}
-
-<FORM METHOD="POST" ACTION="/admin">
+{CUPS_GET_DEVICES_DONE?<FORM METHOD="POST" ACTION="/admin">
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
 <INPUT TYPE="HIDDEN" NAME="OP" VALUE="{op}">
 {printer_name?<INPUT TYPE="HIDDEN" NAME="printer_name" VALUE="{printer_name}">:}
 
 <TABLE>
 {op=add-printer?:<TR>
-<TH CLASS="label">Connessione attuale:</TH>
+<TH CLASS="label">Connessione attuale\:</TH>
 <TD><INPUT TYPE="RADIO" NAME="DEVICE_URI" VALUE="{current_device_uri}" CHECKED>
 {current_device_uri}</TD>
 </TR>}
 <TR>
-<TH CLASS="label">Stampanti locali:</TH>
+<TH CLASS="label">Stampanti locali\:</TH>
 <TD>
 {[device_uri]{device_class!network?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
@@ -26,7 +23,7 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Stampanti di rete rilevate:</TH>
+<TH CLASS="label">Stampanti di rete rilevate\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
@@ -36,7 +33,7 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TR>
 <TR>
 <TR>
-<TH CLASS="label">Altre stampante di reti:</TH>
+<TH CLASS="label">Altre stampanti di rete\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?:<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
@@ -50,5 +47,7 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TR>
 </TABLE>
 
-</FORM>
+</FORM>:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
+ALT="Indicatore di occupato"> Ricerca delle stampanti in corso...</P>}
+
 </DIV>

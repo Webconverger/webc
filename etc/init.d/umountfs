@@ -25,7 +25,7 @@ do_stop () {
 	do
 		echo "$PROTECTED_MOUNTS" | grep -qs "^$DEV $MTPT " && continue
 		case "$MTPT" in
-		  /|/proc|/dev|/.dev|/dev/pts|/dev/shm|/dev/.static/dev|/proc/*|/sys|/sys/*|/run|/run/*)
+		  /|/proc|/dev|/.dev|/dev/pts|/dev/shm|/dev/.static/dev|/proc/*|/sys|/sys/*|/run|/run/*|/dev/vcs)
 			continue
 			;;
 		esac
@@ -111,7 +111,7 @@ do_stop () {
 }
 
 case "$1" in
-  start)
+  start|status)
 	# No-op
 	;;
   restart|reload|force-reload)

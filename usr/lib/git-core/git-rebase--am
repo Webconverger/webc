@@ -4,9 +4,21 @@
 # Copyright (c) 2010 Junio C Hamano.
 #
 
+# The whole contents of this file is run by dot-sourcing it from
+# inside a shell function.  It used to be that "return"s we see
+# below were not inside any function, and expected to return
+# to the function that dot-sourced us.
+#
+# However, FreeBSD /bin/sh misbehaves on such a construct and
+# continues to run the statements that follow such a "return".
+# As a work-around, we introduce an extra layer of a function
+# here, and immediately call it after defining it.
+git_rebase__am () {
+
 case "$action" in
 continue)
-	git am --resolved --resolvemsg="$resolvemsg" &&
+	git am --resolved --resolvemsg="$resolvemsg" \
+		${gpg_sign_opt:+"$gpg_sign_opt"} &&
 	move_to_original_branch
 	return
 	;;
@@ -17,7 +29,13 @@ skip)
 	;;
 esac
 
-test -n "$rebase_root" && root_flag=--root
+if test -z "$rebase_root"
+	# this is now equivalent to ! -z "$upstream"
+then
+	revisions=$upstream...$orig_head
+else
+	revisions=$onto...$orig_head
+fi
 
 ret=0
 if test -n "$keep_empty"
@@ -26,14 +44,17 @@ then
 	# empty commits and even if it didn't the format doesn't really lend
 	# itself well to recording empty patches.  fortunately, cherry-pick
 	# makes this easy
-	git cherry-pick --allow-empty "$revisions"
+	git cherry-pick ${gpg_sign_opt:+"$gpg_sign_opt"} --allow-empty \
+		--right-only "$revisions" \
+		${restrict_revision+^$restrict_revision}
 	ret=$?
 else
 	rm -f "$GIT_DIR/rebased-patches"
 
-	git format-patch -k --stdout --full-index --ignore-if-in-upstream \
+	git format-patch -k --stdout --full-index --cherry-pick --right-only \
 		--src-prefix=a/ --dst-prefix=b/ --no-renames --no-cover-letter \
-		$root_flag "$revisions" >"$GIT_DIR/rebased-patches"
+		"$revisions" ${restrict_revision+^$restrict_revision} \
+		>"$GIT_DIR/rebased-patches"
 	ret=$?
 
 	if test 0 != $ret
@@ -60,7 +81,8 @@ else
 		return $?
 	fi
 
-	git am $git_am_opt --rebasing --resolvemsg="$resolvemsg" <"$GIT_DIR/rebased-patches"
+	git am $git_am_opt --rebasing --resolvemsg="$resolvemsg" \
+		${gpg_sign_opt:+"$gpg_sign_opt"} <"$GIT_DIR/rebased-patches"
 	ret=$?
 
 	rm -f "$GIT_DIR/rebased-patches"
@@ -73,3 +95,7 @@ then
 fi
 
 move_to_original_branch
+
+}
+# ... and then we call the whole thing.
+git_rebase__am

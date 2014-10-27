@@ -31,150 +31,12 @@ eliminate_conffile() {
 
 case "$1" in
   install|upgrade)
-	#
-	# /etc/init.d/stop-bootlogd used to be a symlink to bootlogd;
-	# now it is a separate script.  We need to remove the symlink here,
-	# before dpkg installs the /etc/init.d/stop-bootlogd file.
-	#
-	[ -L /etc/init.d/stop-bootlogd ] && rm -f /etc/init.d/stop-bootlogd
-	#
-	# Remove obsolete conffiles
-	#
-	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.86.ds1-10" ; then
-		eliminate_conffile "/etc/init.d/bootclean.sh"
+	# mtab was removed in 2.88dsf-41+jessie1; the remaining two lines
+	# were merged into checkroot, which provides mtab for compatibility
+	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.88dsf-41+jessie1" ; then
+	        eliminate_conffile "/etc/init.d/mtab.sh"
 	fi
-	#
-	# The /etc/init.d/bootclean script fragment was moved to
-	# /lib/init/ in version 2.86.ds1-39
-	#
-	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.86.ds1-54" ; then
-		eliminate_conffile "/etc/init.d/bootclean"
-	fi
-	# bootlogd moved to a separate package in 2.88dsf-17, and
-	# /etc/default/bootlogd no longer exists in that package.
-	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.88dsf-17" ; then
-		eliminate_conffile "/etc/default/bootlogd"
-	fi
-	# mountoverflowtmp was merged into the general tmpfs handling
-	# in 2.88dsf-23
-	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.88dsf-23" ; then
-		eliminate_conffile "/etc/init.d/mountoverflowtmp"
-	fi
-	# rcS was made a conffile in removed in 2.88dsf-26.  Replace
-	# unmodified older versions, including automated commenting of
-	# removed variables.
-	if [ "$2" ] && dpkg --compare-versions "$2" lt "2.88dsf-26" ; then
-	    case "$(md5sum /etc/default/rcS | cut -d ' ' -f 1)" in \
-		003a3a625ee1159b7845447cc8082cd5 | \
-		038f2b42aaf423f6b63a393adb5881a2 | \
-		08bac7e32209b41ab4d5b813e0432128 | \
-		0a24116eae596ba01eb26cd834491a29 | \
-		0e8325dd1a1a5c87bb6f68da1c497871 | \
-		110d7b0c89b0877e64ec760c849da0ed | \
-		148b4592927935995d84248d1d9b7189 | \
-		1e00aed9c2b3921c649c2aadcfd5c543 | \
-		22c6df22c03276831cb977e907421ecc | \
-		254c74c74bc8f41735cff8d5e800f151 | \
-		27a63f43ac1309b5451801aa400d5566 | \
-		290549506810a28de94b700a46ca708c | \
-		2a96075cc7a0ae92eeaf0c068f7819eb | \
-		2b7bab954e33f13374bb535c11a5dac3 | \
-		2c124ebdef8386c09e7efbe6b9f2a765 | \
-		2cc22b1e201af47349d7665d73820e7f | \
-		2d3e45db247bc056161d6ecf228e7836 | \
-		32a4652ad8eda730ba3369db0653c6fe | \
-		33c4ddc65e90ea61bd744216df07e095 | \
-		35cde625afbc143be1ab8dd57c9e63b6 | \
-		35ee7bd293d75fd0ee7ed0364f7539b8 | \
-		3944912056327e3a533c0bd31a8f330d | \
-		3ae1cdb6091b6423926e62e025e47621 | \
-		3ced6e4b5c0ad0843c6ec7f05a241010 | \
-		45b8ea21c8543ea0ac10010731dd7e03 | \
-		4bf62a16669d3417f40a534b66aad453 | \
-		4e5aceb05dee907c8120c8c5d98ea1e2 | \
-		5046cf2b9ea96d9f42c34de4df5368e8 | \
-		537571636922baaad6ccdcd10bce5c53 | \
-		59ad5e2093d46113f2ec000c8d94e0db | \
-		5f3476329a0d9196c63ab4c525a1d3a3 | \
-		62f3bd6bf72a64440cd4c0fbf98b229b | \
-		666aae74740704e8e8e236f2b163ce96 | \
-		69c93443d3d63fc5b0774862db2e96fe | \
-		6fffaa2d7b9b31925e7e8cd1d1fc2766 | \
-		72b181b41057ddac018493f4201bb16e | \
-		74c1b4b43e3a419bcad93d9d49b66353 | \
-		7a892f732ea5c5b5791860b86009f417 | \
-		7cf1b4cdc330da3ab8d9df1fd9af7026 | \
-		7e068fcfc5cd5bf93257ef23564ab4aa | \
-		81e50a7cebdc836885dbbec570e2c851 | \
-		88309aa2de148d0ce6aaa27d0c837bb6 | \
-		8847521ab9e6dc46ed8182f9e8deeda2 | \
-		88bd9b9ca775324607617f14313cfba1 | \
-		89dbef75f9b7d46644af326200bdc2e6 | \
-		8bd4855d706a7d55e3f8497f0a7f1183 | \
-		94922d77c255c019c828392b500b73cb | \
-		95ee0bd69077a3ed94bd7c49faf63f1a | \
-		9950c6c8b353df7fd8d57632bf59d82b | \
-		9d5faf6463bc08108914b6aaa104d566 | \
-		a0475988d665a538c2bdd3349eff9566 | \
-		a4af750cc5d1edc264d47dc01d11e1b8 | \
-		a573ddebfb162f8a1bc91c5fccb294e4 | \
-		b5e3874a10bf5f6929f0467330253650 | \
-		b93800fe22c30e774e9cb8ecd8ce237e | \
-		bf1a5c293ec61a00f70310175c735cef | \
-		c1a223eba0e647fbf812d191fb8475a0 | \
-		c1c43539047bb3db453e8f72a8c3636f | \
-		c2364ab7dda1da1bb80c4eebf63580b3 | \
-		c51d1bc5262dff61c16d32729055a993 | \
-		c7e061fab5ea6975e77271767ac41117 | \
-		c8911fce184e5a49be3f72d2caae1ae1 | \
-		ca14c765b57c20fa733f554dfe6c388a | \
-		d1b82d8521a632e6f12d839ddf0d1ead | \
-		d4cdbf0856e631df5af728924589c0aa | \
-		d90f2a0efb1f69c153287e8f2e179269 | \
-		dd81e120c60921bed476d863bf55123d | \
-		de0ff7b414e7db8446cda0c11d9ee75b | \
-		de2c86cd53e07f5f4e08376c7b7ff317 | \
-		e137605b014fc42a4c145a4ac06f57e8 | \
-		e60c0cac8a8cb2bebb37daacc2300a1b | \
-		e767f1647e1c30a0df65c479d4766505 | \
-		e7b685cbfda3db481e0309445ade59b1 | \
-		ebe92767da38e2be8f89a694aadcbbe3 | \
-		eefef22faff950c7810151be6811a732 | \
-		f05966d8aa22b704bc5cd9829c013cec | \
-		f12274a1d3b3e5614a504d89d6caaaf3 | \
-		f18facff932a4911aab1b36756ddd1a5 | \
-		f8486391c2d7ad6baebb5c07bbf9a62f)
-		    echo "Upgrading unmodified configuration file /etc/default/rcS ..."
-		    mv -f  /etc/default/rcS /etc/default/rcS.dpkg-old
-		    cat <<EOF >/etc/default/rcS
-#
-# /etc/default/rcS
-#
-# Default settings for the scripts in /etc/rcS.d/
-#
-# For information about these variables see the rcS(5) manual page.
-#
-# This file belongs to the "initscripts" package.
 
-# delete files in /tmp during boot older than x days.
-# '0' means always, -1 or 'infinite' disables the feature
-#TMPTIME=0
-
-# spawn sulogin during boot, continue normal boot if not used in 30 seconds
-#SULOGIN=no
-
-# do not allow users to log in until the boot has completed
-#DELAYLOGIN=no
-
-# be more verbose during the boot process
-#VERBOSE=no
-
-# automatically repair filesystems with inconsistencies during boot
-#FSCKFIX=no
-EOF
-		    ;;
-	    esac
-	fi
 	#
 	# Move conflicting log _file_ if present
 	#
@@ -185,6 +47,15 @@ EOF
 	;;
 esac
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/bootlogd 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd 2.88dsf-42 initscripts -- "$@"
+# End automatically added section
 
 
 :

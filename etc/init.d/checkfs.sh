@@ -3,7 +3,7 @@
 # Provides:          checkfs
 # Required-Start:    checkroot
 # Required-Stop:
-# Should-Start:      mtab
+# Should-Start:
 # Default-Start:     S
 # Default-Stop:
 # X-Interactive:     true
@@ -18,6 +18,7 @@ FSCK_LOGFILE=/var/log/fsck/checkfs
 . /lib/init/vars.sh
 
 . /lib/lsb/init-functions
+. /lib/init/mount-functions.sh
 . /lib/init/swap-functions.sh
 
 do_start () {
@@ -42,7 +43,7 @@ do_start () {
 	BAT=""
 	fscheck="yes"
 
-	if [ -f /fastboot ] || grep -s -w -i "fastboot" /proc/cmdline
+	if is_fastboot_active
 	then
 		[ "$fscheck" = yes ] && log_warning_msg "Fast boot enabled, so skipping file system check."
 		fscheck=no
@@ -58,7 +59,7 @@ do_start () {
 		# or md swap partitions.  fsck can suck RAM.
 		swaponagain 'lvm and md'
 
-		if [ -f /forcefsck ] || grep -s -w -i "forcefsck" /proc/cmdline
+		if [ -f /forcefsck ] || grep -q -s -w -i "forcefsck" /proc/cmdline
 		then
 			force="-f"
 		else
@@ -142,7 +143,7 @@ case "$1" in
 	echo "Error: argument '$1' not supported" >&2
 	exit 3
 	;;
-  stop)
+  stop|status)
 	# No-op
 	;;
   *)

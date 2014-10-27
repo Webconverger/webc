@@ -2,6 +2,56 @@
 
 #set -e
 
+Device_from_bootif ()
+{
+	# support for Syslinux IPAPPEND parameter
+	# it sets the BOOTIF variable on the kernel parameter
+
+	if [ -n "${BOOTIF}" ]
+	then
+		# pxelinux sets BOOTIF to a value based on the mac address of the
+		# network card used to PXE boot, so use this value for DEVICE rather
+		# than a hard-coded device name from initramfs.conf. this facilitates
+		# network booting when machines may have multiple network cards.
+		# pxelinux sets BOOTIF to 01-$mac_address
+
+		# strip off the leading "01-", which isn't part of the mac
+		# address
+		temp_mac=${BOOTIF#*-}
+
+		# convert to typical mac address format by replacing "-" with ":"
+		bootif_mac=""
+		IFS='-'
+		for x in $temp_mac
+		do
+			if [ -z "$bootif_mac" ]
+			then
+				bootif_mac="$x"
+			else
+				bootif_mac="$bootif_mac:$x"
+			fi
+		done
+		unset IFS
+
+		# look for devices with matching mac address, and set DEVICE to
+		# appropriate value if match is found.
+
+		for device in /sys/class/net/*
+		do
+			if [ -f "$device/address" ]
+			then
+			current_mac=$(cat "$device/address")
+
+				if [ "$bootif_mac" = "$current_mac" ]
+				then
+					DEVICE=${device##*/}
+					break
+				fi
+			fi
+		done
+	fi
+}
+
 do_netsetup ()
 {
 	modprobe -q af_packet # For DHCP
@@ -14,52 +64,8 @@ do_netsetup ()
 
 	if [ -z "${NETBOOT}" ] && [ -z "${FETCH}" ] && [ -z "${HTTPFS}" ] && [ -z "${FTPFS}" ]
 	then
-		# support for Syslinux IPAPPEND parameter
-		# it sets the BOOTIF variable on the kernel parameter
-
-		if [ -n "${BOOTIF}" ]
-		then
-			# pxelinux sets BOOTIF to a value based on the mac address of the
-			# network card used to PXE boot, so use this value for DEVICE rather
-			# than a hard-coded device name from initramfs.conf. this facilitates
-			# network booting when machines may have multiple network cards.
-			# pxelinux sets BOOTIF to 01-$mac_address
-
-			# strip off the leading "01-", which isn't part of the mac
-			# address
-			temp_mac=${BOOTIF#*-}
-
-			# convert to typical mac address format by replacing "-" with ":"
-			bootif_mac=""
-			IFS='-'
-			for x in $temp_mac
-			do
-				if [ -z "$bootif_mac" ]
-				then
-					bootif_mac="$x"
-				else
-					bootif_mac="$bootif_mac:$x"
-				fi
-			done
-			unset IFS
-
-			# look for devices with matching mac address, and set DEVICE to
-			# appropriate value if match is found.
-
-			for device in /sys/class/net/*
-			do
-				if [ -f "$device/address" ]
-				then
-					current_mac=$(cat "$device/address")
-
-					if [ "$bootif_mac" = "$current_mac" ]
-					then
-						DEVICE=${device##*/}
-						break
-					fi
-				fi
-			done
-		fi
+		# See if we can select the device from BOOTIF
+		Device_from_bootif
 
 		# if ethdevice was not specified on the kernel command line
 		# make sure we try to get a working network configuration
@@ -111,10 +117,6 @@ do_netsetup ()
 		for interface in ${DEVICE}; do
 			ipconfig -t "$ETHDEV_TIMEOUT" ${interface} | tee /netboot-${interface}.config
 
-			# squeeze
-			[ -e /tmp/net-${interface}.conf ] && . /tmp/net-${interface}.conf
-
-			# wheezy
 			[ -e /run/net-${interface}.conf ] && . /run/net-${interface}.conf
 
 			if [ "$IPV4ADDR" != "0.0.0.0" ]
@@ -129,10 +131,6 @@ do_netsetup ()
 		# source relevant ipconfig output
 		OLDHOSTNAME=${HOSTNAME}
 
-		# squeeze
-		[ -e /tmp/net-${interface}.conf ] && . /tmp/net-${interface}.conf
-
-		# wheezy
 		[ -e /run/net-${interface}.conf ] && . /run/net-${interface}.conf
 
 		[ -z ${HOSTNAME} ] && HOSTNAME=${OLDHOSTNAME}

@@ -299,9 +299,15 @@ while [ $# -gt 0 ]; do
 	if [ -n "$forceclean" ]; then
 		cycle=$(( $count - 1))
 		if [ -z "$COMPRESS" ]; then
-			rm -f -- `ls -t -- $newname.[0-9]* | sed -e 1,${cycle}d`
+			list=$(ls -t -- $newname.[0-9]* 2>/dev/null | sed -e 1,${cycle}d)
+			if [ -n "$list" ]; then
+				rm -f -- $list
+			fi
 		else
-			rm -f -- `ls -t -- $newname.[0-9]*$DOT_Z | sed -e 1,${cycle}d`
+			list=$(ls -t -- $newname.[0-9]*$DOT_Z 2>/dev/null | sed -e 1,${cycle}d)
+			if [ -n "$list" ]; then
+				rm -f -- $list
+			fi
 		fi
 	fi
 

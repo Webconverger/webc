@@ -17,12 +17,12 @@
 
 case "$1" in
   start|"")
-	# Clean /tmp, /lib/init/rw, /run and /run/lock.  Remove the
-	# .clean files to force initial cleaning.  This is intended to
-	# allow cleaning of directories masked by mounts while the
-	# system was previously running, which would otherwise prevent
-	# them being cleaned.
-	rm -f /tmp/.clean /lib/init/rw/.clean /run/.clean /run/lock/.clean
+	# Clean /tmp, /run and /run/lock.  Remove the .clean files to
+	# force initial cleaning.  This is intended to allow cleaning
+	# of directories masked by mounts while the system was
+	# previously running, which would otherwise prevent them being
+	# cleaned.
+	rm -f /tmp/.clean /run/.clean /run/lock/.clean
 
 	clean_all
 	exit $?
@@ -31,7 +31,7 @@ case "$1" in
 	echo "Error: argument '$1' not supported" >&2
 	exit 3
 	;;
-  stop)
+  stop|status)
 	# No-op
 	;;
   *)

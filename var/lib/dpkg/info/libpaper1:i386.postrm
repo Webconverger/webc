@@ -15,8 +15,10 @@ fi
 
 case "$1" in
   purge)
-    [ -x /usr/bin/ucf ] && ucf --purge /etc/papersize
-    rm -f /etc/papersize
+    if [ "${DPKG_MAINTSCRIPT_PACKAGE_REFCOUNT:-1}" = 1 ]; then
+      [ -x /usr/bin/ucf ] && ucf --purge /etc/papersize
+      rm -f /etc/papersize
+    fi
   ;;
 esac
 exit 0

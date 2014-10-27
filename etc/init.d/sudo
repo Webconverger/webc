@@ -11,6 +11,8 @@
 # Description: Provide limited super user privileges to specific users.
 ### END INIT INFO
 
+. /lib/lsb/init-functions
+
 N=/etc/init.d/sudo
 
 set -e
@@ -20,7 +22,7 @@ case "$1" in
 	# make sure privileges don't persist across reboots
 	if [ -d /var/lib/sudo ]
 	then
-                find /var/lib/sudo -exec touch -t 198501010000 '{}' \;
+                find /var/lib/sudo -exec touch -d @0 '{}' \;
 	fi
 	;;
   stop|reload|restart|force-reload|status)

@@ -2,7 +2,7 @@
 #
 #  script for ispell hash autorebuild in Debian systems
 #
-# Copyright 2003-2011 Agustin Martin Domingo <agmartin@debian.org>
+# Copyright 2003-2014 Agustin Martin Domingo <agmartin@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,7 +27,11 @@ my $debug;
 my $dry_run;
 my $force;
 my $triggered;
+my $program      = "ispell-autobuildhash";
+my $varlibdir    = "/var/lib/ispell";
 my $compatdir    = "/var/lib/ispell";
+my $usrlibdir    = "/usr/lib/ispell";
+my $usrsharedir  = "/usr/share/ispell";
 
 # Set tmpdir base, honouring TMPDIR. Real tmpdir is set after options parsing.
 my $tmpdir_base  = $ENV{'TMPDIR'} || '/tmp';
@@ -102,51 +106,101 @@ sub auto_clean {
 # ---------------------------------------------------------------------
 
 sub autorebuild {
-  my $dict = shift;                            # The dictionary name
-  my $zmwl = "/usr/share/ispell/$dict.mwl.gz"; # the compressed munched wordlist
-  my $aff  = "/usr/lib/ispell/$dict.aff";      # the aff file
-  my $hash = "/var/lib/ispell/$dict.hash";     # the hash file
-  my $desc = "/usr/share/ispell/$dict.desc";   # the .desc file
+  my $dict            = shift;                       # The dictionary name
+  my $old_remove_data = shift;
+  my $zmwl            = "$usrsharedir/$dict.mwl.gz"; # the compressed munched wordlist
+  my $aff             = "$usrlibdir/$dict.aff";      # the aff file
+  my $hash            = "$varlibdir/$dict.hash";     # the hash file
+  my $link            = "$usrlibdir/$dict.hash";     # the link to the hash
+  my $desc            = "$usrlibdir/$dict.desc";     # the .desc file
+  my %new_remove_data = ();
 
-  die "ispell-autobuildhash: No argument passed to function autorebuild.\n" unless $dict;
+  die "$program: No argument passed to function autorebuild.\n" unless $dict;
 
   print STDERR "ispell-autobuildhash: Processing \'$dict\' dict.\n";
+
+  foreach my $entry ( keys %{$old_remove_data} ){
+    $new_remove_data{'remove'}{$entry}++;
+    $new_remove_data{'fake-remove'}{$entry}++;
+  }
 
   my $tempfile = "$tmpdir/$dict.mwl";
   if ( -e $aff ){
     if ( -e $zmwl ){
+      # ispell does not accept this from a pipe. Need explicit files.
       my $gzip_cmd  = "gzip -dc $zmwl > $tempfile";
       my $build_cmd = "buildhash -s $tempfile $aff $hash";
       if ( $dry_run ) {
 	print STDERR "$gzip_cmd\n";
 	print STDERR "$build_cmd\n";
+	$new_remove_data{'fake-remove'}{"$hash"}++;
+	$new_remove_data{'fake-remove'}{"$link"}++;
       } else {
-	print STDERR "$gzip_cmd\n" if $debug;
+	debugprint("$gzip_cmd");
 	system ("$gzip_cmd") == 0
 	  or myerror($dict,"Could not gunzip the munched wordlist for $dict");
-	print STDERR "$build_cmd\n" if $debug;
-	system ("$build_cmd") == 0
-	  or myerror($dict,"Could not build the hash file for $dict") ;
+	debugprint("$build_cmd");
+	if ( system ("$build_cmd") == 0 ){
+	  $new_remove_data{'remove'}{$hash}++;
+	  if ( -w  "$usrlibdir" ){
+	    symlink($hash,$link) unless -e $link;
+	  } else {
+	    print STDERR "$program warning: Non writable \"$usrlibdir\". Not setting symlink";
+	  }
+	  if ( -l "$link" ){
+	    # Make sure link is recorded
+	    $new_remove_data{'remove'}{"$link"}++;
+	  }
+	} else {
+	  myerror($dict,"Could not build the hash file for $dict") ;
+	}
       }
     } elsif ( -e $desc ) {
       if ( -x "/usr/sbin/update-ispell-hash" ) {
 	my $cmd = "update-ispell-hash -d $dict > /dev/null";
 	if ( $dry_run ) {
 	  print STDERR "$cmd\n";
+	  $new_remove_data{'fake-remove'}{$hash}++;
+	  $new_remove_data{'fake-remove'}{"$link"}++;
 	} else {
-	  print STDERR "$cmd\n" if $debug;
-	  system ("$cmd") == 0
-	    or myerror($dict,"Problems running update-ispell-hash for $dict");
+	  debugprint("$cmd");
+	  if ( system ("$cmd") == 0 ){
+	    if ( -w  "$usrlibdir" ){
+	      symlink($hash,$link) unless -e $link;
+	    } else {
+	      print STDERR "$program warning: Non writable \"$usrlibdir\". Not setting symlink";
+	    }
+	    if ( -l "$link" ){
+	      # Make sure link is recorded
+	      $new_remove_data{'remove'}{"$link"}++;
+	    }
+	  } else {
+	    myerror($dict,"Problems running update-ispell-hash for $dict");
+	  }
 	}
 	debugprint "Found and run update-ispell-hash";
       } elsif ( -x "/usr/sbin/update-ipolish-hash" ) {
 	my $cmd = "update-ipolish-hash -d $dict > /dev/null";
 	if ( $dry_run ) {
 	  print STDERR "$cmd\n";
+	  $new_remove_data{'fake-remove'}{$hash}++;
+	  $new_remove_data{'fake-remove'}{"$link"}++;
 	} else {
-	  print STDERR "$cmd\n" if $debug;
-	  system ("$cmd") == 0
-	    or myerror($dict,"Problems running update-ipolish-hash for $dict");
+	  debugprint("$cmd");
+	  if ( system ("$cmd") == 0 ){
+	    $new_remove_data{'remove'}{$hash}++;
+	    if ( -w  "$usrlibdir" ){
+	      symlink($hash,$link) unless -e $link;
+	    } else {
+	      print STDERR "$program warning: Non writable \"$usrlibdir\". Not setting symlink";
+	    }
+	    if ( -l "$link" ){
+	      # Make sure link is recorded
+	      $new_remove_data{'remove'}{"$link"}++;
+	    }
+	  } else {
+	    myerror($dict,"Problems running update-ipolish-hash for $dict");
+	  }
 	}
 	debugprint "Found and run update-ipolish-hash";
       } else {
@@ -158,7 +212,8 @@ sub autorebuild {
   } else {
     myerror $dict,"Could not find affix file $aff";
   }
-  return "ok";
+  $new_remove_data{'status'} = "ok";
+  return \%new_remove_data;
 }
 
 # ---------------------------------------------------------------------
@@ -170,9 +225,9 @@ sub get_ispell_compat {
   my $ispellcompatfile = "/usr/share/ispell/ispell.compat";
 
   if ( -e $ispellcompatfile ){
-    open (COMPAT,"$ispellcompatfile");
-    chomp ( $ispell_compat = <COMPAT> );
-    close COMPAT;
+    open (my $COMPAT,"$ispellcompatfile");
+    chomp ( $ispell_compat = <$COMPAT> );
+    close $COMPAT;
   } elsif ( system("which ispell > /dev/null 2>&1") == 0 ){
     $ispell_compat = (split(" ",`ispell -v | head -n 1`))[4];
   }
@@ -184,7 +239,6 @@ sub get_ispell_compat {
 #                        The main program
 # ---------------------------------------------------------------------
 
-dico_checkroot();
 
 # Options processing
 GetOptions ('debug'     => \$debug,
@@ -192,6 +246,8 @@ GetOptions ('debug'     => \$debug,
 	    'force'     => \$force,
 	    'triggered' => \$triggered
   ) or usage();
+
+dico_checkroot() unless $dry_run;
 
 unless ( $triggered or $force ){
   exit if dico_activate_trigger("ispell-autobuildhash");
@@ -207,42 +263,73 @@ $SIG{KILL}    = \&auto_clean;
 $SIG{TERM}    = \&auto_clean;
 $SIG{__DIE__} = \&auto_clean;
 
-print STDERR "ispell-autobuildhash: Using temporary directory \"$tmpdir\"\n"
+print STDERR "$program: Using temporary directory \"$tmpdir\"\n"
   if $debug;
 
 if ( my $ispell_compat = get_ispell_compat() ){
   foreach my $dict ( <$compatdir/*.compat> ){
-    my $dict_compat = "forced";
+    my $dict_compat     = "forced";
+    my %old_remove_data = ();
+
     $dict =~ s/\.compat$//;
     $dict =~ s/.*\///;
 
+    my $remove_file     = "$varlibdir/$dict.remove";
+
+    # Parse dict compat file if available.
     unless ( $force ) {
-      open (COMPAT,"$compatdir/$dict.compat");
-      $dict_compat = <COMPAT>;
-      close COMPAT;
+      open (my $COMPAT,"$compatdir/$dict.compat");
+      $dict_compat = <$COMPAT>;
+      close $COMPAT;
       chomp $dict_compat if $dict_compat;
       $dict_compat = 0 unless $dict_compat;
+    }
+
+    # Parse dict remove file if available
+    if ( -e "$remove_file" ){
+      open (my $REMOVE,"$remove_file");
+      while (<$REMOVE>){
+	chomp;
+	next if m/^\s*$/;
+	s/^\s+//;
+	s/\s+$//;
+	if ( -e "$_" ){
+	  $old_remove_data{$_}++;
+	} else {
+	  print STDERR "$program: \"$_\" in $remove_file not found. Upgrading info.\n";
+	}
+      }
+      close $REMOVE;
     }
 
     if ($force || $ispell_compat ne $dict_compat) {
       print STDERR "--\n" if ( $debug or $dry_run );
       debugprint "$dict => ispell_compat: [$ispell_compat]; dict_compat: [$dict_compat]";
-      if ( autorebuild $dict ) {
+
+      my $new_remove_data = autorebuild("$dict",\%old_remove_data);
+      if ( defined $new_remove_data->{'status'} ) {
 	if ( $dry_run ){
 	  print STDERR "$ispell_compat > $compatdir/$dict.compat\n";
+	  print STDERR "Remove: \n", join("\n",sort keys %{$new_remove_data->{'fake-remove'}}) ,"\n";
 	} else {
-	  open (COMPAT,">","$compatdir/$dict.compat");
-	  print COMPAT "$ispell_compat\n";
-	  close COMPAT;
+	  # Update compat file
+	  open (my $COMPAT,">","$compatdir/$dict.compat");
+	  print $COMPAT "$ispell_compat\n";
+	  close $COMPAT;
 	  debugprint "Updated $compatdir/$dict.compat to $ispell_compat";
+	  # Update remove file
+	  open (my $REMOVE,">","$remove_file")
+	    or die "$program: Could not open \"$remove_file\" for write.";
+	  print $REMOVE join("\n",sort keys %{$new_remove_data->{'remove'}}),"\n";
+	  close $REMOVE;
 	}
       } else {
-	debugprint " --- ispell-autobuildhash: $compatdir/$dict.compat not updated because of an error";
+	debugprint " --- $program: $compatdir/$dict.compat not updated because of an error";
       }
     }
   }
 } else {
-  debugprint "ispell-autobuildhash: no ispell compat info. ispell may not be installed. Aborting ...\n";
+  debugprint "$program: no ispell compat info. ispell may not be installed. Aborting ...\n";
 }
 
 &auto_clean unless $debug;
@@ -346,7 +433,7 @@ Agustin Martin <agmartin@debian.org>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2003-2011 Agustin Martin <agmartin@debian.org>
+Copyright (C) 2003-2013 Agustin Martin <agmartin@debian.org>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -354,4 +441,3 @@ the Free Software Foundation; either version 3 of the License, or
 (at your option) any later version.
 
 =cut
-

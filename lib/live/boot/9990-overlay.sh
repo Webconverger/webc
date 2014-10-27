@@ -55,7 +55,7 @@ setup_unionfs ()
 			done
 		else
 			# ${MODULE}.module does not exist, create a list of images
-			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 			do
 				for IMAGE in "${image_directory}"/*."${FILESYSTEM}"
 				do
@@ -68,7 +68,7 @@ setup_unionfs ()
 
 			if [ -n "${addimage_directory}" ] && [ -d "${addimage_directory}" ]
 			then
-				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 				do
 					for IMAGE in "${addimage_directory}"/*."${FILESYSTEM}"
 					do
@@ -98,58 +98,7 @@ setup_unionfs ()
 			run_scripts /scripts/live-realpremount
 			log_end_msg
 
-
-			if [ "${image##*.}" = "git" ]
-			then
-				_log_msg git
-				if [ "${UNIONTYPE}" != "unionmount" ]
-				then
-					mpoint="${croot}/${imagename}"
-					_log_msg mpoint: $mpoint
-				else
-					mpoint="${rootmnt}"
-				fi
-				rootfslist="${mpoint} ${rootfslist}"
-
-				mkdir -p "${mpoint}"
-				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
-				# Replace /etc/mtab with a symlink to
-				# /proc/mounts. This prevents fuse from
-				# calling /bin/mount to update the mtab,
-				# using options that busybox mount does
-				# not understand...
-				ln -sf /proc/mounts /etc/mtab
-
-				# Make sure fuse keeps persistent inode
-				# numbers to not confuse git. This is
-				# needed in debug mode, when the files
-				# exposed by git-fs are the working
-				# copy for the git repository
-				# bindmounted into /.git. In this case,
-				# git gets confused and becomes slow
-				# when inode numbers change. Since we
-				# can't change this option after
-				# mounting when we decide we need /.git,
-				# we just set it always and accept the
-				# extra (small) memory overhead.
-				#
-				# https://github.com/Webconverger/webc/issues/115
-				gitfs_opt="$gitfs_opt,noforget"
-
-				if [ -n "$GIT_REVISION" ]; then
-					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
-				fi
-
-				#ulimit -c unlimited # enable core dumps
-				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
-				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
-
-				log_end_msg
-				#maybe_break gitfs
-				#openvt -c 3 -- /bin/sh
-
-			elif [ -d "${image}" ]
+			if [ -d "${image}" ]
 			then
 				# it is a plain directory: do nothing
 				rootfslist="${image} ${rootfslist}"
@@ -261,7 +210,7 @@ setup_unionfs ()
 
 		if is_in_comma_sep_list overlay ${PERSISTENCE_METHOD}
 		then
-			overlays="${old_root_overlay_label} ${old_home_overlay_label} ${custom_overlay_label}"
+			overlays="${custom_overlay_label}"
 		fi
 
 		local overlay_devices
@@ -273,18 +222,6 @@ setup_unionfs ()
 				media="$(echo ${media} | tr ":" " ")"
 
 				case ${media} in
-					${old_root_overlay_label}=*)
-						device="${media#*=}"
-						fix_backwards_compatibility ${device} / union
-						overlay_devices="${overlay_devices} ${device}"
-						;;
-
-					${old_home_overlay_label}=*)
-						device="${media#*=}"
-						fix_backwards_compatibility ${device} /home bind
-						overlay_devices="${overlay_devices} ${device}"
-						;;
-
 					${custom_overlay_label}=*)
 						device="${media#*=}"
 						overlay_devices="${overlay_devices} ${device}"
@@ -416,7 +353,7 @@ setup_unionfs ()
 		live_rootfs="/live/rootfs/${d##*/}"
 		live_rootfs_list="${live_rootfs_list} ${live_rootfs}"
 		mkdir -p "${live_rootfs}"
-		case d in
+		case "${d}" in
 			*.dir)
 				# do nothing # mount -o bind "${d}" "${live_rootfs}"
 				;;
@@ -439,23 +376,23 @@ setup_unionfs ()
 	then
 		local custom_mounts
 		custom_mounts="/tmp/custom_mounts.list"
-		rm -rf ${custom_mounts} 2> /dev/null
+		rm -f ${custom_mounts}
 
 		# Gather information about custom mounts from devies detected as overlays
 		get_custom_mounts ${custom_mounts} ${overlay_devices}
 
-		[ -n "${DEBUG}" ] && cp ${custom_mounts} "/lib/live/mount/persistence"
+		[ -n "${LIVE_BOOT_DEBUG}" ] && cp ${custom_mounts} "/lib/live/mount/persistence"
 
 		# Now we do the actual mounting (and symlinking)
 		local used_overlays
 		used_overlays=""
 		used_overlays=$(activate_custom_mounts ${custom_mounts})
-		rm ${custom_mounts}
+		rm -f ${custom_mounts}
 
 		# Close unused overlays (e.g. due to missing $persistence_list)
 		for overlay in ${overlay_devices}
 		do
-			if echo ${used_overlays} | grep -qve "^\(.* \)\?${device}\( .*\)\?$"
+			if echo ${used_overlays} | grep -qve "^\(.* \)\?${overlay}\( .*\)\?$"
 			then
 				close_persistence_media ${overlay}
 			fi
@@ -465,5 +402,5 @@ setup_unionfs ()
         # ensure that a potentially stray tmpfs gets removed
         # otherways, initramfs-tools is unable to remove /live
         # and fails to boot
-        umount /live/overlay || true
+        umount /live/overlay > /dev/null 2>&1 || true
 }

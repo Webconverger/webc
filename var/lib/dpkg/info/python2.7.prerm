@@ -1,14 +1,9 @@
-#! /bin/sh -e
-#
-# prerm script for the Debian python2.7-base package.
-# Written 1998 by Gregor Hoffleit <flight@debian.org>.
-#
+#! /bin/sh
+
+set -e
 
 case "$1" in
     remove|upgrade)
-	dpkg -L python2.7 \
-	    | awk '/\.py$/ {print $0"c\n" $0"o"}' \
-	    | xargs rm -f >&2
         ;;
     deconfigure)
         ;;

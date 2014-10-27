@@ -1,0 +1,26 @@
+#! /bin/sh
+
+set -e
+
+if [ "$1" = "remove" ]; then
+    pc=$(dpkg-query -f '${db:Status-Abbrev} ${binary:Package}\n' -W libpython2.7-minimal \
+	| grep -v '^.n' | wc -l)
+    if [ "$pc" -le 1 ]; then
+	find /usr/lib/python2.7 -name '*.py[co]' -print0 | xargs -r0 rm -f
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+    pc=$(dpkg-query -f '${db:Status-Abbrev} ${binary:Package}\n' -W libpython2.7-minimal \
+	| grep -v '^.n' | wc -l)
+    if [ "$pc" -le 1 ]; then
+	rm -f /etc/python2.7/site.py /etc/python2.7/sitecustomize.py
+	if [ -d /etc/python2.7 ]; then
+	   rmdir --ignore-fail-on-non-empty /etc/python2.7 2>/dev/null
+	fi
+    fi
+fi
+
+
+
+exit 0

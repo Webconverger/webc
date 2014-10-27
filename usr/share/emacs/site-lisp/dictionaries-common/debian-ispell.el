@@ -244,7 +244,7 @@ To be run at `after-init-hook' or at any time if FORCE is given."
 
     (if (and (featurep 'ispell)
 	     (not force))
-	(message "ispell.el is already loaded")
+	nil
       (when (fboundp 'debian-ispell-build-startup-menu)
 	(debian-ispell-build-startup-menu dicts-list)
 	;; (fmakunbound 'debian-ispell-build-startup-menu)
@@ -338,11 +338,13 @@ alist provided by registered dicts."
     (debian-ispell-try-lang-equiv lang debian-aspell-equivs-alist)))
 
 (defun debian-ispell-get-hunspell-default ()
-  "Get default dictionary for hunspell.
+  "Get default dictionary for hunspell under XEmacs.
 Look at the `debian-aspell-equivs-alist' alist provided by registered
-dicts to try finding a match for \"LC_ALL\" or \"LANG\"."
-  (or (debian-ispell-try-lang-equiv (getenv "LC_ALL") debian-hunspell-equivs-alist)
-      (debian-ispell-try-lang-equiv (getenv "LANG")   debian-hunspell-equivs-alist)))
+dicts to try finding a match for \"LC_ALL\" or \"LANG\".
+Emacs will rely on hunspell dicts auto-detection."
+  (if (featurep 'xemacs)
+      (or (debian-ispell-try-lang-equiv (getenv "LC_ALL") debian-hunspell-equivs-alist)
+	  (debian-ispell-try-lang-equiv (getenv "LANG")   debian-hunspell-equivs-alist))))
 
 ;; ---------------------------------------------------------------------------
 ;; Make sure otherchars are read as chars in proper encoding. ispell.el may
@@ -414,54 +416,61 @@ dicts to try finding a match for \"LC_ALL\" or \"LANG\"."
   "Set ispell default to the debconf selected one if ispell-program-name is
 ispell or, when ispell-program-name is aspell, to the value guessed after
 LANG if any."
-  (let ((really-aspell
-	 (if (boundp 'ispell-really-aspell)
-	     ispell-really-aspell
-	   (and (boundp 'ispell-program-name)
-		(string-match "aspell" ispell-program-name)
-		t)))
-	(really-hunspell
-	 (if (boundp 'ispell-really-hunspell)
-	     ispell-really-hunspell
-	   (and (boundp 'ispell-program-name)
-		(string-match "hunspell" ispell-program-name)
-		t))))
+  (let* ((really-aspell
+	  (if (boundp 'ispell-really-aspell)
+	      ispell-really-aspell
+	    (and (boundp 'ispell-program-name)
+		 (string-match "aspell" ispell-program-name)
+		 t)))
+	 (really-hunspell
+	  (if (boundp 'ispell-really-hunspell)
+	      ispell-really-hunspell
+	    (and (boundp 'ispell-program-name)
+		 (string-match "hunspell" ispell-program-name)
+		 t)))
+	 (default-dictionary
+	   (if really-aspell
+	       debian-aspell-dictionary
+	     (if really-hunspell
+		debian-hunspell-dictionary
+	       debian-ispell-dictionary))))
 
-    ;; Set default dictionary if known
-    (unless (and (boundp 'ispell-dictionary)
-		 ispell-dictionary)
-      (setq ispell-dictionary
-	    (if really-aspell
-		debian-aspell-dictionary
-	      (if really-hunspell
-		  debian-hunspell-dictionary
-		debian-ispell-dictionary))))
+    ;; Set `ispell-dictionary' if still unbound. This will be done after
+    ;; init files load, with real `ispell-program-name'
+    (or (boundp 'ispell-dictionary)
+	(defcustom ispell-dictionary default-dictionary
+	  "Default dictionary to use if `ispell-local-dictionary' is nil."
+	  :type '(choice string
+			 (const :tag "default" nil))
+	  :group 'ispell))
 
     ;; The debugging output if required
-
     (if debian-dict-common-debug
 	(message "- (debian-ispell-set-default-dictionary ):
-   DID:%s, DAD:%s, DHD: %s, RA:%s, RH: %s, ILD:%s, IPN:%s"
+   DID:%s, DAD:%s, DHD: %s, RA:%s, RH: %s, DD:%s, ID:%s, IPN:%s"
 		 debian-ispell-dictionary
 		 debian-aspell-dictionary
 		 debian-hunspell-dictionary
 		 really-aspell
 		 really-hunspell
+		 default-dictionary
 		 ispell-dictionary
 		 ispell-program-name))
     )) ;; let and defun ends
 
-(add-hook 'after-init-hook 'debian-ispell-set-default-dictionary)
+;; (add-hook 'after-init-hook 'debian-ispell-set-default-dictionary)
+(eval-after-load "ispell" '(debian-ispell-set-default-dictionary))
 
 ;; ---------------------------------------------------------------------------
 ;; Make sure patched ispell.el is first in the loadpath if not already there
 ;; ---------------------------------------------------------------------------
 
-(let ((mypath (concat "/usr/share/"
-		      (symbol-name debian-emacs-flavor)
-		      "/site-lisp/dictionaries-common")))
-  (unless (member mypath load-path)
-    (debian-pkg-add-load-path-item mypath)))
+(when (fboundp 'debian-pkg-add-load-path-item)
+  (let ((mypath (concat "/usr/share/"
+			(symbol-name debian-emacs-flavor)
+			"/site-lisp/dictionaries-common")))
+    (unless (member mypath load-path)
+      (debian-pkg-add-load-path-item mypath))))
 
 ;; --------------------------------------------------------------------------
 ;; Set ispell-program-name consistently for all emacsen flavours. Prefer
@@ -469,15 +478,21 @@ LANG if any."
 ;; as last option, hunspell support for -a is still too buggy.
 ;; --------------------------------------------------------------------------
 
-(or (boundp 'ispell-program-name)
-    (setq ispell-program-name
-	  (if (executable-find "aspell")
-	      "aspell"
-	    (if (executable-find "ispell")
-		"ispell"
-	      (if (executable-find "hunspell")
-		  "hunspell"
-		"ispell")))))
+(defcustom ispell-program-name
+  (if (executable-find "aspell")
+      "aspell"
+    (if (executable-find "ispell")
+	"ispell"
+      (if (executable-find "hunspell")
+	  "hunspell"
+	"ispell")))
+  "Program invoked by \\[ispell-word] and \\[ispell-region] commands."
+  :type 'string
+  :set (lambda (symbol value)
+         (set-default symbol value)
+         (if (featurep 'ispell)
+             (ispell-set-spellchecker-params)))
+  :group 'ispell)
 
 ;;; -----------------------------------------------------------------------
 

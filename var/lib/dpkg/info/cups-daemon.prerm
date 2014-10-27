@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/pam.d/cups-daemon /etc/pam.d/cups 1.7.3-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/cups 1.7.1-6~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/cups/cupsd.conf.default 1.7.1-3~ -- "$@"
+# End automatically added section
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	deb-systemd-invoke stop cups.path >/dev/null
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/cups" ]; then
+	invoke-rc.d cups stop || exit $?
+fi
+# End automatically added section

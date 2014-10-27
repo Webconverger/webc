@@ -1,23 +1,20 @@
 <DIV CLASS="indent">
 
-<H2 CLASS="title">{op=modify-printer?{printer_name} &auml;ndern:Drucker hinzuf&uuml;gen}</H2>
+<H2 CLASS="title">{op=modify-printer?{printer_name} ändern:Drucker hinzufügen (Schritt 1/5)}</H2>
 
-{CUPS_GET_DEVICES_DONE?:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
-ALT="Busy Indicator"> Suche nach Druckern...</P>}
-
-<FORM METHOD="POST" ACTION="/admin">
+{CUPS_GET_DEVICES_DONE?<FORM METHOD="POST" ACTION="/admin">
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
 <INPUT TYPE="HIDDEN" NAME="OP" VALUE="{op}">
 {printer_name?<INPUT TYPE="HIDDEN" NAME="printer_name" VALUE="{printer_name}">:}
 
 <TABLE>
 {op=add-printer?:<TR>
-<TH CLASS="label">Aktuelle Verbindung:</TH>
+<TH CLASS="label">Aktuelle Verbindung\:</TH>
 <TD><INPUT TYPE="RADIO" NAME="DEVICE_URI" VALUE="{current_device_uri}" CHECKED>
 {current_device_uri}</TD>
 </TR>}
 <TR>
-<TH CLASS="label">Lokale Drucker:</TH>
+<TH CLASS="label">Lokale Drucker\:</TH>
 <TD>
 {[device_uri]{device_class!network?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}">
@@ -26,7 +23,7 @@ VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}"
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Entdeckte Netzwerkdrucker:</TH>
+<TH CLASS="label">Entdeckte Netzwerkdrucker\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}">
@@ -36,11 +33,11 @@ VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}"
 </TR>
 <TR>
 <TR>
-<TH CLASS="label">Andere Netzwerkdrucker:</TH>
+<TH CLASS="label">Andere Netzwerkdrucker\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?:<INPUT TYPE="RADIO" NAME="DEVICE_URI"
-VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}">
-{device_info} {?device_make_and_model!Unbekannt?({device_make_and_model}):}<BR>
+VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
+{device_info} {?device_make_and_model!Unknown?({device_make_and_model}):}<BR>
 }:}}
 </TD>
 </TR>
@@ -50,5 +47,7 @@ VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}"
 </TR>
 </TABLE>
 
-</FORM>
+</FORM>:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
+ALT="Busy Indicator"> Suche nach Druckern...</P>}
 </DIV>
+

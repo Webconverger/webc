@@ -9,7 +9,7 @@ do_iscsi()
 	modprobe iscsi_tcp
 	local debugopt
 	debugopt=""
-	[ "${DEBUG}" = "true" ] && debugopt="-d 8"
+	[ "${LIVE_BOOT_DEBUG}" = "true" ] && debugopt="-d 8"
 	#FIXME this name is supposed to be unique - some date + ifconfig hash?
 	ISCSI_INITIATORNAME="iqn.1993-08.org.debian.live:01:$(echo "${HWADDR}" | sed -e s/://g)"
 	export ISCSI_INITIATORNAME

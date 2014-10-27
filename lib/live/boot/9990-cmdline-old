@@ -4,7 +4,7 @@
 
 Cmdline_old ()
 {
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_BOOT_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			skipconfig)
@@ -15,7 +15,7 @@ Cmdline_old ()
 				;;
 
 			BOOTIF=*)
-				BOOTIF="${x#BOOTIF=}"
+				BOOTIF="${_PARAMETER#BOOTIF=}"
 				;;
 
 			dhcp)
@@ -241,12 +241,6 @@ Cmdline_old ()
 				UNIONTYPE="${_PARAMETER#union=}"
 				export UNIONTYPE
 				;;
-
-			git-revision=*)
-				GIT_REVISION="${_PARAMETER#git-revision=}"
-				export GIT_REVISION
-				;;
-
 		esac
 	done
 
@@ -291,7 +285,7 @@ Cmdline_old ()
 
 		if [ ! -x /lib/cryptsetup/askpass ] || [ ! -x /sbin/cryptsetup ]
 		then
-			log_warning_msg "cryptsetup in unavailable"
+			log_warning_msg "cryptsetup is unavailable"
 			PERSISTENCE_ENCRYPTION=$(echo ${PERSISTENCE_ENCRYPTION} | sed -e 's/\<luks,\|,\?luks$//g')
 			export PERSISTENCE_ENCRYPTION
 		fi

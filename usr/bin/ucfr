@@ -1,7 +1,7 @@
 #! /bin/bash
-#                               -*- Mode: Sh -*- 
-# ucfr --- 
-# Author           : Manoj Srivastava ( srivasta@glaurung.internal.golden-gryphon.com ) 
+#                               -*- Mode: Sh -*-
+# ucfr ---
+# Author           : Manoj Srivastava ( srivasta@glaurung.internal.golden-gryphon.com )
 # Created On       : Tue Apr 11 11:09:15 2006
 # Created On Node  : glaurung.internal.golden-gryphon.com
 # Last Modified By : Manoj Srivastava
@@ -9,11 +9,11 @@
 # Last Machine Used: glaurung.internal.golden-gryphon.com
 # Update Count     : 43
 # Status           : Unknown, Use with caution!
-# HISTORY          : 
-# Description      : 
+# HISTORY          :
+# Description      :
 #
 # Register a configuration file as belonging to a package
-# 
+#
 # arch-tag: 6e1d33fe-a930-41ce-8d0f-c87f87b19918
 #
 
@@ -59,7 +59,7 @@ purge_from_registry () {
         fi
         exit 0;
     fi
-    old_pkg=$(egrep "[[:space:]]${safe_conf_file}$" "$statedir/registry" | \
+    old_pkg=$(egrep "[[:space:]]${real_conf_file_re}$" "$statedir/registry" | \
         awk '{print $1;}' );
     if [ "$pkg" != "$old_pkg"  ]; then
         echo >&2 "ucfr: Association belongs to $old_pkg, not $pkg";
@@ -74,27 +74,27 @@ purge_from_registry () {
 	if [ -e "${statedir}/registry.${i}" ]; then
 	    if [ "X$docmd" = "XYES" ]; then
 		cp -f "${statedir}/registry.${i}"  "${statedir}/registry.$(($i+1))"
-	    else 
+	    else
 		echo cp -f "${statedir}/registry.${i}" "${statedir}/registry.$(($i+1))"
-	    fi 
-	fi 
+	    fi
+	fi
     done
     if [ "X$docmd" = "XYES" ]; then
-	cp -f "$statedir/registry"  "$statedir/registry.0" 
+	cp -f "$statedir/registry"  "$statedir/registry.0"
     else
-	echo cp -f "$statedir/registry"  "$statedir/registry.0" 
+	echo cp -f "$statedir/registry"  "$statedir/registry.0"
     fi
     if [ "X$docmd" = "XYES" ]; then
 	set +e
 	if [ "X$VERBOSE" != "X" ]; then
-	    echo "egrep -v [[:space:]]${safe_conf_file}$ $statedir/registry >\\"
+	    echo "egrep -v [[:space:]]${real_conf_file_re}$ $statedir/registry >\\"
             echo "	$statedir/registry.tmp || true";
 	fi
-	#echo "egrep -v [[:space:]]${safe_conf_file}$ $statedir/registry"
-	egrep -v "[[:space:]]${safe_conf_file}$" "$statedir/registry" > \
-	    "$statedir/registry.tmp" || true; 
+	#echo "egrep -v [[:space:]]${real_conf_file_re}$ $statedir/registry"
+	egrep -v "[[:space:]]${real_conf_file_re}$" "$statedir/registry" > \
+	    "$statedir/registry.tmp" || true;
 	if [ "X$docmd" = "XYES" ]; then
-	    mv -f "$statedir/registry.tmp"  "$statedir/registry" 
+	    mv -f "$statedir/registry.tmp"  "$statedir/registry"
 	else
 	    echo mv -f "$statedir/registry.tmp"  "$statedir/registry"
 	fi
@@ -108,12 +108,12 @@ replace_in_registry () {
         exit 6;
     fi
     if [ $count -eq 1 ]; then
-        old_pkg=$(egrep "[[:space:]]${safe_conf_file}$" "$statedir/registry" | \
+        old_pkg=$(egrep "[[:space:]]${real_conf_file_re}$" "$statedir/registry" | \
             awk '{print $1;}' );
-        
+
         if [ "$pkg" != "$old_pkg" ]; then
             if [ "X$FORCE" = "X" ]; then
-                echo >&2 "$progname: Attempt from package $pkg  to take ${conf_file} away from package $old_pkg";
+                echo >&2 "$progname: Attempt from package $pkg  to take ${real_conf_file} away from package $old_pkg";
                 echo >&2 "ucfr: Aborting.";
                 exit 4;
             fi
@@ -124,7 +124,7 @@ replace_in_registry () {
             exit 0;
         fi
     fi
-    
+
     for i in $(/usr/bin/seq 6 -1 0); do
 	if [ -e "${statedir}/registry.${i}" ]; then
 	    if [ "X$docmd" = "XYES" ]; then
@@ -137,28 +137,28 @@ replace_in_registry () {
 	fi
     done
     if [ "X$docmd" = "XYES" ]; then
-	cp -f "$statedir/registry"  "$statedir/registry.0" 
+	cp -f "$statedir/registry"  "$statedir/registry.0"
     else
-	echo cp -f "$statedir/registry"  "$statedir/registry.0" 
+	echo cp -f "$statedir/registry"  "$statedir/registry.0"
     fi
     if [ "X$docmd" = "XYES" ]; then
 	set +e
 	if [ "X$VERBOSE" != "X" ]; then
-	    echo "egrep -v \"[[:space:]]${safe_conf_file}$\" \"$statedir/registry\"  \\"
+	    echo "egrep -v \"[[:space:]]${real_conf_file_re}$\" \"$statedir/registry\"  \\"
             echo "	$statedir/registry.tmp || true"
-	    echo "echo \"$pkg 	 $conf_file\" >> \"$statedir/registry.tmp\""
-	    echo "mv -f  $statedir/registry.tmp $statedir/registry" 
+	    echo "echo \"$pkg 	 $real_conf_file\" >> \"$statedir/registry.tmp\""
+	    echo "mv -f  $statedir/registry.tmp $statedir/registry"
 	fi
-	egrep -v "[[:space:]]${safe_conf_file}$" "$statedir/registry" > \
-	    "$statedir/registry.tmp" || true; 
-	echo "$pkg 	 $conf_file" >>   "$statedir/registry.tmp"; 
-	mv -f "$statedir/registry.tmp"  "$statedir/registry" 
+	egrep -v "[[:space:]]${real_conf_file_re}$" "$statedir/registry" > \
+	    "$statedir/registry.tmp" || true;
+	echo "$pkg 	 $real_conf_file" >>   "$statedir/registry.tmp";
+	mv -f "$statedir/registry.tmp"  "$statedir/registry"
 	set -e
     else
-	echo "egrep -v \"[[:space:]]${safe_conf_file}$\" \"$statedir/registry\"  \\"
+	echo "egrep -v \"[[:space:]]${real_conf_file_re}$\" \"$statedir/registry\"  \\"
         echo "	$statedir/registry.tmp || true"
-	echo "echo \"$pkg 	 $conf_file\" >> \"$statedir/registry.tmp\""
-	echo "mv -f  $statedir/registry.tmp $statedir/registry" 
+	echo "echo \"$pkg 	 $real_conf_file\" >> \"$statedir/registry.tmp\""
+	echo "mv -f  $statedir/registry.tmp $statedir/registry"
     fi
 }
 
@@ -178,12 +178,12 @@ Options:
      -d [n], --debug    [n]  Set the Debug level to N
      -n,     --no-action     Dry run. No action is actually taken.
      -v,     --verbose       Make the script verbose
-     -p,     --purge         Remove any reference to the package/file association 
+     -p,     --purge         Remove any reference to the package/file association
                              from the records
              --state-dir bar Set the state directory to bar instead of the
                              default '/var/lib/ucf'. Used mostly for testing.
 END
-	
+
 }
 
 ######################################################################
@@ -237,13 +237,13 @@ while true ; do
 	*) echo >&2 "$progname: Internal error!" ; exit 1 ;;
     esac
 done
-# Need to run as root, or else the 
+# Need to run as root, or else the
 if test $(id -u) != 0; then
     if [ "$docmd" = "YES" ]; then
         echo "$progname: Need to be run as root." >&2
         echo "$progname: Setting up no action mode." >&2
-        action='echo'; 
-        docmd='NO'; 
+        action='echo';
+        docmd='NO';
     fi
 fi
 
@@ -251,21 +251,25 @@ if [ $# != 2 ]; then
     echo >&2 "$progname: *** ERROR: Need exactly two arguments, got $#";
     echo >&2 ""
     usageversion;
-    exit 0 ;
+    exit 3 ;
 fi
 
+# We have here a configuration file, which can be a symlink, and may
+# contain characters that are unsafe in regular expressions
 setq pkg  "$1" "The Package name";
 setq conf_file "$2" "The Configuration file";
+setq real_conf_file "$(readlink -q -m $conf_file)" "The (real) Configuration file";
 
-safe_pkg=$(echo $pkg       | sed -e 's,+,\\+,')
-safe_conf_file=$(echo $conf_file | sed -e 's,+,\\+,')
+pkg_re=$(echo $pkg       | sed -e 's,+,\\+,')
+conf_file_re=$(echo $conf_file | sed -e 's,+,\\+,')
+real_conf_file_re=$(echo $real_conf_file | sed -e 's,+,\\+,')
 
-case $safe_conf_file in
+case $conf_file_re in
     /*)
         : echo fine
         ;;
     *)
-        echo >&2 "$progname: Need a fully qualified path for the file \"$safe_conf_file\""
+        echo >&2 "$progname: Need a fully qualified path for the file \"$conf_file\""
         # Don't exit with an error for etch'
         exit 0;
 esac
@@ -283,7 +287,7 @@ elif [ ! "x$UCF_STATE_DIR" = "x" ]; then
 elif [ ! "x$conf_state_dir" = "x" ]; then
     setq statedir "$conf_state_dir" "The State directory"
 else
-    setq statedir '/var/lib/ucf'  "The State directory"    
+    setq statedir '/var/lib/ucf'  "The State directory"
 fi
 
 # VERBOSE of 0 is supposed to be the same as not setting VERBOSE
@@ -314,18 +318,18 @@ if [ "X$VERBOSE" != "X" ]; then
 fi
 
 # sanity check
-count=$(egrep --count "[[:space:]]${safe_conf_file}$" "$statedir/registry") || true
+count=$(egrep --count "[[:space:]]${real_conf_file_re}$" "$statedir/registry") || true
 
 if [ "$count" -ge 2 ]; then
     echo >&2 "$progname: Corrupt registry: Duplicate entries for ${conf_file}";
-    egrep "[[:space:]]${safe_conf_file}$" "$statedir/registry";
+    egrep "[[:space:]]${real_conf_file_re}$" "$statedir/registry";
     exit $count;
 fi
 
 if [ "X$PURGE" != "X" ]; then
-    purge_from_registry $pkg $conf_file;
+    purge_from_registry
 else
-    replace_in_registry $pkg $conf_file;
+    replace_in_registry
 fi
 
 

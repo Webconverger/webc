@@ -1,42 +1,41 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Tzdata ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/tzdata.list ] || \
-	   [ -e /var/lib/live/config/tzdata ]
-	then
-		return
-	fi
-
-	echo -n " tzdata"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.timezone=*|timezone=*)
 				LIVE_TIMEZONE="${_PARAMETER#*timezone=}"
 				;;
-
-			live-config.utc=*|utc=*)
-				LIVE_UTC="${_PARAMETER#*utc=}"
-				;;
 		esac
 	done
-
-	Configure_tzdata
 }
 
-Configure_tzdata ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/tzdata.list ] || \
+	   [ -e /var/lib/live/config/tzdata ]
+	then
+		exit 0
+	fi
+
+	echo -n " tzdata"
+}
+
+Config ()
 {
 	if [ -n "${LIVE_TIMEZONE}" ]
 	then
@@ -47,20 +46,13 @@ Configure_tzdata ()
 		_ZONE="UTC"
 	fi
 
-debconf-communicate -fnoninteractive live-config > /dev/null << EOF
-set tzdata/Areas ${_AREA}
-set tzdata/Zones/${_AREA} ${_ZONE}
-EOF
-
-	cp -f /usr/share/zoneinfo/${_AREA}/${_ZONE} /etc/localtime
-
-	if [ -n "${LIVE_UTC}" ]
-	then
-		sed -i -e "s|UTC=.*|UTC=${LIVE_UTC}|" /etc/default/rcS
-	fi
+	echo "${_AREA}/${_ZONE}" > /etc/timezone
+	dpkg-reconfigure -f noninteractive -p critical tzdata
 
 	# Creating state file
 	touch /var/lib/live/config/tzdata
 }
 
-Tzdata
+Cmdline
+Init
+Config

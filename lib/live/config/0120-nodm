@@ -1,0 +1,62 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+#set -e
+
+Cmdline ()
+{
+	# Reading kernel command line
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.username=*|username=*)
+				LIVE_USERNAME="${_PARAMETER#*username=}"
+				;;
+		esac
+	done
+}
+
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/nodm.list ] || \
+	   [ -e /var/lib/live/config/nodm ]
+	then
+		exit 0
+	fi
+
+	echo -n " nodm"
+}
+
+Config ()
+{
+	# autologin
+	sed -i -r -e "s|^NODM_ENABLED=.*\$|NODM_ENABLED=true|" \
+		  -e "s|^NODM_USER=.*\$|NODM_USER=${LIVE_USERNAME}|" \
+	/etc/default/nodm
+
+cat > /tmp/live-config.cfg << EOF
+nodm nodm/enabled boolean true
+nodm nodm/user string ${LIVE_USERNAME}
+EOF
+
+	debconf-set-selections < /tmp/live-config.cfg
+	rm -f /tmp/live-config.cfg
+
+	# Avoid xinit
+	touch /var/lib/live/config/xinit
+
+	# Creating state file
+	touch /var/lib/live/config/nodm
+}
+
+Cmdline
+Init
+Config

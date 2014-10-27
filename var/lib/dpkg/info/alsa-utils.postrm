@@ -18,5 +18,12 @@ esac
 if [ "$1" = "purge" ] ; then
 	update-rc.d alsa-utils remove >/dev/null
 fi
+
+
+# In case this system is running systemd, we make systemd reload the unit files
+# to pick up changes.
+if [ -d /run/systemd/system ] ; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
 # End automatically added section
 

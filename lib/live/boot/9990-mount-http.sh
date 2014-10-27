@@ -32,8 +32,8 @@ do_httpmount ()
 								ip="$(dirname $url | sed -e 's|tftp://||g' -e 's|/.*$||g')"
 								rfile="$(echo $url | sed -e "s|tftp://$ip||g")"
 								lfile="$(basename $url)"
-								log_begin_msg "Trying tftp -g -b 10240 -r $rfile -l ${dest}/$lfile $ip"
-								tftp -g -b 10240 -r $rfile -l ${dest}/$lfile $ip
+								log_begin_msg "Trying tftp -g -b 65464 -r $rfile -l ${dest}/$lfile $ip"
+								tftp -g -b 65464 -r $rfile -l ${dest}/$lfile $ip
 							;;
 
 							*)
@@ -50,6 +50,13 @@ do_httpmount ()
 						else
 							FUSE_MOUNT="httpfs"
 						fi
+
+						if [ -n "${FUSE_MOUNT}" ] && [ -x /bin/mount.util-linux ]
+						then
+							# fuse does not work with klibc mount
+							ln -f /bin/mount.util-linux /bin/mount
+						fi
+
 						modprobe fuse
 						$FUSE_MOUNT "${url}" "${dest}"
 						ROOT_PID="$(minips h -C "$FUSE_MOUNT" | { read x y ; echo "$x" ; } )"

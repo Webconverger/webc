@@ -77,23 +77,44 @@ unicode_start_stop ()
     fi
 }
 
+test_console () {
+    local ok
+    ok=0
+    if which tty >/dev/null; then
+        case "`tty`" in
+	    /dev/tty[1-9]*|/dev/vc/[0-9]*|/dev/console|/dev/ttyv[0-9]*)
+                return 0
+                ;;
+        esac
+        ok=1
+    fi
+
+    if which kbd_mode >/dev/null; then
+        mode="`(LC_ALL=C; export LC_ALL; kbd_mode) 2>&1`"
+        mode=${mode#The keyboard is in }
+        case "$mode" in
+            Unicode*|default*|xlate*) return 0 ;;
+        esac
+        ok=1
+    fi
+
+    if which vidcontrol >/dev/null; then
+        if vidcontrol -i adapter >&- 2>&-; then
+            return 0
+        fi
+        ok=1
+    fi
+
+    return $ok
+}
+
 setup ()
 {
     # be sure the main program is installed
     which setfont >/dev/null || return
 
-    VT="no"
-    # If we can't access the console, quit
-    CONSOLE_TYPE=`fgconsole 2>/dev/null` || return
-
-    if [ ! $CONSOLE_TYPE = "serial" ]; then
-        readlink /proc/self/fd/0 | grep -q -e /dev/vc -e '/dev/tty[^p]' -e /dev/console
-        if [ $? -eq 0 ]; then
-            VT="yes"
-        fi
-    fi
-
-    [ $VT = "no" ] && return
+    # drop out if we can't access the console
+    test_console || return
 
     # start vcstime
     if [ "${DO_VCSTIME}" = "yes" ] && which vcstime >/dev/null; then
@@ -105,9 +126,16 @@ setup ()
     if [ -d /etc/init ] && which initctl >/dev/null; then
 	    # Upstart
 	    LIST_CONSOLES=`cd /etc/init; find -name 'tty*.conf' -printf '%f ' | sed -e 's/[^0-9 ]//g'`
+    elif [ -f /etc/systemd/logind.conf ] && which systemd >/dev/null; then
+            # systemd
+            N_CONSOLES=`sed -ne 's/#.*//; /NAutoVTs/ { s/[^0-9]//g; p }' /etc/systemd/logind.conf`
+            if [ -z "$N_CONSOLES" ]; then
+                N_CONSOLES=6
+            fi
+            LIST_CONSOLES=`seq 1 "$N_CONSOLES"`
     else
 	    # traditional SysV init
-	    LIST_CONSOLES=`sed -e '/^ *#/d' /etc/inittab | grep -e '\<tty[0-9]*\>' | awk -F: '{printf "%s ", $1}'`
+	    LIST_CONSOLES=`sed -ne '/^[ \t]#/d; /tty[0-9]\+/ s/.*tty\([0-9]\+\).*/\1/ p' /etc/inittab`
     fi
 
     # Global default font+map
@@ -236,7 +264,6 @@ case "$1" in
                 log_action_msg "Setting console screen modes and fonts"
         fi
         setup
-	[ -z "$HAVE_SETUPCON" ] || log_action_msg "Skipping font and keymap setup (handled by console-setup)"
         ;;
     stop)
         ;;

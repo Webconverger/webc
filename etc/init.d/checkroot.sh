@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          checkroot
+# Provides:          checkroot mtab
 # Required-Start:    mountdevsubfs hostname
 # Required-Stop:     
 # Should-Start:      keymap hwclockfirst hdparm bootlogd
@@ -84,7 +84,11 @@ do_start () {
 	# If not we try to use the /dev/root alias device, and if that
 	# fails we create a temporary node in /run.
 	#
-	if [ "$rootcheck" = yes ]
+	# Do this only on Linux. Neither kFreeBSD nor Hurd have
+	# /dev/root and the device ids used here are specific to
+	# Linux.
+	KERNEL="$(uname)"
+	if [ "$rootcheck" = yes ] && [ "$KERNEL" = Linux ]
 	then
 		ddev="$(mountpoint -qx $rootdev)"
 		rdev="$(mountpoint -d /)"
@@ -148,10 +152,19 @@ Will restart in 5 seconds."
 	# See if we want to check the root file system.
 	#
 	FSCKCODE=0
-	if [ -f /fastboot ] || grep -s -w -i "fastboot" /proc/cmdline
+	if is_fastboot_active
 	then
 		[ "$rootcheck" = yes ] && log_warning_msg "Fast boot enabled, so skipping root file system check."
 		rootcheck=no
+	fi
+
+	if which findmnt >/dev/null 2>&1
+	then
+		if [ "$(findmnt -f -n -o FSTYPE /)" = "btrfs" ]
+		then
+			[ "$rootcheck" = yes ] && log_warning_msg "btrfs root detected, so skipping root file system check."
+			rootcheck=no
+		fi
 	fi
 
 	if [ "$rootcheck" = yes ]
@@ -184,7 +197,7 @@ Will restart in 5 seconds."
 	#
 	if [ "$rootcheck" = yes ]
 	then
-		if [ -f /forcefsck ] || grep -s -w -i "forcefsck" /proc/cmdline
+		if [ -f /forcefsck ] || grep -q -s -w -i "forcefsck" /proc/cmdline
 		then
 			force="-f"
 		else
@@ -288,56 +301,22 @@ but requested that the system be restarted."
 		mtab_migrate
 	fi
 
-	#
-	# We only create/modify /etc/mtab if the location where it is
-	# stored is writable. If /etc/mtab is a symlink into /proc/
-	# then it is not writable.
-	#
-	INIT_MTAB_FILE=no
-	MTAB_PATH="$(readlink -f /etc/mtab || :)"
-	case "$MTAB_PATH" in
-	  /proc/*)
-		# Assume that /proc/ is not writable (do nothing)
-		;;
-	  /*)
-		# Common case for file or symlink (initialise)
-		if touch "$MTAB_PATH" >/dev/null 2>&1
-		then
-			:> "$MTAB_PATH"
-			chmod 644 /etc/mtab
-			rm -f ${MTAB_PATH}~
-			INIT_MTAB_FILE=yes
-		fi
-		;;
-	  "")
-		[ -L /etc/mtab ] && MTAB_PATH="$(readlink /etc/mtab)"
-		if [ "$MTAB_PATH" ]
-		then
-			log_failure_msg "Cannot initialize ${MTAB_PATH}."
-		else
-			log_failure_msg "Cannot initialize /etc/mtab."
-		fi
-		;;
-	  *)
-		log_failure_msg "Illegal mtab location '${MTAB_PATH}'."
-		;;
-	esac
-
 	if selinux_enabled && [ -x /sbin/restorecon ] && [ -r /etc/mtab ]
 	then
 		restorecon /etc/mtab
-	fi
-
-	if [ "$INIT_MTAB_FILE" = yes ]
-	then
-		[ "$roottype" != none ] &&
-			mount -f -o $rootopts -t $roottype $fstabroot /
 	fi
 
 	#
 	# Remove /run/rootdev if we created it.
 	#
 	rm -f /run/rootdev
+
+	# Update mount options for mounts created in early boot
+	# S01mountkernfs.sh
+	/etc/init.d/mountkernfs.sh reload
+	# S03mountdevsubfs.sh
+	/etc/init.d/mountdevsubfs.sh reload
+
 }
 
 do_status () {

@@ -31,20 +31,20 @@
 # wpa_supplicant variables
 WPA_SUP_BIN="/sbin/wpa_supplicant"
 WPA_SUP_PNAME="wpa_supplicant"
-WPA_SUP_PIDFILE="/var/run/wpa_supplicant.${WPA_IFACE}.pid"
+WPA_SUP_PIDFILE="/run/wpa_supplicant.${WPA_IFACE}.pid"
 WPA_SUP_OMIT_DIR="/run/sendsigs.omit.d"
 WPA_SUP_OMIT_PIDFILE="${WPA_SUP_OMIT_DIR}/wpasupplicant.wpa_supplicant.${WPA_IFACE}.pid"
 
 # wpa_cli variables
 WPA_CLI_BIN="/sbin/wpa_cli"
 WPA_CLI_PNAME="wpa_cli"
-WPA_CLI_PIDFILE="/var/run/wpa_action.${WPA_IFACE}.pid"
-WPA_CLI_TIMESTAMP="/var/run/wpa_action.${WPA_IFACE}.timestamp"
-WPA_CLI_IFUPDOWN="/var/run/wpa_action.${WPA_IFACE}.ifupdown"
+WPA_CLI_PIDFILE="/run/wpa_action.${WPA_IFACE}.pid"
+WPA_CLI_TIMESTAMP="/run/wpa_action.${WPA_IFACE}.timestamp"
+WPA_CLI_IFUPDOWN="/run/wpa_action.${WPA_IFACE}.ifupdown"
 
 # default ctrl_interface socket directory
 if [ -z "$WPA_CTRL_DIR" ]; then
-	WPA_CTRL_DIR="/var/run/wpa_supplicant"
+	WPA_CTRL_DIR="/run/wpa_supplicant"
 fi
 
 # verbosity variables
@@ -448,7 +448,7 @@ wpa_cli_do () {
 	esac
 	
 	case "$4" in
-		*-psk|*-passphrase|*-passwd*|*-wep-key*)
+		*-psk|*-passphrase|*-passwd*|*-password*|*-wep-key*)
 			WPACLISET_DESC="$4 *****"
 			;;
 		*)
@@ -833,7 +833,7 @@ wpa_log_env () {
 #####################################################################
 ## hysteresis checking
 # Networking tools such as dhcp clients used with ifupdown can
-# synthesize artificial ACTION events, particuarly just after a
+# synthesize artificial ACTION events, particularly just after a
 # DISCONNECTED/CONNECTED events are experienced in quick succession.
 # This can lead to infinite event loops, and in extreme cases has the
 # potential to cause system instability.
@@ -904,9 +904,9 @@ ifup () {
 	if [ -e /etc/network/run/ifstate ]; then
 		# debian's ifupdown
 		IFSTATE_FILE="/etc/network/run/ifstate"
-	elif [ -e /var/run/network/ifstate ]; then
+	elif [ -e /run/network/ifstate ]; then
 		# ubuntu's
-		IFSTATE_FILE="/var/run/network/ifstate"
+		IFSTATE_FILE="/run/network/ifstate"
 	else
 		unset IFSTATE_FILE
 	fi

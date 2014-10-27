@@ -13,8 +13,8 @@ tmpfile=${file}.tmp
 set -o noclobber
 
 trap "rm -f $tmpfile" EXIT
-        
-if ! cat $file > $tmpfile
+
+if ! awk '{print}' $file > $tmpfile
 then
         cat 1>&2 <<EOF
 Either another instance of $0 is running, or it was previously interrupted.

@@ -39,16 +39,16 @@ sub init {
 
 	$this->error("No filename specified") unless $this->{filename};
 
+	my ($directory)=$this->{filename}=~m!^(.*)/[^/]+!;
+	if (length $directory and ! -d $directory) {
+		mkdir $directory || $this->error("mkdir $directory:$!");
+	}
+
 	$this->{filename} = abs_path($this->{filename});
 
 	debug "db $this->{name}" => "started; filename is $this->{filename}";
 	
 	if (! -e $this->{filename}) {
-		my ($directory)=$this->{filename}=~m!^(.*)/[^/]+!;
-		if (! -d $directory) {
-			mkdir $directory || $this->error("mkdir $directory:$!");
-		}
-
 		$this->{backup}=0;
 		sysopen(my $fh, $this->{filename}, 
 				O_WRONLY|O_TRUNC|O_CREAT,$this->{mode}) or

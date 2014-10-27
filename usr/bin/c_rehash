@@ -122,50 +122,34 @@ sub link_hash_cert {
 		my $fname = $_[0];
 		my $hashopt = $_[1] || '-subject_hash';
 		$fname =~ s/'/'\\''/g;
-		open my $in_fh, '<', $fname or die "can't open $fname for read";
-		my $cert = eval {local $/ = undef; <$in_fh>};
-		close $in_fh;
-		OUTERLOOP:
-		while ($cert =~ /^(-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----)$/gms)
-		{
-		   my $part = $1;
-		   my $tfile = `tempfile`;
-		   chomp $tfile;
-		   open my $tfile_fh, '>', $tfile or die "can't open $tfile for write";
-		   print {$tfile_fh} "$part\n";
-		   close $tfile_fh;
-
-		   my ($hash, $fprint) = `"$openssl" x509 $hashopt -fingerprint -noout -in "$tfile"`;
-		   chomp $hash;
-		   chomp $fprint;
-		   $fprint =~ s/^.*=//;
-		   $fprint =~ tr/://d;
-		   my $suffix = 0;
-		   # Search for an unused hash filename
-		   while(exists $hashlist{"$hash.$suffix"}) {
-			   # Hash matches: if fingerprint matches its a duplicate cert
-			   if($hashlist{"$hash.$suffix"} eq $fprint) {
-				   print STDERR "WARNING: Skipping duplicate certificate $fname\n";
-				   unlink $tfile;
-				   next OUTERLOOP;
-			   }
-			   $suffix++;
-		   }
-		   $hash .= ".$suffix";
-		   print "$fname => $hash\n";
-		   $symlink_exists=eval {symlink("",""); 1};
-		   if ($symlink_exists) {
-			   symlink $fname, $hash;
-		   } else {
-			   open IN,"<$tfile" or die "can't open $tfile for read";
-			   open OUT,">$hash" or die "can't open $hash for write";
-			   print OUT <IN>;	# does the job for small text files
-			   close OUT;
-			   close IN;
-		   }
-		   $hashlist{$hash} = $fprint;
-		   unlink $tfile;
-		} ## end while ($cert =~ /^(-----BEGIN ...
+		my ($hash, $fprint) = `"$openssl" x509 $hashopt -fingerprint -noout -in "$fname"`;
+		chomp $hash;
+		chomp $fprint;
+		$fprint =~ s/^.*=//;
+		$fprint =~ tr/://d;
+		my $suffix = 0;
+		# Search for an unused hash filename
+		while(exists $hashlist{"$hash.$suffix"}) {
+			# Hash matches: if fingerprint matches its a duplicate cert
+			if($hashlist{"$hash.$suffix"} eq $fprint) {
+				print STDERR "WARNING: Skipping duplicate certificate $fname\n";
+				return;
+			}
+			$suffix++;
+		}
+		$hash .= ".$suffix";
+		print "$fname => $hash\n";
+		$symlink_exists=eval {symlink("",""); 1};
+		if ($symlink_exists) {
+			symlink $fname, $hash;
+		} else {
+			open IN,"<$fname" or die "can't open $fname for read";
+			open OUT,">$hash" or die "can't open $hash for write";
+			print OUT <IN>;	# does the job for small text files
+			close OUT;
+			close IN;
+		}
+		$hashlist{$hash} = $fprint;
 }
 
 sub link_hash_cert_old {

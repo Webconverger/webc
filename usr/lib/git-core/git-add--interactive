@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use lib (split(/:/, $ENV{GITPERLLIB} || "/usr/share/perl/5.14.2"));
+use lib (split(/:/, $ENV{GITPERLLIB} || "/usr/share/perl/5.20.1"));
 
 use 5.008;
 use strict;
@@ -59,6 +59,9 @@ if ($repo->config_bool("interactive.singlekey")) {
 		Term::ReadKey->import;
 		$use_readkey = 1;
 	};
+	if (!$use_readkey) {
+		print STDERR "missing Term::ReadKey, disabling interactive.singlekey\n";
+	}
 	eval {
 		require Term::Cap;
 		my $termcap = Term::Cap->Tgetent;
@@ -1157,9 +1160,9 @@ sub help_patch_cmd {
 	print colored $help_color, <<EOF ;
 y - $verb this hunk$target
 n - do not $verb this hunk$target
-q - quit; do not $verb this hunk nor any of the remaining ones
+q - quit; do not $verb this hunk or any of the remaining ones
 a - $verb this hunk and all later hunks in the file
-d - do not $verb this hunk nor any of the later hunks in the file
+d - do not $verb this hunk or any of the later hunks in the file
 g - select a hunk to go to
 / - search for a hunk matching the given regex
 j - leave this hunk undecided, see next undecided hunk

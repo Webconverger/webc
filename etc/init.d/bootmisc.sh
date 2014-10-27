@@ -35,8 +35,8 @@ do_start () {
 
 	# Remove bootclean's flag files.
 	# Don't run bootclean again after this!
-	rm -f /tmp/.clean /lib/init/rw/.clean /run/.clean /run/lock/.clean
-	rm -f /tmp/.tmpfs /lib/init/rw/.tmpfs /run/.tmpfs /run/lock/.tmpfs
+	rm -f /tmp/.clean /run/.clean /run/lock/.clean
+	rm -f /tmp/.tmpfs /run/.tmpfs /run/lock/.tmpfs
 }
 
 case "$1" in
@@ -47,7 +47,7 @@ case "$1" in
 	echo "Error: argument '$1' not supported" >&2
 	exit 3
 	;;
-  stop)
+  stop|status)
 	# No-op
 	;;
   *)

@@ -15,7 +15,7 @@ fi
 
 . /usr/share/acpi-support/policy-funcs
 
-if CheckPolicy; then
+if { CheckPolicy || HasLogindAndSystemd1Manager; }; then
 	exit 0
 fi
 

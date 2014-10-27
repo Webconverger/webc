@@ -1,0 +1,22 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          udev-finish
+# Required-Start:    udev $local_fs
+# Required-Stop:     
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Copy rules generated while the root was ro
+### END INIT INFO
+
+PATH="/sbin:/bin"
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start) ;;
+  stop|restart|force-reload) exit 0 ;;
+  *) echo "Usage: $0 {start|stop|restart|force-reload}" >&2; exit 1 ;;
+esac
+
+exec /lib/udev/udev-finish
+

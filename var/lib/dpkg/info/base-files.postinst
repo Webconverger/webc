@@ -32,6 +32,18 @@ migrate_directory() {
   fi
 }
 
+update_to_current_default() {
+  if [ -f /etc/$1 ]; then
+    md5=`md5sum /etc/$1 | cut -f 1 -d " "`
+    if grep -q "$md5" /usr/share/base-files/$1.md5sums; then
+      if ! cmp -s /usr/share/base-files/$1 /etc/$1; then
+        cp -p /usr/share/base-files/$1 /etc/$1
+        echo Updating /etc/$1 to current default.
+      fi
+    fi
+  fi
+}
+
 if [ ! -e /etc/dpkg/origins/default ]; then
   if [ -e /etc/dpkg/origins/debian ]; then
     ln -sf debian /etc/dpkg/origins/default
@@ -46,6 +58,7 @@ if [ "$1" = "configure" ] && [ "$2" = "" ]; then
   install_from_default /usr/share/base-files/dot.bashrc    /root/.bashrc
   install_from_default /usr/share/base-files/profile       /etc/profile
   install_from_default /usr/share/base-files/motd          /etc/motd
+  install_directory mnt       755 root
   install_directory srv       755 root
   install_directory opt       755 root
   install_directory etc/opt   755 root
@@ -92,29 +105,22 @@ fi
 
 if [ ! -d /var/lib/dpkg ]; then
   mkdir -m 755 -p /var/lib/dpkg
-  chown root:root /var/lib/dpkg
 fi
 if [ ! -f /var/lib/dpkg/status ]; then
   echo > /var/lib/dpkg/status
   chmod 644 /var/lib/dpkg/status
-  chown root:root /var/lib/dpkg/status
 fi
 
 if [ ! -f /usr/info/dir ] && [ ! -f /usr/share/info/dir ]; then
   install_from_default /usr/share/base-files/info.dir /usr/share/info/dir
   chmod 644 /usr/share/info/dir
-  chown root:root /usr/share/info/dir
 fi
 
 if [ "$1" = "configure" ] && [ "$2" != "" ]; then
-  if [ -f /etc/profile ]; then
-    md5=`md5sum /etc/profile | cut -f 1 -d " "`
-    if grep -q "$md5" /usr/share/base-files/profile.md5sums; then
-      if ! cmp -s /usr/share/base-files/profile /etc/profile; then
-        cp -p /usr/share/base-files/profile /etc/profile
-        echo Updating /etc/profile to current default.
-      fi
-    fi
+  update_to_current_default profile
+  update_to_current_default nsswitch.conf
+  if dpkg --compare-versions "$2" lt-nl "7.7"; then
+    install_directory mnt 755 root
   fi
 fi
 

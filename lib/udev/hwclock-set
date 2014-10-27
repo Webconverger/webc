@@ -4,7 +4,11 @@
 
 dev=$1
 
-if [ -e /sys/fs/cgroup/systemd ] ; then
+if [ -e /run/systemd/system ] ; then
+    exit 0
+fi
+
+if [ -e /run/udev/hwclock-set ]; then
     exit 0
 fi
 
@@ -23,6 +27,11 @@ fi
 
 if [ yes = "$BADYEAR" ] ; then
     /sbin/hwclock --rtc=$dev --systz --badyear
+    /sbin/hwclock --rtc=$dev --hctosys --badyear
 else
     /sbin/hwclock --rtc=$dev --systz
+    /sbin/hwclock --rtc=$dev --hctosys
 fi
+
+# Note 'touch' may not be available in initramfs
+> /run/udev/hwclock-set

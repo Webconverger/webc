@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-User_setup ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/user-setup.list ] || \
-	   [ -e /var/lib/live/config/user-setup ]
-	then
-		return
-	fi
-
-	echo -n " user-setup"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.user-default-groups=*|user-default-groups=*)
@@ -36,16 +29,26 @@ User_setup ()
 				;;
 		esac
 	done
-
-	Configure_user_setup
 }
 
-Configure_user_setup ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/user-setup.list ] || \
+	   [ -e /var/lib/live/config/user-setup ]
+	then
+		exit 0
+	fi
+
+	echo -n " user-setup"
+}
+
+Config ()
 {
 	# Checking if package is already configured differently
 	if grep -q "^${LIVE_USERNAME}:" /etc/passwd
 	then
-		return
+		exit 0
 	fi
 
 	# Adjust formating of groups
@@ -55,17 +58,18 @@ Configure_user_setup ()
 	fi
 
 	# Make sure user is not in sudo group if sudo is disabled
-	if [ "${_NOROOT}" = "true" ]
-	then
-		LIVE_USER_DEFAULT_GROUPS="$(echo ${LIVE_USER_DEFAULT_GROUPS} | sed -e 's|sudo||')"
-	fi
+	case "${LIVE_CONFIG_NOROOT}" in
+		true)
+			LIVE_USER_DEFAULT_GROUPS="$(echo ${LIVE_USER_DEFAULT_GROUPS} | sed -e 's|sudo||')"
+			;;
+	esac
 
 	# Default password is: live
 	# passwords can be generated with 'echo "live" | mkpasswd -s',
 	# a blank password is 'U6aMy0wojraho'.
 	_PASSWORD="8Ab05sVQ4LLps"
 
-cat > /debconf.live << EOF
+cat > /tmp/live-config.cfg << EOF
 user-setup passwd/make-user boolean true
 user-setup passwd/root-password-crypted string *
 user-setup passwd/user-password-crypted string ${_PASSWORD}
@@ -75,14 +79,11 @@ user-setup passwd/username string ${LIVE_USERNAME}
 user-setup passwd/user-uid string 1000
 EOF
 
-	debconf-set-selections < /debconf.live
-	rm -f /debconf.live
+	debconf-set-selections < /tmp/live-config.cfg
+	rm -f /tmp/live-config.cfg
 
 	# Workaround for bug in shadow
 	set +e
-	touch /etc/passwd-
-	chmod 0600 /etc/passwd-
-
 	/usr/lib/user-setup/user-setup-apply 2>&1 \
 	| grep -v "Shadow passwords are now on"
 	set -e
@@ -91,4 +92,6 @@ EOF
 	touch /var/lib/live/config/user-setup
 }
 
-User_setup
+Cmdline
+Init
+Config

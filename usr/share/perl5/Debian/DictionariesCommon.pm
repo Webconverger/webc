@@ -9,6 +9,7 @@ use Text::Iconv;
 # List all exported symbols here.
 our @EXPORT_OK = qw(parseinfo updatedb loaddb
 		    dico_checkroot
+		    dico_debugprint
 		    dico_get_spellchecker_params
 		    getlibdir
                     dico_getsysdefault dico_setsysdefault
@@ -17,19 +18,25 @@ our @EXPORT_OK = qw(parseinfo updatedb loaddb
 		    build_jed_support
 		    build_squirrelmail_support
 		    dico_activate_trigger
+		    dico_clean_orphaned_removefiles
+		    dico_preprocess_default_symlinks
+                    dico_set_default_symlink
 		    );
 # Import :all to get everything.
 our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 my $infodir             = "/var/lib/dictionaries-common";
 my $cachedir            = "/var/cache/dictionaries-common";
-my $sys_default_dir     = "/etc/dictionaries-common";
-my $ispelldefault       = "ispell-default";
-my $userdefault         = ( defined $ENV{HOME} ) ? "$ENV{HOME}/.$ispelldefault" : undef;
 my $emacsensupport      = "emacsen-ispell-dicts.el";
 my $jedsupport          = "jed-ispell-dicts.sl";
 my $squirrelmailsupport = "sqspell.php";
 my $debug               = 1 if ( defined $ENV{'DICT_COMMON_DEBUG'} );
+
+# Directories and files to store default values
+my $sys_etc_dir         = "/etc/dictionaries-common";
+my $sys_default_dir     = "$cachedir";
+my $ispelldefault       = "ispell-default";
+my $userdefault         = ( defined $ENV{HOME} ) ? "$ENV{HOME}/.$ispelldefault" : undef;
 my %sys_default_file    = ("ispell"   => "$sys_default_dir/ispell-default",
 			   "wordlist" => "$sys_default_dir/wordlist-default");
 
@@ -40,6 +47,14 @@ sub dico_checkroot {
 # ------------------------------------------------------------------
   return if ($> == 0 or ($^O eq 'interix' and $> == 197108));
   die "$0: You must run this as root.\n";
+}
+
+# -------------------------------------------------------------
+sub dico_debugprint {
+# -------------------------------------------------------------
+# Show info if in debug mode
+# -------------------------------------------------------------
+  print STDERR "@_\n" if $debug;
 }
 
 # ------------------------------------------------------------------
@@ -170,8 +185,14 @@ sub updatedb {
 
   foreach my $file (<$infodir/$class/*>) {
     next if $file =~ m/.*~$/;                 # Ignore ~ backup files
-    my $dicts = &parseinfo ("$file");
-    %dictionaries = (%dictionaries, %$dicts);
+    my %dicts = %{ parseinfo ("$file") };
+
+    # Add package name to all entries
+    my $file_basename = $file;
+    $file_basename =~ s/^$infodir\/$class\///;
+    $dicts{$_}{'package'} = $file_basename foreach ( keys %dicts );
+
+    %dictionaries = (%dictionaries, %dicts);
   }
   &dico_dumpdb($class,\%dictionaries);
 }
@@ -196,7 +217,7 @@ sub getdefault {
 # Read default value from specified file. Comments and empty lines are ignored.
 # ------------------------------------------------------------------
   my $file = shift;
-  my $lang;
+  my $lang = "";
 
   if (-f $file) {
     open( my $FILE,"< $file")
@@ -208,8 +229,9 @@ sub getdefault {
       last;
     }
     close $FILE;
+    return $lang;
   }
-  return $lang;
+  return;
 }
 
 # ------------------------------------------------------------------
@@ -239,9 +261,31 @@ sub dico_setsysdefault {
   my $class = shift;
   my $value = shift;
 
-  open (DEFAULT, "> $sys_default_file{$class}");
-  print DEFAULT $value;
-  close DEFAULT;
+  my $default_file       = "$sys_default_file{$class}";
+  my $old_ispell_default = "$sys_etc_dir/$ispelldefault";
+
+  if ( "$value" ){
+    open (DEFAULT, "> $default_file");
+    print DEFAULT $value;
+    close DEFAULT;
+
+    # Set symlink from old to new location for squirrelmail benefit.
+    if ( $class eq "ispell" ){
+      unlink "$old_ispell_default";
+      symlink "$default_file", "$old_ispell_default";
+    }
+  } else {
+    unlink "$default_file" if ( -e "$default_file" );
+
+    # squirrelmail expects an empty file if no ispell dicts are installed.
+    if ( $class eq "ispell" ){
+      # Remove $old_ispell_default. Could be a symlink and target be written.
+      unlink "$old_ispell_default"; #
+      open (DEFAULT, "> $old_ispell_default");
+      print DEFAULT "";
+      close DEFAULT;
+    }
+  }
 }
 
 # ------------------------------------------------------------------
@@ -356,20 +400,22 @@ sub build_emacsen_support {
 	  $lang->{"ispell-args"} : "-d $hashname";
       my $extendedcharactermode = exists $lang->{"extended-character-mode"} ?
 	  ('"' . $lang->{"extended-character-mode"} . '"') : "nil";
-      my $codingsystem = exists $lang->{"coding-system"} ?
+      my $codingsystem  = exists $lang->{"coding-system"} ?
 	  $lang->{"coding-system"} : "nil";
-      my $emacsenname = exists $lang->{"emacsen-name"} ?
+      my $emacsen_name  = defined $lang->{"emacsen-name"} ?
 	  $lang->{"emacsen-name"} : $hashname;
+      my $emacsen_names = defined $lang->{"emacsen-names"} ?
+	  $lang->{"emacsen-names"} : $emacsen_name;
 
       # Explicitly add " -d $hashname" to $ispellargs if not already there.
       # Note that this must check for "-dxx", "-d xx", "-C -d xx", "-C -dxx" like matches
       if ( $ispellargs !~ m/( |^)-d/ ){
-	print STDERR " - $class-emacsen: Adding \" -d $hashname\" to \"$ispellargs\"\n"
-	  if $debug;
+	dico_debugprint(" - $class-emacsen: Adding \" -d $hashname\" to \"$ispellargs\"");
 	$ispellargs .= " -d $hashname";
       }
 
-      $entries{$class}{$emacsenname} = $entries{'all'}{$emacsenname} =
+      foreach my $emacsenname ( split(',\s*',$emacsen_names) ){
+	$entries{$class}{$emacsenname} = $entries{'all'}{$emacsenname} =
 	  ['"' . $emacsenname  . '"',
 	   '"' . $casechars    . '"',
 	   '"' . $notcasechars . '"',
@@ -379,13 +425,14 @@ sub build_emacsen_support {
 	   $extendedcharactermode,
 	   $codingsystem];
 
-      if ( $class eq "aspell" && exists $lang->{"aspell-locales"} ){
-	foreach ( split(/\s*,\s*/,$lang->{"aspell-locales"}) ){
-	  $class_locales{"aspell"}{$_} = $emacsenname;
-	}
-      } elsif ( $class eq "hunspell" && exists $lang->{"hunspell-locales"} ){
-	foreach ( split(/\s*,\s*/,$lang->{"hunspell-locales"}) ){
-	  $class_locales{"hunspell"}{$_} = $emacsenname;
+	if ( $class eq "aspell" && exists $lang->{"aspell-locales"} ){
+	  foreach ( split(/\s*,\s*/,$lang->{"aspell-locales"}) ){
+	    $class_locales{"aspell"}{$_} = $emacsenname;
+	  }
+	} elsif ( $class eq "hunspell" && exists $lang->{"hunspell-locales"} ){
+	  foreach ( split(/\s*,\s*/,$lang->{"hunspell-locales"}) ){
+	    $class_locales{"hunspell"}{$_} = $emacsenname;
+	  }
 	}
       }
     }
@@ -569,18 +616,185 @@ sub dico_activate_trigger {
 # Try activating provided trigger if run under dpkg control.
 # Return true in success, nil otherwise.
 # ------------------------------------------------------------------
-  my $trigger = shift;
+  my $trigger       = shift;
+  my $options       = shift;
+  my $await_trigger = defined $options->{'trigger-await'} ? "" : " --no-await ";
 
   die "DictionariesCommon::dico_activate_trigger: No trigger provided. Aborting ...\n" unless $trigger;
 
   if ( defined $ENV{'DPKG_RUNNING_VERSION'} &&
-       system("type dpkg-trigger >/dev/null 2>&1 && dpkg-trigger $trigger") == 0 ){
-    print STDERR "DictionariesCommon::dico_activate_trigger: Enabled trigger \"$trigger\"\n"
-      if $debug;
+       system("type dpkg-trigger >/dev/null 2>&1 && dpkg-trigger $await_trigger $trigger") == 0 ){
+    dico_debugprint("DictionariesCommon::dico_activate_trigger: Enabled trigger \"$trigger\" [$await_trigger]");
     return 1;
   }
   return;
 }
+
+# ------------------------------------------------------------------
+sub dico_clean_orphaned_removefiles {
+# ------------------------------------------------------------------
+# Clean orphaned remove files and their contents.
+#
+#  dico_clean_orphaned_removefiles($class,$dictionaries)
+# ------------------------------------------------------------------
+  my $class        = shift;
+  die "DictionariesCommon::dico_preprocess_default_symlinks: No class passed"
+    unless $class;
+  my $dictionaries = shift;
+  die "DictionariesCommon::dico_preprocess_default_symlinks: No dictionaries passed"
+    unless $dictionaries;
+  my $program      = "update-default-$class";
+  my $varlibdir    = "/var/lib/$class";
+
+  return unless ( $class eq "aspell" or $class eq "ispell" );
+
+  foreach my $remove_file (<$varlibdir/*.remove>){
+    my $dict        = $remove_file;
+    $dict           =~ s/\.remove$//;
+    $dict           =~ s/.*\///;
+    my $compat_file = "$varlibdir/$dict.compat";
+
+    # Remove orphaned remove files and its contents if no matching .compat file is found
+    unless ( -e "$compat_file" ){
+      open (my $REMOVE,"$remove_file");
+      while (<$REMOVE>){
+	chomp;
+	next if m/^\s*$/;
+	if ( -e "$_"
+	     && m:^(/usr/lib|/var/lib): ){
+	  unlink "$_";
+	  print STDERR "$program: Removing \"$_\".\n";
+	}
+      }
+      close $REMOVE;
+      unlink "$remove_file";
+      print STDERR "$program: Removing remove file \"$remove_file\".\n";
+    }
+  }
+
+  # Remove $varlibdir directory if empty and not owned
+  if ( -d "$varlibdir" ){
+    unless ( scalar <"$varlibdir/*"> ){
+      if ( system("dpkg-query -S $varlibdir  > /dev/null 2>&1") == 0 ){
+	dico_debugprint("$program: Empty \"$varlibdir\" is owned by some package.");
+      } elsif ( scalar %$dictionaries ){
+	print STDERR "$program: Empty and unowned \"$varlibdir\", but \"$class\" elements installed.\n";
+      } else {
+	rmdir "$varlibdir";
+	print STDERR "$program: Removing unowned and empty \"$varlibdir\" directory.\n";
+      }
+    }
+  }
+}
+
+# ------------------------------------------------------------------
+sub dico_preprocess_default_symlinks {
+# ------------------------------------------------------------------
+# Set default symlinks at $libdir if needed. Remove default symlinks
+# at $libdir and $etcdir unless they are not dangling
+#
+# dico_preprocess_default_symlinks ($class,$dictionaries)
+  # ------------------------------------------------------------------
+  my $class        = shift;
+  die "DictionariesCommon::dico_preprocess_default_symlinks: No class passed"
+    unless $class;
+  my $dictionaries = shift;
+  die "DictionariesCommon::dico_preprocess_default_symlinks: No dictionaries passed"
+    unless $dictionaries;
+  my $program      = "installdeb-$class";
+
+
+  my $linkdir = "/etc/dictionaries-common";
+  my $libdir  = { 'ispell'   => "/usr/lib/ispell",
+		  'wordlist' => "/usr/share/dict"};
+  my $links   = {'ispell'    => ["default.hash", "default.aff"],
+		 'wordlist'  => ["words"]};
+
+  if ( %{$dictionaries} ){
+    foreach my $link ( @{$links->{$class}} ){
+      my $link_from = "$libdir->{$class}/$link";
+      unless ( -e "$link_from" ){
+	if ( -w "$libdir->{$class}" ){
+	  print STDERR "Symlinking $link_from to $linkdir/$link\n"
+	    if $debug;
+	  symlink "$linkdir/$link","$link_from";
+	} else {
+	  print STDERR "$program:Warning: Non writable \"$libdir->{$class}\" dir. Read-only filesystem?\n";
+	}
+      }
+    }
+  } else {
+    foreach my $link ( @{$links->{$class}} ){
+      my $default_etc_link = "$linkdir/$link";
+      my $default_usr_link = "$libdir->{$class}/$link";
+
+      foreach my $default_link ( "$default_etc_link","$default_usr_link"){
+	if ( -l "$default_link" ){
+	  if ( -e readlink "$default_link" ){ # Non-dangling symlink
+	    print STDERR "$program: Leaving non dangling symlink behind: \"$default_link\"\n";
+	  } else {
+	    if ( -w "$libdir->{$class}" ){
+	      dico_debugprint("No $class elements. Remove $default_link.");
+	      unlink "$default_link"
+	    } else {
+	      print STDERR "$program:Warning: Non writable \"$libdir->{$class}\" dir. Read-only filesystem?\n";
+	    }
+	  }
+	} elsif ( -e "$default_link" ){
+	  print STDERR "Leaving non symlink \"$default_link\" behind.\n"
+	}
+      }
+    }
+  }
+}
+
+# ------------------------------------------------------------------
+sub dico_set_default_symlink {
+# ------------------------------------------------------------------
+# Try setting default symlinks for ispell dictionaries and wordlists.
+#    dico_set_default_symlink($class,$value)
+# ------------------------------------------------------------------
+  my $class = shift;
+  die "DictionariesCommon::dico_set_default_symlink: No class passed" unless $class;
+  my $value = shift;
+  die "DictionariesCommon::dico_set_default_symlink: No value passed" unless $value;
+
+  my $dictionaries  = loaddb ($class);
+  my $program       = "update-default-$class";
+  my $linkdir       = "/etc/dictionaries-common";
+  my $class_name    = { 'ispell'   => "ispell dictionary",
+                        'wordlist' => "wordlist"};
+  my $libdir        = { 'ispell'   => "/usr/lib/ispell",
+                        'wordlist' => "/usr/share/dict"};
+  my $link_suffixes = { 'ispell'   => [".hash", ".aff"],
+                        'wordlist' => [""]};
+  my $link_basename = { 'ispell'   => "default",
+                        'wordlist' => "words"};
+
+  if ( defined $dictionaries->{$value}{"hash-name"} ){
+    dico_debugprint("update-default-$class: \"$value\" -> \"$dictionaries->{$value}{'hash-name'}\"");
+    my $hash   = "$libdir->{$class}/" . $dictionaries->{$value}{"hash-name"};
+    foreach my $i ( @{$link_suffixes->{$class}}) {
+      my $link_to   = "$hash$i";
+      if ( -e "$link_to" ) {
+        my $link_from = "$linkdir/$link_basename->{$class}$i";
+	system "ln -fs $link_to $link_from";
+        dico_debugprint("$program: \"$link_from\" symlink set to \"$link_to\"");
+      } else {
+	die "$program:
+  Could not make the default symlink to \"$link_to\".
+  This may be a temporary problem due to installation ordering. If that
+  file is not present after installation, please file a bugreport
+  against $class_name->{$class} package owning that file.
+  \n";
+      }
+    }
+  } else {
+    die "$program: Selected value \"$value\" for $class_name->{$class}\n" .
+      "does not contain a hash name entry in the database.\n";
+  }
+}
+
 
 # Ensure we evaluate to true.
 1;

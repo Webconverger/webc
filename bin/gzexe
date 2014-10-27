@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # gzexe: compressor for Unix executables.
 # Use this only for binaries that you do not use frequently.
 #
@@ -8,9 +8,9 @@
 # We also try to retain the original file permissions on the compressed file.
 # For safety reasons, gzexe will not create setuid or setgid shell scripts.
 
-# WARNING: the first line of this file must be either : or #!/bin/bash
+# WARNING: the first line of this file must be either : or #!/bin/sh
 # The : is required for some old versions of csh.
-# On Ultrix, /bin/bash is too buggy, change the first line to: #!/bin/bash5
+# On Ultrix, /bin/sh is too buggy, change the first line to: #!/bin/sh5
 
 
 # Copyright (C) 1998, 2002, 2004, 2006, 2007 Free Software Foundation
@@ -35,8 +35,8 @@ nl='
 '
 IFS=" $tab$nl"
 
-version='gzexe (gzip) 1.5
-Copyright (C) 2007, 2011-2012 Free Software Foundation, Inc.
+version='gzexe (gzip) 1.6
+Copyright (C) 2007, 2011-2013 Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
@@ -145,7 +145,7 @@ for i do
   fi
   if test $decomp -eq 0; then
     (cat <<'EOF' &&
-#!/bin/bash
+#!/bin/sh
 skip=44
 
 tab='	'

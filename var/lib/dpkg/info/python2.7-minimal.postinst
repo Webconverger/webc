@@ -8,10 +8,6 @@ if [ ! -f /etc/python2.7/sitecustomize.py ]; then
 EOF
 fi
 
-syssite=/usr/lib/python2.7/site-packages
-localsite=/usr/local/lib/python2.7/dist-packages
-syslink=../../${localsite#/usr/*}
-
 case "$1" in
     configure)
         # Create empty directories in /usr/local
@@ -20,14 +16,12 @@ case "$1" in
             chmod 2775 /usr/local/lib/python2.7 2> /dev/null || true
             chown root:staff /usr/local/lib/python2.7 2> /dev/null || true
         fi
+	localsite=/usr/local/lib/python2.7/dist-packages
         if [ ! -e $localsite ]; then
             mkdir -p $localsite 2> /dev/null || true
             chmod 2775 $localsite 2> /dev/null || true
             chown root:staff $localsite 2> /dev/null || true
         fi
-	#if [ ! -h $syssite ]; then
-	#    ln -s $syslink $syssite
-	#fi
 
 	if which update-binfmts >/dev/null; then
 	    update-binfmts --import python2.7
@@ -37,13 +31,21 @@ case "$1" in
 esac
 
 if [ "$1" = configure ]; then
-    (
-    files=$(dpkg -L python2.7-minimal | sed -n '/^\/usr\/lib\/python2.7\/.*\.py$/p')
-	python2.7 /usr/lib/python2.7/py_compile.py $files
+    if ls -L /usr/lib/python2.7/sitecustomize.py >/dev/null 2>&1; then
+	filt='cat'
+    else
+	filt='fgrep -v sitecustomize.py'
+    fi
+    files=$(dpkg -L libpython2.7-minimal:i386 \
+		| sed -n '/^\/usr\/lib\/python2.7\/.*\.py$/p' | $filt)
+    if [ -n "$files" ]; then
+	python2.7 -E -S /usr/lib/python2.7/py_compile.py $files
 	if grep -sq '^byte-compile[^#]*optimize' /etc/python/debian_config; then
-	    python2.7 -O /usr/lib/python2.7/py_compile.py $files
+	    python2.7 -E -S -O /usr/lib/python2.7/py_compile.py $files
 	fi
-    )
+    else
+	echo >&2 "python2.7-minimal: can't get files for byte-compilation"
+    fi
     bc=no
     if [ -z "$2" ] || dpkg --compare-versions "$2" lt 2.7-9 \
         || [ -f /var/lib/python/python2.7_installed ]; then

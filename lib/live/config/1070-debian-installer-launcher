@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Debian_installer_launcher ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/debian-installer-launcher.list ] || \
-	   [ -e /var/lib/live/config/debian-installer-launcher ]
-	then
-		return
-	fi
-
-	echo -n " debian-installer-launcher"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -28,11 +21,21 @@ Debian_installer_launcher ()
 				;;
 		esac
 	done
-
-	Configure_debian_installer_launcher
 }
 
-Configure_debian_installer_launcher ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/debian-installer-launcher.list ] || \
+	   [ -e /var/lib/live/config/debian-installer-launcher ]
+	then
+		exit 0
+	fi
+
+	echo -n " debian-installer-launcher"
+}
+
+Config ()
 {
 	# KDE4 needs the desktop file somewhere else,
 	# otherwise no Home and Trash icons on the desktop.
@@ -49,4 +52,6 @@ Configure_debian_installer_launcher ()
 	touch /var/lib/live/config/debian-installer-launcher
 }
 
-Debian_installer_launcher
+Cmdline
+Init
+Config

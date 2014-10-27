@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+/usr/lib/emacsen-common/emacs-package-remove --prerm emacsen-common
+
+# Automatically added by dh_usrlocal
+(
+	while read dir; do
+		rmdir "$dir" 2>/dev/null || true
+	done
+) << DATA
+/usr/local/share/emacs/site-lisp
+/usr/local/share/emacs
+DATA
+# End automatically added section
+

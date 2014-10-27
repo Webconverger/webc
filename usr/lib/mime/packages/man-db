@@ -1,0 +1,33 @@
+# priority=6 above the default 5 on the basis that viewing a man page
+# with man is above average sensible.
+#
+# Priority above /usr/lib/mime/packages/groff-base "nroff -mandoc"
+# since "man" has the advantage of running preprocessors such as tbl
+# specified in the man page and so gives better results.  Eg on
+# /usr/share/man/man1/gtbl.1.gz (the tbl man page uses tbl).  Locale
+# charset handling in man is probably better too.
+#
+# "man -X" is only priority=6 since the gxditview it runs is rather
+# basic and perhaps something more sophisticated could be higher.  The
+# X entry is before the tty so the X is preferred under X.  (The tty
+# one still works there, in its declared needsterminal.)
+#
+# "-X100" seems to make better output than the default -X 75 dpi.
+# Dunno if that's some font dodginess or matching the X server's
+# advertised screen size resolution or something.
+#
+# "test -e gxditview" because it's in the "groff" package which is
+# only a Suggests of man-db and so may not be available.
+
+application/x-troff-man; /usr/bin/man -X100 -l '%s'; test=test -n "$DISPLAY" -a -e /usr/bin/gxditview; description=Man page; priority=6
+text/troff; /usr/bin/man -X100 -l '%s'; test=test -n "$DISPLAY" -a -e /usr/bin/gxditview; description=Man page; priority=6
+application/x-troff-man; /usr/bin/man -l '%s'; needsterminal; description=Man page; priority=6
+text/troff; /usr/bin/man -l '%s'; needsterminal; description=Man page; priority=6
+
+# "-Tascii" gives backspace overstriking, so use "col -b" to undo
+# that.  Piping to col also means "man" has a non-tty output and so
+# does not run its usual "more" etc pager, ensuring this entry is
+# non-interactive.
+#
+application/x-troff-man; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page; priority=2
+text/troff; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page; priority=2

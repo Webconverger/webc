@@ -108,11 +108,6 @@ def updatecache(filename, module_globals=None):
         if os.path.isabs(filename):
             return []
 
-        # Take care to handle packages
-        if basename == '__init__.py':
-            # filename referes to a package
-            basename = filename
-
         for dirname in sys.path:
             # When using imputil, sys.path may contain things other than
             # strings; ignore them when it happens.

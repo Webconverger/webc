@@ -90,7 +90,7 @@ def arbitrary_address(family):
         return tempfile.mktemp(prefix='listener-', dir=get_temp_dir())
     elif family == 'AF_PIPE':
         return tempfile.mktemp(prefix=r'\\.\pipe\pyc-%d-%d-' %
-                               (os.getpid(), _mmap_counter.next()))
+                               (os.getpid(), _mmap_counter.next()), dir="")
     else:
         raise ValueError('unrecognized family')
 
@@ -200,7 +200,6 @@ if sys.platform != 'win32':
         return c1, c2
 
 else:
-
     from _multiprocessing import win32
 
     def Pipe(duplex=True):
@@ -271,7 +270,14 @@ class SocketListener(object):
             self._unlink = None
 
     def accept(self):
-        s, self._last_accepted = self._socket.accept()
+        while True:
+            try:
+                s, self._last_accepted = self._socket.accept()
+            except socket.error as e:
+                if e.args[0] != errno.EINTR:
+                    raise
+            else:
+                break
         s.setblocking(True)
         fd = duplicate(s.fileno())
         conn = _multiprocessing.Connection(fd)
@@ -288,15 +294,16 @@ def SocketClient(address):
     '''
     Return a connection object connected to the socket given by `address`
     '''
-    family = address_type(address)
-    s = socket.socket( getattr(socket, family) )
-    s.setblocking(True)
+    family = getattr(socket, address_type(address))
     t = _init_timeout()
 
     while 1:
+        s = socket.socket(family)
+        s.setblocking(True)
         try:
             s.connect(address)
         except socket.error, e:
+            s.close()
             if e.args[0] != errno.ECONNREFUSED or _check_timeout(t):
                 debug('failed to connect to address %s', address)
                 raise

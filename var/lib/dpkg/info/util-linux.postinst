@@ -1,70 +1,24 @@
-#! /bin/sh
-
-umask 022
+#!/bin/sh
 set -e
 
 update-alternatives --install /usr/bin/pager pager /bin/more 50 \
-  --slave /usr/share/man/man1/pager.1.gz pager.1.gz /usr/share/man/man1/more.1.gz
+	--slave /usr/share/man/man1/pager.1.gz pager.1.gz \
+	/usr/share/man/man1/more.1.gz
 update-alternatives --install /usr/bin/pager pager /usr/bin/pg 10 \
-  --slave /usr/share/man/man1/pager.1.gz pager.1.gz /usr/share/man/man1/pg.1.gz
-
-#
-#	Check if links to hwclock.sh are present in runlevel "6".
-#	If not, remove the ones from runlevel "S" so that
-#	update-rc.d will do it's job.
-#
-if [ ! -f /etc/rc6.d/???hwclock.sh ] && [ ! -f /etc/rc0.d/???hwclock.sh ]
-then
-	rm -f /etc/rcS.d/???hwclock.sh
-fi
+	--slave /usr/share/man/man1/pager.1.gz pager.1.gz \
+	/usr/share/man/man1/pg.1.gz
 
 # hwclock works on all Linux architectures, except s390 (and s390x, of course).
 if [ "$(uname -s)" = "Linux" ]; then
-    model=$(uname -m)
-    if [ ${model%x} != "s390" ]; then
-        update-rc.d -f hwclock.sh remove 2>/dev/null > /dev/null
-        update-rc.d hwclock.sh start 11 S . stop 25 0 6 . > /dev/null
-        update-rc.d -f hwclockfirst.sh remove 2>/dev/null > /dev/null
-	if [ -f /etc/init.d/hwclockfirst.sh ]; then
-	  update-rc.d hwclockfirst.sh start 8 S . > /dev/null
+	model=$(uname -m)
+	if [ ${model%x} != "s390" ]; then
+		update-rc.d -f hwclock.sh remove >/dev/null 2>&1 || true
+		update-rc.d hwclock.sh defaults > /dev/null
 	fi
-    fi
 fi
 
-# Do a one-time migration of the local time setting to /etc/adjtime
-
-if [ -n "$2" ] && dpkg --compare-versions "$2" lt "2.20.1-5"; then
-    if [ -f /etc/default/rcS ]; then
-        . /etc/default/rcS
-    fi
-    if [ ! -e /etc/adjtime ]; then
-        printf "0.0 0 0.0\n0\nUTC" > /etc/adjtime
-    fi
-    if [ "$UTC" = "no" ]; then
-        sed -i -e 's:^UTC$:LOCAL:' /etc/adjtime
-    else
-        sed -i -e 's:^LOCAL$:UTC:' /etc/adjtime
-    fi
-fi
-
-if [ -x /usr/sbin/update-mime ]; then
-	update-mime
-fi
-
-if [ -L /usr/doc/util-linux ] ; then
-    rm -f /usr/doc/util-linux
-fi
-
-# warn about #566072, if applicable (when upgrading from versions prior to
-# 2.17, and there are fstab entries with noauto in the 4th column, and
-# non-zero in the 6th column (cases where the 6th column is ommited are OK)
-if test "x$2" != "x" && dpkg --compare-versions "$2" lt 2.17 && \
-   test -f /usr/share/debconf/confmodule && \
-   sed 's/\s\s*/ /g' /etc/fstab | cut -d' ' -f 1,4,6 | \
-       egrep -q '^[^#]\S+ \S*noauto\S* [^0]'; then
-    . /usr/share/debconf/confmodule
-    db_input critical util-linux/noauto-with-nonzero-passnum
-    db_go
+if [ -L /usr/doc/util-linux ]; then
+	rm -f /usr/doc/util-linux
 fi
 
 

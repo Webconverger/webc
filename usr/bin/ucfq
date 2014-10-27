@@ -1,7 +1,7 @@
 #!/usr/bin/perl
-#                              -*- Mode: Cperl -*- 
-# ucfq --- 
-# Author           : Manoj Srivastava ( srivasta@glaurung.internal.golden-gryphon.com ) 
+#                              -*- Mode: Cperl -*-
+# ucfq ---
+# Author           : Manoj Srivastava ( srivasta@glaurung.internal.golden-gryphon.com )
 # Created On       : Wed Apr 12 14:51:16 2006
 # Created On Node  : glaurung.internal.golden-gryphon.com
 # Last Modified By : Manoj Srivastava
@@ -9,9 +9,9 @@
 # Last Machine Used: glaurung.internal.golden-gryphon.com
 # Update Count     : 81
 # Status           : Unknown, Use with caution!
-# HISTORY          : 
-# Description      : 
-# 
+# HISTORY          :
+# Description      :
+#
 # arch-tag: 1390e09f-ee31-4d7f-a968-bd539ea061a0
 #
 =head1 NAME
@@ -42,9 +42,9 @@ $main::AuthorMail  = "srivasta\@debian.org";
 
 {  # scope for ultra-private meta-object for class attributes
 
-  my %Ucf = 
+  my %Ucf =
     (
-     Optdesc  => 
+     Optdesc  =>
      {
       'help|h'         => sub {print ucf->Usage();     exit 0;},
       'with-colons|w!' => sub {$::ConfOpts{"Colons"}= "$_[1]";},
@@ -63,7 +63,7 @@ Author: $main::Author <$main::AuthorMail>
                        default /var/lib/ucf.
 
 ),
-     Defaults => 
+     Defaults =>
      {
       "Colons"   => 0,
       "DEBUG"    => 0,
@@ -182,14 +182,14 @@ sub new {
 
   # validate and sanitize the settings
   $self->validate(%params);
-  
+
   return $self;
 }
 
 =head2 validate
 
 This routine is responsible for ensuring that the parameters passed in
-(presumably from the command line) are given preference. 
+(presumably from the command line) are given preference.
 
 =cut
 
@@ -226,7 +226,7 @@ sub get_config_ref {
   return $this->{Con_Ref};
 }
 
-=head2 dump_config 
+=head2 dump_config
 
 This routine returns a C<Data::Dumper> for debugging purposes
 
@@ -259,9 +259,9 @@ sub process {
   %{$this->{configs}}     = map { +"$_" => 1} grep {  m,/,} @ARGV;
   $this->{pkg_list}       = object_list->new;
   $this->{file_list}      = object_list->new;
-  $this->{registry_proxy} = 
+  $this->{registry_proxy} =
     registry->new("StateDir" => $this->{Con_Ref}->{StateDir});
-  $this->{hashfile_proxy} = 
+  $this->{hashfile_proxy} =
     hashfile->new("StateDir" => $this->{Con_Ref}->{StateDir});
 
   for (keys %{$this->{packages}} ) {
@@ -273,6 +273,7 @@ sub process {
       unless m,^/,;
     # Don't die for etch
     exit 0 unless m,^/,;
+
     my $file = conffile->new('Name' => "$_");
     $this->{file_list}->element($_, $file);
   }
@@ -369,7 +370,7 @@ sub new {
     if (! -r "$params{StateDir}/registry") {
       die "Can't read registry file $params{StateDir}/registry:$!";
     }
-    open (REG, "$params{StateDir}/registry") || 
+    open (REG, "$params{StateDir}/registry") ||
       die "Can't read registry file $params{StateDir}/registry:$!";
     while (<REG>) {
       chomp;
@@ -455,7 +456,7 @@ sub new {
     if (! -r "$params{StateDir}/hashfile") {
       die "Can't read registry file $params{StateDir}/hashfile:$!";
     }
-    open (HASH, "$params{StateDir}/hashfile") || 
+    open (HASH, "$params{StateDir}/hashfile") ||
       die "Can't read registry file $params{StateDir}/hashfile:$!";
     while (<HASH>) {
       chomp;
@@ -500,6 +501,7 @@ This is the encapsulation of a configuration file metadata.
 
 package conffile;
 use strict;
+use Cwd qw{abs_path};
 
 
 =head2 new
@@ -523,7 +525,9 @@ sub new {
   $self->{Package} = $params{Package}
     if $params{Package};
   $self->{Exists}  = 'Yes' if -e $self->{Name};
-
+  if ($self->{Exists}) {
+    $self->{Name}  = abs_path( $self->{Name});
+  }
   bless $self => $class;
 
   return $self;
@@ -621,7 +625,7 @@ sub conffile_hash {
     $this->{Hash} = $value;
     if (-e "$name") {
       if (-x "/usr/bin/md5sum") {
-        open (NEWHASH, "/usr/bin/md5sum $name |") || 
+        open (NEWHASH, "/usr/bin/md5sum $name |") ||
           die "Could not run md5sum: $!";
         while (<NEWHASH>) {
           chomp;
@@ -743,7 +747,7 @@ sub element {
   my $this      = shift;
   my $name      = shift;
   my $value     = shift;
-  
+
   die "Missing required parameter Name"
     unless $name;
   if ($value) {
@@ -822,7 +826,7 @@ Manoj Srivastava <srivasta\@debian.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This script is a part of the Ucf package, and is 
+This script is a part of the Ucf package, and is
 
 Copyright (c) 2006 Manoj Srivastava <srivasta\@debian.org>
 

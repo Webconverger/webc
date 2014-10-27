@@ -1,6 +1,6 @@
 <DIV CLASS="indent">
 
-<H2 CLASS="title">{op=modify-printer?{printer_name} &auml;ndern:Drucker hinzuf&uuml;gen}</H2>
+<H2 CLASS="title">{op=modify-printer?{printer_name} ändern:Drucker hinzufügen (Schritt 5/5)}</H2>
 
 <FORM METHOD="POST" ACTION="/admin" ENCTYPE="multipart/form-data">
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
@@ -30,11 +30,16 @@
 <TR>
 <TH CLASS="label">Freigabe:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_SHARED" VALUE="{?printer_is_shared}">
-Diesen Drucker {?printer_is_shared=?nicht:{?printer_is_shared=0?nicht:}} freigeben</TD>
+Dieser Drucker ist {?printer_is_shared=?nicht:{?printer_is_shared=0?nicht:}} im Netz freigeben</TD>
+</TR>
+<TR>
+<TH CLASS="label">Farmbmanagement:</TH>
+<TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_COLORMANAGED" VALUE="{?printer_is_colormanaged}">
+{?printer_is_colormanaged=?Eingeschaltet:{?printer_is_colormanaged=0?Ausgeschaltet:}} Eingeschaltet</TD>
 </TR>
 <TR>
 <TH CLASS="label">Marke:</TH>
-<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Andere(n) Marke/Hersteller ausw&auml;hlen"></TD>
+<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Andere(n) Marke/Hersteller auswählen"></TD>
 </TR>
 <TR>
 <TH CLASS="label">Modell:</TH>
@@ -52,7 +57,7 @@ TYPE="FILE" NAME="PPD_FILE"></TD>
 </TR>
 <TR>
 <TD></TD>
-<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Drucker hinzuf&uuml;gen:Drucker &auml;ndern}"></TD>
+<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Drucker hinzufügen:Drucker ändern}"></TD>
 </TR>
 </TABLE>
 

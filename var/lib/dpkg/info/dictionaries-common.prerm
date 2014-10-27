@@ -7,10 +7,19 @@ set -e
 
 case "$1" in
   remove|deconfigure)
-    rm -f /etc/dictionaries-common/default.aff \
+    rm -f /etc/dictionaries-common/ispell-default
+    for i in /etc/dictionaries-common/default.aff \
       /etc/dictionaries-common/default.hash \
       /etc/dictionaries-common/words \
-      /etc/dictionaries-common/ispell-default
+      /usr/lib/ispell/default.aff \
+      /usr/lib/ispell/default.hash \
+      /usr/share/dict/words; do
+      if [ -L "$i" ]; then
+	rm -f "$i"
+      elif [ -e "$i" ]; then
+	echo "dictionaries-common.prerm: leaving behind non-symlink \"$i\"" >&2
+      fi
+    done
     rm -f /var/cache/dictionaries-common/*
     if [ -L /usr/dict ]; then
       rm /usr/dict
@@ -24,17 +33,11 @@ case "$1" in
     exit 0
 esac
 
-# Verifying that there are emacsen installed before calling emacs-package-remove
-if [ -x /usr/lib/emacsen-common/emacs-package-remove ]; then
-  if  [ -d /var/lib/emacsen-common/state/flavor/installed ]; then
-    # Using emacsen-common >= 2.0
-    /usr/lib/emacsen-common/emacs-package-remove --prerm dictionaries-common
-  elif [ -e /var/lib/emacsen-common/installed-flavors ]; then
-    # Using emacsen-common < 2.0
-    /usr/lib/emacsen-common/emacs-package-remove dictionaries-common
-  fi
+# Automatically added by dh_installemacsen
+if [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common ] ; then
+	/usr/lib/emacsen-common/emacs-package-remove --prerm dictionaries-common
 fi
-
+# End automatically added section
 
 
 exit 0

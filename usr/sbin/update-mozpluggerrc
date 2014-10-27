@@ -1,0 +1,93 @@
+#!/bin/sh
+#
+# update-mozpluggerc - Update mozplugger RC file
+# Copyright (C) 2010 Alessio Treglia <alessio@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+set -e
+
+PROGNAME=${0##*/}
+TEMPLATES_DIR=/etc/mozpluggerrc.d
+DEFAULT_CONFIG_FILE=/etc/mozpluggerrc
+WRITE_TO_STDOUT=
+
+# Display a usage message.
+usage () {
+	cat <<EOF
+Usage: $PROGNAME -O
+       $PROGNAME -h
+This program concatenates all *.conf files in /etc/mozpluggerrc.d/ in order
+to generate a new configuration file. By default, the result is written to
+/etc/mozpluggerrc. This utility is primarily useful to Debian package
+maintainer scripts. See update-mozpluggerrc(8) for more information.
+Options:
+    -h                        display this usage message and exit
+    -O                        write to stdout
+EOF
+}
+
+# Display a message; suppress messages if redirected to stdout
+message() {
+	[ -n "$WRITE_TO_STDOUT" ] || echo "$*"
+}
+
+# Update /etc/mozpluggerrc (or write the result to stdout)
+update_mozpluggerrc() {
+	local outfile
+	# Really update the file
+	if [ -z "$WRITE_TO_STDOUT" ] ; then
+		outfile="$DEFAULT_CONFIG_FILE"
+		if [ -f "$outfile" ] ; then
+			echo "Purging current configuration... "
+			rm "$outfile"
+		fi
+	else
+		outfile=/dev/stdout
+	fi
+
+	message "Generating mozpluggerrc... "
+	templates=`ls "${TEMPLATES_DIR}"/*.conf 2>/dev/null || true`
+	for i in ${templates} ; do
+		message "Merging $i ..."
+		cat "$i" >> "$outfile"
+	done
+	message "Done."
+}
+
+# Parse command line arguments
+while getopts ":Oh" opt; do
+	case $opt in
+		h )		usage
+				exit 0 ;;
+		O )		WRITE_TO_STDOUT=true
+				;;
+		\? )	echo 'Wrong option.'
+				usage
+				exit 1 ;;
+	esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ ! -z "$@" ]; then
+	echo 'Too many arguments, exiting...'
+	exit 2
+fi
+
+# Call the routine
+update_mozpluggerrc
+
+exit 0

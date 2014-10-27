@@ -119,7 +119,10 @@ def load_grammar(gt="Grammar.txt", gp=None,
     if force or not _newer(gp, gt):
         logger.info("Generating grammar tables from %s", gt)
         g = pgen.generate_grammar(gt)
-        if save:
+        # the pickle files mismatch, when built on different architectures.
+        # don't save these for now. An alternative solution might be to
+        # include the multiarch triplet into the file name
+        if False:
             logger.info("Writing grammar tables to %s", gp)
             try:
                 g.dump(gp)
@@ -138,3 +141,20 @@ def _newer(a, b):
     if not os.path.exists(b):
         return True
     return os.path.getmtime(a) >= os.path.getmtime(b)
+
+
+def main(*args):
+    """Main program, when run as a script: produce grammar pickle files.
+
+    Calls load_grammar for each argument, a path to a grammar text file.
+    """
+    if not args:
+        args = sys.argv[1:]
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout,
+                        format='%(message)s')
+    for gt in args:
+        load_grammar(gt, save=True, force=True)
+    return True
+
+if __name__ == "__main__":
+    sys.exit(int(not main()))

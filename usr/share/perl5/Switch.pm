@@ -1,12 +1,13 @@
 package Switch;
 
+use 5.005;
 use strict;
 use vars qw($VERSION);
 use Carp;
 
 use if $] >= 5.011, 'deprecate';
 
-$VERSION = '2.16';
+$VERSION = '2.17';
   
 
 # LOAD FILTERING MODULE...
@@ -24,9 +25,11 @@ my ($Perl5, $Perl6) = (0,0);
 
 sub import
 {
+	my ($class) = @_;
+	my $self = bless {}, $class;
 	$fallthrough = grep /\bfallthrough\b/, @_;
 	$offset = (caller)[2]+1;
-	filter_add({}) unless @_>1 && $_[1] eq 'noimport';
+	filter_add($self) unless @_>1 && $_[1] eq 'noimport';
 	my $pkg = caller;
 	no strict 'refs';
 	for ( qw( on_defined on_exists ) )
@@ -506,7 +509,7 @@ __END__
 
 =head1 NAME
 
-Switch - A switch statement for Perl
+Switch - A switch statement for Perl, do not use if you can use given/when
 
 =head1 SYNOPSIS
 
@@ -841,14 +844,21 @@ and requires both these modules to be installed.
 
 =head1 AUTHOR
 
-Damian Conway (damian@conway.org). This module is now maintained by Rafael
-Garcia-Suarez (rgarciasuarez@gmail.com) and more generally by the Perl 5
-Porters (perl5-porters@perl.org), as part of the Perl core.
+Damian Conway (damian@conway.org). This module is now maintained by
+Alexandr Ciornii (alexchorny@gmail.com). Previously was maintained by
+Rafael Garcia-Suarez and perl5 porters.
 
 =head1 BUGS
 
 There are undoubtedly serious bugs lurking somewhere in code this funky :-)
 Bug reports and other feedback are most welcome.
+
+May create syntax errors in other parts of code.
+
+On perl 5.10.x may cause syntax error if "case" is present inside heredoc.
+
+In general, use given/when instead. It were introduced in perl 5.10.0.
+Perl 5.10.0 was released in 2007.
 
 =head1 LIMITATIONS
 
@@ -863,6 +873,10 @@ errors. The workaround is to use C<m?...?> instead.
 Due to the way source filters work in Perl, you can't use Switch inside
 an string C<eval>.
 
+May not work if sub prototypes are used (RT#33988).
+
+Regex captures in when are not available to code.
+
 If your source file is longer then 1 million characters and you have a
 switch statement that crosses the 1 million (or 2 million, etc.)
 character boundary you will get mysterious errors. The workaround is to
@@ -873,3 +887,4 @@ use smaller source files.
     Copyright (c) 1997-2008, Damian Conway. All Rights Reserved.
     This module is free software. It may be used, redistributed
         and/or modified under the same terms as Perl itself.
+

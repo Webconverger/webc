@@ -14,6 +14,7 @@ from sysconfig import get_python_version
 from distutils.core import Command
 from distutils.dir_util import remove_tree
 from distutils.errors import DistutilsOptionError, DistutilsPlatformError
+from distutils.errors import DistutilsFileError
 from distutils import log
 from distutils.util import get_platform
 

@@ -60,6 +60,8 @@ class WeakSet(object):
             for itemref in self.data:
                 item = itemref()
                 if item is not None:
+                    # Caveat: the iterator will keep a strong reference to
+                    # `item` until it is resumed or closed.
                     yield item
 
     def __len__(self):
@@ -170,6 +172,12 @@ class WeakSet(object):
         if not isinstance(other, self.__class__):
             return NotImplemented
         return self.data == set(ref(item) for item in other)
+
+    def __ne__(self, other):
+        opposite = self.__eq__(other)
+        if opposite is NotImplemented:
+            return NotImplemented
+        return not opposite
 
     def symmetric_difference(self, other):
         newset = self.copy()

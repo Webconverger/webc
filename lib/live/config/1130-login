@@ -1,0 +1,35 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+#set -e
+
+Init ()
+{
+	# Checking if package is installed
+	if [ ! -e /var/lib/dpkg/info/login.list ] || \
+	   [ -e /var/lib/live/config/login ]
+	then
+		exit 0
+	fi
+
+	echo -n " login"
+}
+
+Config ()
+{
+	# lastlog with autologin doesn't make sense
+	sed -i '/^[^#].*pam_lastlog\.so/s/^/# /' /etc/pam.d/login
+
+	# Creating state file
+	touch /var/lib/live/config/login
+}
+
+Init
+Config

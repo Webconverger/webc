@@ -8,6 +8,7 @@
 [ -z "$PLYMOUTH_DATADIR" ] && PLYMOUTH_DATADIR="/usr/share"
 [ -z "$PLYMOUTH_PLUGIN_PATH" ] && PLYMOUTH_PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
 [ -z "$PLYMOUTH_LOGO_FILE" ] && PLYMOUTH_LOGO_FILE="/usr/share/plymouth/debian-logo.png"
+[ -n "$PLYMOUTH_THEME_NAME" ] && THEME_OVERRIDE=1
 [ -z "$PLYMOUTH_THEME_NAME" ] && PLYMOUTH_THEME_NAME=$(plymouth-set-default-theme)
 [ -z "$PLYMOUTH_CONFDIR" ] && PLYMOUTH_CONFDIR="/etc/plymouth/"
 [ -z "$PLYMOUTH_POLICYDIR" ] && PLYMOUTH_POLICYDIR="/usr/share/plymouth/"
@@ -372,8 +373,8 @@ done
 [ -z "$INITRDDIR" ] && usage error
 
 mkdir -p ${INITRDDIR}${PLYMOUTH_DATADIR}/plymouth/themes
-inst ${PLYMOUTH_DAEMON_PATH} $INITRDDIR /sbin/plymouthd
-inst ${PLYMOUTH_CLIENT_PATH} $INITRDDIR /bin/plymouth
+inst ${PLYMOUTH_DAEMON_PATH} $INITRDDIR
+inst ${PLYMOUTH_CLIENT_PATH} $INITRDDIR
 inst ${PLYMOUTH_DATADIR}/plymouth/themes/text/text.plymouth $INITRDDIR
 inst ${PLYMOUTH_PLUGIN_PATH}/text.so $INITRDDIR
 inst ${PLYMOUTH_DATADIR}/plymouth/themes/details/details.plymouth $INITRDDIR
@@ -386,6 +387,12 @@ inst ${PLYMOUTH_CONFDIR}/plymouthd.conf $INITRDDIR
 if [ -z "$PLYMOUTH_THEME_NAME" ]; then
     echo "No default plymouth plugin is set" >&2
     exit 1
+fi
+
+if [ $THEME_OVERRIDE ]; then
+    conf=$INITRDDIR/${PLYMOUTH_CONFDIR}/plymouthd.conf
+    echo "modifying plymouthd.conf: Theme=$PLYMOUTH_THEME_NAME" >&2
+    sed -i "s/^ *Theme *=.*/# theme modified by plymouth-populate-initrd\nTheme=$PLYMOUTH_THEME_NAME/" $conf
 fi
 
 PLYMOUTH_MODULE_NAME=$(grep "ModuleName *= *" ${PLYMOUTH_DATADIR}/plymouth/themes/${PLYMOUTH_THEME_NAME}/${PLYMOUTH_THEME_NAME}.plymouth | sed 's/ModuleName *= *//')
@@ -425,6 +432,7 @@ if [ -n "$SYSTEMD_UNIT_DIR" -a -d "$SYSTEMD_UNIT_DIR" ]; then
     inst $SYSTEMD_UNIT_DIR/plymouth-halt.service $INITRDDIR
 
     inst $SYSTEMD_UNIT_DIR/initrd-switch-root.target.wants/plymouth-switch-root.service $INITRDDIR
+    inst $SYSTEMD_UNIT_DIR/initrd-switch-root.target.wants/plymouth-start.service $INITRDDIR
     inst $SYSTEMD_UNIT_DIR/sysinit.target.wants/plymouth-start.service $INITRDDIR
     inst $SYSTEMD_UNIT_DIR/multi-user.target.wants/plymouth-quit.service $INITRDDIR
     inst $SYSTEMD_UNIT_DIR/multi-user.target.wants/plymouth-quit-wait.service $INITRDDIR

@@ -100,7 +100,7 @@ create_temporary_cnf
 # create the certificate.
 
 if [ "$1" != "generate-default-snakeoil" ]; then
-    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes \
+    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes -sha256 \
 	-out $output -keyout $output > $TMPOUT 2>&1
     then
 	echo Could not create certificate. Openssl output was: >&2
@@ -112,7 +112,7 @@ if [ "$1" != "generate-default-snakeoil" ]; then
     cd $(dirname $output)
     ln -sf $(basename $output) $(openssl x509 -hash -noout -in $(basename $output))
 else
-    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes \
+    if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes -sha256 \
 	-out /etc/ssl/certs/ssl-cert-snakeoil.pem \
         -keyout /etc/ssl/private/ssl-cert-snakeoil.key > $TMPOUT 2>&1
     then

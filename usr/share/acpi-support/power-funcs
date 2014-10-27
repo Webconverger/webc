@@ -15,14 +15,14 @@ getXuser() {
 	local plist display uid user startx pid userhome IFS
 
 	if [ "$displaynum" ]; then
-		display=:$displaynum
+		display=":$displaynum"
 	else
 		display=.+
 	fi
 
 	user=
 	if [ -x /usr/bin/ck-list-sessions ]; then
-		uid=$(ck-list-sessions | awk 'BEGIN { unix_user = ""; } /^Session/ { unix_user = ""; } /unix-user =/ { gsub(/'\''/,"",$3); unix_user = $3; } /x11-display = '\'$display\''/ { print unix_user; exit (0); }')
+		uid=$(ck-list-sessions | awk 'BEGIN { unix_user = ""; } /^Session/ { unix_user = ""; } /unix-user =/ { gsub(/'\''/,"",$3); unix_user = $3; } /x11-display = '\'$display\''/ { print unix_user; exit (0); } /x11-display = '\'$display.0\''/ { print unix_user; exit (0);}')
 
 		if [ "$uid" ]; then
 			IFS=:
@@ -30,7 +30,9 @@ getXuser() {
 			user=$1
 			unset IFS
 		fi
-	else
+	fi
+
+	if [ -z "$user" ]; then
 		plist=$(pinky -fw) || pwf_error "pinky lost"
 		while read l; do
 			set -- $l
@@ -94,6 +96,11 @@ getXconsole() {
 	local displaynum
 
 	displaynum=$(ck-list-sessions | awk 'BEGIN { active = 0; } /^Session/ { active = 0; } /active = TRUE/ { active = 1; } active && /x11-display = '\':.+\''/ { gsub(/'\':*'/,"",$3); print $3; exit (0); }')
+
+        if [ -z "$displaynum" ]; then
+		console=`fgconsole`;
+	        displaynum=`ps t tty$console | sed -n -re 's,.*/Xorg .*:([0-9]+).*,\1,p'`
+	fi
 
 	if [ "$displaynum" ]; then
 		DISPLAY=":$displaynum"

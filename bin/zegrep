@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 bindir='/bin'
 case $1 in
 --__bindir) bindir=${2?}; shift; shift;;
 esac
 PATH=$bindir:$PATH
-exec zgrep -E "$@"
+exec zgrep --__bindir "$bindir" -E "$@"

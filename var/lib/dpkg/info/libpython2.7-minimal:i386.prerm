@@ -1,0 +1,35 @@
+#! /bin/sh
+
+set -e
+
+remove_bytecode()
+{
+    pkg=$1
+    dpkg -L $1 \
+	| awk '/\.py$/ {print $0"c\n" $0"o"}' \
+	| xargs -r rm -f >&2
+}
+
+case "$1" in
+    remove)
+	pc=$(dpkg-query -f '${db:Status-Abbrev} ${binary:Package}\n' -W libpython2.7-minimal \
+            | grep -v '^.n' | wc -l)
+	if [ "$pc" -le 1 ]; then
+            remove_bytecode libpython2.7-minimal:i386
+	fi
+        ;;
+    upgrade)
+	remove_bytecode libpython2.7-minimal:i386
+        # byte compilation in python2.7-minimal postinst, strict dependency
+        ;;
+    deconfigure)
+        ;;
+    failed-upgrade)
+        ;;
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+

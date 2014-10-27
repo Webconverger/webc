@@ -1,10 +1,14 @@
 [Unit]
 Description=System Logging Service
+Requires=syslog.socket
+Documentation=man:rsyslogd(8)
+Documentation=http://www.rsyslog.com/doc/
 
 [Service]
-ExecStart=/usr/sbin/rsyslogd -n -c5
-Sockets=syslog.socket
+Type=notify
+ExecStart=/usr/sbin/rsyslogd -n
 StandardOutput=null
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

@@ -2,6 +2,8 @@
 
 set -e
 
+. /usr/share/debconf/confmodule
+
 tmp=`mktemp -q -d`
 
 latest_firmware ()
@@ -29,10 +31,6 @@ if [ $? -ne 0 ]; then
 	   echo "Deleting old extracted firmware..."
 	   rm -rf /lib/firmware/b43
 	fi
-	if [ ! -d /lib/firmware/b43 ]; then
-	   echo "Creating new firmware directory..."
-      		mkdir -p /lib/firmware/b43
-        fi
 fi
 tar xvjf broadcom-wl-5.100.138.tar.bz2
 cd broadcom-wl-5.100.138/linux
@@ -61,6 +59,14 @@ if dpkg --compare-versions 2.6.25 gt `uname -r | cut -d- -f1`; then
 	exit 0
 fi
 
+# install firmware unconditional if the corresponding debconf value is true
+# this is usefull for live-systems or similar systems that should work on
+# changing hardware
+db_get b43-fwcutter/install-unconditional
+if [ "$RET" = "true" ] ; then
+    latest_firmware
+    exit 0
+fi
 
 # Fix for BCM4306/3 [14e4:4320] (rev 03)
 chip=`lspci -n | grep -o "14e4:4320 (rev 03)"` || true
@@ -88,16 +94,14 @@ if [ -n "$pci" ]; then
 		4301 | 4306 | 4320 |4324 | 4325)
 			legacy=1
 		;;
-		4315)
-			lpphy=1
-		;;
-		4328 | 4329 | 4307 | 4311 | 4312 | 4318 | 4319 | 432b | 4315 | 4321 | 4353 | 4357 | 5354)
+		4307 | 4311 | 4312 | 4315 | 4318 | 4319 | 4321 | 4328 | 4329 | 432b | 432c | 4331 | 4353 | 4357 | 5354)
 			latest=1
-                ;;	
-		4322 | 4331 | 4727)
+                ;;
+		4322 | 4358 | 4365 | 4727 | a8d8)
+			# b43 upstream says 3.6+ for a8d8
 			unsupported="$unsupported $device_id"
 		;;
-		0576 | 4313 | 432a | 432c | 432d | 4358 | 4359 | 435a | a99d)
+		0576 | 4313 | 432a | 432d | 4358 | 4359 | 435a | a99d)
                         nottested=1
                 ;;
 		*)
@@ -109,11 +113,6 @@ fi
 if [ "$legacy" ]; then
 	echo "An unsupported BCM4301, BCM4306 or BCM4306/2 device was found."
 	echo "Use b43legacy firmware (firmware-b43legacy-installer package) instead."
-	echo "Aborting."
-	exit 0
-elif [ "$lpphy" ]; then
-	echo "An unsupported BCM4312 Low-Power (LP-PHY) device was found."
-	echo "Use b43 LP-PHY firmware (firmware-b43-lpphy-installer package) instead."
 	echo "Aborting."
 	exit 0
 elif [ "$unsupported" ]; then

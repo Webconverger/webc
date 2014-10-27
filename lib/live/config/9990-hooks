@@ -1,23 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Hooks ()
+#set -e
+
+Cmdline ()
 {
-	if [ -z "${LIVE_HOOKS}" ]
-	then
-		return
-	fi
-
-	echo -n " hooks"
-
-	for _PARAMETER in ${_CMDLINE}
+	# Reading kernel command line
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.hooks=*|hooks=*)
@@ -25,17 +21,20 @@ Hooks ()
 				;;
 		esac
 	done
-
-	Process_hooks
 }
 
-Process_hooks ()
+Init ()
 {
 	if [ -z "${LIVE_HOOKS}" ]
 	then
-		return
+		exit 0
 	fi
 
+	echo -n " hooks"
+}
+
+Config ()
+{
 	for _HOOK in $(echo ${LIVE_HOOKS} | sed -e 's/|/ /g')
 	do
 		case "${_HOOK}" in
@@ -75,9 +74,11 @@ Process_hooks ()
 		fi
 
 		chmod 0755 "${_TMPFILE}"
-		./"${_TMPFILE}"
+		"${_TMPFILE}"
 		rm -f "${_TMPFILE}"
 	done
 }
 
-Hooks
+Cmdline
+Init
+Config

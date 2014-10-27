@@ -48,9 +48,6 @@ sub load_answer {
 		$template->description("Dummy template");
 		$template->extended_description("This is a fake template used to pre-seed the debconf database. If you are seeing this, something is probably wrong.");
 	}
-	else {
-		$template->default($content);
-	}
 	$template->type($type);
 	
 	my $question=Debconf::Question->get($label);

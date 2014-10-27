@@ -1,7 +1,7 @@
 #!/bin/sh
-# $Id: ncurses-config.in,v 1.25 2011/03/19 22:43:38 tom Exp $
+# $Id: ncurses-config.in,v 1.30 2012/11/11 00:14:28 tom Exp $
 ##############################################################################
-# Copyright (c) 2006-2010,2011 Free Software Foundation, Inc.                #
+# Copyright (c) 2006-2011,2012 Free Software Foundation, Inc.                #
 #                                                                            #
 # Permission is hereby granted, free of charge, to any person obtaining a    #
 # copy of this software and associated documentation files (the "Software"), #
@@ -30,22 +30,48 @@
 #
 # Author: Thomas E. Dickey, 2006-on
 
+LANG=C;		export LANG
+LANGUAGE=C;	export LANGUAGE
+LC_ALL=C;	export LC_ALL
+LC_CTYPE=C;	export LC_CTYPE
+
 prefix="/usr"
 exec_prefix="${prefix}"
 
 bindir="${exec_prefix}/bin"
 includedir="${prefix}/include"
 libdir="/usr/lib/i386-linux-gnu"
-datadir="${prefix}/share"
+datarootdir="${prefix}/share"
+datadir="${datarootdir}"
 mandir="/usr/share/man"
 
 THIS="ncurses"
 TINFO_LIB="tinfo"
+RPATH_LIST="${libdir}"
 
-LANG=C;		export LANG
-LANGUAGE=C;	export LANGUAGE
-LC_ALL=C;	export LC_ALL
-LC_CTYPE=C;	export LC_CTYPE
+# Ensure that RPATH_LIST contains only absolute pathnames, if it is nonempty.
+# We cannot filter it out within the build-process since the variable is used
+# in some special cases of installation using a relative path.
+if test -n "$RPATH_LIST"
+then
+	save_IFS="$IFS"
+	IFS=':'
+	filtered=
+	for item in $RPATH_LIST
+	do
+		case "$item" in
+		./*|../*|*/..|*/../*)
+			;;
+		*)
+			test -n "$filtered" && filtered="${filtered}:"
+			filtered="${filtered}${item}"
+			;;
+		esac
+	done
+	IFS="$save_IFS"
+	# if the result is empty, there is little we can do to fix it
+	RPATH_LIST="$filtered"
+fi
 
 # with --disable-overwrite, we installed into a subdirectory, but transformed
 # the headers to include like this:
@@ -83,19 +109,25 @@ while test $# -gt 0; do
 ENDECHO
 		;;
 	--libs)
+		if true
+		then
+			LIBDIR=
+		else
+			LIBDIR=-L$libdir
+		fi
 		if test tinfo = ncurses ; then
 		sed -e 's,^[ ]*,,' -e 's, [ ]*, ,g' -e 's,[ ]*$,,' <<-ENDECHO
-			 -l${THIS}  
+			$LIBDIR  -l${THIS}  
 ENDECHO
 		else
 		sed -e 's,^[ ]*,,' -e 's, [ ]*, ,g' -e 's,[ ]*$,,' <<-ENDECHO
-			 -l${THIS} -l${TINFO_LIB}  
+			$LIBDIR  -l${THIS} -l${TINFO_LIB}  
 ENDECHO
 		fi
 		;;
 	# identification
 	--version)
-		echo "5.9.20110404"
+		echo "5.9.20140913"
 		;;
 	--abi-version)
 		echo "5"
@@ -163,4 +195,5 @@ ENDHELP
 	esac
 	shift
 done
+# vi:ts=4 sw=4
 # vile:shmode

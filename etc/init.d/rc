@@ -82,7 +82,12 @@ if ! test -e /proc/stat; then
 		mount -t linprocfs linprocfs /proc
 	fi
 fi
-startpar -v > /dev/null 2>&1 || CONCURRENCY="none"
+if [ -x /lib/startpar/startpar ] ; then
+    STARTPAR=/lib/startpar/startpar
+else
+    STARTPAR=startpar
+fi
+$STARTPAR -v > /dev/null 2>&1 || CONCURRENCY="none"
 
 #
 # Start script or program.
@@ -90,8 +95,9 @@ startpar -v > /dev/null 2>&1 || CONCURRENCY="none"
 case "$CONCURRENCY" in
 	makefile|startpar|shell) # startpar and shell are obsolete
 		CONCURRENCY=makefile
+		log_action_msg "Using makefile-style concurrent boot in runlevel $runlevel"
 		startup() {
-			eval "$(startpar -p 4 -t 20 -T 3 -M $1 -P $previous -R $runlevel)"
+			eval "$($STARTPAR -p 4 -t 20 -T 3 -M $1 -P $previous -R $runlevel)"
 
 			if [ -n "$failed_service" ]
 			then

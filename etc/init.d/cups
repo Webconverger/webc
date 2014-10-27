@@ -3,31 +3,37 @@
 # Provides:          cups
 # Required-Start:    $syslog $remote_fs
 # Required-Stop:     $syslog $remote_fs
-# Should-Start:      $network avahi
+# Should-Start:      $network avahi-daemon slapd nslcd
 # Should-Stop:       $network
 # X-Start-Before:    samba
 # X-Stop-After:      samba
 # Default-Start:     2 3 4 5
 # Default-Stop:      1
 # Short-Description: CUPS Printing spooler and server
+# Description:       Manage the CUPS Printing spooler and server;
+#                    make it's web interface accessible on http://localhost:631/
 ### END INIT INFO
+
+# Author: Debian Printing Team <debian-printing@lists.debian.org>
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/sbin/cupsd
 NAME=cupsd
 PIDFILE=/var/run/cups/$NAME.pid
 DESC="Common Unix Printing System"
+SCRIPTNAME=/etc/init.d/cups
 
 unset TMPDIR
 
+# Exit if the package is not installed
 test -x $DAEMON || exit 0
 
 mkdir -p /var/run/cups/certs
+[ -x /sbin/restorecon ] && /sbin/restorecon -R /var/run/cups
 
-if [ -r /etc/default/cups ]; then
-  . /etc/default/cups
-fi
-
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
 . /lib/lsb/init-functions
 
 # Get the timezone set.
@@ -35,12 +41,6 @@ if [ -z "$TZ" -a -e /etc/timezone ]; then
     TZ=`cat /etc/timezone`
     export TZ
 fi
-
-restart_xprint() {
-    if [ -n "$success" ] && [ -x /etc/init.d/xprint ]; then
-        invoke-rc.d xprint force-reload || true
-    fi
-}
 
 coldplug_usb_printers() {
     if type udevadm > /dev/null 2>&1 && [ -x /lib/udev/udev-configure-printer ]; then
@@ -55,60 +55,40 @@ coldplug_usb_printers() {
 
 case "$1" in
   start)
-	log_begin_msg "Starting $DESC: $NAME"
+	log_daemon_msg "Starting $DESC" "$NAME"
 
 	mkdir -p `dirname "$PIDFILE"`
-	if [ "$LOAD_LP_MODULE" = "yes" -a -f /usr/lib/cups/backend/parallel \
-             -a -f /proc/devices -a -f /proc/modules -a -x /sbin/modprobe ]; then
-	  modprobe -q -b lp || true
-	  modprobe -q -b ppdev || true
-	  modprobe -q -b parport_pc || true
-	fi
-
-	start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" --exec $DAEMON && success=1
-
-	coldplug_usb_printers
-	log_end_msg $?
-	restart_xprint
+	start-stop-daemon --start --quiet --oknodo --pidfile "$PIDFILE" --exec $DAEMON
+	status=$?
+	[ $status = 0 ] && coldplug_usb_printers
+	log_end_msg $status
 	;;
   stop)
-	log_begin_msg "Stopping $DESC: $NAME"
-	start-stop-daemon --stop --quiet --retry 5 --oknodo --pidfile $PIDFILE --name $NAME && success=1
-	log_end_msg $?
-	restart_xprint
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	start-stop-daemon --stop --quiet --retry 5 --oknodo --pidfile $PIDFILE --name $NAME
+	status=$?
+	log_end_msg $status
 	;;
   reload|force-reload)
-       log_begin_msg "Reloading $DESC: $NAME"
-       start-stop-daemon --stop --quiet --pidfile $PIDFILE --name $NAME --signal 1 && success=1
-       log_end_msg $?
-	restart_xprint
+       log_daemon_msg "Reloading $DESC" "$NAME"
+       start-stop-daemon --stop --quiet --pidfile $PIDFILE --name $NAME --signal 1
+       status=$?
+       log_end_msg $status
        ;;
   restart)
-	log_begin_msg "Restarting $DESC: $NAME"
+	log_daemon_msg "Restarting $DESC" "$NAME"
 	if start-stop-daemon --stop --quiet --retry 5 --oknodo --pidfile $PIDFILE --name $NAME; then
-		start-stop-daemon --start --quiet --pidfile "$PIDFILE" --exec $DAEMON && success=1
+		start-stop-daemon --start --quiet --pidfile "$PIDFILE" --exec $DAEMON
 	fi
-	log_end_msg $?
-	restart_xprint
+	status=$?
+	log_end_msg $status
 	;;
   status)
-	echo -n "Status of $DESC: "
-	if [ ! -r "$PIDFILE" ]; then
-		echo "$NAME is not running."
-		exit 3
-	fi
-	if read pid < "$PIDFILE" && ps -p "$pid" > /dev/null 2>&1; then
-		echo "$NAME is running."
-		exit 0
-	else
-		echo "$NAME is not running but $PIDFILE exists."
-		exit 1
-	fi
+	status_of_proc -p "$PIDFILE" "$DAEMON" "$NAME" && exit 0 || exit $?
 	;;
   *)
-	N=/etc/init.d/${0##*/}
-	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
-	exit 1
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
+	exit 3
 	;;
 esac
 

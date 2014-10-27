@@ -5,10 +5,10 @@
 # Required-Stop: 
 # Default-Start:     2 3 4 5
 # Default-Stop:
-# Short-Description: Remove /etc/nologin at boot
-# Description:       This script removes the /etc/nologin file as the
+# Short-Description: Remove /run/nologin at boot
+# Description:       This script removes the /run/nologin file as the
 #                    last step in the boot process, if DELAYLOGIN=yes.
-#                    If DELAYLOGIN=no, /etc/nologin was not created by
+#                    If DELAYLOGIN=no, /run/nologin was not created by
 #                    bootmisc earlier in the boot process.
 ### END INIT INFO
 
@@ -22,13 +22,13 @@ do_start () {
 	#
 	case "$DELAYLOGIN" in
 	  Y*|y*)
-		rm -f /var/lib/initscripts/nologin
+		rm -f /run/nologin
 		;;
 	esac
 }
 
 do_status () {
-	if [ ! -f /var/lib/initscripts/nologin ] ; then
+	if [ ! -f /run/nologin ] ; then
 		return 0
 	else
 		return 4

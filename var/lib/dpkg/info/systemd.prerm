@@ -7,13 +7,22 @@ set -e
 # will not work.
 #
 
-if [ "$1" = "remove" ] && [ -e /sys/fs/cgroup/systemd ]; then
+if [ "$1" = "remove" ] && [ -d /run/systemd/system ]; then
     echo "systemd is the active init system, please switch to another before removing systemd."
     exit 1
 fi
 
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/bash_completion.d/systemctl-bash-completion.sh /etc/bash_completion.d/systemd-bash-completion.sh 44-2~ systemd -- "$@"
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-journald.conf /etc/systemd/journald.conf 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-logind.conf /etc/systemd/logind.conf 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemd-bash-completion.sh 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemctl-bash-completion.sh 204-1~ systemd -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/x11.conf 29-1~ systemd -- "$@"

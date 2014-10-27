@@ -44,7 +44,7 @@ sub display_nowrap {
 	}
 
 	foreach (@lines) {
-		if (! $this->screenheight_guessed &&
+		if (! $this->screenheight_guessed && $this->screenheight > 2 &&
 		    $this->linecount($this->linecount+1) > $this->screenheight - 2) {
 			my $resp=$this->prompt(
 				prompt => '['.gettext("More").']',

@@ -34,10 +34,10 @@ case "${2}" in
 		;;
 esac
 
-for CTRL in /var/run/wpa_supplicant/*; do
+for CTRL in /run/wpa_supplicant/*; do
 	[ -S "${CTRL}" ] || continue
 
-	IFACE="${CTRL#/var/run/wpa_supplicant/}"
+	IFACE="${CTRL#/run/wpa_supplicant/}"
 
 	# skip if ifplugd is managing this interface
 	if [ "${IFPLUGD_IFACE}" = "${IFACE}" ]; then

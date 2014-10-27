@@ -13,16 +13,16 @@ function select_printers() {
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
 <INPUT TYPE="HIDDEN" NAME="OP" VALUE="export-samba">
 
-<H2 CLASS="title">Esporta stampanti a Samba</H2>
+<H2 CLASS="title">Esporta le stampanti a Samba</H2>
 
-{error?<P>Impossibile esportare stampanti a Samba\:</P>
+{error?<P>Non è possibile esportare le stampanti a Samba\:</P>
 <BLOCKQUOTE>{error}</BLOCKQUOTE>
-<P>Consulta il file <A HREF="/admin/log/error_log"
-TARGET="_blank">error_log</A> per ulteriori informazioni.</P>:
-<P>Questa pagina ti consente di esportare stampanti a Samba in modo che
-i client Windows possano accedervi dalle icone <VAR>Risorse di rete</VAR> 
-sui loro desktop. Devi installare preventivamente i driver per stampanti
-Windows PostScript come descritto nella pagina di manuale <A
+<P>Per maggiori informazioni, consulta il file <A HREF="/admin/log/error_log"
+TARGET="_blank">error_log</A>.</P>:
+<P>Questa pagina ti consente di esportare le stampanti a Samba, in modo che
+i client Windows possano accedervi tramite le icone <VAR>Risorse
+di rete</VAR> dei loro desktop. Innanzitutto, dovete installare i driver delle
+stampanti Windows PostScript, come descritto nella pagina di manuale di <A
 HREF="/help/man-cupsaddsmb.html"
 TARGET="_blank">cupsaddsmb(8)</A>.</P>}
 
@@ -38,16 +38,16 @@ onChange="select_printers()"> Esporta tutte le stampanti
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Nome utente Samba:</TH>
+<TH CLASS="label">Username di Samba:</TH>
 <TD><INPUT TYPE="TEXT" NAME="USERNAME" VALUE="{?USERNAME}"> (richiesto)</TD>
 </TR>
 <TR>
-<TH CLASS="label">Password Samba:</TH>
+<TH CLASS="label">Password di Samba:</TH>
 <TD><INPUT TYPE="PASSWORD" NAME="PASSWORD" VALUE=""> (richiesto)</TD>
 </TR>
 <TR>
 <TD></TD>
-<TD><INPUT TYPE="SUBMIT" VALUE="Esporta stampanti a Samba"></TD>
+<TD><INPUT TYPE="SUBMIT" VALUE="Esporta le stampanti a Samba"></TD>
 </TR>
 </TABLE>
 

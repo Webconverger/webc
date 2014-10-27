@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Gnome_panel_data ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/gnome-panel-data.list ] || \
-	   [ -e /var/lib/live/config/gnome-panel-data ]
-	then
-		return
-	fi
-
-	echo -n " gnome-panel-data"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -28,11 +21,21 @@ Gnome_panel_data ()
 				;;
 		esac
 	done
-
-	Configure_gnome_panel_data
 }
 
-Configure_gnome_panel_data ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-panel-data.list ] || \
+	   [ -e /var/lib/live/config/gnome-panel-data ]
+	then
+		exit 0
+	fi
+
+	echo -n " gnome-panel-data"
+}
+
+Config ()
 {
 	sudo -u "${LIVE_USERNAME}" gconftool-2 -s -t bool /apps/panel/global/disable_lock_screen true
 
@@ -40,4 +43,6 @@ Configure_gnome_panel_data ()
 	touch /var/lib/live/config/gnome-panel-data
 }
 
-Gnome_panel_data
+Cmdline
+Init
+Config

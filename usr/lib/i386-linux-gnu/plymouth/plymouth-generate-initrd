@@ -13,11 +13,12 @@ PLYMOUTH_INITRD_DIR="$(mktemp --tmpdir -d plymouth-XXXXXXX)"
 $PLYMOUTH_POPULATE_INITRD -t "$PLYMOUTH_INITRD_DIR"
 
 if [ $? -eq 0 ]; then
+    command -v pigz &>/dev/null && gzip=pigz || gzip=gzip
     (cd $PLYMOUTH_INITRD_DIR;
         # FIXME: might make sense to add a flag to plymouth-populate-initrd to
         #        skip these from the start
         rm -f lib*/{ld*,libc*,libdl*,libm*,libz*,libpthread*}
-        find | cpio -Hnewc -o | gzip -9 > $PLYMOUTH_IMAGE_FILE
+        find | cpio -Hnewc -o | $gzip -9 > $PLYMOUTH_IMAGE_FILE
     )
 fi
 

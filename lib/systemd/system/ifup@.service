@@ -1,6 +1,10 @@
 [Unit]
 Description=ifup for %I
-After=local-fs.target
+After=local-fs.target network-pre.target networking.service
+Before=network.target
+BindsTo=sys-subsystem-net-devices-%i.device
+ConditionPathIsDirectory=/run/network
+DefaultDependencies=no
 
 [Service]
 ExecStart=/sbin/ifup --allow=hotplug %I

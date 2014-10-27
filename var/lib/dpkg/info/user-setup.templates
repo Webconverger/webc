@@ -13,12 +13,12 @@ Description: for internal use only
 
 Template: passwd/user-default-groups
 Type: string
-Default: audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor
+Default: audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
 Description: for internal use only
 
 Template: passwd/root-login
 Type: boolean
-Default: false
+Default: true
 Description: Allow login as root?
  If you choose not to allow root to log in, then a user account will be
  created and given the power to become root using the 'sudo' command.
@@ -77,9 +77,9 @@ Description-he.UTF-8: לאפשר כניסה כ-root ?
 Description-hi.UTF-8: रूट की तरह लॉगिन की आज्ञा दें?
  यदि आप रूट को लॉगिन की आज्ञा नहीं देंगे तो एक उपयोक्ता खाता बनाया जाएगा जिसको ऐसा अधिकार दिया जाएगा कि वह 'sudo' कमांड का प्रयोग करके रूट बन जाए.
 Description-hr.UTF-8: Dopustiti logiranje kao root?
- Ako ne dopustite rootu da se ulogira, tada će se napraviti korisnički račun koji će dobiti sposobnost da postane root koristeći naredbu 'sudo'.
-Description-hu.UTF-8: Engedélyezed a bejelentkezést root-ként?
- Ha nem engedélyezed a root-ként való bejelentkezést, akkor a létrejövő felhasználó a 'sudo' paranccsal érhet majd el root jogokat.
+ Ako ne dopustite rootu da se ulogira, tada će se napraviti korisnički račun koji će dobiti sposobnost da postane root korištenjem naredbe 'sudo'.
+Description-hu.UTF-8: Engedélyezi a bejelentkezést root-ként?
+ Ha nem engedélyezi a root-ként való bejelentkezést, akkor a létrejövő felhasználó a 'sudo' paranccsal érhet majd el root jogokat.
 Description-id.UTF-8: Izinkan login sebagai root?
  Jika Anda memilih tidak mengizinkan root untuk login, maka sebuah akun pengguna akan dibuat dan diberi wewenang untuk menjadi root dengan perintah 'sudo'.
 Description-is.UTF-8: Leyfa innskráningu sem rót?
@@ -153,12 +153,14 @@ Description-ta.UTF-8: மூலமாக (ரூட்) உள் நுழை�
  மூலமாக (ரூட்) உள் நுழைய அனுமதிக்க வேண்டாம் எனில் உங்களுக்கு ஒரு பயனர் கணக்கு தரப் பட்டு சூடொ ('sudo' ) கட்டளை மூலம் ரூட் ஆக செயல் பட அதிகாரம் தரப் படும்.
 Description-te.UTF-8: root లాగ్ ఇన్ అనుమతించాలా? 
  root లాగ్ ఇన్ అనుమతించనట్లయితే, వాడుకరి ఖాతా సృష్టించి,'sudo' కమాండ్ ద్వారా దానికి  root వలే పనిచేయటానికి  అధికారము ఇవ్వబడుతుంది.
+Description-tg.UTF-8: Барои ворид шудан ҳамчун root иҷозат медиҳед?
+ Агар шумо интихоб кунед, ки ба root воридшавиро иҷозат надиҳед, он гоҳ ҳисоби корбар эҷод карда мешавад, ва он ҳисоб метавонад тавассути фармони "sudo" ба root табдил ёбад.
 Description-th.UTF-8: อนุญาตให้เข้าระบบเป็น root หรือไม่?
  ถ้าคุณเลือกที่จะไม่อนุญาตให้เข้าระบบเป็น root  โปรแกรมจะสร้างบัญชีผู้ใช้หนึ่งขึ้นมา และให้สิทธิ์ในการเป็น root ได้ผ่านคำสั่ง 'sudo'
 Description-tl.UTF-8: Payagan makapasok bilang root?
  Kung piliin niyong hindi payagang makapasok bilang root, may lilikhaing user account na bibigyan ng kakayahang maging root na gamit ang 'sudo' command.
-Description-tr.UTF-8: "root" olarak oturum açmaya izin verilsin mi?
- Eğer "root" kullanıcısının giriş yapmasına izin vermezseniz normal bir kullanıcı hesabı oluşturulacak ve bu kullanıcının 'sudo' komutuyla "root"haklarına sahip olması sağlanacaktır.
+Description-tr.UTF-8: 'root' olarak oturum açmaya izin verilsin mi?
+ Eğer 'root' kullanıcısının giriş yapmasına izin vermezseniz normal bir kullanıcı hesabı oluşturulacak ve bu kullanıcının 'sudo' komutuyla "root"haklarına sahip olması sağlanacaktır.
 Description-ug.UTF-8: باشقۇرغۇچى (root) سالاھىيىتىدە كىرىشكە يول قويامسىز؟
  ئەگەر سىز باشقۇرغۇچى سالاھىيىتىدە كىرىشكە يول قويمىسىڭىز، ئۇنداقتا ئادەتتىكى ئىشلەتكۈچىدىن بىرى قۇرۇلۇپ 'sudo' بۇيرۇقى بىلەن باشقۇرغۇچىغا ئايلىنىدىغان ھوقۇق بېرىلىدۇ.
 Description-uk.UTF-8: Дозволити реєстрацію для користувача root?
@@ -245,13 +247,13 @@ Description-bo.UTF-8: རྩ་བའི་གསང་གྲངས：
  .
  གསལ་འདེབས གསང་གྲངས་འབྲི་སྐབས་ཁྱོད་ཀྱིས་དེའི་ནང་དོན་མཐོང་མི་ཐུབ
 Description-bs.UTF-8: Root šifra:
- Trebate postaviti šifru za 'root' - račun sistemskog administratora. Zlonamjerni ili nekvalifikovani korisnik sa root pristupom može napraviti štetu, tako da se trebate pobrinuti da izaberete root šifru koju nije lahko pogoditi. Ona nebi trebala predstavljati riječ iz rječnika, ili riječ koja bi se lahko mogla povezati sa vama, poput vašeg nadimka.
+ Trebate postaviti šifru za 'root', račun sistemskog administratora. Zlonamjerni ili nekvalificirani korisnik sa root pristupom može napraviti štetu, tako da se trebate pobrinuti da izaberete root šifru koju nije lahko pogoditi. Ona ne bi trebala predstavljati riječ iz rječnika, ili riječ koja bi se lahko mogla povezati s Vama, ili riječ koja se može lahko povezati s Vama.
  .
  Dobra šifra sadržava mješavinu slova, brojeva i znakova interpunkcije i treba se redovno mijenjati.
  .
  Root korisnik ne bi trebao imati praznu šifru. Ako ostavite prazno, root nalog će biti isključen i početni sistemski korisnik će imati mogućnost da postane root pomoću "sudo" komande.
  .
- Primjetite da nećete moći vidjeti šifru dok je budete ukucavali.
+ Uočavate da se šifra ne vidi tokom ukucavanja.
 Description-ca.UTF-8: Contrasenya de root:
  Necessiteu definir una contrasenya per a «root», el compte d'administració del sistema. Un usuari maliciós o no qualificat amb accés de root podria aportar conseqüències desastroses, per tant heu de triar una contrasenya de root que no sigui fàcil d'endevinar. No ha de ser una paraula del diccionari o una paraula que pugui ser fàcilment associada a vosaltres.
  .
@@ -355,7 +357,7 @@ Description-fi.UTF-8: Pääkäyttäjän salasana:
  .
  Pääkäyttäjän salasanan ei tulisi olla tyhjä. Jos jätät tämän kentän tyhjäksi, root-tunnus poistetaan käytöstä ja järjestelmän ensimmäiselle käyttäjätunnukselle annetaan oikeudet siirtyä pääkäyttäjäksi komennolla ”sudo”.
  .
- Huomaa ettei salasana ei näy sitä kirjoitettaessa.
+ Huomaa että salasana ei näy sitä kirjoitettaessa.
 Description-fr.UTF-8: Mot de passe du superutilisateur (« root ») :
  Vous devez choisir un mot de passe pour le superutilisateur, le compte d'administration du système. Un utilisateur malintentionné ou peu expérimenté qui aurait accès à ce compte peut provoquer des désastres. En conséquence, ce mot de passe ne doit pas être facile à deviner, ni correspondre à un mot d'un dictionnaire ou vous être facilement associé.
  .
@@ -405,19 +407,19 @@ Description-hi.UTF-8: रूट कूटशब्द:
  .
  ज्ञात रहे कि टाइप करते समय कूटशब्द आपको दिखाई नहीं पड़ेगा.
 Description-hr.UTF-8: Lozinka root korisnika:
- Morate postaviti lozinku za root korisnika, račun administratora sustava. Zlonamjeran ili nestručan korisnik koji ima root pristup može izazvati golemu štetu, pa se pobrinite da korijensku lozinku ne bude jednostavno odgonetnuti. To ne bi trebala biti obična riječ, ili riječ koju je lako povezati s vama.
+ Morate postaviti lozinku za root korisnika, račun administratora sustava. Zlonamjeran ili nestručan korisnik koji ima root pristup može izazvati golemu štetu pa se pobrinite da korijensku lozinku ne bude jednostavno odgonetnuti. To ne bi trebala biti obična riječ, ili riječ koju je lako povezati s vama.
  .
- Dobra lozinka se treba sastojati od slova, brojaka i interpunkcija i treba se redovito mijenjati.
+ Dobra lozinka se treba sastojati od slova, brojaka i interpunkcija te se treba redovito mijenjati.
  .
  Korisnik root ne bi smio imati praznu lozinku. Ako ovo ostavite prazno, korisnički račun root će biti onemogućen, a inicijalnom korisničkom računu će biti omogućeno da postane root koristeći naredbu 'sudo'.
  .
  Primijetite da nećete moći vidjeti lozinku tipkajući je.
 Description-hu.UTF-8: A 'root' felhasználó jelszava:
- Most kell megadni a 'root', vagyis a rendszergazda hozzáférés jelszavát. Rosszakaró vagy egy nagyon hozzá nem értő felhasználó root hozzáférése végzetes, így csak nagyon nehezen kitalálható root jelszót szabad adni. Ne adjunk szótári, vagy könnyen hozzánk köthető szót.
+ Most kell megadni a 'root', vagyis a rendszergazda hozzáférés jelszavát. Rosszakaró vagy egy nagyon hozzá nem értő felhasználó root hozzáférése végzetes, így csak nagyon nehezen kitalálható root jelszót szabad adni. Ne adjon szótári, vagy könnyen Önhöz köthető szót.
  .
  A jó jelszó betűk, számok és írásjelek keverékéből áll és sűrű, szabályos időközönként (legfeljebb havonta) cserére kerül.
  .
- A root felhasználónak kell legyen jelszava. Ha üresen hagyod, a root fiók ki lesz kapcsolva és a rendszer kezdő felhasználó fiókja a "sudo" paranccsal kap root jogot.
+ A root felhasználó jelszava nem lehet üres. Ha üresen hagyja, a root fiók ki lesz kapcsolva és a rendszer kezdeti felhasználó fiókja a "sudo" paranccsal kap root jogot.
  .
  Fontos, hogy a begépelés közben a jelszó nem jelenik meg.
 Description-id.UTF-8: Kata sandi root:
@@ -715,6 +717,14 @@ Description-te.UTF-8: Root సంకేతపదం:
  root  వాడుకరి  సంకేతపదం ఖాళీ గా వుండకూడదు. ఖాళీగా వుంచినట్లయితే, root ఖాతా అచేతనము చేయబడుతుంది. సిస్టమ్ యొక్క మొదటి వాడుకరి ఖాతా కి  "sudo" కమాండ్ ద్వారా  root అవటానికి  అధికారం  ఇవ్వబడతుంది.
  .
  మీరు టైపు చేస్తున్నప్పుడు, మీ సంకేత పదం కనపడదని గుర్తుంచుకోండి.
+Description-tg.UTF-8: Пароли root:
+ Шумо бояд барои "root", ҳисоби маъмурии система паролро таъин кунед. Корбари бадқасд ё бесалоҳият бо дастрасии root метавонад натиҷаҳои фоҷиавиро ба вуҷуд орад, барои ҳамин шумо бояд барои root паролеро интихоб кунед, ки дарёфтани он душвор аст. Он бояд калима ё ҷумлае набошад, ки дар луғатҳо ёфта мешавад, ё ба осонӣ бо шумо алоқаманд мешавад.
+ .
+ Пароли хуб дорои маҷмӯи ҳарфҳо, рақамҳо ва аломатҳои китобатӣ мебошад, ва бояд дар давраҳои доимӣ тағйир дода шавад.
+ .
+ Корбари root наметавонад пароли холӣ дошта бошад. Агар шумо инро холӣ монед, ҳисоби root ғайрифаъол карда мешавад, ва ҳисоби аслии корбари система метавонад тавассути фармони "sudo" ба root табдил ёбад.
+ .
+ Ба қайд гиред, ки шумо ҳангоми ворид кардани парол онро дида наметавонед.
 Description-th.UTF-8: รหัสผ่าน root:
  คุณต้องตั้งรหัสผ่านสำหรับ 'root' ซึ่งเป็นบัญชีผู้ดูแลระบบ ผู้ใช้ที่ไม่หวังดี หรือไม่มีความรู้ในการดูแลระบบ หากมีสิทธิ์ของ root จะสามารถทำความเสียหายใหญ่หลวงได้ ดังนั้น คุณควรระวังในการตั้งรหัสผ่าน ไม่ให้สามารถเดาได้ง่ายเกินไป ไม่ควรจะเป็นคำที่พบในพจนานุกรม หรือคำที่เกี่ยวโยงกับตัวคุณได้อย่างง่ายดาย
  .
@@ -734,11 +744,11 @@ Description-tl.UTF-8: Kontrasenyas ng root:
 Description-tr.UTF-8: Root parolası:
  Sistem yöneticisi 'root' için bir parola girmeniz gerekiyor. Kötü niyetli veya yetersiz kabiliyetleri olan bir kullanıcının root haklarına sahip olması çok kötü sonuçlar yaratabilir. Bu yüzden kolayca tahmin edilemeyecek bir root parolası seçmeye özen göstermelisiniz. Bu parola sözlükte bulunan ya da sizinle olan alâkasından dolayı kolaylıkla bulunabilecek bir sözcük olmamalıdır.
  .
- İyi bir parola harfler, rakamlar ve noktalama işaretlerinin uygun bir birleşiminden oluşmalı ve düzenli aralıklarla değiştirilmelidir.
+ İyi bir parola harfler, rakamlar ve noktalama işaretlerinin uygun bir kombinasyonundan oluşmalı ve düzenli aralıklarla değiştirilmelidir.
  .
- "root" kullanıcısının boş bir parolası olamaz. Eğer bu alanı boş bırakırsanız root hesabı devre dışı bırakılacak ve sistemde oluşturulacak ilk normal kullanıcı hesabının "sudo" komutuyla root haklarına sahip olması sağlanacaktır.
+ root kullanıcısının parolası boş olamaz. Eğer bu alanı boş bırakırsanız root hesabı devre dışı bırakılacak ve sistemde oluşturulacak ilk normal kullanıcı hesabının "sudo" komutuyla root haklarına sahip olması sağlanacaktır.
  .
- Parolayı yazarken onu göremeyeceğinizi unutmayın.
+ Parolayı yazarken parolanın görünmeyeceğini unutmayın.
 Description-ug.UTF-8: ئالىي ئىشلەتكۈچى(Root) ئىمى:
  'root' ئىشلەتكۈچى (سىستېما باشقۇرغۇچى ھېساباتى)گە ئىم بەلگىلەش لازىم. زەھەرخەندە ياكى سالاھىيىتى يوق ئىشلەتكۈچى 'root' ھوقۇقىغا ئېرىشسە ئاپەت خاراكتېرلىك ئاقىۋەت كەلتۈرۈپ چىقىرىشى مۇمكىن، شۇڭا ئېھتىياتچانلىق بىلەن ئاسان تېپىۋالغىلى بولمايدىغان root ئىم تاللاڭ. ئىم لۇغەتتىن تاپقىلى بولىدىغان سۆز ياكى سىز بىلەن زىچ ئالاقىدار سۆز بولماسلىقى لازىم.
  .
@@ -840,9 +850,9 @@ Description-he.UTF-8: הכנס שוב את הסיסמה לבדיקה אם הכנ
 Description-hi.UTF-8: पुष्टि करने के लिए कूटशब्द दोबारा भरें:
  वही रूट कूटशब्द पुनः भरें जिससे कि यह जाँचा जा सके की आपने सही टाइप किया है.
 Description-hr.UTF-8: Iznova unesite lozinku za potvrdu:
- Molim unesite istu korijensku lozinku kao potvrdu da ste je ispravno utipkali.
-Description-hu.UTF-8: A jelszó ellenőrző ismétlése:
- A 'root' felhasználó jelszava ellenőrzése céljából ismét be kell írni.
+ Molim unesite istu korijensku lozinku kao potvrdu da ste ju ispravno utipkali.
+Description-hu.UTF-8: Írja be újra a jelszavát megerősítés végett:
+ Írja be újra a 'root' felhasználó jelszavát, hogy megerősítse, hogy helyesen gépelte be.
 Description-id.UTF-8: Masukkan lagi kata sandi untuk verifikasi:
  Silakan masukkan kata sandi root yang sama lagi untuk memastikan bahwa Anda mengetiknya dengan benar.
 Description-is.UTF-8: Sláðu lykilorð aftur inn til að staðfesta:
@@ -915,6 +925,8 @@ Description-ta.UTF-8: கடவுச்சொல்லை உறுதி ச�
  அதே சொல்லை மீண்டும் உள்ளீடு செய்க. இதனால் சரியாக உள்ளீடு செய்யப் பட்டதா என சோதிக்க இயலும்.
 Description-te.UTF-8: ధృవీకరణకు సంకేత పదాన్ని మరల  టైప్ చేయండి:
  సరిగా టైపు చేసినట్లు ధృవీకరణకు  అదే  సంకేత పదాన్ని మరల  టైప్ చేయండి
+Description-tg.UTF-8: Паролро барои тайид кардан аз нав ворид кунед:
+ Лутфан, он пароли root як маротибаи дигар ворид кунед, то ин ки тасдиқ кунед, ки шумо онро ба таври дуруст чоп кардед.
 Description-th.UTF-8: ป้อนรหัสผ่านอีกครั้งเพื่อตรวจสอบ:
  กรุณาป้อนรหัสผ่านเดิมสำหรับ root อีกครั้ง เพื่อตรวจสอบว่าคุณพิมพ์ไม่ผิด
 Description-tl.UTF-8: Ibigay muli ang kontrasenyas para ma-tiyak:
@@ -973,9 +985,9 @@ Description-bo.UTF-8: རྒྱུན་ལྡན་གྱི་སྤྱོད�
  .
  གསལ་བརྡ། རྗེས་སུ་ཐོ་ཁོངས་ཞིག་གསར་བཟོ་སྐབས་(ཡང་ཐོ་ཁོངས་མང་པོ་བཟོས་ན) རྩ་བའི་གནས་སུ་'adduser <སྤྱོད་མཁན་མིང>' འབྲི་བ དེའི་ནང་གི་<སྤྱོད་མཁན་མིང> སྤྱོད་མཁན་གྱི་མིང་གང་རུང་ཞིག་དཔེར་ན་'དཔའ་བོ་བཀྲ་ཤིས' སམ 'སངས་རྒྱས' ལྟ་བུ
 Description-bs.UTF-8: Kreirati normalni korisnički račun sada?
- Korištenje root računa za normalne svakodnevne aktivnosti poput čitanja elektronske pošte, nije dobra ideja, zato što čak i najmanja pogreška može dovesti do havarije. Trebate napraviti normalni korisnički račun i koristiti za svakodnevne aktivnosti.
+ Korištenje root računa za normalne svakodnevne aktivnosti, poput čitanja elektronske pošte, nije dobra ideja, jer čak i najmanja pogreška može dovesti do katastrofe. Trebate napraviti normalni korisnički račun i koristiti za svakodnevne aktivnosti.
  .
- Primjetite da ga možete napraviti kasnije (kao i bilo koji drugi račun) ukucavajući 'adduser <korisničko ime>' kao root, gdje je korisničko ime, poput 'mujo' ili 'suljo'.
+ Primjetite da ga možete napraviti kasnije (kao i bilo koji drugi račun) ukucavajući 'adduser <korisničko ime>' kao root, gdje je <korisničko ime> korisničko ime, poput 'mujo' ili 'suljo'.
 Description-ca.UTF-8: Voleu crear ara un compte d'usuari normal?
  És una mala idea emprar el compte de root per a les activitats quotidianes, com ara llegir el correu electrònic, perquè tan sols una petita errada pot resultar en desastre. Heu de crear un compte d'usuari que podreu emprar per a aquestes tasques quotidianes.
  .
@@ -991,7 +1003,7 @@ Description-cy.UTF-8: Creu cyfrif defnyddiwr arferol nawr?
 Description-da.UTF-8: Opret en almindelig brugerkonto nu?
  Det er en dårlig idé, at bruge root-kontoen til almindelige dagligdags gøremål, som f.eks. at læse e-post, da selv en lille fejltagelse kan få katastrofale følger. Du kan nu oprette en normal brugerkonto, som kan benyttes til disse almindelige arbejdsopgaver.
  .
- Bemærk at du også kan oprette den senere (eller oprette flere konti) ved at skrive 'adduser <brugernavn>' som root, hvor <brugernavn> er et brugernavn, som f.eks. 'hansen' eller 'rms'.
+ Bemærk at du også kan oprette den senere (eller oprette flere konti) ved at skrive »adduser <brugernavn>« som root, hvor <brugernavn> er et brugernavn, som f.eks. »hansen« eller »rms«.
 Description-de.UTF-8: Soll jetzt ein normales Benutzerkonto erstellt werden?
  Es ist keine gute Idee, das root-Konto für die alltägliche Arbeit einzusetzen, wie z.B. Lesen der E-Mails, denn selbst ein kleiner Fehler kann in einer Katastrophe enden. Sie sollten nun ein normales Benutzerkonto erstellen.
  .
@@ -1053,13 +1065,13 @@ Description-hi.UTF-8: अभी एक साधारण उपयोक्त�
  .
  संज्ञान लें कि आप इसे बाद में भी बना सकते हैं (साथ ही कोई अतिरिक्त खाता भी). इसके लिए रूट की तरह टाइप करें 'adduser <username>', जहाँ <username> एक उपयोक्ता खाते का नाम है जैसे कि 'imurdock' या 'rms'.
 Description-hr.UTF-8: Načini i običan korisnički račun?
- Nije dobro koristiti korijenski račun za svakodnevne aktivnosti., primjerice čitanje i slanje e-pošte, jer vam i mala pogreška može pričiniti veliku štetu. Zato trebate načiniti obični korisnički račun.
+ Nije dobro koristiti administratorski račun za svakodnevne aktivnosti, primjerice čitanje i slanje e-pošte, jer vam i mala greška može pričiniti veliku štetu. Zato trebate načiniti običan korisnički račun.
  .
- Možete ga načiniti i kasnije (kao i bilo koji dodatni korisnički račun) tako da utipkate 'adduser <ime_korisnika>', prijavljeni  kao korijenski korisnik. To <ime_korisnika> može biti proizvoljno, primjerice 'pero', 'ana'...
-Description-hu.UTF-8: Létrehozol egy sima felhasználói hozzáférést most?
- A mindennapi tevékenységekre a 'root' felhasználót, rendszergazdai jogokat soha de soha nem használjuk, például nem olvasunk vele levelet és az ilyenfajta felhasználás nagyon rossz ötlet, mert a legkisebb hiba is katasztrófát okozhat. Egy sima felhasználói hozzáférést kell létrehoznod a mindennapi használathoz.
+ Primijetite da ga možete načiniti i kasnije (kao i bilo koji dodatni korisnički račun) tako da utipkate 'adduser <ime_korisnika>', prijavljeni kao administratorski korisnik. To <ime_korisnika> može biti proizvoljno, primjerice 'pero', 'ana'...
+Description-hu.UTF-8: Létrehoz most egy sima felhasználói hozzáférést?
+ A mindennapi tevékenységekre a 'root' felhasználót, rendszergazdai jogokat soha de soha nem használjuk, például nem olvasunk vele levelet és az ilyenfajta felhasználás nagyon rossz ötlet, mert a legkisebb hiba is katasztrófát okozhat. Hozzon létre egy sima felhasználói hozzáférést a mindennapi használathoz.
  .
- A most létrehozandó sima felhasználó mellé továbbiakat később is létre lehet hozni például az 'adduser <felhasználónév>' paranccsal rendszergazdaként, ahol a <felhasználónév> egy szokásos felhasználónév formájú, mint például 'imurdock' vagy 'rms'.
+ A most létrehozandó sima felhasználó mellé továbbiakat később is létre lehet hozni például az 'adduser <felhasználónév>' paranccsal rendszergazdaként, ahol a <felhasználónév> szokásos felhasználónév formájú, mint például 'imurdock' vagy 'rms'.
 Description-id.UTF-8: Membuat akun untuk pengguna biasa sekarang?
  Merupakan hal yang buruk bila menggunakan akun root untuk aktifitas sehari-hari, misalnya untuk membaca surat elektronik, karena kesalahan yang kecil saja dapat mengakibatkan bencana. Anda disarankan membuat akun pengguna biasa untuk tugas-tugas sehari-hari.
  .
@@ -1200,6 +1212,10 @@ Description-te.UTF-8: ఒక మామూలు వాడుకదారి ఖ�
  రూట్ ఖాతా ని ఎలెక్ట్రానిక్ మెయిల్ చదవడం లాంటి రోజువారి పనులకు వాడటం మంచి ఆలోచన కాదు ఎందుకంటే, చిన్న తప్పు,పెద్ద వినాశానికి దారితీయవచ్చు.  రోజువారి పనులకు సాధారణ వాడుకరి ఖాతా సృష్టించుకోండి.
  .
   రూట్  గా    'adduser <username>'అనే కమాండ్ ద్వారా  దానిని  (మరియు అదనపు ఖాతాలను)తరువాత సృష్టించవచ్చని  తెలుసుకోండి. (<username> అనేది వాడుకరి పేరు  'imurdock' లేక 'rms' లాగా)
+Description-tg.UTF-8: Ҳисоби корбари оддиро ҳозир эҷод мекунед?
+ Истифодаи ҳисоби root барои амалиётҳои муқаррарии рӯзона, ба мисли хондани почтаи электронӣ, тавсия намешавад, чунки ҳатто хатогии хурд метавонад сабаби фоҷиа гардад. Барои чунин вазифаҳои ҳаррӯза шумо бояд ҳисоби корбари муқаррариро эҷод кунед.
+ .
+ Ба қайд гиред, ки шумо метавонед онро баъдтар эҷод кунед (инчунин ягон ҳисоби иловагӣ) - барои ин фармони "adduser <username>"-ро ҳамчун root иҷро кунед, ки дар он ҷо <username> номи корбар мебошад, ба мисли "imurdock" ё "rms".
 Description-th.UTF-8: จะสร้างบัญชีผู้ใช้ปกติเลยหรือไม่?
  ไม่ใช่ความคิดที่ดีที่จะใช้บัญชี root สำหรับการทำงานประจำวันทั่วไป เช่นการอ่านอีเมล เพราะความผิดพลาดเพียงเล็กน้อยก็สามารถสร้างหายนะได้ คุณควรสร้างบัญชีผู้ใช้ปกติเพื่อใช้ทำงานประจำวันเหล่านั้น
  .
@@ -1211,7 +1227,7 @@ Description-tl.UTF-8: Bumuo ng account ng karaniwang gumagamit ngayon?
 Description-tr.UTF-8: Şimdi normal bir kullanıcı hesabı oluşturulsun mu?
  Root kullanıcısını elektronik posta okumak gibi normal günlük etkinliklerde kullanmak kötü bir fikirdir, çünkü küçük bir hata bile felâketle sonuçlanabilir. Bu tip günlük işlemlerde kullanmak için normal bir kullanıcı hesabı oluşturmalısınız.
  .
- Aklınızda bulunsun, bu kullanıcı hesabını (ve diğer ek kullanıcı hesaplarını) daha sonra 'adduser <kullanıcı_adı>' komutunu root olarak yazarak yaratabilirsiniz. <kullanıcı_adı> 'imurdock' ya da 'rms' gibi bir kullanıcı adıdır.
+ Aklınızda bulunsun, bu kullanıcı hesabını (ve diğer ek kullanıcı hesaplarını) daha sonra 'adduser <kullanıcı_adı>' komutunu root olarak yazarak yaratabilirsiniz. <kullanıcı_adı>, 'imurdock' ya da 'rms' gibi bir kullanıcı adıdır.
 Description-ug.UTF-8: ھازىر ئادەتتىكى ئىشلەتكۈچى ھېساباتى قۇرامسىز؟
  root ئىشلەتكۈچى ھېساباتىدا ئېلخەت ئوقۇشقا ئوخشاش كۈندىلىك مەشغۇلات ئېلىپ بېرىش ناھايىتى قاملاشمىغان چارە. چۈنكى root ھوقۇقىدا ئۆتكۈزۈلگەن ئەڭ كىچىك خاتالىقنىڭ ئاقىۋىتىمۇ ئاپەت خاراكتېرلىك بولۇشى مۇمكىن. سىز ھازىرلا ئادەتتىكى ئىشلەتكۈچىدىن بىرنى قۇرۇپ كۈندىلىك خىزمەت ۋەزىپىلىرىنى ئېلىپ بارالايسىز.
  .
@@ -1227,7 +1243,7 @@ Description-vi.UTF-8: Tạo một tài khoản người dùng chuẩn ngay bây 
 Description-zh_CN.UTF-8: 现在就要创建一个普通用户帐号吗？
  以 root 帐户进行诸如阅读电子邮件这类普通的日常操作是一个糟糕的主意。因为在 root 权限下，哪怕犯一个极小的错误，其结果也可能会是灾难性的。您现在就可以创建一个普通用户帐号来进行那些日常任务。
  .
- 请注意，您也可以稍后再创建此帐户 (也包括任何其它帐户)。方法是以 root 身份执行“adduser <username>”，此处的 <username> 就是一个用户名，例如“imurdock”或“rms”。
+ 请注意，您也可以稍后再创建此帐户 (也包括任何其他帐户)。方法是以 root 身份执行“adduser <username>”，此处的 <username> 就是一个用户名，例如“imurdock”或“rms”。
 Description-zh_TW.UTF-8: 是否要立即建立一個一般的使用者帳號？
  使用 root 帳號來進行諸如閱讀電子郵件這類普通的日常操作並不是恰當的做法，因為在此情況下，即使一個極小的錯誤也可能會導致嚴重的後果。您應該建立一個一般的使用者帳號並使用它來進行這些日常的工作。
  .
@@ -1274,7 +1290,7 @@ Description-bo.UTF-8: སྤྱོད་མཁན་གསར་པའི་མ�
 Description-bs.UTF-8: Ime i prezime novog korisnika:
  Korisnički račun će biti napravljen kako biste ga koristili umjesto root računa za neadministrativne aktivnosti.
  .
- Molim unesite stvarno ime ovog korisnika. Ova informacija će biti korištena npr. kao podrazumjevano porijeklo email poruka poslatih od strane ovog korisnika kao i od strane svakog programa koji prikazuje ili koristi korisnikovo stvarno ime. Vaše ime i prezime je razuman izbor.
+ Molim unesite stvarno ime ovog korisnika. Ova informacija će biti korištena, npr. kao podrazumjevano porijeklo email poruka poslatih od strane ovog korisnika kao i od strane svakog programa koji prikazuje ili koristi korisnikovo stvarno ime. Vaše ime i prezime je razuman izbor.
 Description-ca.UTF-8: Nom complet pel nou usuari:
  Es crearà un compte d'usuari per a ser emprat en lloc del compte de «root» per a tasques no administratives.
  .
@@ -1352,13 +1368,13 @@ Description-hi.UTF-8: नए उपयोक्ता का पूरा ना
  .
  कृपया इस उपयोक्ता के वास्तविक नाम की प्रविष्टि करें. यह जानकारी उन अनुप्रयोगों में प्रयोग की जाएगी जो उपयोक्ता का वास्तविक नाम प्रदर्शित करते हैं या फिर इस उपयोक्ता के द्वारा भेजी गई ई-मेल में प्रेषक के नाम के स्थान पर इसका प्रयोग होगा. आपका पूरा नाम एक अच्छा विकल्प है.
 Description-hr.UTF-8: Unesite puno ime novog korisnika:
- Bit će načinjen obični korisnički račun da ga možete koristiti namjesto korijenskog, za svakodnevne aktivnosti.
+ Bit će načinjen obični korisnički račun da ga možete koristiti namjesto administratorskog, za uobičajene aktivnosti.
  .
- Molim upišite pravo ime ovog korisnika. Ova informacija će se koristiti naprimjer kao zadani izvor za e-mailove koje taj korisnik pošalje, kao i u bilo kojem programu koji prikazuje ili koristi pravo ime korisnika. Vaše puno ime je razumani izbor za upisati ovdje.
+ Molim upišite pravo ime ovog korisnika. Ova informacija će se koristiti npr. kao zadani izvor za poruke e-pošte koje taj korisnik pošalje, kao i u bilo kojem programu koji prikazuje ili koristi pravo ime korisnika. Vaše puno ime je razuman izbor za upisati ovdje.
 Description-hu.UTF-8: Az új felhasználó TELJES Neve:
- Egy sima felhasználói hozzáférést hozunk létre, melynek célja az, hogy a root fiók helyett EZT használd mindennap és ezzel végezd mindennapos tevékenységeidet.
+ Egy sima felhasználói hozzáférést hozunk létre, melynek célja az, hogy a root fiók helyett EZT használja mindennap és ezzel végezze mindennapos tevékenységeit.
  .
- Add meg e felhasználó IGAZI Nevét. Ez az adat például e felhasználó által küldött alapértelmezett feladóként használható levelekben, vagy más programban, mely kiírja vagy használja a felhasználó IGAZI Nevét. A teljes név egy jó választás.
+ Adja meg e felhasználó IGAZI Nevét. Ez az adat például e felhasználó által küldött alapértelmezett feladóként használható levelekben, vagy más programban, mely kiírja vagy használja a felhasználó IGAZI Nevét. A teljes név egy jó választás.
 Description-id.UTF-8: Nama lengkap dari pengguna baru:
  Akun pengguna akan dibuatkan untuk Anda gunakan dalam aktifitas non-administratif.
  .
@@ -1503,6 +1519,10 @@ Description-te.UTF-8: కొత్త వాడుకరి యొక్క ప�
  నిర్వహణేతర పనులకు, root ఖాతా కాక, ఒక వాడుకరి ఖాతా  మీ కొరకు సృష్టించబడుతుంది.
  .
  వాడుకరి అసలు పేరు ప్రవేశపెట్టండి. ఈ వివరము, ఈ వాడుకరి పంపించే ఈ-మెయిళ్లుకి మూలం గా, ఏదైనా వాడుకరి అసలు పేరుని చూపించే లేక వాడే ప్రోగ్రామ్ లో వాడబడుతుంది. మీ పూర్తి పేరు మీ  ఇష్టానుసారంగా ఎంచుకోవచ్చు.
+Description-tg.UTF-8: Номи ҳақиқии шумо барои корбари нав:
+ Барои амалҳои ғайримаъмурӣ, барои шумо ҳисоби корбар ба ҷойи ҳисоби решагӣ эҷод карда мешавад.
+ .
+ Лутфан, номи воқеии корбарро ворид кунед. Ин маълумот ҳангоми навиштани паёмҳои электронии ин корбар, инчунин бо ягон барномае, ки номи воқеии корбарро намиоиш медиҳад, истифода мешавад. Тавсия мешавад, ки номи пурраи худро ворид кунед.
 Description-th.UTF-8: ชื่อเต็มของผู้ใช้ใหม่:
  จะสร้างบัญชีผู้ใช้เพื่อให้คุณใช้แทนบัญชี root ในการทำงานที่ไม่ใช่การดูแลระบบ
  .
@@ -1557,7 +1577,7 @@ Description-bn.UTF-8: আপনার অ্যাকাউন্টের ব�
 Description-bo.UTF-8: ཁྱོད་ཀྱི་ཐོ་ཁོངས་ཀྱི་སྤྱོད་མཁན་མིང：
  ཐོ་ཁོངས་གསར་བ་ལ་སྤྱོད་མཁན་མིང་ཞིག་འཇུག་དགོས ཁྱོད་ཀྱི་མིང་ཁོ་ན་འཇུག་ན་བཟང་། སྤྱོད་མཁན་མིང་ལ་ཆུང་བྲིས་ཡི་གེས་འགོ་འཛུགས་ནས་ཨང་ཀི་དང་ཆུང་བྲིས་སྤེལ་མ་དེའི་འཚམས་སུ་འབྲི་ཆོག
 Description-bs.UTF-8: Korisničko ime za Vaš račun:
- Izaberite korisničko ime za novi račun. Vaše ime je razuman izbor. Korisničko ime treba počinjati sa malim slovom koje može pratiti bilo kakva kombinacija brojeva i još malih slova.
+ Izaberite korisničko ime za novi račun. Vaše ime je razuman izbor. Korisničko ime treba počinjati malim slovom koje može pratiti bilo kakva kombinacija brojeva i još malih slova.
 Description-ca.UTF-8: Nom d'usuari pel vostre compte:
  Seleccioneu un nom d'usuari pel nou compte. El vostre primer nom és una bona opció. El nom d'usuari ha de començar amb una lletra en minúscula, seguida de qualsevol combinació de nombres o més lletres en minúscula.
 Description-cs.UTF-8: Uživatelské jméno pro nový účet:
@@ -1597,9 +1617,9 @@ Description-he.UTF-8: הכנס שם משתמש עבור החשבון שלך:
 Description-hi.UTF-8: आपके खाते के लिए उपयोक्ता नाम:
  नये खाते के लिए उपयोक्ता का नाम चुनें. आपका नाम एक अच्छा विकल्प है. उपयोक्ता का नाम अंग्रेजी के छोटे अक्षर से प्रारंभ होना चाहिए, जिसके बाद अंकों या अन्य छोटे अक्षरों का प्रयोग किसी भी क्रम में किया जा सकता है.
 Description-hr.UTF-8: Unesite ime za vaš korisnički račun:
- Izaberite ime za novi korisnički račun. Vaše ime je uobičajeni izabir. Korisničko ime treba započinjati malim slovom, a može se sastojati od bilo koje kombinacije brojaka i malih slova.
-Description-hu.UTF-8: Felhasználóneved ez legyen:
- Adj felhasználónevet a hozzáféréshez. A keresztnév általában meg szokott felelni a célra. A lényeg, hogy a felhasználónév kisbetűvel kezdődjön, aztán számok és további kisbetűk tetszőleges kombinációja állhat.
+ Izaberite ime za novi korisnički račun. Vaše ime je uobičajeni izbor. Korisničko ime treba započinjati malim slovom, a može se sastojati od bilo koje kombinacije brojaka i malih slova.
+Description-hu.UTF-8: Felhasználóneve:
+ Adjon felhasználónevet a hozzáféréshez. A keresztnév általában meg szokott felelni a célra. A lényeg, hogy a felhasználónév kisbetűvel kezdődjön, azután számok és további kisbetűk tetszőleges kombinációja állhat.
 Description-id.UTF-8: Nama untuk akun Anda:
  Pilih nama pengguna untuk akun baru. Nama depan Anda merupakan pilihan yang baik. Nama pengguna sebaiknya dimulai dengan huruf kecil, yang dapat diikuti dengan kombinasi angka dan huruf kecil.
 Description-is.UTF-8: Notendanafn fyrir þennan reikning:
@@ -1672,6 +1692,8 @@ Description-ta.UTF-8: கணக்குக்கு பயனீட்டாள
  இந்த புதிய கணக்குக்கு பயனரின் உண்மை பெயரை உள்ளிடவும். உங்கள் முதல் உண்மைப் பெயர் இதற்கு ஒரு நல்ல தேர்வாகும். பயனரின் பெயர் ஆங்கிலம் போன்ற இரு நிலை உள்ளீடுகளில் இருப்பின் கீழ் நிலையில் துவங்க வேண்டும். அதற்குப் பின் எந்த எண் எந்த கீழ் நிலை எழுத்துறுக்களின் கலவையாகவும் இருக்கலாம்.
 Description-te.UTF-8: ఖాతాకి వాడుకరి పేరు:
  కొత్త ఖాతా కి వాడుకరి పేరుని ఎంచుకో. మీ పూర్తి పేరు మీ  ఇష్టానుసారంగా ఎంచుకోవచ్చు.వాడుకరి పేరు ఆంగ్ల చిన్న అక్షరాలతో మొదలు పెట్టి, ఇంకొన్ని  అంకెలు, ఏక్కువ చిన్ని అక్షరాల మిళితమై వుండవచ్చు.
+Description-tg.UTF-8: Номи корбар барои ҳисоби шумо:
+ Номи корбарро барои ҳисоби нав интихоб кунед. Номи шумо интихоби беҳтарин аст. Номи корбар бояд бо ҳарфи хурд оғоз ёбад, ки метавонад бо ягон маҷмӯи рақамҳо ва ҳарфҳои дигари хурд идома ёбад.
 Description-th.UTF-8: ชื่อผู้ใช้สำหรับบัญชีของคุณ:
  กรุณาตั้งชื่อผู้ใช้สำหรับบัญชีใหม่ โดยปกติ ชื่อต้นของคุณคือคำตอบที่สมเหตุสมผล ชื่อผู้ใช้ควรขึ้นต้นด้วยอักษรตัวพิมพ์เล็ก และสามารถตามด้วยตัวเลขหรือตัวพิมพ์เล็กหลายตัวได้
 Description-tl.UTF-8: Magbigay ang pangalan ng inyong account:
@@ -1685,7 +1707,7 @@ Description-uk.UTF-8: Назва облікового запису:
 Description-vi.UTF-8: Tên người dùng cho tài khoản của bạn:
  Hãy chọn tên người dùng cho tải khoản mới này. Tên của bạn là sự chọn hữu ích. Tên người dùng nên bắt đầu với chữ thường, với bất cứ phối hợp con số và chữ thường nào theo sau.
 Description-zh_CN.UTF-8: 您的帐号的用户名：
- 请为新的帐号选择用户名。比如，您的名字就是一个合适的选择。用户名必须以一个小写字母开头，接着是任意数字和其它小写字母的组合。
+ 请为新的帐号选择用户名。比如，您的名字就是一个合适的选择。用户名必须以一个小写字母开头，接着是任意数字和其他小写字母的组合。
 Description-zh_TW.UTF-8: 您的帳號的使用者名稱:
  請替新的帳號輸入使用者名稱。例如，您的名字就是一個不錯的選擇。使用者名稱必須以小寫字母開頭，接著的則可以是任意數字或其它的小寫字母之組合。
 
@@ -1710,7 +1732,7 @@ Description-bn.UTF-8: অবৈধ ব্যবহারকারীর-না�
 Description-bo.UTF-8: ཕན་མེད་ཀྱི་སྤྱོད་མཁན་མིང
  ཁྱོད་ཀྱིས་བྲིས་པའི་སྤྱོད་མཁན་གྱི་ནི་ཕན་མེད་རེད། སྤྱོད་མཁན་མིང་གི་འགོ་རུ་ཆུང་བྲིས་ཡི་གེ་དགོས་པ་དང་དེ་མཚམས་སུ་ཨང་གྲངས་དང་ཆུང་བྲིས་ཡི་གེ་སྤེལ་མའི་འབྲུ་༣༢་ལས་ཉུང་ཙམ་དགོས
 Description-bs.UTF-8: Neispravno korisničko ime
- Korisničko ime koje ste unijeli nije ispravno. Obratite pažnju da korisnička imena počinju sa malim slovom, koje može može pratiti bilo kakva kombinacija brojeva i još malih slova i ne smiju biti duža od 32 karaktera.
+ Korisničko ime koje ste unijeli nije ispravno. Obratite pažnju da korisnička imena počinju malim slovom, koje može pratiti bilo kakva kombinacija brojeva i još malih slova i ne smiju biti duža od 32 karaktera.
 Description-ca.UTF-8: El nom d'usuari no és vàlid
  El nom d'usuari introduït no és vàlid. Tingueu en compte que el nom d'usuari ha de començar amb una lletra en minúscula, seguida de qualsevol combinació de nombres o més lletres en minúscula, i no pot tindre més de 32 caràcters.
 Description-cs.UTF-8: Neplatné uživatelské jméno
@@ -1750,9 +1772,9 @@ Description-he.UTF-8: שם המשתמש שהוכנס אינו חוקי
 Description-hi.UTF-8: अवैध उपयोक्ता  नाम
  आपके द्वारा प्रविष्ट उपयोगकर्ता नाम अवैध है. संज्ञान लें कि उपयोक्ता का नाम अंग्रेजी के छोटे अक्षर से प्रारंभ होना चाहिए, जिसके बाद अंकें या अन्य छोटे अक्षरों का प्रयोग किसी भी क्रम में किया जा सकता है, और इसे कुल ३२ अक्षरों से अधिक नहीं होना चाहिए.
 Description-hr.UTF-8: Neispravno korisničko ime
- Korisničko ime koje ste unijeli nije valjano. Korisnička imena moraju započinjati malim slovima, mogu se sastojati od bilo koje kombinacije brojaka i malih slova i ne smiju biti dulja od 32 znaka.
-Description-hu.UTF-8: Helytelen felhasználónév
- A megadott felhasználónév nem érvényes. A felhasználónévnek kisbetűvel kell kezdődnie, aztán számok és további kisbetűk tetszőleges kombinációja állhat, és nem lehet 32 karakternél hosszabb.
+ Korisničko ime koje ste unijeli nije ispravno. Korisnička imena moraju započinjati malim slovom, mogu se sastojati od bilo koje kombinacije brojaka i malih slova i ne smiju biti dulja od 32 znaka.
+Description-hu.UTF-8: Érvénytelen felhasználónév
+ A megadott felhasználónév érvénytelen. A felhasználónévnek kisbetűvel kell kezdődnie, azután számok és további kisbetűk tetszőleges kombinációja állhat, és nem lehet 32 karakternél hosszabb.
 Description-id.UTF-8: Nama pengguna tidak sah
  Nama pengguna yang Anda masukkan tidak sah. Perhatikan bahwa nama pengguna harus dimulai dengan huruf kecil, yang kemudian dapat diikuti dengan kombinasi angka dan huruf kecil yang banyak, dan panjangnya tidak lebih dari 32 karakter.
 Description-is.UTF-8: Ógilt notandanafn
@@ -1813,6 +1835,8 @@ Description-ta.UTF-8: செல்லுபடியாகாத பயனர்
  நீங்கள் உள்ளிட்டது செல்லுபடியாகாத பயனர்பெயர். பயனரின் பெயர் ஆங்கிலம் போன்று இரு நிலை உள்ளீடு இருப்பின் கீழ் நிலையில் துவங்க வேண்டும். அதற்குப் பின் எந்த எண்/ எந்த கீழ் நிலை எழுத்துருக்களின் கலவையாகவும் இருக்கலாம் ஆனால் 32 எழுத்துக்களுக்கு மேல் இருக்க கூடாது.
 Description-te.UTF-8: చెల్లని వాడుకరి పేరు
  మీరు ప్రవేశపెట్టిన వాడుకరిపేరు సరిగాలేదు. వాడుకరిపేరులు చిన్న అక్షరాలతో మొదలై, తరువాత అంకెలు లేక ఇంకొన్ని చిన్న అక్షరాల కలగలుపుగా వుంటాయి మరియు 32 అక్షరాలకు మించకూడదు.
+Description-tg.UTF-8: Номи корбари беэътибор
+ Номи корбаре, ки шумо ворид кардед нодуруст аст. Таваҷҷӯҳ кунед, ки номи корбар бояд бо ҳарфи хурд сар карда шавад ва бояд рақамҳо ва ҳарфҳои хурдро дар бар гирад, вале дарозии номи корбар бояд на зиёда аз 32 аломат бошад.
 Description-th.UTF-8: ชื่อผู้ใช้ผิดพลาด
  ชื่อผู้ใช้ที่คุณป้อนไม่สามารถใช้ได้ โปรดสังเกตว่าชื่อผู้ใช้ต้องขึ้นต้นด้วยอักษรตัวพิมพ์เล็ก และสามารถตามด้วยตัวเลขหรือตัวพิมพ์เล็กหลายตัวได้ โดยต้องยาวไม่เกิน 32 ตัว
 Description-tr.UTF-8: Geçersiz kullanıcı adı
@@ -1820,11 +1844,11 @@ Description-tr.UTF-8: Geçersiz kullanıcı adı
 Description-ug.UTF-8: ئىناۋەتسىز ئىشلەتكۈچى ئاتى
  سىز كىرگۈزگەن ئىشلەتكۈچى ئاتى ئىناۋەتسىز. دىققەت، ئىشلەتكۈچى ئاتى چوقۇم بىر كىچىك ھەرپتىن باشلىنىپ، ئاخىرىغا ھەر قانداق سان ۋە باشقا كىچىك ھەرپلەر كەلسە بولىدۇ,32 ھەرپتىن ئۇزۇن بولماسلىقى لازىم.
 Description-uk.UTF-8: Непридатне ім'я користувача
- Ім'я користувача, яке ви ввели, невірне. Зауважте, що ім'я користувача повинно починатися з малої літери, за якою може слідувати будь-яка комбінація цифр та літер нижнього регістру; довжина не повинна перевищувати 32 символа.
+ Ім'я користувача, яке ви ввели, невірне. Зауважте, що ім'я користувача повинно починатися з малої літери, за якою може слідувати будь-яка комбінація цифр та літер нижнього регістру; довжина не повинна перевищувати 32 символів.
 Description-vi.UTF-8: Tên người dùng không hợp lệ
  Bạn đã nhập một tên người dùng không hợp lệ. Ghi chú rằng tên người dùng nên bắt đầu với chữ thường, với bất cứ phối hợp con số và chữ thường nào theo sau, và không được dài quá 32 kí tự.
 Description-zh_CN.UTF-8: 无效的用户名
- 您所输入的用户名是无效的。请注意，用户名必须以一个小写字母开头，接着是数字和其它小写字母的任意组合，且不得多于 32 个字符。
+ 您所输入的用户名是无效的。请注意，用户名必须以一个小写字母开头，接着是数字和其他小写字母的任意组合，且不得多于 32 个字符。
 Description-zh_TW.UTF-8: 不正確的使用者名稱
  您所輸入的使用者名稱並不正確。請注意，使用者名稱必須以小寫字母開頭，接著的則可以是任意數字或其它的小寫字母之組合，並不能超過 32 個字元。
 
@@ -1890,7 +1914,7 @@ Description-hi.UTF-8: आरक्षित उपयोक्ता नाम
 Description-hr.UTF-8: Rezervirano korisničko ime
  Korisničko ime koje ste upisali (${USERNAME}) je rezervirano za sistemsku upotrebu. Molim odredite drugo.
 Description-hu.UTF-8: Foglalt felhasználónév
- A megadott felhasználónevet (${USERNAME}) a rendszer használja. Kérlek, egy másikat válassz.
+ A megadott felhasználónevet (${USERNAME}) a rendszer használja. Kérem, válasszon másikat.
 Description-id.UTF-8: Nama pengguna khusus (sistem)
  Nama pengguna yang Anda masukkan: (${USERNAME}), telah dikhususkan untuk sistem. Silahkan pilih nama lain.
 Description-is.UTF-8: Frátekið notandanafn
@@ -1961,6 +1985,8 @@ Description-ta.UTF-8: ஒதுக்கப்பட்டன பயனர்ப
  நீங்கள் உள்ளிட்ட பயனர் பெயர் (${USERNAME})· இயங்குதளத்தின் பயன்பாட்டிற்காக ஒதுக்கப்பட்டுள்ளது, தயவு செய்து வேறொன்றை தேர்வு செய்யவும்.
 Description-te.UTF-8: వాడుకరిపేరు  కేటాయించబడినది
  మీరు ప్రవేశపెట్టిన వాడుకరిపేరు   (${USERNAME})  వ్యవస్థకు  కేటాయించబడినది. దయచేసి వేరొకటి ఎంచుకో
+Description-tg.UTF-8: Номи корбари истифодашуда
+ Номи корбари воридшудаи (${USERNAME}) бо система истифода шудааст. Лутфан, номи дигареро интихоб кунед.
 Description-th.UTF-8: ชื่อผู้ใช้สงวนไว้
  ชื่อผู้ใช้ที่คุณป้อน (${USERNAME}) ได้สงวนไว้สำหรับการทำงานของระบบ กรุณาตั้งชื่อใหม่
 Description-tl.UTF-8: Naka-reserbang pangalan
@@ -2038,7 +2064,7 @@ Description-he.UTF-8: הכנס סיסמה עבור המשתמש החדש:
 Description-hi.UTF-8: नये उपयोक्ता के लिए कूटशब्द चुनें:
  एक अच्छे कूटशब्द में अक्षरों, अंकों और विराम चिन्हों का अच्छा मिश्रण होना चाहिए और इसे आपको समय-समय पर बदलते रहना चाहिए.
 Description-hr.UTF-8: Unesite lozinku za novoga korisnika:
- Dobra lozinka se treba sastojati od slova, brojaka i interpunkcija i treba se redovito mijenjati.
+ Dobra lozinka se treba sastojati od slova, brojaka i interpunkcija te se treba redovito mijenjati.
 Description-hu.UTF-8: Az új felhasználó jelszavának megadása:
  A jó jelszó betűk, számok és írásjelek keverékéből áll és sűrű, szabályos időközönként (legfeljebb havonta) cserére kerül.
 Description-id.UTF-8: Kata sandi untuk pengguna baru:
@@ -2114,12 +2140,14 @@ Description-ta.UTF-8: புதிய பயனருக்கான கடவ�
  ஒரு நல்ல கடவுச்சொல் என்பது எழுத்துக்கள் எண்கள் மற்ற குறியீடுகள் உள்ளடக்கிய ஒரு கலவை. இதை அடிக்கடி மாற்ற வேண்டும்.
 Description-te.UTF-8: కొత్త వాడుకరికి  సంకేతపదం  ఎంచుకో :
  మంచి సంకేత పదంలో అక్షరాలు, అంకెలు, సంఙ్ఞలు మిళితమై వుంటాయి, దానిని క్రమం తప్పక కొంత  సమయం తర్వాత మార్పుచేస్తుండాలి.
+Description-tg.UTF-8: Паролеро барои корбари нав интихоб кунед:
+ Пароли хуб дорои маҷмӯи ҳарфҳо, рақамҳо ва аломатҳои китобатӣ мебошад, ва бояд дар давраҳои доимӣ тағйир дода шавад.
 Description-th.UTF-8: ตั้งรหัสผ่านสำหรับผู้ใช้ใหม่:
  รหัสผ่านที่ดีควรมีตัวอักษร ตัวเลข และเครื่องหมายวรรคตอนผสมกัน และควรเปลี่ยนรหัสผ่านเป็นประจำ
 Description-tl.UTF-8: Magbigay ng kontrasenyas para sa bagong gagamit:
  Ang magandang kontrasenyas ay binubuo ng halo-halong mga titik, numero at marka at pinapalitan ito ng madalas.
 Description-tr.UTF-8: Yeni kullanıcı için bir parola girin:
- İyi bir parola harfler, rakamlar ve noktalama işaretlerinin uygun bir birleşiminden oluşmalı ve düzenli aralıklarla değiştirilmelidir.
+ İyi bir parola harfler, rakamlar ve noktalama işaretlerinin uygun bir kombinasyonundan oluşmalı ve düzenli aralıklarla değiştirilmelidir.
 Description-ug.UTF-8: يېڭى ئىشلەتكۈچىگە ئىم تاللاڭ:
  بىخەتەر ئىم ئادەتتە ھەرپ، سان ۋە ھەرپ بەلگىلەرنىڭ ئارىلاشمىسىدىن تەشكىل تاپىدۇ، ھەمدە قەرەللىك ئالماشتۇرۇپ تۇرۇلىدۇ.
 Description-uk.UTF-8: Введіть пароль для нового користувача:
@@ -2192,8 +2220,8 @@ Description-hi.UTF-8: पुष्टि करने के लिए कूट
  यह पुष्टि करने के लिए कि आपने सही प्रविष्टि की है, कृपया उपयोक्ता का वही कूटशब्द फिर से भरें.
 Description-hr.UTF-8: Iznova unesite lozinku za potvrdu:
  Molim unesite istu korisničku lozinku kao potvrdu da ste je ispravno utipkali.
-Description-hu.UTF-8: A jelszó ellenőrző ismétlése:
- A jelszó ellenőrzése céljából újra írd be azt.
+Description-hu.UTF-8: Írja be újra a jelszavát megerősítés végett:
+ Írja be újra a jelszót, hogy megerősítse, hogy helyesen gépelte be.
 Description-id.UTF-8: Masukkan lagi kata sandi untuk verifikasi:
  Silakan masukkan lagi kata sandi pengguna yang sama untuk memastikan Anda mengetiknya dengan benar.
 Description-is.UTF-8: Sláðu lykilorð aftur inn til að staðfesta:
@@ -2266,12 +2294,14 @@ Description-ta.UTF-8: கடவுச்சொல்லை உறுதி ச�
  அதே சொல்லை மீண்டும் உள்ளீடு செய்க. இதனால் சரியாக உள்ளீடு செய்யப் பட்டதா என சோதிக்க இயலும்.
 Description-te.UTF-8: ధృవీకరణకు సంకేత పదాన్ని మరల  టైప్ చేయండి:
  సరిగా టైపు చేసినట్లు ధృవీకరణకు  అదే  వాడుకరి  సంకేత పదాన్ని మరల  టైప్ చేయండి
+Description-tg.UTF-8: Паролро барои тайид кардан аз нав ворид кунед:
+ Лутфан, он пароли корбарро як маротибаи дигар ворид кунед, то ин ки тасдиқ кунед, ки шумо онро ба таври дуруст чоп кардед.
 Description-th.UTF-8: ป้อนรหัสผ่านอีกครั้งเพื่อตรวจสอบ:
  กรุณาป้อนรหัสผ่านเดิมอีกครั้ง เพื่อตรวจสอบว่าคุณไม่ได้พิมพ์ผิด
 Description-tl.UTF-8: Ibigay muli ang kontrasenyas para ma-tiyak:
  Ibigay muli ang parehong kontrasenyas ng gagamit upang matiyak na inyong naibigay ito ng tugma.
 Description-tr.UTF-8: Doğrulamak için parolayı tekrar girin:
- Lütfen hatasız yazdığınızı doğrulamak için aynı kullanıcı parolasını tekrar giriniz.
+ Hatasız yazdığınızı doğrulamak için aynı kullanıcı parolasını tekrar girin.
 Description-ug.UTF-8: دەلىللەش ئۈچۈن ئىمنى  قايتا كىرگۈزۈڭ:
  مەزكۇر ئىشلەتكۈچىنىڭ ئىمنى قايتا كىرگۈزۈپ كىرگۈزگىنىڭىزنىڭ توغرىلىقىنى دەلىللەڭ.
 Description-uk.UTF-8: Повторіть ввід паролю для перевірки:
@@ -2341,10 +2371,10 @@ Description-he.UTF-8: שגיאה בקליטת הסיסמה
  שתי הסיסמאות שהכנסת אינן זהות. אנא נסה שוב.
 Description-hi.UTF-8: पासवर्ड भरने में त्रुटि
  आपके द्वारा भरे गये दोनों कूटशब्द एक नहीं थे. कृपया पुनः प्रयास करें.
-Description-hr.UTF-8: Pogreška pri unošenju lozinke
+Description-hr.UTF-8: Greška pri unošenju lozinke
  Lozinke koje ste unijeli nisu jednake. Molim pokušajte iznova.
 Description-hu.UTF-8: Jelszóbeviteli hiba
- A két megadott jelszó eltér. Most próbáld újra.
+ A két megadott jelszó eltér. Próbálja újra.
 Description-id.UTF-8: Salah memasukkan kata sandi
  Kedua kata sandi yang Anda masukkan tidak sama. Silakan coba lagi.
 Description-is.UTF-8: Villa í innslætti á lykilorði
@@ -2381,8 +2411,8 @@ Description-nb.UTF-8: Feil ved inntastingen av passordet
  De to passordene du oppga var ikke like. Prøv igjen.
 Description-ne.UTF-8: पासवर्ड आगत त्रुटि
  तपाईँले प्रविष्टि गर्नु भएको दुईटा पासवर्डहरू उही छैनन । कृपया फेरी प्रयास गर्नुहोस् ।
-Description-nl.UTF-8: Wachtwoord-invoerfout
- De twee door u ingevoerde wachtwoorden waren kwamen niet overeen. Gelieve nogmaals te proberen.
+Description-nl.UTF-8: Fout bij het invoeren van het wachtwoord
+ De twee door u ingevoerde wachtwoorden waren niet identiek. Gelieve nogmaals te proberen.
 Description-nn.UTF-8: Feil ved inntasting av passord
  Dei to passorda du skreiv inn er ikkje like. Prøv igjen.
 Description-no.UTF-8: Feil ved inntastingen av passordet
@@ -2415,6 +2445,8 @@ Description-ta.UTF-8: கடவுச்சொல் உள்ளீட்டு
  தாங்கள் உள்ளிட்ட இரு கடவுச்சொற்களும் வெவ்வேறானவை. மீண்டும் முயற்சி செய்க.
 Description-te.UTF-8: సంకేత పదం ప్రవేశపెట్టటంలో తప్పు
  మీరు ప్రవేశపెట్టిన  రెండు సంకేతపదాలు ఒకేలాగా లేవు. మరల ప్రయత్నించండి.
+Description-tg.UTF-8: Паролро нодуруст ворид кардед
+ Ду паролеро, ки шумо ворид кардед, бо ҳамдигар мувофиқат намекунанд. Лутфан, амалро такрор кунед.
 Description-th.UTF-8: การป้อนรหัสผ่านผิดพลาด
  รหัสผ่านที่คุณป้อนทั้งสองครั้งไม่ตรงกัน กรุณาลองใหม่
 Description-tl.UTF-8: May pagkakamali sa pagbigay ng kontrasenyas
@@ -2452,7 +2484,7 @@ Description-bn.UTF-8: ফাঁকা পাসওয়ার্ড
 Description-bo.UTF-8: གསང་གྲངས་སྟོང་པ་ཡིན་པ
  ཁྱོད་ཀྱིས་འཇུག་པའི་གསང་གྲངས་ནི་སྟོང་བ་རེད་འདུག་སྟོང་པ་མིན་པའི་གསང་གྲངས་ཞིག་ངེས་པར་དུ་འཇུག་དགོས
 Description-bs.UTF-8: Prazna šifra
- Unijeli ste praznu šifru što nije dopušteno. Molim odaberite šifru koja nije prazna
+ Unijeli ste praznu šifru što nije dopušteno. Molim odaberite šifru koja nije prazna.
 Description-ca.UTF-8: La contrasenya és buida
  Heu introduït una contrasenya buida, que no és permès. Si us plau introduïu una contrasenya no buida.
 Description-cs.UTF-8: Prázdné heslo
@@ -2492,7 +2524,7 @@ Description-he.UTF-8: סיסמה ריקה
 Description-hi.UTF-8: खाली कूटशब्द
  आपने रिक्त कूटशब्द भरा है जोकि स्वीकार्य नहीं है. कृपया रिक्त कूटशब्द न भरें.
 Description-hr.UTF-8: Prazna lozinka
- Unijeli ste praznu lozinku, što nije dozvoljeno. Molim odaberite lozinku.
+ Unijeli ste praznu lozinku, što nije dozvoljeno. Molim izaberite lozinku.
 Description-hu.UTF-8: Üres jelszó
  Üres jelszó megadása nem engedélyezett. Nem-üres jelszót kell megadni.
 Description-id.UTF-8: Kata sandi kosong
@@ -2567,6 +2599,8 @@ Description-ta.UTF-8: வெற்று கடவுச்சொல்
  நீங்கள் வெற்று கடவுச்சொலை உள்ளிட்டீர்கள். இதற்கு அனுமதியில்லை. வெற்றல்லாத கடவுச்சொல்லை உள்ளிடவும்.
 Description-te.UTF-8: ఖాళీ సంకేతపదం
  మీరు ప్రవేశపెట్టిన   సంకేతపదం ఖాళీ గా వుంది.దీనికి అనుమతి లేదు. ఖాళీకాని సంకేతపదం ఎంచుకోండి.
+Description-tg.UTF-8: Парол ворид нашудааст
+ Шумо пароли холиеро, ки иҷозат намешавад, ворид кардед. Лутфан, пароли дигареро интихоб кунед.
 Description-th.UTF-8: รหัสผ่านว่างเปล่า
  คุณป้อนรหัสผ่านว่างเปล่า ซึ่งไม่อนุญาต กรุณาตั้งรหัสผ่านที่ไม่ว่างเปล่า
 Description-tl.UTF-8: Walang kontrasenyas
@@ -2607,7 +2641,7 @@ Description-bn.UTF-8: শ্যাডো পাসওয়ার্ড সক্�
 Description-bo.UTF-8: གྲིབ་གཟུགས་ཅན་གྱི་གསང་གྲངས་ནུས་ཡོད་བཟོ་དགོས་སམ
  གྲིབ་གཟུགས་ཅན་གྱི་གསང་གྲངས་དེ་སུས་ཀྱང་མཐོང་མི་ཐུབ། གསང་གྲངས་འདིའི་རིགས་ཡིག་ཆ་གཞན་ཞིག་གི་ནང་དུ་ཉར་བ་དང་དམིགས་བསལ་གྱི་བྱ་རིམ་གྱིས་ཁོ་ན་ཀློག་ཐུབ། NIS ཁོར་ཡུག་འདྲ་བ་ཁ་ཤས་ཕུད་པའི་གནས་ཡོངས་ལ་གྲིབ་གཟུགས་ཅན་གྱི་གསང་གྲངས་སྤྱོད་དགོས།
 Description-bs.UTF-8: Uključiti shadow šifre?
- Shadow šifre čine vaš sistem sigurnijim zato što niko ne može vidjeti čak ni ekriptovane šifre. Šifre se čuvaju u posebnoj datoteci koju samo posebni programi mogu čitati. Upotreba shadow šifri je čvrsto preporučuje, osim u par slučajeva poput NIS okolína.
+ Shadow šifre čine Vaš sistem sigurnijim zato što niko ne može vidjeti čak ni ekriptovane šifre. Šifre se čuvaju u posebnoj datoteci koju samo posebni programi mogu čitati. Upotreba shadow šifri se čvrsto preporučuje, osim u nekoliko slučajeva poput NIS okolína.
 Description-ca.UTF-8: Voleu habilitar les contrasenyes ombra?
  Les contrasenyes ombra fan el vostre sistema més segur perquè ningú és capaç de veure ni tan sols les contrasenyes xifrades. Les contrasenyes són emmagatzemades en un fitxer a part que només pot ser llegit per programes especials. És molt recomanable l'ús de les contrasenyes ombra, tret d'en pocs casos com en entorns NIS.
 Description-cs.UTF-8: Povolit stínová hesla?
@@ -2647,7 +2681,7 @@ Description-he.UTF-8: האם להפעיל הצללת סיסמאות?
 Description-hi.UTF-8: शैडो पासवर्ड समर्थ करें?
  शैडो कूटशब्द आपके तंत्र को अधिक सुरक्षित बनाते हैं क्योंकि कोई भी कूटबद्ध कूटशब्दो तक को नहीं देख सकता है. कूटशब्द एक अलग फाइल में लिखे होते हैं जिन्हे कुछ विशेष अनुप्रयोग ही पढ़ सकते हैं. शैडो कूटशब्दों के प्रयोग की संस्तुति की जाती है, पर कुछ परिस्थितयों को छोड़ कर जैसे कि एनआईएस परिवेश.
 Description-hr.UTF-8: Omogući 'shadow' lozinke?
- 'Shadow' lozinke čine vaš sustav sigurnijim jer nitko ne može vidjeti čak niti enkriptirane lozinke. Sve one su spremljene u posebnu datoteku koju mogu čitati samo posebni programi. Uporaba 'shadow' lozinki se najtoplije preporuča, osim u par slučajeva kao npr. ako ste u NIS okruženju.
+ 'Shadow' lozinke čine vaš sustav sigurnijim jer nitko ne može vidjeti čak niti šifrirane lozinke. Sve one su spremljene u posebnu datoteku koju mogu čitati samo posebni programi. Korištenje 'shadow' lozinki se najtoplije preporuča, osim u par slučajeva kao npr. ako ste u NIS okruženju.
 Description-hu.UTF-8: Árnyék jelszavak legyenek?
  Az árnyék jelszavak a rendszert sokkal biztonságosabbá teszik, mert még a titkosított jelszavak sem olvashatók. A jelszavak külön fájlba kerülnek, mely csak különleges programokkal olvasható. Az árnyék jelszavak használata erősen ajánlott, kivéve néhány esetet, például NIS környezetben.
 Description-id.UTF-8: Menggunakan kata sandi bayangan?
@@ -2720,6 +2754,8 @@ Description-ta.UTF-8: நிழல் கடவுச்சொல்லை ச�
  நிழல் கடவுச்சொற்கள் கணினியை அதிக பாதுகாப்பு கொண்டதாக்கும். ஏனெனில் மறையாக்கம் செய்த கடவுச்சொல்லை யாரும் பார்க்க இயலாது. தனி கோப்பில் வைக்கப் படும் இவற்றை விசேட நிரல்களால் மட்டுமே படிக்கவியலும். ஆகவே நிஸ் (NIS) போன்ற சூழல்கள் தவிர மற்ற இடங்களில் நிழல் கடவுச்சொல்லை செயல்படுத்துமாறு பலமாக பரிந்துரைக்கப் படுகிறது.
 Description-te.UTF-8: షాడో సంకేతపదాలని చేతనం చెయ్యి?
  షాడో  సంకేతపదాలు, మీ సిస్టమ్ కు ఎక్కువ రక్షణ కలిగిస్తాయి, ఎవరైనా  ఎన్క్రిప్టెడ్ సంకేతపదాలను చూడటానికి వీలుండదు. సంకేతపదాలు, ఒక ప్రత్యేక ఫైలులో  నిల్వచేస్తారు. దీనిని చదవడానికి ప్రత్యేక ప్రోగ్రాములు కావాలి. NIS పరిస్థితులలో తప్ప,షాడో  సంకేతపదాలు గట్టిగా సిఫారస్ చేయబడినవి.
+Description-tg.UTF-8: Паролҳои соягиро фаъол мекунед?
+ Паролҳои соягӣ амнияти системаи шуморо баландтар мегардонанд, чунки ягон нафар наметавонад ҳатто паролҳои рамздорро бинад. Паролҳо дар файли ҷудошуда нигоҳ дошта мешаванд, ки он файл метавонад танҳо бо барномаҳои мушаххас хонда шавад. Истифодаи паролҳои соягӣ тавсия мешавад, ба ғайр аз баъзе ҳолатҳо ба мисли муҳитҳои NIS.
 Description-th.UTF-8: เปิดใช้รหัสผ่าน shadow หรือไม่?
  รหัสผ่านเงา (shadow) จะทำให้ระบบของคุณปลอดภัยยิ่งขึ้น เพราะจะไม่มีใครดูได้แม้แต่รหัสผ่านที่เข้ารหัสไว้ รหัสผ่านจะถูกเก็บไว้ในแฟ้มต่างหากที่สามารถอ่านได้โดยโปรแกรมพิเศษเท่านั้น เราขอแนะนำอย่างยิ่งให้ใช้รหัสผ่านเงานี้ ยกเว้นในบางกรณีที่พบไม่บ่อย เช่น ในสภาพแวดล้อมที่ใช้ NIS
 Description-tl.UTF-8: Itakdang aktibo ang mga shadow kontrasenyas?
@@ -2747,7 +2783,7 @@ Description-be.UTF-8: Наладзіць карыстальнікаў і пар�
 Description-bg.UTF-8: Добавяне на потребители и задаване на пароли
 Description-bn.UTF-8: ব্যবহারকারী ও পাসওয়ার্ড নির্ধারণ করো
 Description-bo.UTF-8: སྤྱོད་མཁན་དང་གསང་གྲངས་སྒྲིག་འཛུགས་བྱེད་པ
-Description-bs.UTF-8: Postavi korisnike i šifre
+Description-bs.UTF-8: Postavite korisnike i šifre
 Description-ca.UTF-8: Configura els usuaris i les contrasenyes
 Description-cs.UTF-8: Nastavit uživatele a hesla
 Description-cy.UTF-8: Paratoi defnyddwyr a chyfrineiriau
@@ -2805,6 +2841,7 @@ Description-sr.UTF-8: Подеси кориснике и лозинке
 Description-sv.UTF-8: Skapa användare och lösenord
 Description-ta.UTF-8: பயனர்கள் மற்றும் கடவுச்சொற்களை அமை
 Description-te.UTF-8: వాడుకరులను మరియ సంకేతపదాలను   సృష్టించు
+Description-tg.UTF-8: Танзими корбарон ва паролҳо
 Description-th.UTF-8: ตั้งบัญชีผู้ใช้และรหัสผ่าน
 Description-tl.UTF-8: Ihanda ang mga gagamit at mga kontrasenyas
 Description-tr.UTF-8: Kullanıcıları ve parolaları oluştur
@@ -2824,11 +2861,11 @@ Description-be.UTF-8: Наладка карыстальнікаў і парол�
 Description-bg.UTF-8: Задаване на потребители и пароли...
 Description-bn.UTF-8: ব্যবহারকারী ও পাসওয়ার্ড নির্ধারণ করা হচ্ছে...
 Description-bo.UTF-8: སྤྱོད་མཁན་དང་གསང་གྲངས་སྒྲིག་འཛུགས་བྱེད་བཞིན་པ་་་
-Description-bs.UTF-8: Postavljam korisnike i šifre...
+Description-bs.UTF-8: Postavljanje korisnika i šifri...
 Description-ca.UTF-8: S'estan establint els usuaris i les contrasenyes...
 Description-cs.UTF-8: Nastavují se uživatelé a hesla...
 Description-cy.UTF-8: Gosod defnyddwyr a chyfrineiriau...
-Description-da.UTF-8: Sætter brugere og adgangskoder op...
+Description-da.UTF-8: Sætter brugere og adgangskoder op ...
 Description-de.UTF-8: Einrichten von Benutzern und Passwörtern ...
 Description-dz.UTF-8: ལག་ལེན་པ་ཚུ་དང་ཆོག་ཡིག་ཚུ་གཞི་སྦྱོར་འབད་དོ...
 Description-el.UTF-8: Ρύθμιση χρηστών και κωδικών πρόσβασης...
@@ -2882,6 +2919,7 @@ Description-sr.UTF-8: Подешавање корисника и лозинки.
 Description-sv.UTF-8: Ställer in användare och lösenord...
 Description-ta.UTF-8: பயனர்கள் மற்றும் கடவுச்சொற்கள் அமைக்கப் படுகின்றன.....
 Description-te.UTF-8: వాడుకరులను మరియు సంకేతపదాలను అమరుస్తున్నాం...
+Description-tg.UTF-8: Корбарон ва паролҳо танзим шуда истодаанд...
 Description-th.UTF-8: กำลังตั้งบัญชีผู้ใช้และรหัสผ่าน...
 Description-tl.UTF-8: Ihanda ang mga gagamit at mga kontrasenyas...
 Description-tr.UTF-8: Kullanıcılar ve parolalar ayarlanıyor...

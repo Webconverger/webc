@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2001, 2002, 2007, 2010 Free Software Foundation
 # Copyright (C) 1992, 1993 Jean-loup Gailly
@@ -23,8 +23,8 @@ case $1 in
 esac
 PATH=$bindir:$PATH; export PATH
 
-version="zmore (gzip) 1.5
-Copyright (C) 2010-2012 Free Software Foundation, Inc.
+version="zmore (gzip) 1.6
+Copyright (C) 2010-2013 Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
@@ -36,57 +36,25 @@ Like 'more', but operate on the uncompressed contents of any compressed FILEs.
 
 Report bugs to <bug-gzip@gnu.org>."
 
-if test "`echo -n a`" = "-n a"; then
-  # looks like a SysV system:
-  n1=''; n2='\c'
-else
-  n1='-n'; n2=''
-fi
-oldtty=`stty -g 2>/dev/null`
-if stty -cbreak 2>/dev/null; then
-  cb='cbreak'; ncb='-cbreak'
-else
-  # 'stty min 1' resets eof to ^a on both SunOS and SysV!
-  cb='min 1 -icanon'; ncb='icanon eof ^d'
-fi
-if test $? -eq 0 && test -n "$oldtty"; then
-   trap 'stty $oldtty 2>/dev/null; exit' 0 2 3 5 10 13 15
-else
-   trap 'stty $ncb echo 2>/dev/null; exit' 0 2 3 5 10 13 15
-fi
+case $1 in
+  --h*) exec printf '%s\n' "$usage";;
+  --v*) exec printf '%s\n' "$version";;
+  --) shift;;
+  -?*) printf >&2 '%s\n' "$0: $1: unknown option; try '$0 --help' for help"
+       exit 1;;
+esac
 
 if test $# = 0; then
     if test -t 0; then
-        echo >&2 "$0: invalid number of operands; try \`$0 --help' for help"
-    else
-        gzip -cdfq | eval ${PAGER-more}
+        printf >&2 '%s\n' "$0: missing operands; try '$0 --help' for help"
+        exit 1
     fi
-else
-    FIRST=1
-    for FILE
-    do
-        case $FILE in
-        --h*) exec echo "$usage";;
-        --v*) exec echo "$version";;
-        esac
-
-        < "$FILE" || continue
-        if test $FIRST -eq 0; then
-                echo $n1 "--More--(Next file: $FILE)$n2"
-                stty $cb -echo 2>/dev/null
-                ANS=`dd bs=1 count=1 2>/dev/null`
-                stty $ncb echo 2>/dev/null
-                echo " "
-                case "$ANS" in
-                [eq]) exit;;
-                esac
-        fi
-        if test "$ANS" != 's'; then
-                echo "------> $FILE <------"
-                gzip -cdfq -- "$FILE" | eval ${PAGER-more}
-        fi
-        if test -t 1; then
-                FIRST=0
-        fi
-    done
+    set -- -
 fi
+
+for FILE
+do
+  test $# -lt 2 ||
+    printf '::::::::::::::\n%s\n::::::::::::::\n' "$FILE" || break
+  gzip -cdfq -- "$FILE"
+done 2>&1 | eval ${PAGER-more}

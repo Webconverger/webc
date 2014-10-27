@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+	deb-systemd-invoke start live-config.service >/dev/null || true
+fi
+# End automatically added section

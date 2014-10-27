@@ -172,9 +172,6 @@ clean_all()
 	log_begin_msg "Cleaning up temporary files..."
 	ES=0
 	clean_tmp || ES=1
-	# /lib/init/rw is not expected to exist since it's removed.
-	# So failure is expected; it's only here to force cleanup.
-	clean /lib/init/rw "! -type d" || true
 	clean /run "! -xtype d ! -name utmp ! -name innd.pid" || ES=1
 	clean /run/lock "! -type d" || ES=1
 	clean /run/shm "! -type d" || ES=1

@@ -1,0 +1,41 @@
+# X session startup script: /etc/X11/Xsession.d/55numlockx
+
+# Initial settings
+NUMLOCK=auto
+
+# Load configuration
+cf=/etc/default/numlockx
+[ ! -r $cf ] || . $cf
+
+# Toggle numlock if we're not removed
+nlx=/usr/bin/numlockx
+[ ! -x $nlx ] || {
+    case $NUMLOCK in
+        # 'keep' is an undocumented state (see `man 1 numlockx'), though
+        # /etc/default/numlockx mentions it; do nothing
+        keep)
+            return 0
+            ;;
+        off|on|toggle)
+            ;;
+        *)
+            NUMLOCK=on
+            ltd=/usr/sbin/laptop-detect
+            [ ! -x $ltd ] || ! $ltd || NUMLOCK=off
+            # Enable numlock for USB keyboard on laptop
+            if [ -f /bin/udevadm ] ; then
+                for kbd in `udevadm trigger --dry-run --verbose --property-match=ID_INPUT_KEYBOARD=1` ; do
+                    if udevadm info --query=env --path=$kbd | grep -q '^DEVNAME=' ; then
+                        continue
+                    fi
+                    if udevadm info --query=env --path=$kbd | grep -q '^ID_USB_DRIVER=usbhid' ; then
+                        NUMLOCK=on
+                    fi
+                done
+            fi
+            ;;
+    esac
+    $nlx $NUMLOCK || :
+}
+
+# EOF

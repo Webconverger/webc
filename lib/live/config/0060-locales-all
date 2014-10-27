@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Locales_all ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/locales-all.list ] || \
-	   [ -e /var/lib/live/config/locales-all ]
-	then
-		return
-	fi
-
-	echo -n " locales-all"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.locales=*|locales=*)
@@ -28,18 +21,40 @@ Locales_all ()
 				;;
 		esac
 	done
-
-	Configure_locales_all
 }
 
-Configure_locales_all ()
+Init ()
 {
-	_LOCALE="${LIVE_LOCALES:-en_US.UTF-8}"
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/locales-all.list ] || \
+	   [ -e /var/lib/live/config/locales-all ]
+	then
+		exit 0
+	fi
 
-	printf 'export LANG="%s"\n' "${_LOCALE}" > /etc/profile.d/locales-all.sh
+	echo -n " locales-all"
+}
+
+Config ()
+{
+	if [ -n "${LIVE_LOCALES}" ]
+	then
+		LIVE_LOCALES="$(echo ${LIVE_LOCALES} | awk -F, '{ print $1 }')"
+	else
+		LIVE_LOCALES="en_US.UTF-8"
+	fi
+
+	if [ -e /etc/progress-linux_version ]
+	then
+		sed -i -e "s|^ *export LANG=.*|export LANG=\"${LIVE_LOCALES}\"|" /etc/profile
+	else
+		printf 'export LANG="%s"\n' "${_LOCALE}" > /etc/profile.d/zz-live-config_locales-all.sh
+	fi
 
 	# Creating state file
 	touch /var/lib/live/config/locales-all
 }
 
-Locales_all
+Cmdline
+Init
+Config

@@ -12,12 +12,16 @@ my %locales    = ();
 updatedb ($class);
 build_emacsen_support ();
 build_squirrelmail_support ();
-
+# 
 build_jed_support ();
+
+# Clean orphaned remove files and its contents.
+my $dictionaries = loaddb ($class);
+dico_clean_orphaned_removefiles($class,$dictionaries);
 
 system ("aspell-autobuildhash") == 0
     or die "Error running aspell-autobuildhash\n";
-
+#
 
 __END__
 

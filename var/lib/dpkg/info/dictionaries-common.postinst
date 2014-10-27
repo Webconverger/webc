@@ -44,9 +44,10 @@ case "$1" in
     # start with a sane environment.
     update-dictcommon-aspell
     update-dictcommon-hunspell
-    # Make sure to not enable trigger here nor try setting symlinks.
-    update-default-ispell     --dico-postinst
-    update-default-wordlist   --dico-postinst
+    # For wordlists and ispell dicts a non-await trigger will be enabled
+    # to have most things delayed to the end of package installation.
+    update-default-wordlist
+    update-default-ispell
 
     # Remove ancient /etc/openoffice/dictionary.lst if present
     if [ -f "/etc/openoffice/dictionary.lst" ]; then
@@ -95,10 +96,10 @@ case "$1" in
 	  ispell-autobuildhash --triggered
 	  ;;
 	update-default-ispell)
-	  update-default-ispell --triggered --rebuild
+	  update-default-ispell --triggered
 	  ;;
 	update-default-wordlist)
-	  update-default-wordlist --triggered --rebuild
+	  update-default-wordlist --triggered
 	  ;;
 	*)
 	  echo "Unsupported trigger \"$trigger\"" >&2
@@ -114,18 +115,12 @@ case "$1" in
     ;;
 esac
 
-# We need to test that there are emacsen installed before calling emacs-package-*
-if [ "$1" = "configure" ] && [ -x /usr/lib/emacsen-common/emacs-package-install ]
+# Automatically added by dh_installemacsen
+if [ "$1" = "configure" ] && [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common ]
 then
-  if [ -d /var/lib/emacsen-common/state/flavor/installed ]; then
-    # Using emacsen-common >= 2.0
-    /usr/lib/emacsen-common/emacs-package-install --postinst dictionaries-common
-  elif [ -e /var/lib/emacsen-common/installed-flavors ]; then
-    # Using emacsen-common < 2.0
-    /usr/lib/emacsen-common/emacs-package-install dictionaries-common
-  fi
+	/usr/lib/emacsen-common/emacs-package-install --postinst dictionaries-common
 fi
-
+# End automatically added section
 
 
 exit 0

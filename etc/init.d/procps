@@ -8,6 +8,7 @@
 # Required-Start:    mountkernfs $local_fs
 # Required-Stop:
 # Should-Start:      udev module-init-tools
+# X-Start-Before:    $network
 # Default-Start:     S
 # Default-Stop:
 # Short-Description: Configure kernel parameters at boottime
@@ -37,14 +38,7 @@ case "$1" in
 	start|restart|force-reload|reload)
 		log_action_begin_msg "Setting kernel variables "
 		STATUS=0
-		for file in /etc/sysctl.conf /etc/sysctl.d/*.conf ; do
-			if [ -r "$file" ] ; then
-				if [ "$VERBOSE" = "yes" ] ; then
-					log_action_cont_msg " $file"
-				fi
-				$SYSCTL $QUIET_SYSCTL --load="$file" || STATUS=$?
-			fi
-		done
+		$SYSCTL $QUIET_SYSCTL --system || STATUS=$?
 		log_action_end_msg $STATUS
 		;;
 	stop)

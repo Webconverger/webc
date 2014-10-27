@@ -4,7 +4,8 @@ Requires=acpid.socket
 
 [Service]
 StandardInput=socket
-ExecStart=/usr/sbin/acpid
+EnvironmentFile=/etc/default/acpid
+ExecStart=/usr/sbin/acpid $OPTIONS
 
 [Install]
 WantedBy=multi-user.target

@@ -25,5 +25,20 @@ root_password () {
 		return 0
 	fi
 
+	# Be more careful than usual about test arguments in the following,
+	# just in case (for example) the encrypted password string is "!".
+
+	if [ -e $ROOT/etc/shadow ] && \
+	   [ -n "`grep ^root: $ROOT/etc/shadow | cut -d : -f 2`" ] && \
+	   [ "x`grep ^root: $ROOT/etc/shadow | cut -d : -f 2`" != 'x*' ]; then
+		return 0
+	fi
+	
+	if [ -e $ROOT/etc/passwd ] && \
+		[ -n "`grep ^root: $ROOT/etc/passwd | cut -d : -f 2`" ] && \
+		[ "x`grep ^root: $ROOT/etc/passwd | cut -d : -f 2`" != 'xx' ]; then
+			return 0
+	fi
+
 	return 1
 }

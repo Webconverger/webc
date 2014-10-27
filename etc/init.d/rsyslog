@@ -22,14 +22,13 @@ DESC="enhanced syslogd"
 NAME=rsyslog
 
 RSYSLOGD=rsyslogd
-RSYSLOGD_BIN=/usr/sbin/rsyslogd
-RSYSLOGD_OPTIONS="-c5"
-RSYSLOGD_PIDFILE=/var/run/rsyslogd.pid
+DAEMON=/usr/sbin/rsyslogd
+PIDFILE=/var/run/rsyslogd.pid
 
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
-[ -x "$RSYSLOGD_BIN" ] || exit 0
+[ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -39,22 +38,15 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 do_start()
 {
-	DAEMON="$RSYSLOGD_BIN"
-	DAEMON_ARGS="$RSYSLOGD_OPTIONS"
-	PIDFILE="$RSYSLOGD_PIDFILE"
-
 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   other if daemon could not be started or a failure occured
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $RSYSLOGD_OPTIONS
 }
 
 do_stop()
 {
-	DAEMON="$RSYSLOGD_BIN"
-	PIDFILE="$RSYSLOGD_PIDFILE"
-
 	# Return
 	#   0 if daemon has been stopped
 	#   1 if daemon was already stopped
@@ -66,9 +58,6 @@ do_stop()
 # Tell rsyslogd to close all open files
 #
 do_rotate() {
-	DAEMON="$RSYSLOGD_BIN"
-	PIDFILE="$RSYSLOGD_PIDFILE"
-
 	start-stop-daemon --stop --signal HUP --quiet --pidfile $PIDFILE --exec $DAEMON
 }
 
@@ -88,7 +77,7 @@ create_xconsole() {
 sendsigs_omit() {
 	OMITDIR=/run/sendsigs.omit.d
 	mkdir -p $OMITDIR
-	ln -sf $RSYSLOGD_PIDFILE $OMITDIR/rsyslog
+	ln -sf $PIDFILE $OMITDIR/rsyslog
 }
 
 case "$1" in
@@ -126,7 +115,7 @@ case "$1" in
 	$0 start
 	;;
   status)
-	status_of_proc -p $RSYSLOGD_PIDFILE $RSYSLOGD_BIN $RSYSLOGD && exit 0 || exit $?
+	status_of_proc -p $PIDFILE $DAEMON $RSYSLOGD && exit 0 || exit $?
 	;;
   *)
 	echo "Usage: $SCRIPTNAME {start|stop|rotate|restart|force-reload|status}" >&2

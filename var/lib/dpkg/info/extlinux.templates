@@ -1,102 +1,62 @@
-Template: extlinux/install
-Type: boolean
-Default: false
-Description: Should EXTLINUX be installed to the MBR?
- If you choose this option, EXTLINUX will be automatically written to the
- MBR of your disk. The current MBR will be saved to a file in /boot.
+Template: extlinux/title
+Type: title
+Description: EXTLINUX
+Description-da.UTF-8: EXTLINUX
+Description-de.UTF-8: EXTLINUX
+Description-es.UTF-8: EXTLINUX
+Description-fr.UTF-8: EXTLINUX
+Description-it.UTF-8: EXTLINUX
+Description-ja.UTF-8: EXTLINUX
+Description-pt.UTF-8: EXTLINUX
+Description-pt_BR.UTF-8: EXTLINUX
+Description-ru.UTF-8: EXTLINUX
+Description-tr.UTF-8: EXTLINUX
+
+Template: extlinux/no-bootloader-integration
+Type: note
+Description: No bootloader integration code anymore
+ The extlinux package does not ship bootloader integration anymore.
  .
- Otherwise, EXTLINUX can be manually setup as described in
- /usr/share/doc/extlinux/README.Debian.
+ If you are upgrading to this version of EXTLINUX your system will not boot
+ any longer if EXTLINUX was the only configured bootloader. Please install
+ GRUB.
+Description-da.UTF-8: Der er ikke længere en integrationskode for opstartsindlæseren
+ Pakken extlinux indeholder ikke længere integration for opstartsindlæseren.
  .
- Note: The automatic installation currently only works if your root
- partition is on the disk to which MBR extlinux should be installed into.
-Description-cs.UTF-8: Má se EXTLINUX nainstalovat do MBR?
- Zvolíte-li tuto možnost, EXTLINUX bude automaticky zapsán do MBR vašeho disku. Současná MBR bude uloženo do souboru v /boot.
+ Hvis du opgraderer til denne version af EXTLINUX, så vil dit system ikke længere starte op, hvis EXTLINUX var den eneste konfigurerede opstartsindlæser. Installer venligst GRUB.
+Description-de.UTF-8: Kein Code zum Systemladen mehr integriert
+ Das Paket extlinux liefert keinen Code mehr zur Integration eines Systemladeprogramms (Bootloaders).
  .
- EXTLINUX je také možné nastavit ručně podle popisu v /usr/share/doc/extlinux/README.Debian.
+ Falls Sie ein Upgrade auf diese Version von EXTLINUX durchführen, wird Ihr System nicht mehr starten, falls EXTLINUX das einzige konfigurierte Systemladeprogramm war. Bitte installieren Sie GRUB.
+Description-es.UTF-8: Ya no hay código de integración del gestor de arranque
+ El paquete extlinux ya no incluye la integración del gestor de arranque.
  .
- Poznámka: Automatická instalace v současné době funguje pouze pokud se kořenový oddíl nachází na disku, na který se má extlinux nainstalovat.
-Description-da.UTF-8: Skal EXTLINUX installeres til MBR?
- Hvis du vælger denne indstilling, vil EXTLINUX automatisk blive skrevet til MBR'en på din disk. Den aktuelle MBR vil blive gemt i en fil i /boot.
+ Si está actualizando a esta versión de EXTLINUX, el sistema ya no iniciará si EXTLINUX era el único gestor de arranque configurado. Instale GRUB.
+Description-fr.UTF-8: Plus d'intégration d'extlinux avec le chargeur d'amorçage
+ Le paquet extlinux n'intègre plus de code gérant le chargeur d'amorçage.
  .
- Ellers kan EXTLINUX blive manuelt opsat som beskrevet i /usr/share/doc/extlinux/README.Debian.
+ Si vous mettez à niveau vers cette version d'EXTLINUX, le système ne démarrera plus si EXTLINUX était le seul chargeur d'amorçage configuré. Veuillez dans ce cas installer GRUB.
+Description-it.UTF-8: Codice di integrazione con bootloader non più presente
+ Il pacchetto extlinux non fornisce più l'integrazione con il bootloader.
  .
- Bemærk: Den automatiske installation virker i øjeblikket kun, hvis din rodpartition (root) er på den disk, hvor MBR extlinux skal installeres på.
-Description-de.UTF-8: Soll EXTLINUX in den MBR installiert werden?
- Falls Sie diese Option auswählen, wird EXTLINUX automatisch in den MBR ihrer Festplatte geschrieben. Der aktuelle MBR wird in eine Datei in /boot gesichert.
+ Se si sta aggiornando a questa versione di EXTLINUX, il sistema non si avvierà più se EXTLINUX era l'unico bootloader configurato. Installare GRUB.
+Description-ja.UTF-8: ブートローダ統合コードはなくなりました
+ extlinux パッケージはブートローダを収録しなくなりました。
  .
- Andernfalls kann EXTLINUX wie in /usr/share/doc/extlinux/README.Debian beschrieben manuell installiert werden.
+ EXTLINUX が唯一の設定済みブートローダであった場合、EXTLINUX をこのバージョンにアップグレードするとシステムはブートしなくなります。GRUB をインストールしてください。
+Description-pt.UTF-8: Não existe mais código de integração com o gestor de arranque (bootloader)
+ O pacote extlinux já não trás mais integração com o gestor de arranque.
  .
- Achtung: Die automatische Installation funktioniert derzeit nur dann, wenn die root Partition sich auf der Festplatte befindet, in dessen MBR extlinux installiert werden soll.
-Description-es.UTF-8: ¿Se debe instalar EXTLINUX en el MBR?
- Si selecciona esta opción, EXTLINUX se escribirá en el MBR de su disco duro. El MBR actual se guardará en un archivo en «/boot».
+ Se você está a actualizar para esta versão do EXTLINUX, os seu sistema não vai voltar a arrancar se o EXTLINUX for o único gestor de arranque configurado. Por favor instale o GRUB.
+Description-pt_BR.UTF-8: Sem código de integração com o carregador de inicialização
+ O pacote extlinux não fornece mais integração com o carregador de inicialização ("bootloader").
  .
- De lo contrario, puede configurar EXTLINUX de forma manual tal y como se explica en «/usr/share/doc/extlinux/README.Debian».
+ Se você está atualizando para esta versão do EXTLINUX, seu sistema não vai mais inicializar caso o EXTLINUX seja o único carregador de inicialização. Por favor, instale o GRUB.
+Description-ru.UTF-8: Удалён код внедрения системного загрузчика
+ Пакет extlinux больше не содержит системный загрузчик.
  .
- Nota: Actualmente, la instalación automática sólo funciona si la partición raíz se encuentra en el disco duro en cuyo MBR se debe instalar EXTLINUX.
-Description-fr.UTF-8: EXTLINUX doit-il être installé sur le secteur d'amorçage ?
- Si vous choisissez cette option, EXTLINUX sera automatiquement installé sur le secteur d'amorçage (« Master Boot Record ») du disque. Le secteur d'amorçage actuel sera sauvegardé dans un fichier qui sera conservé dans /boot.
+ Если вы выполните обновление до этой версии EXTLINUX, то система больше не будет загружаться, если EXTLINUX работал как системный загрузчик. Установите GRUB.
+Description-tr.UTF-8: Açılış önyükleme tümleştirmesi artık sağlanmıyor
+ extlinux paketi artık açılış önyükleyici tümleşmesi sağlamıyor.
  .
- Alternativement, vous pouvez installer EXTLINUX vous-même comme décrit dans /usr/share/doc/extlinux/README.Debian.
- .
- Veuillez noter que l'installation automatique ne fonctionne que si la partition racine est située sur le disque où le secteur d'amorçage EXTLINUX doit être installé.
-Description-id.UTF-8: Apakah EXTLINUX harus dipasang pada MBR?
- Jika anda memilih opsi ini, EXTLINUX akan otomatis ditulis pada MBR disk anda. MBR yang ada saat ini akan disimpan ke sebuah berkas di /boot.
- .
- Jika tidak, EXTLINUX dapat diatur secara manual seperti yang dijelaskan di /usr/share/doc/extlinux/README.Debian.
- .
- Catatan: Pemasangan otomatis saat ini hanya bekerja jika partisi root anda terletak pada disk yang akan dipasangi MBR extlinux.
-Description-it.UTF-8: Installare EXTLINUX nel MBR?
- Selezionando questa opzione, EXTLINUX sarà scritto automaticamente nel MBR del disco. L'attuale MBR verrà salvato in un file in /boot.
- .
- Altrimenti, EXTLINUX può essere installato manualmente come descritto in /usr/share/doc/extlinux/README.Debian.
- .
- Nota: Attualmente l'installazione automatica funziona solo se la partizione di root è sullo stesso disco nel quale MBR extlinux dovrebbe essere installato.
-Description-ja.UTF-8: EXTLINUX を MBR にインストールしますか?
- このオプションを選んだ場合、EXTLINUX がディスクの MBR (マスターブートレコード) に書き込まれます。現在の MBR は /boot にファイルとして保存されます。
- .
- このオプションを選ばない場合は、/usr/share/doc/extlinux/README.Debian に記述されている通りに行えば EXTLINUX の設定ができます。
- .
- 注意: 現在のところ、自動インストールは extlinux をインストールする先の MBR があるディスクに root パーティションが存在している場合にのみ動作します。
-Description-ko.UTF-8: EXTLINUX를 MBR에 설치합니까?
- 이 옵션을 선택하면 EXTLINU가 자동으로 당신의 디스크의 MBR에 기록됩니다. 현재 MBR은 /boot 파일에 저장됩니다.
- .
- 그렇지 않으면 EXTLINUX는 /usr/공유/문서/extlinux/REAEME.Debian 에 설명된 것처럼 수동으로 설치해야 합니다.
- .
- 참고: 루트파티션이 MBR extlinux가 설치되어있는 디스크에 있다면 현재에서만 자동설치가 작동합니다.
-Description-nl.UTF-8: Moet EXTLINUX in het MBR ('master boot record') worden geïnstalleerd?
- Als u hiervoor kiest zal EXTLINUX automatisch worden weggeschreven naar het MBR van uw schijf. Het huidige MBR zal worden bewaard in een bestand in /boot.
- .
- Daarnaast kunt u EXTLINUX ook handmatig instellen zoals beschreven in /usr/share/doc/extlinux/README.Debian.
- .
- Let op: Op dit moment werkt de automatische installatie alleen als uw basispartitie zich op de dezelfde schijf bevindt als het MBR waarin extlinux in wordt geïnstalleerd.
-Description-pt.UTF-8: Deve o EXTLINUX deve ser instalado no MBR?
- Se escolher esta opção, o EXTLINUX será escrito automaticamente no MBR do seu disco. O MBR actual irá ser gravado para um ficheiro em /boot.
- .
- Caso contrário, o EXTLINUX pode ser configurado manualmente como descrito em /usr/share/doc/extlinux/README.Debian.
- .
- Nota: Actualmente a instalação automática apenas funciona se a sua partição raiz (root) estiver no mesmo disco que o MBR onde o extlinux vai ser instalado.
-Description-pt_BR.UTF-8: O EXTLINUX deve ser instalado no MBR?
- Se você escolher esta opção, o EXTLINUX será automaticamente escrito no MBR do seu disco. O MBR atual será salvo em um arquivo em /boot.
- .
- Caso contrário, o EXTLINUX pode ser manualmente configurado como descrito em /usr/share/doc/extlinux/README.Debian.
- .
- Nota: atualmente, a instalação automática funciona somente se sua partição raiz estiver no disco em cujo MBR o extlinux deve ser instalado.
-Description-ru.UTF-8: Установить EXTLINUX в MBR?
- Если вы ответите утвердительно, то EXTLINUX будет автоматически записан MBR жёсткого диска. Имеющийся MBR будет сохранён в файл в каталог /boot.
- .
- Также EXTLINUX можно настроить вручную как описано в файле /usr/share/doc/extlinux/README.Debian.
- .
- Замечание: в данный момент автоматическая установка работает только если корневой раздел расположен на диске, в MBR которого должен быть установлен extlinux.
-Description-sk.UTF-8: Nainštalovať EXTLINUX do MBR?
- Ak zvolíte túto možnosť, bude EXTLINUX automaticky zapísaný do MBR vášho disku. Aktuálny MBR bude uložený do súboru v /boot.
- .
- Inak, EXTLINUX možno nastaviť manuálne, podľa postupu popísaného v /usr/share/doc/extlinux/README.Debian.
- .
- Poznámka: Automatická inštalácie momentálne funguje, len ak je vaša koreňová partícia na disku, do ktorého má byť extlinux MBR nainštalovaný.
-Description-sv.UTF-8: Ska EXTLINUX installeras i MBR?
- Om du väljer detta alternativ kommer EXTLINUX att automatiskt skrivas till MBR på disken. Nuvarande MBR kommer att sparas som en fil i /boot.
- .
- I annat fall kan EXTLINUX manuellt installeras enligt instruktionen i /usr/share/doc/extlinux/README.Debian.
- .
- Observera: Den automatiska installationen fungerar bara om din rotpartition är på disken med MBR som extlinux ska installeras på.
+ Eğer sisteminizde yapılandırılmış olan tek önyükleyici EXTLINUX ise bu sürüme yükseltme yaptığınız takdirde sisteminiz açılamaz hale gelecektir. Lütfen grup-pc önyükleyicisini kullanın.

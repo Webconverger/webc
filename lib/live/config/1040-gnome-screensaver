@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Gnome_screensaver ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/gnome-screensaver.list ] || \
-	   [ -e /var/lib/live/config/gnome-screensaver ]
-	then
-		return
-	fi
-
-	echo -n " gnome-screensaver"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -28,17 +21,29 @@ Gnome_screensaver ()
 				;;
 		esac
 	done
-
-	Configure_gnome_screensaver
 }
 
-Configure_gnome_screensaver ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/gnome-screensaver.list ] || \
+	   [ -e /var/lib/live/config/gnome-screensaver ]
+	then
+		exit 0
+	fi
+
+	echo -n " gnome-screensaver"
+}
+
+Config ()
 {
 	# Disabling to lock the screen when the screensaver goes active.
-	sudo -u "${LIVE_USERNAME}" gconftool-2 -t bool -s /apps/gnome-screensaver/lock_enabled false
+	sudo -u "${LIVE_USERNAME}" dbus-launch --exit-with-session gsettings set org.gnome.desktop.screensaver lock-enabled false
 
 	# Creating state file
 	touch /var/lib/live/config/gnome-screensaver
 }
 
-Gnome_screensaver
+Cmdline
+Init
+Config
