@@ -105,8 +105,9 @@ FileBlock.prototype = {
       }
       return Ci.nsIContentPolicy.REJECT_REQUEST;
     }
-    // We allow all data URLs
-    if (aContentLocation.scheme == "data") {
+    // We allow all javascript and data URLs
+    if (aContentLocation.scheme == "data" ||
+        aContentLocation.scheme == "javascript") {
         return Ci.nsIContentPolicy.ACCEPT;
     }
     // Deny all files

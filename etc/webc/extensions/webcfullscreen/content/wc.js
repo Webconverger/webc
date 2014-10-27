@@ -6,11 +6,6 @@
 		navigatorToolbox.iconsize = "small";
 		navigatorToolbox.setAttribute("iconsize", "small");
 
-		// var reloadButton = document.getElementById("reload-button");
-		// reloadButton.style.visibility = "visible";
-		// var stopButton = document.getElementById("stop-button");
-		// stopButton.style.visibility = "visible";
-
 		var tabSwitchInterval = 0;
 		try {
 			// console.log("Trying to get tabSwitchInterval");
