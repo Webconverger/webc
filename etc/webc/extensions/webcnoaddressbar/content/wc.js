@@ -11,6 +11,27 @@
 			document.getElementById("wc-print").removeAttribute("hidden");
 		}
 		window.removeEventListener("load", startup, false);
+
+		var nobrand = false;
+		try {
+			nobrand = Services.prefs.getBoolPref("extensions.webconverger.nobrand");
+		} catch(e) {}
+		if (!nobrand) {
+		var insertAfter = document.getElementById("alltabs-button");
+		document.getElementById("alltabs-button");
+		var allTabsButton = document.getElementById("alltabs-button");
+		var spacer = document.createElement("spacer");
+		spacer.setAttribute("flex", "1");
+		insertAfter.parentNode.appendChild(spacer);
+		var box = document.createElement("box");
+		box.setAttribute("pack", "center");
+		box.setAttribute("align", "center");
+		var image = document.createElement("image");
+		image.setAttribute("src", "chrome://webconverger/content/webclogo.svg");
+		image.setAttribute("tooltiptext", "Webconverger");
+		box.appendChild(image);
+		insertAfter.parentNode.appendChild(box);
+		}
 	}
 
 	function shutdown() {

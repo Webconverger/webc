@@ -93,19 +93,21 @@ if ! dpkg -s cups 2>/dev/null >/dev/null; then
 	echo 'pref("print.show_print_progress", false);' >> "$prefs"
 fi
 
-// https://github.com/Webconverger/webconverger-addon/issues/17
-if cmdline_has showprintbutton
-then
-	echo 'pref("extensions.webconverger.showprintbutton", true);' >> "$prefs"
-fi
-
-
 for x in $( cmdline ); do
 	case $x in
 
 	debug)
 		echo "webc ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 		mount_git
+		;;
+
+	showprintbutton)
+		// https://github.com/Webconverger/webconverger-addon/issues/17
+		echo 'pref("extensions.webconverger.showprintbutton", true);' >> "$prefs"
+		;;
+
+	nobrand)
+		echo 'pref("extensions.webconverger.nobrand", true);' >> "$prefs"
 		;;
 
 	widescrollbars)
