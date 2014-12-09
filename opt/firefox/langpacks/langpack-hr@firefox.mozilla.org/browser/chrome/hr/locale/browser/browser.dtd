@@ -268,6 +268,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devAppMgrMenu.accesskey           "a">
 <!ENTITY webide.label                      "WebIDE">
 <!ENTITY webide.accesskey                  "W">
+<!ENTITY webide.keycode                    "VK_F8">
+<!ENTITY webide.keytext                    "F8">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Uključi/isključi alate">
@@ -698,10 +700,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults "Vrati zadano">
 <!ENTITY customizeMode.toolbars "Prikaži/sakrij alatne trake">
 <!ENTITY customizeMode.titlebar "Naslovna traka">
+<!ENTITY customizeMode.lwthemes "Teme">
+<!ENTITY customizeMode.lwthemes.myThemes "Moje teme">
+<!ENTITY customizeMode.lwthemes.recommended "Preporučeno">
+<!ENTITY customizeMode.lwthemes.menuManage "Upravljanje">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "M">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Preuzmite dodatne teme">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "P">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Fokusiraj časkanja">
-<!ENTITY social.chatBar.accesskey "c">
+<!ENTITY social.chatBar.accesskey "č">
 
 <!ENTITY social.markpageMenu.accesskey "p">
 <!ENTITY social.markpageMenu.label "Spremi stranicu u…">
@@ -710,18 +719,30 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Kamera za dijeljenje:">
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
-<!ENTITY getUserMedia.selectWindowOrScreen.label "Prozor ili ekran za dijeljenje">
-<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "z">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofor za dijeljenje:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
 <!ENTITY getUserMedia.allWindowsShared.message "Svi vidljivi prozori na vašem ekranu će biti dijeljeni.">
+<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY webrtcIndicatorButton.label "Pristup kameri/mikrofonu">
-<!ENTITY webrtcIndicatorButton.tooltip "Prikaži stranice s kojima se trenutno dijele kamera ili mikrofon">
+<!ENTITY badContentBlocked.moreinfo "Većina web stranica će nastaviti ispravno raditi čak i ako je sadržaj blokiran.">
 
-<!ENTITY loopCallButton.tooltip "Pozovite nekoga na razgovor">
+<!ENTITY mixedContentBlocked2.message "Nesiguran sadržaj">
+<!ENTITY mixedContentBlocked2.moreinfo "Na ovoj stranici su blokirani neki nekriptirani elementi.">
+<!ENTITY mixedContentBlocked2.learnMore "Saznajte više">
+<!ENTITY mixedContentBlocked2.options "Mogućnosti">
+<!ENTITY mixedContentBlocked2.unblock.label "Onemogući zaštitu za sada">
+<!ENTITY mixedContentBlocked2.unblock.accesskey "d">
+<!ENTITY mixedContentBlocked2.block.label "Omogući zaštitu">
+<!ENTITY mixedContentBlocked2.block.accesskey "z">
+<!ENTITY mixedContentBlocked2.disabled.message "Zaštita je onemogućena">
 
-<!ENTITY mixedContentBlocked.moreinfo "Većina web stranica će nastaviti ispravno raditi čak i ako je ova vrsta sadržaja isključena.">
+<!ENTITY trackingContentBlocked.message "Praćenje">
+<!ENTITY trackingContentBlocked.moreinfo "Dijelovi stranice koji prate vašu online aktivnost su blokirani.">
+<!ENTITY trackingContentBlocked.learnMore "Saznajte više">
+<!ENTITY trackingContentBlocked.options "Mogućnosti">
+<!ENTITY trackingContentBlocked.unblock.label2 "Onemogući zaštitu na ovoj stranici">
+<!ENTITY trackingContentBlocked.block.label "Omogući zaštitu">
+<!ENTITY trackingContentBlocked.disabled.message "Zaštita od praćenja je isključena">
 
 <!ENTITY pointerLock.notification.message "Pritisnite ESC za ponovni prikaz.">
 
@@ -750,30 +771,29 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY appMenuSidebars.label         "Bočne trake">
 
 <!ENTITY switchToMetroCmd2.label       "Ponovno pokreni &brandShortName; za Windows 8 Touch">
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
 
-
-<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.2hr                     "Two hours">
-<!ENTITY panicButton.view.5min                    "Five minutes">
-<!ENTITY panicButton.view.day                     "24 hours">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-<!ENTITY panicButton.view.forgetButton            "Forget!">
-
+<!ENTITY panicButton.view.mainTimeframeDesc       "Zaboravi zadnjih:">
+<!ENTITY panicButton.view.5min                    "Pet minuta">
+<!ENTITY panicButton.view.2hr                     "Dva sata">
+<!ENTITY panicButton.view.day                     "24 sata">
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
 
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+<!ENTITY panicButton.view.mainActionDesc          "Nastavak će:">
+<!ENTITY panicButton.view.deleteCookies           "Obriši nedavne <html:strong>kolačiće</html:strong>">
+<!ENTITY panicButton.view.deleteHistory           "Obriši nedavnu <html:strong>povijest</html:strong>">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Zatvori sve <html:strong>kartice</html:strong> i <html:strong>prozore</html:strong>">
+<!ENTITY panicButton.view.openNewWindow           "Otvori novi, čisti prozor">
 
-<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+<!ENTITY panicButton.view.undoWarning             "Ovaj se potez neće moći poništiti.">
+<!ENTITY panicButton.view.forgetButton            "Zaboravi!">
+
+<!ENTITY panicButton.thankyou.msg1                "Vaša nedavna povijest je obrisana.">
+<!ENTITY panicButton.thankyou.msg2                "Sigurno pretraživanje!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Hvala!">
+

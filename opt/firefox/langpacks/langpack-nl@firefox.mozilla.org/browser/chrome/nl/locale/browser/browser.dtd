@@ -239,7 +239,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY responsiveDesignTool.commandkey "M">
 
 <!ENTITY eyedropper.label   "Eyedropper">
-<!ENTITY eyedropper.accesskey "Y">
+<!ENTITY eyedropper.accesskey "y">
 
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
@@ -267,7 +267,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devAppMgrMenu.label               "App-beheerder">
 <!ENTITY devAppMgrMenu.accesskey           "A">
 <!ENTITY webide.label                      "WebIDE">
-<!ENTITY webide.accesskey                  "W">
+<!ENTITY webide.accesskey                  "e">
+<!ENTITY webide.keycode                    "VK_F8">
+<!ENTITY webide.keytext                    "F8">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Hulpmiddelen in-/uitschakelen">
@@ -697,6 +699,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults "Standaardinstellingen herstellen">
 <!ENTITY customizeMode.toolbars "Werkbalken tonen/verbergen">
 <!ENTITY customizeMode.titlebar "Titelbalk">
+<!ENTITY customizeMode.lwthemes "Thema’s">
+<!ENTITY customizeMode.lwthemes.myThemes "Mijn thema’s">
+<!ENTITY customizeMode.lwthemes.recommended "Aanbevolen">
+<!ENTITY customizeMode.lwthemes.menuManage "Beheren">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "B">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Meer thema’s verkrijgen">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "M">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Chats op voorgrond">
@@ -709,18 +718,30 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Te delen camera:">
 <!ENTITY getUserMedia.selectCamera.accesskey "c">
-<!ENTITY getUserMedia.selectWindowOrScreen.label "Te delen venster of scherm:">
-<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "v">
 <!ENTITY getUserMedia.selectMicrophone.label "Te delen microfoon:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
 <!ENTITY getUserMedia.allWindowsShared.message "Alle zichtbare vensters op uw scherm worden gedeeld.">
 
-<!ENTITY webrtcIndicatorButton.label "Camera-/microfoontoegang">
-<!ENTITY webrtcIndicatorButton.tooltip "Websites waarmee u momenteel uw camera of microfoon deelt weergeven">
+<!-- Bad Content Blocker Doorhanger Notification -->
+<!ENTITY badContentBlocked.moreinfo "De meeste websites zullen gewoon werken, zelfs wanneer inhoud wordt geblokkeerd.">
 
-<!ENTITY loopCallButton.tooltip "Iemand uitnodigen voor een gesprek">
+<!ENTITY mixedContentBlocked2.message "Onveilige inhoud ">
+<!ENTITY mixedContentBlocked2.moreinfo "Enkele niet-versleutelde elementen op deze website zijn geblokkeerd.">
+<!ENTITY mixedContentBlocked2.learnMore "Meer info">
+<!ENTITY mixedContentBlocked2.options "Opties">
+<!ENTITY mixedContentBlocked2.unblock.label "Bescherming voor nu uitschakelen">
+<!ENTITY mixedContentBlocked2.unblock.accesskey "u">
+<!ENTITY mixedContentBlocked2.block.label "Bescherming inschakelen">
+<!ENTITY mixedContentBlocked2.block.accesskey "B">
+<!ENTITY mixedContentBlocked2.disabled.message "Bescherming is uitgeschakeld">
 
-<!ENTITY mixedContentBlocked.moreinfo "De meeste websites zullen nog gewoon werken, zelfs wanneer deze inhoud wordt geblokkeerd.">
+<!ENTITY trackingContentBlocked.message "Volgen">
+<!ENTITY trackingContentBlocked.moreinfo "Delen van de pagina die uw online-activiteit volgen zijn geblokkeerd.">
+<!ENTITY trackingContentBlocked.learnMore "Meer info">
+<!ENTITY trackingContentBlocked.options "Opties">
+<!ENTITY trackingContentBlocked.unblock.label2 "Bescherming voor deze website uitschakelen">
+<!ENTITY trackingContentBlocked.block.label "Bescherming inschakelen">
+<!ENTITY trackingContentBlocked.disabled.message "Volgbescherming is uitgeschakeld">
 
 <!ENTITY pointerLock.notification.message "Druk op ESC om het nogmaals te tonen.">
 
@@ -750,28 +771,27 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY switchToMetroCmd2.label       "Herstarten in &brandShortName; voor Windows 8 Touch">
 
-<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.2hr                     "Two hours">
-<!ENTITY panicButton.view.5min                    "Five minutes">
-<!ENTITY panicButton.view.day                     "24 hours">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-<!ENTITY panicButton.view.forgetButton            "Forget!">
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Vergeten:">
+<!ENTITY panicButton.view.5min                    "Laatste vijf minuten">
+<!ENTITY panicButton.view.2hr                     "Laatste twee uur">
+<!ENTITY panicButton.view.day                     "Laatste 24 uur">
 
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
+<!ENTITY panicButton.view.mainActionDesc          "Doorgaan zal:">
+<!ENTITY panicButton.view.deleteCookies           "Recente <html:strong>cookies</html:strong> wissen">
+<!ENTITY panicButton.view.deleteHistory           "Recente <html:strong>geschiedenis</html:strong> wissen">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Alle <html:strong>tabbladen</html:strong> en <html:strong>vensters</html:strong> sluiten">
+<!ENTITY panicButton.view.openNewWindow           "Een nieuw leeg venster openen">
 
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+<!ENTITY panicButton.view.undoWarning             "Deze actie kan niet ongedaan worden gemaakt.">
+<!ENTITY panicButton.view.forgetButton            "Vergeten!">
 
-<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+<!ENTITY panicButton.thankyou.msg1                "Uw recente geschiedenis is gewist.">
+<!ENTITY panicButton.thankyou.msg2                "Hou het veilig!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Bedankt!">

@@ -268,6 +268,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devAppMgrMenu.accesskey                 "a">
 <!ENTITY webide.label                            "WebIDE">
 <!ENTITY webide.accesskey                        "W">
+<!ENTITY webide.keycode                          "VK_F8">
+<!ENTITY webide.keytext                          "F8">
 <!ENTITY devToolbar.keycode                      "VK_F2">
 <!ENTITY devToolbar.keytext                      "F2">
 <!ENTITY devToolboxMenuItem.label                "Toggle Tools">
@@ -697,6 +699,13 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults           "Taasta vaikeväärtused">
 <!ENTITY customizeMode.toolbars                  "Kuva / peida tööriistaribasid">
 <!ENTITY customizeMode.titlebar                  "Tiitliriba">
+<!ENTITY customizeMode.lwthemes                  "Teemad">
+<!ENTITY customizeMode.lwthemes.myThemes         "Minu teemad">
+<!ENTITY customizeMode.lwthemes.recommended      "Soovitatud">
+<!ENTITY customizeMode.lwthemes.menuManage       "Halda">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "H">
+<!ENTITY customizeMode.lwthemes.menuGetMore      "Hangi rohkem teemasid">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "a">
 
 <!ENTITY social.chatBar.commandkey               "c">
 <!ENTITY social.chatBar.label                    "Too vestlused fookusse">
@@ -709,18 +718,30 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label         "Jagatav kaamera:">
 <!ENTITY getUserMedia.selectCamera.accesskey     "J">
-<!ENTITY getUserMedia.selectWindowOrScreen.label "Jagatav aken või ekraan:">
-<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "a">
 <!ENTITY getUserMedia.selectMicrophone.label     "Jagatav mikrofon:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
 <!ENTITY getUserMedia.allWindowsShared.message   "Jagatakse kõiki nähtavaid aknaid sinu ekraanil.">
 
-<!ENTITY webrtcIndicatorButton.label             "Ligipääs kaamerale/mikrofonile">
-<!ENTITY webrtcIndicatorButton.tooltip           "Kuva saite, millel on sinu kaamera või mikrofoni kasutamine lubatud">
+<!-- Bad Content Blocker Doorhanger Notification -->
+<!ENTITY badContentBlocked.moreinfo              "Enamik saite töötab korralikult edasi ka siis, kui see sisu on blokitud.">
 
-<!ENTITY loopCallButton.tooltip                  "Kutsu keegi vestlema">
+<!ENTITY mixedContentBlocked2.message            "Ebaturvaline sisu">
+<!ENTITY mixedContentBlocked2.moreinfo           "Mõned krüptimata elemendid sellel veebilehel blokiti.">
+<!ENTITY mixedContentBlocked2.learnMore          "Rohkem teavet">
+<!ENTITY mixedContentBlocked2.options            "Sätted">
+<!ENTITY mixedContentBlocked2.unblock.label      "Keela kaitse">
+<!ENTITY mixedContentBlocked2.unblock.accesskey  "K">
+<!ENTITY mixedContentBlocked2.block.label        "Luba kaitse">
+<!ENTITY mixedContentBlocked2.block.accesskey    "L">
+<!ENTITY mixedContentBlocked2.disabled.message   "Kaitse on keelatud">
 
-<!ENTITY mixedContentBlocked.moreinfo            "Enamik saite töötab korralikult edasi ka siis, kui see sisu on blokitud.">
+<!ENTITY trackingContentBlocked.message          "Jälitamine">
+<!ENTITY trackingContentBlocked.moreinfo         "Sellest lehest blokiti mõned osad, mis jälitavad sinu tegevusi internetis.">
+<!ENTITY trackingContentBlocked.learnMore        "Rohkem teavet">
+<!ENTITY trackingContentBlocked.options          "Sätted">
+<!ENTITY trackingContentBlocked.unblock.label2   "Keela kaitse sellel saidil">
+<!ENTITY trackingContentBlocked.block.label      "Luba kaitse">
+<!ENTITY trackingContentBlocked.disabled.message "Kaitse on keelatud">
 
 <!ENTITY pointerLock.notification.message        "Uuesti kuvamiseks vajuta klahvi ESC.">
 
@@ -750,29 +771,28 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY switchToMetroCmd2.label                 "Lülitu Windows 8 stiilis &brandShortName;i">
 
-
-<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.2hr                     "Two hours">
-<!ENTITY panicButton.view.5min                    "Five minutes">
-<!ENTITY panicButton.view.day                     "24 hours">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-<!ENTITY panicButton.view.forgetButton            "Forget!">
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Unustatakse viimased:">
+<!ENTITY panicButton.view.5min                    "viis minutit">
+<!ENTITY panicButton.view.2hr                     "kaks tundi">
+<!ENTITY panicButton.view.day                     "24 tundi">
 
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
+<!ENTITY panicButton.view.mainActionDesc          "Jätkamisel:">
+<!ENTITY panicButton.view.deleteCookies           "kustutatakse hiljutised <html:strong>küpsised</html:strong>">
+<!ENTITY panicButton.view.deleteHistory           "kustutatakse hiljutine <html:strong>ajalugu</html:strong>">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "suletakse kõik <html:strong>kaardid</html:strong> ja <html:strong>aknad</html:strong>">
+<!ENTITY panicButton.view.openNewWindow           "avatakse uus tühi aken">
 
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+<!ENTITY panicButton.view.undoWarning             "Seda tegevust ei saa tagasi võtta.">
+<!ENTITY panicButton.view.forgetButton            "Unusta!">
 
-<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+<!ENTITY panicButton.thankyou.msg1                "Hiljutine ajalugu on kustutatud.">
+<!ENTITY panicButton.thankyou.msg2                "Ohutut veebilehitsemist!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Tänan!">
+

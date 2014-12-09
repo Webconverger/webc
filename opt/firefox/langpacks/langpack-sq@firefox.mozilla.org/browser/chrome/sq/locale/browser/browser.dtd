@@ -206,7 +206,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY addons.commandkey            "A">
 
 <!ENTITY webDeveloperMenu.label       "Zhvillues Web">
-<!ENTITY webDeveloperMenu.accesskey   "W">
+<!ENTITY webDeveloperMenu.accesskey   "Z">
 
 <!ENTITY devToolsCmd.keycode          "VK_F12">
 <!ENTITY devToolsCmd.keytext          "F12">
@@ -260,7 +260,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devAppMgrMenu.label               "Përgjegjës Zbatimesh">
 <!ENTITY devAppMgrMenu.accesskey           "P">
 <!ENTITY webide.label                      "WebIDE">
-<!ENTITY webide.accesskey                  "U">
+<!ENTITY webide.accesskey                  "W">
+<!ENTITY webide.keycode                    "VK_F8">
+<!ENTITY webide.keytext                    "F8">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Shfaqni/Fshihni Mjete">
@@ -689,6 +691,14 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults "Rikthejeni te Parazgjedhjet">
 <!ENTITY customizeMode.toolbars "Shfaqni / Fshihni Panele">
 <!ENTITY customizeMode.titlebar "Shtyllë Titujsh">
+<!ENTITY customizeMode.lwthemes "Tema">
+<!ENTITY customizeMode.lwthemes.myThemes "Temat e Mia">
+<!ENTITY customizeMode.lwthemes.recommended "Të këshillueshme">
+<!ENTITY customizeMode.lwthemes.menuManage "Administrojini">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "A">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Merrni Më Shumë Tema">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "M">
+
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Përqendrohu te fjalosjet">
@@ -701,18 +711,30 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY getUserMedia.selectCamera.label "Kamerë për ndarje me të tjerët:">
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
-<!ENTITY getUserMedia.selectWindowOrScreen.label "Dritare ose ekran për ndarje me të tjerët:">
-<!ENTITY getUserMedia.selectWindowOrScreen.accesskey "W">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon për ndarje me të tjerët:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
 <!ENTITY getUserMedia.allWindowsShared.message "Do të ndahen me të tjerët krejt dritaret e dukshme në ekranin tuaj.">
 
-<!ENTITY webrtcIndicatorButton.label "Hyrje në Kamerë / Mikrofon">
-<!ENTITY webrtcIndicatorButton.tooltip "Shfaqni sajtet me të cilët ndani kamerën ose mikrofonin">
+<!-- Bad Content Blocker Doorhanger Notification -->
+<!ENTITY badContentBlocked.moreinfo "Shumica e sajteve web prapë do të funksionojnë si duhet, edhe kur bllokohet lëndë.">
 
-<!ENTITY loopCallButton.tooltip "Ftoni dikë për bisedë">
+<!ENTITY mixedContentBlocked2.message "Lëndë e pasigurt">
+<!ENTITY mixedContentBlocked2.moreinfo "U bllokuan disa elementë të pakoduar në këtë sajt web.">
+<!ENTITY mixedContentBlocked2.learnMore "Mësoni Më Tepër">
+<!ENTITY mixedContentBlocked2.options "Mundësi">
+<!ENTITY mixedContentBlocked2.unblock.label "Tani për tani çaktivizoje mbrojtjen">
+<!ENTITY mixedContentBlocked2.unblock.accesskey "ç">
+<!ENTITY mixedContentBlocked2.block.label "Aktivizoje mbrojtjen">
+<!ENTITY mixedContentBlocked2.block.accesskey "A">
+<!ENTITY mixedContentBlocked2.disabled.message "Mbrojtja është e çaktivizuar">
 
-<!ENTITY mixedContentBlocked.moreinfo "Shumica e sajteve web prapë do të funksionojnë si duhet, edhe kur kjo bllokohet kjo lëndë.">
+<!ENTITY trackingContentBlocked.message "Gjurmim">
+<!ENTITY trackingContentBlocked.moreinfo "U çaktivizuan pjesë të faqes që gjurmojnë veprimtarinë tuaj në rrjet.">
+<!ENTITY trackingContentBlocked.learnMore "Mësoni Më Tepër">
+<!ENTITY trackingContentBlocked.options "Mundësi">
+<!ENTITY trackingContentBlocked.unblock.label2 "Çaktivizoje mbrojtjen për këtë sajt">
+<!ENTITY trackingContentBlocked.block.label "Aktivizoje mbrojtjen">
+<!ENTITY trackingContentBlocked.disabled.message "Mbrojtja nga gjurmimet është e çaktivizuar">
 
 <!ENTITY pointerLock.notification.message "Që të rishfaqet, shtypni ESC në çfarëdo çasti.">
 
@@ -743,31 +765,29 @@ just addresses the organization to follow, e.g. "This site is run by " -->
      l10n-central. They will be definitely removed when Australis is ready
      for mozilla-aurora. -->
 <!ENTITY appMenuSidebars.label         "Anështylla">
-<!-- end of strings to be removed post-Australis -->
 
-
-<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.2hr                     "Two hours">
-<!ENTITY panicButton.view.5min                    "Five minutes">
-<!ENTITY panicButton.view.day                     "24 hours">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-<!ENTITY panicButton.view.forgetButton            "Forget!">
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
+<!ENTITY panicButton.view.mainTimeframeDesc       "Harro:">
+<!ENTITY panicButton.view.5min                    "Pesë minutat e fundit">
+<!ENTITY panicButton.view.2hr                     "Dy orët e fundit">
+<!ENTITY panicButton.view.day                     "24 orët e fundit">
 
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
+<!ENTITY panicButton.view.mainActionDesc          "Vazhdimi:">
+<!ENTITY panicButton.view.deleteCookies           "Do të fshijë <html:strong>Cookies</html:strong> Së Fundi">
+<!ENTITY panicButton.view.deleteHistory           "Do të fshijë <html:strong>Historikun</html:strong> Së Fundi">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Do të mbyllë krejt <html:strong>Skedat</html:strong> dhe <html:strong>Dritaret</html:strong>">
+<!ENTITY panicButton.view.openNewWindow           "Hapni një Dritare të re të pastër">
 
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+<!ENTITY panicButton.view.undoWarning             "Ky veprim nuk mund të zhbëhet.">
+<!ENTITY panicButton.view.forgetButton            "Lëre fare!">
 
-<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+<!ENTITY panicButton.thankyou.msg1                "Historiku juaj së fundi u pastrua.">
+<!ENTITY panicButton.thankyou.msg2                "Shfletim i sigurt!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Faleminderit!">
+
