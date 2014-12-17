@@ -5,7 +5,11 @@ pref("browser.shell.checkDefaultBrowser", false);
 pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
 
-// Don't nag the user
+// master kill switch for submitting data to Mozilla
+// https://bugzilla.mozilla.org/show_bug.cgi?id=862563
+pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
+// Leaving these around, although the above two lines should do it
 pref("browser.rights.3.shown", true);
 pref("toolkit.telemetry.prompted", 2);
 pref("toolkit.telemetry.rejected", true);
