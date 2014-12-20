@@ -33,8 +33,8 @@ restore_lib64_symlink() {
     # If yes, move the directory aside so they can restore it later,
     # otherwise we just remove it.
     if ls -1A /lib64 | grep -vq "^$(basename /lib/ld-linux.so.2)$"; then
-	echo "Warning: /lib64 not empty during libc downgrade, renaming it to /lib64.eglibc-old"
-	mv /lib64 /lib64.eglibc-old
+	echo "Warning: /lib64 not empty during libc downgrade, renaming it to /lib64.glibc-old"
+	mv /lib64 /lib64.glibc-old
     else
 	rm -rf /lib64
     fi

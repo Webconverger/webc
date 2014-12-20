@@ -70,16 +70,6 @@ checkpkgver () {
 
 if [ "$type" = "configure" ]
 then
-    # Add support for /etc/ld.so.conf.d
-    if [ -e /etc/ld.so.conf ]; then
-        [ -z "$(tail -n 1 /etc/ld.so.conf)" ] || echo >> /etc/ld.so.conf
-    else
-        touch /etc/ld.so.conf
-    fi
-    if ! grep -q '^include /etc/ld.so.conf.d/.*\.conf$' /etc/ld.so.conf ; then
-        echo 'include /etc/ld.so.conf.d/*.conf' >> /etc/ld.so.conf
-    fi
-
     # We don't use a registry anymore, remove the old file
     rm -f /etc/ld.so.hwcappkgs
  
@@ -116,8 +106,8 @@ then
     all_upgraded=yes
     if [ -n "$hwcappkgs" ]; then
         for pkg in $hwcappkgs ; do
-            ver=$(dpkg-query -l $pkg 2>/dev/null | sed -e '/^[a-z][a-z]\s/!d;/^.[nc]/d;' -e "s/^..\s\+$pkg\s\+//;s/\s.*//g")
-            if [ -n "$ver" ] && [ "$ver" != "2.13-38+deb7u4" ]; then
+            ver=$(dpkg-query -l $pkg 2>/dev/null | sed -e '/^[a-z][a-z]\s/!d;/^.[nc]/d;' -e "s/^..\s\+$pkg[0-9a-z:]*\s\+//;s/\s.*//g")
+            if [ -n "$ver" ] && [ "$ver" != "2.19-13" ]; then
                 all_upgraded=no
             fi
         done
@@ -139,7 +129,7 @@ then
 	if [ ! -d /var/mail ] && [ ! -L /var/mail ]; then
 	    ln -sf spool/mail /var/mail
 	fi
-	if dpkg --compare-versions "$preversion" lt 2.13; then
+	if dpkg --compare-versions "$preversion" lt 2.19; then
 	    check="apache2.2-common apache apache-ssl apache-perl autofs at"
 	    check="$check boa cucipop courier-authdaemon cron cups exim"
 	    check="$check exim4-base dovecot-common cucipop incron lprng lpr"
@@ -239,6 +229,13 @@ then
 		    echo "Restarting services possibly affected by the upgrade:"
 		    failed=""
 		    for service in $services; do
+			# We can't just use a generic rewrite here, as it was
+			# samba in wheezy and smbd in jessie, which confuses.
+			if [ "$service" = "samba" ]; then
+			    if [ -x /etc/init.d/smbd ] || [ -f /etc/init/smbd ]; then
+				service="smbd"
+			    fi
+			fi
 		    	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
 			    idl="invoke-rc.d ${service}"
 			elif [ -f /usr/share/file-rc/rc ] || [ -f /usr/lib/file-rc/rc ] && [ -f /etc/runlevel.conf ]; then
@@ -299,13 +296,47 @@ then
 	    else
 		echo "Nothing to restart."
 	    fi
-	fi # end upgrading and $preversion lt 2.13
+	fi # end upgrading and $preversion lt 2.19
     fi # Upgrading
 
-    # Restart init. If it fails, there is nothing we can do, so 
-    # just ignore the error
-    telinit u 2> /dev/null || true ; sleep 1
+    # Restart init.  Currently handles chroots, systemd and upstart, and
+    # assumes anything else is going to not fail at behaving like
+    # sysvinit:
+    TELINIT=yes
+    if ischroot 2>/dev/null; then
+        # Don't bother trying to re-exec init from a chroot:
+        TELINIT=no
+    elif [ -d /run/systemd/system ]; then
+        # Skip if systemd is the active PID 1, since systemd doesn't
+        # need a reexec for a clean shutdown
+        TELINIT=no
+    elif [ -x "`which initctl`" ]; then
+        UPSTART=$(initctl version 2>/dev/null | awk '/upstart/ {print $3}' | tr -d ')')
+        if dpkg --compare-versions "$UPSTART" lt-nl 1.6.1; then
+            # This is an old upstart that can't re-exec statefully:
+            TELINIT=no
+            touch /var/run/init.upgraded
+        fi
+    fi
+    if [ "$TELINIT" = "yes" ]; then
+        telinit u 2>/dev/null || true ; sleep 1
+    fi
 fi
+
+# We now use the multiarch triplet instead of the GNU triplet for the ld.so
+# configuration file, in order to keep a stable path. Remove the old file.
+case ${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)} in
+    hurd-i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
+        ;;
+    i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-linux-gnu.conf 2.19-4~ libc6:i386 -- "$@"
+        ;;
+    kfreebsd-i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-kfreebsd-gnu.conf 2.19-11~ libc0.1:kfreebsd-i386 -- "$@"
+        ;;
+esac
 
 # Automatically added by dh_makeshlibs
 if [ "$1" = "configure" ]; then

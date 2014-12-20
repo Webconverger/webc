@@ -5333,7 +5333,7 @@ Description: X.Org X server -- output driver metapackage
  to only have certain drivers installed.
 
 Package: locales
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: standard
 Section: localization
 Installed-Size: 14802
@@ -5341,6 +5341,7 @@ Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Source: eglibc
 Version: 2.13-38+deb7u4
+Config-Version: 2.13-38+deb7u4
 Replaces: base-config, lliurex-belocs-locales-data
 Depends: glibc-2.13-1, debconf (>= 0.5) | debconf-2.0
 Conflicts: base-config, belocs-locales-bin, belocs-locales-data
@@ -12212,19 +12213,20 @@ Package: libdrm-intel1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 604
+Installed-Size: 169
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.40-1~deb7u2
-Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.38), libpciaccess0
+Version: 2.4.58-2
+Depends: libc6 (>= 2.17), libdrm2 (>= 2.4.38), libpciaccess0
 Pre-Depends: multiarch-support
 Description: Userspace interface to intel-specific kernel DRM services -- runtime
- This library implements the userspace interface to the intel-specific kernel
- DRM services.  DRM stands for "Direct Rendering Manager", which is the
- kernelspace portion of the "Direct Rendering Infrastructure" (DRI). The DRI is
- currently used on Linux to provide hardware-accelerated OpenGL drivers.
+ This library implements the userspace interface to the kernel DRM
+ services.  DRM stands for "Direct Rendering Manager", which is the
+ kernelspace portion of the "Direct Rendering Infrastructure" (DRI).
+ The DRI is currently used on Linux to provide hardware-accelerated
+ OpenGL drivers.
 
 Package: wireless-tools
 Status: install ok installed
@@ -13687,26 +13689,26 @@ Package: libc6
 Status: install ok installed
 Priority: required
 Section: libs
-Installed-Size: 8492
+Installed-Size: 9026
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: eglibc
-Version: 2.13-38+deb7u4
+Source: glibc
+Version: 2.19-13
 Replaces: libc6-i386
-Provides: glibc-2.13-1
-Depends: libc-bin (= 2.13-38+deb7u4), libgcc1
+Provides: glibc-2.19-1
+Depends: libgcc1
 Recommends: libc6-i686
 Suggests: glibc-doc, debconf | debconf-2.0, locales
-Breaks: locales (<< 2.13), locales-all (<< 2.13), nscd (<< 2.13)
+Breaks: hurd (<< 1:0.5.git20140203-1), libtirpc1 (<< 0.2.3), locales (<< 2.19), locales-all (<< 2.19), nscd (<< 2.19)
 Conflicts: prelink (<= 0.0.20090311-1), tzdata (<< 2007k-1), tzdata-etch
 Conffiles:
- /etc/ld.so.conf.d/i486-linux-gnu.conf de72af11e0f4e741c2cca3e0e87b7af4
-Description: Embedded GNU C Library: Shared libraries
+ /etc/ld.so.conf.d/i386-linux-gnu.conf d9139764f29daef3f35132d9769ec4b7
+Description: GNU C Library: Shared libraries
  Contains the standard libraries that are used by nearly all programs on
  the system. This package includes shared versions of the standard C library
  and the standard math library, as well as many others.
-Homepage: http://www.eglibc.org
+Homepage: http://www.gnu.org/software/libc/libc.html
 
 Package: libsm6
 Status: install ok installed

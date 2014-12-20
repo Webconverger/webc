@@ -14,25 +14,6 @@ package_name()
     fi
 }
 
-rm_conffile() {
-    local PKGNAME="$1"
-    local CONFFILE="$2"
-
-    [ -e "$CONFFILE" ] || return 0
-
-    local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
-    local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
-            sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
-    if [ "$md5sum" != "$old_md5sum" ]; then
-        echo "Obsolete conffile $CONFFILE has been modified by you."
-        echo "Saving as $CONFFILE.dpkg-bak ..."
-        mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
-    else
-        echo "Removing obsolete conffile $CONFFILE ..."
-        rm -f "$CONFFILE"
-    fi
-}
-
 linux_compare_versions () {
     verA=$(($(echo "$1" | sed 's/^\([0-9]*\.[0-9]*\)\([^.0-9]\|$\)/\1.0\2/; s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).*/\1 \* 10000 + \2 \* 100 + \3/')))
     verB=$(($(echo "$3" | sed 's/^\([0-9]*\.[0-9]*\)\([^.0-9]\|$\)/\1.0\2/; s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).*/\1 \* 10000 + \2 \* 100 + \3/')))
@@ -141,25 +122,19 @@ remove_lib64_symlink() {
         interpreter=$ldfile
     fi
 
-    mkdir /lib64.eglibc-new
-    ln -s $ldfile /lib64.eglibc-new/$(basename /lib/ld-linux.so.2)
+    mkdir /lib64.glibc-new
+    ln -s $ldfile /lib64.glibc-new/$(basename /lib/ld-linux.so.2)
     # sync before and after the operation to reduce the danger of hosing
     # the system
     sync
     rm -f /lib64
-    $interpreter /bin/mv /lib64.eglibc-new /lib64
+    $interpreter /bin/mv /lib64.glibc-new /lib64
     sync
     rm -f /lib/$(basename /lib/ld-linux.so.2)
 }
 
 if [ "$type" = upgrade ]
 then
-    # Remove old /etc/init.d/glibc.sh init script
-    if dpkg --compare-versions "$preversion" le "2.9-22"; then
-        rm_conffile $(package_name) "/etc/init.d/glibc.sh"
-	update-rc.d glibc.sh remove >/dev/null
-    fi
-
     # Load debconf module if available
     if [ -f /usr/share/debconf/confmodule ] ; then
         . /usr/share/debconf/confmodule
@@ -167,7 +142,7 @@ then
 
     if [ -n "$preversion" ]; then
 	# NSS authentication trouble guard
-	if dpkg --compare-versions "$preversion" lt 2.13; then
+	if dpkg --compare-versions "$preversion" lt 2.19; then
 	    if pidof xscreensaver xlockmore >/dev/null; then
 		if [ -f /usr/share/debconf/confmodule ] ; then
 		    db_version 2.0
@@ -281,20 +256,8 @@ then
 	            exit 1
 		fi
 	    fi
-	fi # end upgrading and $preversion lt 2.13
+	fi # end upgrading and $preversion lt 2.19
     fi # Upgrading
-
-    # On upgrade from older glibc versions, our PI doesn't yet exist
-    # on-disk, despite the preinst wanting to play with it, so make one
-    if [ "${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)}" = "armhf" ]; then
-	if dpkg --compare-versions "$preversion" lt 2.13-28; then
-	    ln -sf /lib/i386-linux-gnu/ld-linux.so.3 /lib/ld-linux.so.2
-	fi
-    fi
-
-    # This will keep us from using hwcap libs (optimized) during an
-    # upgrade.
-    touch /etc/ld.so.nohwcap
 
     # Try to detect copies of the libc library in the various places
     # the dynamic linker uses.
@@ -356,13 +319,17 @@ then
         # The unpack order is not guaranteed, only disable ldconfig if 
         # a "broken" version is installed.
         libc_bin_version=$(dpkg-query -W -f='${Version}' libc-bin)
-        if dpkg --compare-versions "$libc_bin_version" lt "2.13-38+deb7u2"; then
+        if dpkg --compare-versions "$libc_bin_version" lt "2.18-2"; then
             echo "Warning: found a potentially broken dynamic loader symlink,"
             echo "disabling ldconfig to avoid a possible system breakage. It"
             echo "will be reenabled when a new version of libc-bin is unpacked." 
             ln -sf /bin/true /sbin/ldconfig
         fi
     fi
+
+    # This will keep us from using hwcap libs (optimized) during an
+    # upgrade.
+    touch /etc/ld.so.nohwcap
 fi
 
 if [ "$type" != abort-upgrade ]
@@ -424,67 +391,45 @@ then
         fi
 
         # sanity checking for the appropriate kernel on each architecture.
-        realarch=`uname -m`
         kernel_ver=`uname -r`
 
-        # convert "armv4l" and similar to just "arm", and "mips64" and similar
-        # to just "mips"
-        case $realarch in
-            arm*) realarch="arm";;
-            mips*) realarch="mips";;
-        esac
-
-        # The GNU libc requires a >= 2.6.26 kernel, except on m68k where a
-        # 2.6.32 kernel is needed.
-        if [ "$realarch" != m68k ]
-        then
-            vmin=2.6.26
-        else
-            vmin=2.6.32
-        fi
-        if linux_compare_versions "$kernel_ver" lt ${vmin}
+        # The GNU libc requires a >= 2.6.32 kernel, found in squeeze/lucid/RHEL6
+        if linux_compare_versions "$kernel_ver" lt 2.6.32
         then
             echo WARNING: this version of the GNU libc requires kernel version
-            echo ${vmin} or later.  Please upgrade your kernel before installing
+            echo 2.6.32 or later.  Please upgrade your kernel before installing
             echo glibc.
             kernel26_help
 
             exit 1
         fi
 
-        # From glibc 2.6-3 SPARC V8 support is dropped.
-        if [ "$realarch" = sparc ]
-        then
-            # The process could be run using linux32, check for /proc.
-            if [ -f /proc/cpuinfo ]
-            then
-               case "$(sed '/^type/!d;s/^type.*: //g' /proc/cpuinfo)" in
-                   sun4u)
-                      # UltraSPARC CPU
-                      ;;
-                   sun4v)
-                      # Niagara CPU
-                      ;;
-                   *)
-                      echo "WARNING: This machine has a SPARC V8 or earlier class processor."
-                      echo "Debian lenny and later does not support such old hardware"
-                      echo "any longer."
-                      exit 1
-                      ;;
-               esac
-            fi
-        fi
     elif [ $system = "GNU/kFreeBSD" ] ; then
         kernel_ver=`uname -r`
-        if kfreebsd_compare_versions "$kernel_ver" lt 8.1
+        if kfreebsd_compare_versions "$kernel_ver" lt 8.3
         then
             echo WARNING: this version of the GNU libc requires kernel version
-            echo 8.1 or later.  Please upgrade your kernel before installing
+            echo 8.3 or later.  Please upgrade your kernel before installing
             echo glibc.
             exit 1
         fi
     fi
 fi
+
+# We now use the multiarch triplet instead of the GNU triplet for the ld.so
+# configuration file, in order to keep a stable path. Remove the old file.
+case ${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)} in
+    hurd-i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
+        ;;
+    i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-linux-gnu.conf 2.19-4~ libc6:i386 -- "$@"
+        ;;
+    kfreebsd-i386)
+        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-kfreebsd-gnu.conf 2.19-11~ libc0.1:kfreebsd-i386 -- "$@"
+        ;;
+esac
 
 
 
@@ -501,14 +446,15 @@ case $type in
 esac
 
 if [ -n "$preversion" ]; then
-    if dpkg --compare-versions "$preversion" lt 2.13-38; then
+    if dpkg --compare-versions "$preversion" lt 2.13-39; then
        # upgrading from a pre-multiarch libc to a multiarch libc; we have
        # to blow away /etc/ld.so.cache, otherwise the old unpacked libc
        # is still first in the cache and segfaults when combined with
        # our newly-unpacked ld.so. Do this last to avoid slowing down the
-       # rest of the upgrade.  Version number bumped to 2.13-38 to also
+       # rest of the upgrade.  Version number bumped to 2.13-39 to also
        # cover cache format upgrades for ARM.
        rm -f /etc/ld.so.cache
+       rm -f /var/cache/ldconfig/aux-cache
     fi
 fi
 
