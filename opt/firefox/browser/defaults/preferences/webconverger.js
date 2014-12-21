@@ -15,6 +15,11 @@ pref("toolkit.telemetry.prompted", 2);
 pref("toolkit.telemetry.rejected", true);
 pref("toolkit.telemetry.enabled", false);
 
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1100304
+pref("media.gmp-gmpopenh264.autoupdate", false);
+pref("media.gmp-gmpopenh264.enabled", false);
+pref("media.gmp-gmpopenh264.provider.enabled", false);
+
 pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences/homepage.properties");
 
