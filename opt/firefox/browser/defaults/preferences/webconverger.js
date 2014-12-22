@@ -20,6 +20,12 @@ pref("media.gmp-gmpopenh264.autoupdate", false);
 pref("media.gmp-gmpopenh264.enabled", false);
 pref("media.gmp-gmpopenh264.provider.enabled", false);
 
+// Disable tiles https://support.mozilla.org/en-US/kb/how-do-tiles-work-firefox#w_how-do-i-turn-it-onoff
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1054202
+pref("browser.newtabpage.enabled", false);
+pref("browser.newtabpage.directory.source", 'data:application/json,{}');
+pref("browser.newtabpage.directory.ping", "");
+
 pref("browser.newtab.url", "about:blank");
 pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences/homepage.properties");
 
