@@ -9,6 +9,7 @@
 #
 ###############################################################################
 
+use File::Spec;
 
 $debug=($ENV{RUN_MAILCAP_DEBUG} || 0);
 $norun=0;
@@ -474,27 +475,22 @@ foreach (@files) {
         }
 
         if ($file ne "-") {
-            if ($comm =~ m/[^%]%s/) {
-                if ($file =~ m![^ a-z0-9,.:/@%^+=_-]!i) {
-                    $match =~ m/nametemplate=(.*?)\s*($|;)/;
-                    my $prefix = $1;
-                    my $linked = 0;
-                    while (!$linked) {
-                        $tmplink = TempFile($prefix);
-                        unlink($tmplink);
-                        if ($file =~ m!^/!) {
-                            $linked = symlink($file,$tmplink);
-                        } else {
-                            my $pwd = `/bin/pwd`;
-                            chomp($pwd);
-                            $linked = symlink("$pwd/$file",$tmplink);
-                        }
-                    }
-                    print STDERR " - filename contains shell meta-characters; aliased to '$tmplink'\n" if $debug;
-                    $comm =~ s/([^%])%s/$1$tmplink/g;
-                } else {
-                    $comm =~ s/([^%])%s/$1$file/g;
+            # Resolve file name to an absolute path
+            $file = File::Spec->rel2abs($file);
+            if ($file =~ m![^ a-z0-9,.:/@%^+=_-]!i) {
+                $match =~ m/nametemplate=(.*?)\s*($|;)/;
+                my $prefix = $1;
+                my $linked = 0;
+                while (!$linked) {
+                    $tmplink = TempFile($prefix);
+                    unlink($tmplink);
+                    $linked = symlink($file,$tmplink);
                 }
+                $file = $tmplink;
+                print STDERR " - filename contains shell meta-characters; aliased to '$tmplink'\n" if $debug;
+            }
+            if ($comm =~ m/[^%]%s/) {
+                   $comm =~ s/([^%])%s/$1$file/g;
             } else {
                 if ($comm =~ m/\|/) {
                     $comm =~ s/\|/<\Q$file\E \|/;
