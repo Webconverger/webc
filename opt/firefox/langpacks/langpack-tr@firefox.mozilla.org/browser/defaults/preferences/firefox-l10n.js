@@ -1,5 +1,6 @@
-//@line 4 "/builds/slave/rel-m-rel-34.1-lx_rpk_10-00000/l10n/tr/browser/firefox-l10n.js"
+//@line 4 "/builds/slave/rel-m-rel-lx_rpk_10-0000000000/l10n/tr/browser/firefox-l10n.js"
 
-//@line 6 "/builds/slave/rel-m-rel-34.1-lx_rpk_10-00000/l10n/tr/browser/firefox-l10n.js"
+//@line 6 "/builds/slave/rel-m-rel-lx_rpk_10-0000000000/l10n/tr/browser/firefox-l10n.js"
 
 pref("general.useragent.locale", "tr");
+pref("browser.search.showOneOffButtons", true);
