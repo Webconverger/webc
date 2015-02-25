@@ -65,6 +65,22 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 }
 
 (function() {
+  function onPageLoad(event) {
+    var doc = event.target;
+    var win = doc.defaultView;
+    // ignore frame loads
+    if (win != win.top) {
+      return;
+    }
+    var uri = doc.documentURIObject;
+    // If we get a neterror, try again in 10 seconds
+    if (uri.spec.match("about:neterror")) {
+      window.setTimeout(function(win) {
+        win.location.reload();
+      }, 10000, win);
+    }
+  }
+
 	function startup() {
 		var navigatorToolbox = document.getElementById("navigator-toolbox");
 		navigatorToolbox.iconsize = "small";
@@ -100,10 +116,12 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 			box.appendChild(image);
 			insertAfter.parentNode.appendChild(box);
 		}
+    document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
 	}
 
 	function shutdown() {
 		window.removeEventListener("unload", shutdown, false);
+    document.getElementById("appcontent").removeEventListener("DOMContentLoaded", onPageLoad, false);
 	}
 
 	window.addEventListener("load", startup, false);

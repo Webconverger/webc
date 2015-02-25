@@ -1,4 +1,20 @@
 (function() {
+  function onPageLoad(event) {
+    var doc = event.target;
+    var win = doc.defaultView;
+    // ignore frame loads
+    if (win != win.top) {
+      return;
+    }
+    var uri = doc.documentURIObject;
+    // If we get a neterror, try again in 10 seconds
+    if (uri.spec.match("about:neterror")) {
+      window.setTimeout(function(win) {
+        win.location.reload();
+      }, 10000, win);
+    }
+  }
+
 	function startup() {
 		// let console = (Cu.import("resource://gre/modules/devtools/Console.jsm", {})).console;
 		window.removeEventListener("load", startup, false);
@@ -28,10 +44,12 @@
 				gBrowser.selectTabAtIndex(selectedIndex);
 			}, tabSwitchInterval);
 		}
+    document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
 	}
 
 	function shutdown() {
 		window.removeEventListener("unload", shutdown, false);
+    document.getElementById("appcontent").removeEventListener("DOMContentLoaded", onPageLoad, false);
 	}
 
 	window.addEventListener("load", startup, false);
