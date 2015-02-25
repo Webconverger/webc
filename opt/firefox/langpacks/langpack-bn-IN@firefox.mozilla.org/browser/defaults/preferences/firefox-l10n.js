@@ -3,4 +3,3 @@
 //@line 6 "/builds/slave/rel-m-rel-lx_rpk_2-00000000000/l10n/bn-IN/browser/firefox-l10n.js"
 
 pref("general.useragent.locale", "bn-IN");
-pref("browser.search.showOneOffButtons", true);

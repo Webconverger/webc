@@ -4,4 +4,3 @@
 
 pref("general.useragent.locale", "sk");
 pref("browser.fixup.alternate.suffix", ".sk");
-pref("browser.search.showOneOffButtons", true);

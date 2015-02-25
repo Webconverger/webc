@@ -4,4 +4,3 @@
 
 pref("general.useragent.locale", "cs");
 pref("browser.fixup.alternate.suffix", ".cz");
-pref("browser.search.showOneOffButtons", true);
