@@ -43,6 +43,7 @@ logs "Fetching git revision ${fetch_revision}"
 # Fetch the git revision. It will not be stored
 # in any local branch, just in FETCH_HEAD.
 rm -f /.git/FETCH_HEAD
+rm -f /.git/*.lock
 if ! git --git-dir "${git_repo}" fetch --depth=1 --quiet origin "${fetch_revision}" || ! git --git-dir "${git_repo}" rev-parse --verify --quiet FETCH_HEAD
 then
 # Fetching the revision failed, to prevent an
