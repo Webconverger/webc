@@ -244,7 +244,8 @@ EOC
 		;;
 
 	homepage=*)
-		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
+		mac=$( mac_address )
+		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' | sed "s,MACID,$mac,g" )"
 		echo "browser.startup.homepage=$(echo $homepage | awk '{print $1}')" > /opt/firefox/browser/defaults/preferences/homepage.properties
 		;;
 	esac
