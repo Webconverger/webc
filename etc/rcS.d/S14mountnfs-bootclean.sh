@@ -1,1 +1,0 @@
-../init.d/mountnfs-bootclean.sh
