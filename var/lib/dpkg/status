@@ -4186,7 +4186,7 @@ Description: Command line tools for the PulseAudio sound server
 Homepage: http://www.pulseaudio.org
 
 Package: linux-image-3.16.0-0.bpo.4-586
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 116157
@@ -4194,6 +4194,7 @@ Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: i386
 Source: linux
 Version: 3.16.7-ckt2-1~bpo70+1
+Config-Version: 3.16.7-ckt2-1~bpo70+1
 Provides: linux-modules-3.16.0-0.bpo.4-586
 Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | dracut (>= 0.40+1-1~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -4206,6 +4207,34 @@ Description: Linux 3.16 for older PCs
  .
  This kernel is not suitable for SMP (multi-processor, multi-core or
  hyper-threaded) systems.
+Homepage: https://www.kernel.org/
+
+Package: linux-image-3.16.0-4-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 118018
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux
+Version: 3.16.7-ckt7-1
+Provides: linux-modules-3.16.0-4-686-pae
+Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | linux-initramfs-tool
+Pre-Depends: debconf | debconf-2.0
+Recommends: firmware-linux-free (>= 3~), irqbalance, libc6-i686
+Suggests: linux-doc-3.16, debian-kernel-handbook, grub-pc | extlinux
+Breaks: at (<< 3.1.12-1+squeeze1), initramfs-tools (<< 0.110~)
+Description: Linux 3.16 for modern PCs
+ The Linux kernel 3.16 and modules for use on PCs with one or more
+ processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
 Homepage: https://www.kernel.org/
 
 Package: libcilkrts5
@@ -11584,7 +11613,7 @@ Description: AddressSanitizer -- a fast memory error detector
 Homepage: http://gcc.gnu.org/
 
 Package: linux-image-3.16.0-0.bpo.4-686-pae
-Status: install ok installed
+Status: deinstall ok config-files
 Priority: optional
 Section: kernel
 Installed-Size: 117769
@@ -11592,6 +11621,7 @@ Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: i386
 Source: linux
 Version: 3.16.7-ckt2-1~bpo70+1
+Config-Version: 3.16.7-ckt2-1~bpo70+1
 Provides: linux-modules-3.16.0-0.bpo.4-686-pae
 Depends: kmod | module-init-tools, linux-base (>= 3~), debconf (>= 0.5) | debconf-2.0, initramfs-tools (>= 0.110~) | dracut (>= 0.40+1-1~) | linux-initramfs-tool
 Pre-Depends: debconf | debconf-2.0
@@ -12532,6 +12562,29 @@ Description: simple configuration storage system - runtime library
  .
  This package contains the runtime library.
 Homepage: https://wiki.gnome.org/dconf
+
+Package: linux-image-686-pae
+Status: install ok installed
+Priority: optional
+Section: kernel
+Installed-Size: 37
+Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
+Architecture: i386
+Source: linux-latest (63)
+Version: 3.16+63
+Provides: linux-latest-modules-3.16.0-4-686-pae
+Depends: linux-image-3.16.0-4-686-pae
+Description: Linux for modern PCs (meta-package)
+ This package depends on the latest Linux kernel and modules for use on PCs
+ with one or more processors supporting PAE.
+ .
+ This kernel requires PAE (Physical Address Extension). This feature is
+ supported by the Intel Pentium Pro/II/III/4/4M/D, Xeon, Core and Atom; AMD
+ Geode NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom;
+ Transmeta Efficeon; VIA C7; and some other processors.
+ .
+ This kernel also runs on a Xen hypervisor.  It supports both privileged
+ (dom0) and unprivileged (domU) operation.
 
 Package: firmware-atheros
 Status: install ok installed
