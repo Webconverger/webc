@@ -1,61 +1,51 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this file,
    - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
-
 <!-- LOCALIZATION NOTE (downloads.title):
      Used by screen readers to describe the Downloads Panel.
      -->
+
 <!ENTITY downloads.title                  "Lejupielādes">
+<!-- LOCALIZATION NOTE (downloadDetails.width):
+     Width of details for a Downloads Panel item (which directly influences the
+     width of the Downloads Panel) expressed using a CSS unit. The longest
+     labels that should fit in the item width are usually those of in-progress
+     downloads and those of blocked downloads.
 
-<!-- LOCALIZATION NOTE (downloads.width):
-     Width of the Downloads Panel list items, expressed using a CSS unit.  The
-     longest labels that should fit in the item width are usually those of
-     in-progress downloads and those of blocked downloads.
-      -->
-<!ENTITY downloadDetails.width                  "60ch">
-<!ENTITY downloadsSummary.minWidth2        "28ch">
+     A good rule of thumb is to try to determine the longest string possible
+     that an in-progress download could display, and use that value in ch
+     units.
 
-<!ENTITY clearDownloadsButton.label       "Notīrīt lejupielādes">
-<!ENTITY clearDownloadsButton.tooltip     "Notīra pabeigtās, atceltās un neveiksmīgās lejupielādes">
-<!ENTITY cmd.clearDownloads.label         "Notīrīt lejupielādes">
-<!ENTITY cmd.clearDownloads.accesskey     "D">
-<!ENTITY cmd.removeFromHistory.label      "Notīrīt formu vēsturi">
-<!ENTITY cmd.removeFromHistory.accesskey  "o">
-<!ENTITY blocked.label                    "BLOĶĒTA">
-<!ENTITY cmd.unblock.label                "Atļaut">
-<!ENTITY cmd.unblock.accesskey            "U">
-<!-- LOCALIZATION NOTE (cmd.removeFile.label):
-     This command may be shown in the context menu or as a menu button label
-     when malware or potentially unwanted downloads are blocked.
-     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+     For example, in English, a long string would be:
+
+     59 minutes, 59 seconds remaining - 1022 of 1023 KB
+
+     That's 50 characters, so we set the width at 50ch.
      -->
-<!ENTITY cmd.removeFile.label             "Aizvākt failu">
-<!ENTITY cmd.removeFile.accesskey         "v">
 
-<!-- LOCALIZATION NOTE (learnMore.label):
-     Shown as a text link for some types of blocked downloads, for example
-     malware, when there is an associated explanation page on the Mozilla site.
-     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+<!ENTITY downloadDetails.width            "60ch">
+<!-- LOCALIZATION NOTE (downloadsSummary.minWidth2):
+     Minimum width for the main description of the downloads summary,
+     which is displayed at the bottom of the Downloads Panel if the
+     number of downloads exceeds the limit that the panel can display.
+
+     A good rule of thumb here is to look at the otherDownloads2 string
+     in downloads.properties, and make a reasonable estimate of its
+     maximum length. For English, this seems like a reasonable limit:
+
+     + 999 other downloads
+
+     that's 21 characters, so we set the minimum width to 21ch.
      -->
-<!ENTITY learnMore.label                  "Uzzināt vairāk">
 
-
-<!ENTITY downloadsPanelEmpty.label        "Šajā sesijā nav nevienas lejupielādes.">
-
-
-<!-- LOCALIZATION NOTE (downloadsListEmpty.label):
-      This string is shown when there are no items in the Downloads view.
-      -->
-<!ENTITY downloadsListEmpty.label         "Nav nevienas lejupielādes.">
-<!ENTITY downloadsListNoMatch.label       "Nav nevienas atbilstošas lejupielādes.">
-
+<!ENTITY downloadsSummary.minWidth2       "28ch">
 
 <!ENTITY cmd.pause.label                  "Apturēt">
-<!ENTITY cmd.pause.accesskey              "P">
+<!ENTITY cmd.pause.accesskey              "p">
 <!ENTITY cmd.resume.label                 "Atkārtot">
-<!ENTITY cmd.resume.accesskey             "R">
+<!ENTITY cmd.resume.accesskey             "r">
 <!ENTITY cmd.cancel.label                 "Atcelt">
-<!ENTITY cmd.cancel.accesskey             "C">
+<!ENTITY cmd.cancel.accesskey             "c">
 <!-- LOCALIZATION NOTE (cmd.show.label, cmd.show.accesskey, cmd.showMac.label,
      cmd.showMac.accesskey):
      The show and showMac commands are never shown together, thus they can share
@@ -69,10 +59,65 @@
 <!ENTITY cmd.goToDownloadPage.label       "Iet uz lejupielādes lapu">
 <!ENTITY cmd.goToDownloadPage.accesskey   "e">
 <!ENTITY cmd.copyDownloadLink.label       "Kopēt lejupielādes adresi">
-<!ENTITY cmd.copyDownloadLink.accesskey   "L">
+<!ENTITY cmd.copyDownloadLink.accesskey   "l">
+<!ENTITY cmd.removeFromHistory.label      "Notīrīt formu vēsturi">
+<!ENTITY cmd.removeFromHistory.accesskey  "o">
 <!ENTITY cmd.clearList.label              "Attīrīt sarakstu">
 <!ENTITY cmd.clearList.accesskey          "a">
+<!ENTITY cmd.clearDownloads.label         "Notīrīt lejupielādes">
+<!ENTITY cmd.clearDownloads.accesskey     "d">
+<!-- LOCALIZATION NOTE (cmd.unblock.label):
+     This command may be shown in the context menu, as a menu button item, or as
+     a text link when malware or potentially unwanted downloads are blocked.
+     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+     -->
+<!ENTITY cmd.unblock.label                "Atļaut">
+<!ENTITY cmd.unblock.accesskey            "u">
+<!-- LOCALIZATION NOTE (cmd.removeFile.label):
+     This command may be shown in the context menu or as a menu button label
+     when malware or potentially unwanted downloads are blocked.
+     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+     -->
+<!ENTITY cmd.removeFile.label             "Aizvākt failu">
+<!ENTITY cmd.removeFile.accesskey         "v">
+<!-- LOCALIZATION NOTE (blocked.label):
+     Shown as a tag before the file name for some types of blocked downloads.
+     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+     -->
+
+<!ENTITY blocked.label                    "BLOĶĒTA">
+<!-- LOCALIZATION NOTE (learnMore.label):
+     Shown as a text link for some types of blocked downloads, for example
+     malware, when there is an associated explanation page on the Mozilla site.
+     Note: This string doesn't exist in the UI yet.  See bug 1053890.
+     -->
+
+<!ENTITY learnMore.label                  "Uzzināt vairāk">
+<!-- LOCALIZATION NOTE (downloadsHistory.label, downloadsHistory.accesskey):
+     This string is shown at the bottom of the Downloads Panel when all the
+     downloads fit in the available space, or when there are no downloads in
+     the panel at all.
+     -->
 
 <!ENTITY downloadsHistory.label           "Rādīt visas lejupielādes">
-<!ENTITY downloadsHistory.accesskey       "S">
+<!ENTITY downloadsHistory.accesskey       "s">
 
+<!ENTITY clearDownloadsButton.label       "Notīrīt lejupielādes">
+<!ENTITY clearDownloadsButton.tooltip     "Notīra pabeigtās, atceltās un neveiksmīgās lejupielādes">
+<!-- LOCALIZATION NOTE (downloadsListEmpty.label):
+     This string is shown when there are no items in the Downloads view, when it
+     is displayed inside a browser tab.
+     -->
+
+<!ENTITY downloadsListEmpty.label         "Nav nevienas lejupielādes.">
+<!-- LOCALIZATION NOTE (downloadsPanelEmpty.label):
+     This string is shown when there are no items in the Downloads Panel.
+     -->
+
+<!ENTITY downloadsPanelEmpty.label        "Šajā sesijā nav nevienas lejupielādes.">
+<!-- LOCALIZATION NOTE (downloadsListNoMatch.label):
+     This string is shown when some search terms are specified, but there are no
+     results in the Downloads view.
+     -->
+
+<!ENTITY downloadsListNoMatch.label       "Nav nevienas atbilstošas lejupielādes.">

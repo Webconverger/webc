@@ -72,7 +72,10 @@ dumneavoastră.</li> 
 <!ENTITY netTimeout.title "Timpul conexiunii a expirat">
 <!ENTITY netTimeout.longDesc "&sharedLongDesc;">
 
-
+<!ENTITY unknownProtocolFound.title "Adresa nu a fost înțeleasă">
+<!ENTITY unknownProtocolFound.longDesc "<ul> 
+<li>S-ar putea să fie nevoie să instalați alt software pentru a deschide această adresă.</li> 
+</ul>">
 
 <!ENTITY proxyConnectFailure.title "Serverul proxy refuză conexiuni">
 <!ENTITY proxyConnectFailure.longDesc "<ul> 
@@ -103,15 +106,15 @@ Manager.</li> 
 </ul>">
 
 <!ENTITY nssFailure2.title "Conexiunea sigură a eșuat">
-<!ENTITY nssFailure2.longDesc "<ul> 
-<li>Pagina pe care încercați să o vedeți nu poate fi afișată pentru că nu s-a putut verifica autenticitatea datelor primite.</li> 
-<li>Vă rugăm să luați legătura cu proprietarii saitului și să-i informați despre această problemă. Ca o alternativă, puteți folos comanda aflată în meniul „Ajutor” pentru a raporta un sait defect.</li> 
+<!ENTITY nssFailure2.longDesc2 "<ul> 
+<li>Pagina pe care încercați să o vedeți nu poate fi afișată pentru că nu s-a putut verifica autenticitatea datelor primite.</li> 
+<li>Vă rugăm să luați legătura cu proprietarii saitului și să-i informați despre această problemă</li> 
 </ul>">
 
 <!ENTITY nssBadCert.title "Conexiunea sigură a eșuat">
 <!ENTITY nssBadCert.longDesc2 "<ul> 
 <li>Acest lucru s-ar putea datora unei probleme în configurația serverului, sau s-ar 
-putea ca cineva să încerce să pretindă că este acest server.</li> 
+putea ca cineva să încerce să pretindă în mod fraudulos că este acest server.</li> 
 <li>Dacă v-ați conectat cu succes în trecut la acest server, eroarea poate fi 
 temporară și puteți încerca din nou mai târziu.</li> 
 </ul>">
@@ -133,8 +136,8 @@ dumneavoastră.</li>
 <!ENTITY phishingBlocked.longDesc "<p>Introducerea de informații personale pe această pagină ar putea rezulta în furt de identitate sau altă fraudă.</p> 
 <p>Aceste tipuri de falsuri web sunt folosite în păcăleli numite și „phishing”, în care pagini și adrese de email sunt folosite pentru a imita unele în care aveți încredere.</p>">
 
-<!ENTITY cspFrameAncestorBlocked.title "Blocat de politica de securitate asupra conținutului">
-<!ENTITY cspFrameAncestorBlocked.longDesc "<p>&brandShortName; a împiedicat această pagină să se încarce în acest mod deoarece pagina are o politică de securitate asupra conținutului ce nu permite asta.</p>">
+<!ENTITY cspBlocked.title "Blocat de politica de securitate asupra conținutului">
+<!ENTITY cspBlocked.longDesc "<p>&brandShortName; a împiedicat această pagină să se încarce în acest mod deoarece pagina are o politică de securitate asupra conținutului ce nu permite asta.</p>">
 
 <!ENTITY corruptedContentError.title "Eroare cauzată de conținut corupt">
 <!ENTITY corruptedContentError.longDesc "<p>Pagina care încercați să o vedeți nu poate fi afișată deoarece a fost detectată o eroare legată de transmiterea datelor.</p><ul><li>Vă rugăm contactați deținătorii saitului pentru a-i informa de această problemă.</li></ul>">
@@ -149,45 +152,28 @@ button is included here (instead of netError.xhtml) because it exposes
 functionality specific to firefox. -->
 
 
-<!ENTITY securityOverride.warningContent "<p>Nu ar trebui să adăugați o excepție, dacă utilizați o conexiune la internet în care nu aveți încredere în întregime sau dacă nu sunteți obișnuit să vedeți un avertisment pentru acest server. </p> 
-  
+<!ENTITY securityOverride.warningContent "<p>Nu ar trebui să adăugați o excepție dacă utilizați o conexiune la internet în care nu aveți încredere în întregime sau dacă nu sunteți obișnuit să vedeți un avertisment pentru acest server.</p> 
+ 
 <button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button> 
 <button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>">
+
+<!ENTITY errorReporting.title "Raportați această eroare">
+<!ENTITY errorReporting.longDesc "Raportarea adresei și informațiilor din certificat pentru <span id='hostname'></span> ne va ajuta să identificăm și să blocăm saiturile malițioase. Vă mulțumim pentru ajutor la crearea un web mai sigur!">
+<!ENTITY errorReporting.automatic "Raportează automat erorile în viitor">
+<!ENTITY errorReporting.learnMore "Aflați mai multe…">
+<!ENTITY errorReporting.sending "Se trimite raportul">
+<!ENTITY errorReporting.sent "Raport trimis">
+<!ENTITY errorReporting.report "Raportați">
+<!ENTITY errorReporting.tryAgain "Încercați din nou">
 
 <!ENTITY remoteXUL.title "XUL la distanță">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Vă rugăm să contactați proprietarii websaitului pentru a-i informa despre această problemă.</li></ul></p>">
 
-<!ENTITY cspBlocked.longDesc "<p>&brandShortName; prevented this page from loading in this way because the page has a content security policy that disallows it.</p>">
-
-<!ENTITY cspBlocked.title "Blocked by Content Security Policy">
-<!ENTITY errorReporting.automatic "Automatically report errors in the future">
-<!ENTITY errorReporting.learnMore "Learn more…">
-<!ENTITY errorReporting.longDesc "Reporting the address and certificate information for <span id='hostname'></span> will help us identify and block malicious sites. Thanks for helping create a safer web!">
-<!ENTITY errorReporting.report "Report">
-<!ENTITY errorReporting.sending "Sending report">
-<!ENTITY errorReporting.sent "Report sent">
-
-<!ENTITY errorReporting.title "Report this error">
-<!ENTITY errorReporting.tryAgain "Try again">
-<!ENTITY nssFailure2.longDesc2 "
-<ul>
-  <li>The page you are trying to view cannot be shown because the authenticity of the received data could not be verified.</li>
-  <li>Please contact the website owners to inform them of this problem.</li>
-</ul>
-">
-<!-- LOCALIZATION NOTE (oldSecurityProtocol.advancedInfo) - Do not translate
-     the <span id='errorcode'></span>. -->
-<!ENTITY oldSecurityProtocol.advancedInfo "Advanced info: <span id='errorcode'></span>">
-<!ENTITY oldSecurityProtocol.learnMore "Learn More…">
+<!ENTITY oldSecurityProtocol.title "Nu se poate conecta în mod securizat">
 <!-- LOCALIZATION NOTE (oldSecurityProtocol.longDesc) - Do not translate the
      <span id='hostname'></span>. -->
-<!ENTITY oldSecurityProtocol.longDesc2 "&brandShortName; cannot guarantee the safety of your data on <span id='hostname'></span> because it uses SSLv3, a broken security protocol.">
-
-<!ENTITY oldSecurityProtocol.title "Unable to Connect Securely">
-<!ENTITY unknownProtocolFound.longDesc "
-<ul>
-  <li>You might need to install other software to open this address.</li>
-</ul>
-">
-
-<!ENTITY unknownProtocolFound.title "The address wasn't understood">
+<!ENTITY oldSecurityProtocol.longDesc2 "&brandShortName; nu poate garanta siguranța datelor dumneavoastră pe <span id='hostname'></span> deoarece folosește SSLv3, un protocol de securitate nesigur.">
+<!-- LOCALIZATION NOTE (oldSecurityProtocol.advancedInfo) - Do not translate
+     the <span id='errorcode'></span>. -->
+<!ENTITY oldSecurityProtocol.advancedInfo "Informații avansate: <span id='errorcode'></span>">
+<!ENTITY oldSecurityProtocol.learnMore "Aflați mai multe…">

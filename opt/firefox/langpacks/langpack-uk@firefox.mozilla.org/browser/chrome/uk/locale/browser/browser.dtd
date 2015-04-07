@@ -13,7 +13,7 @@
 <!ENTITY mainWindow.titlemodifiermenuseparator " - ">
 <!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
                                                                 inside the private browsing mode -->
-<!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Потайливий режим)">
+<!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Приватний перегляд)">
 
 <!ENTITY appmenu.tooltip                     "Відкрити меню">
 <!ENTITY navbarOverflow.label                "Інші інструменти…">
@@ -95,6 +95,8 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY pageInfoCmd.label "Інформація про сторінку">
 <!ENTITY pageInfoCmd.accesskey "І">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!ENTITY mirrorTabCmd.label "Mirror Tab">
+<!ENTITY mirrorTabCmd.accesskey "m">
 <!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
 These should match what Safari and other Apple applications use on OS X Lion. -->
 <!ENTITY enterFullScreenCmd.label "Повноекранний режим">
@@ -140,24 +142,29 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY editThisBookmarkCmd.label "Редагувати цю закладку">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
-<!ENTITY sharePageCmd.label "Поділитись сторінкою">
+<!-- LOCALIZATION NOTE (findShareServices.label):
+  -  Use the unicode ellipsis char, \u2026,
+  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
+<!ENTITY findShareServices.label "Знайти інші служби поширення…">
+<!ENTITY sharePageCmd.label "Поділитися сторінкою">
 <!ENTITY sharePageCmd.commandkey "l">
 <!ENTITY sharePageCmd.accesskey "д">
-<!ENTITY shareLinkCmd.label "Поділитись посиланням">
-<!ENTITY shareLinkCmd.accesskey "д">
-<!ENTITY shareImageCmd.label "Поділитись малюнком">
-<!ENTITY shareImageCmd.accesskey "д">
-<!ENTITY shareSelectCmd.label "Поділитись вибраним">
-<!ENTITY shareSelectCmd.accesskey "д">
-<!ENTITY shareVideoCmd.label "Поділитись цим відео">
-<!ENTITY shareVideoCmd.accesskey "д">
-<!ENTITY feedsMenu.label "Підписатись">
+<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
+<!ENTITY shareLink.label "Поділитися цим посиланням">
+<!ENTITY shareLink.accesskey "п">
+<!ENTITY shareImage.label "Поділитися цим зображенням">
+<!ENTITY shareImage.accesskey "з">
+<!ENTITY shareSelect.label "Поділитися вибраним">
+<!ENTITY shareSelect.accesskey "в">
+<!ENTITY shareVideo.label "Поділитися цим відео">
+<!ENTITY shareVideo.accesskey "і">
+<!ENTITY feedsMenu.label "Підписатися">
 <!ENTITY subscribeToPageMenupopup.label "Підписатися на цю сторінку">
 <!ENTITY subscribeToPageMenuitem.label "Підписатися на цю сторінку…">
 <!ENTITY addCurPagesCmd.label "Закласти всі вкладки…">
-<!ENTITY showAllBookmarks2.label "Показати всі закладки">
+<!ENTITY showAllBookmarks2.label "Показати всі вкладки">
 <!ENTITY unsortedBookmarksCmd.label "Несортовані закладки">
-<!ENTITY bookmarksToolbarChevron.tooltip "Показати решту закладок">
+<!ENTITY bookmarksToolbarChevron.tooltip "Показати інші закладки">
 
 <!ENTITY backCmd.label                "Назад">
 <!ENTITY backButton.tooltip           "Назад на одну сторінку">
@@ -212,6 +219,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY addons.label                 "Додатки">
 <!ENTITY addons.accesskey             "Д">
 <!ENTITY addons.commandkey            "A">
+<!ENTITY webapps.label                "Програми">
+<!ENTITY webapps.accesskey            "П">
 
 <!ENTITY webDeveloperMenu.label       "Веб-розробка">
 <!ENTITY webDeveloperMenu.accesskey   "р">
@@ -219,8 +228,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolsCmd.keycode          "VK_F12">
 <!ENTITY devToolsCmd.keytext          "F12">
 
-<!ENTITY devtoolsConnect.label        "Вміст…">
-<!ENTITY devtoolsConnect.accesskey    "В">
+<!ENTITY devtoolsConnect.label        "З’єднатися…">
+<!ENTITY devtoolsConnect.accesskey    "д">
 
 <!ENTITY errorConsoleCmd.label        "Консоль помилок">
 <!ENTITY errorConsoleCmd.accesskey    "м">
@@ -258,8 +267,13 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
   -  application menu item that opens the browser toolbox UI in the Tools menu. -->
-<!ENTITY browserToolboxMenu.label     "Browser Toolbox">
-<!ENTITY browserToolboxMenu.accesskey "e">
+<!ENTITY browserToolboxMenu.label     "Інструменти браузера">
+<!ENTITY browserToolboxMenu.accesskey "е">
+
+<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser content toolbox UI in the Tools menu.
+  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
+<!ENTITY browserContentToolboxMenu.label     "Інструменти вмісту браузера">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Закрити панель розробника">
 <!ENTITY devToolbarMenu.label              "Панель розробника">
@@ -287,7 +301,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.label        "Нове вікно">
 <!ENTITY newNavigatorCmd.key        "N">
 <!ENTITY newNavigatorCmd.accesskey      "Н">
-<!ENTITY newPrivateWindow.label     "Нове потайливе вікно">
+<!ENTITY newPrivateWindow.label     "Нове приватне вікно">
 <!ENTITY newPrivateWindow.accesskey "в">
 
 <!ENTITY editMenu.label         "Правка"> 
@@ -403,13 +417,25 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
 
+<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
+     These two strings are used to build the header above the list of one-click
+     search providers:  "Search for <used typed keywords> with:" -->
+<!ENTITY searchFor.label              "Шукати ">
+<!ENTITY searchWith.label             " за допомогою:">
+<!-- LOCALIZATION NOTE (searchWithHeader.label):
+     The wording of this string should be as close as possible to
+     searchFor.label and searchWith.label. This string will be used instead of
+     them when the user has not typed any keyword. -->
+<!ENTITY searchWithHeader.label       "Шукати з:">
+<!ENTITY changeSearchSettings.button  "Налаштувати пошук">
+
 <!ENTITY tabView.commandkey           "e">
 
 <!ENTITY openLinkCmdInTab.label       "Відкрити посилання в новій вкладці">
 <!ENTITY openLinkCmdInTab.accesskey   "л">
 <!ENTITY openLinkCmd.label            "Відкрити посилання в новому вікні">
 <!ENTITY openLinkCmd.accesskey        "к">
-<!ENTITY openLinkInPrivateWindowCmd.label "Відкрити у новому потайливому вікні">
+<!ENTITY openLinkInPrivateWindowCmd.label "Відкрити у новому приватному вікні">
 <!ENTITY openLinkInPrivateWindowCmd.accesskey "P">
 <!ENTITY openLinkCmdInCurrent.label     "Відкрити посилання">
 <!ENTITY openLinkCmdInCurrent.accesskey "В">
@@ -477,6 +503,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailImageCmd.accesskey      "ж">
 <!ENTITY emailVideoCmd.label          "Переслати відео…">
 <!ENTITY emailVideoCmd.accesskey      "с">
+<!ENTITY castVideoCmd.label           "Відправити відео на пристрій">
+<!ENTITY castVideoCmd.accesskey       "д">
 <!ENTITY emailAudioCmd.label          "Переслати аудіо…">
 <!ENTITY emailAudioCmd.accesskey      "с">
 <!ENTITY playPluginCmd.label          "Активувати цей плагін">
@@ -690,7 +718,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.accesskey "П">
 <!ENTITY social.closeNotificationItem.label "Не зараз">
 
-
+<!ENTITY social.directory.label "Каталог активації">
+<!ENTITY social.directory.text "Ви можете активувати засоби поширення з каталогу.">
+<!ENTITY social.directory.button "Перейти туди!">
+<!ENTITY social.directory.introText "Натисніть на службу, щоб додати її до &brandShortName;.">
+<!ENTITY social.directory.viewmore.text "Дивитися більше">
 
 <!ENTITY customizeMode.tabTitle "Пристосувати &brandShortName;">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Додаткові інструменти та можливості">
@@ -706,10 +738,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.lwthemes.menuManage.accessKey "К">
 <!ENTITY customizeMode.lwthemes.menuGetMore "Отримати більше тем">
 <!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "б">
+<!ENTITY customizeMode.deveditionTheme.label2 "Використовувати тему Developer Edition">
 
 <!ENTITY social.chatBar.commandkey "c">
-<!ENTITY social.chatBar.label "Focus chats">
-<!ENTITY social.chatBar.accesskey "c">
+<!ENTITY social.chatBar.label "Перемикатись на чати">
+<!ENTITY social.chatBar.accesskey "ч">
 
 <!ENTITY social.markpageMenu.accesskey "б">
 <!ENTITY social.markpageMenu.label "Зберегти сторінку у…">
@@ -739,8 +772,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY trackingContentBlocked.moreinfo "Частини сторінки, які стежать за вашою активністю в Інтернеті заблоковано.">
 <!ENTITY trackingContentBlocked.learnMore "Дізнатися більше">
 <!ENTITY trackingContentBlocked.options "Налаштування">
-<!ENTITY trackingContentBlocked.unblock.label2 "Вимкнути захист для цього сайту">
+<!ENTITY trackingContentBlocked.unblock2.label "Відключити захист для цього сайту">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "з">
 <!ENTITY trackingContentBlocked.block.label "Увімкнути захист">
+<!ENTITY trackingContentBlocked.block.accesskey "E">
 <!ENTITY trackingContentBlocked.disabled.message "Захист від стеження вимкнено">
 
 <!ENTITY pointerLock.notification.message "Натисніть ESC будь-коли, щоб показати його знову.">
@@ -789,50 +824,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY panicButton.view.deleteTabsAndWindows    "Закриті всі <html:strong>Вкладки</html:strong> та <html:strong>Вікна</html:strong>">
 <!ENTITY panicButton.view.openNewWindow           "Відкрито нове чисте вікно">
 
-<!ENTITY panicButton.view.undoWarning             "Цю дію неможливо обернути.">
+<!ENTITY panicButton.view.undoWarning             "Цю дію неможливо відмінити.">
 <!ENTITY panicButton.view.forgetButton            "Забути!">
 
-<!ENTITY panicButton.thankyou.msg1                "Ваша недавня історія була вичищена.">
+<!ENTITY panicButton.thankyou.msg1                "Ваша недавня історія була видалена.">
 <!ENTITY panicButton.thankyou.msg2                "Безпечний перегляд!">
 <!ENTITY panicButton.thankyou.buttonlabel         "Дякую!">
 
-
-
-<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser content toolbox UI in the Tools menu.
-  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
-<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
-<!ENTITY castVideoCmd.accesskey       "e">
-<!ENTITY castVideoCmd.label           "Send Video To Device">
-<!ENTITY changeSearchSettings.button  "Change Search Settings">
-<!ENTITY customizeMode.deveditionTheme.label2 "Use Developer Edition Theme">
-<!-- LOCALIZATION NOTE (findShareServices.label):
-  -  Use the unicode ellipsis char, \u2026,
-  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
-<!ENTITY findShareServices.label "Find more Share services…">
-
-<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
-     These two strings are used to build the header above the list of one-click
-     search providers:  "Search for <used typed keywords> with:" -->
-<!ENTITY searchFor.label              "Search for ">
-<!ENTITY searchWith.label             " with:">
-<!ENTITY shareImage.accesskey "r">
-<!ENTITY shareImage.label "Share This Image">
-<!ENTITY shareLink.accesskey "h">
-<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
-<!ENTITY shareLink.label "Share This Link">
-<!ENTITY shareSelect.accesskey "r">
-<!ENTITY shareSelect.label "Share Selection">
-<!ENTITY shareVideo.accesskey "r">
-<!ENTITY shareVideo.label "Share This Video">
-<!ENTITY social.directory.button "Take me there!">
-<!ENTITY social.directory.introText "Click on a service to add it to &brandShortName;.">
-
-<!ENTITY social.directory.label "Activations Directory">
-<!ENTITY social.directory.text "You can activate Share services from the directory.">
-<!ENTITY social.directory.viewmore.text "View More">
-<!ENTITY trackingContentBlocked.block.accesskey "E">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
-<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
-<!ENTITY webapps.accesskey            "p">
-<!ENTITY webapps.label                "Apps">

@@ -57,6 +57,10 @@ can reach it easily. -->
 <!ENTITY tabCmd.label "Filă nouă">
 <!ENTITY tabCmd.accesskey "F">
 <!ENTITY tabCmd.commandkey "t">
+<!-- LOCALIZATION NOTE (openLocationCmd.label): "Open Location" is only
+displayed on OS X, and only on windows that aren't main browser windows, or
+when there are no windows but Firefox is still running. -->
+<!ENTITY openLocationCmd.label "Deschide o adresă...">
 <!ENTITY openFileCmd.label "Deschide un fișier...">
 <!ENTITY openFileCmd.accesskey "u">
 <!ENTITY openFileCmd.commandkey "o">
@@ -78,12 +82,21 @@ can reach it easily. -->
 <!ENTITY personalbarCmd.accesskey "B">
 <!ENTITY bookmarksToolbarItem.label "Elemente pe bara pentru semne de carte">
 
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "Reîncarcă toate filele">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "a">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Pune semne de carte la toate filele…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "t">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "Anulează închiderea filei">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "u">
+
 <!ENTITY pageSourceCmd.label "Sursă pagină">
 <!ENTITY pageSourceCmd.accesskey "u">
 <!ENTITY pageSourceCmd.commandkey "u">
 <!ENTITY pageInfoCmd.label "Informații despre pagină">
 <!ENTITY pageInfoCmd.accesskey "I">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!ENTITY mirrorTabCmd.label "Duplicați fila">
+<!ENTITY mirrorTabCmd.accesskey "l">
 <!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
 These should match what Safari and other Apple applications use on OS X Lion. -->
 <!ENTITY enterFullScreenCmd.label "Vedeți pe tot ecranul">
@@ -125,21 +138,26 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY bookmarksMenu.label "Semne de carte">
 <!ENTITY bookmarksMenu.accesskey "S">
-<!ENTITY bookmarkThisPageCmd.label "Pune un semn la această pagină">
+<!ENTITY bookmarkThisPageCmd.label "Pune un semn de carte la această pagină">
 <!ENTITY editThisBookmarkCmd.label "Editează acest semn de carte">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
+<!-- LOCALIZATION NOTE (findShareServices.label):
+  -  Use the unicode ellipsis char, \u2026,
+  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
+<!ENTITY findShareServices.label "Găsiți mai multe servicii de partajare…">
 <!ENTITY sharePageCmd.label "Împărtășește această pagină">
 <!ENTITY sharePageCmd.commandkey "I">
 <!ENTITY sharePageCmd.accesskey "i">
-<!ENTITY shareLinkCmd.label "Împărtășește această legătură">
-<!ENTITY shareLinkCmd.accesskey "s">
-<!ENTITY shareImageCmd.label "Împărtășește această imagine">
-<!ENTITY shareImageCmd.accesskey "i">
-<!ENTITY shareSelectCmd.label "Împărtășește selecția">
-<!ENTITY shareSelectCmd.accesskey "m">
-<!ENTITY shareVideoCmd.label "Împărtășește acest videoclip">
-<!ENTITY shareVideoCmd.accesskey "i">
+<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
+<!ENTITY shareLink.label "Împărtășește această legătură">
+<!ENTITY shareLink.accesskey "s">
+<!ENTITY shareImage.label "Împărtășește această imagine">
+<!ENTITY shareImage.accesskey "r">
+<!ENTITY shareSelect.label "Împărtășește selecția">
+<!ENTITY shareSelect.accesskey "r">
+<!ENTITY shareVideo.label "Împărtășește acest videoclip">
+<!ENTITY shareVideo.accesskey "r">
 <!ENTITY feedsMenu.label "Abonare">
 <!ENTITY subscribeToPageMenupopup.label "Abonare la această pagină">
 <!ENTITY subscribeToPageMenuitem.label "Abonare la această pagină...">
@@ -149,18 +167,14 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY bookmarksToolbarChevron.tooltip "Arată mai multe semne de carte">
 
 <!ENTITY backCmd.label                "Înapoi">
-<!ENTITY backCmd.accesskey            "p">
 <!ENTITY backButton.tooltip           "Mergi cu o pagină înapoi">
 <!ENTITY forwardCmd.label             "Înainte">
-<!ENTITY forwardCmd.accesskey         "n">
 <!ENTITY forwardButton.tooltip        "Mergi cu o pagină înainte">
 <!ENTITY backForwardButtonMenu.tooltip "Clic dreapta sau trageți în jos pentru a vedea istoricul">
 <!ENTITY backForwardButtonMenuMac.tooltip "Trageți în jos pentru a vedea istoricul">
 <!ENTITY reloadCmd.label              "Reîncarcă">
-<!ENTITY reloadCmd.accesskey          "R">
 <!ENTITY reloadButton.tooltip         "Reîncarcă pagina curentă">
 <!ENTITY stopCmd.label                "Oprește">
-<!ENTITY stopCmd.accesskey            "O">
 <!ENTITY stopCmd.macCommandKey        ".">
 <!ENTITY stopButton.tooltip           "Oprește încărcarea acestei pagini">
 <!ENTITY goEndCap.tooltip             "Mergi la adresa din bara adresei">
@@ -176,7 +190,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY tabGroupsButton.label        "Grupuri de file">
 
 <!ENTITY bookmarksButton.label          "Semne de carte">
-<!ENTITY bookmarksCmd.commandkey "r">
+<!ENTITY bookmarksCmd.commandkey "e">
 
 <!ENTITY bookmarksMenuButton.label          "Semne de carte">
 <!ENTITY bookmarksMenuButton.unsorted.label "Semne de carte nesortate">
@@ -186,7 +200,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  key should not contain the letters A-F, since these are reserved
   -  shortcut keys on Linux. -->
 
-<!ENTITY bookmarksGtkCmd.commandkey "n">
+<!ENTITY bookmarksGtkCmd.commandkey "o">
 <!ENTITY bookmarksWinCmd.commandkey "i">
 
 <!ENTITY historyButton.label            "Istoric">
@@ -199,13 +213,14 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY keywordfield.accesskey       "h">
 
 <!ENTITY downloads.label              "Descărcări">
-<!ENTITY downloads.tooltip            "Afișează progresul fișierelor în curs de descărcare">
 <!ENTITY downloads.accesskey          "D">
 <!ENTITY downloads.commandkey         "j">
 <!ENTITY downloadsUnix.commandkey     "y">
 <!ENTITY addons.label                 "Suplimente">
 <!ENTITY addons.accesskey             "S">
 <!ENTITY addons.commandkey            "A">
+<!ENTITY webapps.label                "Aplicații">
+<!ENTITY webapps.accesskey            "p">
 
 <!ENTITY webDeveloperMenu.label       "Dezvoltator web">
 <!ENTITY webDeveloperMenu.accesskey   "w">
@@ -232,8 +247,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY responsiveDesignTool.accesskey "r">
 <!ENTITY responsiveDesignTool.commandkey "R">
 
-<!ENTITY eyedropper.label   "Eyedropper">
-<!ENTITY eyedropper.accesskey "y">
+<!ENTITY eyedropper.label   "Selector culoare">
+<!ENTITY eyedropper.accesskey "e">
 <!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
   -  in the Tools menu. See bug 653093.
   -  The Scratchpad is intended to provide a simple text editor for creating
@@ -254,12 +269,21 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY browserToolboxMenu.label     "Set de instrumente pentru navigator">
 <!ENTITY browserToolboxMenu.accesskey "S">
+<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser content toolbox UI in the Tools menu.
+  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
+
+<!ENTITY browserContentToolboxMenu.label     "Set de instrumente al conținutului pentru navigator">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Închide bara de dezvoltare">
 <!ENTITY devToolbarMenu.label              "Bara de dezvoltare">
 <!ENTITY devToolbarMenu.accesskey          "v">
 <!ENTITY devAppMgrMenu.label               "Gestionar aplicații">
 <!ENTITY devAppMgrMenu.accesskey           "a">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
+<!ENTITY webide.keycode                    "VK_F8">
+<!ENTITY webide.keytext                    "F8">
 <!ENTITY devToolbar.keycode                "VK_F2">
 <!ENTITY devToolbar.keytext                "F2">
 <!ENTITY devToolboxMenuItem.label          "Activează uneltele">
@@ -392,6 +416,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
+     These two strings are used to build the header above the list of one-click
+     search providers:  "Search for <used typed keywords> with:" -->
+
+<!ENTITY searchFor.label              "Caută după ">
+<!ENTITY searchWith.label             " cu:">
+<!-- LOCALIZATION NOTE (searchWithHeader.label):
+     The wording of this string should be as close as possible to
+     searchFor.label and searchWith.label. This string will be used instead of
+     them when the user has not typed any keyword. -->
+<!ENTITY searchWithHeader.label       "Caută cu:">
+<!ENTITY changeSearchSettings.button  "Schimbați setările de căutare">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -439,8 +475,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewBGImageCmd.accesskey     "f">
 <!ENTITY setDesktopBackgroundCmd.label      "Setează ca tapet pe spațiul de lucru...">
 <!ENTITY setDesktopBackgroundCmd.accesskey  "S">
-<!ENTITY bookmarkPageCmd2.label       "Pune semn de carte la această pagină">
-<!ENTITY bookmarkPageCmd2.accesskey   "m">
+<!ENTITY bookmarkPageCmd2.label       "Pune un semn de carte la această pagină">
 <!ENTITY bookmarkThisLinkCmd.label      "Pune semn de carte la această legătură">
 <!ENTITY bookmarkThisLinkCmd.accesskey  "l">
 <!ENTITY bookmarkThisFrameCmd.label      "Pune semn de carte la acest cadru">
@@ -468,6 +503,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailImageCmd.accesskey      "i">
 <!ENTITY emailVideoCmd.label          "Email Video…">
 <!ENTITY emailVideoCmd.accesskey      "V">
+<!ENTITY castVideoCmd.label           "Trimiteți videoclipul către dispozitiv">
+<!ENTITY castVideoCmd.accesskey       "e">
 <!ENTITY emailAudioCmd.label          "Email Audio…">
 <!ENTITY emailAudioCmd.accesskey      "A">
 <!ENTITY playPluginCmd.label          "Activați plugin">
@@ -564,11 +601,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY fullZoom.label                 "Mărime text">
 <!ENTITY fullZoom.accesskey             "M">
 
-<!ENTITY newTabButton.tooltip           "Deschide o filă nouă">
-<!ENTITY newWindowButton.tooltip        "Deschide o fereastră nouă">
 <!ENTITY sidebarCloseButton.tooltip     "Închide bara laterală">
-
-<!ENTITY fullScreenButton.tooltip       "Arată fereastra pe întreg ecranul">
 
 <!ENTITY quitApplicationCmdWin.label       "Ieșire"> 
 <!ENTITY quitApplicationCmdWin.accesskey   "e">
@@ -598,7 +631,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!-- On Windows we use the term "Options" to describe settings, but
      on Linux and Mac OS X we use "Preferences" - carry that distinction
      over into this string, which is used in the "popup blocked" info bar . -->
-<!ENTITY editPopupSettingsUnix.label "Editează preferințele de blocare a ferestrelor popup...">
+<!ENTITY editPopupSettingsUnix.label "Editează preferințele de blocare a ferestrelor popup…">
 <!ENTITY editPopupSettings.label "Editează opțiunile de blocare a ferestrelor popup...">
 <!ENTITY editPopupSettings.accesskey "E">
 <!ENTITY dontShowMessage.accesskey "N">
@@ -686,7 +719,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.accesskey "m">
 <!ENTITY social.closeNotificationItem.label "Nu acum">
 
-
+<!ENTITY social.directory.label "Dosar de activări">
+<!ENTITY social.directory.text "Puteți activa serviciile de partajare din dosar.">
+<!ENTITY social.directory.button "Du-mă acolo!">
+<!ENTITY social.directory.introText "Clic pe un serviciu pentru a-l adăuga în &brandShortName;.">
+<!ENTITY social.directory.viewmore.text "Vedeți mai multe">
 
 <!ENTITY customizeMode.tabTitle "Personalizează &brandShortName;">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Funcționalități și unelte suplimentare">
@@ -695,6 +732,14 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults "Restaurează setările implicite">
 <!ENTITY customizeMode.toolbars "Arată / Ascunde bara cu unelte">
 <!ENTITY customizeMode.titlebar "Bara de titlu">
+<!ENTITY customizeMode.lwthemes "Teme">
+<!ENTITY customizeMode.lwthemes.myThemes "Temele mele">
+<!ENTITY customizeMode.lwthemes.recommended "Recomandate">
+<!ENTITY customizeMode.lwthemes.menuManage "Gestionează">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "M">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Obține mai multe teme">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
+<!ENTITY customizeMode.deveditionTheme.label2 "Folosiți tema Developer Edition">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Adu discuțiile în față">
@@ -709,11 +754,30 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "Microfon de folosit:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.allWindowsShared.message "Toate ferestrele vizibile pe ecran vor fi partajate.">
+<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY webrtcIndicatorButton.label "Acces la cameră / microfon">
-<!ENTITY webrtcIndicatorButton.tooltip "Afișează saiturile cărora le permiteți să vă folosească camera sau microfonul">
+<!ENTITY badContentBlocked.moreinfo "Majoritatea saiturilor web vor funcționa corect chiar dacă acest tip de conținut e blocat.">
 
-<!ENTITY mixedContentBlocked.moreinfo "Majoritatea saiturilor web vor funcționa corect în continuare chiar dacă acest tip de conținut e blocat.">
+<!ENTITY mixedContentBlocked2.message "Conținut nesigur">
+<!ENTITY mixedContentBlocked2.moreinfo "Unele elemente necriptate pe acest sait au fost blocate.">
+<!ENTITY mixedContentBlocked2.learnMore "Aflați mai multe">
+<!ENTITY mixedContentBlocked2.options "Opțiuni">
+<!ENTITY mixedContentBlocked2.unblock.label "Dezactivați protecția deocamdată">
+<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
+<!ENTITY mixedContentBlocked2.block.label "Activează protecția">
+<!ENTITY mixedContentBlocked2.block.accesskey "e">
+<!ENTITY mixedContentBlocked2.disabled.message "Protecția este dezactivată">
+
+<!ENTITY trackingContentBlocked.message "Urmărire">
+<!ENTITY trackingContentBlocked.moreinfo "Părți ale paginii care vă urmăresc activitatea online au fost blocate.">
+<!ENTITY trackingContentBlocked.learnMore "Aflați mai multe">
+<!ENTITY trackingContentBlocked.options "Opțiuni">
+<!ENTITY trackingContentBlocked.unblock2.label "Dezactivează protecția pentru acest sait">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
+<!ENTITY trackingContentBlocked.block.label "Activează protecția">
+<!ENTITY trackingContentBlocked.block.accesskey "e">
+<!ENTITY trackingContentBlocked.disabled.message "Protecția de urmărire este dezactivată">
 
 <!ENTITY pointerLock.notification.message "Apasă ESC oricând pentru a-l afișa din nou.">
 
@@ -742,112 +806,29 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY appMenuSidebars.label         "Bare laterale">
 
 <!ENTITY switchToMetroCmd2.label       "Relansați în &brandShortName; pentru Windows 8 Touch">
+<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
+     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
+     Please ensure that this remains the case in the translation. -->
 
-
-
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Most websites will work properly even if content is blocked.">
-
-<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser content toolbox UI in the Tools menu.
-  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
-<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
-<!ENTITY castVideoCmd.accesskey       "e">
-<!ENTITY castVideoCmd.label           "Send Video To Device">
-<!ENTITY changeSearchSettings.button  "Change Search Settings">
-<!ENTITY customizeMode.deveditionTheme.label2 "Use Developer Edition Theme">
-<!ENTITY customizeMode.lwthemes "Themes">
-<!ENTITY customizeMode.lwthemes.menuGetMore "Get More Themes">
-<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
-<!ENTITY customizeMode.lwthemes.menuManage "Manage">
-<!ENTITY customizeMode.lwthemes.menuManage.accessKey "M">
-<!ENTITY customizeMode.lwthemes.myThemes "My Themes">
-<!ENTITY customizeMode.lwthemes.recommended "Recommended">
-<!-- LOCALIZATION NOTE (findShareServices.label):
-  -  Use the unicode ellipsis char, \u2026,
-  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
-<!ENTITY findShareServices.label "Find more Share services…">
-<!ENTITY getUserMedia.allWindowsShared.message "All visible windows on your screen will be shared.">
-<!ENTITY mixedContentBlocked2.block.accesskey "E">
-<!ENTITY mixedContentBlocked2.block.label "Enable protection">
-<!ENTITY mixedContentBlocked2.disabled.message "Protection is disabled">
-<!ENTITY mixedContentBlocked2.learnMore "Learn More">
-
-<!ENTITY mixedContentBlocked2.message "Insecure content">
-<!ENTITY mixedContentBlocked2.moreinfo "Some unencrypted elements on this website have been blocked.">
-<!ENTITY mixedContentBlocked2.options "Options">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.unblock.label "Disable protection for now">
-<!-- LOCALIZATION NOTE (openLocationCmd.label): "Open Location" is only
-displayed on OS X, and only on windows that aren't main browser windows, or
-when there are no windows but Firefox is still running. -->
-<!ENTITY openLocationCmd.label "Open Location…">
-<!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.2hr                     "Two hours">
-<!ENTITY panicButton.view.5min                    "Five minutes">
-<!ENTITY panicButton.view.day                     "24 hours">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-<!ENTITY panicButton.view.forgetButton            "Forget!">
-
+<!ENTITY panicButton.view.mainTimeframeDesc       "Uită ultimele:">
+<!ENTITY panicButton.view.5min                    "Cinci minute">
+<!ENTITY panicButton.view.2hr                     "Două ore">
+<!ENTITY panicButton.view.day                     "24 de ore">
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
 
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
+<!ENTITY panicButton.view.mainActionDesc          "Dacă veți continua:">
+<!ENTITY panicButton.view.deleteCookies           "Ștergeți <html:strong>cookie-urile</html:strong> recente">
+<!ENTITY panicButton.view.deleteHistory           "Ștergeți <html:strong>istoricul</html:strong>recent">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Închideți toate<html:strong>filele</html:strong> și <html:strong>ferestrele</html:strong>">
+<!ENTITY panicButton.view.openNewWindow           "Deschideți o nouă fereastră goală">
 
-<!ENTITY panicButton.view.undoWarning             "This action cannot be undone.">
+<!ENTITY panicButton.view.undoWarning             "Acțiunea este ireversibilă.">
+<!ENTITY panicButton.view.forgetButton            "Uită!">
 
-<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
-     These two strings are used to build the header above the list of one-click
-     search providers:  "Search for <used typed keywords> with:" -->
-<!ENTITY searchFor.label              "Search for ">
-<!ENTITY searchWith.label             " with:">
-<!ENTITY shareImage.accesskey "r">
-<!ENTITY shareImage.label "Share This Image">
-<!ENTITY shareLink.accesskey "h">
-<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
-<!ENTITY shareLink.label "Share This Link">
-<!ENTITY shareSelect.accesskey "r">
-<!ENTITY shareSelect.label "Share Selection">
-<!ENTITY shareVideo.accesskey "r">
-<!ENTITY shareVideo.label "Share This Video">
-<!ENTITY social.directory.button "Take me there!">
-<!ENTITY social.directory.introText "Click on a service to add it to &brandShortName;.">
+<!ENTITY panicButton.thankyou.msg1                "Istoricul dumnevoastră recent este șters.">
+<!ENTITY panicButton.thankyou.msg2                "Navigare sigură!">
+<!ENTITY panicButton.thankyou.buttonlabel         "Mulțumim!">
 
-<!ENTITY social.directory.label "Activations Directory">
-<!ENTITY social.directory.text "You can activate Share services from the directory.">
-<!ENTITY social.directory.viewmore.text "View More">
-<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "T">
-<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Bookmark All Tabs…">
-<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "A">
-
-<!ENTITY toolbarContextMenu.reloadAllTabs.label "Reload All Tabs">
-<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "U">
-<!ENTITY toolbarContextMenu.undoCloseTab.label "Undo Close Tab">
-<!ENTITY trackingContentBlocked.block.accesskey "E">
-<!ENTITY trackingContentBlocked.block.label "Enable protection">
-<!ENTITY trackingContentBlocked.disabled.message "Tracking protection is disabled">
-<!ENTITY trackingContentBlocked.learnMore "Learn More">
-
-<!ENTITY trackingContentBlocked.message "Tracking">
-<!ENTITY trackingContentBlocked.moreinfo "Parts of the page that track your online activity have been blocked.">
-<!ENTITY trackingContentBlocked.options "Options">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
-<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
-<!ENTITY webapps.accesskey            "p">
-<!ENTITY webapps.label                "Apps">
-<!ENTITY webide.accesskey                  "W">
-<!ENTITY webide.keycode                    "VK_F8">
-<!ENTITY webide.keytext                    "F8">
-<!ENTITY webide.label                      "WebIDE">

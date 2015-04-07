@@ -95,6 +95,8 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY pageInfoCmd.label "Page Info">
 <!ENTITY pageInfoCmd.accesskey "I">
 <!ENTITY pageInfoCmd.commandkey "i">
+<!ENTITY mirrorTabCmd.label "Mirror Tab">
+<!ENTITY mirrorTabCmd.accesskey "M">
 <!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
 These should match what Safari and other Apple applications use on OS X Lion. -->
 <!ENTITY enterFullScreenCmd.label "Enter Full Screen">
@@ -140,17 +142,22 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY editThisBookmarkCmd.label "Edit This Bookmark">
 <!ENTITY bookmarkThisPageCmd.commandkey "d">
 <!ENTITY markPageCmd.commandkey "l">
+<!-- LOCALIZATION NOTE (findShareServices.label):
+  -  Use the unicode ellipsis char, \u2026,
+  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
+<!ENTITY findShareServices.label "Find more Share services…">
 <!ENTITY sharePageCmd.label "Share This Page">
 <!ENTITY sharePageCmd.commandkey "S">
 <!ENTITY sharePageCmd.accesskey "S">
-<!ENTITY shareLinkCmd.label "Share This Link">
-<!ENTITY shareLinkCmd.accesskey "S">
-<!ENTITY shareImageCmd.label "Share This Image">
-<!ENTITY shareImageCmd.accesskey "S">
-<!ENTITY shareSelectCmd.label "Share Selection">
-<!ENTITY shareSelectCmd.accesskey "S">
-<!ENTITY shareVideoCmd.label "Share This Video">
-<!ENTITY shareVideoCmd.accesskey "S">
+<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
+<!ENTITY shareLink.label "Share This Link">
+<!ENTITY shareLink.accesskey "h">
+<!ENTITY shareImage.label "Share This Image">
+<!ENTITY shareImage.accesskey "r">
+<!ENTITY shareSelect.label "Share Selection">
+<!ENTITY shareSelect.accesskey "r">
+<!ENTITY shareVideo.label "Share This Video">
+<!ENTITY shareVideo.accesskey "r">
 <!ENTITY feedsMenu.label "Subscribe">
 <!ENTITY subscribeToPageMenupopup.label "Subscribe to This Page">
 <!ENTITY subscribeToPageMenuitem.label "Subscribe to This Page…">
@@ -183,7 +190,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY tabGroupsButton.label        "Tab Groups">
 
 <!ENTITY bookmarksButton.label          "Bookmarks">
-<!ENTITY bookmarksCmd.commandkey        "b">
+<!ENTITY bookmarksCmd.commandkey "b">
 
 <!ENTITY bookmarksMenuButton.label          "Bookmarks">
 <!ENTITY bookmarksMenuButton.unsorted.label "Unsorted Bookmarks">
@@ -193,8 +200,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
   -  key should not contain the letters A-F, since these are reserved
   -  shortcut keys on Linux. -->
-<!ENTITY bookmarksGtkCmd.commandkey     "o">
-<!ENTITY bookmarksWinCmd.commandkey     "i">
+<!ENTITY bookmarksGtkCmd.commandkey "o">
+<!ENTITY bookmarksWinCmd.commandkey "i">
 
 <!ENTITY historyButton.label            "History">
 <!ENTITY historySidebarCmd.commandKey   "h">
@@ -212,6 +219,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY addons.label                 "Add-ons">
 <!ENTITY addons.accesskey             "A">
 <!ENTITY addons.commandkey            "A">
+<!ENTITY webapps.label                "Apps">
+<!ENTITY webapps.accesskey            "p">
 
 <!ENTITY webDeveloperMenu.label       "Web Developer">
 <!ENTITY webDeveloperMenu.accesskey   "W">
@@ -252,7 +261,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  approximation to it or choose a word (or words) that means
   -  "simple discardable text editor". -->
 <!ENTITY scratchpad.label             "Scratchpad">
-<!ENTITY scratchpad.accesskey         "s">
+<!ENTITY scratchpad.accesskey         "S">
 <!ENTITY scratchpad.keycode           "VK_F4">
 <!ENTITY scratchpad.keytext           "F4">
 
@@ -260,6 +269,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  application menu item that opens the browser toolbox UI in the Tools menu. -->
 <!ENTITY browserToolboxMenu.label     "Browser Toolbox">
 <!ENTITY browserToolboxMenu.accesskey "e">
+
+<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser content toolbox UI in the Tools menu.
+  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
+<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Close Developer Toolbar">
 <!ENTITY devToolbarMenu.label              "Developer Toolbar">
@@ -403,6 +417,18 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
 
+<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
+     These two strings are used to build the header above the list of one-click
+     search providers:  "Search for <used typed keywords> with:" -->
+<!ENTITY searchFor.label              "Search for ">
+<!ENTITY searchWith.label             " with:">
+<!-- LOCALIZATION NOTE (searchWithHeader.label):
+          The wording of this string should be as close as possible to
+     searchFor.label and searchWith.label. This string will be used instead of
+     them when the user has not typed any keyword. -->
+<!ENTITY searchWithHeader.label       "Search with:">
+<!ENTITY changeSearchSettings.button  "Change Search Settings">
+
 <!ENTITY tabView.commandkey           "e">
 
 <!ENTITY openLinkCmdInTab.label       "Open Link in New Tab">
@@ -444,7 +470,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY viewImageDescCmd.label       "View Description">
 <!ENTITY viewImageDescCmd.accesskey   "D">
 <!ENTITY viewVideoCmd.label           "View Video">
-<!ENTITY viewVideoCmd.accesskey       "I">
+<!ENTITY viewVideoCmd.accesskey       "i">
 <!ENTITY viewBGImageCmd.label         "View Background Image">
 <!ENTITY viewBGImageCmd.accesskey     "w">
 <!ENTITY setDesktopBackgroundCmd.label      "Set As Desktop Background…">
@@ -477,6 +503,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailImageCmd.accesskey      "a">
 <!ENTITY emailVideoCmd.label          "Email Video…">
 <!ENTITY emailVideoCmd.accesskey      "a">
+<!ENTITY castVideoCmd.label           "Send Video To Device">
+<!ENTITY castVideoCmd.accesskey       "e">
 <!ENTITY emailAudioCmd.label          "Email Audio…">
 <!ENTITY emailAudioCmd.accesskey      "a">
 <!ENTITY playPluginCmd.label          "Activate this plugin">
@@ -522,7 +550,7 @@ items are mutually exclusive. -->
 <!ENTITY mediaPlaybackRate150x.label "High Speed (1.5×)">
 <!ENTITY mediaPlaybackRate150x.accesskey "H">
 <!-- LOCALIZATION NOTE: "Ludicrous Speed" is a reference to the
-     movie "Space Balls" and is meant to say that this speed is very
+movie "Space Balls" and is meant to say that this speed is very
 fast. -->
 <!ENTITY mediaPlaybackRate200x.label "Ludicrous Speed (2×)">
 <!ENTITY mediaPlaybackRate200x.accesskey "L">
@@ -554,7 +582,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY fullZoomEnlargeCmd.label       "Zoom In">
 <!ENTITY fullZoomEnlargeCmd.accesskey   "I">
 <!ENTITY fullZoomEnlargeCmd.commandkey  "+">
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "="> <!-- + is above this key on many keyboards -->
+<!-- + is above this key on many keyboards -->
+<!ENTITY fullZoomEnlargeCmd.commandkey2 "="> 
 <!ENTITY fullZoomEnlargeCmd.commandkey3 "">
 
 <!ENTITY fullZoomReduceCmd.label        "Zoom Out">
@@ -592,9 +621,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY pageStyleMenu.label "Page Style">
 <!ENTITY pageStyleMenu.accesskey "y">
 <!ENTITY pageStyleNoStyle.label "No Style">
-<!ENTITY pageStyleNoStyle.accesskey "n">
+<!ENTITY pageStyleNoStyle.accesskey "N">
 <!ENTITY pageStylePersistentOnly.label "Basic Page Style">
-<!ENTITY pageStylePersistentOnly.accesskey "b">
+<!ENTITY pageStylePersistentOnly.accesskey "B">
 
 <!ENTITY pageReportIcon.tooltip            "Change popup blocking settings for this web site">
 
@@ -685,12 +714,16 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY social.activated.description "Services from <label/> have been enabled. You can change your settings for services in the <label class='text-link'>Add-on Manager</label>.">
 <!ENTITY social.activated.undo.label "Oops, undo this!">
-<!ENTITY social.activated.undo.accesskey "U">
+<!ENTITY social.activated.undo.accesskey "u">
 <!ENTITY social.learnMore.label "Learn more…">
-<!ENTITY social.learnMore.accesskey "l">
+<!ENTITY social.learnMore.accesskey "L">
 <!ENTITY social.closeNotificationItem.label "Not Now">
 
-
+<!ENTITY social.directory.label "Activations Directory">
+<!ENTITY social.directory.text "You can activate Share services from the directory.">
+<!ENTITY social.directory.button "Take me there!">
+<!ENTITY social.directory.introText "Click on a service to add it to &brandShortName;.">
+<!ENTITY social.directory.viewmore.text "View More">
 
 <!ENTITY customizeMode.tabTitle "Customise &brandShortName;">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Additional Tools and Features">
@@ -706,6 +739,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.lwthemes.menuManage.accessKey "M">
 <!ENTITY customizeMode.lwthemes.menuGetMore "Get More Themes">
 <!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
+<!ENTITY customizeMode.deveditionTheme.label2 "Use Developer Edition Theme">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Focus chats">
@@ -732,15 +766,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY mixedContentBlocked2.unblock.label "Disable protection for now">
 <!ENTITY mixedContentBlocked2.unblock.accesskey "D">
 <!ENTITY mixedContentBlocked2.block.label "Enable protection">
-<!ENTITY mixedContentBlocked2.block.accesskey "B">
+<!ENTITY mixedContentBlocked2.block.accesskey "E">
 <!ENTITY mixedContentBlocked2.disabled.message "Protection is disabled">
 
 <!ENTITY trackingContentBlocked.message "Tracking">
 <!ENTITY trackingContentBlocked.moreinfo "Parts of the page that track your online activity have been blocked.">
 <!ENTITY trackingContentBlocked.learnMore "Learn More">
 <!ENTITY trackingContentBlocked.options "Options">
-<!ENTITY trackingContentBlocked.unblock.label2 "Disable protection for this site">
+<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
 <!ENTITY trackingContentBlocked.block.label "Enable protection">
+<!ENTITY trackingContentBlocked.block.accesskey "E">
 <!ENTITY trackingContentBlocked.disabled.message "Tracking protection is disabled">
 
 <!ENTITY pointerLock.notification.message "Press ESC at any time to show it again.">
@@ -796,42 +832,3 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
 <!ENTITY panicButton.thankyou.buttonlabel         "Thanks!">
 
-
-<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser content toolbox UI in the Tools menu.
-  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
-<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
-<!ENTITY castVideoCmd.accesskey       "e">
-<!ENTITY castVideoCmd.label           "Send Video To Device">
-<!ENTITY changeSearchSettings.button  "Change Search Settings">
-<!ENTITY customizeMode.deveditionTheme.label2 "Use Developer Edition Theme">
-<!-- LOCALIZATION NOTE (findShareServices.label):
-  -  Use the unicode ellipsis char, \u2026,
-  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
-<!ENTITY findShareServices.label "Find more Share services…">
-
-<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
-     These two strings are used to build the header above the list of one-click
-     search providers:  "Search for <used typed keywords> with:" -->
-<!ENTITY searchFor.label              "Search for ">
-<!ENTITY searchWith.label             " with:">
-<!ENTITY shareImage.accesskey "r">
-<!ENTITY shareImage.label "Share This Image">
-<!ENTITY shareLink.accesskey "h">
-<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
-<!ENTITY shareLink.label "Share This Link">
-<!ENTITY shareSelect.accesskey "r">
-<!ENTITY shareSelect.label "Share Selection">
-<!ENTITY shareVideo.accesskey "r">
-<!ENTITY shareVideo.label "Share This Video">
-<!ENTITY social.directory.button "Take me there!">
-<!ENTITY social.directory.introText "Click on a service to add it to &brandShortName;.">
-
-<!ENTITY social.directory.label "Activations Directory">
-<!ENTITY social.directory.text "You can activate Share services from the directory.">
-<!ENTITY social.directory.viewmore.text "View More">
-<!ENTITY trackingContentBlocked.block.accesskey "E">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
-<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
-<!ENTITY webapps.accesskey            "p">
-<!ENTITY webapps.label                "Apps">

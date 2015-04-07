@@ -1,21 +1,361 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-
 <!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
 <!-- LOCALIZATION NOTE : FILE Do not translate commandkeys --> 
 <!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
+
 
 <!ENTITY mainWindow.title "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
 <!ENTITY mainWindow.titlemodifier "&brandFullName;">
 <!-- LOCALIZATION NOTE (mainWindow.titlemodifiermenuseparator): DONT_TRANSLATE -->
 <!ENTITY mainWindow.titlemodifiermenuseparator " - ">
+<!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
+                                                                inside the private browsing mode -->
+<!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privātā pārlūkošana)">
+
 <!ENTITY appmenu.tooltip                     "Atvērt izvēlni">
-<!ENTITY trackingContentBlocked.unblock2.label "Atslēgt aizsardzību šajā lapā">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
+<!ENTITY navbarOverflow.label                "Citi rīki…">
+<!-- Tab context menu -->
+
+<!ENTITY  reloadTab.label                    "Pārlādēt cilni">
+<!ENTITY  reloadTab.accesskey                "r">
+<!ENTITY  reloadAllTabs.label                "Pārlādēt visas cilnes">
+<!ENTITY  reloadAllTabs.accesskey            "a">
+<!-- LOCALIZATION NOTE (closeTabsToTheEnd.label): This should indicate the
+direction in which tabs are closed, i.e. locales that use RTL mode should say
+left instead of right. -->
+<!ENTITY  closeTabsToTheEnd.label            "Aizvērt visas cilnes pa labi">
+<!ENTITY  closeTabsToTheEnd.accesskey        "i">
+<!ENTITY  closeOtherTabs.label               "Aizvērt citas cilnes">
+<!ENTITY  closeOtherTabs.accesskey           "v">
+<!-- LOCALIZATION NOTE (pinTab.label, unpinTab.label): "Pin" is being
+used as a metaphor for expressing the fact that these tabs are "pinned" to the
+left edge of the tabstrip. Really we just want the string to express the idea
+that this is a lightweight and reversible action that keeps your tab where you
+can reach it easily. -->
+
+<!ENTITY  pinTab.label                       "Pielīmēt cilni">
+<!ENTITY  pinTab.accesskey                   "P">
+<!ENTITY  unpinTab.label                     "Atbrīvot cilni">
+<!ENTITY  unpinTab.accesskey                 "c">
+<!ENTITY  moveToGroup.label                  "Pārvietot uz grupu">
+<!ENTITY  moveToGroup.accesskey              "P">
+<!ENTITY  moveToNewGroup.label               "Jauna grupa">
+<!ENTITY  moveToNewWindow.label              "Pāriet uz jaunu logu">
+<!ENTITY  moveToNewWindow.accesskey          "P">
+<!ENTITY  bookmarkAllTabs.label              "Saglabāt visas cilnes grāmatzīmēs...">
+<!ENTITY  bookmarkAllTabs.accesskey          "t">
+<!ENTITY  undoCloseTab.label                 "Atsaukt cilnes aizvēršanu">
+<!ENTITY  undoCloseTab.accesskey             "u">
+<!ENTITY  closeTab.label                     "Aizvērt cilni">
+<!ENTITY  closeTab.accesskey                 "c">
+
+<!ENTITY  listAllTabs.label      "Visu ciļņu saraksts">
+
+<!ENTITY tabCmd.label "Jauna cilne">
+<!ENTITY tabCmd.accesskey "c">
+<!ENTITY tabCmd.commandkey "t">
+<!-- LOCALIZATION NOTE (openLocationCmd.label): "Open Location" is only
+displayed on OS X, and only on windows that aren't main browser windows, or
+when there are no windows but Firefox is still running. -->
+<!ENTITY openLocationCmd.label "Atvērt vietu…">
+<!ENTITY openFileCmd.label "Atvērt failu…">
+<!ENTITY openFileCmd.accesskey "A">
+<!ENTITY openFileCmd.commandkey "o">
+<!ENTITY printSetupCmd.label "Lapas iestatījumi…">
+<!ENTITY printSetupCmd.accesskey "u">
+<!ENTITY printPreviewCmd.label "Drukas priekšskatījums">
+<!ENTITY printPreviewCmd.accesskey "p">
+<!ENTITY printCmd.label "Drukāt…">
+<!ENTITY printCmd.accesskey "D">
+<!ENTITY printCmd.commandkey "p">
+
+<!ENTITY goOfflineCmd.label "Strādāt nesaistē">
+<!ENTITY goOfflineCmd.accesskey "r">
+
+<!ENTITY menubarCmd.label "Izvēlne">
+<!ENTITY menubarCmd.accesskey "I">
+<!ENTITY navbarCmd.label "Navigācijas rīkjosla">
+<!ENTITY personalbarCmd.label "Grāmatzīmju rīkjosla">
+<!ENTITY personalbarCmd.accesskey "G">
+<!ENTITY bookmarksToolbarItem.label "Grāmatzīmju rīkjoslas elementi">
+
+<!ENTITY toolbarContextMenu.reloadAllTabs.label "Pārlādēt visas cilnes">
+<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "a">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Saglabāt visas cilnes grāmatzīmēs…">
+<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "t">
+<!ENTITY toolbarContextMenu.undoCloseTab.label "Atcelt cilņu aizvēršanu">
+<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "u">
+
+<!ENTITY pageSourceCmd.label "Lapas pirmkods">
+<!ENTITY pageSourceCmd.accesskey "o">
+<!ENTITY pageSourceCmd.commandkey "u">
+<!ENTITY pageInfoCmd.label "Informācija par lapu">
+<!ENTITY pageInfoCmd.accesskey "I">
+<!ENTITY pageInfoCmd.commandkey "i">
+<!ENTITY mirrorTabCmd.label "Dublēt cilni">
+<!ENTITY mirrorTabCmd.accesskey "D">
+<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
+These should match what Safari and other Apple applications use on OS X Lion. -->
+<!ENTITY enterFullScreenCmd.label "Ieiet pilnekrāna režīmā">
+<!ENTITY enterFullScreenCmd.accesskey "p">
+<!ENTITY exitFullScreenCmd.label "Iziet no pilnekrāna režīma">
+<!ENTITY exitFullScreenCmd.accesskey "p">
+<!ENTITY fullScreenCmd.label "Pa visu ekrānu">
+<!ENTITY fullScreenCmd.accesskey "v">
+<!ENTITY fullScreenCmd.macCommandKey "v">
+<!ENTITY showAllTabsCmd.label "Rādīt visas cilnes">
+<!ENTITY showAllTabsCmd.accesskey "v">
+
+<!ENTITY fxaSignIn.label "Pierakstīties &syncBrand.shortName.label;">
+<!ENTITY fxaSignInError.label "Atkārtoti savienoties ar &syncBrand.shortName.label;">
+<!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; aktivēta">
+<!ENTITY syncStartPanel2.subTitle "&brandShortName; tūlīt sāksies.">
+<!ENTITY syncErrorPanel.heading "Nevar savienoties ar &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.subTitle "Lūdzu pierakstieties, lai turpinātu sinhronizēšanu.">
+<!ENTITY syncErrorPanel.signInButton.label "Sākt">
+<!ENTITY syncErrorPanel.signInButton.accesskey "S">
+
+
+<!ENTITY fullScreenMinimize.tooltip "Minimizēt">
+<!ENTITY fullScreenRestore.tooltip "Atjaunot">
+<!ENTITY fullScreenClose.tooltip "Aizvērt">
+<!ENTITY fullScreenAutohide.label "Paslēpt rīkjoslas">
+<!ENTITY fullScreenAutohide.accesskey "P">
+<!ENTITY fullScreenExit.label "Iziet no pilnekrāna režīma">
+<!ENTITY fullScreenExit.accesskey "p">
+<!ENTITY fullscreenAllowButton.label "Atļaut">
+<!ENTITY fullscreenExitButton.label "Neatļaut">
+
+<!ENTITY fullscreenExitHint2.value "Nospiediet ESC, lai aizvērtu pilnekrāna režīmu.">
+<!ENTITY leaveDOMFullScreen.label "Iziet no pilnekrāna">
+<!ENTITY leaveDOMFullScreen.accesskey "n">
+
+<!ENTITY closeWindow.label "Aizvērt logu">
+<!ENTITY closeWindow.accesskey "g">
+
+<!ENTITY bookmarksMenu.label "Grāmatzīmes">
+<!ENTITY bookmarksMenu.accesskey "G">
+<!ENTITY bookmarkThisPageCmd.label "Saglabāt šo lapu grāmatzīmēs">
+<!ENTITY editThisBookmarkCmd.label "Rediģēt šo grāmatzīmi">
+<!ENTITY bookmarkThisPageCmd.commandkey "d">
+<!ENTITY markPageCmd.commandkey "l">
+<!-- LOCALIZATION NOTE (findShareServices.label):
+  -  Use the unicode ellipsis char, \u2026,
+  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
+<!ENTITY findShareServices.label "Atrast dalīšanās pakalpojumus…">
+<!ENTITY sharePageCmd.label "Pastāstīt par šo lapu">
+<!ENTITY sharePageCmd.commandkey "S">
+<!ENTITY sharePageCmd.accesskey "s">
+<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
+<!ENTITY shareLink.label "Dalīties ar saiti">
+<!ENTITY shareLink.accesskey "s">
+<!ENTITY shareImage.label "Dalīties ar attēlu">
+<!ENTITY shareImage.accesskey "s">
+<!ENTITY shareSelect.label "Dalīties ar iezīmēto">
+<!ENTITY shareSelect.accesskey "s">
+<!ENTITY shareVideo.label "Dalīties ar video">
+<!ENTITY shareVideo.accesskey "s">
+<!ENTITY feedsMenu.label "Pierakstīties">
+<!ENTITY subscribeToPageMenupopup.label "Pierakstīties uz šo lapu">
+<!ENTITY subscribeToPageMenuitem.label "Pierakstīties uz šo lapu...">
+<!ENTITY addCurPagesCmd.label "Saglabāt visas cilnes grāmatzīmēs...">
+<!ENTITY showAllBookmarks2.label "Rādīt visas grāmatzīmes">
+<!ENTITY unsortedBookmarksCmd.label "Nešķirotās grāmatzīmes">
+<!ENTITY bookmarksToolbarChevron.tooltip "Rādīt vairāk grāmatzīmju">
+
+<!ENTITY backCmd.label                "Atpakaļ">
+<!ENTITY backButton.tooltip           "Paiet vienu lapu atpakaļ">
+<!ENTITY forwardCmd.label             "Uz priekšu">
+<!ENTITY forwardButton.tooltip        "Paiet vienu lapu uz priekšu">
+<!ENTITY backForwardButtonMenu.tooltip "Uzklikšķiniet ar labo taustiņu un pavelciet uz leju, lai redzētu vēsturi">
+<!ENTITY backForwardButtonMenuMac.tooltip "Pavelciet uz leju, lai redzētu vēsturi">
+<!ENTITY reloadCmd.label              "Pārlādēt">
+<!ENTITY reloadButton.tooltip         "Pārlādēt pašreizējo lapu">
+<!ENTITY stopCmd.label                "Apturēt">
+<!ENTITY stopCmd.macCommandKey        ".">
+<!ENTITY stopButton.tooltip           "Apturēt šīs lapas ielādi">
+<!ENTITY goEndCap.tooltip             "Pāriet uz adresi, kas redzama vietas joslā">
+<!ENTITY printButton.label            "Drukāt">
+<!ENTITY printButton.tooltip          "Drukāt šo lapu">
+
+<!ENTITY locationItem.title           "Vieta">
+<!ENTITY searchItem.title             "Meklēt">
+<!-- Toolbar items --> 
+
+<!ENTITY homeButton.label             "Sākumlapa">
+
+<!ENTITY tabGroupsButton.label        "Ciļņu grupas">
+
+<!ENTITY bookmarksButton.label          "Grāmatzīmes">
+<!ENTITY bookmarksCmd.commandkey "b">
+
+<!ENTITY bookmarksMenuButton.label          "Grāmatzīmes">
+<!ENTITY bookmarksMenuButton.unsorted.label "Nešķirotās grāmatzīmes">
+<!ENTITY viewBookmarksSidebar2.label        "Atvērt grāmatzīmes sānjoslā">
+<!ENTITY viewBookmarksToolbar.label         "Attēlo grāmatzīmes sānu joslā">
+<!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
+  -  key should not contain the letters A-F, since these are reserved
+  -  shortcut keys on Linux. -->
+
+<!ENTITY bookmarksGtkCmd.commandkey "o">
+<!ENTITY bookmarksWinCmd.commandkey "i">
+
+<!ENTITY historyButton.label            "Vēsture">
+<!ENTITY historySidebarCmd.commandKey   "h">
+
+<!ENTITY toolsMenu.label              "Rīki">
+<!ENTITY toolsMenu.accesskey          "R"> 
+
+<!ENTITY keywordfield.label           "Pievienot meklējuma atslēgas vārdu...">
+<!ENTITY keywordfield.accesskey       "k">
+
+<!ENTITY downloads.label              "Lejupielādes">
+<!ENTITY downloads.accesskey          "d">
+<!ENTITY downloads.commandkey         "j">
+<!ENTITY downloadsUnix.commandkey     "y">
+<!ENTITY addons.label                 "Papildinājumi">
+<!ENTITY addons.accesskey             "a">
+<!ENTITY addons.commandkey            "A">
+<!ENTITY webapps.label                "Lietotnes">
+<!ENTITY webapps.accesskey            "L">
+
+<!ENTITY webDeveloperMenu.label       "Tīmekļa izstrādātājs">
+<!ENTITY webDeveloperMenu.accesskey   "T">
+
+<!ENTITY devToolsCmd.keycode          "VK_F12">
+<!ENTITY devToolsCmd.keytext          "F12">
+
+<!ENTITY devtoolsConnect.label        "Pieslēgties…">
+<!ENTITY devtoolsConnect.accesskey    "e">
+
+<!ENTITY errorConsoleCmd.label        "Kļūdu pārlūks">
+<!ENTITY errorConsoleCmd.accesskey    "K">
+
+<!ENTITY remoteWebConsoleCmd.label    "Attālināta tīmekļa konsole">
+
+<!ENTITY browserConsoleCmd.label      "Pārlūka konsole">
+<!ENTITY browserConsoleCmd.commandkey "j">
+<!ENTITY browserConsoleCmd.accesskey  "P">
+
+<!ENTITY inspectContextMenu.label     "Izmeklēt">
+<!ENTITY inspectContextMenu.accesskey "e">
+
+<!ENTITY responsiveDesignTool.label   "Adaptīvā dizaina režīms">
+<!ENTITY responsiveDesignTool.accesskey "r">
+<!ENTITY responsiveDesignTool.commandkey "M">
+
+<!ENTITY eyedropper.label   "Pipete">
+<!ENTITY eyedropper.accesskey "i">
+<!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
+  -  in the Tools menu. See bug 653093.
+  -  The Scratchpad is intended to provide a simple text editor for creating
+  -  and evaluating bits of JavaScript code for the purposes of function
+  -  prototyping, experimentation and convenient scripting.
+  -
+  -  It's quite possible that you won't have a good analogue for the word
+  -  "Scratchpad" in your locale. You should feel free to find a close
+  -  approximation to it or choose a word (or words) that means
+  -  "simple discardable text editor". -->
+
+<!ENTITY scratchpad.label             "Javascript smilškaste">
+<!ENTITY scratchpad.accesskey         "e">
+<!ENTITY scratchpad.keycode           "VK_F4">
+<!ENTITY scratchpad.keytext           "F4">
+<!-- LOCALIZATION NOTE (browserToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser toolbox UI in the Tools menu. -->
+
+<!ENTITY browserToolboxMenu.label     "Pārlūka rīki">
+<!ENTITY browserToolboxMenu.accesskey "r">
+<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
+  -  application menu item that opens the browser content toolbox UI in the Tools menu.
+  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
+
 <!ENTITY browserContentToolboxMenu.label     "Pārlūka satura rīki">
-<!ENTITY changeSearchSettings.button  "Mainīt meklēšanas iestatījumus">
+
+<!ENTITY devToolbarCloseButton.tooltiptext "Aizvērt izstrādātāja rīkjoslu">
+<!ENTITY devToolbarMenu.label              "Izstrādātāja rīkjosla">
+<!ENTITY devToolbarMenu.accesskey          "j">
+<!ENTITY devAppMgrMenu.label               "Aplikāciju pārvaldnieks">
+<!ENTITY devAppMgrMenu.accesskey           "a">
+<!ENTITY webide.label                      "WebIDE">
+<!ENTITY webide.accesskey                  "W">
+<!ENTITY webide.keycode                    "VK_F8">
+<!ENTITY webide.keytext                    "F8">
+<!ENTITY devToolbar.keycode                "VK_F2">
+<!ENTITY devToolbar.keytext                "F2">
+<!ENTITY devToolboxMenuItem.label          "Ieslēgt rīkus">
+<!ENTITY devToolboxMenuItem.accesskey      "t">
+<!ENTITY devToolboxMenuItem.keytext        "I">
+
+<!ENTITY devToolbarToolsButton.tooltip     "Ieslēgt izstrādātāju rīkus">
+<!ENTITY devToolbarOtherToolsButton.label  "Vairāk rīku">
+
+<!ENTITY getMoreDevtoolsCmd.label        "Iegūt vairāk rīku">
+<!ENTITY getMoreDevtoolsCmd.accesskey    "r">
+
+<!ENTITY fileMenu.label         "Fails"> 
+<!ENTITY fileMenu.accesskey       "F">
+<!ENTITY newNavigatorCmd.label        "Jauns logs">
+<!ENTITY newNavigatorCmd.key        "N">
+<!ENTITY newNavigatorCmd.accesskey      "n">
+<!ENTITY newPrivateWindow.label     "Jauns privātais logs">
+<!ENTITY newPrivateWindow.accesskey "v">
+
+<!ENTITY editMenu.label         "Rediģēt"> 
+<!ENTITY editMenu.accesskey       "e"> 
+<!ENTITY undoCmd.label            "Atsaukt">  
+<!ENTITY undoCmd.key            "Z">  
+<!ENTITY undoCmd.accesskey          "u"> 
+<!ENTITY redoCmd.label            "Pārdarīt">  
+<!ENTITY redoCmd.key            "Y">  
+<!ENTITY redoCmd.accesskey          "r"> 
+<!ENTITY cutCmd.label           "Izgriezt">  
+<!ENTITY cutCmd.key             "X">  
+<!ENTITY cutCmd.accesskey         "t"> 
+<!ENTITY copyCmd.label            "Kopēt">  
+<!ENTITY copyCmd.key            "C">  
+<!ENTITY copyCmd.accesskey          "K"> 
+<!ENTITY pasteCmd.label           "Ielīmēt">  
+<!ENTITY pasteCmd.key           "V">  
+<!ENTITY pasteCmd.accesskey         "I"> 
+<!ENTITY deleteCmd.label          "Dzēst">  
+<!ENTITY deleteCmd.key            "D">  
+<!ENTITY deleteCmd.accesskey        "D"> 
+<!ENTITY selectAllCmd.label         "Iezīmēt visu">  
+<!ENTITY selectAllCmd.key         "A">  
+<!ENTITY selectAllCmd.accesskey       "v"> 
+<!ENTITY preferencesCmd2.label       "Iestatījumi...">
+<!ENTITY preferencesCmd2.accesskey     "m">
+<!ENTITY preferencesCmdUnix.label       "Iestatījumi">
+<!ENTITY preferencesCmdUnix.accesskey     "m"> 
+
+<!ENTITY clearRecentHistory.label               "Dzēst neseno vēsturi…">
+
+<!ENTITY privateBrowsingCmd.commandkey          "P">
+
+<!ENTITY viewMenu.label         "Skats"> 
+<!ENTITY viewMenu.accesskey       "S"> 
+<!ENTITY viewTabGroups.label            "Ciļņu grupas">
+<!ENTITY viewTabGroups.accesskey        "g">
+<!ENTITY viewToolbarsMenu.label       "Rīkjoslas"> 
+<!ENTITY viewToolbarsMenu.accesskey     "l"> 
+<!ENTITY viewSidebarMenu.label "Sānu josla">
+<!ENTITY viewSidebarMenu.accesskey "a">
+<!ENTITY viewCustomizeToolbar.label       "Pielāgot..."> 
+<!ENTITY viewCustomizeToolbar.accesskey     "P">
+
+<!ENTITY historyMenu.label "Vēsture">
+<!ENTITY historyMenu.accesskey "V">
+<!ENTITY historyUndoMenu.label "Nesen aizvērtās cilnes">
+<!-- LOCALIZATION NOTE (historyUndoWindowMenu): see bug 394759 -->
+<!ENTITY historyUndoWindowMenu.label "Nesen aizvērtie logi">
+<!ENTITY historyRestoreLastSession.label "Atjaunot iepriekšējo sesiju">
+
+<!ENTITY showAllHistoryCmd2.label "Parādīt visu vēsturi">
+<!ENTITY showAllHistoryCmd.commandkey "H">
 
 <!ENTITY appMenuCustomize.label "Pielāgot">
 <!ENTITY appMenuCustomize.tooltip "Pielāgot izvēlni un rīkjoslas">
@@ -27,42 +367,11 @@
 <!ENTITY appMenuHistory.restoreSession.label "Atjaunot iepriekšējo sesiju">
 <!ENTITY appMenuHistory.viewSidebar.label "Rādīt vēstures sānjoslu">
 <!ENTITY appMenuHelp.tooltip "Atvērt palīdzības izvēlni">
-<!ENTITY openLocationCmd.label "Atvērt vietu…">
-<!ENTITY trackingContentBlocked.unblock2.label "Deaktivēt aizsardzību šajā lapā">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
-
-
-<!ENTITY badContentBlocked.moreinfo "Lielākā daļa lapu darbosies korekti arī, ja šis saturs tiks bloķēts.">
-
-<!ENTITY mixedContentBlocked2.message "Nedrošs saturs">
-<!ENTITY mixedContentBlocked2.moreinfo "Daži nešifrēti elementi šajā lapā tika bloķēti.">
-<!ENTITY mixedContentBlocked2.learnMore "Uzzināt vairāk">
-<!ENTITY mixedContentBlocked2.options "Iestatījumi">
-<!ENTITY mixedContentBlocked2.unblock.label "Pagaidām deaktivēt aizsardzību">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Aktivēt aizsardzību">
-<!ENTITY mixedContentBlocked2.block.accesskey "B">
-<!ENTITY mixedContentBlocked2.disabled.message "Aizsardzība ir deaktivēta">
-<!ENTITY webide.keycode                    "VK_F8">
-<!ENTITY webide.keytext                    "F8">
-
-
-<!ENTITY trackingContentBlocked.message "Sekošana">
-<!ENTITY trackingContentBlocked.moreinfo "Daļa no lapas, kas seko jūsu aktivitātei internetā tika bloķēta.">
-<!ENTITY trackingContentBlocked.learnMore "Uzzināt vairāk">
-<!ENTITY trackingContentBlocked.options "Iestatījumi">
-<!ENTITY trackingContentBlocked.block.label "Aktivēt aizsardzību">
-<!ENTITY trackingContentBlocked.block.accesskey "k">
-<!ENTITY trackingContentBlocked.disabled.message "Sekošanas aizsardzība ir deaktivēta">
-
-<!ENTITY webapps.label                "Lietotnes">
-<!ENTITY webapps.accesskey            "l">
-
 
 <!ENTITY customizeMenu.addToToolbar.label "Pievienot rīkjoslai">
-<!ENTITY customizeMenu.addToToolbar.accesskey "A">
+<!ENTITY customizeMenu.addToToolbar.accesskey "a">
 <!ENTITY customizeMenu.addToPanel.label "Pievienot izvēlnei">
-<!ENTITY customizeMenu.addToPanel.accesskey "N">
+<!ENTITY customizeMenu.addToPanel.accesskey "n">
 <!ENTITY customizeMenu.moveToToolbar.label "Pārvietot uz rīkjoslu">
 <!ENTITY customizeMenu.moveToToolbar.accesskey "o">
 <!-- LOCALIZATION NOTE (customizeMenu.moveToPanel.accesskey) can appear on the
@@ -73,343 +382,27 @@
 <!ENTITY customizeMenu.moveToPanel.label "Pārvietot uz izvēlni">
 <!ENTITY customizeMenu.moveToPanel.accesskey "o">
 <!ENTITY customizeMenu.removeFromToolbar.label "Aizvākt no rīkjoslas">
-<!ENTITY customizeMenu.removeFromToolbar.accesskey "R">
+<!ENTITY customizeMenu.removeFromToolbar.accesskey "r">
 <!ENTITY customizeMenu.removeFromMenu.label "Aizvākt no izvēlnes">
 <!ENTITY customizeMenu.removeFromMenu.accesskey "z">
 <!ENTITY customizeMenu.addMoreItems.label "Pievienot citas lietas…">
-<!ENTITY customizeMenu.addMoreItems.accesskey "A">
-<!ENTITY editThisBookmarkCmd.label "Rediģēt šo grāmatzīmi">
-<!ENTITY feedsMenu.label "Pierakstīties">
+<!ENTITY customizeMenu.addMoreItems.accesskey "a">
 
-<!ENTITY customizeMode.lwthemes "Tēmas">
-<!ENTITY customizeMode.lwthemes.myThemes "Manas tēmas">
-<!ENTITY customizeMode.lwthemes.recommended "Ieteiktās">
-<!ENTITY customizeMode.lwthemes.menuManage "Pārvaldīt">
-<!ENTITY customizeMode.lwthemes.menuManage.accessKey "P">
-<!ENTITY customizeMode.lwthemes.menuGetMore "Iegūt jaunas tēmas">
-<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
-
-
-<!ENTITY fxaSignIn.label "Pierakstīties &syncBrand.shortName.label;">
-<!ENTITY fxaSignInError.label "Atkārtoti savienoties ar &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.heading "Nevar savienoties ar &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.subTitle "Lūdzu pierakstieties, lai turpinātu sinhronizēšanu.">
-<!ENTITY syncErrorPanel.signInButton.label "Sākt">
-<!ENTITY syncErrorPanel.signInButton.accesskey "S">
-<!ENTITY navbarOverflow.label                "Citi rīki…">
-<!ENTITY quitApplicationCmdWin.tooltip     "Aizvērt &brandShortName;">
-<!ENTITY uiTour.infoPanel.close "Aizvērt">
-<!ENTITY viewBookmarksSidebar2.label        "Atvērt grāmatzīmes sānjoslā">
-<!ENTITY findSelectionCmd.commandkey "e">
-<!ENTITY syncReAuthItem.label         "Savienoties un &syncBrand.shortName.label;…">
-<!ENTITY syncReAuthItem.accesskey     "R">
-<!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; aktivēta">
-<!ENTITY syncStartPanel2.subTitle "&brandShortName; tūlīt sāksies.">
-
-
-<!ENTITY tabCmd.label "Jauna cilne">
-<!ENTITY tabCmd.accesskey "C">
-<!ENTITY tabCmd.commandkey "t">
-<!ENTITY openFileCmd.label "Atvērt failu…">
-<!ENTITY openFileCmd.accesskey "A">
-<!ENTITY openFileCmd.commandkey "o">
-<!ENTITY printSetupCmd.label "Lapas iestatījumi…">
-<!ENTITY printSetupCmd.accesskey "u">
-<!ENTITY printPreviewCmd.label "Drukas priekšskatījums">
-<!ENTITY printPreviewCmd.accesskey "p">
-<!ENTITY printCmd.label "Drukāt…">
-<!ENTITY printCmd.accesskey "D">
-<!ENTITY printCmd.commandkey "p">
-<!ENTITY openLinkCmdInCurrent.label     "Atvērt saiti">
-<!ENTITY openLinkCmdInCurrent.accesskey "A">
-<!ENTITY devToolboxMenuItem.label          "Ieslēgt rīkus">
-<!ENTITY devToolboxMenuItem.accesskey      "T">
-<!ENTITY devToolboxMenuItem.keytext        "I">
-<!ENTITY devtoolsConnect.label        "Pieslēgties…">
-<!ENTITY devtoolsConnect.accesskey    "e">
-
-<!ENTITY devToolsCmd.keycode          "VK_F12">
-<!ENTITY devToolsCmd.keytext          "F12">
-
-<!ENTITY getMoreDevtoolsCmd.label        "Iegūt vairāk rīku">
-<!ENTITY getMoreDevtoolsCmd.accesskey    "r">
-<!ENTITY devToolbarOtherToolsButton.label  "Vairāk rīku">
-<!ENTITY devToolbarToolsButton.tooltip     "Ieslēgt izstrādātāju rīkus">
-
-<!-- LOCALIZATION NOTE (scratchpad.label): This menu item label appears
-  -  in the Tools menu. See bug 653093.
-  -  The Scratchpad is intended to provide a simple text editor for creating
-  -  and evaluating bits of JavaScript code for the purposes of function
-  -  prototyping, experimentation and convenient scripting.
-  -
-  -  It's quite possible that you won't have a good analogue for the word
-  -  "Scratchpad" in your locale. You should feel free to find a close
-  -  approximation to it or choose a word (or words) that means
-  -  "simple discardable text editor". -->
-<!ENTITY scratchpad.label             "Javascript smilškaste">
-<!ENTITY scratchpad.accesskey         "e">
-<!ENTITY scratchpad.keycode           "VK_F4">
-<!ENTITY scratchpad.keytext           "F4">
-
-<!ENTITY webDeveloperMenu.label       "Tīmekļa izstrādātājs">
-<!ENTITY webDeveloperMenu.accesskey   "T">
-
-<!ENTITY bookmarksMenuButton.unsorted.label "Nešķirotās grāmatzīmes">
-<!ENTITY bookmarkAllTabs.label "Saglabāt visas cilnes grāmatzīmēs...">
-<!ENTITY bookmarkAllTabs.accesskey "T">
-<!ENTITY closeTab.label "Aizvērt cilni">
-<!ENTITY closeTab.accesskey "C">
-<!ENTITY closeOtherTabs.accesskey "v">
-<!ENTITY closeOtherTabs.label "Aizvērt citas cilnes">
-<!ENTITY listAllTabs.label "Visu ciļņu saraksts">
-<!ENTITY reloadAllTabs.label "Pārlādēt visas cilnes">
-<!ENTITY reloadAllTabs.accesskey "A">
-<!ENTITY reloadTab.label "Pārlādēt cilni">
-<!ENTITY reloadTab.accesskey "R">
-<!ENTITY undoCloseTab.label "Atsaukt cilnes aizvēršanu">
-<!ENTITY undoCloseTab.accesskey "U">
-
-<!ENTITY  moveToGroup.label                  "Pārvietot uz grupu">
-<!ENTITY  moveToGroup.accesskey              "P">
-<!ENTITY  moveToNewGroup.label               "Jauna grupa">
-<!ENTITY historyRestoreLastSession.label "Atjaunot iepriekšējo sesiju">
-<!ENTITY tabGroupsButton.label        "Ciļņu grupas">
-
-<!ENTITY syncBrand.shortName.label  "Sinhronizēt">
-
-<!-- LOCALIZATION NOTE (syncTabsMenu2.label): This appears in the history menu -->
-<!ENTITY syncTabsMenu2.label     "Cilnes no citām ierīcēm">
-
-<!ENTITY syncSetup.label              "Iestatīt sinhronizēšanu…">
-<!ENTITY syncSetup.accesskey          "U">
-<!ENTITY syncSyncNowItem.label        "Sinhronizēt">
-<!ENTITY syncSyncNowItem.accesskey    "S">
-
-<!ENTITY responsiveDesignTool.label            "Adaptīvā dizaina režīms">
-<!ENTITY responsiveDesignTool.accesskey        "R">
-<!ENTITY responsiveDesignTool.commandkey       "M">
-
-
-<!ENTITY goOfflineCmd.label "Strādāt nesaistē">
-<!ENTITY goOfflineCmd.accesskey "R">
-<!ENTITY viewTabGroups.label            "Ciļņu grupas">
-<!ENTITY viewTabGroups.accesskey        "G">
-
-<!ENTITY menubarCmd.label "Izvēlne">
-<!ENTITY menubarCmd.accesskey "I">
-<!ENTITY  moveToNewWindow.label              "Pāriet uz jaunu logu">
-<!ENTITY  moveToNewWindow.accesskey          "P">
-
-<!ENTITY navbarCmd.label "Navigācijas rīkjosla">
-<!ENTITY personalbarCmd.label "Grāmatzīmju rīkjosla">
-<!ENTITY personalbarCmd.accesskey "G">
-<!ENTITY bookmarksToolbarItem.label "Grāmatzīmju rīkjoslas elementi">
-
-<!ENTITY pageSourceCmd.label "Lapas pirmkods">
-<!ENTITY pageSourceCmd.accesskey "o">
-<!ENTITY pageSourceCmd.commandkey "u">
-<!ENTITY pageInfoCmd.label "Informācija par lapu">
-<!ENTITY pageInfoCmd.accesskey "I">
-<!ENTITY pageInfoCmd.commandkey "i">
-<!ENTITY fullScreenCmd.label "Pa visu ekrānu">
-<!ENTITY fullScreenCmd.accesskey "V">
-<!ENTITY fullScreenCmd.macCommandKey "v">
-
-<!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
-These should match what Safari and other Apple applications use on OS X Lion. -->
-<!ENTITY enterFullScreenCmd.label "Ieiet pilnekrāna režīmā">
-<!ENTITY enterFullScreenCmd.accesskey "P">
-<!ENTITY exitFullScreenCmd.label "Iziet no pilnekrāna režīma">
-<!ENTITY exitFullScreenCmd.accesskey "P">
-
-<!ENTITY fullScreenMinimize.tooltip "Minimizēt">
-<!ENTITY fullScreenRestore.tooltip "Atjaunot">
-<!ENTITY fullScreenClose.tooltip "Aizvērt">
-<!ENTITY fullScreenAutohide.label "Paslēpt rīkjoslas">
-<!ENTITY fullScreenAutohide.accesskey "P">
-<!ENTITY fullScreenExit.label "Iziet no pilnekrāna režīma">
-<!ENTITY fullScreenExit.accesskey "P">
-<!ENTITY fullscreenAllowButton.label "Atļaut">
-<!ENTITY fullscreenExitButton.label "Neatļaut">
-<!ENTITY fullscreenExitHint2.value "Nospiediet ESC, lai aizvērtu pilnekrāna režīmu.">
-<!ENTITY leaveDOMFullScreen.label "Iziet no pilnekrāna">
-<!ENTITY leaveDOMFullScreen.accesskey "n">
-
-<!ENTITY closeWindow.label "Aizvērt logu">
-<!ENTITY closeWindow.accesskey "g">
-
-<!ENTITY bookmarksMenu.label "Grāmatzīmes">
-<!ENTITY bookmarksMenu.accesskey "G">
-<!ENTITY bookmarkThisPageCmd.label "Saglabāt šo lapu grāmatzīmēs">
-<!ENTITY bookmarkThisPageCmd.commandkey "d">
-<!ENTITY subscribeToPageMenupopup.label "Pierakstīties uz šo lapu">
-<!ENTITY subscribeToPageMenuitem.label "Pierakstīties uz šo lapu...">
-<!ENTITY addCurPagesCmd.label "Saglabāt visas cilnes grāmatzīmēs...">
-<!ENTITY unsortedBookmarksCmd.label "Nešķirotās grāmatzīmes">
-<!ENTITY backForwardButtonMenu.tooltip "Uzklikšķiniet ar labo taustiņu un pavelciet uz leju, lai redzētu vēsturi">
-<!ENTITY backForwardButtonMenuMac.tooltip "Pavelciet uz leju, lai redzētu vēsturi">
-<!ENTITY remoteWebConsoleCmd.label    "Attālināta tīmekļa konsole">
-<!ENTITY browserConsoleCmd.label      "Pārlūka konsole">
-<!ENTITY browserConsoleCmd.commandkey "j">
-<!ENTITY browserConsoleCmd.accesskey  "P">
-<!ENTITY markPageCmd.commandkey "l">
-<!ENTITY  closeTabsToTheEnd.label            "Aizvērt visas cilnes pa labi">
-<!ENTITY  closeTabsToTheEnd.accesskey        "i">
-
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-      localized title of this SUMO article
-      https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-<!ENTITY identity.help.tooltip "How do I tell if my connection to a website is secure?">
-<!ENTITY browserToolboxMenu.label     "Pārlūka rīki">
-<!ENTITY browserToolboxMenu.accesskey "r">
-<!ENTITY switchToMetroCmd2.label       "Atvērt &brandShortName; Windows 8 Touch stilā">
-<!ENTITY newPrivateWindow.label     "Jauns privātais logs">
-<!ENTITY newPrivateWindow.accesskey "v">
-<!ENTITY backCmd.label "Atpakaļ">
-<!ENTITY backButton.tooltip "Paiet vienu lapu atpakaļ">
-<!ENTITY forwardCmd.label "Uz priekšu">
-<!ENTITY forwardButton.tooltip "Paiet vienu lapu uz priekšu">
-<!ENTITY reloadCmd.label "Pārlādēt">
-<!ENTITY reloadButton.tooltip "Pārlādēt pašreizējo lapu">
-<!ENTITY stopCmd.label "Apturēt">
-<!ENTITY stopCmd.macCommandKey ".">
-<!ENTITY stopButton.tooltip "Apturēt šīs lapas ielādi">
-<!ENTITY goEndCap.tooltip "Pāriet uz adresi, kas redzama vietas joslā">
-<!ENTITY printButton.label "Drukāt">
-<!ENTITY printButton.tooltip "Drukāt šo lapu">
-
-<!ENTITY locationItem.title "Vieta">
-<!ENTITY searchItem.title "Meklēt">
-<!-- Toolbar items --> 
-
+<!ENTITY openCmd.commandkey           "l">
+<!ENTITY urlbar.placeholder2          "Ieraksti meklējamo tekstu vai mājas lapas adresi">
+<!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Pārslēgties uz cilni:">
-
-<!ENTITY homeButton.label "Sākumlapa">
-
-<!ENTITY bookmarksButton.label "Grāmatzīmes">
-
-
-<!ENTITY historyButton.label "Vēsture">
-<!ENTITY historySidebarCmd.commandKey "h">
-
-<!ENTITY toolsMenu.label "Rīki">
-<!ENTITY toolsMenu.accesskey "R">
-<!ENTITY keywordfield.label "Pievienot meklējuma atslēgas vārdu...">
-<!ENTITY keywordfield.accesskey "K">
-<!ENTITY downloads.label "Lejupielādes">
-<!ENTITY downloads.accesskey "D">
-<!ENTITY downloads.commandkey "j">
-<!ENTITY downloadsUnix.commandkey "y">
-<!ENTITY addons.label "Papildinājumi">
-<!ENTITY addons.accesskey "A">
-<!ENTITY addons.commandkey "A">
-<!ENTITY showAllBookmarks2.label "Rādīt visas grāmatzīmes">
-
-<!ENTITY social.ok.label       "OK">
-<!ENTITY social.ok.accesskey   "O">
-
-<!ENTITY social.activated.description "<label/> pakalpojumi ir aktivēti. Pakalpojumu iestatījumus, Jūs varat mainīt <label class='text-link'>papildinājumu pārvaldniekā</label>.">
-<!ENTITY social.activated.undo.label "Uuups, atcelt šo!">
-<!ENTITY social.activated.undo.accesskey "U">
-<!ENTITY social.learnMore.label "Uzzināt vairāk…">
-<!ENTITY social.learnMore.accesskey "z">
-<!ENTITY social.closeNotificationItem.label "Ne tagad">
-
-<!ENTITY social.markpageMenu.accesskey "P">
-<!ENTITY social.markpageMenu.label "Saglabāt lapu…">
-<!ENTITY social.marklinkMenu.accesskey "L">
-<!ENTITY social.marklinkMenu.label "Saglabāt saiti…">
-
-<!ENTITY errorConsoleCmd.label "Kļūdu pārlūks">
-<!ENTITY errorConsoleCmd.accesskey "K">
-
-<!ENTITY tabCrashed.header "Cilne avarēja">
-<!ENTITY tabCrashed.message "Hmm.. ļoti neveikli. Mēs mēģinājām attēlot mājas lapu, bet tā nereaģē.">
-<!ENTITY tabCrashed.checkSendReport "Pateikt &vendorShortName; par šo avāriju, lai viņi var to salabot.">
-<!ENTITY tabCrashed.tryAgain "Mēģināt vēlreiz">
-
-<!ENTITY fileMenu.label "Fails">
-<!ENTITY fileMenu.accesskey "F">
-<!ENTITY newNavigatorCmd.label "Jauns logs">
-<!ENTITY newNavigatorCmd.key "N">
-<!ENTITY newNavigatorCmd.accesskey "N">
-
-<!ENTITY editMenu.label "Rediģēt">
-<!ENTITY editMenu.accesskey "E">
-<!ENTITY undoCmd.label "Atsaukt">
-<!ENTITY undoCmd.key "Z">
-<!ENTITY undoCmd.accesskey "U">
-<!ENTITY redoCmd.label "Pārdarīt">
-<!ENTITY redoCmd.key "Y">
-<!ENTITY redoCmd.accesskey "R">
-<!ENTITY cutCmd.label "Izgriezt">
-<!ENTITY cutCmd.key "X">
-<!ENTITY cutCmd.accesskey "t">
-<!ENTITY copyCmd.label "Kopēt">
-<!ENTITY copyCmd.key "C">
-<!ENTITY copyCmd.accesskey "K">
-<!ENTITY pasteCmd.label "Ielīmēt">
-<!ENTITY pasteCmd.key "V">
-<!ENTITY pasteCmd.accesskey "I">
-<!ENTITY deleteCmd.label "Dzēst">
-<!ENTITY deleteCmd.key "D">
-<!ENTITY deleteCmd.accesskey "D">
-<!ENTITY selectAllCmd.label "Iezīmēt visu">
-<!ENTITY selectAllCmd.key "A">
-<!ENTITY selectAllCmd.accesskey "V">
-<!ENTITY preferencesCmd2.label "Iestatījumi...">
-<!ENTITY preferencesCmd2.accesskey "m">
-<!ENTITY preferencesCmdUnix.label "Iestatījumi">
-<!ENTITY preferencesCmdUnix.accesskey "m">
-
-<!ENTITY clearRecentHistory.label               "Dzēst neseno vēsturi…">
-
-<!ENTITY viewMenu.label "Skats">
-<!ENTITY viewMenu.accesskey "S">
-<!ENTITY viewToolbarsMenu.label "Rīkjoslas">
-<!ENTITY viewToolbarsMenu.accesskey "L">
-<!ENTITY viewSidebarMenu.label "Sānu josla">
-<!ENTITY viewSidebarMenu.accesskey "a">
-<!ENTITY viewCustomizeToolbar.label "Pielāgot...">
-<!ENTITY viewCustomizeToolbar.accesskey "P">
-
-<!ENTITY historyMenu.label "Vēsture">
-<!ENTITY historyMenu.accesskey "v">
-<!ENTITY historyUndoMenu.label "Nesen aizvērtās cilnes">
-<!ENTITY historyUndoWindowMenu.label "Nesen aizvērtie logi">
-
-<!ENTITY showAllHistoryCmd2.label "Parādīt visu vēsturi">
-<!ENTITY showAllHistoryCmd.commandkey "H">
-
-<!ENTITY identity.permissions "Atļaujas">
-
-<!ENTITY openCmd.commandkey "l">
-<!ENTITY urlbar.accesskey "d">
-<!ENTITY urlbar.placeholder2           "Ieraksti meklējamo tekstu vai mājas lapas adresi">
-
-<!ENTITY  pinTab.label                    "Pielīmēt cilni">
-<!ENTITY  pinTab.accesskey                "P">
-<!ENTITY  unpinTab.label                  "Atbrīvot cilni">
-<!ENTITY  unpinTab.accesskey              "c">
-
-<!ENTITY appMenuCustomize.label "Pielāgot">
-<!ENTITY appMenuSidebars.label "Sānu joslas">
-<!ENTITY bookmarksMenuButton.label          "Grāmatzīmes">
-<!ENTITY viewBookmarksToolbar.label         "Attēlo grāmatzīmes sānu joslā">
-
-<!ENTITY eyedropper.label   "Pipete">
-<!ENTITY eyedropper.accesskey "i">
-
 <!-- 
   Comment duplicated from browser-sets.inc:
 
   Search Command Key Logic works like this:
-  
+
   Unix: Ctrl+J (0.8, 0.9 support)
         Ctrl+K (cross platform binding)
-  Mac:  Ctrl+K (cross platform binding)
+  Mac:  Cmd+K (cross platform binding)
+        Cmd+Opt+F (platform convention)
   Win:  Ctrl+K (cross platform binding)
-        Ctrl+E (IE compat) 
+        Ctrl+E (IE compat)
 
   We support Ctrl+K on all platforms now and advertise it in the menu since it is
   our standard - it is a "safe" choice since it is near no harmful keys like "W" as
@@ -418,171 +411,221 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   is a fundamental keybinding and we are maintaining a XP binding so that it is easy
   for people to switch to Linux.
 
-  Do *not* tamper with these values without talking to ben@mozilla.org
-  
  -->
 
-<!-- LOCALIZATION NOTE (bookmarksSidebarGtkCmd.commandkey): This command
-  -  key should not contain the letters A-F, since these are reserved
-  -  shortcut keys on Linux. -->
-<!ENTITY bookmarksGtkCmd.commandkey "o">
-<!ENTITY bookmarksWinCmd.commandkey "i">
-<!ENTITY bookmarksCmd.commandkey "b">
+<!ENTITY searchFocus.commandkey       "k">
+<!ENTITY searchFocus.commandkey2      "e">
+<!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
+     These two strings are used to build the header above the list of one-click
+     search providers:  "Search for <used typed keywords> with:" -->
+
+<!ENTITY searchFor.label              "Meklēt ">
+<!ENTITY searchWith.label             " izmantojot:">
+<!-- LOCALIZATION NOTE (searchWithHeader.label):
+     The wording of this string should be as close as possible to
+     searchFor.label and searchWith.label. This string will be used instead of
+     them when the user has not typed any keyword. -->
+<!ENTITY searchWithHeader.label       "Meklēt ar:">
+<!ENTITY changeSearchSettings.button  "Mainīt meklēšanas iestatījumus">
+
 <!ENTITY tabView.commandkey           "e">
-<!ENTITY devAppMgrMenu.label               "Aplikāciju pārvaldnieks">
-<!ENTITY devAppMgrMenu.accesskey           "a">
-<!ENTITY pluginNotification.width "28em">
 
-<!ENTITY searchFocus.commandkey "k">
-<!ENTITY searchFocus.commandkey2   "e">
-<!ENTITY searchFocusUnix.commandkey "j">
-
-<!ENTITY openLinkCmd.label "Atvērt saiti jaunā logā">
-<!ENTITY openLinkCmd.accesskey "L">
-<!ENTITY openLinkCmdInTab.label "Atvērt saiti jaunā cilnē">
-<!ENTITY openLinkCmdInTab.accesskey "C">
-<!ENTITY openFrameCmd.label "Atvērt ietvaru jaunā logā">
-<!ENTITY openFrameCmd.accesskey "L">
-<!ENTITY openFrameCmdInTab.label "Atvērt ietvaru jaunā cilnē">
-<!ENTITY openFrameCmdInTab.accesskey "C">
-<!ENTITY showOnlyThisFrameCmd.label "Rādīt tikai šo ietvaru">
-<!ENTITY showOnlyThisFrameCmd.accesskey "T">
-<!ENTITY reloadCmd.commandkey "r">
-<!ENTITY reloadFrameCmd.label "Pārlādēt ietvaru">
-<!ENTITY reloadFrameCmd.accesskey "R">
+<!ENTITY openLinkCmdInTab.label       "Atvērt saiti jaunā cilnē">
+<!ENTITY openLinkCmdInTab.accesskey   "c">
+<!ENTITY openLinkCmd.label            "Atvērt saiti jaunā logā">
+<!ENTITY openLinkCmd.accesskey        "l">
+<!ENTITY openLinkInPrivateWindowCmd.label "Atvērt saiti jaunā privātajā logā">
+<!ENTITY openLinkInPrivateWindowCmd.accesskey "p">
+<!ENTITY openLinkCmdInCurrent.label     "Atvērt saiti">
+<!ENTITY openLinkCmdInCurrent.accesskey "A">
+<!ENTITY openFrameCmdInTab.label      "Atvērt ietvaru jaunā cilnē">
+<!ENTITY openFrameCmdInTab.accesskey  "c">
+<!ENTITY openFrameCmd.label           "Atvērt ietvaru jaunā logā">
+<!ENTITY openFrameCmd.accesskey       "l">
+<!ENTITY showOnlyThisFrameCmd.label     "Rādīt tikai šo ietvaru">
+<!ENTITY showOnlyThisFrameCmd.accesskey "t">
+<!ENTITY reloadCmd.commandkey         "r">
+<!ENTITY reloadFrameCmd.label         "Pārlādēt ietvaru">
+<!ENTITY reloadFrameCmd.accesskey     "r">
 <!ENTITY viewPartialSourceForSelectionCmd.label "Skatīt iezīmētā pirmkodu">
-<!ENTITY viewPartialSourceForMathMLCmd.label "Skatīt MathML pirmkodu">
+<!ENTITY viewPartialSourceForMathMLCmd.label    "Skatīt MathML pirmkodu">
+<!-- LOCALIZATION NOTE (viewPartialSourceCmd.accesskey): This accesskey is used for both 
+         viewPartialSourceForSelectionCmd.label and viewPartialSourceForMathMLCmd.label -->
 <!ENTITY viewPartialSourceCmd.accesskey "e">
-<!ENTITY viewPageSourceCmd.label "Skatīt lapas pirmkodu">
-<!ENTITY viewPageSourceCmd.accesskey "S">
-<!ENTITY viewFrameSourceCmd.label "Skatīt ietvara pirmkodu">
+<!ENTITY viewPageSourceCmd.label      "Skatīt lapas pirmkodu">
+<!ENTITY viewPageSourceCmd.accesskey  "S">
+<!ENTITY viewFrameSourceCmd.label     "Skatīt ietvara pirmkodu">
 <!ENTITY viewFrameSourceCmd.accesskey "S">
-<!ENTITY viewPageInfoCmd.label "Skatīt informāciju par lapu">
-<!ENTITY viewPageInfoCmd.accesskey "I">
-<!ENTITY viewFrameInfoCmd.label "Skatīt informāciju par ietvaru">
-<!ENTITY viewFrameInfoCmd.accesskey "I">
-<!ENTITY viewImageCmd.label "Skatīt attēlu">
-<!ENTITY viewImageCmd.accesskey "T">
+<!ENTITY viewPageInfoCmd.label        "Skatīt informāciju par lapu">
+<!ENTITY viewPageInfoCmd.accesskey    "i">
+<!ENTITY viewFrameInfoCmd.label       "Skatīt informāciju par ietvaru">
+<!ENTITY viewFrameInfoCmd.accesskey   "i">
+<!ENTITY reloadImageCmd.label         "Pārlādēt attēlu">
+<!ENTITY reloadImageCmd.accesskey     "r">
+<!ENTITY viewImageCmd.label           "Skatīt attēlu">
+<!ENTITY viewImageCmd.accesskey       "t">
 <!ENTITY viewImageInfoCmd.label       "Skatīt attēla informāciju">
 <!ENTITY viewImageInfoCmd.accesskey   "f">
 <!ENTITY viewImageDescCmd.label       "Skatīt attēla aprakstu">
 <!ENTITY viewImageDescCmd.accesskey   "p">
 <!ENTITY viewVideoCmd.label           "Skatīt video">
-<!ENTITY viewVideoCmd.accesskey       "I">
-<!ENTITY viewBGImageCmd.label "Skatīt fona attēlu">
-<!ENTITY viewBGImageCmd.accesskey "f">
-<!ENTITY setDesktopBackgroundCmd.label "Uzlikt kā darbvirsmas fonu...">
-<!ENTITY setDesktopBackgroundCmd.accesskey "U">
-<!ENTITY bookmarkPageCmd2.label "Saglabāt šo lapu grāmatzīmēs">
-<!ENTITY bookmarkThisLinkCmd.label "Saglabāt šo saiti grāmatzīmēs">
-<!ENTITY bookmarkThisLinkCmd.accesskey "S">
-<!ENTITY bookmarkThisFrameCmd.label "Pievienot šo ietvaru grāmatzīmēm">
-<!ENTITY bookmarkThisFrameCmd.accesskey "m">
-<!ENTITY savePageCmd.label "Saglabāt lapu kā...">
-<!ENTITY savePageCmd.accesskey "S">
+<!ENTITY viewVideoCmd.accesskey       "i">
+<!ENTITY viewBGImageCmd.label         "Skatīt fona attēlu">
+<!ENTITY viewBGImageCmd.accesskey     "f">
+<!ENTITY setDesktopBackgroundCmd.label      "Uzlikt kā darbvirsmas fonu...">
+<!ENTITY setDesktopBackgroundCmd.accesskey  "U">
+<!ENTITY bookmarkPageCmd2.label       "Saglabāt šo lapu grāmatzīmēs">
+<!ENTITY bookmarkThisLinkCmd.label      "Saglabāt šo saiti grāmatzīmēs">
+<!ENTITY bookmarkThisLinkCmd.accesskey  "S">
+<!ENTITY bookmarkThisFrameCmd.label      "Pievienot šo ietvaru grāmatzīmēm">
+<!ENTITY bookmarkThisFrameCmd.accesskey  "m">
+<!ENTITY emailPageCmd.label           "Nosūtīt saiti…">
+<!ENTITY emailPageCmd.accesskey       "N">
+<!ENTITY savePageCmd.label            "Saglabāt lapu kā...">
+<!ENTITY savePageCmd.accesskey        "S">
 <!-- alternate for content area context menu -->
-<!ENTITY savePageCmd.accesskey2 "P">
-<!ENTITY savePageCmd.commandkey "s">
-<!ENTITY saveFrameCmd.label "Saglabāt ietvaru kā...">
-<!ENTITY saveFrameCmd.accesskey "T">
-<!ENTITY printFrameCmd.label "Drukāt ietvaru...">
-<!ENTITY printFrameCmd.accesskey "D">
-<!ENTITY saveLinkCmd.label "Saglabāt saiti kā...">
-<!ENTITY saveLinkCmd.accesskey "k">
-<!ENTITY saveImageCmd.label "Saglabāt attēlu kā...">
-<!ENTITY saveImageCmd.accesskey "b">
-<!ENTITY copyLinkCmd.label "Kopēt saiti">
-<!ENTITY copyLinkCmd.accesskey "a">
-<!ENTITY copyImageCmd.label "Kopēt attēla adresi">
-<!ENTITY copyImageCmd.accesskey "o">
-<!ENTITY copyImageContentsCmd.label "Kopēt attēlu">
-<!ENTITY copyImageContentsCmd.accesskey "p">
-<!ENTITY copyEmailCmd.label "Kopēt e-pasta adresi">
-<!ENTITY copyEmailCmd.accesskey "E">
+<!ENTITY savePageCmd.accesskey2       "P">
+<!ENTITY savePageCmd.commandkey       "s">
+<!ENTITY saveFrameCmd.label           "Saglabāt ietvaru kā...">
+<!ENTITY saveFrameCmd.accesskey       "t">
+<!ENTITY printFrameCmd.label          "Drukāt ietvaru...">
+<!ENTITY printFrameCmd.accesskey      "D">
+<!ENTITY saveLinkCmd.label            "Saglabāt saiti kā...">
+<!ENTITY saveLinkCmd.accesskey        "k">
+<!ENTITY saveImageCmd.label           "Saglabāt attēlu kā...">
+<!ENTITY saveImageCmd.accesskey       "b">
+<!ENTITY saveVideoCmd.label           "Saglabāt video kā…">
+<!ENTITY saveVideoCmd.accesskey       "g">
+<!ENTITY saveAudioCmd.label           "Saglabāt audio kā…">
+<!ENTITY saveAudioCmd.accesskey       "g">
+<!ENTITY emailImageCmd.label          "Nosūtīt attēlu…">
+<!ENTITY emailImageCmd.accesskey      "a">
+<!ENTITY emailVideoCmd.label          "Nosūtīt video…">
+<!ENTITY emailVideoCmd.accesskey      "a">
 <!ENTITY castVideoCmd.label           "Nosūtīt video uz ierīci">
 <!ENTITY castVideoCmd.accesskey       "e">
-<!ENTITY thisFrameMenu.label "Šis ietvars">
-<!ENTITY thisFrameMenu.accesskey "a">
-<!ENTITY sharePageCmd.commandkey "l">
-<!ENTITY customizeMode.deveditionTheme.label2 "Izmantot izstrādātāju versijas tēmu">
+<!ENTITY emailAudioCmd.label          "Nosūtīt audio…">
+<!ENTITY emailAudioCmd.accesskey      "a">
+<!ENTITY playPluginCmd.label          "Aktivēt šo spraudni">
+<!ENTITY playPluginCmd.accesskey      "a">
+<!ENTITY hidePluginCmd.label          "Paslēpt šo spraudni">
+<!ENTITY hidePluginCmd.accesskey      "p">
+<!ENTITY copyLinkCmd.label            "Kopēt saiti">
+<!ENTITY copyLinkCmd.accesskey        "a">
+<!ENTITY copyImageCmd.label           "Kopēt attēla adresi">
+<!ENTITY copyImageCmd.accesskey       "o">
+<!ENTITY copyImageContentsCmd.label   "Kopēt attēlu">
+<!ENTITY copyImageContentsCmd.accesskey  "p"> 
+<!ENTITY copyVideoURLCmd.label        "Kopēt video adresi">
+<!ENTITY copyVideoURLCmd.accesskey    "o">
+<!ENTITY copyAudioURLCmd.label        "Kopēt audio adresi">
+<!ENTITY copyAudioURLCmd.accesskey    "o">
+<!ENTITY copyEmailCmd.label           "Kopēt e-pasta adresi">
+<!ENTITY copyEmailCmd.accesskey       "e">
+<!ENTITY thisFrameMenu.label              "Šis ietvars">
+<!ENTITY thisFrameMenu.accesskey          "a">
+<!-- Media (video/audio) controls -->
+<!-- LOCALIZATION NOTE: The access keys for "Play" and
+"Pause" are the same because the two context-menu
+items are mutually exclusive. -->
+
+<!ENTITY mediaPlay.label             "Atskaņot">
+<!ENTITY mediaPlay.accesskey         "s">
+<!ENTITY mediaPause.label            "Apturēt">
+<!ENTITY mediaPause.accesskey        "t">
+<!-- LOCALIZATION NOTE: The access keys for "Mute" and
+"Unmute" are the same because the two context-menu
+items are mutually exclusive. -->
+<!ENTITY mediaMute.label             "Apklusināt">
+<!ENTITY mediaMute.accesskey         "A">
+<!ENTITY mediaUnmute.label           "Atjaunot">
+<!ENTITY mediaUnmute.accesskey       "a">
+<!ENTITY mediaPlaybackRate.label     "Atskaņošanas ātrums">
+<!ENTITY mediaPlaybackRate.accesskey "t">
+<!ENTITY mediaPlaybackRate050x.label "Lēnāk (0.5×)">
+<!ENTITY mediaPlaybackRate050x.accesskey "L">
+<!ENTITY mediaPlaybackRate100x.label "Normālā ātrumā">
+<!ENTITY mediaPlaybackRate100x.accesskey "N">
+<!ENTITY mediaPlaybackRate150x.label "Ātri (1.5×)">
+<!ENTITY mediaPlaybackRate150x.accesskey "r">
+<!-- LOCALIZATION NOTE: "Ludicrous Speed" is a reference to the
+movie "Space Balls" and is meant to say that this speed is very
+fast. -->
+<!ENTITY mediaPlaybackRate200x.label "Super ātri (2×)">
+<!ENTITY mediaPlaybackRate200x.accesskey "S">
+<!-- LOCALIZATION NOTE: The access keys for "Show Controls" and
+"Hide Controls" are the same because the two context-menu
+items are mutually exclusive. -->
+<!ENTITY mediaShowControls.label     "Rādīt kontroles">
+<!ENTITY mediaShowControls.accesskey "k">
+<!ENTITY mediaHideControls.label     "Slēpt kontroles">
+<!ENTITY mediaHideControls.accesskey "k">
+<!ENTITY videoFullScreen.label       "Pa visu ekrānu">
+<!ENTITY videoFullScreen.accesskey   "P">
+<!ENTITY videoSaveImage.label        "Saglabāt momentuzņēmumu kā…">
+<!ENTITY videoSaveImage.accesskey    "S">
+<!-- LOCALIZATION NOTE: The access keys for "Show Statistics" and
+"Hide Statistics" are the same because the two context-menu
+items are mutually exclusive. -->
+<!ENTITY videoShowStats.label        "Parādīt statistiku">
+<!ENTITY videoShowStats.accesskey    "t">
+<!ENTITY videoHideStats.label        "Paslēpt statistiku">
+<!ENTITY videoHideStats.accesskey    "t">
 <!-- LOCALIZATION NOTE :
 fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey2 and
 fullZoomResetCmd.commandkey2 are alternative acceleration keys for zoom.
 If shift key is needed with your locale popular keyboard for them,
 you can use these alternative items. Otherwise, their values should be empty.  -->
-<!ENTITY findShareServices.label "Atrast dalīšanās pakalpojumus…">
-<!ENTITY shareImage.label "Dalīties ar attēlu">
-<!ENTITY shareImage.accesskey "s">
-
-<!ENTITY searchFor.label              "Meklēt ">
-<!ENTITY searchWith.label             " izmantojot:">
-
-<!ENTITY social.directory.label "Aktivāciju saraksts">
-<!ENTITY social.directory.text "Jūs varat aktivizēt dalīšanās pakalpojumus no šī saraksta.">
-<!ENTITY social.directory.button "Vediet mani turp!">
-<!ENTITY social.directory.introText "Klikšķiniet uz pakalpojuma, lai pievienotu to &brandShortName;.">
-<!ENTITY social.directory.viewmore.text "Skatī vairāk">
 
 
-<!ENTITY fullZoomEnlargeCmd.label "Pietuvināt">
-<!ENTITY fullZoomEnlargeCmd.accesskey "I">
-<!ENTITY fullZoomEnlargeCmd.commandkey "+">
+<!ENTITY fullZoomEnlargeCmd.label       "Pietuvināt">
+<!ENTITY fullZoomEnlargeCmd.accesskey   "i">
+<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
 <!-- + is above this key on many keyboards -->
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
-<!ENTITY fullZoomEnlargeCmd.commandkey3 "_: fullZoomEnlargeCmd.commandkey3
-">
+<!ENTITY fullZoomEnlargeCmd.commandkey2 "="> 
+<!ENTITY fullZoomEnlargeCmd.commandkey3 "">
 
-<!ENTITY fullZoomReduceCmd.label "Attālināt">
-<!ENTITY fullZoomReduceCmd.accesskey "A">
-<!ENTITY fullZoomReduceCmd.commandkey "-">
-<!ENTITY fullZoomReduceCmd.commandkey2 "">
+<!ENTITY fullZoomReduceCmd.label        "Attālināt">
+<!ENTITY fullZoomReduceCmd.accesskey    "A">
+<!ENTITY fullZoomReduceCmd.commandkey   "-">
+<!ENTITY fullZoomReduceCmd.commandkey2  "=">
 
-<!ENTITY fullZoomResetCmd.label "Atstatīt">
-<!ENTITY fullZoomResetCmd.accesskey "T">
-<!ENTITY fullZoomResetCmd.commandkey "0">
-<!ENTITY fullZoomResetCmd.commandkey2 "">
+<!ENTITY fullZoomResetCmd.label         "Atstatīt">
+<!ENTITY fullZoomResetCmd.accesskey     "t">
+<!ENTITY fullZoomResetCmd.commandkey    "0">
+<!ENTITY fullZoomResetCmd.commandkey2   "=">
 
-<!ENTITY fullZoomToggleCmd.label "Mērogot tikai tekstu">
-<!ENTITY fullZoomToggleCmd.accesskey "T">
-<!ENTITY fullZoom.label "Mērogs">
-<!ENTITY fullZoom.accesskey "M">
+<!ENTITY fullZoomToggleCmd.label        "Mērogot tikai tekstu">
+<!ENTITY fullZoomToggleCmd.accesskey    "t">
+<!ENTITY fullZoom.label                 "Mērogs">
+<!ENTITY fullZoom.accesskey             "M">
 
-<!ENTITY inspectContextMenu.label     "Izmeklēt">
-<!ENTITY inspectContextMenu.accesskey "e">
+<!ENTITY sidebarCloseButton.tooltip     "Aizvērt sānu joslu">
 
-<!ENTITY sidebarCloseButton.tooltip "Aizvērt sānu joslu">
-<!ENTITY quitApplicationCmdWin.label "Iziet">
-<!ENTITY quitApplicationCmdWin.accesskey "z">
+<!ENTITY quitApplicationCmdWin.label       "Iziet"> 
+<!ENTITY quitApplicationCmdWin.accesskey   "z">
+<!ENTITY quitApplicationCmdWin.tooltip     "Aizvērt &brandShortName;">
 <!ENTITY goBackCmd.commandKey "[">
 <!ENTITY goForwardCmd.commandKey "]">
-<!ENTITY quitApplicationCmd.label "Iziet">
-<!ENTITY quitApplicationCmd.accesskey "E">
-<!ENTITY quitApplicationCmdMac.label "Iziet no &brandShortName;">
+<!ENTITY quitApplicationCmd.label       "Iziet"> 
+<!ENTITY quitApplicationCmd.accesskey   "e">
+<!ENTITY quitApplicationCmdMac.label    "Iziet no &brandShortName;">
+<!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
 <!ENTITY quitApplicationCmdUnix.key     "Q">
 
-<!ENTITY closeCmd.label "Aizvērt">
-<!ENTITY closeCmd.key "W">
-<!ENTITY closeCmd.accesskey "Z">
-
-<!ENTITY sharePageCmd.label "Pastāstīt par šo lapu">
-<!ENTITY sharePageCmd.commandkey "S">
-<!ENTITY sharePageCmd.accesskey "s">
-<!ENTITY shareLink.label "Dalīties ar saiti">
-<!ENTITY shareLink.accesskey "s">
-<!ENTITY shareSelect.label "Dalīties ar iezīmēto">
-<!ENTITY shareSelect.accesskey "s">
-<!ENTITY shareVideo.label "Dalīties ar video">
-<!ENTITY shareVideo.accesskey "s">
-
+<!ENTITY closeCmd.label                 "Aizvērt">  
+<!ENTITY closeCmd.key                   "W">  
+<!ENTITY closeCmd.accesskey             "z">
 
 <!ENTITY pageStyleMenu.label "Lapas stils">
 <!ENTITY pageStyleMenu.accesskey "t">
 <!ENTITY pageStyleNoStyle.label "Bez stila">
-<!ENTITY pageStyleNoStyle.accesskey "b">
+<!ENTITY pageStyleNoStyle.accesskey "B">
 <!ENTITY pageStylePersistentOnly.label "Lapas pamata stils">
 <!ENTITY pageStylePersistentOnly.accesskey "m">
 
-<!ENTITY pageReportIcon.tooltip "Izmainīt jauno logu bloķēšanas iestatījumus šai lapai">
+<!ENTITY pageReportIcon.tooltip            "Izmainīt jauno logu bloķēšanas iestatījumus šai lapai">
 
 <!ENTITY allowPopups.accesskey "p">
 <!-- On Windows we use the term "Options" to describe settings, but
@@ -590,29 +633,30 @@ you can use these alternative items. Otherwise, their values should be empty.  -
      over into this string, which is used in the "popup blocked" info bar . -->
 <!ENTITY editPopupSettingsUnix.label "Rediģēt jauno logu bloķētāja iestatījumus...">
 <!ENTITY editPopupSettings.label "Rediģēt jauno logu bloķētāja iestatījumus...">
-<!ENTITY editPopupSettings.accesskey "E">
+<!ENTITY editPopupSettings.accesskey "e">
 <!ENTITY dontShowMessage.accesskey "D">
 
-<!ENTITY bidiSwitchPageDirectionItem.label "Nomainīt lapas virzienu">
-<!ENTITY bidiSwitchPageDirectionItem.accesskey "p">
-<!ENTITY bidiSwitchTextDirectionItem.label "Nomainīt teksta virzienu">
-<!ENTITY bidiSwitchTextDirectionItem.accesskey "m">
-<!ENTITY bidiSwitchTextDirectionItem.commandkey "X">
+<!ENTITY bidiSwitchPageDirectionItem.label        "Nomainīt lapas virzienu">
+<!ENTITY bidiSwitchPageDirectionItem.accesskey    "p">
+<!ENTITY bidiSwitchTextDirectionItem.label        "Nomainīt teksta virzienu">
+<!ENTITY bidiSwitchTextDirectionItem.accesskey    "m">
+<!ENTITY bidiSwitchTextDirectionItem.commandkey   "X">
 
-<!ENTITY findOnCmd.label "Atrast šajā lapā...">
+<!ENTITY findOnCmd.label     "Atrast šajā lapā...">
 <!ENTITY findOnCmd.accesskey "A">
 <!ENTITY findOnCmd.commandkey "f">
-<!ENTITY findAgainCmd.label "Meklēt vēlreiz">
+<!ENTITY findAgainCmd.label  "Meklēt vēlreiz">
 <!ENTITY findAgainCmd.accesskey "k">
 <!ENTITY findAgainCmd.commandkey "g">
 <!ENTITY findAgainCmd.commandkey2 "VK_F3">
+<!ENTITY findSelectionCmd.commandkey "e">
 
 <!ENTITY spellAddDictionaries.label "Pievienot vārdnīcas...">
-<!ENTITY spellAddDictionaries.accesskey "I">
+<!ENTITY spellAddDictionaries.accesskey "i">
 
-<!ENTITY editBookmark.done.label "Gatavs">
-<!ENTITY editBookmark.cancel.label "Atcelt">
-<!ENTITY editBookmark.removeBookmark.accessKey "Z">
+<!ENTITY editBookmark.done.label                     "Gatavs">
+<!ENTITY editBookmark.cancel.label                   "Atcelt">
+<!ENTITY editBookmark.removeBookmark.accessKey       "Z">
 
 <!ENTITY identity.unverifiedsite2 "Šī mājas lapa neatbalsta identitātes informāciju.">
 <!ENTITY identity.connectedTo "Jūs esat pieslēdzies">
@@ -631,106 +675,55 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY identity.moreInfoLinkText "Sīkāka informācija...">
 
-<!ENTITY copyAudioURLCmd.label        "Kopēt audio adresi">
-<!ENTITY copyAudioURLCmd.accesskey    "o">
-<!ENTITY copyVideoURLCmd.label        "Kopēt video adresi">
-<!ENTITY copyVideoURLCmd.accesskey    "o">
+<!ENTITY identity.permissions "Atļaujas">
+<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
+     localized title of this SUMO article
+     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
 
-<!ENTITY getUserMedia.selectCamera.label "Izvēlies kameru:">
-<!ENTITY getUserMedia.selectCamera.accesskey "K">
-<!ENTITY getUserMedia.selectMicrophone.label "Izvēlies mikrofonu:">
-<!ENTITY getUserMedia.selectMicrophone.accesskey "M">
-<!ENTITY getUserMedia.allWindowsShared.message "Visi uz ekrāna redzamie logi tiks koplietoti.">
-
-<!ENTITY toolbarContextMenu.reloadAllTabs.label "Pārlādēt visas cilnes">
-<!ENTITY toolbarContextMenu.reloadAllTabs.accesskey "A">
-<!ENTITY toolbarContextMenu.bookmarkAllTabs.label "Saglabāt visas cilnes grāmatzīmēs…">
-<!ENTITY toolbarContextMenu.bookmarkAllTabs.accesskey "T">
-<!ENTITY toolbarContextMenu.undoCloseTab.label "Atcelt cilņu aizvēršanu">
-<!ENTITY toolbarContextMenu.undoCloseTab.accesskey "U">
-
-<!ENTITY webide.label                      "WebIDE">
-<!ENTITY webide.accesskey                  "W">
-
-
-<!-- Media (video/audio) controls -->
-<!ENTITY mediaPlay.label             "Atskaņot">
-<!ENTITY mediaPlay.accesskey         "s">
-<!ENTITY mediaPause.label            "Apturēt">
-<!ENTITY mediaPause.accesskey        "t">
-<!ENTITY mediaMute.label             "Apklusināt">
-<!ENTITY mediaMute.accesskey         "a">
-<!ENTITY mediaUnmute.label           "Atjaunot">
-<!ENTITY mediaUnmute.accesskey       "a">
-<!ENTITY mediaPlaybackRate.label     "Atskaņošanas ātrums">
-<!ENTITY mediaPlaybackRate.accesskey "t">
-<!ENTITY mediaPlaybackRate050x.label "Lēnāk (0.5×)">
-<!ENTITY mediaPlaybackRate050x.accesskey "L">
-<!ENTITY mediaPlaybackRate100x.label "Normālā ātrumā">
-<!ENTITY mediaPlaybackRate100x.accesskey "N">
-<!ENTITY mediaPlaybackRate150x.label "Ātri (1.5×)">
-<!ENTITY mediaPlaybackRate150x.accesskey "r">
-<!ENTITY mediaPlaybackRate200x.label "Super ātri (2×)">
-<!ENTITY mediaPlaybackRate200x.accesskey "S">
-<!ENTITY mediaShowControls.label     "Rādīt kontroles">
-<!ENTITY mediaShowControls.accesskey "k">
-<!ENTITY mediaHideControls.label     "Slēpt kontroles">
-<!ENTITY mediaHideControls.accesskey "k">
-<!ENTITY reloadImageCmd.label         "Pārlādēt attēlu">
-<!ENTITY reloadImageCmd.accesskey     "R">
-<!ENTITY saveVideoCmd.label           "Saglabāt video kā…">
-<!ENTITY saveVideoCmd.accesskey       "g">
-<!ENTITY saveAudioCmd.label           "Saglabāt audio kā…">
-<!ENTITY saveAudioCmd.accesskey       "g">
-<!ENTITY videoFullScreen.label       "Pa visu ekrānu">
-<!ENTITY videoFullScreen.accesskey   "P">
-<!ENTITY videoSaveImage.label        "Saglabāt momentuzņēmumu kā…">
-<!ENTITY videoSaveImage.accesskey    "S">
-<!ENTITY videoShowStats.label        "Parādīt statistiku">
-<!ENTITY videoShowStats.accesskey    "t">
-<!ENTITY videoHideStats.label        "Paslēpt statistiku">
-<!ENTITY videoHideStats.accesskey    "t">
-<!ENTITY playPluginCmd.label          "Aktivēt šo spraudni">
-<!ENTITY playPluginCmd.accesskey      "a">
-<!ENTITY hidePluginCmd.label          "Paslēpt šo spraudni">
-<!ENTITY hidePluginCmd.accesskey      "p">
-
-
-<!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
-                                                                inside the private browsing mode -->
-<!ENTITY mainWindow.titlePrivateBrowsingSuffix "(Privātā pārlūkošana)">
-
-<!ENTITY privateBrowsingCmd.commandkey        "P">
-<!ENTITY bookmarksToolbarChevron.tooltip "Rādīt vairāk grāmatzīmju">
-
-<!ENTITY devToolbarCloseButton.tooltiptext "Aizvērt izstrādātāja rīkjoslu">
-<!ENTITY devToolbarMenu.label "Izstrādātāja rīkjosla">
-<!ENTITY devToolbarMenu.accesskey "j">
-<!ENTITY devToolbar.keycode                "VK_F2">
-<!ENTITY devToolbar.keytext                "F2">
-
-<!ENTITY emailPageCmd.label           "Nosūtīt saiti…">
-<!ENTITY emailPageCmd.accesskey       "N">
-<!ENTITY emailImageCmd.label          "Nosūtīt attēlu…">
-<!ENTITY emailImageCmd.accesskey      "a">
-<!ENTITY emailVideoCmd.label          "Nosūtīt video…">
-<!ENTITY emailVideoCmd.accesskey      "a">
-<!ENTITY emailAudioCmd.label          "Nosūtīt audio…">
-<!ENTITY emailAudioCmd.accesskey      "a">
-
-<!ENTITY showAllTabsCmd.label "Rādīt visas cilnes">
-<!ENTITY showAllTabsCmd.accesskey "v">
+<!ENTITY identity.help.tooltip "How do I tell if my connection to a website is secure?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
+
 <!ENTITY tabsToolbar.label "Pārlūka cilnes">
+<!-- LOCALIZATION NOTE (syncTabsMenu2.label): This appears in the history menu -->
 
-<!ENTITY openLinkInPrivateWindowCmd.label "Atvērt saiti jaunā privātajā logā">
-<!ENTITY openLinkInPrivateWindowCmd.accesskey "P">
+<!ENTITY syncTabsMenu2.label     "Cilnes no citām ierīcēm">
 
+<!ENTITY syncBrand.shortName.label    "Sinhronizēt">
 
+<!ENTITY syncSetup.label              "Iestatīt sinhronizēšanu…">
+<!ENTITY syncSetup.accesskey          "U">
+<!ENTITY syncSyncNowItem.label        "Sinhronizēt">
+<!ENTITY syncSyncNowItem.accesskey    "S">
+<!ENTITY syncReAuthItem.label         "Savienoties un &syncBrand.shortName.label;…">
+<!ENTITY syncReAuthItem.accesskey     "R">
 <!ENTITY syncToolbarButton.label      "Sinhronizēt">
 
 <!ENTITY socialToolbar.title        "Sociālo rīku joslas poga">
+
+<!ENTITY social.ok.label       "OK">
+<!ENTITY social.ok.accesskey   "O">
+
+<!ENTITY social.toggleSidebar.label "Rādīt sānu joslu">
+<!ENTITY social.toggleSidebar.accesskey "s">
+
+<!ENTITY social.addons.label "Pārvaldīt pakalpojumus…">
+
+<!ENTITY social.toggleNotifications.label "Rādīt paziņojumus">
+<!ENTITY social.toggleNotifications.accesskey "d">
+
+<!ENTITY social.activated.description "<label/> pakalpojumi ir aktivēti. Pakalpojumu iestatījumus, Jūs varat mainīt <label class='text-link'>papildinājumu pārvaldniekā</label>.">
+<!ENTITY social.activated.undo.label "Uuups, atcelt šo!">
+<!ENTITY social.activated.undo.accesskey "U">
+<!ENTITY social.learnMore.label "Uzzināt vairāk…">
+<!ENTITY social.learnMore.accesskey "z">
+<!ENTITY social.closeNotificationItem.label "Ne tagad">
+
+<!ENTITY social.directory.label "Aktivāciju saraksts">
+<!ENTITY social.directory.text "Jūs varat aktivizēt dalīšanās pakalpojumus no šī saraksta.">
+<!ENTITY social.directory.button "Vediet mani turp!">
+<!ENTITY social.directory.introText "Klikšķiniet uz pakalpojuma, lai pievienotu to &brandShortName;.">
+<!ENTITY social.directory.viewmore.text "Skatī vairāk">
 
 <!ENTITY customizeMode.tabTitle "Pielāgot &brandShortName;">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Papildus rīki un iespējas">
@@ -739,41 +732,93 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.restoreDefaults "Atjaunot noklusēto">
 <!ENTITY customizeMode.toolbars "Parādīt vai paslēpt rīkjoslas">
 <!ENTITY customizeMode.titlebar "Virsraksta josla">
+<!ENTITY customizeMode.lwthemes "Tēmas">
+<!ENTITY customizeMode.lwthemes.myThemes "Manas tēmas">
+<!ENTITY customizeMode.lwthemes.recommended "Ieteiktās">
+<!ENTITY customizeMode.lwthemes.menuManage "Pārvaldīt">
+<!ENTITY customizeMode.lwthemes.menuManage.accessKey "P">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Iegūt jaunas tēmas">
+<!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
+<!ENTITY customizeMode.deveditionTheme.label2 "Izmantot izstrādātāju versijas tēmu">
 
-<!ENTITY social.toggleSidebar.label "Rādīt sānu joslu">
-<!ENTITY social.toggleSidebar.accesskey "s">
-
-<!ENTITY social.toggleNotifications.label "Rādīt paziņojumus">
-<!ENTITY social.toggleNotifications.accesskey "d">
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Parādīt sarunas">
 <!ENTITY social.chatBar.accesskey "r">
 
-<!ENTITY pointerLock.notification.message "Nospiediet ESC lai to atkal parādītu.">
-<!ENTITY social.addons.label "Pārvaldīt pakalpojumus…">
+<!ENTITY social.markpageMenu.accesskey "p">
+<!ENTITY social.markpageMenu.label "Saglabāt lapu…">
+<!ENTITY social.marklinkMenu.accesskey "l">
+<!ENTITY social.marklinkMenu.label "Saglabāt saiti…">
 
+<!ENTITY getUserMedia.selectCamera.label "Izvēlies kameru:">
+<!ENTITY getUserMedia.selectCamera.accesskey "k">
+<!ENTITY getUserMedia.selectMicrophone.label "Izvēlies mikrofonu:">
+<!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.allWindowsShared.message "Visi uz ekrāna redzamie logi tiks koplietoti.">
+<!-- Bad Content Blocker Doorhanger Notification -->
+
+<!ENTITY badContentBlocked.moreinfo "Lielākā daļa lapu darbosies korekti arī, ja šis saturs tiks bloķēts.">
+
+<!ENTITY mixedContentBlocked2.message "Nedrošs saturs">
+<!ENTITY mixedContentBlocked2.moreinfo "Daži nešifrēti elementi šajā lapā tika bloķēti.">
+<!ENTITY mixedContentBlocked2.learnMore "Uzzināt vairāk">
+<!ENTITY mixedContentBlocked2.options "Iestatījumi">
+<!ENTITY mixedContentBlocked2.unblock.label "Pagaidām deaktivēt aizsardzību">
+<!ENTITY mixedContentBlocked2.unblock.accesskey "d">
+<!ENTITY mixedContentBlocked2.block.label "Aktivēt aizsardzību">
+<!ENTITY mixedContentBlocked2.block.accesskey "b">
+<!ENTITY mixedContentBlocked2.disabled.message "Aizsardzība ir deaktivēta">
+
+<!ENTITY trackingContentBlocked.message "Sekošana">
+<!ENTITY trackingContentBlocked.moreinfo "Daļa no lapas, kas seko jūsu aktivitātei internetā tika bloķēta.">
+<!ENTITY trackingContentBlocked.learnMore "Uzzināt vairāk">
+<!ENTITY trackingContentBlocked.options "Iestatījumi">
+<!ENTITY trackingContentBlocked.unblock2.label "Deaktivēt aizsardzību šajā lapā">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
+<!ENTITY trackingContentBlocked.block.label "Aktivēt aizsardzību">
+<!ENTITY trackingContentBlocked.block.accesskey "k">
+<!ENTITY trackingContentBlocked.disabled.message "Sekošanas aizsardzība ir deaktivēta">
+
+<!ENTITY pointerLock.notification.message "Nospiediet ESC lai to atkal parādītu.">
 
 <!ENTITY pluginNotification.showAll.label "Rādīt visus">
-<!ENTITY pluginNotification.showAll.accesskey "S">
- 
+<!ENTITY pluginNotification.showAll.accesskey "s">
 <!-- LOCALIZATION NOTE (pluginActivateNow.label, pluginActivateAlways.label, pluginBlockNow.label): These should be the same as the matching strings in browser.properties -->
+
 <!ENTITY pluginActivateNow.label "Atļaut šoreiz">
 <!ENTITY pluginActivateAlways.label "Atļaut un atcerēties">
 <!ENTITY pluginBlockNow.label "Bloķēt spraudni">
+<!-- LOCALIZATION NOTE: (pluginNotification.width): This is used to determine the
+     width of the plugin popup notification that can appear if a plugin has been
+     blocked on a page. Should be wide enough to fit the pluginActivateNow.label
+     and pluginActivateAlways.label strings above on a single line. This must be
+     a CSS length value. -->
 
+<!ENTITY pluginNotification.width "28em">
+
+<!ENTITY tabCrashed.header "Cilne avarēja">
+<!ENTITY tabCrashed.message "Hmm.. ļoti neveikli. Mēs mēģinājām attēlot mājas lapu, bet tā nereaģē.">
+<!ENTITY tabCrashed.checkSendReport "Pateikt &vendorShortName; par šo avāriju, lai viņi var to salabot.">
+<!ENTITY tabCrashed.tryAgain "Mēģināt vēlreiz">
+
+<!ENTITY uiTour.infoPanel.close "Aizvērt">
+
+<!ENTITY appMenuSidebars.label         "Sānu joslas">
+
+<!ENTITY switchToMetroCmd2.label       "Atvērt &brandShortName; Windows 8 Touch stilā">
 <!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
      The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
      Please ensure that this remains the case in the translation. -->
+
 <!ENTITY panicButton.view.mainTimeframeDesc       "Aizmirst pēdējās:">
 <!ENTITY panicButton.view.5min                    "Piecas minūtes">
 <!ENTITY panicButton.view.2hr                     "Divas stundas">
 <!ENTITY panicButton.view.day                     "24 stundas">
-
-
 <!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
      The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
+
 <!ENTITY panicButton.view.mainActionDesc          "Turpinot jūs:">
 <!ENTITY panicButton.view.deleteCookies           "Izdzēsīsiet nesenās <html:strong>sīkdatnes</html:strong>">
 <!ENTITY panicButton.view.deleteHistory           "Izdzēsīsiet pārlūkošanas <html:strong>vēsturi</html:strong>">
@@ -786,3 +831,4 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY panicButton.thankyou.msg1                "Jūsu nesenā vēsture ir notīrīta.">
 <!ENTITY panicButton.thankyou.msg2                "Sērfojiet droši!">
 <!ENTITY panicButton.thankyou.buttonlabel         "Paldies!">
+
