@@ -71,14 +71,14 @@ do
 			if setxkbmap $koptions; then logs "setxkbmap OK $koptions"; else logs "setxkbmap ERR $koptions"; fi
 			;;
 
-		# swarp=0,0 // move mouse pointer to top left of screen
-		swarp=*)
+			# swarp=0,0 // move mouse pointer to top left of screen
+			swarp=*)
 			koptions=$( /bin/busybox httpd -d ${x#swarp=} )
 			swarp $(echo $koptions | sed 's/[^0-9]/ /g')
 			;;
 
-		# http://webconverger.org/touch_screen_calibration/
-		xinput=*)
+			# http://webconverger.org/touch_screen_calibration/
+			xinput=*)
 			option=$( /bin/busybox httpd -d ${x#xinput=} )
 			if eval xinput "$option"
 			then
@@ -88,48 +88,48 @@ do
 			fi
 			;;
 
-		# https://groups.google.com/forum/#!msg/webc-users/GlHh_SX17BM/GojceXVSazgJ
-		xrandr-all=*)
+			# https://groups.google.com/forum/#!msg/webc-users/GlHh_SX17BM/GojceXVSazgJ
+			xrandr-all=*)
 			xoptions=$( /bin/busybox httpd -d ${x#xrandr-all=} )
 
 			logs "xrandr-all: $xoptions"
 
 			xrandr | awk '$2 ~ /^connected$/ { print $1 }' | while read output
-			do
-				xrandr --output $output $xoptions
-			done
+		do
+			xrandr --output $output $xoptions
+		done
 
-			;;
+		;;
 
-		xrandr=*)
+	xrandr=*)
 
-			xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
+		xoptions=$( /bin/busybox httpd -d ${x#xrandr=} )
 
-			if xrandr $xoptions
-			then
-				logs "xrandr OK $xoptions"
-			else
-				logs "xrandr ERR $xoptions"
-			fi
+		if xrandr $xoptions
+		then
+			logs "xrandr OK $xoptions"
+		else
+			logs "xrandr ERR $xoptions"
+		fi
 
-			;;
+		;;
 
-		noblank)
-			logs "noblank"
-			xset s off
-			xset -dpms
-			;;
+	noblank)
+		logs "noblank"
+		xset s off
+		xset -dpms
+		;;
 
-		numlock)
-			logs "numlock set"
-			/usr/bin/numlockx
-			;;
+	numlock)
+		logs "numlock set"
+		/usr/bin/numlockx
+		;;
 
-		blank=*)
-			secondstillblank=$((${x#blank=} * 60))
-			logs "screen will blank after $secondstillblank seconds"
-			xset s $secondstillblank
-			;;
+	blank=*)
+		secondstillblank=$((${x#blank=} * 60))
+		logs "screen will blank after $secondstillblank seconds"
+		xset s $secondstillblank
+		;;
 
 	esac
 done
@@ -151,61 +151,57 @@ cmdline | grep -qs showcursor || exec /usr/bin/unclutter &
 trap "echo Unbreakable!" SIGINT SIGTERM
 
 # Stuff in here gets run at every browser restart:
-while true
-do
-	for x in $(cmdline); do
-		case $x in
-			homepage=*)
-				homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
-				;;
+for x in $(cmdline); do
+	case $x in
+		homepage=*)
+			homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
+			;;
 
 		bgurl=*)
 			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
-				# only download if newer
-				wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
-				file /home/webc/bg.png.custom | grep -qs "image data" && {
-					cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
-					update_background /home/webc/bg.png
-				}
-			;;
+			# only download if newer
+			wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+			file /home/webc/bg.png.custom | grep -qs "image data" && {
+			cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+			update_background /home/webc/bg.png
+		}
+		;;
 
-		install)
-			homepage="$install_qa_url"
-			;;
-		esac
-	done
+	install)
+		homepage="$install_qa_url"
+		;;
+esac
+done
 
-	mac=$( mac_address )
-	usbid=$( usb_serials | head -n1 )
+mac=$( mac_address )
+usbid=$( usb_serials | head -n1 )
+
+while true
+do
 
 	if test -x /opt/firefox/firefox
 	then
 
 		xsetroot -name "$webc_version $webc_id"
+		export webc_id="$webc_id"
 
 		if ! cmdline_has noclean
 		then
-		for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
-		do
-			rm -rf $d
-		done
+			for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
+			do
+				rm -rf $d
+			done
 		fi
 
-		if cmdline_has noptirun || ! pidof bumblebeed
+		logs rhomepage: $rhomepage homepage: $homepage
+		homepage="$(echo ${rhomepage:-$homepage} | sed 's,%20, ,g')"
+		logs Launching with "${homepage}"
+		if cmdline_has instantupdate
 		then
-			logs "FF (re)start"
-			/opt/firefox/firefox $(echo $homepage | 
-			sed "s,MACID,$mac,g" | 
-			sed "s,WEBCID,$webc_id,g" | 
-			sed "s,WEBCVERSION,$webc_version,g" | 
-			sed "s,USBID,$usbid,g" )
+			export rhomepage="$(/usr/bin/webc-wsc /opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,WEBCID,$webc_id,g" | sed "s,WEBCVERSION,$webc_version,g" | sed "s,USBID,$usbid,g" ))"
 		else
-			logs "FF optirun (re)start"
-			optirun /opt/firefox/firefox $(echo $homepage | 
-			sed "s,MACID,$mac,g" | 
-			sed "s,WEBCID,$webc_id,g" | 
-			sed "s,WEBCVERSION,$webc_version,g" | 
-			sed "s,USBID,$usbid,g" )
+			/opt/firefox/firefox $(echo $homepage | sed "s,MACID,$mac,g" | sed "s,WEBCID,$webc_id,g" | sed "s,WEBCVERSION,$webc_version,g" | sed "s,USBID,$usbid,g" )
 		fi
+
 	fi
 done
