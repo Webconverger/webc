@@ -142,9 +142,30 @@ setup_unionfs ()
 
 				modprobe fuse
 				#ulimit -c unlimited # enable core dumps
+				# Note that when -d is specified, git-fs runs in the foreground,
+				# so we can't use openvt --wait. Instead, just sleep a bit waiting
+				# for the filesystem to be mounted
 				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${gitfs_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
 				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
+
+				# Use this command to capture errors when the
+				# kernel panics and you cannot scroll to see it.
+				# You'll need a serial port (which is easy
+				# virtualbox, just let it dump to a raw file).
+				#git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" &>/dev/ttyS0
+
+				# Don't add -d here, then git-fs will run in
+				# the foreground and block. Adding & to run in
+				# the background does not seem to be suffcient.
+				# Instead, use openvt like above.
+				#
+				# Also note that if "debug" is on the kernel commandline,
+				# /usr/share/initramfs-tools/init will redirect output to a file,
+				# hiding any errors
+				#
+				# We redirect stderr to fd 7, to bypass boot.log redirection
+				# set by 9990-main.sh (which seems to sometimes eat messages).
+				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" 2>&7
 
 				log_end_msg
 				#maybe_break gitfs
