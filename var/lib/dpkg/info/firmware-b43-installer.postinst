@@ -22,8 +22,7 @@ if [ -n "$APT_PROXIES" ]; then
         eval export $APT_PROXIES
 fi
 
-wget --timeout=60 http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2
-if [ $? -ne 0 ]; then
+if ! wget --timeout=60 http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2 ; then
 	echo "Some problem occurred during the firmware download. Please check your internet connection." 
 	exit 0
     else

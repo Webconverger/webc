@@ -12,9 +12,19 @@ _update_catalog() {
     journalctl --update-catalog || true
 }
 
-# Update Message Catalogs database in response to dpkg trigger
+# Update Message Catalogs database and reload in response to dpkg triggers
 if [ "$1" = "triggered" ]; then
-    _update_catalog
+    shift
+    for trigger in "$@"; do
+        case $trigger in
+            /usr/lib/systemd/catalog)
+                _update_catalog
+                ;;
+            /etc/init.d)
+                _systemctl daemon-reload
+                ;;
+        esac
+    done
     exit 0
 fi
 
@@ -129,6 +139,10 @@ fi
 if dpkg --compare-versions "$2" lt "214-1"; then
     systemctl enable getty@tty1.service || true
     systemctl enable remote-fs.target || true
+fi
+
+if dpkg --compare-versions "$2" lt "215-13"; then
+    systemctl enable hwclock-save.service || true
 fi
 
 # Re-run systemctl enable for any service that was enabled when preinst was run.

@@ -117,6 +117,17 @@ fi
 basename=${INTERFACE%%[0-9]*}
 match="$match, KERNEL==\"$basename*\""
 
+# build a regular expression that matches the new rule that we want to write
+new_rule_pattern=$(echo "^SUBSYSTEM==\"net\", ACTION==\"add\"$match" | sed -re 's/([\?\*])/\\\1/g')
+
+# Double check if the new rule has already been written. This happens if
+# multiple add events are generated before the script returns and udevd
+# renames the interfaces. See #765577 for details.
+if egrep -qs "$new_rule_pattern" $RO_RULES_FILE $RULES_FILE; then
+	unlock_rules_file
+	exit 0
+fi
+
 if [ "$INTERFACE_NAME" ]; then
 	# external tools may request a custom name
 	COMMENT="$COMMENT (custom name provided by external tool)"

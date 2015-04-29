@@ -95,8 +95,8 @@ make_static_nodes() {
   while read type name mode uid gid age arg; do
     [ -e $name ] && continue
     case "$type" in
-      c|b) mknod -m $mode $name $type $(echo $arg | sed 's/:/ /') ;;
-      d) mkdir $name ;;
+      c|b|c!|b!) mknod -m $mode $name $type $(echo $arg | sed 's/:/ /') ;;
+      d|d!) mkdir $name ;;
       *) echo "unparseable line ($type $name $mode $uid $gid $age $arg)" >&2 ;;
     esac
 

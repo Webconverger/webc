@@ -1,0 +1,11 @@
+[Unit]
+Description=Increase datagram queue length
+DefaultDependencies=no
+Before=syslog.socket
+ConditionPathIsReadWrite=/proc/sys/net/unix/max_dgram_qlen
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/sysctl -w net.unix.max_dgram_qlen=512
+StandardOutput=null
+RemainAfterExit=yes

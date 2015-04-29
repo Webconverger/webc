@@ -12,6 +12,7 @@ After=systemd-user-sessions.service plymouth-quit-wait.service
 After=rc-local.service
 Before=getty.target
 IgnoreOnIsolate=yes
+ConditionPathExists=/dev/pts/%I
 
 [Service]
 ExecStart=-/sbin/agetty --noclear --keep-baud pts/%I 115200,38400,9600 $TERM

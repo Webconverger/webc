@@ -340,7 +340,8 @@ _checkfs_once()
 	if [ "$NAME" = "/" ] ; then
 		NAME="root"
 	fi
-	FSCK_LOGFILE=/run/initramfs/fsck
+	FSCK_LOGFILE=/run/initramfs/fsck.log
+	FSCK_STAMPFILE=/run/initramfs/fsck-${NAME#/}
 
 	TYPE=$(get_fstype "$1")
 
@@ -380,9 +381,6 @@ _checkfs_once()
 		log_end_msg
 	fi
 
-	#
-	# If there was a failure, drop into a shell.
-	#
 	# NOTE: "failure" is defined as exiting with a return code of
 	# 4, possibly or-ed with other flags. A return code of 1
 	# indicates that file system errors were corrected but that
@@ -399,6 +397,8 @@ _checkfs_once()
 	then
 		log_warning_msg "File system check failed but did not detect errors"
 		sleep 5
+	else
+		touch $FSCK_STAMPFILE
 	fi
 	return 0
 }

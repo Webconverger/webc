@@ -15,6 +15,9 @@ Before=sockets.target shutdown.target
 # Don't allow logging until the very end
 Conflicts=shutdown.target
 
+# Increase max_dgram_qlen to a more reasonable value
+Wants=systemd-setup-dgram-qlen.service
+
 [Socket]
 ListenDatagram=/run/systemd/journal/syslog
 SocketMode=0666

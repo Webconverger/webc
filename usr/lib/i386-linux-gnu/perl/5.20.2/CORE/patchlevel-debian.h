@@ -21,7 +21,7 @@
 	,"DEBPKG:debian/deprecate-with-apt - http://bugs.debian.org/747628 Point users to Debian packages of deprecated core modules"
 	,"DEBPKG:debian/squelch-locale-warnings - http://bugs.debian.org/508764 Squelch locale warnings in Debian package maintainer scripts"
 	,"DEBPKG:debian/skip-upstream-git-tests - Skip tests specific to the upstream Git repository"
-	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.20.2-2 in patchlevel.h"
+	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.20.2-3 in patchlevel.h"
 	,"DEBPKG:debian/skip-kfreebsd-crash - http://bugs.debian.org/628493 [perl #96272] Skip a crashing test case in t/op/threads.t on GNU/kFreeBSD"
 	,"DEBPKG:fixes/document_makemaker_ccflags - http://bugs.debian.org/628522 [rt.cpan.org #68613] Document that CCFLAGS should include $Config{ccflags}"
 	,"DEBPKG:debian/find_html2text - http://bugs.debian.org/640479 Configure CPAN::Distribution with correct name of html2text"
@@ -37,3 +37,4 @@
 	,"DEBPKG:fixes/socket_test_recv_fix - http://bugs.debian.org/758718 [perl #122657] Compare recv return value to peername in socket test"
 	,"DEBPKG:fixes/hurd_socket_recv_todo - http://bugs.debian.org/758718 [perl #122657] TODO checking the result of recv() on hurd"
 	,"DEBPKG:fixes/regexp-performance - [0fa70a0] http://bugs.debian.org/777556 [perl #123743] simpify and speed up /.*.../ handling"
+	,"DEBPKG:fixes/failed_require_diagnostics - http://bugs.debian.org/781120 [perl #123270] Report inaccesible file on failed require"
