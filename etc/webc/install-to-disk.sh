@@ -98,7 +98,7 @@ md5() { md5sum | awk '{ print $1 }'; }
 verify_extlinux_mbr() {
 	local disk="$1"
 	_logs "verifying mbr on ${disk}"
-	a=$( md5 < /usr/lib/extlinux/mbr.bin )
+	a=$( md5 < /usr/lib/EXTLINUX/mbr.bin )
 	b=$( dd if=$disk bs=440c count=1 2>/dev/null | md5 )
 	test "$a" = "$b" && return 0
 	return 1
@@ -109,7 +109,7 @@ install_extlinux() {
 	local disk="$3"
 
 	_logs "installing mbr to ${disk}"
-	dd if=/usr/lib/extlinux/mbr.bin of="${disk}" bs=440 count=1 2> /dev/null
+	dd if=/usr/lib/EXTLINUX/mbr.bin of="${disk}" bs=440 count=1
 
 	_logs "installing extlinux to ${dir}/boot/extlinux"
 	mkdir -p "${dir}/boot/extlinux"
