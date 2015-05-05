@@ -114,7 +114,7 @@ def guess_dependency(req, version=None):
         version = getver(version)
 
     # some upstreams have weird ideas for distribution name...
-    name, rest = re.compile('([^><= \[]+)(.*)').match(req).groups()
+    name, rest = re.compile('([^!><= \[]+)(.*)').match(req).groups()
     req = safe_name(name) + rest
 
     data = load()
@@ -172,7 +172,7 @@ def guess_dependency(req, version=None):
 
     # fall back to python-distname
     pname = sensible_pname(name)
-    log.warn('Cannot find installed package that provides %s. '
+    log.info('Cannot find installed package that provides %s. '
              'Using %s as package name. Please add "%s correct_package_name" '
              'line to debian/pydist-overrides to override it if this is incorrect.',
              name, pname, safe_name(name))

@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     purge|remove)
-	if [ -x /usr/sbin/update-initramfs -a -e /etc/initramfs-tools/initramfs.conf ] ; then
+	if [ -x /usr/sbin/update-initramfs ] && [ -e /etc/initramfs-tools/initramfs.conf ] ; then
 	    update-initramfs -u
 	fi
     ;;

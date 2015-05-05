@@ -75,6 +75,10 @@ pidofproc () {
         esac
     done
     shift $(($OPTIND - 1))
+    if [ $# -ne 1 ]; then
+        echo "$0: invalid arguments" >&2
+        return 4
+    fi
 
     base=${1##*/}
     if [ ! "$specified" ]; then
@@ -276,7 +280,7 @@ log_begin_msg () {
     if [ -z "${1:-}" ]; then
         return 1
     fi
-    /bin/echo -n "$@" || true
+    echo -n "$@" || true
     log_begin_msg_post "$@"
 }
 
@@ -301,11 +305,11 @@ log_daemon_msg () {
     log_daemon_msg_pre "$@"
 
     if [ -z "${2:-}" ]; then
-        /bin/echo -n "$1:" || true
+        echo -n "$1:" || true
         return
     fi
     
-    /bin/echo -n "$1: $2" || true
+    echo -n "$1: $2" || true
     log_daemon_msg_post "$@"
 }
 
@@ -328,7 +332,7 @@ log_progress_msg () {
     if [ -z "${1:-}" ]; then
         return 1
     fi
-    /bin/echo -n " $@" || true
+    echo -n " $@" || true
 }
 
 
@@ -375,12 +379,12 @@ log_action_msg () {
 
 log_action_begin_msg () {
     log_action_begin_msg_pre "$@"
-    /bin/echo -n "$@..." || true
+    echo -n "$@..." || true
     log_action_begin_msg_post "$@"
 }
 
 log_action_cont_msg () {
-    /bin/echo -n "$@..." || true
+    echo -n "$@..." || true
 }
 
 log_action_end_msg () {

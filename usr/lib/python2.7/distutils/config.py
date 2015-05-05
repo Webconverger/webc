@@ -21,7 +21,7 @@ password:%s
 class PyPIRCCommand(Command):
     """Base command that knows how to handle the .pypirc file
     """
-    DEFAULT_REPOSITORY = 'http://pypi.python.org/pypi'
+    DEFAULT_REPOSITORY = 'https://pypi.python.org/pypi'
     DEFAULT_REALM = 'pypi'
     repository = None
     realm = None
@@ -47,11 +47,6 @@ class PyPIRCCommand(Command):
             f.write(DEFAULT_PYPIRC % (username, password))
         finally:
             f.close()
-        try:
-            os.chmod(rc, 0600)
-        except OSError:
-            # should do something better here
-            pass
 
     def _read_pypirc(self):
         """Reads the .pypirc file."""

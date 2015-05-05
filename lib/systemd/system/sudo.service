@@ -4,7 +4,7 @@ Description=Provide limited super user privileges to specific users
 [Service]
 Type=oneshot
 # \073 is ';' which needs to be part of the find parameters
-ExecStart=/usr/bin/find /var/lib/sudo -exec /usr/bin/touch -t 198501010000 '{}' \073
+ExecStart=/usr/bin/find /var/lib/sudo -exec /usr/bin/touch -d @0 '{}' \073
 
 [Install]
 WantedBy=multi-user.target

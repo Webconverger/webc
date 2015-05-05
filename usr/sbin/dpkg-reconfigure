@@ -18,18 +18,15 @@ use Debconf::Log qw(:all);
 Debconf::Config->priority('low');
 
 my $unseen_only=0;
-my $all=0;
 my $force=0;
 my $default_priority=0;
 my $reload=1;
 Debconf::Config->getopt(
 gettext(qq{Usage: dpkg-reconfigure [options] packages
-  -a,  --all			Reconfigure all packages.
   -u,  --unseen-only		Show only not yet seen questions.
        --default-priority	Use default priority instead of low.
        --force			Force reconfiguration of broken packages.
        --no-reload		Do not reload templates. (Use with caution.)}),
-	"all|a"			=> \$all,
 	"unseen-only|u"		=> \$unseen_only,
 	"default-priority"	=> \$default_priority,
 	"force"			=> \$force,
@@ -58,17 +55,10 @@ unless ($unseen_only) {
 	Debconf::Config->reshow(1);
 }
 
-my @packages;
-if ($all) {
-	@packages=allpackages();
-	exit unless @packages;
-}
-else {
-	@packages=@ARGV;
-	if (! @packages) {
-		print STDERR "$0: ".gettext("please specify a package to reconfigure")."\n";
-		exit 1;
-	}
+my @packages=@ARGV;
+if (! @packages) {
+	print STDERR "$0: ".gettext("please specify a package to reconfigure")."\n";
+	exit 1;
 }
 
 $ENV{DEBCONF_RECONFIGURE}=1;
@@ -166,21 +156,6 @@ do {
 $frontend->shutdown;
 
 Debconf::Db->save;
-
-sub allpackages {
-	my @ret;
-	local $/="\n\n";
-	
-	open (STATUS, "</var/lib/dpkg/status")
-		|| die sprintf(gettext("Cannot read status file: %s"), $!);
-	while (<STATUS>) {
-		push @ret, $1
-			if m/Status:\s*.*\sinstalled\n/ && m/Package:\s*(.*)\n/;
-	}
-	close STATUS;
-
-	return sort @ret;
-}
 
 sub run_external {
 	Debconf::Db->save;

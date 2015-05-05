@@ -20,7 +20,7 @@
 <H2 CLASS="title">T&acirc;ches</H2>
 
 <P>
-<FORM ACTION="/jobs/" METHDO="GET"><INPUT TYPE="SUBMIT" VALUE="G&eacute;rer les T&acirc;ches"></FORM>
+<FORM ACTION="/jobs/" METHOD="GET"><INPUT TYPE="SUBMIT" VALUE="G&eacute;rer les T&acirc;ches"></FORM>
 </P>
 
 </TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD VALIGN="TOP">
@@ -45,28 +45,21 @@
 <P><A HREF="/admin/">Avanc&eacute; <SMALL>&#x25bc;</SMALL></A><BR>
 <INPUT TYPE="HIDDEN" NAME="OP" VALUE="config-server">
 <INPUT TYPE="HIDDEN" NAME="ADVANCEDSETTINGS" VALUE="YES">
-<INPUT TYPE="CHECKBOX" NAME="REMOTE_PRINTERS" {?remote_printers}> Afficher les imprimantes partag&eacute;es par d'autres syst&egrave;mes<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Protocoles\:
-<INPUT TYPE="CHECKBOX" NAME="BROWSE_REMOTE_CUPS" {?browse_remote_cups}> CUPS
-{HAVE_LDAP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_REMOTE_LDAP" {?browse_remote_ldap}> LDAP:}
-{HAVE_LIBSLP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_REMOTE_SLP" {?browse_remote_slp}> SLP:}<BR>
 <INPUT TYPE="CHECKBOX" NAME="SHARE_PRINTERS" {?share_printers}> Partager les imprimantes connect&eacute;es &agrave; ce syst&egrave;me<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nombre maximum de clients\:
 <INPUT TYPE="TEXT" NAME="MAX_CLIENTS" VALUE="{?max_clients}" SIZE="6"><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Protocoles\:
-<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_CUPS" {?browse_local_cups}> CUPS
-{HAVE_DNSSD?<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_DNSSD" {?browse_local_dnssd}> DNS-SD:}
-{HAVE_LDAP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_LDAP" {?browse_local_ldap}> LDAP:}
-{HAVE_LIBSLP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_SLP" {?browse_local_slp}> SLP:}<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="REMOTE_ANY" {?remote_any}> Autoriser l'impression depuis Internet<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="BROWSE_WEB_IF" {?browse_web_if}> Annoncer l'interface Web<BR>
 <INPUT TYPE="CHECKBOX" NAME="REMOTE_ADMIN" {?remote_admin}> Autoriser l'administration &agrave; distance<BR>
 {have_gssapi?<INPUT TYPE="CHECKBOX" NAME="KERBEROS" {?kerberos}> Utiliser l'authentification Kerberos (<A HREF="/help/kerberos.html?TOPIC=Getting+Started">FAQ</A>)<BR>:}
 <INPUT TYPE="CHECKBOX" NAME="USER_CANCEL_ANY" {?user_cancel_any}> Autoriser les utilisateurs &agrave; annuler n'importe quelle t&acirc;che (Pas seulement les leurs)<BR>
-<INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOB_HISTORY" {?preserve_job_history}> Conserver l'historique des t&acirc;ches<BR>
+<INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOBS" {?preserve_jobs}> Conserver l'historique des t&acirc;ches<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nombre de t&acirc;ches\:
 <INPUT TYPE="TEXT" NAME="MAX_JOBS" VALUE="{?max_jobs}" SIZE="6"><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOB_FILES" {?preserve_job_files}> Conserver les fichiers d'impression des t&acirc;ches<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Conserver les meta-donn&eacute;es\:
+<INPUT TYPE="TEXT" NAME="PRESERVE_JOB_HISTORY" VALUE="{?preserve_job_history}" SIZE="6"><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Conserver les documents\:
+<INPUT TYPE="TEXT" NAME="PRESERVE_JOB_FILES" VALUE="{?preserve_job_files}" SIZE="6"><BR>
 <INPUT TYPE="CHECKBOX" NAME="DEBUG_LOGGING" {?debug_logging}> Enregistrer les informations de debug pour la r&eacute;solution de probl&egrave;mes<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Taille maximum du fichier de log\:
 <INPUT TYPE="TEXT" NAME="MAX_LOG_SIZE" VALUE="{?max_log_size}" SIZE="6"></P>
@@ -75,7 +68,6 @@
 
 <P><A HREF="/admin/?ADVANCEDSETTINGS=YES">Avanc&eacute; <SMALL>&#x25b6;</SMALL></A><BR>
 <INPUT TYPE="HIDDEN" NAME="OP" VALUE="config-server">
-<INPUT TYPE="CHECKBOX" NAME="REMOTE_PRINTERS" {?remote_printers}> Afficher les imprimantes partag&eacute;es par d'autres syst&egrave;mes<BR>
 <INPUT TYPE="CHECKBOX" NAME="SHARE_PRINTERS" {?share_printers}> Partager les imprimantes connect&eacute;es &agrave; ce syst&egrave;me<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="REMOTE_ANY" {?remote_any}> Autoriser l'impression depuis Internet<BR>
 <INPUT TYPE="CHECKBOX" NAME="REMOTE_ADMIN" {?remote_admin}> Autoriser l'administration &agrave; distance<BR>

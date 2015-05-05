@@ -26,10 +26,11 @@ if [ "$RUN" = "yes" ]; then
 			       ip6_address ip6_prefix ip6_prefixlen \
 			       dhcp6_domain_search dhcp6_name_servers ; do
 			var="${prefix}${basevar}"
+			eval "content=\$var"
 
 			# show only variables with values set
-			if [ -n "${!var}" ]; then
-				echo "$var='${!var}'" >> /tmp/dhclient-script.debug
+			if [ -n "${content}" ]; then
+				echo "$var='${content}'" >> /tmp/dhclient-script.debug
 			fi
 		done
 	done

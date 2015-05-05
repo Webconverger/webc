@@ -1,0 +1,132 @@
+#! /usr/bin/perl -w
+
+# chconfig
+# Copyright (C) 1999 Fabrizio Polacco <fpolacco@prosa.it>
+#
+# This file is part of man-db.
+#
+# man-db is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# man-db is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with man-db; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# tool to convert the man-db configuration file to the FHS.
+# it slurps the file in argument (default /etc/manpath.config) and,
+# unless exists in it a single line containing the keyword
+#		NOFHS
+# it tries to make the changes to comply with FHS.
+
+push @ARGV, "/etc/manpath.config" unless @ARGV;
+	print "  Upgrading $ARGV[0]\n";
+
+my $myum = 0;
+my $myusm = 0;
+my $mh = 0;
+my $mhug = 0;
+my $mhob = 0;
+my $mhos = 0;
+my $mbusm = 0;
+my $mbom = 0;
+
+push @IN, "  # config file rewritten by tool chconfig\n";
+while (<>) {
+	warn "  Respecting NOFHS directive.\n" and exit 0
+		if m,^\s*NOFHS\s*$,i;
+	warn "  Configuration file already processed.\n" and exit 0
+		if m/$IN[0]/;
+	push @IN, $_;
+	  # first section
+	$myum = $#IN	if m,^MANDATORY_MANPATH\s+/usr/man\s*$, ;
+	$myusm = $#IN	if m,^MANDATORY_MANPATH\s+/usr/share/man\s*$, ;
+	  # second section
+	$mhug = $#IN	if m,^MANPATH_MAP\s+/usr/games\s+, ;
+	$mhob = $#IN	if m,^MANPATH_MAP\s+/opt/bin\s+, ;
+	$mhos = $#IN	if m,^MANPATH_MAP\s+/opt/sbin\s+, ;
+	$mh = $#IN	if m,^MANPATH_MAP\s+, ;
+	  # third section
+	if ( m,^MANDB_MAP\s+(/\S+)(?:\s+.*)?$, ) {
+		$w = $1 ;
+		push @IN3, ( $w =~ s,/,,g) . " $_";
+		$mbusm = $#IN	if m,^MANDB_MAP\s+/usr/share/man(?:\s+.*)?$, ;
+		$mbom = $#IN	if m,^MANDB_MAP\s+/opt/man(?:\s+.*)?$, ;
+	}
+}
+  # In the third section, if needed, add the lines
+  #	MANDB_MAP       /usr/share/man		/var/cache/man/share
+  #	MANDB_MAP	/opt/man		/var/cache/man/opt
+push @IN3, "3 MANDB_MAP\t/usr/share/man\t/var/cache/man/share\n"	unless $mbusm;
+push @IN3, "2 MANDB_MAP\t/opt/man\t/var/cache/man/opt\n"		unless $mbom;
+
+$saved = $ARGV . ".orig";
+rename $ARGV, ( -e $saved ? $ARGV . "~" : $saved );
+open OUT, ">$ARGV" or die "Cannot open output file $ARGV: $!\n";
+
+foreach $j (0..$#IN) {
+	$_ = $IN[$j];
+	  # first section
+	  # MANDATORY_MANPATH section:
+	  # we have to add 
+	  #	MANDATORY_MANPATH                       /usr/share/man
+	  # just after the usual line
+	  #	MANDATORY_MANPATH                       /usr/man
+	  # which we leave in place.
+	if ( ! $myusm and $j == $myum ) {
+		print OUT ;
+		print OUT "MANDATORY_MANPATH\t\t\t/usr/share/man\n";
+		next;
+	}
+	  # second section
+	  # MANPATH_MAP section:
+	  # we change all the manpath_elements from /usr/man to /usr/share/man.
+	  # we also add the lines
+	  #	MANPATH_MAP	/usr/games		/usr/share/man
+	  #	MANPATH_MAP	/opt/bin		/opt/man
+	  #	MANPATH_MAP	/opt/sbin		/opt/man
+	  # if they were missing.
+	if ( m,^MANPATH_MAP\s+, ) {
+		s,(\s+)/usr/man\s*$,$1/usr/share/man\n,;
+		print OUT ;
+		  # only after the last entry of the section!
+		if ( $j == $mh ) {
+			print OUT "MANPATH_MAP\t/usr/games\t\t/usr/share/man\n"
+				unless $mhug;
+			print OUT "MANPATH_MAP\t/opt/bin\t\t/opt/man\n"
+				unless $mhob;
+			print OUT "MANPATH_MAP\t/opt/sbin\t\t/opt/man\n"
+				unless $mhos;
+		}
+		next;
+	}
+	  # third section
+	  # MANDB_MAP section:
+	  # in the relative_catpath field, we change all occurrences of
+	  # /var/catman with /var/cache/man.
+	  # we also reorder the entries to have longer manpath before.
+	if ( m,^MANDB_MAP\s+, ) {
+		if ( @IN3 ) {
+			foreach (reverse sort @IN3) {
+				($w,$t,$m,$c) = split;
+				$c = "/var/cache/man/$c"
+					if !$c or $c =~ m/^FSSTND$/i;
+				$c =~ s,/var/catman,/var/cache/man,;
+				print OUT $t, "\t", $m, "\t\t", $c, "\n";
+			}
+			@IN3 = ();
+		}
+		next;
+	}
+	  # default
+	print OUT;
+}
+
+__END__
+

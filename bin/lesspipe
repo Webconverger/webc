@@ -98,7 +98,7 @@ if [ $# -eq 1 ] ; then
 				if [ -x "`which bunzip2`" ]; then bunzip2 -dc "$1"
 				else echo "No bunzip2 available"; fi ;;
 
-			*.deb|*.udeb)
+			*.deb|*.udeb|*.ddeb)
 				echo "$1:"; dpkg --info "$1"
 				echo
 				echo '*** Contents:'; dpkg-deb --contents "$1"
@@ -196,7 +196,7 @@ if [ $# -eq 1 ] ; then
 				tar tzvf "$1" --force-local
 				;;
 
-			*.tar.xz)
+			*.tar.xz|*.txz)
 				if [ -x "`which xz`" ]; then
 					xz -dc "$1" | tar tfvv -
 				else

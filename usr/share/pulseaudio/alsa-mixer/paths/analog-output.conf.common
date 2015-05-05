@@ -55,7 +55,22 @@
 
 ; [General]
 ; priority = ...                         # Priority for this path
-; description = ...
+; description-key = ...                  # The path description is looked up from a table in path_verify() in
+;                                        # src/modules/alsa/alsa-mixer.c. By default the path name (i.e. the file name
+;                                        # minus the ".conf" suffix) is used as the lookup key, but if this option is
+;                                        # set, then the given string is used as the key instead. In any case the
+;                                        # "description" option can be used to override the path description.
+; description = ...                      # Description for this path. Overrides the normal description lookup logic, as
+;                                        # described in the "description-key" documentation above.
+; mute-during-activation = yes | no      # If this path supports hardware mute, should the hw mute be used while activating this
+;                                        # path? In some cases this can reduce extra noises during port switching, while in other
+;                                        # cases this can increase such noises. Default: no.
+; eld-device = ...                       # If this is an HDMI port, here's where to specify the device number for the ELD mixer
+;                                        # control. The default is to not make use of ELD information.
+;
+; [Properties]                           # Property list for this path. The list is merged into the port property list.
+; <key> = <value>                        # Each property is defined on its own line.
+; ...
 ;
 ; [Option ...:...]                       # For each option of an enumeration or switch element
 ;                                        # that shall be exposed as a sink/source port. Needs to
@@ -100,12 +115,14 @@
 ;                                        # channel mask. A channel mask may either be the name of a single channel, or the words "all-left",
 ;                                        # "all-right", "all-center", "all-front", "all-rear", and "all" to encode a specific subset of
 ;                                        # channels in a mask
-; [Jack ...]                        # For each jack that we will use for jack detection
-;                                   # The name 'Jack Foo' must match ALSA's 'Foo Jack' control.
-; required = ignore | any           # If not set to ignore, make the path invalid if this jack control is not present.
-; required-absent = ignore | any    # If not set to ignore, make the path invalid if this jack control is present.
-; required-any = ignore | any       # If not set to ignore, make the path invalid if no jack controls and no elements with
-;                                   # the required-any are present.
+; [Jack ...]                           # For each jack that we will use for jack detection
+;                                      # The name 'Jack Foo' must match ALSA's 'Foo Jack' control.
+; required = ignore | any              # If not set to ignore, make the path invalid if this jack control is not present.
+; required-absent = ignore | any       # If not set to ignore, make the path invalid if this jack control is present.
+; required-any = ignore | any          # If not set to ignore, make the path invalid if no jack controls and no elements with
+;                                      # the required-any are present.
+; state.plugged = yes | no | unknown   # Normally a plugged jack would mean the port becomes available, and an unplugged means it's
+; state.unplugged = yes | no | unknown # unavailable, but the port status can be overridden by specifying state.plugged and/or state.unplugged.
 
 [Element PCM]
 switch = mute

@@ -1,0 +1,107 @@
+#!/usr/bin/perl -w
+
+use Errno;
+use strict;
+
+my $lib_dir = "/usr/lib/emacsen-common";
+my $invoked_by_old_pkg;
+my $context;
+my $pkg;
+
+require $lib_dir . "/lib.pl";
+
+umask 0022 or die "emacs-package-install: can't set umask, aborting.";
+
+sub usage
+{
+  my($file_handle) = @_;
+  if($invoked_by_old_pkg)
+  {
+    print $file_handle "Usage: emacs-package-install FLAVOR\n";
+  }
+  else
+  {
+    print $file_handle
+        "Usage: emacs-package-install (--preinst|--postinst) FLAVOR\n";
+  }
+}
+
+sub is_new_pkg
+{
+  my($pkg) = @_;
+  return (-e  "$lib_dir/packages/compat/$pkg");
+}
+
+if(scalar(@ARGV) == 1)
+{
+  $invoked_by_old_pkg = 1;
+  $pkg = $ARGV[0];
+  $context = 'postinst';
+}
+elsif (scalar(@ARGV) == 2)
+{
+  if($ARGV[0] eq '--preinst') { $context = 'preinst'; }
+  elsif($ARGV[0] eq '--postinst') { $context = 'postinst'; }
+  else
+  {
+    usage(*STDERR{IO});
+    exit(1);
+  }
+  $pkg = $ARGV[1];
+}
+else
+{
+  usage(*STDERR{IO});
+  exit(1);
+}
+
+if($context eq 'preinst')
+{
+  die "ERROR: cannot unlink $::installed_package_state_dir/$pkg: $!, "
+      unless (unlink("$::installed_package_state_dir/$pkg") or $!{ENOENT});
+  exit(0);
+}
+
+# Must be --postinst.
+
+validate_add_on_pkg($pkg, 'emacs-package-install', $invoked_by_old_pkg);
+
+# Mark package as safe to attempt to setup.
+ex('touch', "$::installed_package_state_dir/$pkg");
+
+# Get all the packages $pkg depends on, dependency sorted.
+my @pkgs_to_handle = generate_add_on_install_list([$pkg]);
+my @installed_flavors = get_installed_flavors();
+
+foreach my $pkg (@pkgs_to_handle)
+{
+  my $script = $lib_dir . "/packages/install/$pkg";
+
+  if(is_new_pkg($pkg))
+  {
+    foreach my $flavor (@installed_flavors)
+    {
+      print "Install $pkg for $flavor\n";
+      if(-e $script && (system($script, $flavor) != 0))
+      {
+        print STDERR "ERROR: install script from $pkg package failed\n";
+        exit(1);
+      }
+    }
+  }
+  else # old pkg
+  {
+    print "Install $pkg for emacs\n";
+    ex($script, 'emacs', @installed_flavors) if -e $script;
+
+    foreach my $flavor (@installed_flavors)
+    {
+      print "Install $pkg for $flavor\n";
+      if(-e $script && (system($script, $flavor, @installed_flavors) != 0))
+      {
+        print STDERR "ERROR: install script from $pkg package failed\n";
+        exit(1);
+      }
+    }
+  }
+}

@@ -32,11 +32,7 @@ fi
 PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
 
 case "${THEME_NAME}" in
-	text)
-		PLUGINS="text.so"
-		;;
-
-	details)
+	text|details|tribar)
 		PLUGINS="text.so details.so"
 		;;
 
@@ -56,12 +52,7 @@ fi
 # copy plugin and images for current theme
 copy_exec "${MODULE}"
 mkdir -p "${DESTDIR}/${THEMES}"
-IMAGES="$(sed -n 's/^ImageDir=\(.*\)/\1/p' ${THEME})"
-# No images in text mode:
-if [ -n "${IMAGES}" ]
-then
-	cp -r "${IMAGES}" "${DESTDIR}/${THEMES}"
-fi
+cp -r "${THEMES}/${THEME_NAME}" "${DESTDIR}/${THEMES}"
 
 # copy binaries and base plugins
 copy_exec /bin/plymouth
@@ -69,7 +60,13 @@ copy_exec /sbin/plymouthd
 
 for PLUGIN in ${PLUGINS}
 do
-	copy_exec ${PLUGIN_PATH}/${PLUGIN}
+	if [ -f ${PLUGIN_PATH}/${PLUGIN} ]
+	then
+		copy_exec ${PLUGIN_PATH}/${PLUGIN}
+	else
+		echo "W: plymouth: The plugin ${PLUGIN} is missing, the selected theme might not work as expected."
+		echo "W: plymouth: You might want to install the plymouth-themes package to fix this."
+	fi
 done
 
 # copy base themes and logo
@@ -89,28 +86,49 @@ case "${THEME_NAME}" in
 	*)
 		cp /usr/share/plymouth/debian-logo.png "${DESTDIR}/usr/share/plymouth"
 
-		# copy files for font rendering
-		mkdir -p "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
+		# fontconfig
 		mkdir -p "${DESTDIR}/etc/fonts/conf.d"
-		mkdir -p "${DESTDIR}/var/cache/fontconfig"
-		cp -a /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
-		cp -a /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf  "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
 		cp -a /etc/fonts/fonts.conf "${DESTDIR}/etc/fonts"
 		cp -rL /etc/fonts/conf.d/60-latin.conf "${DESTDIR}/etc/fonts/conf.d"
+		mkdir -p "${DESTDIR}/var/cache/fontconfig"
 
-		mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d"
-		mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/modules"
-		cp /usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d/libpango1.0-0.modules ${DESTDIR}/usr/lib/i386-linux-gnu/pango/1.6.0/module-files.d/
-		copy_exec /usr/lib/i386-linux-gnu/pango/1.6.0/modules/pango-basic-fc.so
+		# fonts-dejavu
+		if [ -e /usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf ]
+		then
+			# jessie
+			mkdir -p "${DESTDIR}/usr/share/fonts/truetype/dejavu"
+			cp -a /usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf "${DESTDIR}/usr/share/fonts/truetype/dejavu"
+			cp -a /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf  "${DESTDIR}/usr/share/fonts/truetype/dejavu"
+		else
+			# wheezy
+			mkdir -p "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
+			cp -a /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
+			cp -a /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf  "${DESTDIR}/usr/share/fonts/truetype/ttf-dejavu"
+		fi
 
-		# copy renderers
-		copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/frame-buffer.so
-		copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/drm.so
+		# pango
+		if ls /usr/lib/i386-linux-gnu/pango/1* > /dev/null 2>&1
+		then
+			# wheezy
+			PANGO_VERSION="$(ls /usr/lib/i386-linux-gnu/pango)"
+
+			mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/${PANGO_VERSION}/module-files.d"
+			mkdir -p "${DESTDIR}/usr/lib/i386-linux-gnu/pango/${PANGO_VERSION}/modules"
+			cp /usr/lib/i386-linux-gnu/pango/${PANGO_VERSION}/module-files.d/libpango1.0-0.modules ${DESTDIR}/usr/lib/i386-linux-gnu/pango/${PANGO_VERSION}/module-files.d/
+			copy_exec /usr/lib/i386-linux-gnu/pango/${PANGO_VERSION}/modules/pango-basic-fc.so
+		else
+			# jessie
+			copy_exec /usr/lib/i386-linux-gnu/libpango-1.0.so.0
+		fi
 
 		# add drm modules
 		copy_modules_dir kernel/drivers/gpu/drm mga r128 savage sis tdfx via
 		;;
 esac
+
+# copy renderers
+copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/frame-buffer.so
+copy_exec /usr/lib/i386-linux-gnu/plymouth/renderers/drm.so
 
 # copy config files
 mkdir -p "${DESTDIR}/etc/plymouth"

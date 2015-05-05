@@ -112,7 +112,7 @@ def compile(file, cfile=None, dfile=None, doraise=False):
     try:
         codeobject = __builtin__.compile(codestring, dfile or file,'exec')
     except Exception,err:
-        py_exc = PyCompileError(err.__class__,err.args,dfile or file)
+        py_exc = PyCompileError(err.__class__, err, dfile or file)
         if doraise:
             raise py_exc
         else:
@@ -120,13 +120,24 @@ def compile(file, cfile=None, dfile=None, doraise=False):
             return
     if cfile is None:
         cfile = file + (__debug__ and 'c' or 'o')
-    with open(cfile, 'wb') as fc:
-        fc.write('\0\0\0\0')
-        wr_long(fc, timestamp)
-        marshal.dump(codeobject, fc)
-        fc.flush()
-        fc.seek(0, 0)
-        fc.write(MAGIC)
+    # Atomically write the pyc/pyo file.  Issue #13146.
+    # id() is used to generate a pseudo-random filename.
+    path_tmp = '{}.{}'.format(cfile, id(cfile))
+    try:
+        with open(path_tmp, 'wb') as fc:
+            fc.write('\0\0\0\0')
+            wr_long(fc, timestamp)
+            marshal.dump(codeobject, fc)
+            fc.flush()
+            fc.seek(0, 0)
+            fc.write(MAGIC)
+        os.rename(path_tmp, cfile)
+    except OSError:
+        try:
+            os.unlink(path_tmp)
+        except OSError:
+            pass
+        raise
 
 def main(args=None):
     """Compile several source files.

@@ -8,9 +8,6 @@
 
 set -e
 
-# source debconf library
-. /usr/share/debconf/confmodule
-
 THIS_PACKAGE=xserver-xorg
 THIS_SCRIPT=postinst
 
@@ -26,7 +23,7 @@ THIS_SCRIPT=postinst
 # skip past this library by scanning forward in this file to the string
 # "GOBSTOPPER".
 
-SOURCE_VERSION=1:7.7+3~deb7u1
+SOURCE_VERSION=1:7.7+7
 OFFICIAL_BUILD=
 
 # Use special abnormal exit codes so that problems with this library are more
@@ -641,12 +638,6 @@ if [ -e /etc/default/xorg ]; then
   . /etc/default/xorg
 fi
 
-# the error-out function
-bomb () {
-  echo "$PROGNAME: error: $*" | fold -s -w "${COLUMNS:-80}" >&2
-  exit 1
-}
-
 debug_echo () {
   # Syntax: debug_echo message ...
   if [ -n "$DEBUG_XORG_DEBCONF" ] || [ "$DEBCONF_DEBUG" = "user" ] \
@@ -684,112 +675,6 @@ elif [ `readlink "$SERVER_SYMLINK"` = "/bin/true" ]; then
   rm -f "$SERVER_SYMLINK"
   ln -s "$THIS_SERVER" "$SERVER_SYMLINK"
 fi
-
-if [ -n "$UPGRADE" ]; then
-    if dpkg --compare-versions "$2" le "1:7.3+5"; then
-        # Clean up our old crap
-        for QUESTION in "shared/default-x-server" \
-                        "xserver-xorg/autodetect_mouse" \
-                        "xserver-xorg/autodetect_monitor" \
-                        "xserver-xorg/autodetect_video_card" \
-                        "xserver-xorg/config/device/identifier" \
-                        "xserver-xorg/config/monitor/selection-method" \
-                        "xserver-xorg/config/monitor/screen-size" \
-                        "xserver-xorg/config/monitor/mode-list" \
-                        "xserver-xorg/config/monitor/default-identifier" \
-                        "xserver-xorg/config/monitor/horiz-sync" \
-                        "xserver-xorg/config/monitor/vert-refresh" \
-                        "xserver-xorg/config/monitor/range_input_error" \
-                        "xserver-xorg/config/display/modes" \
-                        "xserver-xorg/config/device/video_ram" \
-                        "xserver-xorg/config/display/default_depth" \
-                        "xserver-xorg/config/inputdevice/mouse/port" \
-                        "xserver-xorg/config/inputdevice/mouse/protocol" \
-                        "xserver-xorg/config/inputdevice/mouse/emulate3buttons" \
-                        "xserver-xorg/config/modules" \
-                        "xserver-xorg/config/monitor/default-identifier" \
-                        "xserver-xorg/config/monitor/identifier" \
-                        "xserver-xorg/config/write_files_section" \
-                        "xserver-xorg/multiple_possible_x-drivers"; do
-          db_unregister "$QUESTION" || true
-        done
-    fi
-    if dpkg --compare-versions "$2" lt-nl 1:7.4; then
-      for QUESTION in \
-        xserver-xorg/config/null_string_error \
-        xserver-xorg/config/doublequote_in_string_error \
-        xserver-xorg/config/nonnumeric_string_error \
-        xserver-xorg/config/device/use_fbdev \
-        xserver-xorg/config/device/driver \
-        xserver-xorg/config/inputdevice/keyboard/rules \
-        xserver-xorg/config/inputdevice/keyboard/model \
-        xserver-xorg/config/inputdevice/keyboard/layout \
-        xserver-xorg/config/inputdevice/keyboard/variant \
-        xserver-xorg/config/inputdevice/keyboard/options \
-        xserver-xorg/autodetect_keyboard; do
-	db_unregister $QUESTION || true
-      done
-    fi
-    if dpkg --compare-versions "$2" lt-nl 1:7.4+2; then
-      db_unregister xserver-xorg/config/device/bus_id || true
-      db_unregister xserver-xorg/config/device/bus_id_error || true
-      rm -f "$XORGCONFIG_ROSTER" "$XORGCONFIG_CHECKSUM"
-      rm -f "$SERVER_SYMLINK_CHECKSUM" "$SERVER_SYMLINK_ROSTER"
-    fi
-fi
-
-if dpkg --compare-versions "$2" lt-nl "1:7.4~3"; then
-  # We're upgrading from pre-7.4.  We need to replace i810 with intel, and
-  # via with openchrome.
-  if [ -e "$XORGCONFIG" ]; then
-    LC_ALL=C sed -e'
-	/^[[:space:]]*Section[[:space:]]\+"Device"[[:space:]]*$/I,/^[[:space:]]*EndSection[[:space:]]*$/I {
-	/^[[:space:]]*Driver[[:space:]]\+"i810"/I s/i810/intel/I
-	/^[[:space:]]*Driver[[:space:]]\+"via"/I s/via/openchrome/I
-	}
-	' $XORGCONFIG > ${XORGCONFIG}.madwizard-new
-    if ! cmp -s $XORGCONFIG ${XORGCONFIG}.madwizard-new; then
-      chown --reference=$XORGCONFIG ${XORGCONFIG}.madwizard-new
-      chmod --reference=$XORGCONFIG ${XORGCONFIG}.madwizard-new
-      mv ${XORGCONFIG}.madwizard-new $XORGCONFIG
-    else
-      rm ${XORGCONFIG}.madwizard-new
-    fi
-  fi
-fi
-
-get_hal_pid() {
-  dbus-send --system --dest=org.freedesktop.DBus --print-reply \
-    /org/freedesktop/DBus org.freedesktop.DBus.GetConnectionUnixProcessID \
-    string:org.freedesktop.Hal 2>/dev/null | awk '/uint32/ {print $2}'
-}
-
-restart_hal() {
-  # restart hald if it was running before
-  pid=$(get_hal_pid)
-  if [ -n "$pid" ]; then
-    kill $pid 2>/dev/null || true
-    lshal >/dev/null || true # will trigger through D-Bus activation
-  fi
-}
-
-case "$1" in
-  configure)
-    if dpkg --compare-versions "$2" lt-nl "1:7.3+11"; then
-      remove_conffile_commit "/etc/init.d/xserver-xorg"
-    fi
-    if dpkg --compare-versions "$2" lt-nl "1:7.3+13"; then
-      update-rc.d xserver-xorg remove || true
-    fi
-    if dpkg --compare-versions "$2" lt "1:7.5~3"; then
-      if [ `uname -s` = "GNU/kFreeBSD" ]; then
-        restart_hal
-      fi
-    fi
-    ;;
-esac
-
-db_stop
 
 exit 0
 

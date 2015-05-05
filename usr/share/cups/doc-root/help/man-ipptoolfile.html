@@ -11,7 +11,7 @@
 ipptoolfile - ipptool file format
 
 <h2 class="title"><a name="DESCRIPTION">Description</a></h2>
-The <a href='man-ipptool.html?TOPIC=Man+Pages'>ipptool(1)</a> program accepts free-form plain text files that describe one or more IPP requests. Comments start with the "#" character and continue to the end of the line. Each request is enclosed by curley braces, for example:
+The <a href='man-ipptool.html?TOPIC=Man+Pages'>ipptool(1)</a> program accepts free-form plain text files that describe one or more IPP requests. Comments start with the "#" character and continue to the end of the line. Each request is enclosed by curly braces, for example:
 <pre>
 
     # This is a comment
@@ -76,6 +76,10 @@ The following directives can be used outside of a test:
 <dd>Defines the named variable to the given value if it does not already have a
 value.
 </dd>
+<dt>FILE-ID "identifier"
+</dt>
+<dd>Specifies an identifier string for the current file.
+</dd>
 <dt>IGNORE-ERRORS yes
 </dt>
 <dd></dd>
@@ -118,6 +122,13 @@ includes a file from the <i>ipptool</i> include directory.
 </dt>
 <dd>Specifies that the remainder of the test file should be skipped when the
 variable is or is not defined.
+</dd>
+<dt>STOP-AFTER-INCLUDE-ERROR no
+</dt>
+<dd></dd>
+<dt>STOP-AFTER-INCLUDE-ERROR yes
+</dt>
+<dd>Specifies whether tests will be stopped after an error in an included file.
 </dd>
 <dt>TRANSFER auto
 </dt>
@@ -163,13 +174,25 @@ The following directives are understood in a test:
 <dt>ATTR tag attribute-name value(s)
 </dt>
 <dd>Adds an attribute to the test request. Values are separated by the comma (",")
-character - escape commas using the "" character.
+character - escape commas using the "\" character. Common attributes and values are listed in the IANA IPP registry - see references below.
 </dd>
 <dt>ATTR collection attribute-name { MEMBER tag member-name value(s) ... } [ ... { ... } ]
 </dt>
 <dd>Adds a collection attribute to the test request. Member attributes follow the
 same syntax as regular attributes and can themselves be nested collections.
 Multiple collection values can be supplied as needed.
+</dd>
+<dt>COMPRESSION deflate
+</dt>
+<dd></dd>
+<dt>COMPRESSION gzip
+</dt>
+<dd></dd>
+<dt>COMPRESSION none
+</dt>
+<dd></dd>
+<dd>Uses the specified compression on the document data following the attributes in
+a Print-Job or Send-Document request.
 </dd>
 <dt>DELAY seconds
 </dt>
@@ -252,6 +275,10 @@ resulted in an error/failure.
 added as predicates - see the "STATUS PREDICATES" section for more information
 on predicates.
 </dd>
+<dt>TEST-ID "identifier"
+</dt>
+<dd>Specifies an identifier string for the current test.
+</dd>
 <dt>TRANSFER auto
 </dt>
 <dd>Specifies that this test will use "Transfer-Encoding: chunked" if it has an
@@ -323,6 +350,11 @@ defined.
 </dt>
 <dd>Requires the EXPECT attribute to use the specified value tag(s).
 </dd>
+<dt>REPEAT-LIMIT number
+</dt>
+<dd></dd>
+<dd>Specifies the maximum number of times to repeat. The default value is 1000.
+</dd>
 <dt>REPEAT-MATCH
 </dt>
 <dd></dd>
@@ -336,22 +368,117 @@ matches or does not match.
 <dd>Requires the EXPECT attribute to have the same number of values as the specified
 parallel attribute.
 </dd>
+<dt>WITH-ALL-HOSTNAMES "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-ALL-HOSTNAMES "/regular expression/"
+</dt>
+<dd>Requires that all URI values contain a matching hostname.
+</dd>
+<dt>WITH-ALL-RESOURCES "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-ALL-RESOURCES "/regular expression/"
+</dt>
+<dd>Requires that all URI values contain a matching resource (including leading /).
+</dd>
+<dt>WITH-ALL-SCHEMES "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-ALL-SCHEMES "/regular expression/"
+</dt>
+<dd>Requires that all URI values contain a matching scheme.
+</dd>
+<dt>WITH-ALL-VALUES "literal string"
+</dt>
+<dd>Requires that all values of the EXPECT attribute match the literal string. Comparisons are case-sensitive.
+</dd>
+<dt>WITH-ALL-VALUES &lt;number
+</dt>
+<dd></dd>
+<dt>WITH-ALL-VALUES =number
+</dt>
+<dd></dd>
+<dt>WITH-ALL-VALUES >number
+</dt>
+<dd></dd>
+<dt>WITH-ALL-VALUES number[,number,...]
+</dt>
+<dd>Requires that all values of the EXPECT attribute match the number(s) or numeric comparison. When comparing rangeOfInteger values, the "&lt;" and ">" operators only check the upper bound of the range.
+</dd>
+<dt>WITH-ALL-VALUES "false"
+</dt>
+<dd></dd>
+<dt>WITH-ALL-VALUES "true"
+</dt>
+<dd>Requires that all values of the EXPECT attribute match the boolean value given.
+</dd>
+<dt>WITH-ALL-VALUES "/regular expression/"
+</dt>
+<dd>Requires that all values of the EXPECT attribute match the regular expression, which must conform to the POSIX regular expression syntax. Comparisons are case-sensitive.
+</dd>
+<dt>WITH-HOSTNAME "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-HOSTNAME "/regular expression/"
+</dt>
+<dd>Requires that at least one URI value contains a matching hostname.
+</dd>
+<dt>WITH-RESOURCE "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-RESOURCE "/regular expression/"
+</dt>
+<dd>Requires that at least one URI value contains a matching resource (including leading /).
+</dd>
+<dt>WITH-SCHEME "literal string"
+</dt>
+<dd></dd>
+<dt>WITH-SCHEME "/regular expression/"
+</dt>
+<dd>Requires that at least one URI value contains a matching scheme.
+</dd>
 <dt>WITH-VALUE "literal string"
 </dt>
-<dd>Requires at least one value of the EXPECT attribute to match the literal string.
-Comparisons are case-sensitive.
+<dd>Requires that at least one value of the EXPECT attribute matches the literal string. Comparisons are case-sensitive.
+</dd>
+<dt>WITH-VALUE &lt;number
+</dt>
+<dd></dd>
+<dt>WITH-VALUE =number
+</dt>
+<dd></dd>
+<dt>WITH-VALUE >number
+</dt>
+<dd></dd>
+<dt>WITH-VALUE number[,number,...]
+</dt>
+<dd>Requires that at least one value of the EXPECT attribute matches the number(s) or numeric comparison. When comparing rangeOfInteger values, the "&lt;" and ">" operators only check the upper bound of the range.
+</dd>
+<dt>WITH-VALUE "false"
+</dt>
+<dd></dd>
+<dt>WITH-VALUE "true"
+</dt>
+<dd>Requires that at least one value of the EXPECT attribute matches the boolean value given.
 </dd>
 <dt>WITH-VALUE "/regular expression/"
 </dt>
-<dd>Requires that all values of the EXPECT attribute match the regular expression,
-which must conform to the POSIX regular expression syntax.
-Comparisons are case-sensitive.
+<dd>Requires that at least one value of the EXPECT attribute matches the regular expression, which must conform to the POSIX regular expression syntax. Comparisons are case-sensitive.
 
 </dd>
 </dl>
 <h2 class="title"><a name="STATUS_PREDICATES">Status Predicates</a></h2>
 The following predicates are understood following the STATUS test directive:
 <dl>
+<dt>DEFINE-MATCH variable-name
+</dt>
+<dd>Defines the variable to "1" when the STATUS matches. A side-effect of this predicate is that this STATUS will never fail a test.
+</dd>
+<dt>DEFINE-NO-MATCH variable-name
+</dt>
+<dd>Defines the variable to "1" when the STATUS does not match. A side-effect of this predicate is that this STATUS will never fail a test.
+</dd>
 <dt>IF-DEFINED variable-name
 </dt>
 <dd>Makes the STATUS apply only if the specified variable is defined.
@@ -359,6 +486,11 @@ The following predicates are understood following the STATUS test directive:
 <dt>IF-NOT-DEFINED variable-name
 </dt>
 <dd>Makes the STATUS apply only if the specified variable is not defined.
+</dd>
+<dt>REPEAT-LIMIT number
+</dt>
+<dd></dd>
+<dd>Specifies the maximum number of times to repeat. The default value is 1000.
 </dd>
 <dt>REPEAT-MATCH
 </dt>
@@ -398,8 +530,8 @@ RFC 2911 and other IPP extension specifications. Here is a complete list:
     Cancel-Subscription
     Close-Job
     Create-Job
-    Create-Job-Subscription
-    Create-Printer-Subscription
+    Create-Job-Subscriptions
+    Create-Printer-Subscriptions
     Deactivate-Printer
     Disable-Printer
     Enable-Printer
@@ -413,6 +545,7 @@ RFC 2911 and other IPP extension specifications. Here is a complete list:
     Get-Subscriptions
     Hold-Job
     Hold-New-Jobs
+    Identify-Printer
     Pause-Printer
     Pause-Printer-After-Current-Job
     Print-Job
@@ -430,6 +563,7 @@ RFC 2911 and other IPP extension specifications. Here is a complete list:
     Resume-Printer
     Schedule-Job-After
     Send-Document
+    Send-Hardcopy-Document
     Send-Notifications
     Send-URI
     Set-Job-Attributes
@@ -437,6 +571,7 @@ RFC 2911 and other IPP extension specifications. Here is a complete list:
     Shutdown-Printer
     Startup-Printer
     Suspend-Current-Job
+    Validate-Document
     Validate-Job
 </pre>
 
@@ -454,6 +589,10 @@ Status codes correspond to the hexadecimal numbers (0xHHHH) and names from RFC
     client-error-document-access-error
     client-error-document-format-error
     client-error-document-format-not-supported
+    client-error-document-password-error
+    client-error-document-permission-error
+    client-error-document-security-error
+    client-error-document-unprintable-error
     client-error-forbidden
     client-error-gone
     client-error-ignored-all-notifications
@@ -570,7 +709,7 @@ no job-uri has been seen.
 </dd>
 <dt>$notify-subscription-id
 </dt>
-<dd>Inserts the last notify-subscription-id value returnd in a test response or 0 if
+<dd>Inserts the last notify-subscription-id value returned in a test response or 0 if
 no notify-subscription-id has been seen.
 </dd>
 <dt>$port
@@ -596,12 +735,15 @@ no notify-subscription-id has been seen.
 </dd>
 </dl>
 <h2 class="title"><a name="SEE_ALSO">See Also</a></h2>
-<a href='man-ipptool.html?TOPIC=Man+Pages'>ipptool(1)</a>,
+<a href='man-ipptool.html?TOPIC=Man+Pages'>ipptool(1)</a>, RFC 2911,
 <br>
 <a href='http://localhost:631/help'>http://localhost:631/help</a>
-
+<br>
+<a href='http://www.iana.org/assignments/ipp-registrations'>http://www.iana.org/assignments/ipp-registrations</a>
+<br>
+<a href='http://www.pwg.org/ipp'>http://www.pwg.org/ipp</a>
 <h2 class="title"><a name="COPYRIGHT">Copyright</a></h2>
-Copyright 2007-2011 by Apple Inc.
+Copyright 2007-2014 by Apple Inc.
 
 </body>
 </html>

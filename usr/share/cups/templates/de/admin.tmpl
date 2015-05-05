@@ -1,26 +1,26 @@
-<TABLE CLASS="indent" SUMMARY="Administrative T&auml;tigkeiten">
+<TABLE CLASS="indent" SUMMARY="Administrative Tätigkeiten">
 <TR><TD VALIGN="TOP">
 
 <H2 CLASS="title">Drucker</H2>
 
 <P>
-<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-printer"><INPUT TYPE="SUBMIT" VALUE="Drucker hinzuf&uuml;gen"></FORM>
-<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="find-new-printers"><INPUT TYPE="SUBMIT" VALUE="Verf&uuml;gbare Drucker auflisten"></FORM>
+<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-printer"><INPUT TYPE="SUBMIT" VALUE="Drucker hinzufügen"></FORM>
+<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="find-new-printers"><INPUT TYPE="SUBMIT" VALUE="Verfügbare Drucker auflisten"></FORM>
 <FORM ACTION="/printers/" METHOD="GET"><INPUT TYPE="SUBMIT" VALUE="Drucker verwalten"></FORM>
-{have_samba?<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="export-samba"><INPUT TYPE="SUBMIT" VALUE="Drucker f&uuml;r Samba freigeben"></FORM>:}
+{have_samba?<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="export-samba"><INPUT TYPE="SUBMIT" VALUE="Drucker für Samba freigeben"></FORM>:}
 </P>
 
 <H2 CLASS="title">Klassen</H2>
 
 <P>
-<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-class"><INPUT TYPE="SUBMIT" VALUE="Klasse hinzuf&uuml;gen"></FORM>
+<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-class"><INPUT TYPE="SUBMIT" VALUE="Klasse hinzufügen"></FORM>
 <FORM ACTION="/classes/" METHOD="GET"><INPUT TYPE="SUBMIT" VALUE="Klassen verwalten"></FORM>
 </P>
 
-<H2 CLASS="title">Druckauftr&auml;ge</H2>
+<H2 CLASS="title">Druckaufträge</H2>
 
 <P>
-<FORM ACTION="/jobs/" METHOD="GET"><INPUT TYPE="SUBMIT" VALUE="Auftr&auml;ge verwalten"></FORM>
+<FORM ACTION="/jobs/" METHOD="GET"><INPUT TYPE="SUBMIT" VALUE="Aufträge verwalten"></FORM>
 </P>
 
 </TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD VALIGN="TOP">
@@ -59,16 +59,16 @@
 {HAVE_LDAP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_LDAP" {?browse_local_ldap}> LDAP:}
 {HAVE_LIBSLP?<INPUT TYPE="CHECKBOX" NAME="BROWSE_LOCAL_SLP" {?browse_local_slp}> SLP:}<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="REMOTE_ANY" {?remote_any}> Erlaube Drucken vom Internet aus<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="BROWSE_WEB_IF" {?browse_web_if}> Ver&ouml;ffentliche Webinterface<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="BROWSE_WEB_IF" {?browse_web_if}> Veröffentliche Webinterface<BR>
 <INPUT TYPE="CHECKBOX" NAME="REMOTE_ADMIN" {?remote_admin}> Erlaube entfernte Verwaltung<BR>
 {have_gssapi?<INPUT TYPE="CHECKBOX" NAME="KERBEROS" {?kerberos}> Benutze Kerberos Authentifizierung (<A HREF="/help/kerberos.html?TOPIC=Getting+Started">FAQ</A>)<BR>:}
 <INPUT TYPE="CHECKBOX" NAME="USER_CANCEL_ANY" {?user_cancel_any}> Erlaube Benutzern jeden Auftrag abzubrechen (nicht nur die Eigenen)<BR>
 <INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOB_HISTORY" {?preserve_job_history}> Auftragsverlauf aufbewahren<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anzahl der Auftr&auml;ge\:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anzahl der Aufträge\:
 <INPUT TYPE="TEXT" NAME="MAX_JOBS" VALUE="{?max_jobs}" SIZE="6"><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOB_FILES" {?preserve_job_files}> Dateien von Druckauftr&auml;gen aufbewahren<BR>
-<INPUT TYPE="CHECKBOX" NAME="DEBUG_LOGGING" {?debug_logging}> Speichere Fehlerinformationen f&uuml;r Fehlersuche<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maximale Gr&ouml;&szlig;e der Protokolldatei\:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="CHECKBOX" NAME="PRESERVE_JOB_FILES" {?preserve_job_files}> Dateien von Druckaufträgen aufbewahren<BR>
+<INPUT TYPE="CHECKBOX" NAME="DEBUG_LOGGING" {?debug_logging}> Speichere Fehlerinformationen für Fehlersuche<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maximale Grösse der Protokolldatei\:
 <INPUT TYPE="TEXT" NAME="MAX_LOG_SIZE" VALUE="{?max_log_size}" SIZE="6"></P>
 
 :<P><B>Grundlegende Servereinstellungen:</B></P>
@@ -81,10 +81,10 @@
 <INPUT TYPE="CHECKBOX" NAME="REMOTE_ADMIN" {?remote_admin}> Erlaube entfernte Verwaltung<BR>
 {have_gssapi?<INPUT TYPE="CHECKBOX" NAME="KERBEROS" {?kerberos}> Benutze Kerberos Authentifizierung (<A HREF="/help/kerberos.html?TOPIC=Getting+Started">FAQ</A>)<BR>:}
 <INPUT TYPE="CHECKBOX" NAME="USER_CANCEL_ANY" {?user_cancel_any}> Erlaube Benutzern jeden Auftrag abzubrechen (nicht nur die Eigenen)<BR>
-<INPUT TYPE="CHECKBOX" NAME="DEBUG_LOGGING" {?debug_logging}> Speichere Fehlerinformationen f&uuml;r Fehlersuche</P>
+<INPUT TYPE="CHECKBOX" NAME="DEBUG_LOGGING" {?debug_logging}> Speichere Fehlerinformationen für Fehlersuche</P>
 
 }
-<P><INPUT TYPE="SUBMIT" NAME="CHANGESETTINGS" VALUE="Einstellungen &auml;ndern"></P>
+<P><INPUT TYPE="SUBMIT" NAME="CHANGESETTINGS" VALUE="Einstellungen ändern"></P>
 
 </FORM>}
 
@@ -96,7 +96,7 @@
 <H2 CLASS="title">RSS Subskriptionen</H2>
 
 <P>
-<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-rss-subscription"><INPUT TYPE="SUBMIT" VALUE="RSS Subskription hinzuf&uuml;gen"></FORM>
+<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="add-rss-subscription"><INPUT TYPE="SUBMIT" VALUE="RSS Subskription hinzufügen"></FORM>
 </P>
 
 </DIV>
@@ -105,6 +105,6 @@
 <THEAD><TR><TH>Name</TH><TH>Ereignis</TH><TH>Warteschlange</TH></TR></THEAD>
 <TBODY>{[notify_subscription_id]
 <TR><TD><A HREF="{notify_recipient_uri}">{notify_recipient_name}</A><BR>
-<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="cancel-subscription"><INPUT TYPE="HIDDEN" NAME="notify_subscription_id" VALUE="{notify_subscription_id}"><INPUT TYPE="SUBMIT" VALUE="RSS Subskription k&uuml;ndigen"></FORM>&nbsp;</TD><TD>{notify_events}</TD><TD NOWRAP>&nbsp;{notify_printer_name?{notify_printer_name}:Alle Warteschlangen}</TD></TR>}
+<FORM ACTION="/admin/" METHOD="POST"><INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}"><INPUT TYPE="HIDDEN" NAME="OP" VALUE="cancel-subscription"><INPUT TYPE="HIDDEN" NAME="notify_subscription_id" VALUE="{notify_subscription_id}"><INPUT TYPE="SUBMIT" VALUE="RSS Subskription kündigen"></FORM>&nbsp;</TD><TD>{notify_events}</TD><TD NOWRAP>&nbsp;{notify_printer_name?{notify_printer_name}:Alle Warteschlangen}</TD></TR>}
 </TBODY>
 </TABLE>:}

@@ -16,17 +16,17 @@ set -e
 
 case "$1" in
     configure)
-	# Update init script priorities
-	if dpkg --compare-versions "$2" lt "3.20.2-1"; then
-		for i in 0 6 ; do
-			if [ -e /etc/rc$i.d/K90rsyslog ]; then
-				mv /etc/rc$i.d/K90rsyslog /etc/rc$i.d/S30rsyslog
-			fi
-		done
-	fi
-	# /run transition (see #633036)
+	# /run transition (Bug: #633036)
 	if dpkg --compare-versions "$2" lt "5.8.2-2"; then
 		rm -f /lib/init/rw/sendsigs.omit.d/rsyslog
+	fi
+
+	# Fix permissions of the spool/work directory (Bug: #693099)
+	chmod 700 /var/spool/rsyslog
+
+	# Clean up temporary syslog.service symlink
+	if [ -d /run/systemd/system ] &&  dpkg --compare-versions "$2" lt-nl "7.4.1-2" ; then
+		rm -f /run/systemd/system/syslog.service
 	fi
     ;;
 
@@ -39,10 +39,31 @@ case "$1" in
     ;;
 esac
 
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask rsyslog.service >/dev/null || true
 
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled rsyslog.service; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable rsyslog.service >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state rsyslog.service >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+# In case this system is running systemd, we need to ensure that all
+# necessary tmpfiles (if any) are created before starting.
+if [ -d /run/systemd/system ] ; then
+	systemd-tmpfiles --create /usr/lib/tmpfiles.d/xconsole.conf >/dev/null || true
+fi
+# End automatically added section
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/rsyslog" ]; then
-	update-rc.d rsyslog start 10 2 3 4 5 . start 30 0 6 . stop 90 1 . >/dev/null
+	update-rc.d rsyslog defaults >/dev/null
 	if [ -n "$2" ]; then
 		_dh_action=restart
 	else
@@ -52,5 +73,3 @@ if [ -x "/etc/init.d/rsyslog" ]; then
 fi
 # End automatically added section
 
-
-exit 0

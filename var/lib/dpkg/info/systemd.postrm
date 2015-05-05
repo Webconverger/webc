@@ -1,23 +1,31 @@
-#! /bin/sh
+#!/bin/sh
 
 set -e
 
-# Clean up the mess we created
-statedir=/var/lib/systemd
-if [ "$1" = "purge" ] && [ -d $statedir ]; then
-    find $statedir -name "*.symlinks" | while read file ; do
-        while read symlink ; do
-             rm -f "$symlink"
-        done < "$file"
-        rm -f "$file"
-    done
-    rm -f $statedir/enabled-units
-    rm -f $statedir/run-debian-enable-units
-    rmdir --ignore-fail-on-non-empty $statedir
-fi
+case "$1" in
+    purge)
+        rm -f /var/lib/systemd/catalog/database
+        rmdir --ignore-fail-on-non-empty /var/lib/systemd/catalog 2> /dev/null || true
+
+        rm -rf /var/lib/systemd/backlight/
+        rm -rf /var/lib/systemd/rfkill/
+
+        rm -f /var/lib/systemd/clock
+        rm -f /var/lib/systemd/random-seed
+    ;;
+esac
 
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/bash_completion.d/systemctl-bash-completion.sh /etc/bash_completion.d/systemd-bash-completion.sh 44-2~ systemd -- "$@"
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-journald.conf /etc/systemd/journald.conf 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-logind.conf /etc/systemd/logind.conf 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemd-bash-completion.sh 204-1~ systemd -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemctl-bash-completion.sh 204-1~ systemd -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/x11.conf 29-1~ systemd -- "$@"

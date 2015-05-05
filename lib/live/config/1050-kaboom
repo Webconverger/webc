@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Kaboom ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/kaboom.list ] || \
-	   [ -e /var/lib/live/config/kaboom ]
-	then
-		return
-	fi
-
-	echo -n " kaboom"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -28,11 +21,21 @@ Kaboom ()
 				;;
 		esac
 	done
-
-	Configure_kaboom
 }
 
-Configure_kaboom ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/kaboom.list ] || \
+	   [ -e /var/lib/live/config/kaboom ]
+	then
+		exit 0
+	fi
+
+	echo -n " kaboom"
+}
+
+Config ()
 {
 	sudo -u "${LIVE_USERNAME}" sh -c "mkdir -p /home/${LIVE_USERNAME}/.local && touch /home/${LIVE_USERNAME}/.local/kaboom"
 
@@ -40,4 +43,6 @@ Configure_kaboom ()
 	touch /var/lib/live/config/kaboom
 }
 
-Kaboom
+Cmdline
+Init
+Config

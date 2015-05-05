@@ -58,9 +58,6 @@ case "$1" in
 	CERTS_ENABLED="$RET"
 	# XXX unmark seen for next configuration
 	db_fset ca-certificates/new_crts seen false
-	# We should clean up this value now, as everyone will have
-	# upgraded to a fixed version.
-	db_fset ca-certificates/enable_crts asked_pt_br_question false
 	db_stop || true
 	if test -f /etc/ca-certificates.conf; then
 	  # XXX: while in subshell?

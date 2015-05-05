@@ -22,7 +22,7 @@ THIS_SCRIPT=preinst
 # skip past this library by scanning forward in this file to the string
 # "GOBSTOPPER".
 
-SOURCE_VERSION=1:7.7+3~deb7u1
+SOURCE_VERSION=1:7.7+7
 OFFICIAL_BUILD=
 
 # Use special abnormal exit codes so that problems with this library are more
@@ -645,14 +645,6 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
     mkdir --mode=755 --parents "$CONFIG_DIR"
   fi
 fi
-
-case "$1" in
-  install|upgrade)
-    if dpkg --compare-versions "$2" lt-nl "1:7.3+11"; then
-      remove_conffile_lookup xserver-xorg "/etc/init.d/xserver-xorg"
-    fi
-    ;;
-esac
 
 
 

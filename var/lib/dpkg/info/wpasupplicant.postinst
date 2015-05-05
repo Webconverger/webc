@@ -23,17 +23,6 @@ case "$1" in
 		if ! getent group netdev >/dev/null; then
 			addgroup --quiet --system netdev || true
 		fi
-
-		# Migrate existing sendsigs omission pid files to /run
-		if [ -d /run/sendsigs.omit.d/ ] && \
-		   [ -d /lib/init/rw/sendsigs.omit.d/ ]; then
-			for f in /lib/init/rw/sendsigs.omit.d/wpasupplicant.*.pid
-			do
-				if [ -f "$f" ]; then
-					mv "$f" /run/sendsigs.omit.d/
-				fi
-			done
-		fi
 		;;
 	abort-upgrade|abort-deconfigure|abort-remove)
 		;;

@@ -25,7 +25,16 @@ maybe_break()
 }
 
 # Override panic from scripts/functions
-panic() {
+panic()
+{
+	for _PARAMETER in ${LIVE_BOOT_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			panic=*)
+				panic="${_PARAMETER#*panic=}"
+				;;
+		esac
+	done
 
 	DEB_1="\033[1;31m .''\`.  \033[0m"
 	DEB_2="\033[1;31m: :'  : \033[0m"
@@ -41,13 +50,12 @@ panic() {
 	kill ${tailpid}
 
 	printf "\n\n"
-	printf "     ${DEB_1}\n"
-	printf "     ${DEB_2}  \033[1;37mBOOT FAILED!\033[0m\n"
-	printf "     ${DEB_3}\n"
-	printf "     ${DEB_4}  This Debian Live image failed to boot.\n\n"
+	printf "  \033[1;37mBOOT FAILED!\033[0m\n"
+	printf "\n"
+	printf "  This Live System image failed to boot.\n\n"
 
-	printf "  Please file a bug against the 'live-boot' package or email the Debian\n"
-	printf "  Live mailing list at <debian-live@lists.debian.org>, making sure to note the\n"
+	printf "  Please file a bug against the 'live-boot' package or email the Live Systems\n"
+	printf "  mailing list at <debian-live@lists.debian.org>, making sure to note the\n"
 	printf "  exact version, name and distribution of the image you were attempting to boot.\n\n"
 
 	printf "  The file ${LIVELOG} contains some debugging information but booting with the\n"

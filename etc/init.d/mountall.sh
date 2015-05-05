@@ -1,7 +1,7 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          mountall
-# Required-Start:    
+# Required-Start:    checkfs checkroot-bootclean
 # Required-Stop: 
 # Default-Start:     S
 # Default-Stop:
@@ -55,7 +55,7 @@ do_start() {
 		mknod -m 600 "$INITCTL" p
 
 		# Reopen control channel.
-		PID="$(pidof /sbin/init || echo 1)"
+		PID="$(pidof -s /sbin/init || echo 1)"
 		[ -n "$PID" ] && kill -s USR1 "$PID"
 	fi
 
@@ -83,7 +83,7 @@ case "$1" in
 	echo "Error: argument '$1' not supported" >&2
 	exit 3
 	;;
-  stop)
+  stop|status)
 	# No-op
 	;;
   *)

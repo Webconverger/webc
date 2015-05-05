@@ -13,10 +13,10 @@ rm -fr /var/lib/mime
 rm -f  /usr/sbin/install-mime
 
 
-# Use "see" as alternative for "view"
-update-alternatives \
-    --install /usr/bin/view view /usr/bin/see 1 \
-    --slave /usr/share/man/man1/view.1.gz view.1.gz /usr/share/man/man1/see.1.gz
+# Remove the "see" as alternative for "view"
+# Closes: #623384
+# This command can be removed after the Jessie release
+update-alternatives --remove view /usr/bin/see
 
 
 # Run the update program

@@ -49,18 +49,13 @@ can_start_udevd() {
     return 1
   fi
 
-  if [ ! -e /sys/kernel/uevent_helper ]; then
-    echo "udev requires hotplug support, not started."
-    return 1
-  fi
-
   if ! ps --no-headers --format args ax | egrep -q '^\['; then
     echo "udev does not support containers, not started."
     return 1
   fi
 
-  if ! grep -q '[[:space:]]tmpfs$' /proc/filesystems; then
-    echo "udev requires tmpfs support, not started."
+  if ! grep -q '[[:space:]]devtmpfs$' /proc/filesystems; then
+    echo "udev requires devtmpfs support, not started."
     return 1
   fi
 
@@ -75,54 +70,10 @@ can_start_udevd() {
 enable_udev() {
   can_start_udevd || return 0
 
-  echo > /sys/kernel/uevent_helper
+  invoke-rc.d udev start
 
-  # create the directory which will hold our new /dev
-  TEMPDEV=$(tempdir)
-
-  export UDEV_ROOT=$TEMPDEV
-  invoke-rc.d udev restart
-
-  if ! mount -n -o size=10M,mode=0755 -t tmpfs tmpfs $TEMPDEV; then
-    echo "Not enabling udev because the system lacks tmpfs support!"
-    rm -f $TEMPDEV/.udev/uevent_seqnum
-    rmdir $TEMPDEV/.udev/ 2> /dev/null || true
-    return
-  fi
-
-  echo "Populating the new /dev filesystem temporarily mounted on $TEMPDEV/..."
-  /lib/udev/create_static_nodes $TEMPDEV
-  udevadm trigger --action=add
-
-  # wait for the udevd children to finish
-  udevadm settle || true
-
-  for dir in pts shm; do
-    [ -d /dev/$dir ] || continue
-    mkdir -p $TEMPDEV/$dir
-    if mountpoint -q /dev/$dir; then
-      mount -n --move /dev/$dir $TEMPDEV/$dir
-    fi
-  done
-
-  mount -n --move $TEMPDEV /dev
-
-  # start the final daemon with the normal configuration
-  unset UDEV_ROOT
-  invoke-rc.d udev restart
-
-  # XXX Some people reported that the directory was not empty.
-  # This should fix the issue (udevd reopens the file for each event):
-  rm -f $TEMPDEV/.udev/uevent_seqnum
-  rmdir $TEMPDEV/.udev/ 2> /dev/null || true
-
-  if ! rmdir $TEMPDEV; then
-    echo "WARNING: $TEMPDEV is not empty!"
-    ls -laR $TEMPDEV
-  fi
-
-  # restart some daemons because their /dev sockets have been hidden by
-  # the tmpfs
+  # restart some daemons because their /dev sockets might have been hidden by
+  # the devtmpfs
   kill -s HUP 1
   local sysloginits="inetutils-syslogd rsyslog socklog-run sysklogd syslog-ng"
   for script in $sysloginits; do
@@ -144,38 +95,60 @@ write_interfaces_rules() {
   done
 }
 
-fix_persistent_net_rules() {
-  if [ -e /etc/udev/rules.d/70-persistent-net.rules ]; then
-    sed -i -e 's/\bATTRS{/ATTR{/g' /etc/udev/rules.d/70-persistent-net.rules
-  fi
-}
-
 upgrade_fixes() {
-  if dpkg --compare-versions "$2" lt "171-3"; then
-
-  # in 171-2 this directory becomes a symlink to libudev0, so it must be
-  # manually deleted because dpkg cannot automatically deal with this  
-  if [ -e /usr/share/doc/udev -a ! -L /usr/share/doc/udev ]; then
-    rm -rf /usr/share/doc/udev
-    ln -s libudev0 /usr/share/doc/udev
-  fi
-  
-  if dpkg --compare-versions "$2" lt "140-2"; then
-    fix_persistent_net_rules
-  fi
-
-  fi
-
   # 167-1 introduced /run/udev/ but does not move the old database on
   # upgrades when it decides to switch to /run/.
   if ! chrooted && [ -d /dev/.udev/ -a ! -d /run/udev/ ] \
       && grep -E -q "^[^[:space:]]+ /run tmpfs " /proc/mounts; then
     mv /dev/.udev/ /run/udev/
   fi
+
+  if dpkg --compare-versions "$2" lt "171-3"; then
+    # in 171-2 this directory becomes a symlink to libudev0, so it must be
+    # manually deleted because dpkg cannot automatically deal with this
+    if [ -e /usr/share/doc/udev -a ! -L /usr/share/doc/udev ]; then
+      rm -rf /usr/share/doc/udev
+      ln -s libudev0 /usr/share/doc/udev
+    fi
+  fi
+
+  if dpkg --compare-versions "$2" lt "204-1"; then
+    # We dropped udev-mtab with udev 204.
+    update-rc.d udev-mtab remove
+  fi
+}
+
+update_hwdb() {
+  udevadm hwdb --update --usr || true
+}
+
+# In udev-204, we ship systemd-udevd.service (upstream name), whereas previous
+# versions used udev.service. We replace udev.service with a symlink to
+# systemd-udevd.service, but systemd (both 44 and 204) exposes weird behavior:
+# After a daemon-reload, it forgets about the /sbin/udevd process in the
+# udev.service cgroup, so a restart will lead to having two udevd processes
+# running — one in the udev.service cgroup and one in the systemd-udevd.service
+# cgroup.
+#
+# To fix this, we explicitly stop udev.service and the corresponding sockets,
+# then issue the daemon-reload, then restart the new systemd-udevd.service (via
+# invoke-rc.d).
+handle_service_rename() {
+  if dpkg --compare-versions "$2" lt "204-1"; then
+    if [ -d /run/systemd/system ]; then
+      systemctl stop udev.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || true
+    fi
+  fi
 }
 
 case "$1" in
     configure)
+    # update/create hwdb before we (re)start udev
+    update_hwdb
+
+    # Add new system group used by udev rules
+    addgroup --quiet --system input
+
     if [ -z "$2" ]; then # first install
       if ! chrooted && ! in_debootstrap; then
 	write_interfaces_rules
@@ -189,7 +162,14 @@ case "$1" in
 	  echo "Please reboot the system as soon as possible."
 	  rm /etc/udev/kernel-upgrade
 	elif can_start_udevd; then
+          handle_service_rename
+	  rm -f /run/systemd/system/systemd-udevd.service
 	  rm -f /run/systemd/system/udev.service
+          # This is necessary for the handle_service_rename case, but does not
+          # hurt in general (invoke-rc.d does it, too).
+	  if [ -d /run/systemd/system ] ; then
+	    systemctl daemon-reload || true
+	  fi
 	  invoke-rc.d udev restart
 	fi
       fi
@@ -199,6 +179,11 @@ case "$1" in
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    triggered)
+    update_hwdb
+    exit 0
     ;;
 
     interfaces)
@@ -213,17 +198,12 @@ esac
 
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/udev" ]; then
-	update-rc.d udev start 03 S . >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/udev-mtab" ]; then
-	update-rc.d udev-mtab start 36 S . >/dev/null || exit $?
+	update-rc.d udev defaults >/dev/null || exit $?
 fi
 # End automatically added section
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/udev-finish" ]; then
-	update-rc.d udev-finish start 37 S . >/dev/null || exit $?
+	update-rc.d udev-finish defaults >/dev/null || exit $?
 fi
 # End automatically added section
 # Automatically added by dh_installinit
@@ -240,6 +220,12 @@ fi
 if [ -x "/etc/init.d/udev-fallback-graphics" ]; then
 	update-rc.d udev-fallback-graphics defaults >/dev/null || exit $?
 fi
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
 # End automatically added section
 
 

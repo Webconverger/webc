@@ -1,6 +1,6 @@
 ;;; flyspell.el --- on-the-fly spell checker
 
-;; Copyright (C) 1998, 2000-2012  Free Software Foundation, Inc.
+;; Copyright (C) 1998, 2000-2013 Free Software Foundation, Inc.
 
 ;; Author: Manuel Serrano <Manuel.Serrano@sophia.inria.fr>
 ;; Maintainer: FSF
@@ -83,7 +83,7 @@ Non-nil means use highlight, nil means use minibuffer messages."
   "Non-nil means Flyspell reports a repeated word as an error.
 See `flyspell-mark-duplications-exceptions' to add exceptions to this rule.
 Detection of repeated words is not implemented in
-\"large\" regions; see `flyspell-large-region'."
+\"large\" regions; see variable `flyspell-large-region'."
   :group 'flyspell
   :type 'boolean)
 
@@ -112,7 +112,7 @@ downcased before comparing with these exceptions."
   :version "21.1"
   :type 'boolean)
 
-(defcustom flyspell-duplicate-distance -1
+(defcustom flyspell-duplicate-distance 400000
   "The maximum distance for finding duplicates of unrecognized words.
 This applies to the feature that when a word is not found in the dictionary,
 if the same spelling occurs elsewhere in the buffer,
@@ -165,9 +165,10 @@ whose length is specified by `flyspell-delay'."
 (defcustom flyspell-default-deplacement-commands
   '(next-line previous-line
     handle-switch-frame handle-select-window
-    scroll-up scroll-down)
+    scroll-up
+    scroll-down)
   "The standard list of deplacement commands for Flyspell.
-See `flyspell-deplacement-commands'."
+See variable `flyspell-deplacement-commands'."
   :group 'flyspell
   :version "21.1"
   :type '(repeat (symbol)))
@@ -252,8 +253,8 @@ URL `http://www.gnu.org/software/auctex/'"
   :type 'boolean)
 
 (defcustom flyspell-mode-line-string " Fly"
-  "String displayed on the modeline when flyspell is active.
-Set this to nil if you don't want a modeline indicator."
+  "String displayed on the mode line when flyspell is active.
+Set this to nil if you don't want a mode line indicator."
   :group 'flyspell
   :type '(choice string (const :tag "None" nil)))
 
@@ -310,9 +311,9 @@ If this variable is nil, all regions are treated as small."
 ;;*    Mode specific options enable users to disable flyspell on        */
 ;;*    certain word depending of the emacs mode. For instance, when     */
 ;;*    using flyspell with mail-mode add the following expression       */
-;;*    in your .emacs file:                                             */
+;;*    in your init file:                                               */
 ;;*       (add-hook 'mail-mode                                          */
-;;*    	     (lambda () (setq flyspell-generic-check-word-predicate    */
+;;*    	     (lambda () (setq flyspell-generic-check-word-predicate     */
 ;;*    			       'mail-mode-flyspell-verify)))            */
 ;;*---------------------------------------------------------------------*/
 (defvar flyspell-generic-check-word-predicate nil
@@ -471,24 +472,37 @@ like <img alt=\"Some thing.\">."
 ;;*---------------------------------------------------------------------*/
 ;;*    Highlighting                                                     */
 ;;*---------------------------------------------------------------------*/
+(let ((may-support-wave (ispell-check-minver "24.4" emacs-version)))
 (defface flyspell-incorrect
-  '((((class color)) (:foreground "OrangeRed" :bold t :underline t))
-    (t (:bold t)))
-  "Face used for marking a misspelled word in Flyspell."
+  (if (featurep 'xemacs)
+      '((((class color)) (:foreground "OrangeRed" :bold t :underline t))
+	(t (:bold t)))
+    (if may-support-wave
+	'((((supports :underline (:style wave)))
+	   :underline (:style wave :color "Red1"))
+	  (t :underline t :inherit error))
+      '((((class color)) (:foreground "OrangeRed" :bold t :underline t))
+	(t (:bold t)))))
+  "Flyspell face for misspelled words."
+  :version "24.4"
   :group 'flyspell)
-(if (featurep 'emacs)
-    (define-obsolete-face-alias 'flyspell-incorrect-face 'flyspell-incorrect "22.1")
-  (put 'flyspell-incorrect-face 'face-alias 'flyspell-incorrect))
 
 (defface flyspell-duplicate
-  '((((class color)) (:foreground "Gold3" :bold t :underline t))
-    (t (:bold t)))
-  "Face used for marking a misspelled word that appears twice in the buffer.
+  (if (featurep 'xemacs)
+      '((((class color)) (:foreground "Gold3" :bold t :underline t))
+	(t (:bold t)))
+    (if may-support-wave
+	'((((supports :underline (:style wave)))
+	   :underline (:style wave :color "DarkOrange"))
+	  (t :underline t :inherit warning))
+      '((((class color)) (:foreground "Gold3" :bold t :underline t))
+	(t (:bold t)))))
+  "Flyspell face for words that appear twice in a row.
 See also `flyspell-duplicate-distance'."
+  :version "24.4"
   :group 'flyspell)
-(if (featurep 'emacs)
-    (define-obsolete-face-alias 'flyspell-duplicate-face 'flyspell-duplicate "22.1")
-  (put 'flyspell-duplicate-face 'face-alias 'flyspell-duplicate))
+) ;; End of let
+
 
 (defvar flyspell-overlay nil)
 
@@ -524,7 +538,7 @@ invoking `ispell-change-dictionary'.
 Consider using the `ispell-parser' to check your text.  For instance
 consider adding:
 \(add-hook 'tex-mode-hook (function (lambda () (setq ispell-parser 'tex))))
-in your .emacs file.
+in your init file.
 
 \\[flyspell-region] checks all words inside a region.
 \\[flyspell-buffer] checks the whole buffer."
@@ -763,7 +777,7 @@ before the current command."
   (let ((ispell-otherchars (ispell-get-otherchars)))
     (cond
    ((not (and (numberp flyspell-pre-point)
-              (buffer-live-p flyspell-pre-buffer)))
+              (eq flyspell-pre-buffer (current-buffer))))
       nil)
      ((and (eq flyspell-pre-pre-point flyspell-pre-point)
 	   (eq flyspell-pre-pre-buffer flyspell-pre-buffer))
@@ -981,11 +995,10 @@ Mostly we check word delimiters."
             ;; Prevent anything we do from affecting the mark.
             deactivate-mark)
         (if (flyspell-check-pre-word-p)
-            (with-current-buffer flyspell-pre-buffer
+            (save-excursion
               '(flyspell-debug-signal-pre-word-checked)
-              (save-excursion
-                (goto-char flyspell-pre-point)
-                (flyspell-word))))
+              (goto-char flyspell-pre-point)
+              (flyspell-word)))
         (if (flyspell-check-word-p)
             (progn
               '(flyspell-debug-signal-word-checked)
@@ -999,16 +1012,14 @@ Mostly we check word delimiters."
               ;; FLYSPELL-CHECK-PRE-WORD-P
               (setq flyspell-pre-pre-buffer (current-buffer))
               (setq flyspell-pre-pre-point  (point)))
-          (progn
-            (setq flyspell-pre-pre-buffer nil)
-            (setq flyspell-pre-pre-point  nil)
-            ;; when a word is not checked because of a delayed command
-            ;; we do not disable the ispell cache.
-            (if (and (symbolp this-command)
+          (setq flyspell-pre-pre-buffer nil)
+          (setq flyspell-pre-pre-point  nil)
+          ;; when a word is not checked because of a delayed command
+          ;; we do not disable the ispell cache.
+          (when (and (symbolp this-command)
                      (get this-command 'flyspell-delayed))
-                (progn
-                  (setq flyspell-word-cache-end -1)
-                  (setq flyspell-word-cache-result '_)))))
+            (setq flyspell-word-cache-end -1)
+            (setq flyspell-word-cache-result '_)))
         (while (and (not (input-pending-p)) (consp flyspell-changes))
           (let ((start (car (car flyspell-changes)))
                 (stop  (cdr (car flyspell-changes))))
@@ -1037,17 +1048,33 @@ Mostly we check word delimiters."
 ;;*---------------------------------------------------------------------*/
 (defun flyspell-word-search-backward (word bound &optional ignore-case)
   (save-excursion
-    (let ((r '())
-	  (inhibit-point-motion-hooks t)
-	  p)
-      (while (and (not r) (setq p (search-backward word bound t)))
-	(let ((lw (flyspell-get-word)))
-	  (if (and (consp lw)
-		   (if ignore-case
-		       (string-equal (downcase (car lw)) (downcase word))
-		     (string-equal (car lw) word)))
-	      (setq r p)
-	    (goto-char p))))
+    (let* ((r '())
+	   (inhibit-point-motion-hooks t)
+	   (flyspell-not-casechars (flyspell-get-not-casechars))
+	   (bound (if (and bound
+			   (> bound (point-min)))
+		      (- bound 1)))
+	   (word-re (concat
+                     "\\(?:" flyspell-not-casechars "\\|\\`\\)"
+                     (regexp-quote word)
+                     flyspell-not-casechars))
+	   p)
+      (while
+	  (and (not r)
+               (setq p
+                     (and
+                      (re-search-backward word-re bound t)
+		      (if (bobp)
+			  (point)
+                        (forward-char)
+                        (point)))))
+        (let ((lw (flyspell-get-word)))
+          (if (and (consp lw)
+                   (if ignore-case
+                       (string-equal (downcase (car lw)) (downcase word))
+                     (string-equal (car lw) word)))
+              (setq r p)
+            (goto-char p))))
       r)))
 
 ;;*---------------------------------------------------------------------*/
@@ -1055,14 +1082,28 @@ Mostly we check word delimiters."
 ;;*---------------------------------------------------------------------*/
 (defun flyspell-word-search-forward (word bound)
   (save-excursion
-    (let ((r '())
-	  (inhibit-point-motion-hooks t)
-	  p)
-      (while (and (not r) (setq p (search-forward word bound t)))
-	(let ((lw (flyspell-get-word)))
-	  (if (and (consp lw) (string-equal (car lw) word))
-	      (setq r p)
-	    (goto-char (1+ p)))))
+    (let* ((r '())
+	   (inhibit-point-motion-hooks t)
+	   (flyspell-not-casechars (flyspell-get-not-casechars))
+	   (bound (if (and bound
+			   (< bound (point-max)))
+		      (+ bound 1)))
+	   (word-re (concat flyspell-not-casechars
+                            (regexp-quote word)
+                            "\\(?:" flyspell-not-casechars "\\|\\'\\)"))
+	   p)
+      (while
+	  (and (not r)
+               (setq p (and
+                        (re-search-forward word-re bound t)
+                        (if (eobp)
+                            (point)
+                          (backward-char)
+                          (point)))))
+        (let ((lw (flyspell-get-word)))
+          (if (and (consp lw) (string-equal (car lw) word))
+              (setq r p)
+            (goto-char (1+ p)))))
       r)))
 
 ;;*---------------------------------------------------------------------*/

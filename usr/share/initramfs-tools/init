@@ -1,5 +1,11 @@
 #!/bin/sh
 
+echo "Loading, please wait..."
+
+# Default PATH differs between shells, and is not automatically exported
+# by klibc dash.  Make it consistent.
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
 [ -d /dev ] || mkdir -m 0755 /dev
 [ -d /root ] || mkdir -m 0700 /root
 [ -d /sys ] || mkdir /sys
@@ -52,7 +58,11 @@ export panic=
 export blacklist=
 export resume=
 export resume_offset=
-export init_option=
+export drop_caps=
+export fastboot=n
+export forcefsck=n
+export fsckfix=n
+
 
 # Bring in the main config
 . /conf/initramfs.conf
@@ -69,41 +79,11 @@ for x in $(cat /proc/cmdline); do
 		;;
 	root=*)
 		ROOT=${x#root=}
-		case $ROOT in
-		LABEL=*)
-			ROOT="${ROOT#LABEL=}"
-
-			# support any / in LABEL= path (escape to \x2f)
-			case "${ROOT}" in
-			*/*)
-			if command -v sed >/dev/null 2>&1; then
-				ROOT="$(echo ${ROOT} | sed 's,/,\\x2f,g')"
-			else
-				if [ "${ROOT}" != "${ROOT#/}" ]; then
-					ROOT="\x2f${ROOT#/}"
-				fi
-				if [ "${ROOT}" != "${ROOT%/}" ]; then
-					ROOT="${ROOT%/}\x2f"
-				fi
-				IFS='/'
-				newroot=
-				for s in $ROOT; do
-					newroot="${newroot:+${newroot}\\x2f}${s}"
-				done
-				unset IFS
-				ROOT="${newroot}"
-			fi
-			esac
-			ROOT="/dev/disk/by-label/${ROOT}"
-			;;
-		UUID=*)
-			ROOT="/dev/disk/by-uuid/${ROOT#UUID=}"
-			;;
-		/dev/nfs)
-			[ -z "${BOOT}" ] && BOOT=nfs
-			;;
-		esac
-		;;
+		ROOT=$(resolve_device "$ROOT")
+		if [ -z "${BOOT}" ] && [ "$ROOT" = "/dev/nfs" ]; then
+			BOOT=nfs
+		fi
+                ;;
 	rootflags=*)
 		ROOTFLAGS="-o ${x#rootflags=}"
 		;;
@@ -132,12 +112,19 @@ for x in $(cat /proc/cmdline); do
 		;;
 	resume=*)
 		RESUME="${x#resume=}"
+		case $RESUME in
+	        UUID=*)
+			RESUME="/dev/disk/by-uuid/${RESUME#UUID=}"
+		esac
 		;;
 	resume_offset=*)
 		resume_offset="${x#resume_offset=}"
 		;;
 	noresume)
 		noresume=y
+		;;
+	drop_capabilities=*)
+		drop_caps="-d ${x#drop_capabilities=}"
 		;;
 	panic=*)
 		panic="${x#panic=}"
@@ -149,7 +136,6 @@ for x in $(cat /proc/cmdline); do
 		;;
 	quiet)
 		quiet=y
-		init_option=quiet
 		;;
 	ro)
 		readonly=y
@@ -182,6 +168,15 @@ for x in $(cat /proc/cmdline); do
 		;;
 	BOOTIF=*)
 		BOOTIF=${x#BOOTIF=}
+		;;
+	fastboot)
+		fastboot=y
+		;;
+	forcefsck)
+		forcefsck=y
+		;;
+	fsckfix)
+		fsckfix=y
 		;;
 	esac
 done
@@ -217,11 +212,67 @@ run_scripts /scripts/init-premount
 
 maybe_break mount
 log_begin_msg "Mounting root file system"
+# Always load local and nfs (since these might be needed for /etc or
+# /usr, irrespective of the boot script used to mount the rootfs).
+. /scripts/local
+. /scripts/nfs
 . /scripts/${BOOT}
 parse_numeric ${ROOT}
 maybe_break mountroot
+mount_top
+mount_premount
 mountroot
 log_end_msg
+
+validate_init() {
+	checktarget="${1}"
+
+	# Work around absolute symlinks
+	if [ -d "${rootmnt}" ] && [ -h "${rootmnt}${checktarget}" ]; then
+		checktarget="$(readlink "${rootmnt}${checktarget}")"
+		case "$checktarget" in
+		/*)
+			;;
+		*)
+			checktarget="${1%/*}/$checktarget"
+			;;
+		esac
+	fi
+
+	# Make sure the specified init can be executed
+	if [ ! -x "${rootmnt}${checktarget}" ]; then
+		return 1
+	fi
+
+	# Upstart uses /etc/init as configuration directory :-/
+	if [ -d "${rootmnt}${checktarget}" ]; then
+		return 1
+	fi
+}
+
+# Check init is really there
+if ! validate_init "$init"; then
+	echo "Target filesystem doesn't have requested ${init}."
+	init=
+	for inittest in /sbin/init /etc/init /bin/init /bin/sh; do
+		if validate_init "${inittest}"; then
+			init="$inittest"
+			break
+		fi
+	done
+fi
+
+# Mount /usr only if init is systemd (after reading symlink)
+if [ "${checktarget##*/}" = systemd ] && read_fstab_entry /usr; then
+	log_begin_msg "Mounting /usr file system"
+	mountfs /usr
+	log_end_msg
+fi
+
+# Mount cleanup
+mount_bottom
+nfs_bottom
+local_bottom
 
 maybe_break bottom
 [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/init-bottom"
@@ -243,58 +294,15 @@ else
 	umount /run
 fi
 
-validate_init() {
-	checktarget="${1}"
-
-	# Work around absolute symlinks
-	if [ -d "${rootmnt}" ] && [ -h "${rootmnt}${checktarget}" ]; then
-		case $(readlink "${rootmnt}${checktarget}") in /*)
-			checktarget="$(chroot ${rootmnt} readlink ${checktarget})"
-			;;
-		esac
-	fi
-
-	# Make sure the specified init can be executed
-	if [ ! -x "${rootmnt}${checktarget}" ]; then
-		return 1
-	fi
-
-	# Upstart uses /etc/init as configuration directory :-/
-	if [ -d "${rootmnt}${checktarget}" ]; then
-		return 1
-	fi
-}
-
-# Check init bootarg
-if [ -n "${init}" ]; then
-	if ! validate_init "$init"; then
-		echo "Target filesystem doesn't have requested ${init}."
-		init=
-	fi
-fi
-
-# Common case: /sbin/init is present
-if [ ! -x "${rootmnt}/sbin/init" ]; then
-	# ... if it's not available search for valid init
-	if [ -z "${init}" ] ; then
-		for inittest in /sbin/init /etc/init /bin/init /bin/sh; do
-			if validate_init "${inittest}"; then
-				init="$inittest"
-				break
-			fi
-		done
-	fi
-
-	# No init on rootmount
-	if ! validate_init "${init}" ; then
-		panic "No init found. Try passing init= bootarg."
-	fi
+# No init on rootmount
+if ! validate_init "${init}" ; then
+	panic "No init found. Try passing init= bootarg."
 fi
 
 maybe_break init
 
 # don't leak too much of env - some init(8) don't clear it
-# (keep init, rootmnt)
+# (keep init, rootmnt, drop_caps)
 unset debug
 unset MODPROBE_OPTIONS
 unset DPKG_ARCH
@@ -314,16 +322,19 @@ unset quiet
 unset readonly
 unset resume
 unset resume_offset
+unset fastboot
+unset forcefsck
+unset fsckfix
 
 # Move virtual filesystems over to the real filesystem
 mount -n -o move /sys ${rootmnt}/sys
 mount -n -o move /proc ${rootmnt}/proc
 
 # Chain to real filesystem
-if command -v switch_root >/dev/null 2>&1; then
-	exec switch_root ${rootmnt} ${init} ${init_option} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
+if [ -z "$drop_caps" ] && command -v switch_root >/dev/null 2>&1; then
+	exec switch_root ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
 elif command -v run-init >/dev/null 2>&1; then
-	exec run-init ${rootmnt} ${init} ${init_option} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
+	exec run-init ${drop_caps} ${rootmnt} ${init} "$@" <${rootmnt}/dev/console >${rootmnt}/dev/console
 fi
 echo "Something went badly wrong in the initramfs."
 panic "Please file a bug on initramfs-tools."

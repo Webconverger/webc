@@ -23,6 +23,7 @@ Description-ru.UTF-8: Обновление udev
 Description-sk.UTF-8: Aktualizácia udev
 Description-sv.UTF-8: Uppgraderar udev
 Description-ta.UTF-8: யூடெவ் ஐ மேம்படுத்தல்
+Description-tr.UTF-8: udev yükseltiliyor
 
 Template: udev/reboot_needed
 Type: error
@@ -138,6 +139,10 @@ Description-ta.UTF-8: இந்த மேம்படுத்தலுக்க
  இசைவில்லாத ஒரு உட்கூறு பதிப்புடன் நீங்கள் யூடெவ் ஐ மேம்படுத்துகிறீர்கள். ஒரு இசைவான பதிப்பு நிறுவப்பட்டுள்ளது அல்லது நிறுவப்படுகிறது ஆனால் மேம்படுத்தல் முடிந்ததும் இந்த புதிய உட்கூறை பயன்படுத்தி நீங்கள் மீள்துவக்கம் செய்ய வேண்டும். 
  .
  அத்தகைய மீள்துவக்கம் இல்லாது போனால் கணினி பயன்படுத்த இயலாத நிலைக்கு ஆளாக்கப்படும்.
+Description-tr.UTF-8: Bu yükseltmeden sonra sistemin yeniden başlatılması gerekmektedir
+ Şu anda uyumsuz bir çekirdek sürümü kullandığınız halde udev'i yükseltiyorsunuz. Uyumlu bir sürüm sisteminize kurulacak ya da şu an kuruluyor, fakat bu sürümü kullanabilmek için yükseltme işlemi tamamlanır tamamlanmaz sisteminizi yeniden başlatmalısınız.
+ .
+ Bu yeni çekirdek sürümüne geçmediğiniz süre içinde sisteminiz KULLANILAMAZ durumda olacaktır.
 
 Template: udev/sysfs_deprecated_incompatibility
 Type: error
@@ -260,6 +265,12 @@ Description-sv.UTF-8: Kärnan som körs har flaggor som inte stöds aktiverade
  Det bör inte hindra systemet från att starta om uppgraderingen till en kärna utan flaggan CONFIG_SYSFS_DEPRECATED inte genomförs före omstart men det kan innebära att vissa udev-regler inte aktiveras vid uppstarten. Exempelvis kommer alla enheter ägas av root:root (istället för root:disk) och nätverksgränssnitt kan komma att ha nya namn efter omstart. Det senare fallet kan innebära problem om du fjärradministrerar maskinen.
  .
  Uppgraderingen av udev kommer att fortsätta när du bekräftat detta meddelande.
+Description-tr.UTF-8: Kullanılan çekirdek uyumsuz özellikler taşıyor
+ Şu an kullanımda bulunan çekirdek CONFIG_SYSFS_DEPRECATED seçeneğini kullanıyor. Bu seçenek udev'in bu sürümü ile uyumsuzluk göstermektedir.  Eğer standart Debian çekirdek paketlerini kullanıyorsanız ve lenny'den squeeze'a yükseltme süreci içindeyseniz uyumlu bir çekirdek paketi sürecin bir parçası olarak sisteminize kurulacaktır.  Eğer Debian çekirdek paketlerini kullanmıyorsanız ya da şu an sisteminizi yükseltmiyorsanız, çekirdek sürümünün bilgisayarın bir sonraki açılışından önce yükseltilebilmesi için gereken tedbirleri almanız gerekmektedir.
+ .
+ Çekirdeğinizi CONFIG_SYSFS_DEPRECATED özelliğinin olmadığı bir sürüme yükseltmediğiniz takdirde sisteminiz büyük olasılıkla açılacaktır, fakat bazı udev kuralları açılış esnasında uygulanamayacaktır.  Özellikle, tüm blok aygıtlarının sahibi root:root olacak (root:disk yerine) ve ağ arayüzleri büyük olasılıkla farklı adlara sahip olacaktır. Ağ arayüzlerinin farklı adlara sahip olması eğer bu makineyi uzaktan yönetiyorsanız sorun oluşturabilir.
+ .
+ udev yükseltmesinin devam etmesi için bu iletiyi onaylamanız gerekiyor.
 
 Template: udev/new_kernel_needed
 Type: boolean
@@ -432,3 +443,9 @@ Description-ta.UTF-8: உட்கூறு இசைவில்லாது �
  நீங்கள் மேம்படுத்து முன் அவசியமாக இசைவுள்ள  உட்கூறு பதிப்பு (2.6.32 அல்லது மேல்) ஒன்றை நிறுவியாக வேண்டும். இல்லாவிட்டால் கணினி பயன்படுத்த முடியாத நிலைக்கு போகும். இந்த புதிய யூடெவ் பதிப்புடன் "linux-image-2.6-" என பெயர் துவங்கும் பொதிகள் இசைவுள்ளவை.
  .
  அப்படியும் யூடெவ்  ஐ மேம்படுத்த நினைத்தால் இசைவுள்ள உட்கூறு பதிப்புஒன்றை நிறுவியாக வேண்டும். உடனேயே அந்த உட்கூறுடன் மீள்துவக்கம் செய்ய வேண்டும்.
+Description-tr.UTF-8: Çekirdek sürümü uyumsuz olduğu halde udev yükseltmesi yapılsın mı?
+ Çekirdek sürümünüzle uyumsuz olduğu halde udev'i yükseltiyorsunuz.
+ .
+ Yükseltmeden önce uyumlu bir çekirdek sürümünü (2.6.32 ya da daha yeni) yüklemeniz gerekmektedir, aksi takdirde sisteminiz KULLANILAMAZ hale gelecektir. "linux-image-2.6-" adıyla başlayan paketler bu udev sürümü ile birlikte kullanılabilir.
+ .
+ Yine de udev'i yükseltmek isterseniz, uyumlu bir çekirdeği bir an önce kurmalı ve sistemi yeniden başlatmalısınız.

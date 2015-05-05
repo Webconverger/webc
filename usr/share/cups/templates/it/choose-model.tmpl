@@ -1,6 +1,6 @@
 <DIV CLASS="indent">
 
-<H2 CLASS="title">{op=modify-printer?Modify {printer_name}:Aggiungi stampante}</H2>
+<H2 CLASS="title">{op=modify-printer?Modifica {printer_name}:Aggiungi una stampante}</H2>
 
 <FORM METHOD="POST" ACTION="/admin" ENCTYPE="multipart/form-data">
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
@@ -30,29 +30,29 @@
 <TR>
 <TH CLASS="label">Condivisione:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_SHARED" VALUE="{?printer_is_shared}">
-{?printer_is_shared=?Do Not:{?printer_is_shared=0?Do Not:}} Condividi stampante</TD>
+{?printer_is_shared=?No:{?printer_is_shared=0?No:}} Condividi questa stampante</TD>
 </TR>
 <TR>
-<TH CLASS="label">Crea:</TH>
-<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Select Another Make/Manufacturer"></TD>
+<TH CLASS="label">Marca:</TH>
+<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Seleziona un'altra marca"></TD>
 </TR>
 <TR>
 <TH CLASS="label">Modello:</TH>
 <TD>
 <SELECT NAME="PPD_NAME" SIZE="10">
-{op=add-printer?:<OPTION VALUE="__no_change__" SELECTED>Driver corrente - {current_make_and_model}</OPTION>:}
+{op=add-printer?:<OPTION VALUE="__no_change__" SELECTED>Current Driver - {current_make_and_model}</OPTION>:}
 {[ppd_name]<OPTION VALUE="{ppd_name}" {op=modify-printer?:{?current_make_and_model={ppd_make_and_model}?SELECTED:}}>{ppd_make_and_model} ({ppd_natural_language})
 }</SELECT>
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">O fornisci un file PPD:</TH>
+<TH CLASS="label">Oppure fornisci un file PPD:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="262144"><INPUT
 TYPE="FILE" NAME="PPD_FILE"></TD>
 </TR>
 <TR>
 <TD></TD>
-<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Add Printer:Modifica stampante}"></TD>
+<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Aggiungi una stampante:Modifica una stampante}"></TD>
 </TR>
 </TABLE>
 

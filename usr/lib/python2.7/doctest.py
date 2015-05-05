@@ -216,7 +216,7 @@ def _load_testfile(filename, package, module_relative):
                 # get_data() opens files as 'rb', so one must do the equivalent
                 # conversion as universal newlines would do.
                 return file_contents.replace(os.linesep, '\n'), filename
-    with open(filename) as f:
+    with open(filename, 'U') as f:
         return f.read(), filename
 
 # Use sys.stdout encoding for ouput.
@@ -326,6 +326,32 @@ def _comment_line(line):
     else:
         return '#'
 
+def _strip_exception_details(msg):
+    # Support for IGNORE_EXCEPTION_DETAIL.
+    # Get rid of everything except the exception name; in particular, drop
+    # the possibly dotted module path (if any) and the exception message (if
+    # any).  We assume that a colon is never part of a dotted name, or of an
+    # exception name.
+    # E.g., given
+    #    "foo.bar.MyError: la di da"
+    # return "MyError"
+    # Or for "abc.def" or "abc.def:\n" return "def".
+
+    start, end = 0, len(msg)
+    # The exception name must appear on the first line.
+    i = msg.find("\n")
+    if i >= 0:
+        end = i
+    # retain up to the first colon (if any)
+    i = msg.find(':', 0, end)
+    if i >= 0:
+        end = i
+    # retain just the exception name
+    i = msg.rfind('.', 0, end)
+    if i >= 0:
+        start = i+1
+    return msg[start: end]
+
 class _OutputRedirectingPdb(pdb.Pdb):
     """
     A specialized version of the python debugger that redirects stdout
@@ -424,7 +450,7 @@ class Example:
         zero-based, with respect to the beginning of the DocTest.
 
       - indent: The example's indentation in the DocTest string.
-        I.e., the number of space characters that preceed the
+        I.e., the number of space characters that precede the
         example's first prompt.
 
       - options: A dictionary mapping from option flags to True or
@@ -564,7 +590,7 @@ class DocTestParser:
         # Want consists of any non-blank lines that do not start with PS1.
         (?P<want> (?:(?![ ]*$)    # Not a blank line
                      (?![ ]*>>>)  # Not a line starting with PS1
-                     .*$\n?       # But any other line
+                     .+$\n?       # But any other line
                   )*)
         ''', re.MULTILINE | re.VERBOSE)
 
@@ -895,7 +921,7 @@ class DocTestFinder:
         if '__name__' not in globs:
             globs['__name__'] = '__main__'  # provide a default module name
 
-        # Recursively expore `obj`, extracting DocTests.
+        # Recursively explore `obj`, extracting DocTests.
         tests = []
         self._find(tests, obj, name, module, source_lines, globs, {})
         # Sort the tests by alpha order of names, for consistency in
@@ -1323,10 +1349,9 @@ class DocTestRunner:
 
                 # Another chance if they didn't care about the detail.
                 elif self.optionflags & IGNORE_EXCEPTION_DETAIL:
-                    m1 = re.match(r'(?:[^:]*\.)?([^:]*:)', example.exc_msg)
-                    m2 = re.match(r'(?:[^:]*\.)?([^:]*:)', exc_msg)
-                    if m1 and m2 and check(m1.group(1), m2.group(1),
-                                           self.optionflags):
+                    if check(_strip_exception_details(example.exc_msg),
+                             _strip_exception_details(exc_msg),
+                             self.optionflags):
                         outcome = SUCCESS
 
             # Report the outcome.
@@ -2381,7 +2406,12 @@ def DocTestSuite(module=None, globs=None, extraglobs=None, test_finder=None,
     elif not tests:
         # Why do we want to do this? Because it reveals a bug that might
         # otherwise be hidden.
-        raise ValueError(module, "has no tests")
+        # It is probably a bug that this exception is not also raised if the
+        # number of doctest examples in tests is zero (i.e. if no doctest
+        # examples were found).  However, we should probably not be raising
+        # an exception at all here, though it is too late to make this change
+        # for a maintenance release.  See also issue #14649.
+        raise ValueError(module, "has no docstrings")
 
     tests.sort()
     suite = unittest.TestSuite()

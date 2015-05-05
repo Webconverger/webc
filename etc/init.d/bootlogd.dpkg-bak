@@ -1,0 +1,96 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          bootlogd
+# Required-Start:    mountdevsubfs
+# X-Start-Before:    hostname keymap keyboard-setup procps pcmcia hwclock hwclockfirst hdparm hibernate-cleanup lvm2
+# Required-Stop:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Start or stop bootlogd.
+# Description:       Starts or stops the bootlogd log program
+#                    which logs boot messages.
+### END INIT INFO
+
+PATH=/sbin:/bin  # No remote fs at start
+DAEMON=/sbin/bootlogd
+[ -x "$DAEMON" ] || exit 0
+NAME=bootlogd
+DESC="boot logger"
+BOOTLOGD_OPTS="-r -c"
+[ -r /etc/default/bootlogd ] && . /etc/default/bootlogd
+. /lib/init/vars.sh
+
+. /lib/lsb/init-functions
+
+# Because bootlogd is broken on some systems, we take the special measure
+# of requiring it to be enabled by setting an environment variable.
+case "$BOOTLOGD_ENABLE" in
+  [Nn]*)
+	exit 0
+	;;
+esac
+
+# Previously this script was symlinked as "stop-bootlogd" which, when run
+# with the "start" argument, should stop bootlogd.  Now stop-bootlogd is
+# a distinct script, but for backward compatibility this script continues
+# to implement the old behavior.
+SCRIPTNAME=${0##*/}
+SCRIPTNAME=${SCRIPTNAME#[SK]??}
+ACTION="$1"
+case "$0" in
+  *stop-bootlog*)
+	[ "$ACTION" = start ] && ACTION=stop
+	;;
+esac
+
+case "$ACTION" in
+  start)
+  	# PATH is set above
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	if [ -d /proc/1/. ]
+	then
+		umask 027
+		start-stop-daemon --start --quiet --exec $DAEMON -- \
+			$BOOTLOGD_OPTS
+		ES=$?
+	else
+		$DAEMON $BOOTLOGD_OPTS
+		ES=$?
+	fi
+	[ "$VERBOSE" != no ] && log_end_msg $ES
+	;;
+  stop)
+	PATH=/bin:/sbin:/usr/bin:/usr/sbin
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	start-stop-daemon --oknodo --stop --quiet --exec $DAEMON
+	ES=$?
+	sleep 1
+	[ "$VERBOSE" != no ] && log_end_msg $ES
+	if [ -f /var/log/boot ] && [ -f /var/log/boot~ ]
+	then
+		[ "$VERBOSE" = no ] || log_action_begin_msg "Moving boot log file"
+		# bootlogd writes to boot, making backup at boot~
+		cd /var/log && {
+			chgrp adm boot || :
+			savelog -q -p -c 5 boot \
+			&& mv boot.0 boot \
+			&& mv boot~ boot.0
+		}
+		ES=$?
+		[ "$VERBOSE" = no ] || log_action_end_msg $ES
+	fi
+	;;
+  restart|force-reload)
+ 	/etc/init.d/bootlogd stop
+ 	/etc/init.d/bootlogd start
+	;;
+  status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
+	exit 3
+	;;
+esac
+
+:

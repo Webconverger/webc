@@ -140,6 +140,49 @@ Description: Freefont Serif, Sans and Mono Truetype fonts
  Times and Courier fonts.
 Homepage: http://savannah.gnu.org/projects/freefont/
 
+Package: libjpeg62-turbo
+Priority: optional
+Section: libs
+Installed-Size: 368
+Maintainer: Ondřej Surý <ondrej@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libjpeg-turbo
+Version: 1:1.3.1-12
+Replaces: libjpeg62
+Provides: libjpeg62
+Depends: libc6 (>= 2.7)
+Conflicts: libjpeg62
+Size: 122868
+Description: libjpeg-turbo JPEG runtime library
+ The libjpeg-turbo JPEG library is a library for handling JPEG files.
+ .
+ libjpeg-turbo is a JPEG image codec that uses SIMD instructions (MMX,
+ SSE2, NEON) to accelerate baseline JPEG compression and decompression
+ on x86, x86-64, and ARM systems.  The libjpeg-turbo JPEG library is
+ an API/ABI compatible with the IJG JPEG library.
+ .
+ This package contains the shared runtime library.
+Homepage: http://www.libjpeg-turbo.org/
+
+Package: libgcc-4.9-dev
+Priority: optional
+Section: libdevel
+Installed-Size: 7718
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Replaces: gccgo-4.9 (<< 4.9.2-10)
+Depends: gcc-4.9-base (= 4.9.2-10), libgcc1 (>= 1:4.9.2-10), libgomp1 (>= 4.9.2-10), libitm1 (>= 4.9.2-10), libatomic1 (>= 4.9.2-10), libasan1 (>= 4.9.2-10), libubsan0 (>= 4.9.2-10), libcilkrts5 (>= 4.9.2-10), libquadmath0 (>= 4.9.2-10)
+Recommends: libc6-dev (>= 2.13-5)
+Size: 2058720
+Description: GCC support library (development files)
+ This package contains the headers and static library files necessary for
+ building C programs which use libgcc, libgomp, libquadmath, libssp or libitm.
+Homepage: http://gcc.gnu.org/
+
 Package: libsystemd-id128-0
 Priority: extra
 Section: libs
@@ -305,6 +348,30 @@ Description: library for direct access to IEEE 1394 bus (aka FireWire)
  applications can directly send to and receive from other nodes without
  requiring a kernel driver for the protocol in question.
 Homepage: https://ieee1394.wiki.kernel.org/
+
+Package: iproute2
+Priority: important
+Section: net
+Installed-Size: 1246
+Maintainer: Debian iproute2 Maintainers <ah-iproute@debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Version: 3.16.0-2
+Replaces: iproute
+Provides: arpd
+Depends: libc6 (>= 2.14), libdb5.3, libselinux1 (>= 2.0.15)
+Recommends: libatm1 (>= 2.4.1-17~), libxtables10
+Suggests: iproute2-doc
+Conflicts: arpd, iproute (<< 20130000-1)
+Size: 445706
+Description: networking and traffic control tools
+ The iproute2 suite is a collection of utilities for networking and
+ traffic control.
+ .
+ These tools communicate with the Linux kernel via the (rt)netlink
+ interface, providing advanced features not available through the
+ legacy net-tools commands 'ifconfig' and 'route'.
+Homepage: http://www.linux-foundation.org/en/Net:Iproute2
 
 Package: shared-mime-info
 Priority: optional
@@ -799,17 +866,14 @@ Description: SSL shared libraries
 Package: cups-ppdc
 Priority: optional
 Section: utils
-Installed-Size: 220
+Installed-Size: 186
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-5+deb7u5
-Replaces: cupsddk (<< 1.4.0)
-Provides: cupsddk
-Depends: libc6 (>= 2.4), libcups2 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common
-Breaks: cupsddk (<< 1.4.0)
-Size: 115708
+Version: 1.7.5-11
+Depends: libc6 (>= 2.4), libcups2 (>= 1.6.2), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), cups-common (>= 1.7.5-11)
+Size: 126758
 Description: Common UNIX Printing System(tm) - PPD manipulation utilities
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -926,6 +990,23 @@ Version: 3.0.10-3
 Depends: libc6 (>= 2.1.3)
 Pre-Depends: multiarch-support
 Size: 20952
+Description: Foreign Function Interface library runtime
+ A foreign function interface is the popular name for the interface that
+ allows code written in one language to call code written in another
+ language.
+
+Package: libffi6
+Priority: optional
+Section: libs
+Installed-Size: 34
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libffi (3.1-2)
+Version: 3.1-2+b2
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 18852
 Description: Foreign Function Interface library runtime
  A foreign function interface is the popular name for the interface that
  allows code written in one language to call code written in another
@@ -1124,6 +1205,21 @@ Original-Maintainer: Debian NVIDIA Maintainers <pkg-nvidia-devel@lists.alioth.de
 Original-Uploaders: Russ Allbery <rra@debian.org>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: libsystemd0
+Priority: optional
+Section: libs
+Installed-Size: 195
+Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 215-12
+Pre-Depends: libc6 (>= 2.9), libgcrypt20 (>= 1.6.1), liblzma5 (>= 5.1.1alpha+20120614), multiarch-support
+Size: 93434
+Description: systemd utility library
+ The libsystemd0 library provides interfaces to various systemd components.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
 Package: xserver-xorg-video-sis
 Priority: optional
 Section: x11
@@ -1209,6 +1305,23 @@ Description: Compression and decompression in the LZMA format - command line uti
  familiar gzip-like interface.
 Homepage: http://www.7-zip.org/sdk.html
 
+Package: libatomic1
+Priority: optional
+Section: libs
+Installed-Size: 24
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.3.6-6~)
+Pre-Depends: multiarch-support
+Size: 8480
+Description: support library providing __atomic built-in functions
+ library providing __atomic built-in functions. When an atomic call cannot
+ be turned into lock-free instructions, GCC will make calls into this library.
+Homepage: http://gcc.gnu.org/
+
 Package: libuuid1
 Priority: required
 Section: libs
@@ -1274,6 +1387,30 @@ Description: GnuPG archive keys of the Webconverger archive
  The Webconverger project digitally signs its Release files. This package
  contains the archive keys used for that.
 Homepage: http://webconverger.com
+
+Package: libtasn1-6
+Priority: standard
+Section: libs
+Installed-Size: 130
+Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Version: 4.2-2
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 50542
+Description: Manage ASN.1 structures (runtime)
+ Manage ASN1 (Abstract Syntax Notation One) structures.
+ The main features of this library are:
+   * on-line ASN1 structure management that doesn't require any C code
+     file generation.
+   * off-line ASN1 structure management with C code file generation
+     containing an array.
+   * DER (Distinguish Encoding Rules) encoding
+   * no limits for INTEGER and ENUMERATED values
+ .
+ This package contains runtime libraries.
+Homepage: http://www.gnu.org/software/libtasn1/
 
 Package: libtasn1-3
 Priority: standard
@@ -1498,6 +1635,26 @@ Description: Independent JPEG Group's JPEG runtime library (version 6.2)
  JPEG files.
  .
  This package contains the shared library for version 6.2.
+
+Package: cpp-4.9
+Priority: optional
+Section: interpreters
+Installed-Size: 16749
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Source: gcc-4.9
+Version: 4.9.2-10
+Replaces: gccgo-4.9 (<< 4.9.2-10)
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.11), libcloog-isl4 (>= 0.17), libgmp10 (>= 2:5.0.1~), libisl10 (>= 0.10), libmpc3, libmpfr4 (>= 3.1.2), zlib1g (>= 1:1.1.4)
+Suggests: gcc-4.9-locales (>= 4.9)
+Size: 5155254
+Description: GNU C preprocessor
+ A macro processor that is used automatically by the GNU C compiler
+ to transform programs before actual compilation.
+ .
+ This package has been separated from gcc for the benefit of those who
+ require the preprocessor but not the compiler.
+Homepage: http://gcc.gnu.org/
 
 Package: plymouth-themes-solar
 Priority: optional
@@ -1906,6 +2063,41 @@ Description: Collection of video4linux support libraries
  This package contains the shared libraries.
 Homepage: http://linuxtv.org/downloads/v4l-utils/
 
+Package: libgnutls-deb0-28
+Priority: standard
+Section: libs
+Installed-Size: 2095
+Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gnutls28
+Version: 3.3.8-6
+Replaces: gnutls0, gnutls0.4, gnutls3
+Depends: libc6 (>= 2.17), libgmp10 (>= 2:6), libhogweed2 (>= 2.7), libnettle4 (>= 2.7), libp11-kit0 (>= 0.20.7), libtasn1-6 (>= 4.1-0), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Suggests: gnutls-bin
+Conflicts: gnutls0, gnutls0.4
+Size: 709286
+Description: GNU TLS library - main runtime library
+ GnuTLS is a portable library which implements the Transport Layer
+ Security (TLS 1.0, 1.1, 1.2) and Secure Sockets Layer (SSL) 3.0 and Datagram
+ Transport Layer Security (DTLS 1.0, 1.2) protocols.
+ .
+ GnuTLS features support for:
+  - TLS extensions: server name indication, max record size, opaque PRF
+    input, etc.
+  - authentication using the SRP protocol.
+  - authentication using both X.509 certificates and OpenPGP keys.
+  - TLS Pre-Shared-Keys (PSK) extension.
+  - Inner Application (TLS/IA) extension.
+  - X.509 and OpenPGP certificate handling.
+  - X.509 Proxy Certificates (RFC 3820).
+  - all the strong encryption algorithms (including SHA-256/384/512 and
+    Camellia (RFC 4132)).
+ .
+ This package contains the main runtime library.
+Homepage: http://www.gnutls.org/
+
 Package: debian-keyring
 Priority: optional
 Section: misc
@@ -2181,15 +2373,15 @@ Homepage: http://sourceforge.net/projects/libavc1394/
 Package: libgpg-error0
 Priority: standard
 Section: libs
-Installed-Size: 364
-Maintainer: Jose Carlos Garcia Sogo <jsogo@debian.org>
+Installed-Size: 448
+Maintainer: Debian GnuPG Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libgpg-error
-Version: 1.10-3.1
-Depends: libc6 (>= 2.1.3)
+Version: 1.17-3
+Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
-Size: 79248
+Size: 97224
 Description: library for common error values and messages in GnuPG components
  Library that defines common error values for all GnuPG
  components.  Among these are GPG, GPGSM, GPGME, GPG-Agent, libgcrypt,
@@ -2930,6 +3122,27 @@ Description: Dynamic Kernel Module Support Framework
  you upgrade kernels.
 Homepage: http://linux.dell.com/dkms
 
+Package: init-system-helpers
+Priority: extra
+Section: admin
+Installed-Size: 97
+Maintainer: pkg-systemd-maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Version: 1.22
+Depends: perl-base (>= 5.20.1-3)
+Breaks: systemd (<< 44-12)
+Size: 14026
+Description: helper tools for all init systems
+ This package contains helper tools that are necessary for switching between
+ the various init systems that Debian contains (e.g. sysvinit, upstart,
+ systemd). An example is deb-systemd-helper, a script that enables systemd unit
+ files without depending on a running systemd.
+ .
+ While this package is maintained by pkg-systemd-maintainers, it is NOT
+ specific to systemd at all. Maintainers of other init systems are welcome to
+ include their helpers in this package.
+
 Package: libsamplerate0
 Priority: optional
 Section: libs
@@ -3188,6 +3401,24 @@ Description: basic infrastructure for text console configuration
  recommended tool to specify a boot-time keymap to the system, as well
  as tools for internal use of keymap-providing packages.
 
+Package: libcloog-isl4
+Priority: optional
+Section: libs
+Installed-Size: 187
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: cloog (0.18.2-1)
+Version: 0.18.2-1+b2
+Depends: libc6 (>= 2.7), libgmp10, libisl10 (>= 0.11)
+Pre-Depends: multiarch-support
+Size: 67884
+Description: Chunky Loop Generator (runtime library)
+ CLooG is a software which generates loops for scanning Z-polyhedra.
+ .
+ This package contains the runtime library.
+Homepage: http://www.CLooG.org
+
 Package: libgdk-pixbuf2.0-0
 Priority: optional
 Section: libs
@@ -3212,15 +3443,15 @@ Homepage: http://www.gtk.org/
 Package: libquadmath0
 Priority: optional
 Section: libs
-Installed-Size: 503
+Installed-Size: 570
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gcc-4.7
-Version: 4.7.2-5
-Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.10)
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.10)
 Pre-Depends: multiarch-support
-Size: 197586
+Size: 193220
 Description: GCC Quad-Precision Math Library
  A library, which provides quad-precision mathematical functions on targets
  supporting the __float128 datatype. The library is used to provide on such
@@ -3349,36 +3580,26 @@ Homepage: http://dev.perl.org/perl5/
 Package: sysv-rc
 Priority: required
 Section: admin
-Installed-Size: 219
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 223
+Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
 Architecture: all
+Multi-Arch: foreign
 Source: sysvinit
-Version: 2.88dsf-41baureo1
+Version: 2.88dsf-58
 Replaces: file-rc
-Depends: debconf (>= 0.5) | debconf-2.0, sysvinit-utils (>= 2.86.ds1-62), insserv (>> 1.12.0-10)
-Pre-Depends: dpkg-lzip
+Depends: debconf (>= 0.5) | debconf-2.0, sysvinit-utils (>= 2.86.ds1-62), insserv (>> 1.12.0-10), startpar
 Recommends: lsb-base (>= 3.2-14)
-Suggests: sysv-rc-conf, bum
+Suggests: bum
 Breaks: initscripts (<< 2.86.ds1-63)
 Conflicts: file-rc
 Filename: pool/main/s/sysvinit/sysv-rc_2.88dsf-13.1_all.deb
-Size: 78560
+Size: 82818
 MD5sum: 437eab429125751663d0469c72b63099
 Description: System-V-like runlevel change mechanism
  This package provides support for the System-V like system
  for booting, changing runlevels, and shutting down,
  configured through symbolic links in /etc/rc?.d/.
 Homepage: http://savannah.nongnu.org/projects/sysvinit
-Original-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
-Original-Uploaders: 
- Petter Reinholdtsen <pere@debian.org>,
- Henrique de Moraes Holschuh <hmh@debian.org>,
- Kel Modderman <kel@otaku42.de>,
- Roger Leigh <rleigh@debian.org>
-Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
-Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libutempter0
 Priority: optional
@@ -3464,6 +3685,26 @@ Description: simple configuration storage system - runtime library
  .
  This package contains the runtime library.
 Homepage: http://live.gnome.org/dconf
+
+Package: libdconf1
+Priority: optional
+Section: libs
+Installed-Size: 76
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: d-conf
+Version: 0.22.0-1
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.39.1)
+Pre-Depends: multiarch-support
+Breaks: dconf-gsettings-backend (<< 0.10.0), gdm3 (<< 3.4.1-9)
+Size: 37044
+Description: simple configuration storage system - runtime library
+ DConf is a low-level key/value database designed for storing desktop
+ environment settings.
+ .
+ This package contains the runtime library.
+Homepage: https://wiki.gnome.org/dconf
 
 Package: iceweasel-l10n-nb-no
 Priority: optional
@@ -3929,14 +4170,14 @@ Description: The GNU bc arbitrary precision calculator language
 Package: glib-networking
 Priority: optional
 Section: libs
-Installed-Size: 172
+Installed-Size: 155
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Version: 2.32.3-1
-Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.8), libgnutls26 (>= 2.12.17-0), libp11-kit0 (>= 0.11), libproxy0 (>= 0.2.3), glib-networking-services (>= 2.32.3-1), glib-networking-services (<< 2.32.3-1.1~), glib-networking-common (= 2.32.3-1), gsettings-desktop-schemas
+Version: 2.42.0-2
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.41.3), libgnutls-deb0-28 (>= 3.3.8), libp11-kit0 (>= 0.11), libproxy1 (>= 0.4.11), glib-networking-services (>= 2.42.0-2), glib-networking-services (<< 2.42.0-2.1~), glib-networking-common (= 2.42.0-2), gsettings-desktop-schemas
 Breaks: libglib2.0-0 (<< 2.30.1-2)
-Size: 57338
+Size: 56476
 Description: network-related giomodules for GLib
  This package contains various network related extensions for the GIO
  library.
@@ -3966,16 +4207,16 @@ Homepage: http://diracvideo.org/
 Package: netbase
 Priority: important
 Section: admin
-Installed-Size: 65
+Installed-Size: 66
 Maintainer: Marco d'Itri <md@linux.it>
 Architecture: all
-Version: 5.0
+Multi-Arch: foreign
+Version: 5.3
 Depends: lsb-base (>= 3.0-6)
 Recommends: ifupdown
-Breaks: ifupdown (<< 0.7~rc1)
-Conflicts: inetutils-inetd (<< 2:1.4.3+20060719-3), openbsd-inetd (<< 0.20050402-3)
+Breaks: ifupdown (<< 0.7)
 Filename: pool/main/n/netbase/netbase_4.45_all.deb
-Size: 20072
+Size: 18988
 MD5sum: 5749df88a1b98c81390fa2fc224763a9
 Description: Basic TCP/IP networking system
  This package provides the necessary infrastructure for basic TCP/IP based
@@ -4156,17 +4397,18 @@ Homepage: http://strigi.sourceforge.net
 Package: cups-client
 Priority: optional
 Section: net
-Installed-Size: 523
+Installed-Size: 949
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-5+deb7u5
-Depends: libc6 (>= 2.4), libcups2 (= 1.5.3-5+deb7u5), libcupsimage2 (>= 1.4.0), cups-common (>= 1.5.3), adduser
-Recommends: smbclient
-Suggests: cups, xpp, cups-bsd
+Version: 1.7.5-11
+Replaces: cups (<< 1.7.3-5~)
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libcups2 (= 1.7.5-11), libcupsimage2 (>= 1.4.0), cups-common (>= 1.7.5-11), adduser
+Suggests: cups, xpp, cups-bsd, smbclient
+Breaks: cups (<< 1.7.3-5~)
 Conflicts: lprng
-Size: 172240
+Size: 299062
 Description: Common UNIX Printing System(tm) - client programs (SysV)
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -4410,6 +4652,22 @@ Description: libudev shared library
 Original-Maintainer: Marco d'Itri <md@linux.it>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
+Package: libudev1
+Priority: important
+Section: libs
+Installed-Size: 104
+Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: systemd
+Version: 215-12
+Depends: libc6 (>= 2.17)
+Pre-Depends: multiarch-support
+Size: 56532
+Description: libudev shared library
+ This library provides access to udev device information.
+Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
 Package: iceweasel-l10n-lg
 Priority: optional
 Section: localization
@@ -4458,16 +4716,17 @@ Homepage: http://www.python.org/
 Package: libfontconfig1
 Priority: optional
 Section: libs
-Installed-Size: 430
+Installed-Size: 481
 Maintainer: Keith Packard <keithp@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: fontconfig
-Version: 2.9.0-7.1
+Version: 2.11.0-6.3
 Provides: libfontconfig
-Depends: libc6 (>= 2.7), libexpat1 (>= 2.0.1), libfreetype6 (>= 2.2.1), zlib1g (>= 1:1.1.4), fontconfig-config (= 2.9.0-7.1)
+Depends: libc6 (>= 2.7), libexpat1 (>= 2.0.1), libfreetype6 (>= 2.2.1), fontconfig-config (>= 2.11.0-6.3)
 Pre-Depends: multiarch-support
-Size: 300542
+Breaks: xpdf (<= 3.03-11)
+Size: 337020
 Description: generic font configuration library - runtime
  Fontconfig is a font configuration and customization library, which
  does not depend on the X Window System. It is designed to locate
@@ -4480,18 +4739,18 @@ Description: generic font configuration library - runtime
 Package: ifupdown
 Priority: important
 Section: admin
-Installed-Size: 196
+Installed-Size: 124
 Maintainer: Andrew Shadura <andrewsh@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 0.7.8
+Version: 0.7.53.1
 Replaces: netbase (<< 5.0)
-Depends: iproute (>= 20071016-1), libc6 (>= 2.7), lsb-base (>= 4.1+Debian3), initscripts (>= 2.88dsf-25)
-Pre-Depends: dpkg (>= 1.15.7.2)
-Suggests: isc-dhcp-client | dhcp-client, ppp, rdnssd, net-tools
-Breaks: dhcp-client (<< 3.0), netbase (<< 5.0)
+Depends: iproute2 | iproute (>= 20071016-1), libc6 (>= 2.7), lsb-base (>= 4.1+Debian3), initscripts (>= 2.88dsf-25), adduser
+Recommends: isc-dhcp-client | dhcp-client
+Suggests: ppp, rdnssd, net-tools
+Breaks: dhcp3-client (<< 4.0), netbase (<< 5.0)
 Filename: pool/main/i/ifupdown/ifupdown_0.6.10_i386.deb
-Size: 64282
+Size: 67856
 MD5sum: 0714accc2d39a48904c90439b69e2f46
 Description: high level tools to configure network interfaces
  This package provides the tools ifup and ifdown which may be used to
@@ -4578,6 +4837,36 @@ Homepage: http://www.syslinux.org/
 Original-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
 Original-Uploaders: Otavio Salvador <otavio@debian.org>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: libhogweed2
+Priority: optional
+Section: libs
+Installed-Size: 226
+Maintainer: Magnus Holmgren <holmgren@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: nettle
+Version: 2.7.1-5
+Depends: libc6 (>= 2.4), libgmp10 (>= 2:6.0.0), libnettle4 (= 2.7.1-5)
+Pre-Depends: multiarch-support
+Size: 126662
+Description: low level cryptographic library (public-key cryptos)
+ Nettle is a cryptographic library that is designed to fit easily in more or
+ less any context: In crypto toolkits for object-oriented languages (C++,
+ Python, Pike, ...), in applications like LSH or GNUPG, or even in kernel
+ space.
+ .
+ It tries to solve a problem of providing a common set of cryptographic
+ algorithms for higher-level applications by implementing a
+ context-independent set of cryptographic algorithms. In that light, Nettle
+ doesn't do any memory allocation or I/O, it simply provides the
+ cryptographic algorithms for the application to use in any environment and
+ in any way it needs.
+ .
+ This package contains the asymmetric cryptographic algorithms, which,
+ require the GNU multiple precision arithmetic library (libgmp) for
+ their large integer computations.
+Homepage: http://www.lysator.liu.se/~nisse/nettle/
 
 Package: libxxf86dga1
 Priority: optional
@@ -4877,15 +5166,15 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: kmod
 Priority: important
 Section: admin
-Installed-Size: 192
+Installed-Size: 297
 Maintainer: Marco d'Itri <md@linux.it>
 Architecture: i386
 Multi-Arch: foreign
-Version: 9-3
+Version: 18-3
 Replaces: module-init-tools (<< 4)
-Depends: libc6 (>= 2.8), libkmod2 (>= 6~), lsb-base (>= 3.0-6)
-Breaks: module-init-tools (<< 4)
-Size: 59808
+Depends: libc6 (>= 2.17), libkmod2 (= 18-3), lsb-base (>= 3.0-6)
+Breaks: alsa-base (<= 1.0.25+3), module-init-tools (<< 4), oss-compat (= 4)
+Size: 93494
 Description: tools for managing Linux kernel modules
  This package contains a set of programs for loading, inserting, and
  removing kernel modules for Linux.
@@ -5412,15 +5701,15 @@ Description: X11 pixmap library
 Package: libkmod2
 Priority: important
 Section: libs
-Installed-Size: 134
+Installed-Size: 153
 Maintainer: Marco d'Itri <md@linux.it>
 Architecture: i386
 Multi-Arch: same
 Source: kmod
-Version: 9-3
-Depends: libc6 (>= 2.8)
+Version: 18-3
+Depends: libc6 (>= 2.17)
 Pre-Depends: multiarch-support
-Size: 50272
+Size: 51846
 Description: libkmod shared library
  This library provides an API for insertion, removal, configuration and
  listing of kernel modules.
@@ -5541,6 +5830,23 @@ Description: GNU C compiler
  This is the GNU C compiler, a fairly portable optimizing compiler for C.
 Homepage: http://gcc.gnu.org/
 
+Package: gcc-4.9
+Priority: optional
+Section: devel
+Installed-Size: 17926
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Version: 4.9.2-10
+Replaces: gccgo-4.9 (<< 4.9.2-10)
+Provides: c-compiler
+Depends: cpp-4.9 (= 4.9.2-10), gcc-4.9-base (= 4.9.2-10), binutils (>= 2.25), libgcc-4.9-dev (= 4.9.2-10), libc6 (>= 2.11), libcloog-isl4 (>= 0.17), libgmp10 (>= 2:5.0.1~), libisl10 (>= 0.10), libmpc3, libmpfr4 (>= 3.1.2), zlib1g (>= 1:1.1.4)
+Recommends: libc6-dev (>= 2.13-5)
+Suggests: gcc-4.9-multilib, gcc-4.9-doc (>= 4.9), gcc-4.9-locales (>= 4.9), libgcc1-dbg (>= 1:4.9.2-10), libgomp1-dbg (>= 4.9.2-10), libitm1-dbg (>= 4.9.2-10), libatomic1-dbg (>= 4.9.2-10), libasan1-dbg (>= 4.9.2-10), liblsan0-dbg (>= 4.9.2-10), libtsan0-dbg (>= 4.9.2-10), libubsan0-dbg (>= 4.9.2-10), libcilkrts5-dbg (>= 4.9.2-10), libquadmath0-dbg (>= 4.9.2-10)
+Size: 5483148
+Description: GNU C compiler
+ This is the GNU C compiler, a fairly portable optimizing compiler for C.
+Homepage: http://gcc.gnu.org/
+
 Package: libclass-isa-perl
 Priority: standard
 Section: perl
@@ -5607,6 +5913,30 @@ Description: Little CMS 2 color management library
  all V2 and V4 profiles, including abstract, devicelink and named color
  profiles.
 Homepage: http://www.littlecms.com/
+
+Package: cups-core-drivers
+Priority: optional
+Section: net
+Installed-Size: 170
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: cups
+Version: 1.7.5-11
+Replaces: cups (<< 1.7.1-4~)
+Depends: libc6 (>= 2.4), libcups2 (= 1.7.5-11), cups-daemon (>= 1.7.5-11), cups-filters-core-drivers (>= 1.0.24-3~)
+Recommends: avahi-daemon
+Breaks: cups (<< 1.7.1-4~)
+Size: 127324
+Description: Common UNIX Printing System(tm) - PPD-less printing
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the parts of CUPS which are needed for PPD-less
+ printing on IPP printers with common data formats.
+Homepage: http://www.cups.org
 
 Package: libnl2
 Priority: optional
@@ -5731,23 +6061,17 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libmount1
 Priority: required
 Section: libs
-Installed-Size: 242
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 394
+Maintainer: Debian util-linux Maintainers <ah-util-linux@debian.org>
 Architecture: i386
+Multi-Arch: same
 Source: util-linux
-Version: 2.20.1-5.3baureo1
-Depends: libblkid1 (>= 2.17.2), libc6 (>= 2.4), libselinux1 (>= 1.32), libsepol1 (>= 1.14)
-Pre-Depends: dpkg-lzip, multiarch-support
-Size: 108668
-Description: block device id library
- The device mounting library, used by mount and mount helpers.
-Homepage: http://userweb.kernel.org/~kzak/util-linux/
-Original-Maintainer: LaMont Jones <lamont@debian.org>
-Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
-Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
-Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+Version: 2.25.2-5
+Depends: libblkid1 (>= 2.17.2), libc6 (>= 2.17), libselinux1 (>= 1.32)
+Pre-Depends: multiarch-support
+Size: 173338
+Description: device mounting library
+ The device mounting library, used by mount and umount helpers.
 
 Package: libqtcore4
 Priority: optional
@@ -5774,15 +6098,15 @@ Homepage: http://qt-project.org/
 Package: libcupsfilters1
 Priority: optional
 Section: libs
-Installed-Size: 168
-Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Installed-Size: 213
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups-filters
-Version: 1.0.18-2.1+deb7u1
-Depends: libc6 (>= 2.7), libcomerr2 (>= 1.01), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libgcrypt11 (>= 1.4.5), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.6.dfsg.2), libjpeg8 (>= 8c), libk5crypto3 (>= 1.6.dfsg.2), libkrb5-3 (>= 1.6.dfsg.2), libpng12-0 (>= 1.2.13-4), libtiff4 (>> 3.9.5-3~), zlib1g (>= 1:1.1.4)
+Version: 1.0.61-5
+Depends: libc6 (>= 2.7), libcups2 (>= 1.7.0), libcupsimage2 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libjpeg62-turbo (>= 1.3.1), libpng12-0 (>= 1.2.13-4), libtiff5 (>= 4.0.3)
 Pre-Depends: multiarch-support
-Size: 67420
+Size: 108914
 Description: OpenPrinting CUPS Filters - Shared library
  This library contains functions commonly used by the CUPS filters
  in the OpenPrinting CUPS filters package, currently functions to read
@@ -5813,19 +6137,19 @@ Homepage: http://www.webmproject.org
 Package: zlib1g
 Priority: required
 Section: libs
-Installed-Size: 165
+Installed-Size: 151
 Maintainer: Mark Brown <broonie@debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: zlib
-Version: 1:1.2.7.dfsg-13
+Source: zlib (1:1.2.8.dfsg-2)
+Version: 1:1.2.8.dfsg-2+b1
 Provides: libz1
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Breaks: libxml2 (<< 2.7.6.dfsg-2), texlive-binaries (<< 2009-12)
 Conflicts: zlib1 (<= 1:1.0.4-7)
 Filename: pool/main/z/zlib/zlib1g_1.2.3.4.dfsg-3_i386.deb
-Size: 91000
+Size: 89374
 MD5sum: 37246cd4fe5d4cb0f7c03ce3082164a3
 Description: compression library - runtime
  zlib is a library implementing the deflate compression method found
@@ -6118,6 +6442,51 @@ Description: Embedded GNU C Library: National Language (locale) data [support]
  unpacked to an excess of 30 megs.
 Homepage: http://www.eglibc.org
 
+Package: cups-server-common
+Priority: optional
+Section: net
+Installed-Size: 2627
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: cups
+Version: 1.7.5-11
+Replaces: cups (<< 1.6.2-2~), cups-common (<< 1.7.0)
+Breaks: cups (<< 1.6.2-2~), cups-common (<< 1.7.0)
+Size: 617716
+Description: Common UNIX Printing System(tm) - server common files
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides common files for CUPS server.
+Homepage: http://www.cups.org
+
+Package: libisl10
+Priority: optional
+Section: libs
+Installed-Size: 1638
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: isl
+Version: 0.12.2-2
+Depends: libc6 (>= 2.4), libgmp10
+Pre-Depends: multiarch-support
+Breaks: libcloog-isl4 (<< 0.18.1)
+Size: 495976
+Description: manipulating sets and relations of integer points bounded by linear constraints
+ isl is a library for manipulating sets and relations of integer points
+ bounded by linear constraints. Supported operations on sets include
+ intersection, union, set difference, emptiness check, convex hull,
+ (integer) affine hull, integer projection, and computing the lexicographic
+ minimum using parametric integer programming. It also includes an ILP solver
+ based on generalized basis reduction.
+ .
+ This package contains the runtime library.
+Homepage: http://freecode.com/projects/isl
+
 Package: linux-image-686-pae
 Priority: extra
 Section: kernel
@@ -6281,17 +6650,17 @@ Homepage: http://librdf.org/raptor/
 Package: libgcc1
 Priority: required
 Section: libs
-Installed-Size: 145
+Installed-Size: 118
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gcc-4.7 (4.7.2-5)
-Version: 1:4.7.2-5
-Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.2.4)
+Source: gcc-4.9 (4.9.2-10)
+Version: 1:4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.2.4)
 Pre-Depends: multiarch-support
-Breaks: gcc-4.1, gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
+Breaks: gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
 Filename: pool/main/g/gcc-4.4/libgcc1_4.4.5-8_i386.deb
-Size: 53260
+Size: 48098
 MD5sum: 5d8be6b16bd8dac3e7cd1c39ae0a897f
 Description: GCC support library
  Shared version of the support library, a library of internal subroutines
@@ -6302,15 +6671,15 @@ Homepage: http://gcc.gnu.org/
 Package: libck-connector0
 Priority: optional
 Section: libs
-Installed-Size: 98
-Maintainer: Utopia Maintenance Team <pkg-utopia-maintainers@lists.alioth.debian.org>
+Installed-Size: 69
+Maintainer: Robert Millan <rmh@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: consolekit
-Version: 0.4.5-3.1
+Version: 0.4.6-5
 Depends: libc6 (>= 2.3.4), libdbus-1-3 (>= 1.0.2)
 Pre-Depends: multiarch-support
-Size: 58604
+Size: 59762
 Description: ConsoleKit libraries
  ConsoleKit is a system daemon for tracking what users are logged
  into the system and how they interact with the computer (e.g.
@@ -6619,17 +6988,17 @@ Package: base-files
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 414
+Installed-Size: 220
 Maintainer: Santiago Vila <sanvila@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 7.1wheezy1
+Version: 8
 Replaces: base, dpkg (<= 1.15.0), miscutils
 Provides: base
 Pre-Depends: awk
 Breaks: initscripts (<< 2.88dsf-13.3), sendfile (<< 2.1b.20080616-5.2~)
 Filename: pool/main/b/base-files/base-files_6.0squeeze4_i386.deb
-Size: 80320
+Size: 69432
 MD5sum: 5e3e78475bec6d8f42cf4afe4fca76ee
 Description: Debian base system miscellaneous files
  This package contains the basic filesystem hierarchy of a Debian system, and
@@ -6665,27 +7034,20 @@ Package: mount
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 386
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 350
+Maintainer: Debian util-linux Maintainers <ah-util-linux@debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: util-linux
-Version: 2.20.1-5.3baureo1
-Pre-Depends: dpkg-lzip, libblkid1 (>= 2.20.1), libc6 (>= 2.6), libmount1 (>= 2.20.1), libselinux1 (>= 2.0.15), libsepol1 (>= 1.14)
+Version: 2.25.2-5
+Pre-Depends: libc6 (>= 2.17), libmount1 (>= 2.25), libselinux1 (>= 2.0.15), libsmartcols1 (>= 2.25)
 Suggests: nfs-common (>= 1:1.1.0-13)
 Filename: pool/main/u/util-linux/mount_2.17.2-9_i386.deb
-Size: 160154
+Size: 173232
 MD5sum: 9d114d52949d504cbf28f6fcb9ca1d81
 Description: Tools for mounting and manipulating filesystems
  This package provides the mount(8), umount(8), swapon(8),
  swapoff(8), and losetup(8) commands.
-Homepage: http://userweb.kernel.org/~kzak/util-linux/
-Original-Maintainer: LaMont Jones <lamont@debian.org>
-Original-Uploaders: Scott James Remnant <scott@ubuntu.com>, Adam Conrad <adconrad@0c3.net>
-Original-Vcs-Browser: http://git.debian.org/?p=users/lamont/util-linux.git
-Original-Vcs-Git: git://git.debian.org/~lamont/util-linux.git
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: libasound2-plugins
 Priority: optional
@@ -6829,6 +7191,28 @@ Description: library to read and control CD-ROM
  disc images as though they were CD's.
 Homepage: http://www.gnu.org/software/libcdio/
 
+Package: cups-filters-core-drivers
+Priority: optional
+Section: net
+Installed-Size: 320
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Source: cups-filters
+Version: 1.0.61-5
+Replaces: cups (<< 1.5.0-16), cups-filters (<< 1.0.44-1~)
+Depends: libc6 (>= 2.4), libcups2 (>= 1.7.0), libcupsfilters1 (>= 1.0.58), libcupsimage2 (>= 1.4.0), libgcc1 (>= 1:4.1.1), liblcms2-2 (>= 2.2+git20110628), libpoppler46 (>= 0.26.5), libqpdf13 (>> 5.0.0~), libstdc++6 (>= 4.9), bc, poppler-utils
+Breaks: cups (<< 1.5.0-16), cups-filters (<< 1.0.44-1~)
+Size: 141534
+Description: OpenPrinting CUPS Filters - PPD-less printing
+ This package provides additional CUPS filters which are not provided
+ by the CUPS project itself. This includes filters for a PDF based
+ printing workflow.
+ .
+ This package contains only the filters needed for PPD-less printing of
+ PDF input files on IPP printers with known, common languages (PDF,
+ PostScript, PWG Raster, PCL).
+Homepage: http://www.openprinting.org/
+
 Package: libsqlite3-0
 Priority: standard
 Section: libs
@@ -6872,13 +7256,13 @@ Homepage: http://search.cpan.org/search?module=Text::Iconv
 Package: cups-common
 Priority: optional
 Section: net
-Installed-Size: 4354
+Installed-Size: 1730
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: cups
-Version: 1.5.3-5+deb7u5
-Size: 903580
+Version: 1.7.5-11
+Size: 273296
 Description: Common UNIX Printing System(tm) - common files
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -6906,20 +7290,17 @@ Homepage: http://search.cpan.org/dist/UUID/
 Package: libcups2
 Priority: optional
 Section: libs
-Installed-Size: 478
+Installed-Size: 620
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: cups
-Version: 1.5.3-5+deb7u5
-Replaces: libcupsys2
-Provides: libcupsys2
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.10+dfsg~), zlib1g (>= 1:1.1.4)
+Version: 1.7.5-11
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.4), libgnutls-deb0-28 (>= 3.3.0), libgssapi-krb5-2 (>= 1.10+dfsg~), zlib1g (>= 1:1.2.0)
 Pre-Depends: multiarch-support
 Suggests: cups-common
 Breaks: cups (<< 1.5.0)
-Conflicts: libcupsys2
-Size: 256038
+Size: 294554
 Description: Common UNIX Printing System(tm) - Core library
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
@@ -7198,6 +7579,22 @@ Description: X C Binding, dri2 extension
   * Easy creation of new extensions: automatically generates interface from
     machine-parsable protocol descriptions
 Homepage: http://xcb.freedesktop.org
+
+Package: gcc-4.9-base
+Priority: required
+Section: libs
+Installed-Size: 178
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Breaks: dehydra (<= 0.9.hg20110609-2), gcc-4.4-base (<< 4.4.7), gcc-4.7-base (<< 4.7.3), gcj-4.4-base (<< 4.4.6-9~), gcj-4.6-base (<< 4.6.1-4~), gnat-4.4-base (<< 4.4.6-3~), gnat-4.6 (<< 4.6.1-5~)
+Size: 159668
+Description: GCC, the GNU Compiler Collection (base package)
+ This package contains files common to all languages and libraries
+ contained in the GNU Compiler Collection (GCC).
+Homepage: http://gcc.gnu.org/
 
 Package: lockfile-progs
 Priority: optional
@@ -7509,29 +7906,21 @@ Description: XML parsing C library - runtime library
 Homepage: http://expat.sourceforge.net
 
 Package: iproute
-Priority: important
-Section: net
-Installed-Size: 973
-Maintainer: Debian iproute maintainers <ah-iproute@debian.org>
-Architecture: i386
-Multi-Arch: foreign
-Source: iproute (20120521-3)
-Version: 20120521-3+b3
-Provides: arpd
-Depends: libc6 (>= 2.4), libdb5.1
-Recommends: libatm1
-Suggests: iproute-doc
-Conflicts: arpd
+Priority: optional
+Section: oldlibs
+Installed-Size: 16
+Maintainer: Debian iproute2 Maintainers <ah-iproute@debian.org>
+Architecture: all
+Source: iproute2 (3.16.0-2)
+Version: 1:3.16.0-2
+Depends: iproute2
 Filename: pool/main/i/iproute/iproute_20100519-3_i386.deb
-Size: 459946
+Size: 15528
 MD5sum: fd4cd9e6433bf9424de69b6a8e6eec14
-Description: networking and traffic control tools
- The iproute suite, also known as iproute2, is a collection of
- utilities for networking and traffic control.
- .
- These tools communicate with the Linux kernel via the (rt)netlink
- interface, providing advanced features not available through the
- legacy net-tools commands 'ifconfig' and 'route'.
+Description: transitional dummy package for iproute2
+ This is a transitional dummy package to get upgrading systems to install
+ the iproute2 package. It can safely be removed once no other package
+ depends on it.
 Homepage: http://www.linux-foundation.org/en/Net:Iproute2
 
 Package: libxcb-atom1
@@ -7638,6 +8027,42 @@ Description: automatic proxy configuration management library (shared)
  This package contains the shared library.
 Homepage: http://code.google.com/p/libproxy/
 
+Package: libproxy1
+Priority: optional
+Section: libs
+Installed-Size: 145
+Maintainer: Emilio Pozuelo Monfort <pochu@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libproxy (0.4.11-4)
+Version: 0.4.11-4+b2
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.9)
+Pre-Depends: multiarch-support
+Size: 57664
+Description: automatic proxy configuration management library (shared)
+ libproxy is a lightweight library which makes it easy to develop
+ applications proxy-aware with a simple and stable API.
+ .
+ This package contains the shared library.
+Homepage: http://code.google.com/p/libproxy/
+
+Package: libcilkrts5
+Priority: optional
+Section: libs
+Installed-Size: 134
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.8), libstdc++6 (>= 4.1.1)
+Pre-Depends: multiarch-support
+Size: 44464
+Description: Intel Cilk Plus language extensions (runtime)
+ Intel Cilk Plus is an extension to the C and C++ languages to support
+ data and task parallelism.
+Homepage: http://gcc.gnu.org/
+
 Package: gsettings-desktop-schemas
 Priority: optional
 Section: gnome
@@ -7677,20 +8102,25 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: cups-filters
 Priority: optional
 Section: net
-Installed-Size: 929
-Maintainer: Debian CUPS Maintainers <pkg-cups-devel@lists.alioth.debian.org>
+Installed-Size: 1455
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
-Version: 1.0.18-2.1+deb7u1
-Replaces: cups (<< 1.5.0-16), cups-common (<< 1.5.0-16), ghostscript-cups (<< 9.02~)
-Depends: libc6 (>= 2.7), libcups2 (>= 1.4.0), libcupsfilters1 (>= 1.0~b1), libcupsimage2 (>= 1.4.0), libfontconfig1 (>= 2.9.0), libgcc1 (>= 1:4.1.1), libijs-0.35 (>= 0.35), liblcms2-2, libpoppler19 (>= 0.18.4), libstdc++6 (>= 4.1.1), zlib1g (>= 1:1.1.4), ghostscript (>= 9.02~), ttf-freefont | fonts-liberation | ttf-dejavu
-Recommends: colord, foomatic-filters (>= 4.0), ghostscript-cups (>= 9.02~)
+Version: 1.0.61-5
+Replaces: cups (<< 1.5.0-16), cups-common (<< 1.5.0-16), cups-ppdc (<< 1.6), foomatic-filters, ghostscript-cups
+Provides: foomatic-filters, ghostscript-cups
+Depends: libc6 (>= 2.15), libcups2 (>= 1.7.0), libcupsfilters1 (>= 1.0.58), libcupsimage2 (>= 1.4.0), libfontconfig1 (>= 2.11), libfontembed1 (>= 1.0.31), libgcc1 (>= 1:4.1.1), libijs-0.35 (>= 0.35), liblcms2-2 (>= 2.2+git20110628), libpoppler46 (>= 0.26.5), libqpdf13 (>> 5.0.0~), libstdc++6 (>= 4.1.1), cups-filters-core-drivers (>= 1.0.61-5), bc, ghostscript (>= 9.02~)
+Recommends: colord
 Suggests: foomatic-db-compressed-ppds | foomatic-db
-Breaks: cups (<< 1.5.0-16), cups-common (<< 1.5.0-16), ghostscript-cups (<< 9.02~)
-Size: 382940
-Description: OpenPrinting CUPS Filters
+Breaks: cups (<< 1.5.0-16), cups-common (<< 1.5.0-16), cups-ppdc (<< 1.6)
+Conflicts: foomatic-filters, ghostscript-cups
+Size: 510144
+Description: OpenPrinting CUPS Filters - Main Package
  This package provides additional CUPS filters which are not provided
  by the CUPS project itself. This includes filters for a PDF based
  printing workflow.
+ .
+ This package contains the filters for printing with drivers/PPDs and
+ for converting non-PDF input files to PDF.
 Homepage: http://www.openprinting.org/
 
 Package: iceweasel-l10n-br
@@ -7713,6 +8143,28 @@ Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-mainta
 Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/iceweasel.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
+
+Package: libopenjpeg5
+Priority: extra
+Section: libs
+Installed-Size: 376
+Maintainer: Debian PhotoTools Maintainers <pkg-phototools-devel@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: openjpeg
+Version: 1:1.5.2-3
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 112658
+Description: JPEG 2000 image compression/decompression library - runtime
+ OpenJPEG is a library for handling the JPEG 2000 image compression format.
+ JPEG 2000 is a wavelet-based image compression standard and permits progressive
+ transmission by pixel and resolution accuracy for progressive downloads of an
+ encoded image. It supports lossless and lossy compression, supports higher
+ compression than JPEG 1991, and has resilience to errors in the image.
+ .
+ this is the runtime package
+Homepage: http://www.openjpeg.org
 
 Package: iceweasel-l10n-bs
 Priority: optional
@@ -8242,17 +8694,17 @@ Description: X server initialisation tool
 Package: libattr1
 Priority: required
 Section: libs
-Installed-Size: 60
+Installed-Size: 29
 Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: attr
-Version: 1:2.4.46-8
+Version: 1:2.4.47-2
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Conflicts: attr (<< 2.0.0)
 Filename: pool/main/a/attr/libattr1_2.4.44-2_i386.deb
-Size: 19532
+Size: 18264
 MD5sum: 1e08d3be5e8d55515e7b3fa6fc76a022
 Description: Extended attribute shared library
  Contains the runtime environment required by programs that make use
@@ -8331,6 +8783,31 @@ Version: 0.9-4
 Depends: libc6 (>= 2.3.4), libgmp10, libmpfr4 (>= 3.1.0)
 Pre-Depends: multiarch-support
 Size: 41342
+Description: multiple precision complex floating-point library
+ MPC is a portable library written in C for arbitrary precision
+ arithmetic on complex numbers providing correct rounding. For the time
+ being, it contains all arithmetic operations over complex numbers, the
+ exponential and the logarithm functions, the trigonometric and
+ hyperbolic functions.
+ .
+ Ultimately, it should implement a multiprecision equivalent of the ISO
+ C99 standard.
+ .
+ It builds upon the GNU MP and the MPFR libraries.
+Homepage: http://www.multiprecision.org/mpc/
+
+Package: libmpc3
+Priority: extra
+Section: libs
+Installed-Size: 145
+Maintainer: Laurent Fousse <lfousse@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: mpclib3
+Version: 1.0.2-1
+Depends: libc6 (>= 2.3), libgmp10, libmpfr4 (>= 3.1.2)
+Pre-Depends: multiarch-support
+Size: 43720
 Description: multiple precision complex floating-point library
  MPC is a portable library written in C for arbitrary precision
  arithmetic on complex numbers providing correct rounding. For the time
@@ -8524,19 +9001,19 @@ Description: X C Binding, render extension
 Homepage: http://xcb.freedesktop.org
 
 Package: systemd
-Priority: extra
+Priority: optional
 Section: admin
-Installed-Size: 3667
-Maintainer: Tollef Fog Heen <tfheen@debian.org>
+Installed-Size: 11874
+Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
 Architecture: i386
-Version: 44-11+deb7u4
-Depends: libacl1 (>= 2.2.51-8), libaudit0 (>= 1.7.13), libc6 (>= 2.11), libcap2 (>= 2.10), libcryptsetup4 (>= 2:1.4), libdbus-1-3 (>= 1.1.1), libkmod2 (>= 5~), liblzma5 (>= 5.1.1alpha+20120614), libpam0g (>= 0.99.7.1), libselinux1 (>= 2.0.65), libsystemd-daemon0 (>= 31), libsystemd-id128-0 (>= 38), libsystemd-journal0 (>= 38), libsystemd-login0 (>= 38), libudev0 (>= 172), libwrap0 (>= 7.6-4~), util-linux (>= 2.19.1-2), initscripts (>= 2.88dsf-17), udev
-Pre-Depends: dpkg (>= 1.15.7.2)
-Recommends: libpam-systemd
-Suggests: systemd-gui, python, python-dbus, python-cairo
-Breaks: lsb-base (<< 4.1+Debian4), lvm2 (<< 2.02.84-1)
+Version: 215-12
+Depends: libacl1 (>= 2.2.51-8), libaudit1 (>= 1:2.2.1), libblkid1 (>= 2.19.1), libcap2 (>= 1:2.10), libcryptsetup4 (>= 2:1.4.3), libkmod2 (>= 5~), libpam0g (>= 0.99.7.1), libselinux1 (>= 2.1.9), libsystemd0 (= 215-12), util-linux (>= 2.19.1-2), mount (>= 2.21), initscripts (>= 2.88dsf-53.2), sysv-rc, udev (>= 208-8), acl, adduser, libcap2-bin
+Pre-Depends: libc6 (>= 2.17), libgcrypt20 (>= 1.6.1), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32)
+Recommends: libpam-systemd, dbus
+Suggests: systemd-ui
+Breaks: lsb-base (<< 4.1+Debian4), lvm2 (<< 2.02.104-1), systemd-shim (<< 8-2)
 Conflicts: klogd
-Size: 1454550
+Size: 2563440
 Description: system and service manager
  systemd is a replacement for sysvinit.  It is dependency-based and
  able to read the LSB init script headers in addition to parsing rcN.d
@@ -8545,6 +9022,9 @@ Description: system and service manager
  It also provides process supervision using cgroups and the ability to
  not only depend on other init script being started, but also
  availability of a given mount point or dbus service.
+ .
+ Installing the systemd package will not switch your init system unless you
+ boot with init=/bin/systemd or install systemd-sysv in addition.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
 
 Package: libswscale2
@@ -8734,6 +9214,24 @@ Description: free implementation of the GL API -- shared library
  functions. It is intended to be mainly used by both the libgles1-mesa
  and libgles2-mesa packages.
 Homepage: http://mesa3d.sourceforge.net/
+
+Package: libtiff5
+Priority: optional
+Section: libs
+Installed-Size: 571
+Maintainer: Jay Berkenbilt <qjb@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: tiff
+Version: 4.0.3-12.3
+Depends: libc6 (>= 2.11), libjbig0 (>= 2.0), libjpeg62-turbo (>= 1.3.1), liblzma5 (>= 5.1.1alpha+20120614), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Size: 221938
+Description: Tag Image File Format (TIFF) library
+ libtiff is a library providing support for the Tag Image File Format
+ (TIFF), a widely used format for storing image data.  This package
+ includes the shared library.
+Homepage: http://libtiff.maptools.org
 
 Package: librtmp0
 Priority: extra
@@ -10514,17 +11012,17 @@ Description: library that implements library compatibility checks for dlopen()
 Package: glib-networking-services
 Priority: optional
 Section: libs
-Installed-Size: 60
+Installed-Size: 27
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: glib-networking
-Version: 2.32.3-1
+Version: 2.42.0-2
 Replaces: glib-networking (<< 2.30.1-2)
-Depends: libc6 (>= 2.0), libglib2.0-0 (>= 2.31.6), libproxy0 (>= 0.2.3), glib-networking-common (= 2.32.3-1)
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.41.3), libproxy1 (>= 0.4.11), glib-networking-common (= 2.42.0-2)
 Recommends: glib-networking
 Breaks: glib-networking (<< 2.30.1-2)
-Size: 13178
+Size: 17206
 Description: network-related giomodules for GLib - D-Bus services
  This package contains D-Bus services that are used by the GIO network
  extensions in glib-networking, for actions that need to be done in a
@@ -10573,6 +11071,24 @@ Description: Tool to create and append to squashfs filesystems
 Homepage: http://squashfs.sourceforge.net/
 Original-Uploaders: Otavio Salvador <otavio@debian.org>
 
+Package: libubsan0
+Priority: optional
+Section: libs
+Installed-Size: 230
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Pre-Depends: multiarch-support
+Size: 88886
+Description: UBSan -- undefined behaviour sanitizer (runtime)
+ UndefinedBehaviorSanitizer can be enabled via -fsanitize=undefined.
+ Various computations will be instrumented to detect undefined behavior
+ at runtime. Available for C and C++.
+Homepage: http://gcc.gnu.org/
+
 Package: plymouth
 Priority: optional
 Section: misc
@@ -10593,6 +11109,22 @@ Description: Graphical Boot Animation and Logger
 Homepage: http://www.freedesktop.org/wiki/Software/Plymouth
 Original-Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
 Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+
+Package: libxtables10
+Priority: important
+Section: net
+Installed-Size: 114
+Maintainer: Laurence J. Lane <ljlane@debian.org>
+Architecture: i386
+Source: iptables (1.4.21-2)
+Version: 1.4.21-2+b1
+Replaces: iptables (<< 1.4.16.3-3)
+Depends: libc6 (>= 2.7)
+Breaks: iptables (<< 1.4.16.3-3)
+Size: 68970
+Description: netfilter xtables library
+ The user-space interface to the Netfilter xtables kernel framework.
+Homepage: http://www.netfilter.org/
 
 Package: kbd
 Priority: optional
@@ -10634,6 +11166,23 @@ Original-Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-mainta
 Original-Uploaders: Mike Hommey <glandium@debian.org>
 Original-Vcs-Browser: http://git.debian.org/?p=pkg-mozilla/nss.git
 Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/nss.git
+
+Package: libasan1
+Priority: optional
+Section: libs
+Installed-Size: 707
+Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1)
+Pre-Depends: multiarch-support
+Size: 192080
+Description: AddressSanitizer -- a fast memory error detector
+ AddressSanitizer (ASan) is a fast memory error detector.  It finds
+ use-after-free and {heap,stack,global}-buffer overflow bugs in C/C++ programs.
+Homepage: http://gcc.gnu.org/
 
 Package: libcurl3
 Priority: optional
@@ -11478,34 +12027,24 @@ Homepage: http://mozplugger.mozdev.org
 Package: initscripts
 Priority: required
 Section: admin
-Installed-Size: 288
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 160
+Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
 Architecture: i386
+Multi-Arch: foreign
 Source: sysvinit
-Version: 2.88dsf-41baureo1
+Version: 2.88dsf-58
 Replaces: libc0.1, libc0.3, libc6, libc6.1
-Depends: libc6 (>= 2.2), mount (>= 2.11x-1), debianutils (>= 4), lsb-base (>= 3.2-14), sysvinit-utils (>= 2.86.ds1-64), sysv-rc | file-rc, coreutils (>= 5.93)
-Pre-Depends: dpkg-lzip
+Depends: libc6 (>= 2.4), mount (>= 2.11x-1), debianutils (>= 4), lsb-base (>= 3.2-14), sysvinit-utils (>= 2.88dsf-50), sysv-rc | file-rc, coreutils (>= 5.93)
 Recommends: psmisc, e2fsprogs
-Breaks: aide (<< 0.15.1-5), atm-tools (<< 1:2.5.1-1.3), autofs (<< 5.0.0), bootchart (<< 0.10~svn407-3.3), console-common (<< 0.7.86), console-setup (<< 1.74), cruft (<< 0.9.16), eepc-acpi-scripts (<< 1.1.12), fcheck (<< 2.7.59-16), hostapd (<< 1:0.7.3-3), ifupdown (<< 0.7~rc3), initramfs-tools (<< 0.104), libpam-mount (<< 2.13-1), live-build (<< 3.0~a26-1), ltsp-client-core (<< 5.2.16-1), mdadm (<< 3.2.2-1), nbd-client (<< 1:2.9.23-1), nfs-common (<< 1:1.2.5-3), portmap (<< 6.0.0-2), readahead-fedora (<< 2:1.5.6-3), resolvconf (<< 1.49), rpcbind (<< 0.2.0-7), rsyslog (<< 5.8.2-2), selinux-policy-default (<= 2:0.2.20100524-9), splashy (<< 0.3.13-5.1+b1), sysklogd (<< 1.5-6.2), util-linux (<< 2.20.1-5), wpasupplicant (<< 0.7.3-4), xymon (<< 4.3.0~beta2.dfsg-9)
+Breaks: aide (<< 0.15.1-5), atm-tools (<< 1:2.5.1-1.3), autofs (<< 5.0.0), bootchart (<< 0.10~svn407-4), console-common (<< 0.7.86), console-setup (<< 1.74), cruft (<< 0.9.16), eepc-acpi-scripts (<< 1.1.12), fcheck (<< 2.7.59-16), hostapd (<< 1:0.7.3-3), hurd (<< 0.5.git20131101~), ifupdown (<< 0.7.46), initramfs-tools (<< 0.104), libpam-mount (<< 2.13-1), live-build (<< 3.0~a26-1), ltsp-client-core (<< 5.2.16-1), mdadm (<< 3.2.2-1), nbd-client (<< 1:2.9.23-1), nfs-common (<< 1:1.2.5-3), portmap (<< 6.0.0-2), readahead-fedora (<< 2:1.5.6-3), resolvconf (<< 1.49), rpcbind (<< 0.2.0-7), rsyslog (<< 5.8.2-2), selinux-policy-default (<= 2:0.2.20100524-9), splashy (<< 0.3.13-5.1+b1), sysklogd (<< 1.5-6.2), util-linux (<< 2.20.1-5), wpasupplicant (<< 0.7.3-4), xymon (<< 4.3.0~beta2.dfsg-9)
 Conflicts: libdevmapper1.02.1 (<< 2:1.02.24-1)
 Filename: pool/main/s/sysvinit/initscripts_2.88dsf-13.1_i386.deb
-Size: 87974
+Size: 87188
 MD5sum: fba4a3833e251e6156be29e2573e5322
 Description: scripts for initializing and shutting down the system
  The scripts in this package initialize a standard Debian
  system at boot time and shut it down at halt or reboot time.
 Homepage: http://savannah.nongnu.org/projects/sysvinit
-Original-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
-Original-Uploaders: 
- Petter Reinholdtsen <pere@debian.org>,
- Henrique de Moraes Holschuh <hmh@debian.org>,
- Kel Modderman <kel@otaku42.de>,
- Roger Leigh <rleigh@debian.org>
-Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
-Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: gstreamer0.10-doc
 Priority: optional
@@ -12487,16 +13026,16 @@ Homepage: http://avahi.org/
 Package: cpp
 Priority: optional
 Section: interpreters
-Installed-Size: 63
+Installed-Size: 22
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: allowed
-Source: gcc-defaults (1.120)
-Version: 4:4.7.2-1
-Depends: cpp-4.7 (>= 4.7.2-1~)
+Source: gcc-defaults (1.136)
+Version: 4:4.9.2-2
+Depends: cpp-4.9 (>= 4.9.2-1~)
 Suggests: cpp-doc
 Conflicts: cpp-doc (<< 1:2.95.3)
-Size: 16618
+Size: 17322
 Description: GNU C preprocessor (cpp)
  The GNU C preprocessor is a macro processor that is used automatically
  by the GNU C compiler to transform programs before actual compilation.
@@ -12558,6 +13097,24 @@ Description: GNU TLS library - runtime library
  .
  This package contains the runtime libraries.
 Homepage: http://www.gnutls.org/
+
+Package: libaudit1
+Priority: optional
+Section: libs
+Installed-Size: 121
+Maintainer: Laurent Bigonville <bigon@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: audit (1:2.4-1)
+Version: 1:2.4-1+b1
+Depends: libaudit-common (>= 1:2.4-1), libc6 (>= 2.8)
+Pre-Depends: multiarch-support
+Size: 45608
+Description: Dynamic library for security auditing
+ The audit-libs package contains the dynamic libraries needed for
+ applications to use the audit framework. It is used to monitor systems for
+ security related events.
+Homepage: http://people.redhat.com/sgrubb/audit/
 
 Package: libaudit0
 Priority: optional
@@ -12662,6 +13219,23 @@ Description: General Purpose Mouse - shared library
  and delivers them to applications. See the description for the 'gpm'
  package for more information.
 Homepage: http://www.nico.schottelius.org/software/gpm/
+
+Package: libdb5.3
+Priority: standard
+Section: libs
+Installed-Size: 2006
+Maintainer: Debian Berkeley DB Group <pkg-db-devel@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: db5.3
+Version: 5.3.28-9
+Depends: libc6 (>= 2.17)
+Pre-Depends: multiarch-support
+Size: 738378
+Description: Berkeley v5.3 Database Libraries [runtime]
+ This is the runtime package for programs that use the v5.3 Berkeley
+ database library.
+Homepage: http://www.oracle.com/technology/software/products/berkeley-db/index.html
 
 Package: libdb5.1
 Priority: standard
@@ -12849,31 +13423,27 @@ Package: dpkg
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 6421
+Installed-Size: 6447
 Origin: debian
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+Bugs: debbugs://bugs.debian.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.16.10-0baureo+1
-Provides: dpkg-lzip
-Pre-Depends: libbz2-1.0, libc6 (>= 2.6), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 1.32), zlib1g (>= 1:1.1.4), tar (>= 1.23), plzip | lzip | lziprecover
+Version: 1.17.24
+Replaces: manpages-it (<< 2.80-4)
+Pre-Depends: libbz2-1.0, libc6 (>= 2.11), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 2.3), zlib1g (>= 1:1.1.4), tar (>= 1.23)
 Suggests: apt
-Breaks: apt (<< 0.7.7), aptitude (<< 0.4.7-1), dpkg-dev (<< 1.15.8), libdpkg-perl (<< 1.15.8), pinfo (<< 0.6.9-3.1), tkinfo (<< 2.8-3.1)
+Breaks: apt (<< 0.7.7), apt-cudf (<< 3.3~beta1-3), aptitude (<< 0.4.7-1), auctex (<< 11.87-3+deb8u1), ccache (<< 3.1.10-1), cups (<< 1.7.5-10), debian-security-support (<< 2014.10.26), distcc (<< 3.1-6.1), doc-base (<< 0.10.5), dpkg-dev (<< 1.15.8), fontconfig (<< 2.11.0-6.2), fusionforge-plugin-mediawiki (<< 5.3.2+20141104-3), gap-core (<< 4r7p5-2), gitweb (<< 1:2.1.4-2.1), grace (<< 1:5.1.24-3), gxine (<< 0.5.908-3.1), hoogle (<< 4.2.33-4), icecc (<< 1.0.1-2), install-info (<< 5.1.dfsg.1-3), libapache2-mod-php5 (<< 5.6.4+dfsg-3), libapache2-mod-php5filter (<< 5.6.4+dfsg-3), libdpkg-perl (<< 1.15.8), libjs-protoaculous (<< 5), man-db (<< 2.6.3-6), mcollective (<< 2.6.0+dfsg-2.1), php5-fpm (<< 5.6.4+dfsg-3), pypy (<< 2.4.0+dfsg-3), readahead-fedora (<< 2:1.5.6-5.2), wordpress (<< 4.1+dfsg-1), xfonts-traditional (<< 1.7), xine-ui (<< 0.99.9-1.2)
+Conflicts: ada-reference-manual (<< 20021112web-4), asn1-mode (<< 2.7-7), bogosort (<< 0.4.2-3), cl-yacc (<< 0.3-3), cpp-4.1-doc (<< 4.1.2.nf2-4), cpp-4.2-doc (<< 4.2.4.nf1-4), gcc-4.1-doc (<< 4.1.2.nf2-4), gcc-4.2-doc (<< 4.2.4.nf1-4), gcj-4.1-doc (<< 4.1.2.nf2-4), gcj-4.2-doc (<< 4.2.4.nf1-4), gfortran-4.1-doc (<< 4.1.2.nf2-4), gfortran-4.2-doc (<< 4.2.4.nf1-4), ggz-docs (<< 0.0.14.1-2), glame (<< 2.0.1-6), gnat-4.1-doc (<< 4.1.2.nf2-4), gnat-4.2-doc (<< 4.2.4.nf1-4), gtalk (<< 0.99.10-16), libalogg-dev (<< 1.3.7-2), libgtk1.2-doc (<< 1.2.10-19), libnettle-dev (<< 2), liborbit-dev (<< 0.5.17-12), libreadline5-dev (<< 5.2-8), librep-doc (<< 0.90), mmucl (<< 1.5.2-3), nxml-mode (<< 20041004-9), octave3.0-info (<< 1:3.0.1-6lenny3), octave3.2-info (<< 3.2.4-8), polgen-doc (<< 1.3-3), r6rs-doc (<< 1.0-2), serveez-doc (<< 0.1.5-3), slat (<< 2.0-6), texlive-base-bin-doc (<< 2007.dfsg.2-9), ttcn-el (<< 0.6.9-2), ulog-acctd (<< 0.4.3-3), xconq-doc (<< 7.4.1-5), zenirc (<< 2.112.dfsg-1)
 Filename: pool/main/d/dpkg/dpkg_1.15.8.12_i386.deb
-Size: 1644446
+Size: 2940726
 MD5sum: f9b1fcccedee8352a17a548174b3394b
 Description: Debian package management system
  This package provides the low-level infrastructure for handling the
  installation and removal of Debian software packages.
  .
  For Debian package development tools, install dpkg-dev.
-Homepage: http://wiki.debian.org/Teams/Dpkg
-Original-Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
-Original-Uploaders: Guillem Jover <guillem@debian.org>, Raphaël Hertzog <hertzog@debian.org>
-Original-Vcs-Browser: http://git.debian.org/?p=dpkg/dpkg.git
-Original-Vcs-Git: git://git.debian.org/git/dpkg/dpkg.git
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
+Homepage: https://wiki.debian.org/Teams/Dpkg
 
 Package: libxvidcore4
 Priority: optional
@@ -13165,19 +13735,54 @@ Homepage: http://search.cpan.org/dist/gettext/gettext.pm
 Package: glib-networking-common
 Priority: optional
 Section: libs
-Installed-Size: 658
+Installed-Size: 751
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: glib-networking
-Version: 2.32.3-1
+Version: 2.42.0-2
 Replaces: glib-networking (<< 2.30.1-2)
 Recommends: glib-networking
 Breaks: glib-networking (<< 2.30.1-2)
-Size: 49370
+Size: 52128
 Description: network-related giomodules for GLib - data files
  This package contains data files and translations for the GIO network
  extensions in glib-networking.
+
+Package: libqpdf13
+Priority: optional
+Section: libs
+Installed-Size: 903
+Maintainer: Jay Berkenbilt <qjb@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: qpdf
+Version: 5.1.2-2
+Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libpcre3 (>= 8.10), libstdc++6 (>= 4.9), zlib1g (>= 1:1.1.4)
+Pre-Depends: multiarch-support
+Recommends: qpdf
+Size: 337552
+Description: runtime library for PDF transformation/inspection software
+ QPDF is a program that can be used to linearize (web-optimize),
+ encrypt (password-protect), decrypt, and inspect PDF files from the
+ command-line.  It does these and other structural, content-preserving
+ transformations on PDF files, reading a PDF file as input and
+ creating a new one as output.  It also provides many useful
+ capabilities to developers of PDF-producing software or for people
+ who just want to look at the innards of a PDF file to learn more
+ about how they work.
+ .
+ QPDF understands PDF files that use compressed object streams
+ (supported by newer PDF applications) and can convert such files into
+ those that can be read with older viewers.  It can also be used for
+ checking PDF files for structural errors, inspecting stream contents,
+ or extracting objects from PDF files.  QPDF is not PDF content
+ creation or viewing software -- it does not have the capability to
+ create PDF files from scratch or to display PDF files.
+ .
+ This package contains the qpdf runtime libraries required to run
+ programs that link with the qpdf library.
+Homepage: http://qpdf.sourceforge.net
 
 Package: linux-image-3.7-0baureo1-686-pae
 Priority: optional
@@ -13298,6 +13903,31 @@ Description: Standalone GNU Info documentation browser
  .
  Much of the software in Debian comes with its online documentation in
  the form of Info files, so it is most likely you will want to install it.
+
+Package: cups-daemon
+Priority: optional
+Section: net
+Installed-Size: 855
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: cups
+Version: 1.7.5-11
+Replaces: cups (<< 1.6.1-1~)
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.15), libcups2 (= 1.7.5-11), libcupsmime1 (>= 1.5.0), libdbus-1-3 (>= 1.0.2), libgnutls-deb0-28 (>= 3.3.0), libgssapi-krb5-2 (>= 1.10+dfsg~), libpam0g (>= 0.99.7.1), libpaper1, libsystemd0, init-system-helpers (>= 1.18~), procps, lsb-base (>= 3), ssl-cert (>= 1.0.11), adduser, bc
+Pre-Depends: dpkg (>= 1.15.7.2)
+Recommends: colord, cups-browsed, avahi-daemon (>= 0.6.31-3~)
+Suggests: cups, cups-bsd, cups-common (>= 1.7.5-11), cups-server-common (>= 1.7.5-11), cups-client (>= 1.7.5-11), cups-ppdc, cups-filters, poppler-utils (>= 0.12), ghostscript (>= 9.02~), cups-filters (>= 1.0.42) | foomatic-filters (>= 4.0), foomatic-db-compressed-ppds | foomatic-db, printer-driver-gutenprint, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
+Breaks: cups (<< 1.6.1-1~)
+Size: 389134
+Description: Common UNIX Printing System(tm) - daemon
+ The Common UNIX Printing System (or CUPS(tm)) is a printing system and
+ general replacement for lpd and the like.  It supports the Internet
+ Printing Protocol (IPP), and has its own filtering driver model for
+ handling various document types.
+ .
+ This package provides the CUPS scheduler/daemon.
+Homepage: http://www.cups.org
 
 Package: crda
 Priority: optional
@@ -13560,17 +14190,17 @@ Homepage: http://www.alsa-project.org/
 Package: gcc
 Priority: optional
 Section: devel
-Installed-Size: 41
+Installed-Size: 7
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
-Source: gcc-defaults (1.120)
-Version: 4:4.7.2-1
+Source: gcc-defaults (1.136)
+Version: 4:4.9.2-2
 Provides: c-compiler
-Depends: cpp (>= 4:4.7.2-1), gcc-4.7 (>= 4.7.2-1~)
+Depends: cpp (>= 4:4.9.2-2), gcc-4.9 (>= 4.9.2-1~)
 Recommends: libc6-dev | libc-dev
-Suggests: gcc-multilib, make, manpages-dev, autoconf, automake1.9, libtool, flex, bison, gdb, gcc-doc
+Suggests: gcc-multilib, make, manpages-dev, autoconf, automake, libtool, flex, bison, gdb, gcc-doc
 Conflicts: gcc-doc (<< 1:2.95.3)
-Size: 5062
+Size: 5118
 Description: GNU C compiler
  This is the GNU C compiler, a fairly portable optimizing compiler for C.
  .
@@ -14290,6 +14920,23 @@ Description: audio meta-data library
  install RusXMMS flavour which can be found in the libtag1-rusxmms package.
 Homepage: http://developer.kde.org/~wheeler/taglib.html
 
+Package: startpar
+Priority: required
+Section: admin
+Installed-Size: 93
+Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
+Architecture: i386
+Version: 0.59-3
+Replaces: sysvinit-utils (<< 2.88dsf-52)
+Depends: libc6 (>= 2.15)
+Suggests: insserv, sysv-rc
+Breaks: sysvinit-utils (<< 2.88dsf-52)
+Size: 21054
+Description: run processes in parallel and multiplex their output
+ Used by the sysv-rc boot system executor to run init.d scripts in parallel
+ while making sure the script output is not completely messed up.
+Homepage: http://savannah.nongnu.org/projects/sysvinit
+
 Package: libjbig2dec0
 Priority: optional
 Section: libs
@@ -14602,18 +15249,19 @@ Package: libc-bin
 Essential: yes
 Priority: required
 Section: libs
-Installed-Size: 3010
+Installed-Size: 3052
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Source: eglibc
-Version: 2.13-38+deb7u8
+Source: glibc
+Version: 2.19-17
 Replaces: libc0.1, libc0.3, libc6, libc6.1
+Depends: libc6 (>> 2.19), libc6 (<< 2.20), libcap2 (>= 1:2.10)
 Breaks: libc0.1 (<< 2.10), libc0.3 (<< 2.10), libc6 (<< 2.10), libc6.1 (<< 2.10)
 Filename: pool/main/e/eglibc/libc-bin_2.11.3-2_i386.deb
-Size: 1218004
+Size: 1224876
 MD5sum: 1461399818a3202f675c2780067494ef
-Description: Embedded GNU C Library: Binaries
+Description: GNU C Library: Binaries
  This package contains utility programs related to the GNU C Library.
  .
   * catchsegv: catch segmentation faults in programs
@@ -14622,9 +15270,8 @@ Description: Embedded GNU C Library: Binaries
   * iconv, iconvconfig: convert between character encodings
   * ldd, ldconfig: print/configure shared library dependencies
   * locale, localedef: show/generate locale definitions
-  * rpcinfo: report RPC information
   * tzselect, zdump, zic: select/dump/compile time zones
-Homepage: http://www.eglibc.org
+Homepage: http://www.gnu.org/software/libc/libc.html
 
 Package: librasqal3
 Priority: optional
@@ -14672,6 +15319,41 @@ Description: GNOME configuration database system (support tools)
  gconf-merge-tree.
 Homepage: http://projects.gnome.org/gconf/
 
+Package: libpoppler46
+Priority: optional
+Section: libs
+Installed-Size: 2962
+Maintainer: Loic Minier <lool@dooz.org>
+Architecture: i386
+Multi-Arch: same
+Source: poppler
+Version: 0.26.5-2
+Depends: libc6 (>= 2.11), libfontconfig1 (>= 2.11), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.1.1), libjpeg62-turbo (>= 1:1.3.1), liblcms2-2 (>= 2.2+git20110628), libopenjpeg5 (>= 1.3+dfsg), libpng12-0 (>= 1.2.13-4), libstdc++6 (>= 4.1.1), libtiff5 (>= 4.0.3)
+Pre-Depends: multiarch-support
+Recommends: poppler-data
+Size: 1240166
+Description: PDF rendering library
+ Poppler is a PDF rendering library based on Xpdf PDF viewer.
+ .
+ This package contains the shared core library.
+Homepage: http://poppler.freedesktop.org/
+
+Package: alsa-base
+Priority: optional
+Section: sound
+Installed-Size: 83
+Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
+Architecture: all
+Version: 1.0.27+1
+Depends: kmod (>= 17-1)
+Pre-Depends: dpkg (>= 1.15.7.2~)
+Size: 54334
+Description: dummy package to ease purging of obsolete conffiles
+ This is an empty dummy package with the only purpose of ensuring
+ obsolete kmod files will be removed from the system. This functionality
+ is now shipped in kmod.
+Homepage: http://www.alsa-project.org/
+
 Package: mime-support
 Priority: standard
 Section: net
@@ -14693,36 +15375,6 @@ Description: MIME files 'mime.types' & 'mailcap', and support programs
  will display, alter, create, and print (respectively) any file using
  a program determined from the entries in the mime.types and mailcap
  files.
-
-Package: alsa-base
-Priority: optional
-Section: sound
-Installed-Size: 131
-Maintainer: Debian ALSA Maintainers <pkg-alsa-devel@lists.alioth.debian.org>
-Architecture: all
-Version: 1.0.25+3~deb7u1
-Provides: alsa
-Depends: kmod, procps, udev
-Pre-Depends: dpkg (>= 1.15.7.2~)
-Recommends: alsa-utils
-Suggests: alsa-oss, oss-compat
-Breaks: linux-sound-base
-Size: 61092
-Description: ALSA driver configuration files
- This package contains various configuration files for
- the ALSA drivers.
- .
- For ALSA to work on a system with a given sound card,
- there must be an ALSA driver for that card in the kernel.
- Linux as shipped in linux-image packages contains ALSA
- drivers for all supported sound cards in the form of
- loadable modules.
- .
- Please read the README.Debian file for more information
- about loading modules.
- .
- ALSA is the Advanced Linux Sound Architecture.
-Homepage: http://www.alsa-project.org/
 
 Package: libldap-2.4-2
 Priority: standard
@@ -14847,20 +15499,18 @@ Package: sysvinit-utils
 Essential: yes
 Priority: required
 Section: admin
-Installed-Size: 203
-Maintainer: Progress Linux Maintainers <maintainers@lists.progress-linux.org>
-Bugs: mailto:bugs@lists.progress-linux.org
+Installed-Size: 135
+Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
 Architecture: i386
 Source: sysvinit
-Version: 2.88dsf-41baureo1
+Version: 2.88dsf-58
 Replaces: last, sysvinit (<= 2.86.ds1-65)
-Depends: libc6 (>= 2.10), libselinux1 (>= 1.32)
-Pre-Depends: dpkg-lzip
+Depends: libc6 (>= 2.7), libselinux1 (>= 1.32), startpar
 Suggests: bootlogd, sash
-Breaks: upstart (<< 1.5-1)
-Conflicts: chkconfig (<< 11.0-79.1-2), last, sysvconfig
+Breaks: upstart (<< 1.5-0ubuntu5)
+Conflicts: chkconfig (<< 11.0-79.1-2), last, startpar (<< 0.58-2), sysvconfig
 Filename: pool/main/s/sysvinit/sysvinit-utils_2.88dsf-13.1_i386.deb
-Size: 89416
+Size: 84490
 MD5sum: eb633d54471ea21f10160318b63ee643
 Description: System-V-like utilities
  This package contains the important System-V-like utilities.
@@ -14868,15 +15518,6 @@ Description: System-V-like utilities
  Specifically, this package includes:
  killall5, last, lastb, mesg, pidof, service, sulogin
 Homepage: http://savannah.nongnu.org/projects/sysvinit
-Original-Maintainer: Debian sysvinit maintainers <pkg-sysvinit-devel@lists.alioth.debian.org>
-Original-Uploaders: 
- Petter Reinholdtsen <pere@debian.org>,
- Henrique de Moraes Holschuh <hmh@debian.org>,
- Kel Modderman <kel@otaku42.de>,
- Roger Leigh <rleigh@debian.org>
-Original-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sysvinit
-Original-Vcs-Git: git://git.debian.org/collab-maint/sysvinit
-Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 
 Package: cron
 Priority: important
@@ -14993,16 +15634,16 @@ Homepage: http://www.eglibc.org
 Package: fontconfig-config
 Priority: optional
 Section: fonts
-Installed-Size: 299
+Installed-Size: 425
 Maintainer: Keith Packard <keithp@debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: fontconfig
-Version: 2.9.0-7.1
+Version: 2.11.0-6.3
 Replaces: fontconfig (<< 2.3.2-2)
-Depends: debconf (>= 0.5) | debconf-2.0, ucf (>= 0.29), ttf-dejavu-core | ttf-bitstream-vera | ttf-freefont | gsfonts-x11
+Depends: debconf (>= 0.5) | debconf-2.0, ucf (>= 0.29), fonts-dejavu-core | ttf-bitstream-vera | fonts-liberation | fonts-freefont
 Conflicts: fontconfig (<< 2.3.2-2)
-Size: 232610
+Size: 272522
 Description: generic font configuration library - configuration
  Fontconfig is a font configuration and customization library, which
  does not depend on the X Window System. It is designed to locate
@@ -15203,17 +15844,17 @@ Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 Package: dconf-gsettings-backend
 Priority: optional
 Section: libs
-Installed-Size: 80
+Installed-Size: 70
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: d-conf
-Version: 0.12.1-3
+Version: 0.22.0-1
 Replaces: libdconf0 (<< 0.7.3-2)
 Provides: gsettings-backend
-Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.18), dconf-service (>= 0.12.1-3), dconf-service (<< 0.12.1-3.1~), libdconf0 (= 0.12.1-3)
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.39.1), dconf-service (>= 0.22.0-1), dconf-service (<< 0.22.0-1.1~), libdconf1 (= 0.22.0-1)
 Breaks: libdconf0 (<< 0.7.3-2), libglib2.0-0 (<< 2.30)
-Size: 21374
+Size: 35884
 Description: simple configuration storage system - GSettings back-end
  DConf is a low-level key/value database designed for storing desktop
  environment settings.
@@ -15221,7 +15862,7 @@ Description: simple configuration storage system - GSettings back-end
  This package contains a back-end for GSettings. It is needed by
  applications accessing settings through GSettings to set custom values
  and listen for changes.
-Homepage: http://live.gnome.org/dconf
+Homepage: https://wiki.gnome.org/dconf
 
 Package: libnspr4-0d
 Priority: extra
@@ -15406,15 +16047,15 @@ Original-Vcs-Git: git://git.debian.org/git/pkg-mozilla/iceweasel.git
 Package: libp11-kit0
 Priority: standard
 Section: libs
-Installed-Size: 130
+Installed-Size: 320
 Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: p11-kit
-Version: 0.12-3
-Depends: libc6 (>= 2.4)
+Version: 0.20.7-1
+Depends: libc6 (>= 2.16), libffi6 (>= 3.0.4)
 Pre-Depends: multiarch-support
-Size: 51818
+Size: 83318
 Description: Library for loading and coordinating access to PKCS#11 modules - runtime
  Provides a way to load and enumerate PKCS#11 modules. Provides a standard
  configuration setup for installing PKCS#11 modules in such a way that
@@ -15554,6 +16195,36 @@ Description: Common files for the ATK accessibility toolkit
  This contains the common files which the runtime libraries need.
 Homepage: http://www.gtk.org/
 
+Package: libnettle4
+Priority: optional
+Section: libs
+Installed-Size: 342
+Maintainer: Magnus Holmgren <holmgren@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: nettle
+Version: 2.7.1-5
+Depends: libc6 (>= 2.4)
+Pre-Depends: multiarch-support
+Size: 178642
+Description: low level cryptographic library (symmetric and one-way cryptos)
+ Nettle is a cryptographic library that is designed to fit easily in more or
+ less any context: In crypto toolkits for object-oriented languages (C++,
+ Python, Pike, ...), in applications like LSH or GNUPG, or even in kernel
+ space.
+ .
+ It tries to solve a problem of providing a common set of cryptographic
+ algorithms for higher-level applications by implementing a
+ context-independent set of cryptographic algorithms. In that light, Nettle
+ doesn't do any memory allocation or I/O, it simply provides the
+ cryptographic algorithms for the application to use in any environment and
+ in any way it needs.
+ .
+ This package contains the symmetric and one-way cryptographic
+ algorithms. To avoid having this package depend on libgmp, the
+ asymmetric cryptos reside in a separate library, libhogweed.
+Homepage: http://www.lysator.liu.se/~nisse/nettle/
+
 Package: iceweasel-l10n-ta-lk
 Priority: optional
 Section: localization
@@ -15598,16 +16269,16 @@ Description: X11 client-side library
 Package: libselinux1
 Priority: required
 Section: libs
-Installed-Size: 204
+Installed-Size: 192
 Maintainer: Debian SELinux maintainers <selinux-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libselinux
-Version: 2.1.9-5
-Depends: libc6 (>= 2.8)
+Version: 2.3-2
+Depends: libc6 (>= 2.8), libpcre3 (>= 8.10)
 Pre-Depends: multiarch-support
 Filename: pool/main/libs/libselinux/libselinux1_2.0.96-1_i386.deb
-Size: 89878
+Size: 93888
 MD5sum: 65c82e5ad1ebe75c056eeb33147e1eeb
 Description: SELinux runtime shared libraries
  This package provides the shared libraries for Security-enhanced
@@ -15629,6 +16300,7 @@ Description: SELinux runtime shared libraries
  API. libselinux may use the shared libsepol to manipulate the binary
  policy if necessary (e.g. to downgrade the policy format to an older
  version supported by the kernel) when loading policy.
+Homepage: http://userspace.selinuxproject.org/
 
 Package: firmware-libertas
 Priority: optional
@@ -15739,6 +16411,27 @@ Description: Linux 3.12 for older PCs
  hyper-threaded) systems.
 Homepage: https://www.kernel.org/
 
+Package: libaudit-common
+Priority: optional
+Section: libs
+Installed-Size: 49
+Maintainer: Laurent Bigonville <bigon@debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: audit
+Version: 1:2.4-1
+Replaces: libaudit0, libaudit1 (<< 1:2.2.1-2)
+Breaks: libaudit0, libaudit1 (<< 1:2.2.1-2)
+Size: 13502
+Description: Dynamic library for security auditing - common files
+ The audit-libs package contains the dynamic libraries needed for
+ applications to use the audit framework. It is used to monitor systems for
+ security related events.
+ .
+ This package contains the libaudit.conf configuration file and the associated
+ manpage.
+Homepage: http://people.redhat.com/sgrubb/audit/
+
 Package: libiw30
 Priority: extra
 Section: libs
@@ -15812,21 +16505,20 @@ Homepage: http://aa-project.sourceforge.net/aalib/
 Package: libc6
 Priority: required
 Section: libs
-Installed-Size: 9026
+Installed-Size: 8960
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: glibc
-Version: 2.19-13
+Version: 2.19-17
 Replaces: libc6-i386
-Provides: glibc-2.19-1
 Depends: libgcc1
 Recommends: libc6-i686
 Suggests: glibc-doc, debconf | debconf-2.0, locales
 Breaks: hurd (<< 1:0.5.git20140203-1), libtirpc1 (<< 0.2.3), locales (<< 2.19), locales-all (<< 2.19), nscd (<< 2.19)
 Conflicts: prelink (<= 0.0.20090311-1), tzdata (<< 2007k-1), tzdata-etch
 Filename: pool/main/e/eglibc/libc6_2.11.3-2_i386.deb
-Size: 4112582
+Size: 3976042
 MD5sum: 98b7f493e00de957998177965ddbbdc9
 Description: GNU C Library: Shared libraries
  Contains the standard libraries that are used by nearly all programs on
@@ -16048,6 +16740,23 @@ Description: PNG library - runtime
  This package contains the runtime library files needed to run software
  using libpng.
 Homepage: http://libpng.org/pub/png/libpng.html
+
+Package: libfontembed1
+Priority: optional
+Section: libs
+Installed-Size: 111
+Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: cups-filters
+Version: 1.0.61-5
+Depends: libc6 (>= 2.7), libjpeg62-turbo (>= 1.3.1), libtiff5 (>= 4.0.3)
+Pre-Depends: multiarch-support
+Size: 74108
+Description: OpenPrinting CUPS Filters - Font Embed Shared library
+ This library contains functions for font embedding in PDF files, commonly
+ used by CUPS filters.
+Homepage: http://www.openprinting.org/
 
 Package: nvidia-alternative
 Priority: optional
@@ -16325,26 +17034,22 @@ Homepage: http://lloyd.github.com/yajl/
 Package: iptables
 Priority: important
 Section: net
-Installed-Size: 1201
+Installed-Size: 1365
 Maintainer: Laurence J. Lane <ljlane@debian.org>
 Architecture: i386
-Version: 1.4.14-3.1
-Provides: libxtables7
-Depends: libc6 (>= 2.7), libnfnetlink0 (>= 1.0.0)
-Breaks: iproute (<< 20120521-3), xtables-addons-common (<< 1.42-2)
+Source: iptables (1.4.21-2)
+Version: 1.4.21-2+b1
+Depends: libc6 (>= 2.15), libnfnetlink0, libxtables10 (= 1.4.21-2+b1)
 Filename: pool/main/i/iptables/iptables_1.4.8-3_i386.deb
-Size: 387158
+Size: 280986
 MD5sum: e8bd99e17e9cfabf90469e5defba3d56
 Description: administration tools for packet filtering and NAT
- These are the user-space administration tools for the Linux
- kernel's netfilter and iptables. netfilter and iptables provide
- a framework for stateful and stateless packet filtering, network
- and port address translation, and other IP packet manipulation.
- The framework is the successor to ipchains.
- .
- netfilter and iptables are used in applications such as Internet
- connection sharing, firewalls, IP accounting, transparent proxying,
- advanced routing and traffic control.
+ iptables is the userspace command line program used to configure
+ the Linux packet filtering ruleset. It is targeted towards system
+ administrators. Since Network Address Translation is also configured
+ from the packet filter ruleset, iptables is used for this, too. The
+ iptables package also includes ip6tables. ip6tables is used for
+ configuring the IPv6 packet filter
 Homepage: http://www.netfilter.org/
 
 Package: live-boot
@@ -16440,15 +17145,15 @@ Homepage: http://www.gnu.org/software/make/
 Package: libgmp10
 Priority: optional
 Section: libs
-Installed-Size: 533
+Installed-Size: 611
 Maintainer: Debian Science Team <debian-science-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: gmp
-Version: 2:5.0.5+dfsg-2
+Version: 2:6.0.0+dfsg-6
 Depends: libc6 (>= 2.7)
 Pre-Depends: multiarch-support
-Size: 263248
+Size: 259134
 Description: Multiprecision arithmetic library
  GNU MP is a programmer's library for arbitrary precision
  arithmetic (ie, a bignum package).  It can operate on signed
@@ -16641,6 +17346,21 @@ Description: a macro processing language
  generating `configure' scripts, but not for running them.
 Homepage: http://www.gnu.org/software/m4/
 
+Package: libsmartcols1
+Priority: required
+Section: libs
+Installed-Size: 223
+Maintainer: Debian util-linux Maintainers <ah-util-linux@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: util-linux
+Version: 2.25.2-5
+Depends: libc6 (>= 2.17)
+Pre-Depends: multiarch-support
+Size: 115308
+Description: smart column output alignment library
+ The smart column output alignment library, used by fdisk utilities.
+
 Package: libmad0
 Priority: optional
 Section: libs
@@ -16804,18 +17524,19 @@ Homepage: https://www.kernel.org/
 Package: libstdc++6
 Priority: important
 Section: libs
-Installed-Size: 1168
+Installed-Size: 1210
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gcc-4.7
-Version: 4.7.2-5
-Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.11), libgcc1 (>= 1:4.1.1)
+Source: gcc-4.9
+Version: 4.9.2-10
+Replaces: libstdc++6-4.9-dbg (<< 4.9.0-3)
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.18), libgcc1 (>= 1:4.1.1)
 Pre-Depends: multiarch-support
-Breaks: gcc-4.1, gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
+Breaks: gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
 Conflicts: scim (<< 1.4.2-1)
 Filename: pool/main/g/gcc-4.4/libstdc++6_4.4.5-8_i386.deb
-Size: 346330
+Size: 287674
 MD5sum: cf7baf7a7269c3bff14cecc676289c32
 Description: GNU Standard C++ Library v3
  This package contains an additional runtime library for C++ programs
@@ -16926,16 +17647,16 @@ Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 Package: libmpfr4
 Priority: optional
 Section: libs
-Installed-Size: 760
-Maintainer: Laurent Fousse <lfousse@debian.org>
+Installed-Size: 780
+Maintainer: Debian QA Group <packages@qa.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mpfr4
-Version: 3.1.0-5
-Depends: libc6 (>= 2.3), libgmp10
+Version: 3.1.2-2
+Depends: libc6 (>= 2.4), libgmp10
 Pre-Depends: multiarch-support
 Conflicts: libgmp3 (<< 4.1.4-3)
-Size: 535290
+Size: 529432
 Description: multiple precision floating-point computation
  MPFR provides a library for multiple-precision floating-point computation
  with correct rounding.  The computation is both efficient and has a
@@ -17188,20 +17909,43 @@ Description: X.Org X server -- SiliconMotion display driver
 Package: binutils
 Priority: optional
 Section: devel
-Installed-Size: 12984
+Installed-Size: 20296
 Maintainer: Matthias Klose <doko@debian.org>
 Architecture: i386
-Version: 2.22-8+deb7u2
-Replaces: binutils-gold (<< 2.20.51.20100415)
-Provides: elf-binutils
-Depends: libc6 (>= 2.11), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.6), zlib1g (>= 1:1.2.0)
-Suggests: binutils-doc (>= 2.22-8+deb7u2)
-Conflicts: binutils-gold (<< 2.20.51.20100415), elf-binutils, gas, modutils (<< 2.4.19-1)
-Size: 4555422
+Version: 2.25-5
+Replaces: binutils-gold (<< 2.20.51.20100415), binutils-mingw-w64-i686 (<< 2.23.52.20130612-1+3), binutils-mingw-w64-x86-64 (<< 2.23.52.20130612-1+3)
+Provides: binutils-gold, elf-binutils
+Depends: libc6 (>= 2.11), zlib1g (>= 1:1.2.0)
+Suggests: binutils-doc (>= 2.25-5)
+Breaks: binutils-mingw-w64-i686 (<< 2.23.52.20130612-1+3), binutils-mingw-w64-x86-64 (<< 2.23.52.20130612-1+3)
+Conflicts: binutils-gold (<< 2.20.51.20100415), binutils-mingw-w64-i686 (<< 2.23.52.20130612-1+3), binutils-mingw-w64-x86-64 (<< 2.23.52.20130612-1+3), elf-binutils, gas, modutils (<< 2.4.19-1)
+Size: 3650538
 Description: GNU assembler, linker and binary utilities
  The programs in this package are used to assemble, link and manipulate
  binary and object files.  They may be used in conjunction with a compiler
  and various libraries to build programs.
+
+Package: libgcrypt20
+Priority: standard
+Section: libs
+Installed-Size: 833
+Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Version: 1.6.3-2
+Depends: libc6 (>= 2.15), libgpg-error0 (>= 1.14)
+Pre-Depends: multiarch-support
+Suggests: rng-tools
+Size: 373156
+Description: LGPL Crypto library - runtime library
+ libgcrypt contains cryptographic functions.  Many important free
+ ciphers, hash algorithms and public key signing algorithms have been
+ implemented:
+ .
+ Arcfour, Blowfish, CAST5, DES, AES, Twofish, Serpent, rfc2268 (rc2), SEED,
+ Camellia, IDEA, Salsa, CRC, MD4, MD5, RIPE-MD160, SHA-1, SHA-256, SHA-512,
+ Tiger, Whirlpool, DSA, DSA2, ElGamal, RSA, ECC.
+Homepage: http://directory.fsf.org/project/libgcrypt/
 
 Package: nvidia-detect
 Priority: optional
@@ -17232,17 +17976,17 @@ Uploaders: Daniel Baumann <daniel.baumann@progress-linux.org>
 Package: dconf-service
 Priority: optional
 Section: libs
-Installed-Size: 80
+Installed-Size: 99
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
 Source: d-conf
-Version: 0.12.1-3
+Version: 0.22.0-1
 Replaces: dconf-gsettings-backend (<< 0.10.0-2), libdconf0 (<< 0.7.3-2)
-Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.31.18), libdconf0 (= 0.12.1-3)
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.39.1), libdconf1 (= 0.22.0-1)
 Recommends: dconf-gsettings-backend
 Breaks: dconf-gsettings-backend (<< 0.10.0-2), libdconf0 (<< 0.7.3-2)
-Size: 21794
+Size: 43928
 Description: simple configuration storage system - D-Bus service
  DConf is a low-level key/value database designed for storing desktop
  environment settings.
@@ -17250,7 +17994,7 @@ Description: simple configuration storage system - D-Bus service
  This package contains the DConf service, which applications talk to
  using D-Bus in order to obtain their settings. It is mostly used by the
  GSettings backend.
-Homepage: http://live.gnome.org/dconf
+Homepage: https://wiki.gnome.org/dconf
 
 Package: less
 Priority: standard
@@ -17276,18 +18020,18 @@ Homepage: http://www.greenwoodsoftware.com/less/
 Package: libglib2.0-0
 Priority: optional
 Section: libs
-Installed-Size: 3983
+Installed-Size: 4938
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: glib2.0
-Version: 2.33.12+really2.32.4-5
+Version: 2.42.1-1
 Replaces: libglib2.0-dev (<< 2.23.2-2)
-Depends: libc6 (>= 2.9), libffi5 (>= 3.0.4), libpcre3 (>= 8.10), libselinux1 (>= 1.32), zlib1g (>= 1:1.2.2)
+Depends: libc6 (>= 2.17), libffi6 (>= 3.0.4), libpcre3 (>= 8.10), libselinux1 (>= 1.32), zlib1g (>= 1:1.2.2)
 Pre-Depends: multiarch-support
-Recommends: libglib2.0-data, shared-mime-info
-Breaks: gvfs (<< 1.8)
-Size: 1829432
+Recommends: libglib2.0-data, shared-mime-info, xdg-user-dirs
+Breaks: glib-networking (<< 2.33.12), gvfs (<< 1.8), libgnome-desktop-3-2 (<< 3.4.2-2), python-gi (<< 3.7.2)
+Size: 2460924
 Description: GLib library of C routines
  GLib is a library containing many useful C routines for things such
  as trees, hashes, lists, and strings.  It is a useful general-purpose
@@ -17317,16 +18061,16 @@ Homepage: http://0pointer.de/lennart/projects/libasyncns/
 Package: libgomp1
 Priority: optional
 Section: libs
-Installed-Size: 95
+Installed-Size: 103
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gcc-4.7
-Version: 4.7.2-5
-Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.6)
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.17)
 Pre-Depends: multiarch-support
-Breaks: gcc-4.1, gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
-Size: 29118
+Breaks: gcc-4.3 (<< 4.3.6-1), gcc-4.4 (<< 4.4.6-4), gcc-4.5 (<< 4.5.3-2)
+Size: 41130
 Description: GCC OpenMP (GOMP) support library
  GOMP is an implementation of OpenMP for the C, C++, and Fortran compilers
  in the GNU Compiler Collection.
@@ -17485,19 +18229,20 @@ Homepage: http://www.alsa-project.org/
 Package: libcap2
 Priority: standard
 Section: libs
-Installed-Size: 53
-Maintainer: Torsten Werner <twerner@debian.org>
+Installed-Size: 29
+Maintainer: Christian Kastner <debian@kvr.at>
 Architecture: i386
 Multi-Arch: same
-Version: 1:2.22-1.2
-Depends: libattr1 (>= 1:2.4.46-8), libc6 (>= 2.3)
+Version: 1:2.24-7
+Depends: libattr1 (>= 1:2.4.46-8), libc6 (>= 2.8)
 Pre-Depends: multiarch-support
-Size: 13986
-Description: support for getting/setting POSIX.1e capabilities
- This library implements the user-space interfaces to the POSIX
- 1003.1e capabilities available in Linux kernels. These capabilities are
- a partitioning of the all powerful root privilege into a set of distinct
- privileges.
+Size: 15448
+Description: POSIX 1003.1e capabilities (library)
+ Libcap implements the user-space interfaces to the POSIX 1003.1e capabilities
+ available in Linux kernels. These capabilities are a partitioning of the all
+ powerful root privilege into a set of distinct privileges.
+ .
+ This package contains the shared library.
 Homepage: http://sites.google.com/site/fullycapable/
 
 Package: libglib2.0-doc
@@ -17523,15 +18268,15 @@ Homepage: http://www.gtk.org/
 Package: libitm1
 Priority: optional
 Section: libs
-Installed-Size: 145
+Installed-Size: 126
 Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gcc-4.7
-Version: 4.7.2-5
-Depends: gcc-4.7-base (= 4.7.2-5), libc6 (>= 2.3.6-6~), libgcc1 (>= 1:4.1.1)
+Source: gcc-4.9
+Version: 4.9.2-10
+Depends: gcc-4.9-base (= 4.9.2-10), libc6 (>= 2.3.6-6~)
 Pre-Depends: multiarch-support
-Size: 36232
+Size: 30894
 Description: GNU Transactional Memory Library
  GNU Transactional Memory Library (libitm) provides transaction support for
  accesses to the memory of a process, enabling easy-to-use synchronization of
@@ -17644,26 +18389,25 @@ Description: Wietse Venema's TCP wrappers library
 Package: cups
 Priority: optional
 Section: net
-Installed-Size: 4152
+Installed-Size: 682
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.5.3-5+deb7u5
-Replaces: cupsddk-drivers (<< 1.4.0), ghostscript-cups (<< 9.02~)
-Provides: cupsddk-drivers
-Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.7), libcups2 (= 1.5.3-5+deb7u5), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.5.0), libcupsppdc1 (>= 1.4.0), libdbus-1-3 (>= 1.0.2), libgcc1 (>= 1:4.1.1), libgnutls26 (>= 2.12.17-0), libgssapi-krb5-2 (>= 1.8+dfsg), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libpam0g (>= 0.99.7.1), libpaper1, libslp1, libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3), cups-common (>= 1.5.3), cups-client (>= 1.5.3-5+deb7u5), ssl-cert (>= 1.0.11), adduser, bc, cups-ppdc, cups-filters
-Pre-Depends: dpkg (>= 1.15.7.2)
-Recommends: avahi-daemon, colord, foomatic-filters (>= 4.0), printer-driver-gutenprint, ghostscript-cups (>= 9.02~)
+Version: 1.7.5-11
+Replaces: cups-bsd (<< 1.7.2-3~), ghostscript-cups (<< 9.02~)
+Depends: libavahi-client3 (>= 0.6.16), libavahi-common3 (>= 0.6.16), libc6 (>= 2.16), libcups2 (= 1.7.5-11), libcupscgi1 (>= 1.4.2), libcupsimage2 (>= 1.4.0), libcupsmime1 (>= 1.4.0), libcupsppdc1 (>= 1.4.0), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.1.1), libusb-1.0-0 (>= 2:1.0.8), debconf (>= 1.2.9) | debconf-2.0, libc-bin (>= 2.13), cups-core-drivers (>= 1.7.5-11), cups-daemon (>= 1.7.5-11), poppler-utils (>= 0.12), procps, ghostscript (>= 9.02~), lsb-base (>= 3.2-14~), cups-common (>= 1.7.5-11), cups-server-common (>= 1.7.5-11), cups-client (>= 1.7.5-11), cups-ppdc, cups-filters (>= 1.0.24-3~)
+Recommends: avahi-daemon, colord, cups-filters (>= 1.0.42) | foomatic-filters (>= 4.0), printer-driver-gutenprint, cups-filters (>= 1.0.36) | ghostscript-cups (>= 9.02~)
 Suggests: cups-bsd, foomatic-db-compressed-ppds | foomatic-db, printer-driver-hpcups, hplip, cups-pdf, udev, smbclient
-Breaks: cupsddk-drivers (<< 1.4.0), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
-Size: 1386200
-Description: Common UNIX Printing System(tm) - server
+Breaks: cups-bsd (<< 1.7.2-3~), foomatic-filters (<< 4.0), ghostscript-cups (<< 9.02~)
+Size: 294260
+Description: Common UNIX Printing System(tm) - PPD/driver support, web interface
  The Common UNIX Printing System (or CUPS(tm)) is a printing system and
  general replacement for lpd and the like.  It supports the Internet
  Printing Protocol (IPP), and has its own filtering driver model for
  handling various document types.
  .
- This package provides the CUPS scheduler/daemon and related files.
+ This package provides the parts of CUPS which are needed for using printer
+ drivers.
 Homepage: http://www.cups.org
 
 Package: libkrb5-3

@@ -38,13 +38,7 @@ host <I>hostname</I> {
 
 <H3><A NAME="BOOTP">Configuring the IP Address Using BOOTP</A></H3>
 
-<P>The BOOTP protocol is used when you need to provide additional information such as the location of a configuration file to the network interface. Using the standard <TT>bootpd(8)</TT> program supplied with UNIX you simply need to add a line to the <VAR>/etc/bootptab</VAR> file; for IRIX:</P>
-
-<PRE CLASS="command">
-myprinter 08:00:69:00:12:34 192.0.2.2 <VAR>myprinter.boot</VAR>
-</PRE>
-
-<P>Newer versions of <TT>bootpd</TT> use a different format:</P>
+<P>The BOOTP protocol is used when you need to provide additional information such as the location of a configuration file to the network interface. Using the standard <TT>bootpd(8)</TT> program supplied with UNIX you simply need to add a line to the <VAR>/etc/bootptab</VAR> file:</P>
 
 <PRE CLASS="command">
 myprinter:ha=080069001234:ip=192.0.2.2:<VAR>t144=myprinter.boot</VAR>
@@ -93,27 +87,39 @@ page on the device.</P>
 
 <PRE>
 socket://<i>ip-address-or-hostname</i>
-socket://<i>ip-address-or-hostname</i>/?waiteof=false
+socket://<i>ip-address-or-hostname</i>/?option=value
+socket://<i>ip-address-or-hostname</i>/?option=value&amp;option=value
 socket://<i>ip-address-or-hostname</i>:<i>port-number</i>
-socket://<i>ip-address-or-hostname</i>:<i>port-number</i>/?waiteof=false
+socket://<i>ip-address-or-hostname</i>:<i>port-number</i>/?option=value
+socket://<i>ip-address-or-hostname</i>:<i>port-number</i>/?option=value&amp;option=value
 </PRE>
+
+<P>The "contimeout" option controls the number of seconds that the backend will wait to obtain a connection to the printer. The default is 1 week.</P>
+
+<P>The "snmp" option controls whether the <tt>socket</tt> backend queries for supply and page count information via SNMP.</P>
 
 <P>The "waiteof" option controls whether the <tt>socket</tt> backend waits for the printer to complete the printing of the job. The default is to wait.</P>
 
 <H3><A NAME="IPP">Internet Printing Protocol (IPP)</A></H3>
 
-<P>IPP is the only protocol that CUPS supports natively and is supported by some network printers and print servers. However, since many printers do not implement IPP properly, only use IPP when the vendor actually documents official support for it. IPP printing normally happens over port 631 and uses the <tt>http</tt> and <tt>ipp</tt> URI schemes:</P>
+<P>IPP is the only protocol that CUPS supports natively and is supported by some network printers and print servers. However, since many printers do not implement IPP properly, only use IPP when the vendor actually documents official support for it. IPP printing normally happens over port 631 and uses the <tt>http</tt>, <tt>ipp</tt>, and <tt>ipps</tt> URI schemes:</P>
 
 <PRE>
 http://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>
 http://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value</i>
-http://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value&option=value</i>
+http://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value&amp;option=value</i>
 ipp://<i>ip-address-or-hostname</i>/<i>resource</i>
 ipp://<i>ip-address-or-hostname</i>/<i>resource</i>?<i>option=value</i>
-ipp://<i>ip-address-or-hostname</i>/<i>resource</i>?<i>option=value&option=value</i>
+ipp://<i>ip-address-or-hostname</i>/<i>resource</i>?<i>option=value&amp;option=value</i>
 ipp://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>
 ipp://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value</i>
-ipp://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value&option=value</i>
+ipp://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value&amp;option=value</i>
+ipps://<i>ip-address-or-hostname</i>/<i>resource</i>
+ipps://<i>ip-address-or-hostname</i>/<i>resource</i>?<i>option=value</i>
+ipps://<i>ip-address-or-hostname</i>/<i>resource</i>?<i>option=value&amp;option=value</i>
+ipps://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>
+ipps://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value</i>
+ipps://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option=value&amp;option=value</i>
 </PRE>
 
 <P>The <tt>ipp</tt> backend supports many options, which are summarized in <A HREF="#TABLE2">Table 2</A>.</P>
@@ -148,16 +154,20 @@ ipp://<i>ip-address-or-hostname</i>:<i>port-number</i>/<i>resource</i>?<i>option
 	<TD>Specifies that the connection to the IPP server should be encrypted using TLS.</TD>
 </TR>
 <TR>
-	<TD><TT>version=1.0</TT></TD>
-	<TD>Specifies that version 1.0 of the IPP protocol should be used instead of the default version 1.1.</TD>
+	<TD><TT>snmp=false</TT></TD>
+	<TD>Specifies that SNMP supply and page count queries should not be performed.</TD>
 </TR>
 <TR>
-	<TD><TT>version=2.0</TT></TD>
-	<TD>Specifies that version 2.0 of the IPP protocol should be used instead of the default version 1.1.</TD>
+	<TD><TT>version=1.0</TT></TD>
+	<TD>Specifies that version 1.0 of the IPP protocol should be used instead of the default version 2.0.</TD>
+</TR>
+<TR>
+	<TD><TT>version=1.1</TT></TD>
+	<TD>Specifies that version 1.1 of the IPP protocol should be used instead of the default version 2.0.</TD>
 </TR>
 <TR>
 	<TD><TT>version=2.1</TT></TD>
-	<TD>Specifies that version 2.1 of the IPP protocol should be used instead of the default version 1.1.</TD>
+	<TD>Specifies that version 2.1 of the IPP protocol should be used instead of the default version 2.0.</TD>
 </TR>
 <TR>
 	<TD><TT>waitjob=false</TT></TD>
@@ -179,8 +189,8 @@ lpd://<i>ip-address-or-hostname</i>/<i>queue</i>
 lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>
 lpd://<i>ip-address-or-hostname</i>/<i>queue</i>?<i>option=value</i>
 lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>?<i>option=value</i>
-lpd://<i>ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&option=value</i>
-lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&option=value</i>
+lpd://<i>ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&amp;option=value</i>
+lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&amp;option=value</i>
 </PRE>
 
 <P><A HREF="#TABLE3">Table 3</A> summarizes the options supported by the <tt>lpd</tt> backend.</P>
@@ -265,6 +275,10 @@ lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&option
 <TR>
 	<TD><TT>sanitize_title=yes</TT></TD>
 	<TD>Specifies that the job title string should be restricted to ASCII characters.</TD>
+</TR>
+<TR>
+	<TD><TT>snmp=false</TT></TD>
+	<TD>Specifies that SNMP supply and page count queries should not be performed.</TD>
 </TR>
 <TR>
 	<TD><TT>timeout=<I>seconds</I></TT></TD>
@@ -397,21 +411,19 @@ lpd://<i>username@ip-address-or-hostname</i>/<i>queue</i>?<i>option=value&option
 
 <H2 CLASS="title"><A NAME="SNMP">Troubleshooting SNMP Discovery Problems</A></H2>
 
-<P>Whenever you view the administration web page or a list of supported device URIs, the <tt>snmp</tt> backend will probe the local network(s) using Simple Network Management Protocol (SNMP) broadcasts. Printers that respond to these broadcasts are then interrogated for the make and model and supported protocols, yielding a device URI that can be used to add the printer.</P> 
+<P>Whenever you view the administration web page or a list of supported device URIs, the <tt>snmp</tt> backend can probe the local network(s) using Simple Network Management Protocol (SNMP) v1 broadcasts. Printers that respond to these broadcasts are then interrogated for the make, model, and supported protocols, yielding a device URI that can be used to add the printer.</P>
 
-<P>That said, the SNMP requests sometimes expose problems in vendor SNMP or IPP implementations. If you are experiencing long delays in loading the CUPS web interface administration page, or if you don't see your printer listed, the following instructions will help you to diagnose those problems and/or provide important feedback to the CUPS developers so that we can correct problems and improve the SNMP backend in future releases.</P>
+<P>That said, the SNMP requests sometimes expose problems in vendor implementations. If you are experiencing long delays in loading the CUPS web interface administration page, or if you don't see your printer listed, the following instructions will help you to diagnose those problems and/or provide important feedback to the CUPS developers so that we can correct problems and improve the SNMP backend in future releases.</P>
 
 <H3>Quick Fixes</H3>
 
-<P>If you don't use "public" as your community name, create a text file called <VAR>/etc/cups/snmp.conf</VAR> and put the following line in it:</P>
+<P>If you don't use "public" as your community name, edit or create (as needed) a text file called <VAR>/etc/cups/snmp.conf</VAR> and put the following line in it:</P>
 
 <PRE CLASS="command">
 Community <I>your community name</I>
 </PRE>
 
-<P>If you have more than one community name, list them all on separate lines.</P>
-
-<P>If you don't support SNMP v1 on your network, you are currently "out of luck". That said, we will be adding v2, v2c, and v3 support in future CUPS releases once we have a handle on the actual requirements people have for such things. Please file or update an <A HREF="http://www.cups.org/str.php">SNMP enhancement request</A> with <em>specific</em> requirements you have - what you need supported, why you need it supported, and how you would like to see the functionality provided/exposed - so that we can do it "right" the first time.</P>
+<P>The SNMP backend will not be able to find any printers on your network if SNMP v1 or broadcasting are not supported on your network.</P>
 
 <H3>Basic Debugging</H3>
 
@@ -424,7 +436,7 @@ CUPS_DEBUG_LEVEL=2 /usr/lib/cups/backend/snmp 2>&amp;1 | tee snmp.log
 <P>For C shell (/bin/csh) and TCsh (/bin/tcsh), use the following command instead:</P>
 
 <PRE CLASS="command">
-(setenv CUPS_DEBUG_LEVEL 2; /usr/lib/cups/backend/snmp) |& tee snmp.log
+(setenv CUPS_DEBUG_LEVEL 2; /usr/lib/cups/backend/snmp) |&amp; tee snmp.log
 </PRE>
 
 <P>On MacOS X you'll find the SNMP backend in /usr/libexec/cups/backend instead:</P>

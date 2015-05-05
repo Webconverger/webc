@@ -4,6 +4,15 @@ set -e
 
 case "${1}" in
 	configure)
+		# For some versions in the 0.9.0 branch, the .service files
+		# were containing an WantedBy option. This was useless as all
+		# the .service files are already statically enabled.
+		# The option has been removed but we still need to take care of
+		# removing the leftover.
+		if dpkg --compare-versions "$2" le-nl "0.9.0-6~"; then
+			deb-systemd-helper purge plymouth-halt.service plymouth-kexec.service plymouth-poweroff.service plymouth-quit.service plymouth-quit-wait.service plymouth-read-write.service plymouth-reboot.service plymouth-start.service >/dev/null
+			deb-systemd-helper unmask plymouth-halt.service plymouth-kexec.service plymouth-poweroff.service plymouth-quit.service plymouth-quit-wait.service plymouth-read-write.service plymouth-reboot.service plymouth-start.service >/dev/null
+		fi
 		if [ -x /usr/sbin/update-initramfs ]
 		then
 			update-initramfs -u
@@ -22,12 +31,12 @@ esac
 
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/plymouth" ]; then
-	update-rc.d plymouth start 21 2 3 4 5 . stop 02 0 6 . >/dev/null || exit $?
+	update-rc.d plymouth start . 2 3 4 5 . stop . 0 6 . >/dev/null || exit $?
 fi
 # End automatically added section
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/plymouth-log" ]; then
-	update-rc.d plymouth-log start 37 S . >/dev/null || exit $?
+	update-rc.d plymouth-log start . S . >/dev/null || exit $?
 fi
 # End automatically added section
 # Automatically added by dh_makeshlibs

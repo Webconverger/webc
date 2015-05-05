@@ -103,7 +103,9 @@ print STDERR " Warning: --language=$regexp will be overriden by
           --emacs=$emacsen setting\n\n"
   if ( defined $lang && $regexp && $emacsen );
 
-my $ispell_wrapper_args = &dico_get_spellchecker_params($class,$dictionaries->{$lang});
+my $ispell_wrapper_args = "";
+$ispell_wrapper_args = dico_get_spellchecker_params($class,$dictionaries->{$lang})
+  if ( $lang && defined $dictionaries->{$lang});
 
 # Ignore $lang results if -d is explicitly set from commandline
 

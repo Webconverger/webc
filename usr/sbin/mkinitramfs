@@ -146,7 +146,7 @@ if dpkg --compare-versions "${version}" lt "2.6.38" 2>/dev/null; then
 fi
 
 [ "${compress}" = lzop ] && compress="lzop -9"
-[ "${compress}" = xz ] && compress="xz -8 --check=crc32"
+[ "${compress}" = xz ] && compress="xz --check=crc32"
 
 if [ -d "${outfile}" ]; then
 	echo "${outfile} is a directory" >&2
@@ -157,7 +157,7 @@ MODULESDIR="/lib/modules/${version}"
 
 if [ ! -e "${MODULESDIR}" ]; then
 	echo "WARNING: missing ${MODULESDIR}"
-	echo "Device driver support needs thus be built-in linux image!"
+	echo "Ensure all necessary drivers are built into the linux image!"
 fi
 if [ ! -e "${MODULESDIR}/modules.dep" ]; then
 	depmod ${version}
@@ -167,14 +167,8 @@ fi
 DESTDIR="$(mktemp -d ${TMPDIR:-/var/tmp}/mkinitramfs_XXXXXX)" || exit 1
 chmod 755 "${DESTDIR}"
 
-# do not execute cache_run_scripts() if mounted with noexec
-NOEXEC=""
-fs=$(df -P $DESTDIR 2> /dev/null | tail -1 | awk '{print $6}')
-if [ -n "$fs" ] && mount | grep -q "on $fs .*noexec" ; then
-	NOEXEC=1
-fi
-
 __TMPCPIOGZ="$(mktemp ${TMPDIR:-/var/tmp}/mkinitramfs-OL_XXXXXX)" || exit 1
+__TMPEARLYCPIO="$(mktemp ${TMPDIR:-/var/tmp}/mkinitramfs-FW_XXXXXX)" || exit 1
 
 DPKG_ARCH=`dpkg --print-architecture`
 
@@ -192,6 +186,9 @@ export BUSYBOX
 
 # Private, used by 'catenate_cpiogz'.
 export __TMPCPIOGZ
+
+# Private, used by 'prepend_earlyinitramfs'.
+export __TMPEARLYCPIO
 
 for d in bin conf/conf.d etc lib/modules run sbin scripts ${MODULESDIR}; do
 	mkdir -p "${DESTDIR}/${d}"
@@ -274,6 +271,10 @@ if ! command -v ldd >/dev/null 2>&1 ; then
 	exit 1
 fi
 
+# fstab and mtab
+touch "${DESTDIR}/etc/fstab"
+ln -s /proc/mounts "${DESTDIR}/etc/mtab"
+
 # module-init-tools
 copy_exec /sbin/modprobe /sbin
 copy_exec /sbin/rmmod /sbin
@@ -289,13 +290,9 @@ run_scripts /usr/share/initramfs-tools/hooks
 run_scripts "${CONFDIR}"/hooks
 
 # cache boot run order
-if [ -n "$NOEXEC" ]; then
-	echo "W: TMPDIR is mounted noexec, will not cache run scripts."
-else
-	for b in $(cd "${DESTDIR}/scripts" && find . -mindepth 1 -type d); do
-		cache_run_scripts "${DESTDIR}" "/scripts/${b#./}"
-	done
-fi
+for b in $(cd "${DESTDIR}/scripts" && find . -mindepth 1 -type d); do
+	cache_run_scripts "${DESTDIR}" "/scripts/${b#./}"
+done
 
 # generate module deps
 depmod -a -b "${DESTDIR}" ${version}
@@ -311,6 +308,11 @@ fi
 # Apply DSDT to initramfs
 if [ -e "${CONFDIR}/DSDT.aml" ]; then
 	copy_exec "${CONFDIR}/DSDT.aml" /
+fi
+
+# Make sure there is a final sh in initramfs
+if [ ! -e "${DESTDIR}/bin/sh" ]; then
+	copy_exec /bin/sh "${DESTDIR}/bin/"
 fi
 
 # Remove any looping or broken symbolic links, since they break cpio.
@@ -331,9 +333,20 @@ if [ "$DPKG_ARCH" = armhf ]; then
 fi
 
 [ "${verbose}" = y ] && echo "Building cpio ${outfile} initramfs"
+
+if [ -s "${__TMPEARLYCPIO}" ]; then
+	cat "${__TMPEARLYCPIO}" >"${outfile}" || exit 1
+else
+	# truncate
+	> "${outfile}"
+fi
+
 (
+# preserve permissions if root builds the image, see #633582
+[ "$UID" != 0 ] && cpio_owner_root="-R 0:0"
+
 # work around lack of "set -o pipefail" for the following pipe:
-# cd "${DESTDIR}" && find . | cpio --quiet -R 0:0 -o -H newc | gzip >"${outfile}" || exit 1
+# cd "${DESTDIR}" && find . | cpio --quiet $cpio_owner_root -o -H newc | gzip >>"${outfile}" || exit 1
 exec 3>&1
 eval `
 	# http://cfaj.freeshell.org/shell/cus-faq-2.html
@@ -342,8 +355,8 @@ eval `
 	{
 		find . 4>&-; echo "ec1=$?;" >&4
 	} | {
-		cpio --quiet -R 0:0 -o -H newc 4>&-; echo "ec2=$?;" >&4
-	} | ${compress} >"${outfile}"
+		cpio --quiet $cpio_owner_root -o -H newc 4>&-; echo "ec2=$?;" >&4
+	} | ${compress} >>"${outfile}"
 	echo "ec3=$?;" >&4
 `
 if [ "$ec1" -ne 0 ]; then
@@ -365,10 +378,11 @@ if [ -s "${__TMPCPIOGZ}" ]; then
 fi
 
 if [ "${keep}" = "y" ]; then
-	echo "Working files in ${DESTDIR} and overlay in ${__TMPCPIOGZ}"
+	echo "Working files in ${DESTDIR}, early initramfs in ${__TMPEARLYCPIO} and overlay in ${__TMPCPIOGZ}"
 else
 	rm -rf "${DESTDIR}"
 	rm -rf "${__TMPCPIOGZ}"
+	rm -rf "${__TMPEARLYCPIO}"
 fi
 
 exit 0

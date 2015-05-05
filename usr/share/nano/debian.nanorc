@@ -2,19 +2,20 @@
 ## Adapted from http://milianw.de/blog/Syntax-Highlighting-in-Nano
 ## (mail@milianw.de).
 ##
-syntax "apt/sources.list" "sources\.list(\.old|~)?$"
+syntax "apt/sources.list" "sources\.list(\.old|~)?$" "apt/sources\.list\.d/.*\.list"
 # component
-color brightmagenta "^deb(-src)? ((http|file|ftp):/[^ ]+|cdrom:\[[^\]]+\]/|cdrom:\[[-a-zA-Z0-9\._\(\) ]+\]/) [^ ]+ .+$"
+color brightmagenta "^deb(-src)?\s+((http(s)?|file|ftp|tor|spacewalk):/\S+|cdrom:\[[^\]]+\]/|cdrom:\[[-a-zA-Z0-9\._\(\) ]+\]/)\s+\S+\s+.+$"
 # distribution
-color brightred "^deb(-src)? ((http|file|ftp):/[^ ]+|cdrom:\[[^\]]+\]/|cdrom:\[[-a-zA-Z0-9\._\(\) ]+\]/) [^ ]+"
+color brightred "^deb(-src)?\s+((http(s)?|file|ftp|tor|spacewalk):/\S+|cdrom:\[[^\]]+\]/|cdrom:\[[-a-zA-Z0-9\._\(\) ]+\]/)\s+\S+"
 # URI
-color brightgreen "(http|file|ftp):/[^ ]+"
+color brightgreen "(http(s)?|file|ftp|tor|spacewalk)://\S+"
 # cdroms
 # [^\]] does not work...
 color brightgreen "cdrom:\[[-a-zA-Z0-9\._\(\) ]+\]/"
 # deb / deb-src
-color yellow "^deb"
-color yellow "^deb-src"
+color yellow "^deb(-src)?"
 # comments
 color brightblue "#.*"
 
+## Trailing whitespace
+color ,green "[[:space:]]+$"

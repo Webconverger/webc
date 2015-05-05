@@ -1,0 +1,60 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          bootlogs
+# Required-Start:    hostname $local_fs
+# Required-Stop:
+# Should-Start:      $x-display-manager gdm kdm xdm ldm sdm wdm nodm
+# Default-Start:     1 2 3 4 5
+# Default-Stop:
+# Short-Description: Log file handling to be done during bootup.
+# Description:       Various things that don't need to be done particularly
+#                    early in the boot, just before getty is run.
+### END INIT INFO
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+[ "$DELAYLOGIN" ] || DELAYLOGIN=yes
+. /lib/init/vars.sh
+
+do_start () {
+	# Save kernel messages in /var/log/dmesg
+	if which dmesg >/dev/null 2>&1
+	then
+		[ -f /var/log/dmesg ] && savelog -q -p -c 5 /var/log/dmesg
+		dmesg -s 524288 > /var/log/dmesg
+		chgrp adm /var/log/dmesg || :
+	elif [ -c /dev/klog ]
+	then
+		[ -f /var/log/dmesg ] && savelog -q -p -c 5 /var/log/dmesg
+		dd if=/dev/klog of=/var/log/dmesg &
+		sleep 1
+		kill $!
+		[ -f /var/log/dmesg ] && { chgrp adm /var/log/dmesg || : ; }
+	fi
+}
+
+do_status () {
+	return 0
+}
+
+case "$1" in
+  start|"")
+	do_start
+	;;
+  restart|reload|force-reload)
+	echo "Error: argument '$1' not supported" >&2
+	exit 3
+	;;
+  stop)
+	# No-op
+	;;
+  status)
+	do_status
+	exit $?
+	;;
+  *)
+	echo "Usage: bootlogs [start|stop|status]" >&2
+	exit 3
+	;;
+esac
+
+:

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+set -e
+
+# Convert installed-flavors to flavor/installed/*.
+if test -e /var/lib/emacsen-common/installed-flavors
+then
+  for flavor in $(cat /var/lib/emacsen-common/installed-flavors)
+  do
+    touch "/var/lib/emacsen-common/state/flavor/installed/$flavor"
+  done
+  rm -f /var/lib/emacsen-common/installed-flavors
+fi
+
+# Put debhelper section before emacs-package-install to avoid emacs
+# complaints about missing /usr/local/share/emacs/site-lisp.
+
+# Automatically added by dh_usrlocal
+if [ "$1" = configure ]; then
+(
+	while read line; do
+		set -- $line
+		dir="$1"; mode="$2"; user="$3"; group="$4"
+		if [ ! -e "$dir" ]; then
+			if mkdir "$dir" 2>/dev/null; then
+				chown "$user":"$group" "$dir"
+				chmod "$mode" "$dir"
+			fi
+		fi
+	done
+) << DATA
+/usr/local/share 2775 root staff
+/usr/local/share/emacs 2775 root staff
+/usr/local/share/emacs/site-lisp 2775 root staff
+DATA
+fi
+# End automatically added section
+
+
+/usr/lib/emacsen-common/emacs-package-install --postinst emacsen-common

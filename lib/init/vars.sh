@@ -32,7 +32,6 @@ if [ -r /proc/cmdline ]; then
             # partitions/files when it is set.
             noswap)
 		NOSWAP=yes
-		break
 		;;
 
             # Accept the same 'quiet' option as the kernel, but only
@@ -42,7 +41,6 @@ if [ -r /proc/cmdline ]; then
 		if [ "$RUNLEVEL" ] && [ "$PREVLEVEL" ] ; then
 		    VERBOSE="no"
 		fi
-		break
 		;;
 	esac
     done

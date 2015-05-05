@@ -1,5 +1,5 @@
 /*
- * "$Id: escp.h 7304 2008-02-14 01:52:22Z mike $"
+ * "$Id$"
  *
  *   This file contains model number definitions for the CUPS unified
  *   ESC/P driver.
@@ -30,5 +30,5 @@
 
 
 /*
- * End of "$Id: escp.h 7304 2008-02-14 01:52:22Z mike $".
+ * End of "$Id$".
  */

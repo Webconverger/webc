@@ -82,9 +82,7 @@ session    optional   pam_lastlog.so
 
 # Prints the message of the day upon succesful login.
 # (Replaces the `MOTD_FILE' option in login.defs)
-# This includes a dynamically generated part from /run/motd.dynamic
-# and a static (admin-editable) part from /etc/motd.
-session    optional   pam_motd.so  motd=/run/motd.dynamic
+session    optional   pam_exec.so type=open_session stdout /bin/uname -snrvm
 session    optional   pam_motd.so
 
 # Prints the status of the user's mailbox upon succesful login
@@ -96,6 +94,9 @@ session    optional   pam_motd.so
 # also removes the user's mail spool file.
 # See comments in /etc/login.defs
 session    optional   pam_mail.so standard
+
+# Sets the loginuid process attribute
+session    required     pam_loginuid.so
 
 # Standard Un*x account and session
 @include common-account

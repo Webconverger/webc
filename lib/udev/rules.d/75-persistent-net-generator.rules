@@ -16,6 +16,11 @@ SUBSYSTEM!="net",			GOTO="persistent_net_generator_end"
 # ignore the interface if a name has already been set
 NAME=="?*",				GOTO="persistent_net_generator_end"
 
+# new predictable network interface naming scheme
+# http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+IMPORT{cmdline}="net.ifnames"
+ENV{net.ifnames}=="1",			GOTO="persistent_net_generator_end"
+
 # device name whitelist
 KERNEL!="eth*|ath*|wlan*[0-9]|msh*|ra*|sta*|ctc*|lcs*|hsi*", \
 					GOTO="persistent_net_generator_end"
@@ -63,6 +68,7 @@ ENV{MATCHADDR}=="52:54:ab:*", GOTO="globally_administered_whitelist"
 # Kingston Technologies
 ENV{MATCHADDR}=="e2:0c:0f:*", GOTO="globally_administered_whitelist"
 
+
 # ignore interfaces with locally administered or null MAC addresses
 # and VMWare, Hyper-V, KVM, Virtualbox and Xen virtual interfaces
 ENV{MATCHADDR}=="?[2367abef]:*",	ENV{MATCHADDR}=""
@@ -73,6 +79,25 @@ ENV{MATCHADDR}=="00:15:5d:*",		ENV{MATCHADDR}=""
 ENV{MATCHADDR}=="52:54:00:*|54:52:00:*", ENV{MATCHADDR}=""
 ENV{MATCHADDR}=="08:00:27:*",		ENV{MATCHADDR}=""
 ENV{MATCHADDR}=="00:16:3e:*",		ENV{MATCHADDR}=""
+
+# ignore Windows Azure Hyper-V virtual interfaces
+ENV{MATCHADDR}=="00:03:ff:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:0d:3a:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:1d:d8:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:12:5a:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:17:fa:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:22:48:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:25:ae:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="00:50:f2:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="28:18:78:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="50:1a:c5:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="60:45:bd:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="7c:1e:52:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="7c:ed:8d:*", ENV{MATCHADDR}=""
+ENV{MATCHADDR}=="dc:b4:c4:*", ENV{MATCHADDR}=""
+
+# ignore Ravello virtual interfaces
+ENV{MATCHADDR}=="2c:c2:60:*", ENV{MATCHADDR}=""
 
 LABEL="globally_administered_whitelist"
 

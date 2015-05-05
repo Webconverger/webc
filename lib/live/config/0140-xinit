@@ -1,0 +1,62 @@
+#!/bin/sh
+
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+##
+## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+#set -e
+
+Init ()
+{
+	# Checking if a display manager has been configured
+	case "${_X11}" in
+		true)
+			rm -f /etc/profile.d/zz-live-config_xinit.sh
+
+			exit 0
+			;;
+	esac
+
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/xinit.list ] || \
+	   [ -e /var/lib/live/config/xinit ]
+	then
+		exit 0
+	fi
+
+	echo -n " xinit"
+}
+
+Config ()
+{
+	# Checking if package is already configured differently
+	if [ -e /etc/profile.d/zz-live-config_xinit.sh ]
+	then
+		exit 0
+	fi
+
+cat > /etc/profile.d/zz-live-config_xinit.sh << EOF
+if [ -z "\${DISPLAY}" ] && [ \$(tty) = /dev/tty1 ]
+then
+	while true
+	do
+		if grep -qs quiet /proc/cmdline
+		then
+			startx > /dev/null 2>&1
+		else
+			startx
+		fi
+	done
+fi
+EOF
+
+	# Creating state file
+	touch /var/lib/live/config/xinit
+}
+
+Init
+Config

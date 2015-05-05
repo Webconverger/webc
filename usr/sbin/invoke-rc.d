@@ -21,10 +21,9 @@
 # 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Constants
-RUNLEVEL=/sbin/runlevel
+RUNLEVELHELPER=/sbin/runlevel
 POLICYHELPER=/usr/sbin/policy-rc.d
 INITDPREFIX=/etc/init.d/
-UPSTARTDIR=/etc/init/
 RCDPREFIX=/etc/rc
 
 # Options
@@ -38,6 +37,7 @@ RETRY=
 RETURNFAILURE=
 RC=
 is_upstart=
+is_systemd=
 
 # Shell options
 set +e
@@ -267,12 +267,17 @@ case ${ACTION} in
 	;;
 esac
 
+# Operate against system upstart, not session
+unset UPSTART_SESSION
 # If we're running on upstart and there's an upstart job of this name, do
 # the rest with upstart instead of calling the init script.
-if which initctl >/dev/null && initctl version | grep -q upstart \
-   && [ -e "$UPSTARTDIR/${INITSCRIPTID}.conf" ]
+if which initctl >/dev/null && initctl version 2>/dev/null | grep -q upstart \
+   && initctl status ${INITSCRIPTID} 1>/dev/null 2>/dev/null
 then
     is_upstart=1
+elif test -d /run/systemd/system ; then
+    is_systemd=1
+    UNIT="${INITSCRIPTID%.sh}.service"
 elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
     ## Verifies if the given initscript ID is known
     ## For sysvinit, this error is critical
@@ -281,7 +286,7 @@ elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
 fi
 
 ## Queries sysvinit for the current runlevel
-RL=`${RUNLEVEL} | sed 's/.*\ //'`
+RL=`${RUNLEVELHELPER} | sed 's/.*\ //'`
 if test ! $? ; then
     printerror "could not determine current runlevel"
     if test x${RETRY} = x ; then
@@ -290,9 +295,9 @@ if test ! $? ; then
     RL=
 fi
 
-## Running ${RUNLEVEL} to get current runlevel do not work in the boot
-## runlevel (scripts in /etc/rcS.d/), as /var/run/utmp contain
-## runlevel 0 or 6 (written at shutdown) at that point.
+## Running ${RUNLEVELHELPER} to get current runlevel do not work in
+## the boot runlevel (scripts in /etc/rcS.d/), as /var/run/utmp
+## contains runlevel 0 or 6 (written at shutdown) at that point.
 if test x${RL} = x0 || test x${RL} = x6 ; then
     if ps -fp 1 | grep -q 'init boot' ; then
        RL=S
@@ -383,7 +388,18 @@ case ${ACTION} in
 esac
 
 # test if /etc/init.d/initscript is actually executable
-if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+_executable=
+if [ -n "$is_upstart" ]; then
+    _executable=1
+elif [ -n "$is_systemd" ]; then
+    _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
+    if [ "$_state" != "LoadState=masked" ]; then
+        _executable=1
+    fi
+elif testexec "${INITDPREFIX}${INITSCRIPTID}"; then
+   _executable=1
+fi
+if [ "$_executable" = "1" ]; then
     if test x${RC} = x && test x${MODE} = xquery ; then
         RC=105
     fi
@@ -496,6 +512,42 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 			initctl "$saction" "$INITSCRIPTID" && exit 0
 			;;
 		esac
+            elif [ -n "$is_systemd" ]; then
+                if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
+                    # If we are called by a maintainer script, chances are good that a
+                    # new or updated sysv init script was installed.  Reload daemon to
+                    # pick up any changes.
+                    systemctl daemon-reload
+                fi
+                case $saction in
+                    start|stop|restart|status)
+                        systemctl "${saction}" "${UNIT}" && exit 0
+                        ;;
+                    reload)
+                        _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+                        if [ "$_canreload" = "CanReload=no" ]; then
+                            "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+                        else
+                            systemctl reload "${UNIT}" && exit 0
+                        fi
+                        ;;
+                    force-stop)
+                        systemctl --signal=KILL kill "${UNIT}" && exit 0
+                        ;;
+                    force-reload)
+                        _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
+                        if [ "$_canreload" = "CanReload=no" ]; then
+                           systemctl restart "${UNIT}" && exit 0
+                        else
+                           systemctl reload "${UNIT}" && exit 0
+                        fi
+                        ;;
+                    *)
+                        # We try to run non-standard actions by running
+                        # the init script directly.
+                        "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
+                        ;;
+                esac
 	    else
 		"${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
 	    fi

@@ -10,7 +10,7 @@ do_cifsmount ()
 	then
 		if [ -z "${NFSOPTS}" ]
 		then
-			CIFSOPTS="-ouser=root,password="
+			CIFSOPTS="-o user=root,password="
 		else
 			CIFSOPTS="-o ${NFSOPTS}"
 		fi
@@ -18,7 +18,7 @@ do_cifsmount ()
 		log_begin_msg "Trying mount.cifs ${NFSROOT} ${mountpoint} ${CIFSOPTS}"
 		modprobe -q cifs
 
-		if mount.cifs "${NFSROOT}" "${mountpoint}" "${CIFSOPTS}"
+		if mount.cifs "${NFSROOT}" "${mountpoint}" ${CIFSOPTS}
 		then
 			rc=0
 		fi

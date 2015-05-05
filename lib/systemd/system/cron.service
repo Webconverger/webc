@@ -1,0 +1,11 @@
+[Unit]
+Description=Regular background program processing daemon
+Documentation=man:cron(8)
+
+[Service]
+EnvironmentFile=-/etc/default/cron
+ExecStart=/usr/sbin/cron -f $EXTRA_OPTS
+IgnoreSIGPIPE=false
+
+[Install]
+WantedBy=multi-user.target

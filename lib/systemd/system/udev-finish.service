@@ -1,0 +1,9 @@
+[Unit]
+Description=Copy rules generated while the root was ro
+DefaultDependencies=no
+After=systemd-udevd.service systemd-udev-settle.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/lib/udev/udev-finish

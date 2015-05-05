@@ -107,9 +107,12 @@ class JSONEncoder(object):
         encoding of keys that are not str, int, long, float or None.  If
         skipkeys is True, such items are simply skipped.
 
-        If ensure_ascii is true, the output is guaranteed to be str
-        objects with all incoming unicode characters escaped.  If
-        ensure_ascii is false, the output will be unicode object.
+        If *ensure_ascii* is true (the default), all non-ASCII
+        characters in the output are escaped with \uXXXX sequences,
+        and the results are str instances consisting of ASCII
+        characters only.  If ensure_ascii is False, a result may be a
+        unicode instance.  This usually happens if the input contains
+        unicode strings or the *encoding* parameter is used.
 
         If check_circular is true, then lists, dicts, and custom encoded
         objects will be checked for circular references during encoding to
@@ -128,7 +131,10 @@ class JSONEncoder(object):
         If indent is a non-negative integer, then JSON array
         elements and object members will be pretty-printed with that
         indent level.  An indent level of 0 will only insert newlines.
-        None is the most compact representation.
+        None is the most compact representation.  Since the default
+        item separator is ', ',  the output might include trailing
+        whitespace when indent is specified.  You can use
+        separators=(',', ': ') to avoid this.
 
         If specified, separators should be a (item_separator, key_separator)
         tuple.  The default is (', ', ': ').  To get the most compact JSON
@@ -171,6 +177,7 @@ class JSONEncoder(object):
                     pass
                 else:
                     return list(iterable)
+                # Let the base class default method raise the TypeError
                 return JSONEncoder.default(self, o)
 
         """

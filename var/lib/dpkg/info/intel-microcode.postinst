@@ -19,36 +19,18 @@ set -e
 
 case "$1" in
     configure)
-	# try to load the microcode module just in case.  If we succeed,
-	# it will trigger a microcode update by itself
-	if modprobe -q --first-time microcode ; then
-	    echo "Updating microcode on all online processors..." >&2
-	else
-	    # we have to trigger the microcode update manually
-	    if [ -e /sys/devices/system/cpu/microcode/reload ] ; then
-		echo "Updating microcode on all online processors..." >&2
-		echo 1 > /sys/devices/system/cpu/microcode/reload || {
-		    echo "Kernel reported failure while updating microcode!" >&2
-		}
-	    else
-		# Try all online processors, broken kernels need this,
-		# fixed kernels will accept it only on the BSP and update
-		# all processors anyway, and -EINVAL all others... but we
-		# don't know which one is the BSP, so we try all of them
-		# and hide errors, the kernel will log any real problem.
-		echo "Using per-core interface to update microcode on online processors..." >&2
-		find /sys/devices/system/cpu -noleaf -type f -path '/sys/devices/system/cpu/cpu*/microcode/reload' | \
-		    while read i ; do echo -n 1 2>/dev/null >"$i" || true ; done
-	    fi
-	fi
 	# do it like udev and firmware-linux-*
-	if [ -x /usr/sbin/update-initramfs -a -e /etc/initramfs-tools/initramfs.conf ] ; then
-		update-initramfs -u
+	if [ -x /usr/sbin/update-initramfs ] && [ -e /etc/initramfs-tools/initramfs.conf ] ; then
+	    update-initramfs -u && {
+		echo "intel-microcode: microcode will be updated at next boot" >&2
+		ls /usr/share/misc/intel-microcode* >/dev/null 2>&1 && {
+		    echo "intel-microcode: possibly old microcode files from /usr/share/misc were used" >&2
+		    echo "intel-microcode: remove them if this is not desired and run 'update-initramfs -u'" >&2
+		}
+	    }
+	else
+	    echo "intel-microcode: initramfs support missing" >&2
 	fi
-	ls /usr/share/misc/intel-microcode* >/dev/null 2>&1 && {
-	    echo "WARNING: /usr/share/misc/intel-microcode* installed to the initramfs" >&2
-	    echo "If this is undesired, remove /usr/share/misc/intel-microcode* and run 'update-initramfs -u'" >&2
-	}
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

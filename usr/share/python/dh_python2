@@ -1,0 +1,713 @@
+#! /usr/bin/python
+# -*- coding: UTF-8 -*- vim: et ts=4 sw=4
+
+# Copyright © 2010-2012 Piotr Ożarowski <piotr@debian.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+from __future__ import with_statement
+import logging
+import os
+import re
+import sys
+from filecmp import dircmp, cmpfiles, cmp as fcmp
+from optparse import OptionParser, SUPPRESS_HELP
+from os.path import isabs, isdir, islink, exists, join, normpath, realpath,\
+ split
+from shutil import rmtree, copy as fcopy
+from stat import ST_MODE, S_IXUSR, S_IXGRP, S_IXOTH
+from debpython.debhelper import DebHelper
+from debpython.depends import Dependencies
+from debpython.version import SUPPORTED, DEFAULT, \
+    debsorted, getver, vrepr, parse_pycentral_vrange, \
+    get_requested_versions, parse_vrange, vrange_str
+import debpython.namespace as ns
+from debpython.pydist import validate as validate_pydist, \
+                             PUBLIC_DIR_RE
+from debpython.tools import sitedir, relative_symlink, \
+                            fix_shebang, shebang2pyver, \
+                            so2pyver, clean_egg_name, \
+                            pyinstall, pyremove
+from debpython.option import Option
+
+# initialize script
+logging.basicConfig(format='%(levelname).1s: %(module)s:%(lineno)d: '
+                           '%(message)s')
+log = logging.getLogger(__name__)
+os.umask(022)
+EGGnPTH_RE = re.compile(r'(.*?)(-py\d\.\d+)?(.*?)(\.egg-info|\.pth)$')
+
+# naming conventions used in the file:
+# * version - tuple of integers
+# * ver - string representation of version
+# * vrange - version range, pair of max and min versions
+# * fn - file name (without path)
+# * fpath - file path
+
+
+### FILES ######################################################
+def fix_locations(package):
+    """Move files to the right location."""
+    found_versions = {}
+    for version in SUPPORTED:
+        ver = vrepr(version)
+        to_check = [i % ver for i in (\
+                    'usr/local/lib/python%s/site-packages',
+                    'usr/local/lib/python%s/dist-packages',
+                    'var/lib/python-support/python%s',
+                    'usr/lib/pymodules/python%s')]
+        if version >= (2, 6):
+            to_check.append("usr/lib/python%s/site-packages" % ver)
+        dstdir = sitedir(version, package)
+
+        for location in to_check:
+            srcdir = "debian/%s/%s" % (package, location)
+            if isdir(srcdir):
+                if ver in found_versions:
+                    log.error('files for version %s '
+                              'found in two locations:\n %s\n %s',
+                              ver, location, found_versions[ver])
+                    exit(2)
+                log.info('Python %s should install files in %s. '
+                         'Did you forget "--install-layout=deb"?',
+                         ver, sitedir(version))
+                if not isdir(dstdir):
+                    os.makedirs(dstdir)
+                # TODO: what about relative symlinks?
+                log.debug('moving files from %s to %s', srcdir, dstdir)
+                os.renames(srcdir, dstdir)
+                found_versions[ver] = location
+
+        # do the same with debug locations
+        dbg_to_check = ['usr/lib/debug/%s' % i for i in to_check]
+        dbg_to_check.append("usr/lib/debug/usr/lib/pyshared/python%s" % ver)
+        dstdir = sitedir(version, package, gdb=True)
+
+        for location in dbg_to_check:
+            srcdir = "debian/%s/%s" % (package, location)
+            if isdir(srcdir):
+                if not isdir(dstdir):
+                    os.makedirs(dstdir)
+                log.debug('moving files from %s to %s', srcdir, dstdir)
+                os.renames(srcdir, dstdir)
+
+
+### SHARING FILES ##############################################
+def share(package, stats, options):
+    """Move files to /usr/share/pyshared/ if possible."""
+    if package.endswith('-dbg'):
+        # nothing to share in debug packages
+        return
+    pubvers = debsorted(i for i in stats['public_vers'] if i[0] == 2)
+    if len(pubvers) > 1:
+        for pos, version1 in enumerate(pubvers):
+            dir1 = sitedir(version1, package)
+            for version2 in pubvers[pos + 1:]:
+                dir2 = sitedir(version2, package)
+                dc = dircmp(dir1, dir2)
+                share_2x(dir1, dir2, dc)
+    elif len(pubvers) == 1:
+        # don't install into pyshared anymore
+        pass
+
+    if options.guess_versions and pubvers:
+        for version in get_requested_versions(options.vrange):
+            if version not in pubvers:
+                log.debug('guessing files for Python %s', vrepr(version))
+                versions_without_ext = debsorted(set(pubvers) -\
+                                                 stats['ext'])
+                if not versions_without_ext:
+                    log.error('extension for python%s is missing. '
+                              'Build extensions for all supported Python '
+                              'versions (`pyversions -vr`) or adjust '
+                              'X-Python-Version field or pass '
+                              '--no-guessing-versions to dh_python2',
+                              vrepr(version))
+                    exit(3)
+                srcver = versions_without_ext[0]
+                if srcver in stats['public_vers']:
+                    stats['public_vers'].add(version)
+                share_2x(sitedir(srcver, package), sitedir(version, package))
+    # remove duplicates
+    stats['requires.txt'] = set(realpath(i) for i in stats['requires.txt'])
+    stats['nsp.txt'] = set(realpath(i) for i in stats['nsp.txt'])
+
+
+def move_to_pyshared(dir1):
+    # dir1 starts with debian/packagename/usr/lib/pythonX.Y/*-packages/
+    debian, package, path = dir1.split('/', 2)
+    dstdir = join(debian, package, 'usr/share/pyshared/', \
+                  '/'.join(dir1.split('/')[6:]))
+
+    fext = lambda fname: fname.rsplit('.', 1)[-1]
+
+    for i in os.listdir(dir1):
+        fpath1 = join(dir1, i)
+        if isdir(fpath1) and not islink(fpath1):
+            if any(fn for fn in os.listdir(fpath1) if fext(fn) != 'so'):
+                # at least one file that is not an extension
+                move_to_pyshared(join(dir1, i))
+        else:
+            if fext(i) == 'so':
+                continue
+            fpath2 = join(dstdir, i)
+            if not exists(fpath2):
+                if not exists(dstdir):
+                    os.makedirs(dstdir)
+                if islink(fpath1):
+                    fpath1_target = os.readlink(fpath1)
+                    if isabs(fpath1_target):
+                        os.symlink(fpath1_target, fpath2)
+                    else:
+                        fpath1_target = normpath(join(dir1, fpath1_target))
+                        relative_symlink(fpath1_target, fpath2)
+                    os.remove(fpath1)
+                else:
+                    os.rename(fpath1, fpath2)
+                relative_symlink(fpath2, fpath1)
+
+
+def create_ext_links(dir1):
+    """Create extension symlinks in /usr/lib/pyshared/pythonX.Y.
+
+    These symlinks are used to let dpkg detect file conflicts with
+    python-support and python-central packages.
+    """
+
+    debian, package, path = dir1.split('/', 2)
+    python, _, module_subpath = path[8:].split('/', 2)
+    dstdir = join(debian, package, 'usr/lib/pyshared/', python, module_subpath)
+
+    for i in os.listdir(dir1):
+        fpath1 = join(dir1, i)
+        if isdir(fpath1):
+            create_ext_links(fpath1)
+        elif i.rsplit('.', 1)[-1] == 'so':
+            fpath2 = join(dstdir, i)
+            if exists(fpath2):
+                continue
+            if not exists(dstdir):
+                os.makedirs(dstdir)
+            relative_symlink(fpath1, join(dstdir, i))
+
+
+def create_public_links(dir1, vrange, root=''):
+    """Create public module symlinks for given directory."""
+
+    debian, package, path = dir1.split('/', 2)
+    versions = get_requested_versions(vrange)
+
+    for fn in os.listdir(dir1):
+        fpath1 = join(dir1, fn)
+        if isdir(fpath1):
+            create_public_links(fpath1, vrange, join(root, fn))
+        else:
+            for version in versions:
+                dstdir = join(sitedir(version, package), root)
+                if not exists(dstdir):
+                    os.makedirs(dstdir)
+                relative_symlink(fpath1, join(dstdir, fn))
+
+
+def share_2x(dir1, dir2, dc=None):
+    """Move common files to pyshared and create symlinks in original
+    locations."""
+    debian, package, path = dir2.split('/', 2)
+    # dir1 starts with debian/packagename/usr/lib/pythonX.Y/*-packages/
+    dstdir = join(debian, package, 'usr/share/pyshared/', \
+                  '/'.join(dir1.split('/')[6:]))
+    if not exists(dstdir) and not islink(dir1):
+        os.makedirs(dstdir)
+    if dc is None:  # guess/copy mode
+        if not exists(dir2):
+            os.makedirs(dir2)
+        common_dirs = []
+        common_files = []
+        for i in os.listdir(dir1):
+            subdir1 = join(dir1, i)
+            if isdir(subdir1) and not islink(subdir1):
+                common_dirs.append([i, None])
+            else:
+                # directories with .so files will be blocked earlier
+                common_files.append(i)
+    elif islink(dir1):
+        # skip this symlink in pyshared
+        # (dpkg has problems with symlinks anyway)
+        common_dirs = []
+        common_files = []
+    else:
+        common_dirs = dc.subdirs.iteritems()
+        common_files = dc.common_files
+        # dircmp returns common names only, lets check files more carefully...
+        common_files = cmpfiles(dir1, dir2, common_files, shallow=False)[0]
+
+    for fn in common_files:
+        if 'so' in fn.split('.'):  # foo.so, bar.so.0.1.2, etc.
+            # in unlikely case where extensions are exactly the same
+            continue
+        fpath1 = join(dir1, fn)
+        fpath2 = join(dir2, fn)
+        fpath3 = join(dstdir, fn)
+        # do not touch symlinks created by previous loop or other tools
+        if dc and not islink(fpath1):
+            # replace with a link to pyshared
+            if not exists(fpath3):
+                os.rename(fpath1, fpath3)
+                relative_symlink(fpath3, fpath1)
+            elif fcmp(fpath3, fpath1, shallow=False):
+                os.remove(fpath1)
+                relative_symlink(fpath3, fpath1)
+        if dc is None:  # guess/copy mode
+            if islink(fpath1):
+                # ralative links will work as well, it's always the same level
+                os.symlink(os.readlink(fpath1), fpath2)
+            else:
+                if exists(fpath3):
+                    # cannot share it, pyshared contains another copy
+                    fcopy(fpath1, fpath2)
+                else:
+                    # replace with a link to pyshared
+                    os.rename(fpath1, fpath3)
+                    relative_symlink(fpath3, fpath1)
+                    relative_symlink(fpath3, fpath2)
+        elif exists(fpath2) and exists(fpath3) and \
+             fcmp(fpath2, fpath3, shallow=False):
+            os.remove(fpath2)
+            relative_symlink(fpath3, fpath2)
+    for dn, dc in common_dirs:
+        share_2x(join(dir1, dn), join(dir2, dn), dc)
+
+
+### PACKAGE DETAILS ############################################
+def scan(package, dname=None, options=None):
+    """Gather statistics about Python files in given package."""
+    r = {'requires.txt': set(),
+         'nsp.txt': set(),
+         'shebangs': set(),
+         'public_vers': set(),
+         'private_dirs': {},
+         'compile': False,
+         'ext': set()}
+
+    dbg_package = package.endswith('-dbg')
+
+    if not dname:
+        proot = "debian/%s" % package
+        if dname is False:
+            private_to_check = []
+        else:
+            private_to_check = [i % package for i in
+                                ('usr/lib/%s', 'usr/lib/games/%s',
+                                'usr/share/%s', 'usr/share/games/%s')]
+    else:
+        # scan private directory *only*
+        dname = dname.strip('/')
+        proot = join('debian', package, dname)
+        private_to_check = [dname]
+
+    for root, dirs, file_names in os.walk(proot):
+        # ignore Python 3.X locations
+        if '/usr/lib/python3' in root or\
+           '/usr/local/lib/python3' in root:
+            # warn only once
+            if root[root.find('/lib/python'):].count('/') == 2:
+                log.warning('Python 3.x location detected, '
+                            'please use dh_python3: %s', root)
+            continue
+
+        bin_dir = private_dir = None
+        public_dir = PUBLIC_DIR_RE.match(root)
+        if public_dir:
+            version = getver(public_dir.group(1))
+            if root.endswith('-packages'):
+                r['public_vers'].add(version)
+        else:
+            # TODO: find a way to specify Python version private
+            # extension was build for
+            version = False
+            for i in private_to_check:
+                if root.startswith(join('debian', package, i)):
+                    private_dir = '/' + i
+                    break
+            else:  # i.e. not public_dir and not private_dir
+                if len(root.split('/', 6)) < 6 and (\
+                   root.endswith('/sbin') or root.endswith('/bin') or\
+                   root.endswith('/usr/games')):
+                   # /(s)bin or /usr/(s)bin or /usr/games
+                    bin_dir = root
+
+        # handle some EGG related data (.egg-info dirs)
+        for name in dirs:
+            if name.endswith('.egg-info'):
+                if dbg_package and options.clean_dbg_pkg:
+                    rmtree(join(root, name))
+                    dirs.remove(name)
+                    continue
+                clean_name = clean_egg_name(name)
+                if clean_name != name:
+                    log.info('renaming %s to %s', name, clean_name)
+                    os.rename(join(root, name), join(root, clean_name))
+                    dirs[dirs.index(name)] = clean_name
+        if root.endswith('.egg-info'):
+            if 'requires.txt' in file_names:
+                r['requires.txt'].add(join(root, 'requires.txt'))
+            if 'namespace_packages.txt' in file_names:
+                r['nsp.txt'].add(join(root, 'namespace_packages.txt'))
+            continue
+
+        # check files
+        for fn in sorted(file_names):
+            # sorted() to make sure .so files are handled before .so.foo
+            fpath = join(root, fn)
+            if not exists(fpath):
+                # could be removed while handling .so symlinks
+                if islink(fpath) and '.so.' in split(fpath)[-1]:
+                    # dangling symlink to (now removed/renamed) .so file
+                    # which wasn't removed yet (see test3's quux.so.0)
+                    log.info('removing symlink: %s', fpath)
+                    os.remove(fpath)
+                continue
+            fext = fn.rsplit('.', 1)[-1]
+            if fext in ('pyc', 'pyo'):
+                os.remove(fpath)
+                continue
+            if public_dir:
+                if fext == 'so' and islink(fpath):
+                    dstfpath = fpath
+                    links = set()
+                    while islink(dstfpath):
+                        links.add(dstfpath)
+                        dstfpath = join(root, os.readlink(dstfpath))
+                    if exists(dstfpath) and '.so.' in split(dstfpath)[-1]:
+                        # rename .so.$FOO symlinks, remove other ones
+                        for lpath in links:
+                            log.info('removing symlink: %s', lpath)
+                            os.remove(lpath)
+                        log.info('renaming %s to %s', dstfpath, fn)
+                        os.rename(dstfpath, fpath)
+                if dbg_package and options.clean_dbg_pkg and \
+                   fext not in ('so', 'h'):
+                    os.remove(join(root, fn))
+                    continue
+
+            elif private_dir:
+                if exists(fpath):
+                    mode = os.stat(fpath)[ST_MODE]
+                    if mode & S_IXUSR or mode & S_IXGRP or mode & S_IXOTH:
+                        if (options.no_shebang_rewrite or \
+                            fix_shebang(fpath, options.shebang)) and \
+                           not options.ignore_shebangs:
+                            res = shebang2pyver(fpath)
+                            if res:
+                                r['private_dirs'].setdefault(private_dir, {})\
+                                    .setdefault('shebangs', set()).add(res)
+
+            if public_dir or private_dir:
+                if fext == 'so':
+                    so_version = so2pyver(join(root, fn))
+                    if so_version:
+                        if public_dir:
+                            if version != so_version:
+                                log.error('extension linked to libpython%s '
+                                          'and shipped in python%s\'s dist-'
+                                          'packages: %s', vrepr(so_version),
+                                          vrepr(version), fn)
+                                exit(7)
+                            log.warn('public extension linked with '
+                                     'libpython%s: %s', vrepr(so_version), fn)
+                        elif not version:
+                            version = so_version
+
+                    (r if public_dir else
+                     r['private_dirs'].setdefault(private_dir, {}))\
+                    .setdefault('ext', set()).add(version)
+                    continue
+                elif fext == 'py':
+                    (r if public_dir else
+                     r['private_dirs'].setdefault(private_dir, {}))\
+                    ['compile'] = True
+                    continue
+
+            # .egg-info files
+            if fn.endswith('.egg-info'):
+                clean_name = clean_egg_name(fn)
+                if clean_name != fn:
+                    log.info('renaming %s to %s', fn, clean_name)
+                    os.rename(join(root, fn), join(root, clean_name))
+                continue
+            # search for scripts in bin dirs
+            if bin_dir:
+                if (options.no_shebang_rewrite or \
+                    fix_shebang(fpath, options.shebang)) and \
+                   not options.ignore_shebangs:
+                     res = shebang2pyver(fpath)
+                     if res:
+                         r['shebangs'].add(res)
+
+    if dbg_package and options.clean_dbg_pkg:
+        # remove empty directories in -dbg packages
+        proot = proot + '/usr/lib'
+        for root, dirs, file_names in os.walk(proot, topdown=False):
+            if '-packages/' in root and not file_names:
+                try:
+                    os.rmdir(root)
+                except Exception:
+                    pass
+
+    log.debug("package %s details = %s", package, r)
+    return r
+
+
+################################################################
+def main():
+    log.warn('Please add dh-python package to Build-Depends')
+    usage = '%prog -p PACKAGE [-V [X.Y][-][A.B]] DIR [-X REGEXPR]\n'
+    parser = OptionParser(usage, version='%prog 2.1',
+                                   option_class=Option)
+    parser.add_option('--no-guessing-versions', action='store_false',
+        dest='guess_versions', default=True,
+        help='disable guessing other supported Python versions')
+    parser.add_option('--no-guessing-deps', action='store_false',
+        dest='guess_deps', default=True, help='disable guessing dependencies')
+    parser.add_option('--skip-private', action='store_true', default=False,
+        help='don\'t check private directories')
+    parser.add_option('-v', '--verbose', action='store_true', default=False,
+        help='turn verbose mode on')
+    # arch=False->arch:all only, arch=True->arch:any only, None->all of them
+    parser.add_option('-i', '--indep', action='store_false',
+        dest='arch', default=None,
+        help='act on architecture independent packages')
+    parser.add_option('-a', '-s', '--arch', action='store_true',
+        dest='arch', help='act on architecture dependent packages')
+    parser.add_option('-q', '--quiet', action='store_false', dest='verbose',
+        help='be quiet')
+    parser.add_option('-p', '--package', action='append',
+        help='act on the package named PACKAGE')
+    parser.add_option('-N', '--no-package', action='append',
+        help='do not act on the specified package')
+    parser.add_option('--compile-all', action='store_true', default=False,
+        help='compile all files from given private directory in postinst, '
+             'not just the ones provided by the package')
+    parser.add_option('-V', type='version_range', dest='vrange',
+        help='specify list of supported Python versions. ' +\
+             'See pycompile(1) for examples')
+    parser.add_option('-X', '--exclude', action='append', dest='regexpr',
+        help='exclude items that match given REGEXPR. You may use this option '
+             'multiple times to build up a list of things to exclude.')
+    parser.add_option('--depends', action='append',
+        help='translate given requirements into Debian dependencies '
+             'and add them to ${python:Depends}. '
+             'Use it for missing items in requires.txt.')
+    parser.add_option('--recommends', action='append',
+        help='translate given requirements into Debian '
+             'dependencies and add them to ${python:Recommends}')
+    parser.add_option('--suggests', action='append',
+        help='translate given requirements into Debian '
+             'dependencies and add them to ${python:Suggests}')
+    parser.add_option('--namespace', action='append', dest='namespaces',
+        help='recreate __init__.py files for given namespaces at install time')
+    parser.add_option('--clean-pycentral', action='store_true', default=False,
+        help='generate maintainer script that will remove pycentral files')
+    parser.add_option('--shebang',
+        help='use given command as shebang in scripts')
+    parser.add_option('--ignore-shebangs', action='store_true', default=False,
+        help='do not translate shebangs into Debian dependencies')
+    parser.add_option('--ignore-namespace', action='store_true', default=False,
+        help="ignore Egg's namespace_packages.txt file and --namespace option")
+    parser.add_option('--no-dbg-cleaning', action='store_false',
+            dest='clean_dbg_pkg', default=True,
+        help='do not remove files from debug packages')
+    parser.add_option('--no-shebang-rewrite', action='store_true',
+            default=False, help='do not rewrite shebangs')
+    # ignore some debhelper options:
+    parser.add_option('-O', help=SUPPRESS_HELP)
+
+    options, args = parser.parse_args(sys.argv[1:] + \
+                    os.environ.get('DH_OPTIONS', '').split())
+    # regexpr option type is not used so lets check patterns here
+    for pattern in options.regexpr or []:
+        # fail now rather than at runtime
+        try:
+            pattern = re.compile(pattern)
+        except Exception:
+            log.error('regular expression is not valid: %s', pattern)
+            exit(1)
+
+    if not options.vrange and exists('debian/pyversions'):
+        log.debug('parsing version range from debian/pyversions')
+        with open('debian/pyversions') as fp:
+            for line in fp:
+                line = line.strip()
+                if line and not line.startswith('#'):
+                    options.vrange = parse_vrange(line)
+                    break
+
+    # disable PyDist if dh_pydeb is used
+    if options.guess_deps:
+        try:
+            rules = open('debian/rules', 'r').read()
+        except IOError:
+            log.warning('cannot open debian/rules file')
+        else:
+            if re.search('\n\s*dh_pydeb', rules) or \
+               re.search('\n\s*dh\s+[^#]*--with[^#]+pydeb', rules):
+                log.warning('dh_pydeb detected, PyDist feature disabled')
+                options.guess_deps = False
+
+    if not args:
+        private_dir = None
+    else:
+        private_dir = args[0]
+        if not private_dir.startswith('/'):
+            # handle usr/share/foo dirs (without leading slash)
+            private_dir = '/' + private_dir
+    # TODO: support more than one private dir at the same time (see :meth:scan)
+    if options.skip_private:
+        private_dir = False
+
+    if options.verbose or os.environ.get('DH_VERBOSE') == '1':
+        log.setLevel(logging.DEBUG)
+        log.debug('argv: %s', sys.argv)
+        log.debug('options: %s', options)
+        log.debug('args: %s', args)
+
+    dh = DebHelper(options)
+    if not options.vrange and dh.python_version:
+        options.vrange = parse_pycentral_vrange(dh.python_version)
+
+    for package, pdetails in dh.packages.iteritems():
+        if options.arch is False and pdetails['arch'] != 'all' or \
+           options.arch is True and pdetails['arch'] == 'all':
+            continue
+        log.debug('processing package %s...', package)
+        if not private_dir:
+            if not pyinstall(package, options.vrange):
+                exit(4)
+            if not pyremove(package, options.vrange):
+                exit(5)
+            fix_locations(package)
+        stats = scan(package, private_dir, options)
+        if not private_dir:
+            share(package, stats, options)
+            pyshared_dir = "debian/%s/usr/share/pyshared/" % package
+            if not stats['public_vers'] and exists(pyshared_dir):
+                create_public_links(pyshared_dir, options.vrange)
+                stats['public_vers'] = get_requested_versions(options.vrange)
+                stats['compile'] = True
+
+        dependencies = Dependencies(package)
+        dependencies.parse(stats, options)
+
+        if stats['public_vers']:
+            dh.addsubstvar(package, 'python:Versions', \
+                           ', '.join(sorted(vrepr(stats['public_vers']))))
+            ps = package.split('-', 1)
+            if len(ps) > 1 and ps[0] == 'python':
+                dh.addsubstvar(package, 'python:Provides', \
+                           ', '.join("python%s-%s" % (i, ps[1])\
+                           for i in sorted(vrepr(stats['public_vers']))))
+
+        pyclean_added = False  # invoke pyclean only once in maintainer script
+        if stats['compile']:
+            if options.clean_pycentral:
+                dh.autoscript(package, 'preinst',
+                              'preinst-pycentral-clean', '')
+            dh.autoscript(package, 'postinst', 'postinst-pycompile', '')
+            dh.autoscript(package, 'prerm', 'prerm-pyclean', '')
+            pyclean_added = True
+
+        for pdir, details in stats['private_dirs'].iteritems():
+            if not details.get('compile'):
+                continue
+            if not pyclean_added:
+                dh.autoscript(package, 'prerm', 'prerm-pyclean', '')
+                pyclean_added = True
+
+            args = pdir
+
+            ext_for = details.get('ext')
+            if ext_for is None:  # no extension
+                shebangs = list(v for i, v in details.get('shebangs', []) if v)
+                if not options.ignore_shebangs and len(shebangs) == 1:
+                    # only one version from shebang
+                    args += " -V %s" % vrepr(shebangs[0])
+                elif options.vrange and options.vrange != (None, None):
+                    args += " -V %s" % vrange_str(options.vrange)
+            elif False in ext_for:
+                # at least one extension's version not detected
+                if options.vrange and '-' not in vrange_str(options.vrange):
+                    ver = vrange_str(options.vrange)
+                else:  # try shebang or default Python version
+                    ver = (list(v for i, v in details.get('shebangs', [])
+                           if v) or [None])[0] or DEFAULT
+                    ver = vrepr(ver)
+                dependencies.depend("python%s" % ver)
+                args += " -V %s" % vrepr(ver)
+            else:
+                version = ext_for.pop()
+                args += " -V %s" % vrepr(version)
+                dependencies.depend("python%d.%d" % version)
+
+            for pattern in options.regexpr or []:
+                args += " -X '%s'" % pattern.replace("'", r"'\''")
+
+            dh.autoscript(package, 'postinst', 'postinst-pycompile', args)
+
+        dependencies.export_to(dh)
+
+        pydist_file = join('debian', "%s.pydist" % package)
+        if exists(pydist_file):
+            if not validate_pydist(pydist_file):
+                log.warning("%s.pydist file is invalid", package)
+            else:
+                dstdir = join('debian', package, 'usr/share/python/dist/')
+                if not exists(dstdir):
+                    os.makedirs(dstdir)
+                fcopy(pydist_file, join(dstdir, package))
+
+        # namespace feature - recreate __init__.py files at install time
+        if options.ignore_namespace:
+            nsp = None
+        else:
+            nsp = ns.parse(stats['nsp.txt'], options.namespaces)
+        # note that pycompile/pyclean is already added to maintainer scripts
+        # and it should remain there even if __init__.py was the only .py file
+        if nsp:
+            try:
+                nsp = ns.remove_from_package(package, nsp,
+                                             stats['public_vers'])
+            except (IOError, OSError), e:
+                log.error('cannot remove __init__.py from package: %s', e)
+                exit(6)
+        if nsp:
+            dstdir = join('debian', package, 'usr/share/python/ns/')
+            if not exists(dstdir):
+                os.makedirs(dstdir)
+            with open(join(dstdir, package), 'a') as fp:
+                fp.writelines("%s\n" % i for i in nsp)
+
+        pyshared = join('debian', package, 'usr/share/pyshared/')
+        if isdir(pyshared) and not os.listdir(pyshared):
+            # remove empty pyshared directory
+            os.rmdir(pyshared)
+
+    dh.save()
+
+if __name__ == '__main__':
+    main()

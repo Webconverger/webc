@@ -2,7 +2,12 @@
 
 #set -e
 
-if [ -e /lib/live/boot.sh ]
-then
-	. /lib/live/boot.sh
-fi
+. /bin/live-boot
+
+. /scripts/functions
+
+mountroot ()
+{
+	# initramfs-tools entry point for live-boot is mountroot(); function
+	Live
+}

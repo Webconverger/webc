@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+
+case "$1" in
+install|upgrade)
+    if dpkg --compare-versions "$2" le "1.6.1" && [ -e /etc/cups/cupsd.conf ]; then
+        # Move cupsd.conf away as it becomes a non-conffile
+        mv /etc/cups/cupsd.conf /etc/cups/cupsd.conf.conffile-bak
+    fi
+
+    if dpkg --compare-versions "$2" le "1.7.5-7~"; then
+        # Delete cupsd-systemd-listen configuration files once used to socket-activate CUPS
+        for csl in cupsd-systemd-listen.conf cupsd-systemd-listen.conf.0; do
+            if [ -e /etc/cups/$csl ]; then
+                rm -f /etc/cups/$csl
+            fi
+        done
+    fi
+esac
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/cups/cupsd.conf.default 1.7.1-3~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/cups 1.7.1-6~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/pam.d/cups-daemon /etc/pam.d/cups 1.7.3-2~ -- "$@"
+# End automatically added section
+
+
+exit 0

@@ -854,11 +854,10 @@ class GConfSchema:
         # Fix the default value to be parsable by GVariant
         if self.type == 'list':
             l = self.default.strip()
-            if not (l[0] == '[' and l[-1] == ']'):
-                if not l:
-                    l = '[]'
-                else:
-                    raise GSettingsSchemaConvertException('Cannot parse default list value \'%s\' for key \'%s\'.' % (self.default, self.applyto or self.key))
+            if not l:
+                l = '[]'
+            elif not (l[0] == '[' and l[-1] == ']'):
+                raise GSettingsSchemaConvertException('Cannot parse default list value \'%s\' for key \'%s\'.' % (self.default, self.applyto or self.key))
             values = l[1:-1].strip()
             if not values:
                 self.default = '[]'

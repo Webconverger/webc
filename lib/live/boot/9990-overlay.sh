@@ -140,10 +140,32 @@ setup_unionfs ()
 					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
 				fi
 
+				modprobe fuse
 				#ulimit -c unlimited # enable core dumps
-				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${noforget_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
+				# Note that when -d is specified, git-fs runs in the foreground,
+				# so we can't use openvt --wait. Instead, just sleep a bit waiting
+				# for the filesystem to be mounted
+				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${gitfs_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
 				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}"
+
+				# Use this command to capture errors when the
+				# kernel panics and you cannot scroll to see it.
+				# You'll need a serial port (which is easy
+				# virtualbox, just let it dump to a raw file).
+				#git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" &>/dev/ttyS0
+
+				# Don't add -d here, then git-fs will run in
+				# the foreground and block. Adding & to run in
+				# the background does not seem to be suffcient.
+				# Instead, use openvt like above.
+				#
+				# Also note that if "debug" is on the kernel commandline,
+				# /usr/share/initramfs-tools/init will redirect output to a file,
+				# hiding any errors
+				#
+				# We redirect stderr to fd 7, to bypass boot.log redirection
+				# set by 9990-main.sh (which seems to sometimes eat messages).
+				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" 2>&7
 
 				log_end_msg
 				#maybe_break gitfs
@@ -261,7 +283,7 @@ setup_unionfs ()
 
 		if is_in_comma_sep_list overlay ${PERSISTENCE_METHOD}
 		then
-			overlays="${old_root_overlay_label} ${old_home_overlay_label} ${custom_overlay_label}"
+			overlays="${custom_overlay_label}"
 		fi
 
 		local overlay_devices
@@ -273,18 +295,6 @@ setup_unionfs ()
 				media="$(echo ${media} | tr ":" " ")"
 
 				case ${media} in
-					${old_root_overlay_label}=*)
-						device="${media#*=}"
-						fix_backwards_compatibility ${device} / union
-						overlay_devices="${overlay_devices} ${device}"
-						;;
-
-					${old_home_overlay_label}=*)
-						device="${media#*=}"
-						fix_backwards_compatibility ${device} /home bind
-						overlay_devices="${overlay_devices} ${device}"
-						;;
-
 					${custom_overlay_label}=*)
 						device="${media#*=}"
 						overlay_devices="${overlay_devices} ${device}"
@@ -416,7 +426,7 @@ setup_unionfs ()
 		live_rootfs="/live/rootfs/${d##*/}"
 		live_rootfs_list="${live_rootfs_list} ${live_rootfs}"
 		mkdir -p "${live_rootfs}"
-		case d in
+		case "${d}" in
 			*.dir)
 				# do nothing # mount -o bind "${d}" "${live_rootfs}"
 				;;
@@ -439,23 +449,23 @@ setup_unionfs ()
 	then
 		local custom_mounts
 		custom_mounts="/tmp/custom_mounts.list"
-		rm -rf ${custom_mounts} 2> /dev/null
+		rm -f ${custom_mounts}
 
 		# Gather information about custom mounts from devies detected as overlays
 		get_custom_mounts ${custom_mounts} ${overlay_devices}
 
-		[ -n "${DEBUG}" ] && cp ${custom_mounts} "/lib/live/mount/persistence"
+		[ -n "${LIVE_BOOT_DEBUG}" ] && cp ${custom_mounts} "/lib/live/mount/persistence"
 
 		# Now we do the actual mounting (and symlinking)
 		local used_overlays
 		used_overlays=""
 		used_overlays=$(activate_custom_mounts ${custom_mounts})
-		rm ${custom_mounts}
+		rm -f ${custom_mounts}
 
 		# Close unused overlays (e.g. due to missing $persistence_list)
 		for overlay in ${overlay_devices}
 		do
-			if echo ${used_overlays} | grep -qve "^\(.* \)\?${device}\( .*\)\?$"
+			if echo ${used_overlays} | grep -qve "^\(.* \)\?${overlay}\( .*\)\?$"
 			then
 				close_persistence_media ${overlay}
 			fi
@@ -465,5 +475,5 @@ setup_unionfs ()
         # ensure that a potentially stray tmpfs gets removed
         # otherways, initramfs-tools is unable to remove /live
         # and fails to boot
-        umount /live/overlay || true
+        umount /live/overlay > /dev/null 2>&1 || true
 }

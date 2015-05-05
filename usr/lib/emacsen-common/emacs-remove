@@ -1,0 +1,72 @@
+#!/usr/bin/perl -w
+
+use Errno;
+use strict;
+
+my $lib_dir = "/usr/lib/emacsen-common";
+my $invoked_by_old_pkg;
+my $flavor;
+
+require $lib_dir . "/lib.pl";
+
+umask 0022 or die "emacs-remove: can't set umask, aborting.";
+
+sub usage
+{
+  my($file_handle) = @_;
+  if($invoked_by_old_pkg)
+  {
+    print $file_handle "Usage: emacs-remove FLAVOR\n";
+  }
+  else
+  {
+    print $file_handle "Usage: emacs-remove --prerm FLAVOR\n";
+  }
+}
+
+if(scalar(@ARGV) == 1)
+{
+  $invoked_by_old_pkg = 1;
+  $flavor = $ARGV[0];
+}
+elsif(scalar(@ARGV) == 2 && $ARGV[0] eq '--prerm')
+{
+  $flavor = $ARGV[1];
+}
+else
+{
+  usage(*STDERR{IO});
+  exit(1);
+}
+
+my @ordered_pkg_list =
+    reverse
+    generate_add_on_install_list(get_installed_add_on_packages());
+
+my @installed_flavors = get_installed_flavors();
+
+foreach my $pkg (@ordered_pkg_list)
+{
+  print "Remove $pkg for $flavor\n";
+  my $script = $lib_dir . "/packages/remove/$pkg";
+  my $failed;
+  if(-e "$lib_dir/packages/compat/$pkg") # New-style package.
+  {
+    $failed = -e $script && (system($script, $flavor) != 0);
+  }
+  else # Old-style package.
+  {
+    $failed = -e $script && (system($script, $flavor, @installed_flavors) != 0);
+  }
+  if($failed)
+  {
+    print STDERR "ERROR: remove script from $pkg package failed\n";
+    exit(1);
+  }
+}
+
+# Silence "single use" warning.
+$::installed_flavor_state_dir = $::installed_flavor_state_dir;
+
+die "ERROR: cannot unlink $::installed_flavor_state_dir/$flavor: $!, "
+    unless (unlink("$::installed_flavor_state_dir/$flavor") or $!{ENOENT});

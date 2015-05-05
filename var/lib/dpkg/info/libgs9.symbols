@@ -36,7 +36,6 @@ libgs.so.9 libgs9 #MINVER#
  FF_serialize_type2_font@Base 9.01~
  Face_Create@Base 8.61.dfsg.1
  Face_Destroy@Base 8.61.dfsg.1
- FindBandSize@Base 8.61.dfsg.1
  FloydSteinbergC@Base 8.61.dfsg.1
  FloydSteinbergCloseC@Base 8.61.dfsg.1
  FloydSteinbergCloseG@Base 8.61.dfsg.1
@@ -68,6 +67,8 @@ libgs.so.9 libgs9 #MINVER#
  Matrix3_default@Base 8.61.dfsg.1
  MatrixA_default@Base 8.61.dfsg.1
  Memento_breakAt@Base 9.04~dfsg
+ Memento_breakOnFree@Base 9.06~dfsg
+ Memento_breakOnRealloc@Base 9.06~dfsg
  Memento_breakpoint@Base 9.04~dfsg
  Memento_calloc@Base 9.04~dfsg
  Memento_check@Base 9.04~dfsg
@@ -77,15 +78,19 @@ libgs.so.9 libgs9 #MINVER#
  Memento_find@Base 9.04~dfsg
  Memento_free@Base 9.04~dfsg
  Memento_getBlockNum@Base 9.04~dfsg
+ Memento_label@Base 9.06~dfsg
  Memento_listBlocks@Base 9.05~
  Memento_listNewBlocks@Base 9.05~
  Memento_malloc@Base 9.04~dfsg
  Memento_paranoidAt@Base 9.04~dfsg
  Memento_realloc@Base 9.04~dfsg
+ Memento_setMax@Base 9.06~dfsg
  Memento_setParanoia@Base 9.04~dfsg
+ Memento_stats@Base 9.06~dfsg
  MulDiv_Round@Base 8.61.dfsg.1
  MulTo64@Base 8.61.dfsg.1
  Order64@Base 8.61.dfsg.1
+ PDFDocEncodingLookup@Base 9.06~dfsg
  QuadGlyphList@Base 9.05~
  Range3_default@Base 8.61.dfsg.1
  Range4_default@Base 8.61.dfsg.1
@@ -170,6 +175,7 @@ libgs.so.9 libgs9 #MINVER#
  alpha_buffer_bits@Base 9.00~dfsg
  arg_copy@Base 8.61.dfsg.1
  arg_finit@Base 8.61.dfsg.1
+ arg_free@Base 9.06~dfsg
  arg_init@Base 8.61.dfsg.1
  arg_next@Base 8.61.dfsg.1
  arg_push_memory_string@Base 8.61.dfsg.1
@@ -308,6 +314,7 @@ libgs.so.9 libgs9 #MINVER#
  check_pcm_and_separation_names@Base 8.61.dfsg.1
  check_proc_failed@Base 8.61.dfsg.1
  check_range@Base 9.00~dfsg
+ check_rgb_color_model_comps@Base 9.06~dfsg
  check_type_failed@Base 8.61.dfsg.1
  chunk_locate_ptr@Base 8.61.dfsg.1
  cid_fill_CIDMap@Base 8.61.dfsg.1
@@ -334,13 +341,16 @@ libgs.so.9 libgs9 #MINVER#
  ciedefspace@Base 8.64~dfsg
  cieicc_prepare_caches@Base 9.00~dfsg
  clip_call_copy_alpha@Base 8.61.dfsg.1
+ clip_call_copy_alpha_hl_color@Base 9.06~dfsg
  clip_call_copy_color@Base 8.61.dfsg.1
  clip_call_copy_mono@Base 8.61.dfsg.1
  clip_call_copy_planes@Base 9.05~dfsg
  clip_call_fill_mask@Base 8.61.dfsg.1
  clip_call_fill_rectangle@Base 8.61.dfsg.1
+ clip_call_fill_rectangle_hl_color@Base 9.06~dfsg
  clip_call_strip_copy_rop2@Base 9.05~
  clip_call_strip_copy_rop@Base 8.61.dfsg.1
+ clip_call_strip_tile_rect_devn@Base 9.06~dfsg
  clip_call_strip_tile_rectangle@Base 8.61.dfsg.1
  clist_VMerror_recover@Base 8.61.dfsg.1
  clist_VMerror_recover_flush@Base 8.61.dfsg.1
@@ -355,8 +365,9 @@ libgs.so.9 libgs9 #MINVER#
  clist_close_writer_and_init_reader@Base 8.63.dfsg.1
  clist_compressor_init@Base 9.00~dfsg
  clist_compressor_template@Base 9.00~dfsg
- clist_compute_colors_used@Base 8.61.dfsg.1
+ clist_compute_color_usage@Base 9.06~dfsg
  clist_copy_alpha@Base 8.61.dfsg.1
+ clist_copy_alpha_hl_color@Base 9.06~dfsg
  clist_copy_band_complexity@Base 8.61.dfsg.1
  clist_copy_color@Base 8.61.dfsg.1
  clist_copy_mono@Base 8.61.dfsg.1
@@ -374,6 +385,7 @@ libgs.so.9 libgs9 #MINVER#
  clist_fill_parallelogram@Base 8.61.dfsg.1
  clist_fill_path@Base 8.61.dfsg.1
  clist_fill_rectangle@Base 8.61.dfsg.1
+ clist_fill_rectangle_hl_color@Base 9.06~dfsg
  clist_fill_trapezoid@Base 8.61.dfsg.1
  clist_fill_triangle@Base 8.61.dfsg.1
  clist_fillpage@Base 8.64~dfsg
@@ -410,6 +422,7 @@ libgs.so.9 libgs9 #MINVER#
  clist_setup_params@Base 8.61.dfsg.1
  clist_strip_copy_rop2@Base 9.05~
  clist_strip_copy_rop@Base 8.61.dfsg.1
+ clist_strip_tile_rect_devn@Base 9.06~dfsg
  clist_strip_tile_rectangle@Base 8.61.dfsg.1
  clist_stroke_path@Base 8.61.dfsg.1
  clist_teardown_render_threads@Base 8.63.dfsg.1
@@ -425,7 +438,7 @@ libgs.so.9 libgs9 #MINVER#
  cmd_check_clip_path@Base 8.61.dfsg.1
  cmd_clear_known@Base 8.61.dfsg.1
  cmd_delta_offsets@Base 8.61.dfsg.1
- cmd_drawing_colors_used@Base 8.61.dfsg.1
+ cmd_drawing_color_usage@Base 9.06~dfsg
  cmd_get_buffer_space@Base 8.63.dfsg.1
  cmd_put_bits@Base 8.61.dfsg.1
  cmd_put_color@Base 8.61.dfsg.1
@@ -456,6 +469,7 @@ libgs.so.9 libgs9 #MINVER#
  cmd_write_icctable@Base 9.00~dfsg
  cmd_write_page_rect_cmd@Base 8.64~dfsg
  cmd_write_rect_cmd@Base 8.61.dfsg.1
+ cmd_write_rect_hl_cmd@Base 9.06~dfsg
  cmd_write_unknown@Base 8.61.dfsg.1
  cmyk_16bit_map_cmyk_color@Base 8.71~dfsg
  cmyk_16bit_map_color_cmyk@Base 8.71~dfsg
@@ -530,6 +544,8 @@ libgs.so.9 libgs9 #MINVER#
  cos_object_memory@Base 8.61.dfsg.1
  cos_object_value@Base 8.61.dfsg.1
  cos_param_list_writer_init@Base 8.61.dfsg.1
+ cos_reference_alloc@Base 9.06~dfsg
+ cos_reference_procs@Base 9.06~dfsg
  cos_release@Base 8.61.dfsg.1
  cos_resource_value@Base 8.61.dfsg.1
  cos_stream_add@Base 8.61.dfsg.1
@@ -647,7 +663,6 @@ libgs.so.9 libgs9 #MINVER#
  display_set_callback@Base 8.61.dfsg.1
  dljet_mono_print_page@Base 8.61.dfsg.1
  dljet_mono_print_page_copies@Base 8.61.dfsg.1
- dlsym_wrapper@Base 8.61.dfsg.1
  dprintf_file_and_line@Base 8.61.dfsg.1
  dprintf_file_and_line_format@Base 8.61.dfsg.1
  dprintf_file_only_format@Base 8.61.dfsg.1
@@ -778,9 +793,11 @@ libgs.so.9 libgs9 #MINVER#
  font_gdir_get_outline@Base 8.61.dfsg.1
  font_param@Base 8.61.dfsg.1
  font_resource_encoded_alloc@Base 8.61.dfsg.1
+ font_resource_free@Base 9.06~dfsg
  font_restore@Base 8.61.dfsg.1
  font_string_array_param@Base 8.61.dfsg.1
  free_all_margins@Base 8.61.dfsg.1
+ free_color_space@Base 9.06~dfsg
  free_compressed_color_list@Base 8.61.dfsg.1
  free_indexed_map@Base 8.61.dfsg.1
  free_separation_names@Base 8.61.dfsg.1
@@ -850,7 +867,7 @@ libgs.so.9 libgs9 #MINVER#
  gdev_prn_clear_trailing_bits@Base 8.61.dfsg.1
  gdev_prn_close@Base 8.61.dfsg.1
  gdev_prn_close_printer@Base 8.61.dfsg.1
- gdev_prn_colors_used@Base 8.61.dfsg.1
+ gdev_prn_color_usage@Base 9.06~dfsg
  gdev_prn_copy_scan_lines@Base 8.61.dfsg.1
  gdev_prn_create_buf_planar@Base 8.61.dfsg.1
  gdev_prn_file_is_new@Base 8.61.dfsg.1
@@ -1014,14 +1031,12 @@ libgs.so.9 libgs9 #MINVER#
  gs_arcn@Base 8.61.dfsg.1
  gs_arcto@Base 8.61.dfsg.1
  gs_ashow_begin@Base 8.61.dfsg.1
- gs_ashow_n_init@Base 8.61.dfsg.1
  gs_atan2_degrees@Base 8.61.dfsg.1
  gs_attachattributecolorspace@Base 8.61.dfsg.1
  gs_atx23_device@Base 8.61.dfsg.1
  gs_atx24_device@Base 8.61.dfsg.1
  gs_atx38_device@Base 8.61.dfsg.1
  gs_awidthshow_begin@Base 8.61.dfsg.1
- gs_awidthshow_n_init@Base 8.61.dfsg.1
  gs_base_make_font@Base 8.61.dfsg.1
  gs_base_same_font@Base 8.61.dfsg.1
  gs_bbox_device@Base 8.61.dfsg.1
@@ -1097,9 +1112,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_cfax_device@Base 8.61.dfsg.1
  gs_char_flatness@Base 8.61.dfsg.1
  gs_charboxpath_begin@Base 8.61.dfsg.1
- gs_charboxpath_n_init@Base 8.61.dfsg.1
  gs_charpath_begin@Base 8.61.dfsg.1
- gs_charpath_n_init@Base 8.61.dfsg.1
  gs_chp2200_device@Base 8.61.dfsg.1
  gs_cid0_has_type2@Base 8.61.dfsg.1
  gs_cid0_indexed_font@Base 8.61.dfsg.1
@@ -1137,6 +1150,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_closepath@Base 8.61.dfsg.1
  gs_cmap_ToUnicode_add_pair@Base 8.61.dfsg.1
  gs_cmap_ToUnicode_alloc@Base 8.61.dfsg.1
+ gs_cmap_ToUnicode_free@Base 9.06~dfsg
  gs_cmap_adobe1_alloc@Base 8.61.dfsg.1
  gs_cmap_alloc@Base 8.61.dfsg.1
  gs_cmap_compute_identity@Base 8.61.dfsg.1
@@ -1146,6 +1160,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_cmap_enum_next_entry@Base 8.61.dfsg.1
  gs_cmap_enum_next_lookup@Base 8.61.dfsg.1
  gs_cmap_enum_next_range@Base 8.61.dfsg.1
+ gs_cmap_free@Base 9.06~dfsg
  gs_cmap_from_type42_cmap@Base 8.61.dfsg.1
  gs_cmap_init@Base 8.61.dfsg.1
  gs_cmap_is_identity@Base 8.61.dfsg.1
@@ -1198,7 +1213,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_create_composite_alpha@Base 8.61.dfsg.1
  gs_create_overprint@Base 8.61.dfsg.1
  gs_cshow_begin@Base 8.61.dfsg.1
- gs_cshow_n_init@Base 8.61.dfsg.1
  gs_cspace_alloc@Base 8.61.dfsg.1
  gs_cspace_base_space@Base 8.61.dfsg.1
  gs_cspace_build_CIEA@Base 8.61.dfsg.1
@@ -1221,6 +1235,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_cspace_new_DeviceN@Base 8.61.dfsg.1
  gs_cspace_new_DevicePixel@Base 8.61.dfsg.1
  gs_cspace_new_DeviceRGB@Base 8.61.dfsg.1
+ gs_cspace_new_ICC@Base 9.06~dfsg
  gs_cspace_new_Separation@Base 8.61.dfsg.1
  gs_cspace_set_devn_function@Base 8.61.dfsg.1
  gs_cspace_set_sepr_function@Base 8.61.dfsg.1
@@ -1248,8 +1263,12 @@ libgs.so.9 libgs9 #MINVER#
  gs_currentdash_offset@Base 8.61.dfsg.1
  gs_currentdash_pattern@Base 8.61.dfsg.1
  gs_currentdashadapt@Base 8.61.dfsg.1
+ gs_currentdefaultcmykicc@Base 9.06~dfsg
+ gs_currentdefaultgrayicc@Base 9.06~dfsg
+ gs_currentdefaultrgbicc@Base 9.06~dfsg
  gs_currentdevice@Base 8.61.dfsg.1
  gs_currentdevicecolor@Base 8.71~dfsg
+ gs_currentdevicenicc@Base 9.06~dfsg
  gs_currentdotlength@Base 8.61.dfsg.1
  gs_currentdotlength_absolute@Base 8.61.dfsg.1
  gs_currentfilladjust@Base 8.61.dfsg.1
@@ -1258,6 +1277,9 @@ libgs.so.9 libgs9 #MINVER#
  gs_currentgridfittt@Base 8.61.dfsg.1
  gs_currentgstate@Base 8.61.dfsg.1
  gs_currenthalftone@Base 8.61.dfsg.1
+ gs_currenthpglpathmode@Base 9.06~dfsg
+ gs_currenticcdirectory@Base 9.06~dfsg
+ gs_currentlabicc@Base 9.06~dfsg
  gs_currentlimitclamp@Base 8.61.dfsg.1
  gs_currentlinecap@Base 8.61.dfsg.1
  gs_currentlinejoin@Base 8.61.dfsg.1
@@ -1266,6 +1288,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_currentmatrix@Base 8.61.dfsg.1
  gs_currentminscreenlevels@Base 8.61.dfsg.1
  gs_currentmiterlimit@Base 8.61.dfsg.1
+ gs_currentnamedicc@Base 9.06~dfsg
  gs_currentopacityalpha@Base 8.61.dfsg.1
  gs_currentoverprint@Base 8.61.dfsg.1
  gs_currentoverprintmode@Base 8.61.dfsg.1
@@ -1281,6 +1304,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_currentshapealpha@Base 8.61.dfsg.1
  gs_currentsmoothness@Base 8.61.dfsg.1
  gs_currentsourcetransparent@Base 8.71~dfsg
+ gs_currentsrcgtagicc@Base 9.06~dfsg
  gs_currentstrokeadjust@Base 8.61.dfsg.1
  gs_currenttextknockout@Base 8.61.dfsg.1
  gs_currenttextrenderingmode@Base 8.61.dfsg.1
@@ -1400,6 +1424,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_free_const_bytestring@Base 8.61.dfsg.1
  gs_free_const_object@Base 8.61.dfsg.1
  gs_free_const_string@Base 8.61.dfsg.1
+ gs_free_copied_font@Base 9.06~dfsg
  gs_free_file_name@Base 8.61.dfsg.1
  gs_free_ref_array@Base 8.61.dfsg.1
  gs_fs600_device@Base 8.61.dfsg.1
@@ -1434,11 +1459,8 @@ libgs.so.9 libgs9 #MINVER#
  gs_glyph_data_from_string@Base 8.61.dfsg.1
  gs_glyph_data_substring@Base 8.61.dfsg.1
  gs_glyphpath_begin@Base 8.61.dfsg.1
- gs_glyphpath_init@Base 8.61.dfsg.1
  gs_glyphshow_begin@Base 8.61.dfsg.1
- gs_glyphshow_init@Base 8.61.dfsg.1
  gs_glyphwidth_begin@Base 8.61.dfsg.1
- gs_glyphwidth_init@Base 8.61.dfsg.1
  gs_grestore@Base 8.61.dfsg.1
  gs_grestore_only@Base 8.61.dfsg.1
  gs_grestoreall@Base 8.61.dfsg.1
@@ -1532,7 +1554,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_imager_setmatrix@Base 8.61.dfsg.1
  gs_imager_state_copied@Base 8.61.dfsg.1
  gs_imager_state_copy@Base 8.61.dfsg.1
- gs_imager_state_finalize@Base 9.05~
  gs_imager_state_initialize@Base 8.61.dfsg.1
  gs_imager_state_pre_assign@Base 8.61.dfsg.1
  gs_imager_state_release@Base 8.61.dfsg.1
@@ -1599,7 +1620,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_jpegcmyk_device@Base 8.61.dfsg.1
  gs_jpeggray_device@Base 8.61.dfsg.1
  gs_kshow_begin@Base 8.61.dfsg.1
- gs_kshow_n_init@Base 8.61.dfsg.1
  gs_kshow_next_char@Base 8.61.dfsg.1
  gs_kshow_previous_char@Base 8.61.dfsg.1
  gs_la50_device@Base 8.61.dfsg.1
@@ -1810,7 +1830,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_oki182_device@Base 8.61.dfsg.1
  gs_oki4w_device@Base 8.61.dfsg.1
  gs_okiibm_device@Base 8.61.dfsg.1
- gs_omni_device@Base 8.61.dfsg.1
  gs_opendevice@Base 8.61.dfsg.1
  gs_oprp_device@Base 8.61.dfsg.1
  gs_opvp_device@Base 8.61.dfsg.1
@@ -2014,10 +2033,14 @@ libgs.so.9 libgs9 #MINVER#
  gs_setcurvejoin@Base 8.61.dfsg.1
  gs_setdash@Base 8.61.dfsg.1
  gs_setdashadapt@Base 8.61.dfsg.1
+ gs_setdefaultcmykicc@Base 9.06~dfsg
+ gs_setdefaultgrayicc@Base 9.06~dfsg
  gs_setdefaultmatrix@Base 8.61.dfsg.1
+ gs_setdefaultrgbicc@Base 9.06~dfsg
  gs_setdevice@Base 8.61.dfsg.1
  gs_setdevice_no_erase@Base 8.61.dfsg.1
  gs_setdevice_no_init@Base 8.61.dfsg.1
+ gs_setdevicenprofileicc@Base 9.06~dfsg
  gs_setdotlength@Base 8.61.dfsg.1
  gs_setdotorientation@Base 8.61.dfsg.1
  gs_setfilladjust@Base 8.61.dfsg.1
@@ -2029,6 +2052,9 @@ libgs.so.9 libgs9 #MINVER#
  gs_sethalftone@Base 8.61.dfsg.1
  gs_sethalftone_allocated@Base 8.61.dfsg.1
  gs_sethalftone_prepare@Base 8.61.dfsg.1
+ gs_sethpglpathmode@Base 9.06~dfsg
+ gs_seticcdirectory@Base 9.06~dfsg
+ gs_setlabicc@Base 9.06~dfsg
  gs_setlimitclamp@Base 8.61.dfsg.1
  gs_setlinecap@Base 8.61.dfsg.1
  gs_setlinedashcap@Base 8.71~dfsg
@@ -2039,6 +2065,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_setmatrix@Base 8.61.dfsg.1
  gs_setminscreenlevels@Base 8.61.dfsg.1
  gs_setmiterlimit@Base 8.61.dfsg.1
+ gs_setnamedprofileicc@Base 9.06~dfsg
  gs_setnullcolor@Base 8.61.dfsg.1
  gs_setopacityalpha@Base 8.61.dfsg.1
  gs_setoverprint@Base 8.61.dfsg.1
@@ -2055,6 +2082,7 @@ libgs.so.9 libgs9 #MINVER#
  gs_setshapealpha@Base 8.61.dfsg.1
  gs_setsmoothness@Base 8.61.dfsg.1
  gs_setsourcetransparent@Base 8.71~dfsg
+ gs_setsrcgtagicc@Base 9.06~dfsg
  gs_setstrokeadjust@Base 8.61.dfsg.1
  gs_settextknockout@Base 8.61.dfsg.1
  gs_settextrenderingmode@Base 8.61.dfsg.1
@@ -2097,7 +2125,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_show_enum_alloc@Base 8.61.dfsg.1
  gs_show_enum_release@Base 8.61.dfsg.1
  gs_show_in_charpath@Base 8.61.dfsg.1
- gs_show_n_init@Base 8.61.dfsg.1
  gs_show_next@Base 8.61.dfsg.1
  gs_show_width@Base 8.61.dfsg.1
  gs_show_width_only@Base 8.61.dfsg.1
@@ -2121,7 +2148,6 @@ libgs.so.9 libgs9 #MINVER#
  gs_state_update_overprint@Base 8.61.dfsg.1
  gs_stcolor_device@Base 8.61.dfsg.1
  gs_stringwidth_begin@Base 8.61.dfsg.1
- gs_stringwidth_n_init@Base 8.61.dfsg.1
  gs_stroke@Base 8.61.dfsg.1
  gs_strokepath2@Base 8.71~dfsg
  gs_strokepath@Base 8.61.dfsg.1
@@ -2227,12 +2253,10 @@ libgs.so.9 libgs9 #MINVER#
  gs_viewclip@Base 8.61.dfsg.1
  gs_viewclippath@Base 8.61.dfsg.1
  gs_widthshow_begin@Base 8.61.dfsg.1
- gs_widthshow_n_init@Base 8.61.dfsg.1
  gs_xcf_device@Base 8.61.dfsg.1
  gs_xcfcmyk_device@Base 8.61.dfsg.1
  gs_xes_device@Base 8.61.dfsg.1
  gs_xyshow_begin@Base 8.61.dfsg.1
- gs_xyshow_n_init@Base 8.61.dfsg.1
  gsapi_delete_instance@Base 8.61.dfsg.1
  gsapi_exit@Base 8.61.dfsg.1
  gsapi_init_with_args@Base 8.61.dfsg.1
@@ -2298,6 +2322,7 @@ libgs.so.9 libgs9 #MINVER#
  gsicc_init_hash_cs@Base 9.00~dfsg
  gsicc_init_iccmanager@Base 9.00~dfsg
  gsicc_init_profile_info@Base 9.00~dfsg
+ gsicc_initialize_default_profile@Base 9.06~dfsg
  gsicc_initialize_iccsmask@Base 9.00~dfsg
  gsicc_link_free@Base 9.05~
  gsicc_manager_new@Base 9.00~dfsg
@@ -2344,9 +2369,6 @@ libgs.so.9 libgs9 #MINVER#
  gx_char_cache_init@Base 8.61.dfsg.1
  gx_check_fixed_diff_overflow@Base 8.61.dfsg.1
  gx_check_fixed_sum_overflow@Base 8.61.dfsg.1
- gx_check_tile_cache@Base 8.61.dfsg.1
- gx_check_tile_cache_current@Base 8.61.dfsg.1
- gx_check_tile_size@Base 8.61.dfsg.1
  gx_cie_check_rendering@Base 8.61.dfsg.1
  gx_cie_common_complete@Base 8.61.dfsg.1
  gx_cie_load_common_cache@Base 8.61.dfsg.1
@@ -2361,6 +2383,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_clip_to_rectangle@Base 8.61.dfsg.1
  gx_clist_reader_free_band_complexity_array@Base 8.61.dfsg.1
  gx_color_frac_map@Base 8.61.dfsg.1
+ gx_color_index2usage@Base 9.06~dfsg
  gx_color_interpolate_linear@Base 8.61.dfsg.1
  gx_color_interpolate_nearest@Base 8.61.dfsg.1
  gx_color_space_needs_cie_caches@Base 8.61.dfsg.1
@@ -2414,6 +2437,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_cpath_unshare@Base 8.61.dfsg.1
  gx_cspace_is_linear_default@Base 8.61.dfsg.1
  gx_cspace_no_linear@Base 8.61.dfsg.1
+ gx_curr_bbox@Base 9.06~dfsg
  gx_current_char@Base 8.61.dfsg.1
  gx_current_path@Base 8.61.dfsg.1
  gx_currentciecaches@Base 8.61.dfsg.1
@@ -2428,11 +2452,16 @@ libgs.so.9 libgs9 #MINVER#
  gx_dc_colored_masked@Base 8.61.dfsg.1
  gx_dc_colored_masked_fill_rect@Base 8.61.dfsg.1
  gx_dc_default_fill_masked@Base 8.61.dfsg.1
+ gx_dc_devn_fill_masked@Base 9.06~dfsg
+ gx_dc_devn_get_nonzero_comps@Base 9.06~dfsg
+ gx_dc_devn_masked@Base 9.06~dfsg
+ gx_dc_devn_masked_fill_rect@Base 9.06~dfsg
  gx_dc_ht_binary_get_nonzero_comps@Base 8.61.dfsg.1
  gx_dc_ht_colored_get_nonzero_comps@Base 8.61.dfsg.1
  gx_dc_ht_get_phase@Base 8.61.dfsg.1
  gx_dc_is_pattern1_color@Base 8.61.dfsg.1
  gx_dc_is_pattern1_color_clist_based@Base 8.63.dfsg.1
+ gx_dc_is_pattern1_color_with_trans@Base 9.06~dfsg
  gx_dc_is_pattern2_color@Base 8.61.dfsg.1
  gx_dc_no_get_phase@Base 8.61.dfsg.1
  gx_dc_pat_trans_fill_rectangle@Base 9.00~dfsg
@@ -2457,11 +2486,13 @@ libgs.so.9 libgs9 #MINVER#
  gx_dc_pure_masked@Base 8.61.dfsg.1
  gx_dc_pure_masked_fill_rect@Base 8.61.dfsg.1
  gx_dc_read_color@Base 8.61.dfsg.1
+ gx_dc_type_data_devn@Base 9.06~dfsg
  gx_dc_type_data_ht_binary@Base 8.61.dfsg.1
  gx_dc_type_data_ht_colored@Base 8.61.dfsg.1
  gx_dc_type_data_none@Base 8.61.dfsg.1
  gx_dc_type_data_null@Base 8.61.dfsg.1
  gx_dc_type_data_pure@Base 8.61.dfsg.1
+ gx_dc_type_devn@Base 9.06~dfsg
  gx_dc_type_ht_binary@Base 8.61.dfsg.1
  gx_dc_type_ht_colored@Base 8.61.dfsg.1
  gx_dc_type_none@Base 8.61.dfsg.1
@@ -2495,6 +2526,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_default_composite_is_closing@Base 8.62.dfsg.1
  gx_default_composite_is_friendly@Base 8.62.dfsg.1
  gx_default_copy_alpha@Base 8.61.dfsg.1
+ gx_default_copy_alpha_hl_color@Base 9.06~dfsg
  gx_default_copy_color@Base 8.61.dfsg.1
  gx_default_copy_mono@Base 8.61.dfsg.1
  gx_default_copy_rop@Base 8.61.dfsg.1
@@ -2558,6 +2590,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_default_start_render_thread@Base 8.61.dfsg.1
  gx_default_strip_copy_rop2@Base 9.05~
  gx_default_strip_copy_rop@Base 8.61.dfsg.1
+ gx_default_strip_tile_rect_devn@Base 9.06~dfsg
  gx_default_strip_tile_rectangle@Base 8.61.dfsg.1
  gx_default_stroke_path@Base 8.61.dfsg.1
  gx_default_sync_output@Base 8.61.dfsg.1
@@ -2607,8 +2640,11 @@ libgs.so.9 libgs9 #MINVER#
  gx_devn_reduce_colored_halftone@Base 8.61.dfsg.1
  gx_downscaler_copy_scan_lines@Base 9.04~dfsg
  gx_downscaler_fin@Base 9.04~dfsg
+ gx_downscaler_get_bits_rectangle@Base 9.06~dfsg
  gx_downscaler_getbits@Base 9.04~dfsg
  gx_downscaler_init@Base 9.04~dfsg
+ gx_downscaler_init_planar@Base 9.06~dfsg
+ gx_downscaler_scale@Base 9.06~dfsg
  gx_effective_clip_path@Base 8.61.dfsg.1
  gx_end_transparency_group@Base 8.61.dfsg.1
  gx_end_transparency_mask@Base 8.61.dfsg.1
@@ -2632,8 +2668,10 @@ libgs.so.9 libgs9 #MINVER#
  gx_forward_begin_typed_image@Base 8.61.dfsg.1
  gx_forward_close_device@Base 8.61.dfsg.1
  gx_forward_copy_alpha@Base 8.61.dfsg.1
+ gx_forward_copy_alpha_hl_color@Base 9.06~dfsg
  gx_forward_copy_color@Base 8.61.dfsg.1
  gx_forward_copy_mono@Base 8.61.dfsg.1
+ gx_forward_copy_planes@Base 9.06~dfsg
  gx_forward_copy_rop@Base 8.61.dfsg.1
  gx_forward_create_compositor@Base 9.04~dfsg
  gx_forward_decode_color@Base 8.61.dfsg.1
@@ -2676,6 +2714,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_forward_set_graphics_type_tag@Base 9.04~dfsg
  gx_forward_strip_copy_rop2@Base 9.05~
  gx_forward_strip_copy_rop@Base 8.61.dfsg.1
+ gx_forward_strip_tile_rect_devn@Base 9.06~dfsg
  gx_forward_strip_tile_rectangle@Base 8.61.dfsg.1
  gx_forward_stroke_path@Base 8.61.dfsg.1
  gx_forward_sync_output@Base 8.61.dfsg.1
@@ -2691,6 +2730,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_get_dc_type_index@Base 8.61.dfsg.1
  gx_get_largest_clipping_box@Base 8.61.dfsg.1
  gx_has_transfer@Base 9.00~dfsg
+ gx_hl_fill_linear_color_scanline@Base 9.06~dfsg
  gx_hld_get_color_component@Base 8.61.dfsg.1
  gx_hld_get_color_space_and_ccolor@Base 8.61.dfsg.1
  gx_hld_get_gstate_ptr@Base 8.61.dfsg.1
@@ -2776,6 +2816,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_lookup_fm_pair@Base 8.61.dfsg.1
  gx_make_clip_device_in_heap@Base 8.61.dfsg.1
  gx_make_clip_device_on_stack@Base 8.61.dfsg.1
+ gx_make_clip_device_on_stack_if_needed@Base 9.06~dfsg
  gx_make_rop_texture_device@Base 8.61.dfsg.1
  gx_mask_clip_initialize@Base 8.61.dfsg.1
  gx_matrix_to_fixed_coeff@Base 8.61.dfsg.1
@@ -2802,7 +2843,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_overprint_sep_fill_rectangle_1@Base 8.61.dfsg.1
  gx_overprint_sep_fill_rectangle_2@Base 8.61.dfsg.1
  gx_page_device_get_page_device@Base 8.61.dfsg.1
- gx_page_info_colors_used@Base 8.61.dfsg.1
+ gx_page_info_color_usage@Base 9.06~dfsg
  gx_parse_output_file_name@Base 8.61.dfsg.1
  gx_pat_cache_default_bits@Base 8.61.dfsg.1
  gx_pat_cache_default_tiles@Base 8.61.dfsg.1
@@ -2811,6 +2852,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_path_add_curve_notes@Base 8.61.dfsg.1
  gx_path_add_dash_expansion@Base 8.61.dfsg.1
  gx_path_add_dash_notes@Base 8.61.dfsg.1
+ gx_path_add_gap_notes@Base 9.06~dfsg
  gx_path_add_line_notes@Base 8.61.dfsg.1
  gx_path_add_lines_notes@Base 8.61.dfsg.1
  gx_path_add_partial_arc_notes@Base 8.61.dfsg.1
@@ -2889,6 +2931,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_remap_DeviceCMYK@Base 8.61.dfsg.1
  gx_remap_DeviceGray@Base 8.61.dfsg.1
  gx_remap_DeviceRGB@Base 8.61.dfsg.1
+ gx_remap_ICC_imagelab@Base 9.06~dfsg
  gx_remap_color@Base 8.61.dfsg.1
  gx_remap_concrete_DCMYK@Base 8.61.dfsg.1
  gx_remap_concrete_DGray@Base 8.61.dfsg.1
@@ -2925,6 +2968,7 @@ libgs.so.9 libgs9 #MINVER#
  gx_set_identity_transfer@Base 8.61.dfsg.1
  gx_set_miter_limit@Base 8.61.dfsg.1
  gx_set_overprint_cmyk@Base 9.00~dfsg
+ gx_set_overprint_rgb@Base 9.06~dfsg
  gx_set_pattern_procs_standard@Base 9.00~dfsg
  gx_set_pattern_procs_trans@Base 9.00~dfsg
  gx_set_rop_no_source@Base 8.61.dfsg.1
@@ -2978,6 +3022,8 @@ libgs.so.9 libgs9 #MINVER#
  ialloc_validate_memory@Base 8.61.dfsg.1
  ialloc_validate_object@Base 8.61.dfsg.1
  ialloc_validate_spaces@Base 8.61.dfsg.1
+ icc_link_finalize@Base 9.06~dfsg
+ icc_linkcache_finalize@Base 9.06~dfsg
  idivmod@Base 8.61.dfsg.1
  igc_reloc_const_string@Base 8.61.dfsg.1
  igc_reloc_param_string@Base 8.61.dfsg.1
@@ -3026,6 +3072,7 @@ libgs.so.9 libgs9 #MINVER#
  iodev_os_fopen@Base 8.61.dfsg.1
  ireclaim_l2_op_defs@Base 8.61.dfsg.1
  isLegalUTF8Sequence@Base 8.61.dfsg.1
+ ivalidate_clean_spaces@Base 9.06~dfsg
  lib_file_open@Base 8.61.dfsg.1
  lib_fopen@Base 8.61.dfsg.1
  lips_media_selection@Base 8.61.dfsg.1
@@ -3095,6 +3142,7 @@ libgs.so.9 libgs9 #MINVER#
  mem_true64_device@Base 8.61.dfsg.1
  mem_true64_word_device@Base 8.61.dfsg.1
  mem_word_get_bits_rectangle@Base 8.61.dfsg.1
+ mem_x_device@Base 9.06~dfsg
  memflip8x8@Base 8.61.dfsg.1
  mesh_init_fill_state@Base 8.61.dfsg.1
  mesh_padding@Base 8.61.dfsg.1
@@ -3296,7 +3344,6 @@ libgs.so.9 libgs9 #MINVER#
  pdf_close_aside@Base 8.61.dfsg.1
  pdf_close_contents@Base 8.61.dfsg.1
  pdf_close_text_contents@Base 8.61.dfsg.1
- pdf_close_text_document@Base 8.61.dfsg.1
  pdf_close_text_page@Base 8.61.dfsg.1
  pdf_cmap_alloc@Base 8.61.dfsg.1
  pdf_color_space_named@Base 8.61.dfsg.1
@@ -3365,6 +3412,7 @@ libgs.so.9 libgs9 #MINVER#
  pdf_font_descriptor_drop_complete_font@Base 8.61.dfsg.1
  pdf_font_descriptor_embedding@Base 8.61.dfsg.1
  pdf_font_descriptor_font@Base 8.61.dfsg.1
+ pdf_font_descriptor_free@Base 9.06~dfsg
  pdf_font_descriptor_id@Base 8.61.dfsg.1
  pdf_font_descriptor_is_subset@Base 8.61.dfsg.1
  pdf_font_descriptor_name@Base 8.61.dfsg.1
@@ -3378,6 +3426,7 @@ libgs.so.9 libgs9 #MINVER#
  pdf_font_type3_alloc@Base 8.61.dfsg.1
  pdf_font_used_glyph@Base 8.61.dfsg.1
  pdf_forget_resource@Base 8.61.dfsg.1
+ pdf_free_charproc_ownership@Base 9.06~dfsg
  pdf_free_font_cache@Base 8.61.dfsg.1
  pdf_free_resource_objects@Base 8.61.dfsg.1
  pdf_from_stream_to_text@Base 8.61.dfsg.1
@@ -3421,7 +3470,6 @@ libgs.so.9 libgs9 #MINVER#
  pdf_obtain_parent_type0_font_resource@Base 8.61.dfsg.1
  pdf_open_aside@Base 8.61.dfsg.1
  pdf_open_contents@Base 8.61.dfsg.1
- pdf_open_document@Base 8.61.dfsg.1
  pdf_open_obj@Base 8.61.dfsg.1
  pdf_open_page@Base 8.61.dfsg.1
  pdf_open_separate@Base 8.61.dfsg.1
@@ -3512,7 +3560,6 @@ libgs.so.9 libgs9 #MINVER#
  pdf_write_FontDescriptor@Base 8.61.dfsg.1
  pdf_write_FontFile_entry@Base 8.61.dfsg.1
  pdf_write_OneByteIdentityH@Base 8.61.dfsg.1
- pdf_write_and_free_all_resource_objects@Base 8.61.dfsg.1
  pdf_write_bitmap_fonts_Encoding@Base 8.61.dfsg.1
  pdf_write_cid_systemInfo_separate@Base 8.61.dfsg.1
  pdf_write_cid_system_info@Base 8.61.dfsg.1
@@ -3537,6 +3584,7 @@ libgs.so.9 libgs9 #MINVER#
  pdfmark_process@Base 8.61.dfsg.1
  pdfmark_scan_int@Base 8.61.dfsg.1
  pdfmark_write_article@Base 8.61.dfsg.1
+ pdfwrite_pdf_open_document@Base 9.06~dfsg
  pixel_image_params@Base 8.61.dfsg.1
  plane_device_init@Base 8.61.dfsg.1
  png_push_fill_buffer@Base 8.61.dfsg.1
@@ -3631,6 +3679,7 @@ libgs.so.9 libgs9 #MINVER#
  psw_write_page_header@Base 8.61.dfsg.1
  psw_write_page_trailer@Base 8.61.dfsg.1
  ptr_const_string_procs@Base 8.61.dfsg.1
+ ptr_name_index_procs@Base 9.06~dfsg
  ptr_ref_mark@Base 8.61.dfsg.1
  ptr_ref_procs@Base 8.61.dfsg.1
  ptr_ref_unmark@Base 8.61.dfsg.1
@@ -4125,6 +4174,7 @@ libgs.so.9 libgs9 #MINVER#
  t1_hinter__vstem3@Base 8.61.dfsg.1
  t1_hinter__vstem@Base 8.61.dfsg.1
  term_patch_fill_state@Base 8.61.dfsg.1
+ text_data_free@Base 9.06~dfsg
  tiff_close@Base 8.71~dfsg
  tiff_compression_allowed@Base 8.71~dfsg
  tiff_compression_id@Base 8.71~dfsg
@@ -4141,6 +4191,7 @@ libgs.so.9 libgs9 #MINVER#
  tiff_set_compression@Base 8.71~dfsg
  tiff_set_fields_for_printer@Base 8.71~dfsg
  tile_clip_initialize@Base 8.61.dfsg.1
+ tile_clip_release@Base 9.06~dfsg
  tile_clip_set_phase@Base 8.61.dfsg.1
  tile_rect_trans_blend@Base 8.70~
  tile_rect_trans_simple@Base 8.70~
@@ -4191,6 +4242,7 @@ libgs.so.9 libgs9 #MINVER#
  width@Base 8.61.dfsg.1
  write_bmp_header@Base 8.61.dfsg.1
  write_bmp_separated_header@Base 8.61.dfsg.1
+ write_font_resources@Base 9.06~dfsg
  write_matrix_in@Base 8.61.dfsg.1
  z1_data_procs@Base 8.61.dfsg.1
  z1_glyph_info@Base 8.61.dfsg.1

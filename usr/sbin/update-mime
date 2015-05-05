@@ -24,6 +24,7 @@ $conffile	= "/etc/update-mime.conf";
 $mailcap	= "/etc/mailcap";
 $mailcapdef	= "/usr/lib/mime/mailcap";
 $mimedir	= "/usr/lib/mime/packages";
+$appsdir	= "/usr/share/applications";
 $orderfile	= "/etc/mailcap.order";
 $defpriority    = 5;
 $localgen	= 0;
@@ -63,14 +64,12 @@ do $conffile if -f $conffile;
 %packages;
 %priorities;
 @order;
-
+$counter=1;
 
 
 sub ReadEntries
 {
-	my($pkg,$priority,$counter);
-
-	$counter=1;
+	my($pkg,$priority);
 
 #	foreach $file (glob "$mimedir/*") {
 	foreach $file (map { glob $_.'/*' } split ':',$mimedir) {
@@ -86,6 +85,10 @@ sub ReadEntries
 			while (<FILE>) {
 				chomp;
 				next if m/^\s*$|^\s*\#/;
+				if (! m(^[a-zA-Z0-9*][a-zA-Z0-9!#\$&^_.+-]*/[a-zA-Z0-9*][a-zA-Z0-9!#\$&^_.+-]*;) ) {
+					print STDERR "Warning: mailcap line not starting with a media type in $pkg\n";
+					print STDERR "Problematic line: $_\n";
+				}
 				if (m/priority\s*=\s*(\d+)\s*($|;)/i) {
 					$priority=$1;
 				} else {
@@ -96,7 +99,6 @@ sub ReadEntries
 					print STDERR "       $_\n";
 					$priority=$defpriority;
 				}
-				s/([^\s;]\s+)(?![\'\"])([^\s;]*)%s([^\s;]*)/$1'$2%s$3'/g;
 				$entries{$counter} = $_;
 				push @{$packages{$pkg}},$counter;
 				push @{$priorities{$priority}},$counter;
@@ -110,6 +112,75 @@ sub ReadEntries
 	}
 }
 
+sub RecurseIntoDirectories
+{
+	my @files;
+	foreach my $dir (@_) {
+		next if ($dir =~ m!(^|/)(\.|\#)|(\~)$!);
+		my @entries = glob "$dir/*";
+		push @files, RecurseIntoDirectories(grep { -d $_ } @entries);
+		push @files, grep { -f $_ } @entries;
+	}
+	return @files;
+}
+
+sub ReadDesktopEntries
+{
+	my($pkg,$priority);
+
+	foreach $file (RecurseIntoDirectories(split ':',$appsdir)) {
+		next if ($file =~ m!(^|/)(\.|\#)|(\~)$!);
+		next unless ($file =~ m/\.desktop$/);
+		($pkg) = ($file =~ m|/([^/]*)\.desktop$|);
+		print STDERR "$pkg:\n" if $debug;
+
+		next if (defined $packages{$pkg});
+		$packages{$pkg} = [];
+
+		if (open(FILE,"<$file")) {
+			my($terminal, $name, $icon, $exec, @types) = ("test=test -n \"\$DISPLAY\"", $pkg);
+			while (<FILE>) {
+				chomp;
+				next if (m/^\s*$|^\s*\#/);
+				if (m/^Terminal=(\w+)/i) {
+					$terminal = "needsterminal" if ($1 eq "true");
+				}
+				elsif (m/^Name=(.+)/i) {
+					$name = $1;
+				}
+				elsif (m/^Icon=(.+)/i) {
+					$icon = $1;
+				}
+				elsif (m/Exec=(.*)$/i) {
+					$exec = $1;
+					$exec =~ s/%[fFuU]/%s/g;
+					$exec .= " %s" if ($exec !~ m/%s/);
+				}
+				elsif (m/MimeType=(.*)/i) {
+					push @types, split(/;/, $1);
+				}
+			}
+			if (!defined($exec) || !scalar(@types)) {
+				close(FILE);
+				next;
+			}
+			$exec =~ s/%c/$name/g;
+			$exec =~ s/%i/--icon $icon/g;
+			foreach $type (@types) {
+				my $entry = "$type; $exec; $terminal";
+				$priority=$defpriority;
+				$entries{$counter} = $entry;
+				push @{$packages{$pkg}},$counter;
+				push @{$priorities{$priority}},$counter;
+				print STDERR "$counter: $entry\n" if $debug;
+				$counter++;
+			}
+			close(FILE);
+		} else {
+			print STDERR "Warning: could not open file '$file' -- $!\n";
+		}
+	}
+}
 
 
 sub ReadOrder
@@ -121,6 +192,11 @@ sub ReadOrder
 				s/\s*\#.*$//;
 				next if m/^\s*$/;
 				push @order,$_;
+				/(.*):/;
+				my $pkg = $1;
+				unless( grep {/^$pkg$/} keys(%packages)) {
+					print STDERR "Warning: package $pkg listed in /etc/mailcap.order does not have mailcap entries.\n";
+				}
 			}
 			close(FILE);
 		} else {
@@ -270,6 +346,7 @@ sub UpdateMailcap
 
 
 ReadEntries();
+ReadDesktopEntries();
 ReadOrder();
 @list = OrderEntries();
 UpdateMailcap(@list);

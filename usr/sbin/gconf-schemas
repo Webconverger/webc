@@ -68,11 +68,15 @@ if schemas:
 
     fd = os.open("/dev/null",os.O_WRONLY)
     save_stdout=os.dup(1)
+    save_stderr=os.dup(2)
     os.dup2(fd,1)
+    os.dup2(fd,2)
     os.close(fd)
     res=os.spawnvpe(os.P_WAIT,'gconftool-2',['gconftool-2',arg]+schemas,env)
     os.dup2(save_stdout,1)
     os.close(save_stdout)
+    os.dup2(save_stderr,2)
+    os.close(save_stderr)
 
     shutil.rmtree(tmp_home)
 

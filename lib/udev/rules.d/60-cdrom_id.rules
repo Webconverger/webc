@@ -9,10 +9,18 @@ ENV{DEVTYPE}!="disk", GOTO="cdrom_end"
 KERNEL=="sr[0-9]*", ENV{ID_CDROM}="1"
 
 # media eject button pressed
-ENV{DISK_EJECT_REQUEST}=="?*", RUN+="cdrom_id --eject-media $tempnode", GOTO="cdrom_end"
+ENV{DISK_EJECT_REQUEST}=="?*", RUN+="cdrom_id --eject-media $devnode", GOTO="cdrom_end"
 
 # import device and media properties and lock tray to
 # enable the receiving of media eject button events
-IMPORT{program}="cdrom_id --lock-media $tempnode"
+IMPORT{program}="cdrom_id --lock-media $devnode"
+
+# These rules will create symlinks for the CD/DVD reader, to help old
+# programs which are unable to automatically discover the devices.
+# The results are undefined for system with multiple CD/DVD devices.
+ENV{ID_CDROM}=="?*",        SYMLINK+="cdrom", OPTIONS+="link_priority=-100"
+ENV{ID_CDROM_CD_RW}=="?*",  SYMLINK+="cdrw",  OPTIONS+="link_priority=-100"
+ENV{ID_CDROM_DVD}=="?*",    SYMLINK+="dvd",   OPTIONS+="link_priority=-100"
+ENV{ID_CDROM_DVD_RW}=="?*", SYMLINK+="dvdrw", OPTIONS+="link_priority=-100"
 
 LABEL="cdrom_end"

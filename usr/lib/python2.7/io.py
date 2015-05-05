@@ -4,7 +4,7 @@ builtin open function is defined in this module.
 At the top of the I/O hierarchy is the abstract base class IOBase. It
 defines the basic interface to a stream. Note, however, that there is no
 separation between reading and writing to streams; implementations are
-allowed to throw an IOError if they do not support a given operation.
+allowed to raise an IOError if they do not support a given operation.
 
 Extending IOBase is RawIOBase which deals simply with the reading and
 writing of raw bytes to a stream. FileIO subclasses RawIOBase to provide
@@ -68,15 +68,16 @@ SEEK_END = 2
 # version however.
 class IOBase(_io._IOBase):
     __metaclass__ = abc.ABCMeta
+    __doc__ = _io._IOBase.__doc__
 
 class RawIOBase(_io._RawIOBase, IOBase):
-    pass
+    __doc__ = _io._RawIOBase.__doc__
 
 class BufferedIOBase(_io._BufferedIOBase, IOBase):
-    pass
+    __doc__ = _io._BufferedIOBase.__doc__
 
 class TextIOBase(_io._TextIOBase, IOBase):
-    pass
+    __doc__ = _io._TextIOBase.__doc__
 
 RawIOBase.register(FileIO)
 

@@ -4,7 +4,7 @@ package Debconf::FrontEnd::Kde::Ui_DebconfWizard;
 
 use strict;
 use warnings;
-use Qt3Support4;
+
 use QtCore4;
 use QtGui4;
 
@@ -141,10 +141,10 @@ sub retranslateUi {
     my ( $self, $debconfWizard ) = @_;
     $debconfWizard->setWindowTitle( Qt::Application::translate( 'DebconfWizard', "Debconf", undef, Qt::Application::UnicodeUTF8() ) );
     $self->{title}->setText( Qt::Application::translate( 'DebconfWizard', "title", undef, Qt::Application::UnicodeUTF8() ) );
-    $self->{bhelp}->setText( Qt::Application::translate( 'DebconfWizard', "Help", undef, Qt::Application::UnicodeUTF8() ) );
-    $self->{bback}->setText( Qt::Application::translate( 'DebconfWizard', "< Back", undef, Qt::Application::UnicodeUTF8() ) );
-    $self->{bnext}->setText( Qt::Application::translate( 'DebconfWizard', "Next >", undef, Qt::Application::UnicodeUTF8() ) );
-    $self->{bcancel}->setText( Qt::Application::translate( 'DebconfWizard', "Cancel", undef, Qt::Application::UnicodeUTF8() ) );
+    $self->{bHelp}->setText( Qt::Application::translate( 'DebconfWizard', "Help", undef, Qt::Application::UnicodeUTF8() ) );
+    $self->{bBack}->setText( Qt::Application::translate( 'DebconfWizard', "< Back", undef, Qt::Application::UnicodeUTF8() ) );
+    $self->{bNext}->setText( Qt::Application::translate( 'DebconfWizard', "Next >", undef, Qt::Application::UnicodeUTF8() ) );
+    $self->{bCancel}->setText( Qt::Application::translate( 'DebconfWizard', "Cancel", undef, Qt::Application::UnicodeUTF8() ) );
 } # retranslateUi
 
 sub retranslate_ui {

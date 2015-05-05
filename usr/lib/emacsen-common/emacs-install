@@ -1,0 +1,87 @@
+#!/usr/bin/perl -w
+
+use Errno;
+use strict;
+
+my $lib_dir = "/usr/lib/emacsen-common";
+my $invoked_by_old_pkg;
+my $context;
+my $flavor;
+
+require $lib_dir . "/lib.pl";
+
+umask 0022 or die "emacs-install: can't set umask, aborting.";
+
+sub usage
+{
+  my($file_handle) = @_;
+  if($invoked_by_old_pkg)
+  {
+    print $file_handle "Usage: emacs-install FLAVOR\n";
+  }
+  else
+  {
+    print $file_handle "Usage: emacs-install (--preinst|--postinst) FLAVOR\n";
+  }
+}
+
+if(scalar(@ARGV) == 1)
+{
+  $invoked_by_old_pkg = 1;
+  $flavor = $ARGV[0];
+  $context = 'postinst;'
+}
+elsif (scalar(@ARGV) == 2)
+{
+  if($ARGV[0] eq '--preinst') { $context = 'preinst'; }
+  elsif($ARGV[0] eq '--postinst') { $context = 'postinst'; }
+  else
+  {
+    usage(*STDERR{IO});
+    exit(1);
+  }
+  $flavor = $ARGV[1];
+}
+else
+{
+  usage(*STDERR{IO});
+  exit(1);
+}
+
+if($context eq 'preinst')
+{
+  my $f = "$::installed_flavor_state_dir/$flavor";
+  unlink("$f");
+  die "ERROR: cannot unlink $f: $!, " unless (unlink($f) or $!{ENOENT});
+  exit(0);
+}
+
+# Must be --postinst.
+
+my @installed_flavors = get_installed_flavors();
+
+# Mark as safe to include in list of flavors for package setup.
+ex('touch', "$::installed_flavor_state_dir/$flavor");
+
+my @ordered_pkg_list =
+    generate_add_on_install_list(get_installed_add_on_packages());
+
+foreach my $pkg (@ordered_pkg_list)
+{
+  print "Install $pkg for $flavor\n";
+  my $script = $lib_dir . "/packages/install/$pkg";
+  my $failed;
+  if(-e "$lib_dir/packages/compat/$pkg") # New-style package.
+  {
+    $failed = -e $script && (system($script, $flavor) != 0);
+  }
+  else # Old-style package.
+  {
+    $failed = -e $script && (system($script, $flavor, @installed_flavors) != 0);
+  }
+  if($failed)
+  {
+    print STDERR "ERROR: install script from $pkg package failed\n";
+    exit(1);
+  }
+}

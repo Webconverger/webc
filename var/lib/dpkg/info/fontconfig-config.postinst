@@ -4,98 +4,99 @@ set -e
 
 . /usr/share/debconf/confmodule
 
-# Remove old ucf stuff
-rm -rf /var/lib/fontconfig
-
-CONFAVAIL=/etc/fonts/conf.avail
+CONFAVAIL=/usr/share/fontconfig/conf.avail
 CONFDIR=/etc/fonts/conf.d
 
-# Remove old defoma stuff
-if [ -x "`which defoma-app 2>/dev/null`" ]; then
-    defoma-app purge fontconfig >/dev/null || true
-fi
-DEFOMA=/var/lib/defoma/fontconfig.d/
-if [ -d $DEFOMA ]; then
-    rm -f $DEFOMA/fonts.conf
-    rm -f $DEFOMA/id-cache
-    rmdir $DEFOMA
-fi
-rm -f /etc/defoma/fontconfig.subst-rule
+# Check if this is the initial configuration and not an upgrade of an
+# existing configuration
+# Usage: if is_initial_configuration "$@"; then ... fi from top level
+is_initial_configuration() {
+    # Plain installation
+    if [ "$1" = configure ] && [ -z "$2" ]; then
+        return 0
+    fi
+    # Configuration via dpkg-reconfigure
+    if [ "$1" = reconfigure ] || [ "$DEBCONF_RECONFIGURE" ]; then
+        return 0
+    fi
+    return 1
+}
 
-db_get fontconfig/hinting_type
-hinting_type="$RET"
+if is_initial_configuration "$@"; then
+    db_get fontconfig/hinting_type
+    hinting_type="$RET"
 
-unhinted="10-unhinted.conf"
-autohint="10-autohint.conf"
+    unhinted="10-unhinted.conf"
+    autohint="10-autohint.conf"
 
-if [ -h $CONFDIR/$unhinted ]; then
-	rm $CONFDIR/$unhinted
-fi
-if [ -h $CONFDIR/$autohint ]; then
-	rm $CONFDIR/$autohint
-fi
-	
-case "$hinting_type" in
-"Native")
-	;;
-"Autohinter")
-	ln -s $CONFAVAIL/$autohint $CONFDIR/$autohint
-	;;
-"None")
-	ln -s $CONFAVAIL/$unhinted $CONFDIR/$unhinted
-	;;
-esac
+    if [ -h $CONFDIR/$unhinted ]; then
+    	rm $CONFDIR/$unhinted
+    fi
+    if [ -h $CONFDIR/$autohint ]; then
+    	rm $CONFDIR/$autohint
+    fi
 
-
-db_get fontconfig/subpixel_rendering
-subpixel_rendering="$RET"
-
-subpixel="10-sub-pixel-rgb.conf"
-no_subpixel="10-no-sub-pixel.conf"
-
-if [ -h $CONFDIR/$subpixel ]; then
-	rm $CONFDIR/$subpixel
-fi
-
-if [ -h $CONFDIR/$no_subpixel ]; then
-	rm $CONFDIR/$no_subpixel
-fi
-
-case "$subpixel_rendering" in
-"Automatic")
-	;;
-"Always")
-	ln -s $CONFAVAIL/$subpixel $CONFDIR/$subpixel
-	;;
-"Never")
-	ln -s $CONFAVAIL/$no_subpixel $CONFDIR/$no_subpixel
-	;;
-esac
+    case "$hinting_type" in
+    "Native")
+    	;;
+    "Autohinter")
+    	ln -s $CONFAVAIL/$autohint $CONFDIR/$autohint
+    	;;
+    "None")
+    	ln -s $CONFAVAIL/$unhinted $CONFDIR/$unhinted
+    	;;
+    esac
 
 
-db_get fontconfig/enable_bitmaps
-enable_bitmaps="$RET"
+    db_get fontconfig/subpixel_rendering
+    subpixel_rendering="$RET"
 
-yes_bitmaps="70-yes-bitmaps.conf"
-no_bitmaps="70-no-bitmaps.conf"
+    subpixel="10-sub-pixel-rgb.conf"
+    no_subpixel="10-no-sub-pixel.conf"
 
-if [ -h $CONFDIR/$yes_bitmaps ]; then
-	rm $CONFDIR/$yes_bitmaps
-fi
+    if [ -h $CONFDIR/$subpixel ]; then
+    	rm $CONFDIR/$subpixel
+    fi
 
-if [ -h $CONFDIR/$no_bitmaps ]; then
-	rm $CONFDIR/$no_bitmaps
-fi
+    if [ -h $CONFDIR/$no_subpixel ]; then
+    	rm $CONFDIR/$no_subpixel
+    fi
 
-case "$enable_bitmaps" in
-"true")
-	ln -s $CONFAVAIL/$yes_bitmaps $CONFDIR/$yes_bitmaps
-	;;
-*)
-	ln -s $CONFAVAIL/$no_bitmaps $CONFDIR/$no_bitmaps
-	;;
-esac
+    case "$subpixel_rendering" in
+    "Automatic")
+    	;;
+    "Always")
+    	ln -s $CONFAVAIL/$subpixel $CONFDIR/$subpixel
+    	;;
+    "Never")
+    	ln -s $CONFAVAIL/$no_subpixel $CONFDIR/$no_subpixel
+    	;;
+    esac
 
+
+    db_get fontconfig/enable_bitmaps
+    enable_bitmaps="$RET"
+
+    yes_bitmaps="70-yes-bitmaps.conf"
+    no_bitmaps="70-no-bitmaps.conf"
+
+    if [ -h $CONFDIR/$yes_bitmaps ]; then
+    	rm $CONFDIR/$yes_bitmaps
+    fi
+
+    if [ -h $CONFDIR/$no_bitmaps ]; then
+    	rm $CONFDIR/$no_bitmaps
+    fi
+
+    case "$enable_bitmaps" in
+    "true")
+    	ln -s $CONFAVAIL/$yes_bitmaps $CONFDIR/$yes_bitmaps
+    	;;
+    *)
+    	ln -s $CONFAVAIL/$no_bitmaps $CONFDIR/$no_bitmaps
+    	;;
+    esac
+fi # end changes applied only for initial config / reconfiguration
 
 # Create /usr/local/share/fonts
 LOCALDIR=/usr/local/share/fonts
@@ -106,4 +107,104 @@ if [ ! -d $LOCALDIR ]; then
   fi
 fi
 
+# fontconfig-config 2.11.0-5 (and earlier) created /etc/fonts.conf.d by mistake
+# remove it
+
+if [ -d /etc/fonts.conf.d ]; then
+    rmdir --ignore-fail-on-non-empty /etc/fonts.conf.d
+fi
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-autohint.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-no-sub-pixel.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-sub-pixel-bgr.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-sub-pixel-rgb.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-sub-pixel-vbgr.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-sub-pixel-vrgb.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/10-unhinted.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/11-lcdfilter-default.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/11-lcdfilter-legacy.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/11-lcdfilter-light.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/20-fix-globaladvance.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/20-unhint-small-vera.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/25-unhint-nonlatin.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/30-metric-aliases.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/30-urw-aliases.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/40-nonlatin.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/45-latin.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/49-sansserif.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/50-user.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/51-local.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/60-latin.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/65-fonts-persian.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/65-khmer.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/65-nonlatin.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/69-unifont.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/70-force-bitmaps.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/70-no-bitmaps.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/70-yes-bitmaps.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/80-delicious.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/conf.avail/90-synthetic.conf 2.10 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/fonts/fonts.dtd 2.10 -- "$@"
+# End automatically added section
 

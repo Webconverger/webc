@@ -120,6 +120,7 @@ def removeduppaths():
     sys.path[:] = L
     return known_paths
 
+
 def _init_pathinfo():
     """Return a set containing all existing directory entries from sys.path"""
     d = set()
@@ -450,7 +451,7 @@ def setcopyright():
     for supporting Python development.  See www.python.org for more information.""")
     here = os.path.dirname(os.__file__)
     __builtin__.license = _Printer(
-        "license", "See http://www.python.org/%.3s/license.html" % sys.version,
+        "license", "See http://www.python.org/psf/license/",
         ["LICENSE.txt", "LICENSE"],
         [os.path.join(here, os.pardir), here, os.curdir])
 

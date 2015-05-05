@@ -10,7 +10,7 @@ copy_live_to ()
 
 	if [ -z "${MODULETORAM}" ]
 	then
-		size=$(fs_size "" ${copyfrom}/${LIVE_MEDIA_PATH} "used")
+		size=$(fs_size "" ${copyfrom}/ "used")
 	else
 		MODULETORAMFILE="${copyfrom}/${LIVE_MEDIA_PATH}/${MODULETORAM}"
 

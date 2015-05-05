@@ -25,7 +25,7 @@ the General Decimal Arithmetic Specification:
 
 and IEEE standard 854-1987:
 
-    www.cs.berkeley.edu/~ejr/projects/754/private/drafts/854-1987/dir.html
+    http://en.wikipedia.org/wiki/IEEE_854-1987
 
 Decimal floating point has finite precision with arbitrarily large bounds.
 
@@ -136,7 +136,6 @@ __all__ = [
 
 __version__ = '1.70'    # Highest version of the spec this complies with
 
-import copy as _copy
 import math as _math
 import numbers as _numbers
 
@@ -1581,7 +1580,13 @@ class Decimal(object):
 
     def __float__(self):
         """Float representation."""
-        return float(str(self))
+        if self._isnan():
+            if self.is_snan():
+                raise ValueError("Cannot convert signaling NaN to float")
+            s = "-nan" if self._sign else "nan"
+        else:
+            s = str(self)
+        return float(s)
 
     def __int__(self):
         """Converts self to an int, truncating if necessary."""
@@ -3659,6 +3664,8 @@ class Decimal(object):
         if self._is_special:
             sign = _format_sign(self._sign, spec)
             body = str(self.copy_abs())
+            if spec['type'] == '%':
+                body += '%'
             return _format_align(sign, body, spec)
 
         # a type of None defaults to 'g' or 'G', depending on context
@@ -6027,7 +6034,10 @@ def _parse_format_specifier(format_spec, _localeconv=None):
         format_dict['decimal_point'] = '.'
 
     # record whether return type should be str or unicode
-    format_dict['unicode'] = isinstance(format_spec, unicode)
+    try:
+        format_dict['unicode'] = isinstance(format_spec, unicode)
+    except NameError:
+        format_dict['unicode'] = False
 
     return format_dict
 

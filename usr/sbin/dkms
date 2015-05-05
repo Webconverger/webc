@@ -163,11 +163,14 @@ set_kernel_source_dir()
 
 # A little test function for DKMS commands that only work on one kernel.
 have_one_kernel() {
-    (( ${#kernelver[@]} > 1 )) && \
-	die 4 $"The action $1 does not support multiple kernel version" \
-	$"parameters on the command line."
-    [[ $all ]] && die 5 $"The action $1 does not support the --all" \
-	$"parameter."
+    if (( ${#kernelver[@]} != 1 )); then
+        die 4 $"The action $1 does not support multiple kernel version" \
+        $"parameters on the command line."
+    fi
+    if [[ $all ]]; then
+        die 5 $"The action $1 does not support the --all" \
+        $"parameter."
+    fi
 }
 
 # Set up the kernelver and arch arrays.  You must have a 1:1 correspondence --
@@ -761,16 +764,17 @@ moduleconfig_update_obsoletes()
     # do all the changes at once, record the diffs for posterity
     for file in "$@"; do
 	[[ $file && -w $file ]] || continue
+	_tmpf="$temp_dir_name/${file##*/}.new"
 	if [[ $file = /etc/sysconfig/kernel ]]; then
-	    sed "${sa_sck_o[@]}" "$file" > "$temp_dir_name/${file##*/}.new"
+	    [ -z "${sa_sck_o[@]}" ] || sed "${sa_sck_o[@]}" "$file" > "$_tmpf"
 	else
-	    sed "${sa_mc_o[@]}" "$file" > "$temp_dir_name/${file##*/}.new"
+	    [ -z "${sa_mc_o[@]}" ] || sed "${sa_mc_o[@]}" "$file" > "$_tmpf"
 	fi
-	if ! mod_diff=$(diff -u "$temp_dir_name/${file##*/}.new" "$file"); then
+	if [ -f "$_tmpf" ] && ! mod_diff=$(diff -u "$_tmpf" "$file"); then
 	    echo $"$file updated to replace obsoleted module references:"
 	    echo "$mod_diff"
-	    cp -fp "$temp_dir_name/${file##*/}.new" "$file"
-	    rm -f "$temp_dir_name/${file##*/}.new"
+	    cp -fp "$_tmpf" "$file"
+	    rm -f "$_tmpf"
 	fi
     done
 }

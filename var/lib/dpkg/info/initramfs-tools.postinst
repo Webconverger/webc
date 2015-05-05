@@ -3,7 +3,8 @@
 set -e
 
 if [ ! -e /etc/initramfs-tools/modules ]; then
-	cp /usr/share/initramfs-tools/modules /etc/initramfs-tools/
+	sed '/^###/d' /usr/share/initramfs-tools/modules \
+		> /etc/initramfs-tools/modules
 fi
 
 # Regenerate initramfs whenever we go to dpkg state `installed'

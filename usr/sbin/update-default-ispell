@@ -8,16 +8,20 @@ dico_checkroot ();
 
 my $triggered;
 my $skip_symlinks_setting;
-my $class  = "ispell";
+my $class   = "ispell";
+my $program = "update-default-$class";
+my $debug   = 1 if defined $ENV{'DICT_COMMON_DEBUG'};
 
 # Parse options
 foreach my $option ( @ARGV ){
-  if ( $option eq "--dico-postinst" ){
-    $skip_symlinks_setting++;  # Do not set symlinks from dictionaries-comon.postinst
-    $triggered++;              # Do not enable trigger from dictionaries-comon.postinst
+  if ( $option eq "--skip-symlinks" ){
+    # Do not try to set symlinks at $linkdir.
+    $skip_symlinks_setting++;
   } elsif ( $option eq "--rebuild" ){
-    # Do nothing, keep sometime as no-op for old maintainer scripts.
+    # info is always rebuilt, so this option is not needed.
+    # It is preserved as a no-op for old maintainer scripts.
   } elsif ( $option eq "--triggered" ){
+    # Do not try to enable update-default-$class} trigger but run the script.
     $triggered++;
   } else {
     die "update-default-$class: Bad option \"$option\". Aborting..."
@@ -26,18 +30,21 @@ foreach my $option ( @ARGV ){
 
 version ('2.0');
 
-# Enable trigger if needed
+updatedb ($class);
+my $dictionaries = loaddb ($class);
+
+# Preprocess default symlinks
+dico_preprocess_default_symlinks ($class,$dictionaries);
+
+# Enable trigger if needed. Exit cleanly on success.
 unless ( $triggered ){
   exit if dico_activate_trigger("update-default-$class");
 }
 
 my $manual;
-my $libdir    = "/usr/lib/ispell";
 my $question  = "dictionaries-common/default-$class";
 my $iquestion = "dictionaries-common/invalid_debconf_value";
-my $linkdir   = "/etc/dictionaries-common";
-my $program   = "update-default-$class";
-my $debug     = 1 if defined $ENV{'DICT_COMMON_DEBUG'};
+my $debconf_dbase_corruption_question = "dictionaries-common/debconf_database_corruption";
 my $newflag   = "/var/cache/dictionaries-common/flag-$class-new";
 
 # This flag is intended for remove-default-$class. If we are here we do not
@@ -47,9 +54,6 @@ if ( -f $newflag ){
   unlink $newflag
     or print STDERR " $program: Warning: could not remove $newflag\n";
 }
-
-updatedb ($class);
-my $dictionaries = loaddb ($class);
 
 my ($ret, $value)  = get ($question);
 if ( $ret == 0 && $value ){
@@ -72,46 +76,64 @@ if ( $ret == 0 && $value ){
   # Question is empty. No default nor class elements available. Proceed as for manual.
   print STDERR "$program: No \"$class\" elements left.\n" if $debug;
   $manual++;
-} else {
-  # Question is empty, but $class elements are installed. Two possibilities.
-  if ( -x "/usr/bin/apt-extracttemplates" ){
-    # apt-utils is installed. Other possibility is debconf database corruption.
-    my $shared_question = "shared/packages-$class";
-    print STDERR "$program: Question empty but elements installed for class \"$class\"\n";
-    print STDERR "  $question: return code: \"$ret\", value: \"$value\"\n";
-    print STDERR "  Choices: " . metaget ($question, "choices") . "\n";
-    my ($shared_ret,$shared_owners) = metaget ($shared_question, "owners");
-    print STDERR "  $shared_question: return code: \"$shared_ret\" owners/error: \"$shared_owners\"\n";
-    print STDERR "  Installed elements: " . join(', ',sort keys %{$dictionaries}) . "\n\n";
-    print STDERR "  Please see \"/usr/share/doc/dictionaries-common/README.problems\", section\n";
-    print STDERR "  \"Debconf database corruption\" for recovery info.\n\n";
-  } else {
-    # apt-utils is not installed, so $class templates may not have been parsed at preconfigure stage.
-    # Delay settings until ispell dictionaries/wordlists are configured and their debconf templates parsed.
-    print STDERR "$program: apt-utils is not installed. Delay settings until $class elements are configured.\n";
-    $manual++;
+} else { # Question is empty, but $class elements are installed.
+
+  # This seems to be debconf database corruption. Warn loudly about it.
+  my %class_pkgs = ();
+  foreach my $lang ( keys %{$dictionaries} ){
+    if ( defined $dictionaries->{$lang}->{'package'} ){
+      $class_pkgs{$dictionaries->{$lang}->{'package'}}++;
+    }
+  }
+  my $class_packages = join (', ',sort keys %class_pkgs);
+
+  subst($debconf_dbase_corruption_question,"class_packages",$class_packages);
+  subst($debconf_dbase_corruption_question,"question",$question);
+  fset ($debconf_dbase_corruption_question,"seen","false");
+  input("high",$debconf_dbase_corruption_question);
+  title ("dictionaries-common: ispell dictionaries");
+  go ();
+
+  # Try harder to get a value after default file
+  my $dico_sysdefault = dico_getsysdefault($class);
+  if ( defined $dico_sysdefault ){ # Not undef. Can be an empty or non-empty string.
+    if ( $dico_sysdefault ){ # True: Non-empty string and not 0
+      if ( defined $dictionaries->{$dico_sysdefault} ){
+	$value = $dico_sysdefault;
+	set($question,$value);
+	print STDERR "$program: Missing value for \"$question\" question. Using \"$value\"\n";
+      }
+    } else { # False: The empty string or 0
+      $value = "Manual symlinks setting (Forced after default file)";
+      set($question,$value);
+      $manual++;
+    }
   }
 }
 
 unless ( $manual ){
   # Handle invalid debconf values
   if ( not exists $dictionaries->{$value} ){
-    my @available_keys = ();
-    foreach ( split (/\s*,\s*/, metaget ($question, "choices")) ){
-      # strip leading/trailing whitespace and create a list of available keys
-      s/^\s+//;
-      s/\s+$//;
-      push (@available_keys,$_) if ( defined $dictionaries->{$_} );
-    }
+    # This can happen because either an invalid debconf value or a
+    # void value due to debconf database corruption. Try after stored
+    # values to stay in the safe side.
+    my @available_keys = sort {lc $a cmp lc $b} keys %$dictionaries;
     my $choices    = join (', ', sort {lc $a cmp lc $b} @available_keys);
+    print STDERR "$program: Trying to get a default value from \"$choices\"\n";
     my $forced_key = $available_keys[0] ||
       die "$program: Selected ispell dictionary" .
-      " \"$value\" \n" .
-      "does not correspond to any installed package in the system\n" .
-      "and no alternative ispell dictionary could be selected.\n";
-    subst($iquestion,"value",$value);
-    fset ($iquestion,"seen","false");
-    input("high",$iquestion);                # Warn about what happened
+	" \"$value\" \n" .
+	"does not correspond to any installed package in the system\n" .
+	"and no alternative ispell dictionary could be selected.\n";
+
+    # Warn about what might have happened if not debconf database corruption
+    if ( $value ){
+      subst($iquestion,"value",$value);
+      fset ($iquestion,"seen","false");
+      input("high",$iquestion);
+    }
+
+    # Prepare a selection box to get a default.
     subst ($question, "choices", $choices);  # Put sane values in debconf choices field
     subst ($question, "echoices", $choices); # Put sane values in debconf echoices field
     set ($question, $forced_key);            # Set debconf value to a sane one
@@ -125,8 +147,15 @@ unless ( $manual ){
       if ( $ret != 0 ); # This should never be reached
 
     # Set manual flag if needed to avoid later symlinking
-    $manual++ if ( $value =~ m/^Manual.*/i )
+    $manual++ if ( $value =~ m/^Manual.*/i );
   }
+}
+
+# Set default value for ispell dictionaries and wordlists
+if ( $manual ){
+  dico_setsysdefault ($class,"");
+} else {
+  dico_setsysdefault ($class,$value);
 }
 
 # This here is only for ispell, not wordlist
@@ -135,10 +164,7 @@ my $cache_dir            = "/var/cache/dictionaries-common";
 my $emacsen_default_file = "$cache_dir/emacsen-ispell-default.el";
 my $ispell_dicts_list    = "$cache_dir/ispell-dicts-list.txt";
 
-if ( $manual ){
-  dico_setsysdefault ($class,"");
-} else {
-  dico_setsysdefault ($class,$value);
+unless ( $manual ){
 
   # Get ispell default dict for emacsen
   if ( exists $dictionaries->{$value}{"emacs-display"}
@@ -177,35 +203,18 @@ system ("ispell-autobuildhash --triggered") == 0
 build_emacsen_support ();
 build_jed_support ();
 build_squirrelmail_support ();
+
+# Clean orphaned remove files and its contents.
+dico_clean_orphaned_removefiles($class,$dictionaries);
 # -- End of specific ispell support 
 
-# Set default symlink(s) and complain if not possible. This should not be done
-# from dictionaries-common postinst, but from dictionaries/wordlists postinst.
-# Otherwise this is called before hashes are autobuild and will fail. If
-# autobuildhash is used, do sylinking now, after autobuildhash.
+# Set default symlink(s) and complain if not possible.
+# For ispell dictionaries using auto-buildhash this should not be done
+# from dictionaries-common postinst, but from ispell dictionaries postinst.
+# Otherwise this is called before hashes are autobuild and will fail.
+# d-c.postinst will call update-default-ispell with --skip-symlinks option.
 unless ( $skip_symlinks_setting or $manual ) {
-  my $dictionaries = loaddb ($class); # Refresh reference, build_stuff above changed it
-  if ( defined $dictionaries->{$value}{"hash-name"} ){
-    print STDERR "update-default-$class: \"$value\" -> \"$dictionaries->{$value}{'hash-name'}\"\n"
-      if $debug;
-    my $hash   = "$libdir/" . $dictionaries->{$value}{"hash-name"};
-    foreach my $i (".hash", ".aff") {
-      if (-e "$hash$i") {
-	system "ln -fs $hash$i $linkdir/default$i";
-      } else {
-	die "
-When trying to make the default link to a ispell dictionary
-the file to link [$hash$i] was not found. Please report this as a bug to the
-maintainer of the ispell dictionary package you tried to
-select.
-In the meantime select other default value for your ispell dictionary.\n";
-      }
-    }
-  } else {
-    die "Selected ispell dictionary:\n" .
-      " $value \n" .
-      "does not contain a hash name entry in the database.\n";
-  }
+ dico_set_default_symlink($class,$value);
 }
 
 # Local Variables:
@@ -220,7 +229,7 @@ update-default-ispell - update default ispell dictionary
 
 =head1 SYNOPSIS
 
- update-default-ispell [--dico-postinst] [--triggered]
+ update-default-ispell [--skip-symlinks] [--triggered]
 
 =head1 DESCRIPTION
 
@@ -228,30 +237,36 @@ WARNING: Not to be used from the command line unless you know very well what you
 
 This program is intended to be called from ispell dictionary package postinst,
 from B<select-default-ispell> or
-from dictionaries-common postinst (with B<--dico-postinst>).
+from dictionaries-common postinst.
 
-When called under dpkg control without the B<--dico-postinst> option, a dictionaries-common
-trigger is enabled to be run later.
-In the triggered run (or when is called from the command line or with --trigger option),
-reads the system default from the debconf database and set
-default links in F</etc/dictionaries-common> pointing to the appropriate files in
-F</usr/lib/ispell/>.  Also
-updates the system-wide setting F</etc/dictionaries-common/ispell-default>.
-and rebuilds the
-F</var/cache/dictionaries-common/ispell.db> 
-and the emacsen, jed, and SquirrelMail support (to be put in
-F</var/cache/dictionaries-common/>) from the files in
-F</var/lib/dictionaries-common/ispell>
+When called under dpkg control with the B<--trigger> option the
+script is run normally, otherwise the dictionaries-common
+B<update-default-ispell> trigger is enabled
+for later run.
 
-When called from from dictionaries-common postinst with B<--dico-postinst> symlinks
-creation step will be skipped and trigger not enabled.
+With the B<--skip-symlinks> option the symlinks setting is skipped.
+This is needed for B<update-default-ispell> when called from
+dictionaries-common postinst, since autobuilt hashes may not yet
+be available.
+
+When run normally (from the command line or with B<--trigger>)
+this script rebuilds the info at
+F</var/cache/dictionaries-common/ispell.db>
+after files under F</var/lib/dictionaries-common/ispell>,
+reads the system default from the debconf database and
+unless disabled, set default symlinks in F</etc/dictionaries-common>
+pointing to the appropriate files in
+F</usr/lib/ispell/>.
+
+For ispell this script also updates the system-wide setting
+F</etc/dictionaries-common/ispell-default> and the emacsen,
+jed, and SquirrelMail support after known info.
 
 =head1 OPTIONS
 
---dico-postinst  Do not enable trigger nor try to set default symlinks.
---triggered      Run all the code instead of trying to enable
-                 update-default-ispell trigger
-
+ --skip-symlinks  Do not try to set symlinks at /etc/dictionaries-common dir.
+ --triggered      Run all the code instead of trying to enable
+                  update-default-ispell trigger
 
 =head1 SEE ALSO
 
@@ -259,7 +274,7 @@ The dictionaries-common policy document
 
 =head1 AUTHORS
 
-Rafael Laboissiere
+Rafael Laboissiere,
 Agustin Martin Domingo
 
 =cut

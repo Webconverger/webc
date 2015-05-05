@@ -37,7 +37,7 @@ SETTINGS="$SETTINGS${1:+ wol $1}${2:+ sopass $2}"
 case "$IF_ETHERNET_AUTONEG" in
 '')	;;
 on|off)	SETTINGS="$SETTINGS autoneg $IF_ETHERNET_AUTONEG" ;;
-*)	SETTINGS="$SETTINGS autoneg on $IF_ETHERNET_AUTONEG" ;;
+*)	SETTINGS="$SETTINGS autoneg on advertise $IF_ETHERNET_AUTONEG" ;;
 esac
 
 [ -z "$SETTINGS" ] || $ETHTOOL --change "$IFACE" $SETTINGS

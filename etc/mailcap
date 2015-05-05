@@ -26,28 +26,38 @@
 ###############################################################################
 
 text/plain; less '%s'; needsterminal
-text/html; /usr/bin/sensible-browser '%s'; description=HTML Text; nametemplate=%s.html
-application/pdf; epdfview '%s'; test=test -n "$DISPLAY"; nametemplate=%s.pdf
-application/x-pdf; epdfview '%s'; test=test -n "$DISPLAY"; nametemplate=%s.pdf
-application/x-tar; /bin/tar tvf -; print=/bin/tar tvf - | print text/plain:-; copiousoutput
-application/x-gtar; /bin/tar tvzf -; print=/bin/tar tvzf - | print text/plain:-; copiousoutput
-text/plain; more '%s'; needsterminal
-text/plain; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
-text/plain; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
+application/x-troff-man; /usr/bin/man -X100 -l '%s'; test=test -n "$DISPLAY" -a -e /usr/bin/gxditview; description=Man page
+text/troff; /usr/bin/man -X100 -l '%s'; test=test -n "$DISPLAY" -a -e /usr/bin/gxditview; description=Man page
+application/x-troff-man; /usr/bin/man -l '%s'; needsterminal; description=Man page
+text/troff; /usr/bin/man -l '%s'; needsterminal; description=Man page
+text/html; /usr/bin/sensible-browser %s; description=HTML Text; nametemplate=%s.html
+application/pdf; epdfview %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf
+application/x-pdf; epdfview %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf
+application/x-troff-man; /usr/bin/nroff -mandoc -Tutf8; copiousoutput; print=/usr/bin/nroff -mandoc -Tutf8 | print text/plain:-
+text/plain; more %s; needsterminal
+text/plain; vim %s; needsterminal
+text/plain; view %s; edit=vim %s; compose=vim %s; test=test -x /usr/bin/vim; needsterminal
+text/plain; view %s; edit=vi %s; compose=vi %s; needsterminal
+application/x-troff-man; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page
+text/troff; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page
 text/*; less '%s'; needsterminal
-text/*; view '%s'; edit=vim '%s'; compose=vim '%s'; test=test -x /usr/bin/vim; needsterminal
-image/gif  ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/jpeg ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/png  ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/tiff ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-cmu-raster; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-portable-anymap; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-portable-bitmap; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-portable-graymap; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-portable-pixmap; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-xbitmap ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-xpixmap ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-image/x-xwindowdump ; /usr/bin/xloadimage '%s' ; test=test -n "$DISPLAY"
-text/*; more '%s'; needsterminal
-text/*; view '%s'; edit=vi '%s'; compose=vi '%s'; needsterminal
-application/x-debian-package; /usr/lib/mime/debian-view '%s'; needsterminal; description=Debian GNU/Linux Package; nametemplate=%s.deb
+text/*; view %s; edit=vim %s; compose=vim %s; test=test -x /usr/bin/vim; needsterminal
+application/x-tar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
+application/x-gtar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
+application/x-ustar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
+image/gif; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/jpeg; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/pcx; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/png; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/tiff; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-cmu-raster; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-portable-anymap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-portable-bitmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-portable-graymap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-portable-pixmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-xbitmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-xpixmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+image/x-xwindowdump; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+text/*; more %s; needsterminal
+text/*; view %s; edit=vi %s; compose=vi %s; needsterminal
+application/vnd.debian.binary-package; /usr/lib/mime/debian-view %s; needsterminal; description=Debian GNU/Linux Package; nametemplate=%s.deb

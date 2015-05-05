@@ -2,9 +2,7 @@
 #
 # Architecture names are formed as a combination of the system name
 # (from ostable) and CPU name (from this table) after mapping from
-# the Debian triplet (from triplettable). A list of architecture
-# names in the Debian ‘sid’ distribution can be found in the archtable
-# file.
+# the Debian triplet (from triplettable).
 #
 # Column 1 is the Debian name for the CPU, used to form the cpu part in
 # the Debian triplet.
@@ -16,7 +14,7 @@
 # Column 5 is the endianness (byte ordering in numbers)
 #
 # <Debian name>	<GNU name>	<config.guess regex>	<Bits>	<Endianness>
-i386		i486		(i[3456]86|pentium)	32	little
+i386		i586		(i[34567]86|pentium)	32	little
 ia64		ia64		ia64			64	little
 alpha		alpha		alpha.*			64	little
 amd64		x86_64		x86_64			64	little
@@ -29,8 +27,13 @@ m32r		m32r		m32r			32	big
 m68k		m68k		m68k			32	big
 mips		mips		mips(eb)?		32	big
 mipsel		mipsel		mipsel			32	little
+mips64		mips64		mips64			64	big
+mips64el	mips64el	mips64el		64	little
+or1k		or1k		or1k			32	big
 powerpc		powerpc		(powerpc|ppc)		32	big
+powerpcel	powerpcle	powerpcle		32	little
 ppc64		powerpc64	(powerpc|ppc)64		64	big
+ppc64el		powerpc64le	powerpc64le		64	little
 s390		s390		s390			32	big
 s390x		s390x		s390x			64	big
 sh3		sh3		sh3			32	little

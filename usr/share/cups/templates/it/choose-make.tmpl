@@ -1,6 +1,6 @@
 <DIV CLASS="indent">
 
-<H2 CLASS="title">{op=modify-printer?Modify {printer_name}:Aggiungi stampante}</H2>
+<H2 CLASS="title">{op=modify-printer?Modifica {printer_name}:Aggiungi una stampante}</H2>
 
 <FORM METHOD="POST" ACTION="/admin" ENCTYPE="multipart/form-data">
 <INPUT TYPE="HIDDEN" NAME="org.cups.sid" VALUE="{$org.cups.sid}">
@@ -31,10 +31,10 @@
 <TR>
 <TH CLASS="label">Condivisione:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_SHARED" VALUE="{?printer_is_shared}">
-{?printer_is_shared=?Do Not:{?printer_is_shared=0?Do Not:}} Condividi questa stampante</TD>
+{?printer_is_shared=?No:{?printer_is_shared=0?No:}} Condividi questa stampante</TD>
 </TR>
 <TR>
-<TH CLASS="label">Crea:</TH>
+<TH CLASS="label">Make:</TH>
 <TD>
 <SELECT NAME="PPD_MAKE" SIZE="10">
 {[ppd_make]<OPTION VALUE="{ppd_make}" {?current_make={ppd_make}?SELECTED:}>{ppd_make}}
@@ -56,7 +56,7 @@ TYPE="FILE" NAME="PPD_FILE"></TD>
 </TR>
 <TR>
 <TD></TD>
-<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Add Printer:Modify Printer}"></TD>
+<TD><INPUT TYPE="SUBMIT" VALUE="{op=add-printer?Aggiungi una stampante:Modifica la stampante}"></TD>
 </TR>
 </TABLE>
 

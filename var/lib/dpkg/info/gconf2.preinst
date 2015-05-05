@@ -1,0 +1,8 @@
+#! /bin/sh
+set -e
+
+if dpkg --compare-versions "$2" lt-nl 3.2.6-2; then
+  update-alternatives --remove gconftool /usr/bin/gconftool-2
+fi
+
+

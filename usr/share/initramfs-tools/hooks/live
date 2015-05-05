@@ -1,101 +1,75 @@
 #!/bin/sh
 
-# initramfs hook for live-boot (Debian Live)
-
 set -e
-
-# initramfs-tools header
-
-PREREQ=""
-
-prereqs()
-{
-	echo "${PREREQ}"
-}
-
-case "${1}" in
-	prereqs)
-		prereqs
-		exit 0
-		;;
-esac
 
 . /usr/share/initramfs-tools/hook-functions
 
-[ "${QUIET}" ] || echo -n live-boot:
+[ "${QUIET}" ] || echo -n "live-boot:"
 
-# live-boot hook
+# Reading configuration file from filesystem and live-media
+for _FILE in /etc/live/boot.conf /etc/live/boot/* \
+	     /lib/live/mount/media/live/boot.conf /lib/live/mount/media/live/boot/*
+do
+	if [ -e "${_FILE}" ]
+	then
+		. "${_FILE}"
+	fi
+done
 
-# Reading configuration file from filesystem
-if [ -e /etc/live/boot.conf ]
+# Checking live-boot
+if [ ! -e /bin/live-boot ]
 then
-	. /etc/live/boot.conf
-fi
-
-if ls /etc/live/boot.d/*.conf > /dev/null 2>&1
-then
-	for _FILE in /etc/live/boot.d/*.conf
-	do
-		. ${_FILE}
-	done
-fi
-
-# Handling live-boot
-
-if [ ! -e /lib/live/boot ]
-then
+	echo
 	echo "W: live-boot-initramfs-tools (backend) installed without live-boot,"
 	echo "W: this initramfs will *NOT* have live support."
 	exit 0
 fi
 
-[ "${QUIET}" ] || echo -n " "core
+[ "${QUIET}" ] || echo -n " core"
+
+mkdir -p "${DESTDIR}/bin"
+cp -a /bin/live-boot /lib/live/boot "${DESTDIR}/bin"
 
 mkdir -p "${DESTDIR}/lib/live"
-cp -a /lib/live/boot.sh /lib/live/boot "${DESTDIR}/lib/live"
+cp -a /lib/live/boot "${DESTDIR}/lib/live"
 
 # klibc dependencies
 for FILE in /lib/libacl* /lib/libblkid* /lib/libuuid* /lib/libdevmapper* /lib/libattr*
 do
-	if [ ! -e "${DESTDIR}"/"${FILE}" ] && ls ${FILE} > /dev/null 2>&1
+	if [ ! -e "${DESTDIR}/${FILE}" ] && ls "${FILE}" > /dev/null 2>&1
 	then
-		cp -a "${FILE}" "${DESTDIR}"/"${FILE}"
+		cp -a "${FILE}" "${DESTDIR}/${FILE}"
 	fi
 done
 
-# udev dependencies (squeeze and newer)
+# udev dependencies
 for FILE in /lib/udev/*_id
 do
-	if [ ! -e "${DESTDIR}/${FILE}" ]
-	then
-		mkdir -p "${DESTDIR}/lib/udev"
-		copy_exec "${FILE}" /lib/udev
-	fi
+	copy_exec "${FILE}"
 done
 
 if [ -e /lib/udev/rules.d/60-cdrom_id.rules ]
 then
-	mkdir -p ${DESTDIR}/lib/udev/rules.d
-	cp -p /lib/udev/rules.d/60-cdrom_id.rules ${DESTDIR}/lib/udev/rules.d
+	mkdir -p "${DESTDIR}/lib/udev/rules.d"
+	cp -p /lib/udev/rules.d/60-cdrom_id.rules "${DESTDIR}/lib/udev/rules.d"
 fi
 
-# Handling other stuff
+[ "${QUIET}" ] || echo -n " filesystems"
 
-[ "${QUIET}" ] || echo -n " "filesystems
 # Configuration: keymap (usefull when using encryption)
 if [ -x /bin/loadkeys ] && [ -r /etc/console/boottime.kmap.gz ]
 then
-	copy_exec /bin/loadkeys /bin
+	copy_exec /bin/loadkeys
 
-	mkdir -p "${DESTDIR}"/etc
-	cp /etc/console/boottime.kmap.gz "${DESTDIR}"/etc
+	mkdir -p "${DESTDIR}/etc"
+	cp /etc/console/boottime.kmap.gz "${DESTDIR}/etc"
 fi
 
 # Configuration: Unique ID
 if [ -n "${LIVE_GENERATE_UUID}" ]
 then
-	mkdir -p "${DESTDIR}"/conf
-	uuidgen -r > "${DESTDIR}"/conf/uuid.conf
+	mkdir -p "${DESTDIR}/conf"
+	uuidgen -r > "${DESTDIR}/conf/uuid.conf"
 fi
 
 # Filesystem: btrfs
@@ -104,13 +78,17 @@ manual_add_modules btrfs
 # Filesystem: cifs
 if [ -x /sbin/mount.cifs ]
 then
-	copy_exec /sbin/mount.cifs /sbin
+	copy_exec /sbin/mount.cifs
         manual_add_modules cifs
 fi
 
 # Filesystem: ext3/ext4
 manual_add_modules ext3
 manual_add_modules ext4
+
+# Filesystem: hfs/hfsplus
+manual_add_modules hfs
+manual_add_modules hfsplus
 
 # Filesystem: jffs2
 manual_add_modules jffs2
@@ -121,7 +99,7 @@ then
 fi
 
 # Filesystem: squashfs
-copy_exec /sbin/losetup /sbin
+copy_exec /sbin/losetup
 manual_add_modules loop
 manual_add_modules squashfs
 manual_add_modules sqlzma
@@ -147,7 +125,7 @@ manual_add_modules vfat
 # Filesystem: ntfs
 manual_add_modules ntfs
 
-[ "${QUIET}" ] || echo -n " "devices
+[ "${QUIET}" ] || echo -n " devices"
 # Hardware: cdrom
 manual_add_modules ide-cd
 manual_add_modules ide-generic
@@ -167,16 +145,24 @@ then
 	copy_exec /usr/bin/eject /bin
 fi
 
-[ "${QUIET}" ] || echo -n " "utils
+# Program: mount
+# fuse does not work with klibc mount
+copy_exec /bin/mount /bin/mount.util-linux
+
+[ "${QUIET}" ] || echo -n " utils"
 
 # Feature: Verify Checksums
-copy_exec /usr/bin/sha256sum /bin
-copy_exec /usr/bin/md5sum /bin
+if [ -e /etc/progress-linux_version ]
+then
+	copy_exec /usr/bin/sha256sum /bin
+else
+	copy_exec /usr/bin/md5sum /bin
+fi
 
 # Program: memdisk
 if [ -x /usr/bin/memdiskfind ]
 then
-[ "${QUIET}" ] || echo -n :memdisk
+[ "${QUIET}" ] || echo -n " memdisk"
 	copy_exec /usr/bin/memdiskfind
 	manual_add_modules phram
 	manual_add_modules mtdblock
@@ -185,27 +171,22 @@ fi
 # Program: udev
 if [ -x /sbin/udevadm ]
 then
-	[ "${QUIET}" ] || echo -n " "udev
-	copy_exec /sbin/udevadm /sbin
-fi
-if [ -x /usr/bin/udevinfo ]
-then
-	[ "${QUIET}" ] || echo -n " "udev
-	copy_exec /usr/bin/udevinfo /bin
+	[ "${QUIET}" ] || echo -n " udev"
+	copy_exec /sbin/udevadm
 fi
 
 # Program: wget
 if [ -x /usr/bin/wget ]
 then
-	[ "${QUIET}" ] || echo -n " "wget
+	[ "${QUIET}" ] || echo -n " wget"
 	copy_exec /usr/bin/wget /bin
 fi
 
 # Program: blockdev
 if [ -x /sbin/blockdev ]
 then
-	[ "${QUIET}" ] || echo -n " "blockdev
-	copy_exec /sbin/blockdev /sbin
+	[ "${QUIET}" ] || echo -n " blockdev"
+	copy_exec /sbin/blockdev
 fi
 
 # FUSE kernel module
@@ -214,49 +195,50 @@ manual_add_modules fuse
 # FUSE filesystem: httpfs2
 if [ -x /usr/bin/httpfs2_ssl ]
 then
-	[ "${QUIET}" ] || echo -n " "httpfs:ssl
+	[ "${QUIET}" ] || echo -n " httpfs:ssl"
 	copy_exec /usr/bin/httpfs2_ssl /bin/httpfs
 elif [ -x /usr/bin/httpfs2 ]
 then
-	[ "${QUIET}" ] || echo -n " "httpfs
+	[ "${QUIET}" ] || echo -n " httpfs"
 	copy_exec /usr/bin/httpfs2 /bin/httpfs
 fi
 
 # FUSE filesystem: curlftpfs
 if [ -x /usr/bin/curlftpfs ]
 then
-	[ "${QUIET}" ] || echo -n " "ftpfs
+	[ "${QUIET}" ] || echo -n " ftpfs"
 	copy_exec /usr/bin/curlftpfs /bin
 fi
 
 # iSCSI
 if [ -x /usr/sbin/iscsistart ]
 then
-	[ "${QUIET}" ] || echo -n " "iscsi
+	[ "${QUIET}" ] || echo -n " iscsi"
 	copy_exec /usr/sbin/iscsistart /bin
 	#manual_add_modules ib_iser
 	manual_add_modules iscsi_tcp
 	manual_add_modules crc32c
 fi
 
-if [ "${LIVE_DNS}" = "true" ]
-then
-	[ "${QUIET}" ] || echo -n " "dns
-	#copy_exec /lib/libnss_files.so.*      /lib  # /etc/hosts and /etc/passwd
-	copy_exec /lib/libnss_dns.so.*      /lib  # DNS server
-	#copy_exec /lib/libnss_compat.so.*      /lib  # /etc/passwd
+# Some experimental stuff
 
-	# Configuration file - may be needed if /etc/hosts is used.
-	#mkdir -p $DESTDIR/etc
-	#cp -p /etc/nsswitch.conf $DESTDIR/etc
-fi
+case "${LIVE_DNS}" in
+	true)
+		[ "${QUIET}" ] || echo -n " dns"
 
-if [ "${LIVE_UNIONMOUNT}" = "true" ]
-then
-	[ "${QUIET}" ] || echo -n " "unionmount
-	# UnionMount
-	# only mount from patched util-linux can do this currently
-	copy_exec /bin/mount /bin/mount_full
-fi
+		# /lib/libnss_dns.so.*:a   DNS
+		# /lib/libnss_files.so.*:  /etc/hosts and /etc/passwd
+		# /lib/libnss_compat.so.*: /etc/passwd
+
+		for _SHLIB in $(find /lib -name 'libnss_dns.so.*')
+		do
+			copy_exec "${_SHLIB}"
+		done
+
+		# might be needed if /etc/hosts is used
+		#mkdir -p "${DESTDIR}/etc"
+		#cp -p /etc/nsswitch.conf "${DESTDIR}/etc"
+		;;
+esac
 
 [ "${QUIET}" ] || echo .

@@ -51,10 +51,10 @@ which () {
 # the boot process /tmp is mounted read-only, so lets have some other
 # options...  I am not sure all non-GNU versions of mktemp understand
 # the -q option so redirections of stderr are used instead.
-TMPFILE=''
+tempfiles=''
+trap 'rm -f $tempfiles >/dev/null 2>&1' 0
+trap "exit 2" 1 2 3 13 15
 tempfile () {
-    local tmp
-    tmp="$TMPFILE"
     if \
         TMPFILE=`mktemp /tmp/tmpkbd.XXXXXX 2>/dev/null` \
             || TMPFILE=`mktemp /run/tmpkbd.XXXXXX 2>/dev/null` \
@@ -62,10 +62,7 @@ tempfile () {
             || TMPFILE=`mktemp /lib/init/rw/tmpkbd.XXXXXX 2>/dev/null` \
             || TMPFILE=`mktemp 2>/dev/null`
     then
-        if [ -z "$tmp" ]; then
-            trap 'rm -f "$TMPFILE" >/dev/null 2>&1' 0
-            trap "exit 2" 1 2 3 13 15
-        fi
+        tempfiles="$tempfiles $TMPFILE"
         return 0
     else
         TMPFILE=''
@@ -75,8 +72,19 @@ tempfile () {
 
 # Print the arguments to stderr if $do_verbose is yes
 report () {
+    local nl
+    case "$1" in
+        -n)
+            shift
+            nl=''
+            ;;
+        *)
+            nl='
+'
+            ;;
+    esac
     if [ "$do_verbose" ]; then
-        echo "$@" >&2
+        echo -n "$@" "$nl" >&2
     fi
 }
 
@@ -88,10 +96,13 @@ report () {
 # but the standard input is being redirected, 'other argument'=do not
 # redirect the standard input or output but use this as a tty option.
 #
-# 2rd argument: option(s) for verbose output; 3nd argument: command to
-# run; other arguments: other options
+# 2nd argument: option(s) for verbose output.  NONE=no output,
+# FORK=run the command in background, 'other argument'=give this
+# option to the executed command.
 #
-# Example: run '-C ' -v setfont font.psf
+# 3rd argument: command to run; other arguments: other options
+#
+# Example 1: run '-C ' -v setfont font.psf
 # If ACTIVE_CONSOLES='/dev/tty1 /dev/tty2 /dev/tty3', then this results in
 #
 # setfont -C /dev/tty1 font.psf -v
@@ -105,6 +116,12 @@ report () {
 # setfont -C /dev/tty3 font.psf >/dev/null 2>&1
 #
 # depending on the value of $do_verbose
+#
+# Example 2: `run plain FORK echo hello` results in `echo hello`
+# regardless of the value of $do_verbose.
+#
+# Example 3: `run plain NONE echo hello` results in `echo hello` or
+# `echo hello >/dev/null 2>&1` depending on the value of $do_verbose.
 
 run () {
     local ttyarg cmd verbose tty x
@@ -122,31 +139,63 @@ run () {
 "
             elif [ "$do_verbose" ]; then
 		case "$verbose" in
-		    ECHO)
-			report Executing $cmd "$@".
+		    NONE)
+			report executing $cmd "$@".
 			$cmd "$@"
 			;;
+		    FORK)
+                        # no arguments to suppress '\033%%@' and '\033%%G'
+			report executing $cmd.
+			$cmd "$@" &
+			;;
 		    *)
+			report executing $cmd "$@".
 			$cmd "$@" $verbose
 			;;
 		esac
             else
-                $cmd "$@" >/dev/null 2>&1
+		case "$verbose" in
+		    NONE)
+			report executing $cmd "$@".
+                        $cmd "$@" >/dev/null 2>&1
+                        ;;
+                    FORK)
+                        # no arguments to suppress '\033%%@' and '\033%%G'
+			report executing $cmd.
+                        $cmd "$@" &
+                        ;;
+                    *)
+			report executing $cmd "$@".
+                        $cmd "$@"
+                        ;;
+                esac
             fi
             ;;
         in)
             for tty in $ACTIVE_CONSOLES; do
-                if [ -r $tty ]; then
-                    if [ "$setupdir" ]; then
-                        # keep the space between < and $tty
-                        SETUP="$SETUP$cmd $@ < $tty
+                if [ "$setupdir" ]; then
+                    # keep the space between < and $tty
+                    SETUP="$SETUP$cmd $@ < $tty
 "
-                    else
-                        report For $tty:
-                        run plain "$verbose" "$cmd" "$@" <$tty
-                    fi
+                elif [ -r $tty ]; then
+                    report -n on $tty ''
+                    run plain "$verbose" "$cmd" "$@" <$tty
                 else
                     report No read access from $tty. Can not execute $cmd.
+                fi
+            done
+            ;;
+        out)
+            for tty in $ACTIVE_CONSOLES; do
+                if [ "$setupdir" ]; then
+                    # keep the space between > and $tty
+                    SETUP="$SETUP$cmd $@ > $tty
+"
+                elif [ -w $tty ]; then
+                    report -n on $tty ''
+                    run plain "$verbose" "$cmd" "$@" >$tty
+                else
+                    report No write access to $tty. Can not execute $cmd.
                 fi
             done
             ;;
@@ -173,34 +222,16 @@ findfile () {
             fi
             ;;
     esac
-    x=`(ls "$installdir"/$1/$2 /usr/local/$1/$2 \
-	   /usr/$1/$2 /etc/console-setup/$2 \
-	   "$installdir"/etc/console-setup/$2) 2>/dev/null`
+    x=`(ls "$installdir"/$1/$2 \
+           /usr/local/$1/$2 \
+	   /usr/$1/$2 \
+           /etc/console-setup/cached_$2 \
+           /etc/console-setup/$2 \
+           "$installdir"/etc/console-setup/cached_$2 \
+           "$installdir"/etc/console-setup/$2) 2>/dev/null`
     x=`echo $x`
     [ "${x%% *}" ] || report Unable to find "$2".
     echo "${x%% *}"
-}
-
-# Usage: utf_start /dev/tty5
-# Configure a console for unicode output
-utf_start () {
-    if [ -w "$1" ]; then
-        report Configuring "$1" in Unicode mode.
-        printf '\033%%G' >"$1"
-    else
-        report No write access to $tty. Can not configure Unicode mode.
-    fi
-}
-
-# Usage: utf_stop /dev/tty5
-# Configure a console for non-unicode output
-utf_stop () {
-    if [ -w "$1" ]; then
-        report Configuring "$1" in non-Unicode mode.
-        printf '\033%%@' >"$1"
-    else
-        report No write access to $tty. Can not configure non-Unicode mode.
-    fi
 }
 
 # Return code 0: we are on the console; 1: we are not on the console
@@ -287,11 +318,13 @@ Sets up the font and the keyboard on Linux console.
                          update /etc/console-setup/cached.*
       --save-only      only save; don't setup keyboard/font immediately
                          (implies --force)
+      --save-keyboard FILE, --setup-dir DIR
+                       options for initrd builders
   -h, --help           display this help and exit
 
 If VARIANT is not specified setupcon looks for the configuration files
 (in this order) ~/.console-setup and if this doesn't exist then the
-combination/etc/default/keyboard + /etc/default/console-setup.  When
+combination /etc/default/keyboard + /etc/default/console-setup.  When
 a VARIANT is specified then setupcon looks for the configuration files
 ~/.console-setup.VARIANT and /etc/default/console-setup.VARIANT.
 EOF
@@ -320,6 +353,10 @@ case "$installdir" in
     *) installdir=$installdir/.. ;;
 esac
 [ -n "$installdir" -a -d "$installdir"/bin ] || installdir=/usr
+case "$installdir" in
+    /*) ;;
+    *) installdir="`pwd`\$installdir" ;;
+esac
 
 
 ###########################################################################
@@ -334,19 +371,21 @@ USER_CONFIG=${HOME}/.console-setup"$VARIANT"
 USER_CONFIG2=${HOME}/.keyboard"$VARIANT"
 MAIN_CONFIG=/etc/default/keyboard"$VARIANT"
 [ -f "$MAIN_CONFIG" ] \
+    || [ ! -f "$installdir"/etc/default/keyboard"$VARIANT" ] \
     || MAIN_CONFIG="$installdir"/etc/default/keyboard"$VARIANT"
 MAIN_CONFIG2=/etc/default/console-setup"$VARIANT"
 [ -f "$MAIN_CONFIG2" ] \
+    || [ ! -f "$installdir"/etc/default/console-setup"$VARIANT" ] \
     || MAIN_CONFIG2="$installdir"/etc/default/console-setup"$VARIANT"
 
-if [ -f "$USER_CONFIG" ]; then
+if [ -f "$USER_CONFIG" -o -f "$USER_CONFIG2" ]; then
     CONFIG="$USER_CONFIG"
     CONFIG2="$USER_CONFIG2"
-elif [ -f "$MAIN_CONFIG" ]; then
+elif [ -f "$MAIN_CONFIG" -o -f "$MAIN_CONFIG2" ]; then
     CONFIG="$MAIN_CONFIG"
     CONFIG2="$MAIN_CONFIG2"
 else
-    echo "setupcon: None of $MAIN_CONFIG nor $USER_CONFIG exists." >&2
+    echo "setupcon: None of $MAIN_CONFIG, $MAIN_CONFIG2, $USER_CONFIG, $USER_CONFIG2 exists." >&2
     exit 1
 fi
 
@@ -356,7 +395,9 @@ else
     # in order to permit "if [ cached.kmap.gz -ot $CONFIG2 ]; then ... fi"
     CONFIG2="$CONFIG"
 fi
-. "$CONFIG"
+if [ -f "$CONFIG" ]; then
+    . "$CONFIG"
+fi
 
 ###########################################################################
 ### INITIALIZATION AND DEFAULT VALUES
@@ -385,9 +426,6 @@ fi
 if [ -n "$do_save" ]; then
     if [ ! -d /usr/share ]; then
         echo It seems /usr is not mounted.  Will not save files in /etc. >&2
-        do_save=''
-    elif [ ! -w /etc/console-setup/ ]; then
-        echo /etc/console-setup is not writable.  No files will be saved there. >&2
         do_save=''
     fi
 fi
@@ -738,13 +776,6 @@ if \
 then
     savekbdfile="$cached"
 fi
-if [ -z "$savekbdfile" -a -n "$setupdir" ]; then
-    mkdir -p "$setupdir"/etc/console-setup
-    case "$kernel" in
-        linux) savekbdfile="$setupdir"/etc/console-setup/cached.kmap.gz ;;
-        freebsd) savekbdfile="$setupdir"/etc/console-setup/cached.kbd ;;
-    esac
-fi
 [ "$XKBMODEL" ] || savekbdfile=''
 if [ "$kernel" = linux ] && ! which gzip >/dev/null; then
     savekbdfile=''
@@ -762,20 +793,30 @@ fi
 ### SAVE THE FILES IN /etc
 ###########################################################################
 
+for i in /etc/console-setup $CONSOLE_MAP $FONTFILES $FONTMAPFILE $savekbdfile; do
+    if [ "$i" = "${i#/etc/console-setup}" -a -n "$do_save" ]; then
+        if [ ! -w /etc/console-setup/ ]; then
+            echo /etc/console-setup is not writable.  No files will be saved there. >&2
+            do_save=''
+        fi
+        break
+    fi
+done
+
 if [ -n "$do_save" ]; then
     case "$CONSOLE_MAP" in
         /etc/console-setup/*) ;;
-        ?*) cp "$CONSOLE_MAP" /etc/console-setup/ ;;
+        ?*) cp "$CONSOLE_MAP" /etc/console-setup/cached_"${CONSOLE_MAP##*/}" ;;
     esac
     for font in $FONTFILES; do
         case "$font" in
             /etc/console-setup/*) ;;
-            ?*) cp "$font" /etc/console-setup/ ;;
+            ?*) cp "$font" /etc/console-setup/cached_"${font##*/}" ;;
         esac
     done
     case "$FONTMAPFILE" in
         /etc/console-setup/*) ;;
-        ?*) cp "$FONTMAPFILE" /etc/console-setup/ ;;
+        ?*) cp "$FONTMAPFILE" /etc/console-setup/cached_"${FONTMAPFILE##*/}" ;;
     esac
 fi
 
@@ -789,7 +830,6 @@ if [ "$savekbdfile" ]; then
 	            "$XKBLAYOUT" "$XKBVARIANT" "$XKBOPTIONS" >$TMPFILE \
                     && gzip -9 <$TMPFILE >"$savekbdfile"
             } || exit 1
-            rm $TMPFILE
             ;;
         freebsd)
 	    $installdir/bin/ckbcomp -freebsd -backspace "$backspace" \
@@ -821,12 +861,12 @@ fi
 if [ "$VIDEOMODE" ]; then
     case "$do_font" in
         freebsd)
-            run in ECHO vidcontrol "$VIDEOMODE"
+            run in '' vidcontrol "$VIDEOMODE"
             ;;
         linux*)
             # this is a bit pointless as vesafb doesn't support changing mode
             if which fbset >/dev/null; then
-                run plain ECHO fbset -a "$VIDEOMODE"
+                run plain '' fbset -a "$VIDEOMODE"
             else
                 report fbset is not installed
             fi
@@ -839,10 +879,11 @@ case "$do_font" in
     # So far the FreeBSD kernel doesn't support changes of the mode from
     # utf to 8-bit and vice versa (its a compile time option).
     linux*)
+        # FORK because of #678897
         if [ "$unicode" ]; then
-            run '' ECHO utf_start
+            run out FORK printf '\033%%G'
         else
-            run '' ECHO utf_stop
+            run out FORK printf '\033%%@'
         fi
         ;;
 esac
@@ -853,7 +894,7 @@ if [ "$FONTFILES" ]; then
         freebsd)
             if [ -z "$unicode" ]; then
                 for font in $FONTFILES; do
-                    run plain ECHO vidcontrol -f $font
+                    run plain '' vidcontrol -f $font
                 done
             fi
             ;;
@@ -879,7 +920,7 @@ if [ "$CONSOLE_MAP" ]; then
     case "$do_font" in
         freebsd)
             if [ -z "$unicode" ]; then
-                run plain ECHO vidcontrol -l "$CONSOLE_MAP"
+                run plain '' vidcontrol -l "$CONSOLE_MAP"
             fi
             ;;
         linuxkbd)
@@ -898,7 +939,7 @@ if [ "$do_font" ]; then
     [ -z "$SCREEN_HEIGHT" ] || STTY="$STTY rows $SCREEN_HEIGHT"
 
     if [ "$STTY" ]; then
-        run in ECHO stty $STTY
+        run in '' stty $STTY
     fi
 fi
 
@@ -917,7 +958,7 @@ if [ "$do_kbd" = linux ]; then
     if [ -x /sbin/sysctl -a -r /etc/sysctl.conf ]; then
 	if grep -v '^\#' /etc/sysctl.conf | grep -q keycodes ; then
 	    grep keycodes /etc/sysctl.conf | grep -v "^#" \
-		| while read d ; do
+		| while read -r d ; do
                 /sbin/sysctl -w $d 2> /dev/null || true
             done
 	fi
@@ -928,9 +969,9 @@ fi
 if [ "$do_kbd" = linux ]; then
     if which kbd_mode >/dev/null; then
         if [ "$unicode" ]; then
-            run in ECHO kbd_mode -u
+            run in '' kbd_mode -u
         else
-            run in ECHO kbd_mode -a
+            run in '' kbd_mode -a
         fi
     else
         report kbd_mode is not accessible.  Unable to setup unicode/non-unicode keyboard mode.
@@ -946,8 +987,8 @@ fi
 
 if [ "$KMAP" ]; then
     case "$do_kbd" in
-        linux) run plain '' loadkeys "$KMAP" ;;
-        freebsd) run in ECHO kbdcontrol -l "$KMAP" ;;
+        linux) run plain NONE loadkeys "$KMAP" ;;
+        freebsd) run in '' kbdcontrol -l "$KMAP" ;;
     esac
 else
     tempfile || { echo Can not create temporary file >&2; exit 1; }
@@ -956,17 +997,16 @@ else
 	    $installdir/bin/ckbcomp -backspace "$backspace" $acm_option \
                 $rules_option -model "$XKBMODEL" \
 	        "$XKBLAYOUT" "$XKBVARIANT" "$XKBOPTIONS" >$TMPFILE
-            run plain ECHO loadkeys $TMPFILE
+            run plain NONE loadkeys $TMPFILE
             ;;
         freebsd)
 	    $installdir/bin/ckbcomp -freebsd -backspace "$backspace" \
                 $acm_option $rules_option -model "$XKBMODEL" \
 	        "$XKBLAYOUT" "$XKBVARIANT" "$XKBOPTIONS" >$TMPFILE
-            run in ECHO kbdcontrol -l $TMPFILE
-            run in ECHO kbdcontrol -f 70 "`printf '\033[3~'`"
+            run in '' kbdcontrol -l $TMPFILE
+            run in '' kbdcontrol -f 70 "`printf '\033[3~'`"
             ;;
     esac
-    rm $TMPFILE
 fi
 
 
@@ -975,63 +1015,63 @@ fi
 ###########################################################################
 
 
-
 if [ "$setupdir" ]; then
 
-    filearg () {
-        case "$1" in
-            *.kmap.gz|*.kbd|*/tmpkbd.*)
-                echo -n "/etc/console-setup/${savekbdfile##*/} "
-                ;;
-            /*)
-                if [ -e "$1" ]; then
-                    if [ ! -e "$setupdir/etc/console-setup/${1##*/}" ]; then
-                        cp -a "$1" "$setupdir/etc/console-setup/${1##*/}"
-                    fi
-                    echo -n "/etc/console-setup/${1##*/} "
-                else
-                    echo -n "$1 "
-                fi
-                ;;
-            *)
-                echo -n "$1 "
-                ;;
-        esac
+    fileargs () {
+        local arg args f
+        if [ "$1" ]; then
+            printf "%s" "$1" | {
+                read -r arg args
+                case "$arg" in
+                    \>|\<)
+                        echo -n "$arg"
+                        ;;
+                    /*)
+                        echo -n "'"
+                        if [ -e "$arg" ]; then
+                            f="${arg##*/}"
+                            f="${f%.gz}"
+                            case "$arg" in
+                                *.gz) zcat "$arg" >"$setupdir/etc/console-setup/$f" ;;
+                                *) cp -a "$arg" "$setupdir/etc/console-setup/$f" ;;
+                            esac
+                            printf "%s" "/etc/console-setup/$f" \
+                                | sed "s/'/\'\\\\\'\'/g"
+                        else
+                            printf "%s" "$arg" \
+                                | sed "s/'/\'\\\\\'\'/g"
+                        fi
+                        echo -n "'"
+                        ;;
+                    *)
+                        echo -n "'"
+                        # printf instead of echo because different versions of
+                        # echo process backslashes differently.
+                        printf "%s" "$arg" \
+                            | sed "s/'/\'\\\\\'\'/g"
+                        echo -n "'"
+                        ;;
+                esac
+                echo -n ' '
+                fileargs "$args"
+                }
+        fi
     }
 
     mkdir -p "$setupdir"/bin
+    mkdir -p "$setupdir"/etc/console-setup
 
     echo '#!/bin/sh' >"$setupdir"/bin/setupcon
     echo '# A micro-version of setupcon with static configuration.' >>"$setupdir"/bin/setupcon
     chmod +x "$setupdir"/bin/setupcon
     tempfile || { echo Can not create temporary file >&2; exit 1; }
-    echo "$SETUP" |
-    while read cmd args; do
-        case "$cmd $args" in
-            utf_start*)
-                echo -n printf \'\\\\'033%%G'\'' >' # not for FreeBSD
-                filearg "${args%% *}"
-                echo
-                ;;
-            utf_stop*)
-                echo -n printf \'\\\\'033%%@'\'' >' # not for FreeBSD
-                filearg "${args%% *}"
-                echo
-                ;;
-            kbdcontrol?-f?70*)
-                echo kbdcontrol -f 70 \"\`printf \'\\\\033[3~\'\`\"
-                ;;
-            *)
-                which "$cmd" >>$TMPFILE || true
-                echo -n "$cmd "
-                for arg in $args; do
-                    filearg "$arg"
-                done
-                echo
-                ;;
-        esac
+    printf "%s" "$SETUP" |
+    while read -r cmd args; do
+        which "$cmd" >>$TMPFILE || true
+        printf "%s " "$cmd"
+        fileargs "$args"
+        echo
     done >>"$setupdir"/bin/setupcon
     echo exit 0 >>"$setupdir"/bin/setupcon
-    sort $TMPFILE | uniq >"$setupdir"/morefiles
-    rm $TMPFILE
+    sort $TMPFILE | uniq | grep -v 'printf$' >"$setupdir"/morefiles
 fi

@@ -4,7 +4,7 @@ set -eu
 
 usage()
 {
-	echo "Usage: $(basename $0) <initramfs file>"
+	echo "Usage: $(basename $0) [-l] <initramfs file>"
 }
 
 if [ "$#" -eq 0 ] ; then
@@ -40,20 +40,72 @@ while true; do
 	esac
 done
 
+listarchive()
+{
+	archive="$1"
+	if zcat -t "${archive}" >/dev/null 2>&1 ; then
+		zcat "${archive}" | cpio ${cpio_args}
+	elif xzcat -t "${archive}" >/dev/null 2>&1 ; then
+		xzcat "${archive}" | cpio ${cpio_args}
+	elif bzip2 -t "${archive}" >/dev/null 2>&1 ; then
+		bzip2 -c -d "${archive}" | cpio ${cpio_args}
+	elif lzop -t "${archive}" >/dev/null 2>&1 ; then
+		lzop -c -d "${archive}" | cpio ${cpio_args}
+	fi
+}
+
+# Read bytes out of a file, checking that they are valid hex digits
+readhex()
+{
+	dd < "$1" bs=1 skip="$2" count="$3" 2> /dev/null | \
+		LANG=C grep -E "^[0-9A-Fa-f]{$3}\$"
+}
+
+# Check for a zero byte in a file
+checkzero()
+{
+	dd < "$1" bs=1 skip="$2" count=1 2> /dev/null | \
+		LANG=C grep -q -z '^$'
+}
+
 for initramfs in "$@" ; do
 	if ! [ -r "${initramfs}" ] ; then
 		echo "Specified file could not be read." >&2
 		exit 1
 	else
 		echo "${initramfs}"
-		if zcat -t "${initramfs}" >/dev/null 2>&1 ; then
-			zcat "${initramfs}" | cpio ${cpio_args}
-		elif xzcat -t "$initramfs" >/dev/null 2>&1 ; then
-			xzcat "$initramfs" | cpio ${cpio_args}
-		elif bzip2 -t "$initramfs" >/dev/null 2>&1 ; then
-			bzip2 -c -d "$initramfs" | cpio ${cpio_args}
-		elif lzop -t "$initramfs" >/dev/null 2>&1 ; then
-			lzop -c -d "$initramfs" | cpio ${cpio_args}
+
+		# There may be a prepended uncompressed archive.  cpio
+		# won't tell us the true size of this so we have to
+		# parse the headers and padding ourselves.  This is
+		# very roughly based on linux/lib/earlycpio.c
+		offset=0
+		while true; do
+			if checkzero "$initramfs" $offset; then
+				offset=$((offset + 4))
+				continue
+			fi
+			magic="$(readhex "$initramfs" $offset 6)" || break
+			test $magic = 070701 || test $magic = 070702 || break
+			namesize=0x$(readhex "$initramfs" $((offset + 94)) 8)
+			filesize=0x$(readhex "$initramfs" $((offset + 54)) 8)
+			offset=$(((offset + 110)))
+			offset=$(((offset + $namesize + 3) & ~3))
+			offset=$(((offset + $filesize + 3) & ~3))
+		done
+
+		if [ $offset -ne 0 ]; then
+			# List uncompressed archive
+			cpio ${cpio_args} < "$initramfs"
+
+			# List main archive
+			subarchive=$(mktemp ${TMPDIR:-/var/tmp}/lsinitramfs_XXXXXX)
+			trap "rm -f $subarchive" EXIT
+			dd < "$initramfs" bs="$offset" skip=1 2> /dev/null \
+				> $subarchive
+			listarchive $subarchive
+		else
+			listarchive "${initramfs}"
 		fi
 
 	fi

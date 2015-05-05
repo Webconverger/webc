@@ -22,12 +22,10 @@ if [ -d "/var/run/sudo" ];then
 fi
 
 # make sure sudoers has the correct permissions and owner/group
-chown root:root /etc/sudoers
-chmod 440 /etc/sudoers
-
-update-rc.d -f sudo remove >/dev/null 2>&1
-
-update-rc.d sudo start 75 2 3 4 5 . >/dev/null
+if [ -f /etc/sudoers ];then
+    chown root:root /etc/sudoers
+    chmod 440 /etc/sudoers
+fi
 
 # if we've gotten this far .. remove the saved, unchanged old sudoers file
 rm -f /etc/sudoers.pre-conffile

@@ -1,5 +1,5 @@
 /*
- * "$Id: pcl.h 7304 2008-02-14 01:52:22Z mike $"
+ * "$Id$"
  *
  *   This file contains model number definitions for the CUPS unified
  *   PCL driver.
@@ -34,5 +34,5 @@
 
 
 /*
- * End of "$Id: pcl.h 7304 2008-02-14 01:52:22Z mike $".
+ * End of "$Id$".
  */

@@ -1,54 +1,16 @@
 #!/bin/sh
-
 set -e
-
-if [ "$1" = "upgrade" ]; then
-	# Remove apm symlinks (legacy, no longer installed since 1.0.25+1)
-	rm -f \
-		/etc/apm/suspend.d/??alsa \
-		/etc/apm/resume.d/??alsa
-	[ -d /etc/apm/suspend.d ] && rmdir --ignore-fail-on-non-empty /etc/apm/suspend.d
-	[ -d /etc/apm/resume.d ]  && rmdir --ignore-fail-on-non-empty /etc/apm/resume.d
-	[ -d /etc/apm ]           && rmdir --ignore-fail-on-non-empty /etc/apm
-fi
-
-case "$1" in
-    install|upgrade)
-	# Handle upgrade of /etc/default/alsa → /etc/default/alsa-base
-	if [ -f /etc/default/alsa ]; then
-		OLDMD5SUM="b0f9824c2d4288aa89df3777668f0d99"
-		CURMD5SUM=$(md5sum /etc/default/alsa | sed -e 's/ .*//')
-		# Upgrades prior to the file rename
-		if dpkg --compare-versions "$2" lt "1.0.25+2"; then
-			if [ "$OLDMD5SUM" = "$CURMD5SUM" ]; then
-				rm -f /etc/default/alsa
-			# Don't overwrite the file if it already existed
-			elif [ ! -f /etc/default/alsa-base ]; then
-				mv /etc/default/alsa /etc/default/alsa-base
-			fi
-		# Upgrades from current testing: both files exist
-		# If the old file was modified, just leave it there
-		elif dpkg --compare-versions "$2" lt "1.0.25+3"; then
-			if [ "$OLDMD5SUM" = "$CURMD5SUM" ]; then
-				rm -f /etc/default/alsa
-			fi
-		fi
-	fi
-esac
-
-# Automatically added by dh_installmodules
-if [ "$1" = install ] || [ "$1" = upgrade ]; then
-	if [ -e "/etc/modprobe.d/alsa-base" ]; then
-		if [ "`md5sum \"/etc/modprobe.d/alsa-base\" | sed -e \"s/ .*//\"`" = \
-		     "`dpkg-query -W -f='${Conffiles}' alsa-base | sed -n -e \"\\\\' /etc/modprobe.d/alsa-base '{s/ obsolete$//;s/.* //p}\"`" ]
-		then
-			rm -f "/etc/modprobe.d/alsa-base"
-		fi
-	fi
-fi
-# End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/apm/scripts.d/alsa 1.0.25+2~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/alsa-base.conf 1.0.27+1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/alsa-base-blacklist.conf 1.0.27+1~ alsa-base -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/default/alsa-base 1.0.27+1~ alsa-base -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper mv_conffile /etc/modprobe.d/alsa-base-blacklist /etc/modprobe.d/alsa-base-blacklist.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
@@ -65,4 +27,3 @@ dpkg-maintscript-helper mv_conffile /etc/modprobe.d/linux-sound-base_noALSA /etc
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/modprobe.d/alsa.conf 1.0.20+dfsg-1~ alsa-base -- "$@"
 # End automatically added section
-

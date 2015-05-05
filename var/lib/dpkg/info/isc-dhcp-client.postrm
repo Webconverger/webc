@@ -4,7 +4,8 @@
 
 if [ "$1" = "purge" ]; then
 	# Remove lease database
-	rm -f /var/lib/dhcp/dhclient.leases*
+	rm -f /var/lib/dhcp/dhclient*.leases
+	rm -f /var/lib/dhcp/dhclient*.lease
 
 	# Try to remove directory
 	if [ -d /var/lib/dhcp ]; then

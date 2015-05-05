@@ -24,7 +24,7 @@ from debpython.pydist import parse_pydep, guess_dependency
 from debpython.version import DEFAULT, SUPPORTED, debsorted, vrepr, vrange_str
 
 # minimum version required for pycompile/pyclean
-MINPYCDEP = 'python (>= 2.6.6-7~)'
+MINPYCDEP = 'python:any (>= 2.6.6-7~)'
 
 log = logging.getLogger(__name__)
 
@@ -115,20 +115,20 @@ class Dependencies(object):
             self.depend(MINPYCDEP)
 
         for interpreter, version in stats['shebangs']:
-            self.depend(interpreter)
+            self.depend("%s:any" % interpreter)
 
         for private_dir, details in stats['private_dirs'].iteritems():
             versions = list(v for i, v in details.get('shebangs', []) if v)
 
             for v in versions:
                 if v in SUPPORTED:
-                    self.depend("python%d.%d" % v)
+                    self.depend("python%d.%d:any" % v)
                 else:
                     log.info('dependency on python%s (from shebang) ignored'
                              ' - it\'s not supported anymore', vrepr(v))
             # /usr/bin/python shebang → add python to Depends
             if any(True for i, v in details.get('shebangs', []) if v is None):
-                self.depend('python')
+                self.depend('python:any')
 
             if details.get('compile', False):
                 self.depend(MINPYCDEP)
@@ -144,12 +144,12 @@ class Dependencies(object):
                     if vr == (None, None):
                         pass
                     elif vr[0] == vr[1]:
-                        self.depend("python%s" % vrepr(vr[0]))
+                        self.depend("python%s:any" % vrepr(vr[0]))
                     else:
                         if vr[0]:  # minimum version specified
-                            self.depend("python (>= %s)" % vrepr(vr[0]))
+                            self.depend("python:any (>= %s)" % vrepr(vr[0]))
                         if vr[1]:  # maximum version specified
-                            self.depend("python (<< %d.%d)" % \
+                            self.depend("python:any (<< %d.%d)" % \
                                        (vr[1][0], vr[1][1] + 1))
 
                 for pattern in options.regexpr or []:

@@ -21,10 +21,23 @@ set -e
 
 [ -z "$PULSE_SERVER" ]
 
-/usr/bin/pulseaudio --start "$@"
+# check if pulseaudio has already been started by someone else
+if /usr/bin/pulseaudio --check; then
+    EXIT_WITH_X_SESSION=no
+else
+    EXIT_WITH_X_SESSION=yes
+    /usr/bin/pulseaudio --start "$@"
+fi
+
 
 if [ x"$DISPLAY" != x ] ; then
 
     /usr/bin/pactl load-module module-device-manager "do_routing=1" > /dev/null
 
 fi
+
+# fork and wait for X-session to end, then quit pulseaudio
+if [ "$EXIT_WITH_X_SESSION" = yes ]; then
+    /usr/bin/xprop -root -spy > /dev/null 2>&1 || true
+    /usr/bin/pulseaudio --kill
+fi &

@@ -1,26 +1,19 @@
 #!/bin/sh
 
-## live-config(7) - System Configuration Scripts
-## Copyright (C) 2006-2012 Daniel Baumann <daniel@debian.org>
+## live-config(7) - System Configuration Components
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
 
-Debconf ()
+#set -e
+
+Cmdline ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/debconf.list ] || \
-	   [ -e /var/lib/live/config/debconf ]
-	then
-		return
-	fi
-
-	echo -n " debconf"
-
 	# Reading kernel command line
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.debconf-preseed=*|debconf-preseed=*)
@@ -28,18 +21,28 @@ Debconf ()
 				;;
 		esac
 	done
-
-	Configure_debconf
 }
 
-Configure_debconf ()
+Init ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/debconf.list ] || \
+	   [ -e /var/lib/live/config/debconf ]
+	then
+		exit 0
+	fi
+
+	echo -n " debconf"
+}
+
+Config ()
 {
 	if [ -z "${LIVE_DEBCONF_PRESEED}" ]
 	then
-		return
+		exit 0
 	fi
 
-	for _PRESEED in $(echo ${LIVE_PRESEEDS} | sed -e 's/|/ /g')
+	for _PRESEED in $(echo ${LIVE_DEBCONF_PRESEED} | sed -e 's/|/ /g')
 	do
 		case "${_PRESEED}" in
 			filesystem)
@@ -85,4 +88,6 @@ Configure_debconf ()
 	touch /var/lib/live/config/debconf
 }
 
-Debconf
+Cmdline
+Init
+Config
