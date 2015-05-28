@@ -77,7 +77,7 @@ FileBlock.prototype = {
       if (aRequestOrigin &&
           (aRequestOrigin.spec == "chrome://browser/content/browser.xul" ||
           aRequestOrigin.scheme == "moz-nullprincipal")) {
-        return Ci.nsIContentPolicy.REJECT_REQUEST;
+        return Ci.nsIContentPolicy.ACCEPT;
       }
       // All chrome requests come through here, so we have to allow them
       // (Like loading the main browser window for instance)
