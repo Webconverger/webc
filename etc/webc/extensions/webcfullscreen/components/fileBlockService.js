@@ -121,7 +121,7 @@ FileBlock.prototype = {
     // If we had a whitelist, reject everything else
     if (this.whitelist.length > 0) {
       if (aContentType == Ci.nsIContentPolicy.TYPE_DOCUMENT) {
-        Services.prompt.alert(null, "Webconverger", "Not allowed, whitelist only permits: " + this.whitelist.join(", "));
+        // Services.prompt.alert(null, "Webconverger", "Not allowed, whitelist only permits: " + this.whitelist.join(", "));
         return Ci.nsIContentPolicy.REJECT_REQUEST;
       }
     }
