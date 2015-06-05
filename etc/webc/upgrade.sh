@@ -16,18 +16,13 @@ fi
 # the revision we should fetch from the git server (it
 # can only be a branch or tag name, since we can't fetch
 # a sha directly).
-# update_revision is optional and can be used to specify
-# a sha of a revision to update to (but it must be
-# "included" in the fetch triggered by fetch_revision).
-# If no update_revision is given, the revision specified
-# by fetch_revision is used.
 #
-# Note that there is a third revision parameter,
+# Note that there is a second revision parameter,
 # git_revision, which must always contain a sha and must
 # only be used on the real kernel cmdline in the
 # bootloader config to tell the initrd which revision to
 # mount. It is automatically generated below based on
-# fetch_revision / update_revision.
+# fetch_revision.
 
 if cmdline_has fetch-revision
 then
@@ -35,8 +30,6 @@ then
 else
 	fetch_revision=master
 fi
-
-update_revision=$(cmdline_get update-revision)
 
 logs "Fetching git revision ${fetch_revision}"
 
