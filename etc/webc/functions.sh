@@ -160,7 +160,7 @@ generate_live_config()
 	local bootparams=$(get_bootparams "$git_repo" "$git_revision")
 
 	# TODO: Unhardcode this list
-	local flavours="486 686-pae"
+	local flavours="686-pae"
 
 	if ! [ -r "${dir}/boot/live.cfg.in" ]; then
 		logs "live.cfg.in not found, skipping bootloader update!"
