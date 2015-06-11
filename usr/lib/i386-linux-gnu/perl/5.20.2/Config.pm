@@ -97,7 +97,7 @@ tie %Config, 'Config', {
     ldlibpthname => 'LD_LIBRARY_PATH',
     libpth => '/usr/local/lib /usr/lib/gcc/i586-linux-gnu/4.9/include-fixed /usr/include/i386-linux-gnu /usr/lib /lib/i386-linux-gnu /lib/../lib /usr/lib/i386-linux-gnu /usr/lib/../lib /lib',
     osname => 'linux',
-    osvers => '3.2.0-4-amd64',
+    osvers => '3.16.0-4-amd64',
     path_sep => ':',
     privlibexp => '/usr/share/perl/5.20',
     scriptdir => '/usr/bin',

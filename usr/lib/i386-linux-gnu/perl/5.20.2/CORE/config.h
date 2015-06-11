@@ -9,9 +9,9 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Sun Mar 29 23:51:52 UTC 2015
+ * Configuration time: Sun May  3 17:18:14 UTC 2015
  * Configured by     : Debian Project
- * Target system     : linux binet 3.2.0-4-amd64 #1 smp debian 3.2.65-1+deb7u2 i686 gnulinux 
+ * Target system     : linux babin 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt9-3~deb8u1 (2015-04-24) i686 gnulinux 
  */
 
 #ifndef _config_h_
@@ -864,7 +864,7 @@
  *	feature tests from Configure are generally more reliable.
  */
 #define OSNAME "linux"		/**/
-#define OSVERS "3.2.0-4-amd64"		/**/
+#define OSVERS "3.16.0-4-amd64"		/**/
 
 /* MULTIARCH:
  *	This symbol, if defined, signifies that the build
