@@ -57,3 +57,8 @@ pref("network.protocol-handler.external.nntp", false);
 pref("network.protocol-handler.external.snews", false);
 
 pref("plugin.default.state", 2);
+
+// Disable bookmarking addon
+pref("browser.pocket.enabled", false);
+// Disable reader view function
+pref("reader.parse-on-load.enabled", false);
