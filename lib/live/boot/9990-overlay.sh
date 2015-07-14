@@ -9,7 +9,7 @@ setup_unionfs ()
 	addimage_directory="${3}"
 
 	case ${UNIONTYPE} in
-		aufs|unionfs|overlayfs)
+		aufs|unionfs|overlay)
 			modprobe -q -b ${UNIONTYPE}
 
 			if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$" && [ -x /bin/unionfs-fuse ]
