@@ -1,13 +1,29 @@
+# Various history and backup files and special filesystemsj
 root/.bash_history
-/home/webc/.bash_history
 root/.aptitude
+/home/webc/.bash_history
+root/.lesshst
+proc
+sys
+dev
+run
+*.swp
+*~
+
+# Config files we don't need
+etc/apt/trusted.gpg~
+etc/group-
+etc/passwd-
+etc/shadow-
+etc/gshadow-
+etc/ld.so.cache
+
+# Variable data that we don't need
 var/lib/aptitude
-usr/share/keyrings
 var/lib/apt
 var/lib/dpkg/*-old
 var/log
 var/lock
-usr/share/info
 var/cache/man/
 var/cache/fontconfig/
 var/cache/ldconfig/
@@ -16,24 +32,22 @@ var/cache/apt/
 var/cache/cups/
 var/cache/debconf/*-old
 var/tmp
-usr/share/locale
-usr/share/lintian
-usr/share/man
+
+# Files installed by packages. If you add anything here, also update
+# /etc/dpkg/dpkg.cfg.d/exclude-files to make sure dpkg does not install
+# these files in the first place (and doesn't refer to them in its .list
+# files).
+# Technically just having the dpkg exclude should be sufficient, but
+# these files are ignored too just to be sure (also when configure or postinst
+# scripts create files in these directories).
 usr/share/doc
 usr/share/doc-base
-etc/apt/trusted.gpg~
-etc/group-
-etc/passwd-
-etc/shadow-
-etc/gshadow-
-proc
+usr/share/man
+usr/share/lintian
+usr/share/locale
+usr/share/keyrings
+usr/share/info
 usr/include
-sys
-dev
-run
-etc/ld.so.cache
-*.swp
-root/.lesshst
 usr/share/bug
 usr/share/fonts/X11
-*~
+
