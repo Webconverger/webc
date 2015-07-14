@@ -45,6 +45,8 @@
 			}, tabSwitchInterval);
 		}
     document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
+	// Remove social API
+	SocialActivationListener = {};
 	}
 
 	function shutdown() {
