@@ -9,15 +9,14 @@ setup_unionfs ()
 	addimage_directory="${3}"
 
 	case ${UNIONTYPE} in
-		aufs|unionfs|overlayfs)
+		aufs|unionfs|overlay)
 			modprobe -q -b ${UNIONTYPE}
 
-			if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$" && [ -x /bin/unionfs-fuse ]
+			if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$" && ! cut -f2 /proc/filesystems | grep -q "^overlay\$"
 			then
-				echo "${UNIONTYPE} not available, falling back to unionfs-fuse."
-				echo "This might be really slow."
+				echo "${UNIONTYPE} not available, falling back to overlay."
 
-				UNIONTYPE="unionfs-fuse"
+				UNIONTYPE="overlay"
 			fi
 			;;
 	esac

@@ -1322,7 +1322,7 @@ do_union ()
 			pidof unionfs-fuse >> /run/sendsigs.omit.d/unionfs-fuse || true )
 			;;
 
-		overlayfs)
+		overlay)
 			# XXX: can multiple unionro be used? (overlayfs only handles two dirs, but perhaps they can be chained?)
 			# XXX: and can unionro be optional? i.e. can overlayfs skip lowerdir?
 			if echo ${unionro} | grep -q " "
@@ -1332,7 +1332,15 @@ do_union ()
 			then
 				panic "Overlayfs needs at least one lower filesystem (read-only branch)."
 			fi
-			unionmountopts="-o noatime,lowerdir=${unionro},upperdir=${unionrw}"
+
+			# overlayfs requires:
+			# + a workdir to become mounted
+			# + workdir and upperdir to reside under the same mount
+			# + workdir and upperdir to be in separate directories
+			mkdir "${unionrw}/rw"
+			mkdir "${unionrw}/work"
+			unionmountopts="-o noatime,lowerdir=${unionro},upperdir=${unionrw}/rw,workdir=${unionrw}/work"
+
 			mount -t ${UNIONTYPE} ${unionmountopts} ${UNIONTYPE} "${unionmountpoint}"
 			;;
 
