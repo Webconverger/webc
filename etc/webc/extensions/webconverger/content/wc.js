@@ -5,6 +5,7 @@ var webc = {
 		if (gBrowser) {
 			gBrowser.tabContainer.addEventListener("TabClose", webc.tabRemoved, false);
 		}
+	    gBrowser.getStatusPanel().setAttribute("hidden", "true");
 	},
 	tabRemoved: function(event) {
 

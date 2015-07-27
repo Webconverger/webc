@@ -47,6 +47,7 @@
     document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
 	// Remove social API
 	SocialActivationListener = {};
+	gBrowser.getStatusPanel().setAttribute("hidden", "true");
 	}
 
 	function shutdown() {
