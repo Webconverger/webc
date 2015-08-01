@@ -11,7 +11,7 @@ pref("datareporting.policy.dataSubmissionEnabled", false);
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 // Leaving these around, although the above two lines should do it
 pref("browser.rights.3.shown", true);
-pref("toolkit.telemetry.prompted", 2);
+pref("toolkit.telemetry.prompted", 999);
 pref("toolkit.telemetry.rejected", true);
 pref("toolkit.telemetry.enabled", false);
 
