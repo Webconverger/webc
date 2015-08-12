@@ -13,13 +13,30 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.emptyNotice1/2): This is the label shown
   -  in the call list view when empty. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice1    "Kliknite gumb">
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice2    "za začetek spremljanja klicev funkcij JavaScripta.">
 
 <!-- LOCALIZATION NOTE (profilerUI.stopNotice1/2): This is the label shown
   -  in the call list view while recording a profile. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice1    "Ponovno kliknite gumb">
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice2    "za konec spremljanja.">
+
+<!-- LOCALIZATION NOTE (profilerUI.startRecording/profilerUI.stopRecording): These are
+  -  the labels shown on the main recording buttons to start/stop recording. -->
+<!ENTITY profilerUI.startRecording "Začni spremljanje učinkovitosti">
+<!ENTITY profilerUI.stopRecording  "Končaj spremljanje učinkovitosti">
+
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusTooltip): This string
+  -  is displayed as the tooltip for the buffer capacity during a recording. -->
+<!ENTITY profilerUI.bufferStatusTooltip "Med spremljanjem delovanja se vzorci shranjujejo v krožni predpomnilnik. Ko se napolni, novi vzorci začnejo prepisovati vzorce na začetku spremljanja.">
+
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusFull): This string
+  -  is displayed when the profiler's circular buffer has started to overlap. -->
+<!ENTITY profilerUI.bufferStatusFull "Medpomnilnik je poln. Starejši vzorci bodo zdaj prepisani.">
 
 <!-- LOCALIZATION NOTE (profilerUI.loadingNotice): This is the label shown
   -  in the call list view while loading a profile. -->
@@ -27,7 +44,12 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.recordButton): This string is displayed
   -  on a button that starts a new profile. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.recordButton.tooltip "Spremljanje klicev funkcij JavaScripta.">
+
+<!-- LOCALIZATION NOTE (profilerUI.recordButton2): This string is displayed
+  -  on a button that starts a new profile. -->
+<!ENTITY profilerUI.recordButton2.tooltip "Preklopi stanje spremljanja učinkovitosti.">
 
 <!-- LOCALIZATION NOTE (profilerUI.importButton): This string is displayed
   -  on a button that opens a dialog to import a saved profile data file. -->
@@ -51,16 +73,22 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.table.*): These strings are displayed
   -  in the call tree headers for a recording. -->
-<!ENTITY profilerUI.table.totalDuration2  "Skupen čas">
-<!ENTITY profilerUI.table.selfDuration2   "Lasten čas">
-<!ENTITY profilerUI.table.totalPercentage "Skupna cena">
-<!ENTITY profilerUI.table.selfPercentage  "Lastna cena">
-<!ENTITY profilerUI.table.samples         "Vzorci">
-<!ENTITY profilerUI.table.function        "Funkcija">
-<!ENTITY profilerUI.table.totalAlloc1       "Skupne vzorčne dodelitve">
-<!ENTITY profilerUI.table.totalAllocTooltip "Skupno število dodelitev Objecta, vzorčenega na tem mestu in v klicateljih.">
-<!ENTITY profilerUI.table.selfAlloc1        "Lastne vzorčne dodelitve">
-<!ENTITY profilerUI.table.selfAllocTooltip  "Število dodelitev Objecta, vzorčenega na tem mestu.">
+<!ENTITY profilerUI.table.totalDuration2           "Skupen čas">
+<!ENTITY profilerUI.table.totalDuration.tooltip    "Čas izvajanja te funkcije in funkcij, ki jih le-ta kliče.">
+<!ENTITY profilerUI.table.selfDuration2            "Lasten čas">
+<!ENTITY profilerUI.table.selfDuration.tooltip     "Čas izvajanja same funkcije.">
+<!ENTITY profilerUI.table.totalPercentage          "Skupna cena">
+<!ENTITY profilerUI.table.totalPercentage.tooltip  "Odstotek izvajanja te funkcije in funkcij, ki jih le-ta kliče.">
+<!ENTITY profilerUI.table.selfPercentage           "Lastna cena">
+<!ENTITY profilerUI.table.selfPercentage.tooltip   "Odstotek izvajanja same funkcije.">
+<!ENTITY profilerUI.table.samples                  "Vzorci">
+<!ENTITY profilerUI.table.samples.tooltip          "Število pojavitev funkcije na skladu, ko je bil med spremljanjem delovanja zajet vzorec.">
+<!ENTITY profilerUI.table.function                 "Funkcija">
+<!ENTITY profilerUI.table.function.tooltip         "Ime in lokacija vzorčene funkcije.">
+<!ENTITY profilerUI.table.totalAlloc1              "Skupne vzorčne dodelitve">
+<!ENTITY profilerUI.table.totalAlloc.tooltip       "Skupno število dodelitev objektov vzorčenih na tem mestu in v klicočih funkcijah.">
+<!ENTITY profilerUI.table.selfAlloc1               "Lastne vzorčne dodelitve">
+<!ENTITY profilerUI.table.selfAlloc.tooltip        "Število dodelitev objektov vzorčenih na tem mestu.">
 
 <!-- LOCALIZATION NOTE (profilerUI.newtab.tooltiptext): The tooltiptext shown
   -  on the "+" (new tab) button for a profile when a selection is available. -->
@@ -72,11 +100,11 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.options.tooltiptext): This is the tooltip
   -  for the options button. -->
-<!ENTITY profilerUI.options.gear.tooltiptext "Spremeni nastavitve zmogljivosti.">
+<!ENTITY profilerUI.options.gear.tooltiptext "Spremeni nastavitve učinkovitosti.">
 
 <!-- LOCALIZATION NOTE (profilerUI.invertTree): This is the label shown next to
   -  a checkbox that inverts and un-inverts the profiler's call tree. -->
-<!ENTITY profilerUI.invertTree "Obrni drevo klicev">
+<!ENTITY profilerUI.invertTree             "Obrni drevo klicev">
 <!ENTITY profilerUI.invertTree.tooltiptext "Obrnjeno drevo klicev prikazuje spremljane poti klicev od najmlajših okvirjev do najstarejših.">
 
 <!-- LOCALIZATION NOTE (profilerUI.invertFlameGraph): This is the label shown next to
@@ -107,3 +135,26 @@
   -  is recorded. -->
 <!ENTITY profilerUI.enableFramerate             "Beleži hitrost sličic">
 <!ENTITY profilerUI.enableFramerate.tooltiptext "Beleži hitrost sličic med spremljanjem.">
+
+<!-- LOCALIZATION NOTE (profilerUI.showJITOptimizations): This string
+  -  is displayed next to a checkbox determining whether or not JIT optimization data
+  -  should be shown. -->
+<!ENTITY profilerUI.showJITOptimizations             "Prikaži optimizacije JIT">
+<!ENTITY profilerUI.showJITOptimizations.tooltiptext "Prikaži podatke optimizacije JIT, vzorčene v vsakem okvirju drevesa klicev JS.">
+
+<!-- LOCALIZATION NOTE (profilerUI.JITOptimizationsTitle): This string
+  -  is displayed as the title of the JIT Optimizations panel. -->
+<!ENTITY profilerUI.JITOptimizationsTitle "Optimizacije JIT">
+
+<!-- LOCALIZATION NOTE (profilerUI.console.recordingNoticeStart/recordingNoticeEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Wraps the command used to start, like "Currently recording via console.profile("label")" -->
+<!ENTITY profilerUI.console.recordingNoticeStart "Trenutno spremljanje preko">
+<!ENTITY profilerUI.console.recordingNoticeEnd   "">
+
+<!-- LOCALIZATION NOTE (profilerUI.console.stopCommandStart/stopCommandEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Indicates how to stop the recording, wrapping the command, like
+  -  "Stop recording by entering console.profilEnd("label") into the console." -->
+<!ENTITY profilerUI.console.stopCommandStart "Ustavitev spremljanje z vnosom">
+<!ENTITY profilerUI.console.stopCommandEnd   "v konzolo.">

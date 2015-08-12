@@ -13,13 +13,30 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.emptyNotice1/2): This is the label shown
   -  in the call list view when empty. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice1    "JavaScript 함수 호출을 기록하려면">
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice2    "단추를 누르십시오.">
 
 <!-- LOCALIZATION NOTE (profilerUI.stopNotice1/2): This is the label shown
   -  in the call list view while recording a profile. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice1    "프로파일링을 그만하시려면">
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice2    "단추를 한번 더 누르십시오.">
+
+<!-- LOCALIZATION NOTE (profilerUI.startRecording/profilerUI.stopRecording): These are
+  -  the labels shown on the main recording buttons to start/stop recording. -->
+<!ENTITY profilerUI.startRecording "성능 기록을 시작하기">
+<!ENTITY profilerUI.stopRecording  "성능 기록을 그만하기">
+
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusTooltip): This string
+  -  is displayed as the tooltip for the buffer capacity during a recording. -->
+<!ENTITY profilerUI.bufferStatusTooltip "프로파일러는 샘플을 원형 버퍼에 가지고 있는데 버퍼가 차 더 이상 기록을 담을 수 없게 되면 새 샘플이 처음으로 기록한 샘플부터 덮어씁니다.">
+
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusFull): This string
+  -  is displayed when the profiler's circular buffer has started to overlap. -->
+<!ENTITY profilerUI.bufferStatusFull "버퍼가 가득 찼습니다. 오래된 샘플부터 덮어씌여집니다.">
 
 <!-- LOCALIZATION NOTE (profilerUI.loadingNotice): This is the label shown
   -  in the call list view while loading a profile. -->
@@ -27,7 +44,12 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.recordButton): This string is displayed
   -  on a button that starts a new profile. -->
+<!-- TODO remove -->
 <!ENTITY profilerUI.recordButton.tooltip "JavaScript 함수 호출을 기록합니다.">
+
+<!-- LOCALIZATION NOTE (profilerUI.recordButton2): This string is displayed
+  -  on a button that starts a new profile. -->
+<!ENTITY profilerUI.recordButton2.tooltip "성능 기록을 시작하거나 멈춥니다.">
 
 <!-- LOCALIZATION NOTE (profilerUI.importButton): This string is displayed
   -  on a button that opens a dialog to import a saved profile data file. -->
@@ -51,16 +73,22 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.table.*): These strings are displayed
   -  in the call tree headers for a recording. -->
-<!ENTITY profilerUI.table.totalDuration2  "전체 시간">
-<!ENTITY profilerUI.table.selfDuration2   "차지하는 시간">
-<!ENTITY profilerUI.table.totalPercentage "전체 비용">
-<!ENTITY profilerUI.table.selfPercentage  "차지하는 비용">
-<!ENTITY profilerUI.table.samples         "샘플 수">
-<!ENTITY profilerUI.table.function        "함수">
-<!ENTITY profilerUI.table.totalAlloc1       "샘플링한 할당 전체">
-<!ENTITY profilerUI.table.totalAllocTooltip "이 구역의 호출에서 Object 할당을 샘플링한 전체 개수입니다.">
-<!ENTITY profilerUI.table.selfAlloc1        "샘플링한 할당에서 차지">
-<!ENTITY profilerUI.table.selfAllocTooltip  "이 구역의 Object 할당을 샘플링한 개수입니다.">
+<!ENTITY profilerUI.table.totalDuration2           "전체 시간">
+<!ENTITY profilerUI.table.totalDuration.tooltip    "이 함수와 이 함수에서 다른 함수를 호출하는 데 쓰인 시간을 모두 더한 값입니다.">
+<!ENTITY profilerUI.table.selfDuration2            "차지하는 시간">
+<!ENTITY profilerUI.table.selfDuration.tooltip     "이 함수에서 쓰인 시간을 모두 더한 값입니다.">
+<!ENTITY profilerUI.table.totalPercentage          "전체 비용">
+<!ENTITY profilerUI.table.totalPercentage.tooltip  "이 함수와 이 함수에서 다른 함수를 호출하는 데 쓰인 시간의 백분율입니다.">
+<!ENTITY profilerUI.table.selfPercentage           "차지하는 비용">
+<!ENTITY profilerUI.table.selfPercentage.tooltip   "이 함수에서 쓰인 시간의 백분율입니다.">
+<!ENTITY profilerUI.table.samples                  "샘플 수">
+<!ENTITY profilerUI.table.samples.tooltip          "프로파일러가 샘플을 가져왔을 때 이 함수가 스택에 있었던 횟수입니다.">
+<!ENTITY profilerUI.table.function                 "함수">
+<!ENTITY profilerUI.table.function.tooltip         "가져온 샘플에 있는 함수의 이름과 소스 코드의 위치입니다.">
+<!ENTITY profilerUI.table.totalAlloc1              "샘플링한 할당 전체">
+<!ENTITY profilerUI.table.totalAlloc.tooltip       "이 구역의 호출에서 Object 할당을 샘플링한 전체 개수입니다.">
+<!ENTITY profilerUI.table.selfAlloc1               "샘플링한 할당에서 차지">
+<!ENTITY profilerUI.table.selfAlloc.tooltip        "이 구역의 Object 할당을 샘플링한 개수입니다.">
 
 <!-- LOCALIZATION NOTE (profilerUI.newtab.tooltiptext): The tooltiptext shown
   -  on the "+" (new tab) button for a profile when a selection is available. -->
@@ -68,7 +96,7 @@
 
 <!-- LOCALIZATION NOTE (profilerUI.toolbar.filter.tooltiptext): This string
   -  is displayed next to the filter button-->
-<!ENTITY profilerUI.options.filter.tooltiptext "Select what data to display in the timeline">
+<!ENTITY profilerUI.options.filter.tooltiptext "타임라인에 띄울 데이터 고르기">
 
 <!-- LOCALIZATION NOTE (profilerUI.options.tooltiptext): This is the tooltip
   -  for the options button. -->
@@ -107,3 +135,26 @@
   -  is recorded. -->
 <!ENTITY profilerUI.enableFramerate             "프레임레이트 기록">
 <!ENTITY profilerUI.enableFramerate.tooltiptext "프로파일링을 하는 동안 프레임레이트를 기록합니다.">
+
+<!-- LOCALIZATION NOTE (profilerUI.showJITOptimizations): This string
+  -  is displayed next to a checkbox determining whether or not JIT optimization data
+  -  should be shown. -->
+<!ENTITY profilerUI.showJITOptimizations             "JIT 최적화 보이기">
+<!ENTITY profilerUI.showJITOptimizations.tooltiptext "JS 호출 트리의 각 프레임에서 샘플링한 JIT 최적화 데이터를 보여줍니다.">
+
+<!-- LOCALIZATION NOTE (profilerUI.JITOptimizationsTitle): This string
+  -  is displayed as the title of the JIT Optimizations panel. -->
+<!ENTITY profilerUI.JITOptimizationsTitle "JIT 최적화">
+
+<!-- LOCALIZATION NOTE (profilerUI.console.recordingNoticeStart/recordingNoticeEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Wraps the command used to start, like "Currently recording via console.profile("label")" -->
+<!ENTITY profilerUI.console.recordingNoticeStart "">
+<!ENTITY profilerUI.console.recordingNoticeEnd   "에서 기록하고 있음">
+
+<!-- LOCALIZATION NOTE (profilerUI.console.stopCommandStart/stopCommandEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Indicates how to stop the recording, wrapping the command, like
+  -  "Stop recording by entering console.profilEnd("label") into the console." -->
+<!ENTITY profilerUI.console.stopCommandStart "기록을 그만하려면 콘솔에">
+<!ENTITY profilerUI.console.stopCommandEnd   "라고 입력하십시오.">

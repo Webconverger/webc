@@ -10,24 +10,46 @@
   - documentation on web development on the web. -->
 <!-- LOCALIZATION NOTE (profilerUI.emptyNotice1/2): This is the label shown
   -  in the call list view when empty. -->
+<!-- TODO remove -->
 
 
 
 <!ENTITY profilerUI.emptyNotice1    "Klik pada tombol">
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice2    "untuk mulai merekam pemanggilan fungsi JavaScript.">
 <!-- LOCALIZATION NOTE (profilerUI.stopNotice1/2): This is the label shown
   -  in the call list view while recording a profile. -->
+<!-- TODO remove -->
 
 <!ENTITY profilerUI.stopNotice1    "Klik pada tombol">
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice2    "sekali lagi untuk menghentikan pemrofilan.">
+<!-- LOCALIZATION NOTE (profilerUI.startRecording/profilerUI.stopRecording): These are
+  -  the labels shown on the main recording buttons to start/stop recording. -->
+
+<!ENTITY profilerUI.startRecording "Mulai Rekam Kinerja">
+<!ENTITY profilerUI.stopRecording  "Hentikan Rekaman Kinerja">
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusTooltip): This string
+  -  is displayed as the tooltip for the buffer capacity during a recording. -->
+
+<!ENTITY profilerUI.bufferStatusTooltip "Profiler menyimpan sampel dalam buffer sirkular dan segera setelah buffer mencapai batas rekaman, sampel baru akan menimpa samepl lama di awal rekaman.">
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusFull): This string
+  -  is displayed when the profiler's circular buffer has started to overlap. -->
+
+<!ENTITY profilerUI.bufferStatusFull "Buffer penuh. Sampel lama ditimpa.">
 <!-- LOCALIZATION NOTE (profilerUI.loadingNotice): This is the label shown
   -  in the call list view while loading a profile. -->
 
 <!ENTITY profilerUI.loadingNotice "Memuat…">
 <!-- LOCALIZATION NOTE (profilerUI.recordButton): This string is displayed
   -  on a button that starts a new profile. -->
+<!-- TODO remove -->
 
 <!ENTITY profilerUI.recordButton.tooltip "Rekam pemanggilan fungsi JavaScript.">
+<!-- LOCALIZATION NOTE (profilerUI.recordButton2): This string is displayed
+  -  on a button that starts a new profile. -->
+
+<!ENTITY profilerUI.recordButton2.tooltip "Aktifkan/Nonaktifkan status kinerja rekaman">
 <!-- LOCALIZATION NOTE (profilerUI.importButton): This string is displayed
   -  on a button that opens a dialog to import a saved profile data file. -->
 
@@ -51,16 +73,22 @@
 <!-- LOCALIZATION NOTE (profilerUI.table.*): These strings are displayed
   -  in the call tree headers for a recording. -->
 
-<!ENTITY profilerUI.table.totalDuration2  "Total Waktu">
-<!ENTITY profilerUI.table.selfDuration2   "Waktu Sendiri">
-<!ENTITY profilerUI.table.totalPercentage "Total Beban">
-<!ENTITY profilerUI.table.selfPercentage  "Beban Item">
-<!ENTITY profilerUI.table.samples         "Sampling">
-<!ENTITY profilerUI.table.function        "Fungsi">
-<!ENTITY profilerUI.table.totalAlloc1       "Jumlah Alokasi Sampel">
-<!ENTITY profilerUI.table.totalAllocTooltip "Jumlah total alokasi Objek yang di-samping pada lokasi ini dan pemanggilnya.">
-<!ENTITY profilerUI.table.selfAlloc1        "Alokasi Sampling Mandiri">
-<!ENTITY profilerUI.table.selfAllocTooltip  "Jumlah alokasi Objek yang di-samping pada lokasi ini.">
+<!ENTITY profilerUI.table.totalDuration2           "Total Waktu">
+<!ENTITY profilerUI.table.totalDuration.tooltip    "Jumlah waktu yang dihabiskan pada fungsi ini dan fungsi yang dipanggilnya.">
+<!ENTITY profilerUI.table.selfDuration2            "Waktu Sendiri">
+<!ENTITY profilerUI.table.selfDuration.tooltip     "Waktu yang dihabiskan hanya dalam fungsi ini.">
+<!ENTITY profilerUI.table.totalPercentage          "Total Beban">
+<!ENTITY profilerUI.table.totalPercentage.tooltip  "Persentase waktu yang dihabiskan dalam fungsi ini dan fungsi yang dipanggil olehnya.">
+<!ENTITY profilerUI.table.selfPercentage           "Beban Item">
+<!ENTITY profilerUI.table.selfPercentage.tooltip   "Persentasi waktu yang dihabiskan hanya dalam fungsi ini.">
+<!ENTITY profilerUI.table.samples                  "Sampling">
+<!ENTITY profilerUI.table.samples.tooltip          "Jumlah munculan fungsi ini dalam stack saat profiler mengambil sampel.">
+<!ENTITY profilerUI.table.function                 "Fungsi">
+<!ENTITY profilerUI.table.function.tooltip         "Nama dan lokasi sumber fungsi yang disampling.">
+<!ENTITY profilerUI.table.totalAlloc1              "Jumlah Alokasi Sampel">
+<!ENTITY profilerUI.table.totalAlloc.tooltip       "Jumlah total alokasi Objek yang di-samping pada lokasi ini dan pemanggilnya.">
+<!ENTITY profilerUI.table.selfAlloc1               "Alokasi Sampling Mandiri">
+<!ENTITY profilerUI.table.selfAlloc.tooltip        "Jumlah alokasi Objek yang di-samping pada lokasi ini.">
 <!-- LOCALIZATION NOTE (profilerUI.newtab.tooltiptext): The tooltiptext shown
   -  on the "+" (new tab) button for a profile when a selection is available. -->
 
@@ -107,3 +135,26 @@
 
 <!ENTITY profilerUI.enableFramerate             "Rekam Framerate">
 <!ENTITY profilerUI.enableFramerate.tooltiptext "Rekam framerate saat pemrofilan.">
+<!-- LOCALIZATION NOTE (profilerUI.showJITOptimizations): This string
+  -  is displayed next to a checkbox determining whether or not JIT optimization data
+  -  should be shown. -->
+
+<!ENTITY profilerUI.showJITOptimizations             "Tampilkan Optimisasi JIT">
+<!ENTITY profilerUI.showJITOptimizations.tooltiptext "Tampilkan data optimisasi JIT yang diambil sebagai sampel dalam tiap bingkai pada pohon panggilan JS.">
+<!-- LOCALIZATION NOTE (profilerUI.JITOptimizationsTitle): This string
+  -  is displayed as the title of the JIT Optimizations panel. -->
+
+<!ENTITY profilerUI.JITOptimizationsTitle "Optimisasi JIT">
+<!-- LOCALIZATION NOTE (profilerUI.console.recordingNoticeStart/recordingNoticeEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Wraps the command used to start, like "Currently recording via console.profile("label")" -->
+
+<!ENTITY profilerUI.console.recordingNoticeStart "Sedang merekam via">
+<!ENTITY profilerUI.console.recordingNoticeEnd   "">
+<!-- LOCALIZATION NOTE (profilerUI.console.stopCommandStart/stopCommandEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Indicates how to stop the recording, wrapping the command, like
+  -  "Stop recording by entering console.profilEnd("label") into the console." -->
+
+<!ENTITY profilerUI.console.stopCommandStart "Berhenti merekam dengan memasukkan">
+<!ENTITY profilerUI.console.stopCommandEnd   "ke konsol.">

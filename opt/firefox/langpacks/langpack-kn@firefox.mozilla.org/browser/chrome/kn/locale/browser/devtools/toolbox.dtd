@@ -6,6 +6,9 @@
 
 
 <!ENTITY closeCmd.key  "W">
+<!ENTITY toggleToolbox.key  "I">
+<!ENTITY toggleToolboxF12.keycode          "VK_F12">
+<!ENTITY toggleToolboxF12.keytext          "F12">
 
 <!ENTITY toolboxCloseButton.tooltip    "ವಿಕಸನೆಗಾರ ಉಪಕರಣಗಳನ್ನು ಮುಚ್ಚು">
 <!ENTITY toolboxOptionsButton.key      "O">
@@ -77,6 +80,8 @@
   -  checkbox that toggles chrome debugging, i.e. devtools.chrome.enabled
   -  boolean preference in about:config, in the options panel. -->
 
+<!ENTITY options.enableChrome.label5    "ಕ್ರೋಮ್ ಬ್ರೌಸರ್ ಮತ್ತು ಡೀಬಗ್ಗಿಂಗ್ ಉಪಕರಣ ಚೌಕ ಆಡ್‌-ಅನ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು">
+<!ENTITY options.enableChrome.tooltip3  "ಈ ಆಯ್ಕೆಯನ್ನು ಆನ್ ಮಾಡುವುದರಿಂದನೀವು ಅನೇಕ ಡೆವೆಲಪರ್ ಉಪಕರಣಗಳನ್ನು ಬ್ರೌಸರ್ ಬಳಸುವ ಸಂದರ್ಭದಲ್ಲಿ (ಉಪಕರಣಗಳು > ವೆಬ್ ಡೆವೆಲಪರ್ > ಬ್ರೌಸರ್ ಉಪಕರಣಪೆಟ್ಟಿಗೆ) ಮತ್ತು ಆಡ್-ಆನ್‌ ವ್ಯವಸ್ಥಾಪಕದ ಮೂಲಕ ಆಡ್-ಆನ್‌ಗಳನ್ನು ದೋಷನಿದಾನಕ್ಕೆ ಅಣಿಮಾಡಲು ಅನುಮತಿ ಪಡೆಯುತ್ತೀರಿ">
 <!-- LOCALIZATION NOTE (options.enableRemote.label3): This is the label for the
   -  checkbox that toggles remote debugging, i.e. devtools.debugger.remote-enabled
   -  boolean preference in about:config, in the options panel. -->
@@ -95,10 +100,12 @@
 
 <!ENTITY options.disableCache.label2     "ಕ್ಯಾಶೆಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು (ಉಪಕರಣಪೆಟ್ಟಿಗೆಯು ತೆರೆದಾಗ)">
 <!ENTITY options.disableCache.tooltip2   "ಈ ಆಯ್ಕೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವುದರಿಂದ ಉಪಕರಣಪೆಟ್ಟಿಗೆಯನ್ನು ಯಾವ ಎಲ್ಲಾ ಟ್ಯಾಬ್‌ಗಳಲ್ಲಿ ತೆರೆಯಲಾಗಿದೆಯೊ ಅವುಗಳಿಗಾಗಿನ ಕ್ಯಾಶ್ ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗುತ್ತದೆ.">
-<!-- LOCALIZATION NOTE (options.enableServiceWorkersTesting.label,
-  -  options.enableServiceWorkersTesting.tooltip): This is the options panel label and
-  -  tooltip for the checkbox that toggles the service workers testing features on or off. -->
+<!-- LOCALIZATION NOTE (options.enableServiceWorkersHTTP.label,
+  -  options.enableServiceWorkersHTTP.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the service workers testing features on or off. This option enables service workers over HTTP. -->
 
+<!ENTITY options.enableServiceWorkersHTTP.label     "HTTP ನ ಮೇಲೆ ಸೇವಾ ವರ್ಕರ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು (ಉಪಕರಣಪೆಟ್ಟಿಗೆ ತೆರೆದಿದ್ದಾಗ)">
+<!ENTITY options.enableServiceWorkersHTTP.tooltip   "ಈ ಆಯ್ಕೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವುದರಿಂದ ಉಪಕರಣಪೆಟ್ಟಿಗೆಯನ್ನು ಯಾವ ಎಲ್ಲಾ ಟ್ಯಾಬ್‌ಗಳಲ್ಲಿ ತೆರೆಯಲಾಗಿದೆಯೊ ಅವುಗಳಿಗೆ HTTP ಮೂಲಕ ಸೇವಾ ವರ್ಕರ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗುತ್ತದೆ.">
 <!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tools. -->
@@ -196,16 +203,3 @@
 <!ENTITY options.sourceeditor.keybinding.accesskey      "K">
 <!ENTITY options.sourceeditor.keybinding.default.label  "ಪೂರ್ವನಿಯೋಜಿತ">
 
-
-
-<!-- LOCALIZATION NOTE (options.enableChrome.label4): This is the label for the
-  -  checkbox that toggles chrome debugging, i.e. devtools.chrome.enabled
-  -  boolean preference in about:config, in the options panel. -->
-<!ENTITY options.enableChrome.label5    "Enable browser chrome and add-on debugging toolboxes">
-<!ENTITY options.enableChrome.tooltip3  "Turning this option on will allow you to use various developer tools in browser context (via Tools > Web Developer > Browser Toolbox) and debug add-ons from the Add-ons Manager">
-
-<!-- LOCALIZATION NOTE (options.enableServiceWorkersTesting.label,
-  -  options.enableServiceWorkersTesting.tooltip): This is the options panel label and
-  -  tooltip for the checkbox that toggles the service workers testing features on or off. -->
-<!ENTITY options.enableServiceWorkersTesting.label     "Enable Service Workers testing features (when toolbox is open)">
-<!ENTITY options.enableServiceWorkersTesting.tooltip   "Turning this option on will enable the service workers testing features for all tabs that have the toolbox open.">

@@ -10,24 +10,46 @@
   - documentation on web development on the web. -->
 <!-- LOCALIZATION NOTE (profilerUI.emptyNotice1/2): This is the label shown
   -  in the call list view when empty. -->
+<!-- TODO remove -->
 
 
 
 <!ENTITY profilerUI.emptyNotice1    "Kattintson a ">
+<!-- TODO remove -->
 <!ENTITY profilerUI.emptyNotice2    "gombra a JavaScript függvényhívások rögzítésének megkezdéséhez.">
 <!-- LOCALIZATION NOTE (profilerUI.stopNotice1/2): This is the label shown
   -  in the call list view while recording a profile. -->
+<!-- TODO remove -->
 
 <!ENTITY profilerUI.stopNotice1    "Kattintson a ">
+<!-- TODO remove -->
 <!ENTITY profilerUI.stopNotice2    "gombra újra a profilozás leállításához.">
+<!-- LOCALIZATION NOTE (profilerUI.startRecording/profilerUI.stopRecording): These are
+  -  the labels shown on the main recording buttons to start/stop recording. -->
+
+<!ENTITY profilerUI.startRecording "Teljesítményrögzítés kezdése">
+<!ENTITY profilerUI.stopRecording  "Teljesítményrögzítés befejezése">
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusTooltip): This string
+  -  is displayed as the tooltip for the buffer capacity during a recording. -->
+
+<!ENTITY profilerUI.bufferStatusTooltip "A profilozó a mintákat körkörös pufferben tárolja, és amikor a puffer eléri a felvétel korlátját, az újabb minták elkezdik felülírni a felvétel elején lévő mintákat.">
+<!-- LOCALIZATION NOTE (profilerUI.bufferStatusFull): This string
+  -  is displayed when the profiler's circular buffer has started to overlap. -->
+
+<!ENTITY profilerUI.bufferStatusFull "A puffer megtelt. A régebbi minták mostantól felülírásra kerülnek.">
 <!-- LOCALIZATION NOTE (profilerUI.loadingNotice): This is the label shown
   -  in the call list view while loading a profile. -->
 
 <!ENTITY profilerUI.loadingNotice "Betöltés…">
 <!-- LOCALIZATION NOTE (profilerUI.recordButton): This string is displayed
   -  on a button that starts a new profile. -->
+<!-- TODO remove -->
 
 <!ENTITY profilerUI.recordButton.tooltip "JavaScript függvényhívások rögzítése.">
+<!-- LOCALIZATION NOTE (profilerUI.recordButton2): This string is displayed
+  -  on a button that starts a new profile. -->
+
+<!ENTITY profilerUI.recordButton2.tooltip "Teljesítményrögzítés felvételi állapotának átváltása.">
 <!-- LOCALIZATION NOTE (profilerUI.importButton): This string is displayed
   -  on a button that opens a dialog to import a saved profile data file. -->
 
@@ -51,16 +73,22 @@
 <!-- LOCALIZATION NOTE (profilerUI.table.*): These strings are displayed
   -  in the call tree headers for a recording. -->
 
-<!ENTITY profilerUI.table.totalDuration2  "Teljes idő">
-<!ENTITY profilerUI.table.selfDuration2   "Saját idő">
-<!ENTITY profilerUI.table.totalPercentage "Teljes költség">
-<!ENTITY profilerUI.table.selfPercentage  "Saját költség">
-<!ENTITY profilerUI.table.samples         "Minták">
-<!ENTITY profilerUI.table.function        "Függvény">
-<!ENTITY profilerUI.table.totalAlloc1       "Mintavételezett foglalások összesen">
-<!ENTITY profilerUI.table.totalAllocTooltip "Ezen a helyen és hívottakban mintavételezett objektumfoglalások teljes száma.">
-<!ENTITY profilerUI.table.selfAlloc1        "Ön-mintavételezett foglalások">
-<!ENTITY profilerUI.table.selfAllocTooltip  "Ezen a helyen mintavételezett objektumfoglalások száma.">
+<!ENTITY profilerUI.table.totalDuration2           "Teljes idő">
+<!ENTITY profilerUI.table.totalDuration.tooltip    "A függvényben és az általa hívott függvényekben töltött idő.">
+<!ENTITY profilerUI.table.selfDuration2            "Saját idő">
+<!ENTITY profilerUI.table.selfDuration.tooltip     "A függvényen belül töltött idő.">
+<!ENTITY profilerUI.table.totalPercentage          "Teljes költség">
+<!ENTITY profilerUI.table.totalPercentage.tooltip  " A függvényben és az általa hívott függvényekben töltött idő százalékban.">
+<!ENTITY profilerUI.table.selfPercentage           "Saját költség">
+<!ENTITY profilerUI.table.selfPercentage.tooltip   "A függvényben és az általa hívott függvényekben töltött idő százalékban.">
+<!ENTITY profilerUI.table.samples                  "Minták">
+<!ENTITY profilerUI.table.samples.tooltip          "A függvény ennyiszer volt a verem tetején, amikor a profilozó mintát vett.">
+<!ENTITY profilerUI.table.function                 "Függvény">
+<!ENTITY profilerUI.table.function.tooltip         "A mintavételezett függvény neve és helye.">
+<!ENTITY profilerUI.table.totalAlloc1              "Mintavételezett foglalások összesen">
+<!ENTITY profilerUI.table.totalAlloc.tooltip       "Ezen a helyen és hívottakban mintavételezett objektumfoglalások teljes száma.">
+<!ENTITY profilerUI.table.selfAlloc1               "Ön-mintavételezett foglalások">
+<!ENTITY profilerUI.table.selfAlloc.tooltip        "Ezen a helyen mintavételezett objektumfoglalások száma.">
 <!-- LOCALIZATION NOTE (profilerUI.newtab.tooltiptext): The tooltiptext shown
   -  on the "+" (new tab) button for a profile when a selection is available. -->
 
@@ -107,3 +135,26 @@
 
 <!ENTITY profilerUI.enableFramerate             "Képkockasebesség rögzítése">
 <!ENTITY profilerUI.enableFramerate.tooltiptext "Képkockasebesség rögzítése profilozáskor.">
+<!-- LOCALIZATION NOTE (profilerUI.showJITOptimizations): This string
+  -  is displayed next to a checkbox determining whether or not JIT optimization data
+  -  should be shown. -->
+
+<!ENTITY profilerUI.showJITOptimizations             "JIT optimalizációk megjelenítése">
+<!ENTITY profilerUI.showJITOptimizations.tooltiptext "A JS hívási fa egyes kereteiben mintavételezett JIT optimalizálási adatok megjelenítése.">
+<!-- LOCALIZATION NOTE (profilerUI.JITOptimizationsTitle): This string
+  -  is displayed as the title of the JIT Optimizations panel. -->
+
+<!ENTITY profilerUI.JITOptimizationsTitle "JIT optimalizációk">
+<!-- LOCALIZATION NOTE (profilerUI.console.recordingNoticeStart/recordingNoticeEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Wraps the command used to start, like "Currently recording via console.profile("label")" -->
+
+<!ENTITY profilerUI.console.recordingNoticeStart "Rögzítés folyamatban ezen keresztül:">
+<!ENTITY profilerUI.console.recordingNoticeEnd   "">
+<!-- LOCALIZATION NOTE (profilerUI.console.stopCommandStart/stopCommandEnd):
+  -  This string is displayed when a recording is selected that started via console.profile.
+  -  Indicates how to stop the recording, wrapping the command, like
+  -  "Stop recording by entering console.profilEnd("label") into the console." -->
+
+<!ENTITY profilerUI.console.stopCommandStart "Állítsa le a felvételt ennek beírásával: ">
+<!ENTITY profilerUI.console.stopCommandEnd   "a konzolba.">
