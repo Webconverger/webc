@@ -40,3 +40,5 @@ pref("general.config.filename", "mozilla.cfg");
 
 // Disable https://blog.mozilla.org/metrics/2012/09/21/firefox-health-report/
 pref("datareporting.healthreport.uploadEnabled", false);
+
+pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
