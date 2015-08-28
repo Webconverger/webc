@@ -42,3 +42,11 @@ pref("datareporting.healthreport.uploadEnabled", false);
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 pref("media.eme.enabled", false);
 pref("geo.enabled", false);
+pref("extensions.blocklist.enabled", false);
+pref("browser.safebrowsing.enabled", false);
+
+
+pref("browser.safebrowsing.phishing.enabled", false);
+pref("browser.safebrowsing.malware.enabled", false);
+pref("browser.safebrowsing.downloads.enabled", false);
+pref("browser.safebrowsing.downloads.remote.enabled", false);
