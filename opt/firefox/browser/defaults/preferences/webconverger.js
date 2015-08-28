@@ -41,3 +41,4 @@ pref("datareporting.healthreport.uploadEnabled", false);
 
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 pref("media.eme.enabled", false);
+pref("geo.enabled", false);
