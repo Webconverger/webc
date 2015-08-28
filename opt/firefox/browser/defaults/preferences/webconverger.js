@@ -40,3 +40,4 @@ pref("general.config.filename", "mozilla.cfg");
 pref("datareporting.healthreport.uploadEnabled", false);
 
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
+pref("media.eme.enabled", false);
