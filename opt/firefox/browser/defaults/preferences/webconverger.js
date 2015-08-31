@@ -38,6 +38,13 @@ pref("general.config.filename", "mozilla.cfg");
 
 // Disable https://blog.mozilla.org/metrics/2012/09/21/firefox-health-report/
 pref("datareporting.healthreport.uploadEnabled", false);
+pref("datareporting.healthreport.service.enabled", false);
+
+//Disable plugin checking
+pref("plugins.hide_infobar_for_outdated_plugin", true);
+
+// Don't ask to install the Flash plugin
+pref("plugins.notifyMissingFlash", false);
 
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 pref("media.eme.enabled", false);
@@ -45,8 +52,10 @@ pref("geo.enabled", false);
 pref("extensions.blocklist.enabled", false);
 pref("browser.safebrowsing.enabled", false);
 
-
 pref("browser.safebrowsing.phishing.enabled", false);
 pref("browser.safebrowsing.malware.enabled", false);
 pref("browser.safebrowsing.downloads.enabled", false);
 pref("browser.safebrowsing.downloads.remote.enabled", false);
+
+// Disable crash reporter
+pref("toolkit.crashreporter.enabled", false);
