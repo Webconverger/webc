@@ -57,5 +57,10 @@ pref("browser.safebrowsing.malware.enabled", false);
 pref("browser.safebrowsing.downloads.enabled", false);
 pref("browser.safebrowsing.downloads.remote.enabled", false);
 
+// https://github.com/Webconverger/webconverger-addon/issues/65
+pref("media.gmp-gmpopenh264.autoupdate", false);
+pref("media.gmp-gmpopenh264.enabled", false);
+pref("media.gmp-gmpopenh264.provider.enabled", false);
+
 // Disable crash reporter
 pref("toolkit.crashreporter.enabled", false);
