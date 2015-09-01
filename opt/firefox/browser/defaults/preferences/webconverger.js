@@ -32,6 +32,7 @@ pref("browser.startup.homepage", "file:/opt/firefox/browser/defaults/preferences
 // Disable updates, since we use git
 pref("app.update.auto", false);
 pref("app.update.enabled", false);
+pref("app.update.url", "");
 
 pref("general.config.obscure_value", 0);
 pref("general.config.filename", "mozilla.cfg");
@@ -48,9 +49,15 @@ pref("plugins.notifyMissingFlash", false);
 
 pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 pref("media.eme.enabled", false);
-pref("geo.enabled", false);
+pref("media.gmp-manager.url", "");
 pref("extensions.blocklist.enabled", false);
 pref("browser.safebrowsing.enabled", false);
+
+// https://github.com/Webconverger/webconverger-addon/issues/64
+pref("geo.enabled", false);
+pref("browser.search.geoip.url", "");
+pref("geo.wifi.uri", "");
+pref("browser.search.geoSpecificDefaults", false);
 
 pref("browser.safebrowsing.phishing.enabled", false);
 pref("browser.safebrowsing.malware.enabled", false);
