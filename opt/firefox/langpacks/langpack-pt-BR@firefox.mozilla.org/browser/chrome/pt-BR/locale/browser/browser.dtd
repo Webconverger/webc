@@ -275,6 +275,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 
 <!ENTITY browserContentToolboxMenu.label     "Caixa de ferramentas de conteúdo do navegador">
+<!ENTITY browserContentToolboxMenu.accesskey "C">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Fechar barra do desenvolvedor">
 <!ENTITY devToolbarMenu.label              "Barra do desenvolvedor">
@@ -304,6 +305,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "o">
 <!ENTITY newPrivateWindow.label     "Nova janela privativa">
 <!ENTITY newPrivateWindow.accesskey "j">
+<!ENTITY newNonRemoteWindow.label   "Nova janela Non-e10s">
 
 <!ENTITY editMenu.label         "Editar"> 
 <!ENTITY editMenu.accesskey       "E"> 
@@ -421,7 +423,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
 
-<!ENTITY searchFor.label              "Pesquisar por ">
+<!ENTITY searchFor.label              "Pesquisar por ">
 <!ENTITY searchWith.label             " com:">
 <!-- LOCALIZATION NOTE (search.label, searchAfter.label):
      This string is used to build the header above the list of one-click search
@@ -430,7 +432,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      display a string after the search engine name.  This string will be displayed
      as:  "Search <selected engine name><searchAfter.label text>" -->
 
-<!ENTITY search.label                 "Pesquisa ">
+<!ENTITY search.label                 "Pesquisa ">
 <!ENTITY searchAfter.label            "">
 <!-- LOCALIZATION NOTE (searchWithHeader.label):
      The wording of this string should be as close as possible to
@@ -462,14 +464,14 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY reloadCmd.commandkey         "r">
 <!ENTITY reloadFrameCmd.label         "Recarregar frame">
 <!ENTITY reloadFrameCmd.accesskey     "R">
-<!ENTITY viewPartialSourceForSelectionCmd.label "Ver código fonte selecionado">
-<!ENTITY viewPartialSourceForMathMLCmd.label    "Ver código fonte MathML">
+<!ENTITY viewPartialSourceForSelectionCmd.label "Ver código-fonte selecionado">
+<!ENTITY viewPartialSourceForMathMLCmd.label    "Ver código-fonte MathML">
 <!-- LOCALIZATION NOTE (viewPartialSourceCmd.accesskey): This accesskey is used for both 
          viewPartialSourceForSelectionCmd.label and viewPartialSourceForMathMLCmd.label -->
 <!ENTITY viewPartialSourceCmd.accesskey "e">
-<!ENTITY viewPageSourceCmd.label      "Ver código fonte da página">
+<!ENTITY viewPageSourceCmd.label      "Ver código-fonte da página">
 <!ENTITY viewPageSourceCmd.accesskey  "V">
-<!ENTITY viewFrameSourceCmd.label     "Ver código fonte do frame">
+<!ENTITY viewFrameSourceCmd.label     "Ver código-fonte do frame">
 <!ENTITY viewFrameSourceCmd.accesskey "V">
 <!ENTITY viewPageInfoCmd.label        "Ver informações da página">
 <!ENTITY viewPageInfoCmd.accesskey    "i">
@@ -639,7 +641,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY pageStylePersistentOnly.label "Estilo básico da página">
 <!ENTITY pageStylePersistentOnly.accesskey "b">
 
-<!ENTITY pageReportIcon.tooltip            "alterar as configurações de popups para este site">
+<!ENTITY pageReportIcon.tooltip            "Alterar as configurações de popups para este site">
 
 <!ENTITY allowPopups.accesskey "p">
 <!-- On Windows we use the term "Options" to describe settings, but
@@ -672,29 +674,14 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Cancelar">
 <!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
-<!ENTITY identity.unverifiedsite2 "Este site não fornece informações de identidade.">
-<!ENTITY identity.connectedTo "Conectado a">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "Conexão segura">
+<!ENTITY identity.connectionNotSecure "Conexão não é segura">
+<!ENTITY identity.connectionVerified "&brandShortName; verificou que está conectado seguramente a este site, administrado por:">
+<!ENTITY identity.connectionInternal "Esta é uma página segura do &brandShortName;.">
 
-example.com
-which is run by
-Example Enterprises, Inc.
-
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "que é administrado por">
-
-<!ENTITY identity.moreInfoLinkText "Mais informações…">
+<!ENTITY identity.moreInfoLinkText2 "Mais informações">
 
 <!ENTITY identity.permissions "Permissões">
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-
-<!ENTITY identity.help.tooltip "Como saber se minha conexão com um site é segura?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -744,7 +731,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.menuAndToolbars.empty "Deseja mais ferramentas?">
 <!ENTITY customizeMode.menuAndToolbars.emptyLink "Escolha entre milhares de complementos">
 <!ENTITY customizeMode.restoreDefaults "Restaurar padrões">
-<!ENTITY customizeMode.toolbars "Exibir/ocultar barras">
+<!ENTITY customizeMode.toolbars "Exibir / Ocultar barra de ferramentas">
 <!ENTITY customizeMode.titlebar "Barra de título">
 <!ENTITY customizeMode.lwthemes "Temas">
 <!ENTITY customizeMode.lwthemes.myThemes "Meus temas">
@@ -858,10 +845,17 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY readingList.sidebar.commandKey           "R">
 <!ENTITY readingList.showSidebar.label            "Exibir painel da lista de leitura">
 <!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Exibir mais...">
+<!ENTITY readingList.sidebar.showMore.label       "Exibir mais…">
 <!-- Pre-landed string for bug 1133662 -->
 <!ENTITY readingList.sidebar.emptyText            "Adicione artigos à sua Lista de Leitura para salvá-los e encontrá-los facilmente quando precisar deles mais tarde.">
 <!ENTITY readingList.sidebar.delete.tooltip       "Remover da sua Lista de Leitura">
 <!-- Pre-landed strings for bug 1123519 -->
 <!ENTITY readingList.sidebar.add.label            "Adicionar à Lista de Leitura">
 <!ENTITY readingList.sidebar.add.tooltip          "Adicionar esta página a sua Lista de Leitura">
+<!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
+
+<!ENTITY saveToPocketCmd.label     "Salvar página no Pocket">
+<!ENTITY saveToPocketCmd.accesskey "k">
+<!ENTITY saveLinkToPocketCmd.label     "Salvar link no Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "o">
+<!ENTITY pocketMenuitem.label      "Ver lista do Pocket">
