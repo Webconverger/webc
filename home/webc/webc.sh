@@ -114,6 +114,33 @@ do
 
 		;;
 
+	synclient=*)
+
+		xoptions=$( /bin/busybox httpd -d ${x#synclient=} )
+
+		if synclient $xoptions
+		then
+			logs "synclient OK $xoptions"
+		else
+			logs "synclient ERR $xoptions"
+		fi
+
+		;;
+
+
+	amixer=*)
+
+		xoptions=$( /bin/busybox httpd -d ${x#amixer=} )
+
+		if amixer $xoptions
+		then
+			logs "amixer OK $xoptions"
+		else
+			logs "amixer ERR $xoptions"
+		fi
+
+		;;
+
 	noblank)
 		logs "noblank"
 		xset s off
