@@ -1,4 +1,4 @@
-// http://webconverger.org/kiosk/
+// https://webconverger.org/kiosk/
 
 pref("devtools.errorconsole.enabled", false);
 
@@ -62,3 +62,5 @@ pref("plugin.default.state", 2);
 pref("browser.pocket.enabled", false);
 // Disable reader view function
 pref("reader.parse-on-load.enabled", false);
+
+pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
