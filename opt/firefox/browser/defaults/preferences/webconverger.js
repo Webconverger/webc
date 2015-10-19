@@ -71,3 +71,6 @@ pref("media.gmp-gmpopenh264.provider.enabled", false);
 
 // Disable crash reporter
 pref("toolkit.crashreporter.enabled", false);
+
+// Disable self-repair.mozilla.org https://wiki.mozilla.org/Advocacy/heartbeat
+pref("browser.selfsupport.url", "");
