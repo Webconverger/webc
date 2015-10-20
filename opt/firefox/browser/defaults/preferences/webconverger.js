@@ -78,3 +78,9 @@ pref("browser.selfsupport.url", "");
 // Disable geo.mozilla.org connections https://bugzilla.mozilla.org/show_bug.cgi?id=1216026
 // https://support.mozilla.org/en-US/kb/how-stop-firefox-making-automatic-connections#w_mozilla-content
 pref("browser.aboutHomeSnippets.updateUrl",		"");
+
+// https://discourse.mozilla-community.org/t/test-html5-videos-on-youtube/1325
+pref("media.fragmented-mp4.exposed", true);
+pref("media.fragmented-mp4.ffmpeg.enabled", true);
+pref("media.mediasource.enabled", true);
+pref("media.mediasource.mp4.enabled", true);
