@@ -74,3 +74,7 @@ pref("toolkit.crashreporter.enabled", false);
 
 // Disable self-repair.mozilla.org https://wiki.mozilla.org/Advocacy/heartbeat
 pref("browser.selfsupport.url", "");
+
+// Disable geo.mozilla.org connections https://bugzilla.mozilla.org/show_bug.cgi?id=1216026
+// https://support.mozilla.org/en-US/kb/how-stop-firefox-making-automatic-connections#w_mozilla-content
+pref("browser.aboutHomeSnippets.updateUrl",		"");
