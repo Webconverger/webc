@@ -51,7 +51,6 @@ pref("datareporting.policy.dataSubmissionPolicyBypassNotification", true);
 pref("media.eme.enabled", false);
 pref("media.gmp-manager.url", "");
 pref("extensions.blocklist.enabled", false);
-pref("browser.safebrowsing.enabled", false);
 
 // https://github.com/Webconverger/webconverger-addon/issues/64
 pref("geo.enabled", false);
@@ -59,8 +58,10 @@ pref("browser.search.geoip.url", "");
 pref("geo.wifi.uri", "");
 pref("browser.search.geoSpecificDefaults", false);
 
-pref("browser.safebrowsing.phishing.enabled", false);
+// https://wiki.mozilla.org/Phishing_Protection#Prefs
+pref("browser.safebrowsing.enabled", false);
 pref("browser.safebrowsing.malware.enabled", false);
+// https://wiki.mozilla.org/Security/Application_Reputation#Prefs
 pref("browser.safebrowsing.downloads.enabled", false);
 pref("browser.safebrowsing.downloads.remote.enabled", false);
 
@@ -84,3 +85,7 @@ pref("media.fragmented-mp4.exposed", true);
 pref("media.fragmented-mp4.ffmpeg.enabled", true);
 pref("media.mediasource.enabled", true);
 pref("media.mediasource.mp4.enabled", true);
+
+// https://wiki.mozilla.org/Security/Tracking_protection#Prefs
+pref("privacy.trackingprotection.enabled", false);
+pref("privacy.trackingprotection.pbmode.enabled", false);
