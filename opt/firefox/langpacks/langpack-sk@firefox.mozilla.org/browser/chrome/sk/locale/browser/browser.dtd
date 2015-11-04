@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "a">
 
 <!ENTITY fxaSignIn.label "Prihlásiť sa k službe &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Otvoriť nastavenia služby &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Obnoviť pripojenie k službe &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "Synchronizácia je zapnutá">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; sa práve začína synchronizovať">
@@ -125,8 +126,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "k">
 <!ENTITY fullScreenExit.label "Ukončiť režim Na celú obrazovku">
 <!ENTITY fullScreenExit.accesskey "U">
-<!ENTITY fullscreenAllowButton.label "Povoliť">
-<!ENTITY fullscreenExitButton.label "Zakázať">
 
 <!ENTITY fullscreenExitHint2.value "Stlačením klávesu ESC opustíte režim.">
 <!ENTITY leaveDOMFullScreen.label "Ukončiť režim Na celú obrazovku">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Prejsť na kartu:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Chcete vylepšiť vyhľadávanie zahrnutím návrhov z vyhľadávacích modulov?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Ďalšie informácie…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Nie">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Áno">
+
 <!--
   Comment duplicated from browser-sets.inc:
 
@@ -418,6 +422,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Výraz vyhľadávania">
+<!ENTITY contentSearchSubmit.label    "Odoslať vyhľadávanie">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -629,6 +639,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                  "W">
 <!ENTITY closeCmd.accesskey            "Z">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label           "Štýl stránky">
 <!ENTITY pageStyleMenu.accesskey       "n">
 <!ENTITY pageStyleNoStyle.label        "Žiadny štýl">
@@ -671,8 +683,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Zabezpečené pripojenie">
 <!ENTITY identity.connectionNotSecure "Pripojenie nie je zabezpečené">
+<!ENTITY identity.connectionFile "Táto stránka je uložená vo vašom počítači.">
 <!ENTITY identity.connectionVerified "&brandShortName; overil, že pripojenie k tejto stránke je zabezpečené. Spravuje ju:">
 <!ENTITY identity.connectionInternal "Toto je bezpečná stránka prehliadača &brandShortName;">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; zablokoval súčasti tejto stránky, ktoré nie sú bezpečné.">
+<!ENTITY identity.passiveLoaded "Súčasti tejto stránky nie sú bezpečné (ako napr. obrázky).">
+<!ENTITY identity.activeLoaded "Na tejto stránke ste vypli Ochranu pred sledovaním.">
+<!ENTITY identity.weakEncryption "Táto stránka používa slabé šifrovanie.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Pripojenie k tejto stránke nie je súkromné. Zadané informácie (ako heslá, správy, informácie o platobných kartách, atď.) môžu byť viditeľné pre iných ľudí.">
+<!ENTITY identity.description.weakCipher "Pripojenie k tejto webovej stránke používa slabé zabezpečenie a nie je súkromné.">
+<!ENTITY identity.description.weakCipher2 "Iní ľudia môžu zobraziť vaše údaje alebo zmeniť správanie stránky.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; zablokoval súčasti tejto stránky, ktoré nie sú bezpečné.">
+<!ENTITY identity.description.passiveLoaded "Vaše pripojenie nie je súkromné a informácie, ktoré zadáte na stránke, môžu byť viditeľné pre iných ľudí.">
+<!ENTITY identity.description.passiveLoaded2 "Táto stránka obsahuje súčasti, ktoré nie sú bezpečné (ako napr. obrázky).">
+<!ENTITY identity.description.passiveLoaded3 "Hoci &brandShortName; zablokoval niektoré súčasti, stále je na stránke dostupný obsah, ktorý nie je bezpečný (ako napr. obrázky).">
+<!ENTITY identity.description.activeLoaded "Táto stránka obsahuje súčasti, ktoré nie sú bezpečné (ako napr. skripty) a vaše pripojenie k nej nie je súkromné.">
+<!ENTITY identity.description.activeLoaded2 "Informácie zadané na tejto stránke (ako heslá, správy, informácie o platobných kartách, atď.) môžu byť viditeľné pre iných ľudí.">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Povoliť ochranu">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "P">
+<!ENTITY identity.disableMixedContentBlocking.label "Zakázať ochranu">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "Z">
+<!ENTITY identity.learnMore "Ďalšie informácie">
 
 <!ENTITY identity.moreInfoLinkText2 "Ďalšie informácie">
 
@@ -749,20 +785,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "k">
 <!ENTITY getUserMedia.selectMicrophone.label "Zdieľať mikrofón:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label "Zvuk z karty bude zdieľaný.">
 <!ENTITY getUserMedia.allWindowsShared.message "Všetky okná viditeľné na vašej obrazovke budú zdieľané.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Väčšina stránok bude po zablokovaní obsahu fungovať naďalej správne.">
-
-<!ENTITY mixedContentBlocked2.message "Nezabezpečený obsah">
-<!ENTITY mixedContentBlocked2.moreinfo "Niektoré nezašifrované prvky tejto stránky boli zablokované.">
-<!ENTITY mixedContentBlocked2.learnMore "Ďalšie informácie">
-<!ENTITY mixedContentBlocked2.options "Možnosti">
-<!ENTITY mixedContentBlocked2.unblock.label "Nateraz vypnúť ochranu">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "N">
-<!ENTITY mixedContentBlocked2.block.label "Zapnúť ochranu">
-<!ENTITY mixedContentBlocked2.block.accesskey "c">
-<!ENTITY mixedContentBlocked2.disabled.message "Ochrana je vypnutá">
+<!ENTITY trackingProtection.title "Ochrana pred sledovaním">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokuje časti stránky, ktoré môžu sledovať vaše prehliadanie.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Na tejto stránke boli nájdené prvky sledovania. Ochrana pred sledovaním je však pre túto stránku vypnutá.">
+<!ENTITY trackingProtection.notDetected3 "Na tejto stránke neboli zistené žiadne prvky sledovania.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Vypnúť ochranu pre túto stránku">
+<!ENTITY trackingProtection.unblock.accesskey "V">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Vypnúť ochranu pre túto reláciu">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "c">
+<!ENTITY trackingProtection.block2.label "Zapnúť ochranu">
+<!ENTITY trackingProtection.block2.accesskey "Z">
 
 <!ENTITY trackingContentBlocked.message "Sledovanie">
 <!ENTITY trackingContentBlocked.moreinfo "Časti stránky, ktoré sledujú vašu aktivitu na webe, boli zablokované.">
@@ -836,18 +877,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "T">
 <!ENTITY emeNotificationsDontAskAgain.label       "Nabudúce sa už nepýtať">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "N">
-
-<!ENTITY readingList.label                        "Zoznam na prečítanie">
-<!ENTITY readingList.sidebar.commandKey           "o">
-<!ENTITY readingList.showSidebar.label            "Zobraziť bočný panel Zoznam na prečítanie">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Zobraziť ďalšie…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Pridajte si články do svojho Zoznamu na prečítanie a budete ich mať jednoducho dostupné vždy, keď ich budete potrebovať.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Odstráni túto stránku do Zoznamu na prečítanie">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Pridať do Zoznamu na prečítanie">
-<!ENTITY readingList.sidebar.add.tooltip          "Pridá túto stránku do Zoznamu na prečítanie">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Uložiť stránku do služby Pocket">

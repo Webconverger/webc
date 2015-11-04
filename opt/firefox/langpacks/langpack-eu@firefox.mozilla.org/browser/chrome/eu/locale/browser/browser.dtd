@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "z">
 
 <!ENTITY fxaSignIn.label "Hasi saioa &syncBrand.shortName.label;(e)n">
+<!ENTITY fxaSignedIn.tooltip "Ireki &syncBrand.shortName.label; hobespenak">
 <!ENTITY fxaSignInError.label "Birkonektatu &syncBrand.shortName.label;(e)ra">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; gaituta">
 <!ENTITY syncStartPanel2.subTitle "Une batetik bestera hasiko da sinkronizatzen &brandShortName;.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "E">
 <!ENTITY fullScreenExit.label "Irten pantaila osoko ikuspegitik">
 <!ENTITY fullScreenExit.accesskey "p">
-<!ENTITY fullscreenAllowButton.label "Baimendu">
-<!ENTITY fullscreenExitButton.label "Ukatu">
 
 <!ENTITY fullscreenExitHint2.value "Sakatu ESK edozein unetan irteteko.">
 <!ENTITY leaveDOMFullScreen.label "Irten pantaila osotik">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Idatzi bilaketa edo helbidea">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Aldatu fitxara:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Bilaketen esperientzia hobetu nahi duzu gomendioekin?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Argibide gehiago…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ez">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Bai">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Bilaketa-katea">
+<!ENTITY contentSearchSubmit.label    "Bidali bilaketa">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "x">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Orriaren estiloa">
 <!ENTITY pageStyleMenu.accesskey "e">
 <!ENTITY pageStyleNoStyle.label "Estilorik gabe">
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Konexio segurua">
 <!ENTITY identity.connectionNotSecure "Konexioa ez da segurua">
-<!ENTITY identity.connectionVerified "&brandShortName;(e)k egiaztatu du gune honetara modu segurua konektatuta zaudela. Arduraduna:">
+<!ENTITY identity.connectionFile "Orri hau zure ordenagailuan biltegiratuta dago.">
+<!ENTITY identity.connectionVerified "&brandShortName;(e)k egiaztatu du gune honetara modu seguruan konektatuta zaudela. Arduraduna:">
 <!ENTITY identity.connectionInternal "&brandShortName; orri segurua da hau.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName;(e)k seguruak ez diren orri honetako zatiak blokeatu ditu.">
+<!ENTITY identity.passiveLoaded "Orri honetako zenbait atal ez dira seguruak (adib. irudiak).">
+<!ENTITY identity.activeLoaded "Babesa desgaitu duzu orri honetan.">
+<!ENTITY identity.weakEncryption "Orri honek zifraketa ahula erabiltzen du.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "Gune honetarako zure konexioa ez da pribatua. Bidaltzen duzun informazioa besteek ikus lezakete (adibidez pasahitzak, mezuak, kreditu txartelak, etab.).">
+<!ENTITY identity.description.weakCipher "Gune honetarako zure konexioak zifraketa ahula erabiltzen du eta ez da pribatua.">
+<!ENTITY identity.description.weakCipher2 "Besteek zure informazioa ikusi edo webgunearen portaera alda lezakete.">
+<!ENTITY identity.description.activeBlocked "&brandShortName;(e)k seguruak ez diren orri honetako zatiak blokeatu ditu.">
+<!ENTITY identity.description.passiveLoaded "Zure konexioa ez da pribatua eta gunearekin partekatzen duzun informazioa besteek ikus lezakete.">
+<!ENTITY identity.description.passiveLoaded2 "Wegune honek segurua ez den edukia dauka (adibidez irudiak).">
+<!ENTITY identity.description.passiveLoaded3 "Nahiz eta &brandShortName;(e)k zenbait eduki blokeatu duen, segurua ez den edukia dauka oraindik orriak (adibidez irudiak).">
+<!ENTITY identity.description.activeLoaded "Wegune honek segurua ez den edukia dauka (adibidez script-ak) eta zure konexioa ez da pribatua.">
+<!ENTITY identity.description.activeLoaded2 "Gune honekin partekatzen duzun informazioa besteek ikus lezakete (adibidez pasahitzak, mezuak, kreditu txartelak, etab.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Gaitu babesa">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "G">
+<!ENTITY identity.disableMixedContentBlocking.label "Desgaitu babesa momentuz">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "Argibide gehiago">
 
 <!ENTITY identity.moreInfoLinkText2 "Informazio gehiago">
 
@@ -754,26 +790,31 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "k">
 <!ENTITY getUserMedia.selectMicrophone.label "Partekatzeko mikrofonoa:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label "Fitxatik datorren audioa partekatu egingo da.">
 <!ENTITY getUserMedia.allWindowsShared.message "Zure pantailan ikusgai dauden leiho guztiak partekatuko dira.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Webgune gehienak ondo ibiliko dira nahiz eta edukia blokeatu.">
-
-<!ENTITY mixedContentBlocked2.message "Eduki ez-segurua">
-<!ENTITY mixedContentBlocked2.moreinfo "Webgune honetako zifratu gabeko hainbat elementu blokeatu egin dira.">
-<!ENTITY mixedContentBlocked2.learnMore "Argibide gehiago">
-<!ENTITY mixedContentBlocked2.options "Aukerak">
-<!ENTITY mixedContentBlocked2.unblock.label "Desgaitu babesa momentuz">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Gaitu babesa">
-<!ENTITY mixedContentBlocked2.block.accesskey "G">
-<!ENTITY mixedContentBlocked2.disabled.message "Babesa desgaituta dago">
+<!ENTITY trackingProtection.title "Jarraipenaren babesa">
+<!ENTITY trackingProtection.detectedBlocked3 "Zure nabigazioaren jarraipena egin lezaketen orriaren zatiak blokeatzen ari da &brandShortName;.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Gune honek zure nabigazioaren jarraipena egin lezaketen zatiak ditu. Babesa desgaituta daukazu.">
+<!ENTITY trackingProtection.notDetected3 "Ez da jarraipeneko elementurik atzeman orri honetan.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Desgaitu babesa gune honetarako">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Desgaitu babesa saio honetarako">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "Gaitu babesa">
+<!ENTITY trackingProtection.block2.accesskey "G">
 
 <!ENTITY trackingContentBlocked.message "Jarraipena">
 <!ENTITY trackingContentBlocked.moreinfo "Zure lineako jardueraren jarraipena egiten duten orriaren zatiak blokeatu egin dira.">
 <!ENTITY trackingContentBlocked.learnMore "Argibide gehiago">
 <!ENTITY trackingContentBlocked.options "Aukerak">
-<!ENTITY trackingContentBlocked.unblock2.label "Desgaitu babesa orri honetarako">
+<!ENTITY trackingContentBlocked.unblock2.label "Desgaitu babesa gune honetarako">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "D">
 <!ENTITY trackingContentBlocked.block.label "Gaitu babesa">
 <!ENTITY trackingContentBlocked.block.accesskey "G">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "e">
 <!ENTITY emeNotificationsDontAskAgain.label       "Ez galdetu berriz">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "d">
-
-<!ENTITY readingList.label                        "Irakurketa-zerrenda">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Erakutsi irakurketa-zerrendaren alboko barra">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Erakutsi gehiago…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Gehitu artikuluak zure irakurketa-zerrendan gerorako gorde eta behar dituzunean erraz aurkitzeko.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Kendu hau zure irakurketa-zerrendatik">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Gehitu irakurketa-zerrendan">
-<!ENTITY readingList.sidebar.add.tooltip          "Gehitu orri hau zure irarketa-zerrendan">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Gorde orria Pocket-era">

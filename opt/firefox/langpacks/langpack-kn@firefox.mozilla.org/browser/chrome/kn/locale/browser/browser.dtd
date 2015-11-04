@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "&syncBrand.shortName.label; ಗೆ ಸೈನ್-ಇನ್ ಆಗು">
+<!ENTITY fxaSignedIn.tooltip "ತೆಗೆ &syncBrand.shortName.label; ಇಚ್ಛೆಗಳು">
 <!ENTITY fxaSignInError.label "&syncBrand.shortName.label; ಗೆ ಮತ್ತೆ ಸಂಪರ್ಕ ಹೊಂದು">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; ಸ್ವಲ್ಪದರಲ್ಲಿ ಸಿಂಕ್ ಆಗಲು ಪ್ರಾರಂಭಿಸುವುದು.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "H">
 <!ENTITY fullScreenExit.label "ಪೂರ್ಣತೆರೆಯ ವಿಧಾನದಿಂದ ಹೊರನಡೆ">
 <!ENTITY fullScreenExit.accesskey "F">
-<!ENTITY fullscreenAllowButton.label "ಅನುಮತಿಸು">
-<!ENTITY fullscreenExitButton.label "ನಿರಾಕರಿಸು">
 
 <!ENTITY fullscreenExitHint2.value "ಯಾವುದೆ ಸಮಯದಲ್ಲಿ ನಿರ್ಗಮಿಸಲು ESC ಅನ್ನು ಒತ್ತಿ">
 <!ENTITY leaveDOMFullScreen.label "ಪೂರ್ಣತೆರೆಯಿಂದ ನಿರ್ಗಮಿಸು">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "ವಿಳಾಸವನ್ನು ಹುಡುಕು ಅಥವ ನಮೂದಿಸು">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "ಟ್ಯಾಬ್‌ಗೆ ಬದಲಾಯಿಸು:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "ನಿಮ್ಮ ಹುಡುಕುವ ಅನುಭವವನ್ನು ಸಲಹೆಗಳಿಂದ ಉತ್ತಮಗೊಳಿಸಲು ಬಯಸುವಿರಾ?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "ಇಲ್ಲ">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "ಹೌದು">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "ಹುಡುಕು ಪ್ರಶ್ನೆ">
+<!ENTITY contentSearchSubmit.label    "ಹುಡುಕನ್ನು ಒಪ್ಪಿಸು">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "C">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "ಪುಟದ ಶೈಲಿ">
 <!ENTITY pageStyleMenu.accesskey "y">
 <!ENTITY pageStyleNoStyle.label "ಯಾವುದೇ ಶೈಲಿ ಇಲ್ಲ">
@@ -676,8 +688,27 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "ಸುರಕ್ಷಿತ ಸಂಪರ್ಕ">
 <!ENTITY identity.connectionNotSecure "ಸಂಪರ್ಕವು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲ">
+<!ENTITY identity.connectionFile "ನಿಮ್ಮ ಗಣಕದಲ್ಲಿ ಈ ಪುಟವನ್ನು ಶೇಖರಿಸಿಡಲಾಗಿದೆ.">
 <!ENTITY identity.connectionVerified "ನೀವು ಈ ತಾಣಕ್ಕೆ ಸುರಕ್ಷಿತವಾಗಿ ಸಂಪರ್ಕ ಹೊಂದಿದ್ದೀರೆಂದು &brandShortName; ಪರಿಶೀಲಿಸಿದೆ, ನಿರ್ವಹಿಸಿರುವುದು:">
 <!ENTITY identity.connectionInternal "ಇದು ಸುರಕ್ಷಿತ &brandShortName; ಪುಟ">
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.passiveLoaded "ಪುಟದ ಕೆಲ ಭಾಗಗಳು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲ(ಚಿತ್ರಗಳಂತಹ).">
+<!ENTITY identity.activeLoaded "ಈ ಪುಟದಲ್ಲಿ ಸಂರಕ್ಷಣೆಯನ್ನು ನೀವು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿದ್ದೀರಿ.">
+<!ENTITY identity.weakEncryption "ಈ ಪುಟವು ನಿಶ್ಶಕ್ತ ಎನ್‌ಕ್ರಿಪ್ಷನ್ ನನ್ನು ಬಳಸುತ್ತದೆ.">
+<!-- Strings for connection state warnings in the subview. -->
+
+
+
+
+
+
+
+
+
+
+<!ENTITY identity.disableMixedContentBlocking.label "ಸಂರಕ್ಷಣೆಯನ್ನು ಸಧ್ಯಕ್ಕೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು (D)">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+
 
 <!ENTITY identity.moreInfoLinkText2 "ಹೆಚ್ಚಿನ ಮಾಹಿತಿ">
 
@@ -754,27 +785,29 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "ಹಂಚಲು ಮೈಕ್ರೊಫೋನ್:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "ಹಾಳೆಯಿಂದ ಆಡಿಯೋವನ್ನು ಹಂಚಲಾಗುತ್ತದೆ.">
 <!ENTITY getUserMedia.allWindowsShared.message "ನಿಮ್ಮ ತೆರೆಯಲ್ಲಿರುವ ಎಲ್ಲಾ ಗೋಚರಿಸುವ ಕಿಟಕಿಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಲಾಗುತ್ತದೆ.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "ವಿಷಯವನ್ನು ನಿರ್ಬಂಧಿಸಿದ್ದರೂ ಸಹ ಹೆಚ್ಚಿನ ಜಾಲತಾಣಗಳು ಸರಿಯಾಗಿ ಕೆಲಸ ಮಾಡುತ್ತವೆ.">
 
-<!ENTITY mixedContentBlocked2.message "ಅಸುರಕ್ಷಿತ ವಿಷಯ">
-<!ENTITY mixedContentBlocked2.moreinfo "ಈ ಜಾಲತಾಣದಲ್ಲಿ ಎನ್ಕ್ರಿಪ್ಟ್ ಆಗಿರದ ಕೆಲವು ಅಂಶಗಳನ್ನು ತಡೆ ಹಿಡಿಯಲಾಗಿದೆ.">
-<!ENTITY mixedContentBlocked2.learnMore "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ">
-<!ENTITY mixedContentBlocked2.options "ಆಯ್ಕೆಗಳು">
-<!ENTITY mixedContentBlocked2.unblock.label "ಸಂರಕ್ಷಣೆಯನ್ನು ಸಧ್ಯಕ್ಕೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು (D)">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "ಸಂರಕ್ಷಣೆಯನ್ನು Enable">
-<!ENTITY mixedContentBlocked2.block.accesskey "E">
-<!ENTITY mixedContentBlocked2.disabled.message "ಸಂರಕ್ಷಣೆಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ">
+
+
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+
+
+
 
 <!ENTITY trackingContentBlocked.message "ಜಾಡು ಇರಿಸುವಿಕೆ">
 <!ENTITY trackingContentBlocked.moreinfo "ನಿಮ್ಮ ಆನ್‌ಲೈನ್‌ ಚಟುವಟಿಕೆಯ ಜಾಡನ್ನು ಇರಿಸಿಕೊಳ್ಳುವ ಕೆಲವು ಪುಟದ ಕೆಲವು ಭಾಗವನ್ನು ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ.">
 <!ENTITY trackingContentBlocked.learnMore "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ">
-<!ENTITY trackingContentBlocked.options "ಆಯ್ಕೆಗಳು">
-<!ENTITY trackingContentBlocked.unblock2.label "ಈ ತಾಣದ ಸಂರಕ್ಷಣೆಯನ್ನು Disable">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
+
+
+
 <!ENTITY trackingContentBlocked.block.label "ಸಂರಕ್ಷಣೆಯನ್ನು Enable">
 <!ENTITY trackingContentBlocked.block.accesskey "E">
 <!ENTITY trackingContentBlocked.disabled.message "ಟ್ರಾಕಿಂಗ್ ಸಂರಕ್ಷಣೆಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ">
@@ -840,18 +873,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "ಮತ್ತೊಮ್ಮೆ ನನ್ನನ್ನು ಕೇಳಬೇಡ (D)">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "ಓದುಬೇಕಿರುವ ಪಟ್ಟಿ">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "ಓದಬೇಕಿರುವ ಪಟ್ಟಿಯ ಬದಿಪಟ್ಟಿ ತೋರಿಸು">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "ಇನ್ನಷ್ಟು ತೋರಿಸು…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "ಲೇಖನಗಳನ್ನು ನಿಮ್ಮ ಓದುವ ಪಟ್ಟಿಗೆ ಮುಂದೆ ಓದುವ ಸಲುವಾಗಿ ಉಳಿಸಿ ಮತ್ತು ಅವುಗಳನ್ನು ಬೇಕಾದಾಗ ಸುಲಭವಾಗಿ ಹುಡುಕಿ.">
-<!ENTITY readingList.sidebar.delete.tooltip       "ಇದನ್ನು ನಿಮ್ಮ ಓದುವ ಪಟ್ಟಿಯಿಂದ ತೆಗೆಯಿರಿ">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "ಓದುವ ಪಟ್ಟಿಗೆ ಸೇರಿಸು">
-<!ENTITY readingList.sidebar.add.tooltip          "ಈ ಪುಟವನ್ನು ನಿಮ್ಮ ಓದುವ ಪಟ್ಟಿಗೆ ಸೇರಿಸು">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Pocketಗೆ ಪುಟವನ್ನು ಉಳಿಸಿ">
@@ -859,3 +880,42 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY saveLinkToPocketCmd.label     "ಕೊಂಡಿಯನ್ನು ಪಾಕೆಟ್‌ಗೆ ಉಳಿಸಿ">
 <!ENTITY saveLinkToPocketCmd.accesskey "o">
 <!ENTITY pocketMenuitem.label      "ಪಾಕೆಟ್ ಪಟ್ಟಿಯನ್ನು ನೋಡಿ">
+
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; has blocked parts of this page that are not secure.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; has blocked parts of this page that are not secure.">
+<!ENTITY identity.description.activeLoaded "This website contains content that is not secure (such as scripts) and your connection to it is not private.">
+<!ENTITY identity.description.activeLoaded2 "Information you share with this site could be viewed by others (like passwords, messages, credit cards, etc.).">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Your connection to this site is not private. Information you submit could be viewed by others (like passwords, messages, credit cards, etc.).">
+<!ENTITY identity.description.passiveLoaded "Your connection is not private and information you share with the site could be viewed by others.">
+<!ENTITY identity.description.passiveLoaded2 "This website contains content that is not secure (such as images).">
+<!ENTITY identity.description.passiveLoaded3 "Although &brandShortName; has blocked some content, there is still content on the page that is not secure (such as images).">
+<!ENTITY identity.description.weakCipher "Your connection to this website uses weak encryption and is not private.">
+<!ENTITY identity.description.weakCipher2 "Other people can view your information or modify the website's behavior.">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Enable protection">
+<!ENTITY identity.learnMore "Learn More">
+<!ENTITY trackingContentBlocked.options "Options">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
+<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
+<!ENTITY trackingProtection.block2.accesskey "E">
+<!ENTITY trackingProtection.block2.label "Enable protection">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; is blocking parts of the page that may track your browsing.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "This site includes elements that may track your browsing. You have disabled protection.">
+<!ENTITY trackingProtection.notDetected3 "No tracking elements detected on this page.">
+
+<!ENTITY trackingProtection.title "Tracking Protection">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Disable protection for this site">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Disable protection for this session">

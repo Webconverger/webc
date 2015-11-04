@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "a">
 
 <!ENTITY fxaSignIn.label "Ingresar a &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Abrir preferencias de &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Reconectar a &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; habilitado">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; comenzará a sincronizar momentáneamente.">
@@ -125,8 +126,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "h">
 <!ENTITY fullScreenExit.label "Salir de pantalla completa">
 <!ENTITY fullScreenExit.accesskey "S">
-<!ENTITY fullscreenAllowButton.label "Permitir">
-<!ENTITY fullscreenExitButton.label "Denegar">
 
 <!ENTITY fullscreenExitHint2.value "Pulse ESC en cualquier momento para salir.">
 <!ENTITY leaveDOMFullScreen.label "Salir de pantalla completa">
@@ -399,6 +398,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Cambiar a pestaña:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "¿Desea mejorar la experienca de búsquedas con sugerencias?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Conocer más…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "No">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Sí">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -422,6 +426,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Pedido de búsqueda">
+<!ENTITY contentSearchSubmit.label    "Enviar búsqueda">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -636,6 +646,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key "W">
 <!ENTITY closeCmd.accesskey "C">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Estilo de la página">
 <!ENTITY pageStyleMenu.accesskey "g">
 <!ENTITY pageStyleNoStyle.label "Sin estilo">
@@ -678,8 +690,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Conexión segura">
 <!ENTITY identity.connectionNotSecure "Conexión insegura">
+<!ENTITY identity.connectionFile "Esta página está guardada en su computadora.">
 <!ENTITY identity.connectionVerified "&brandShortName; verificó que está en una conexión segura a este sitio, provisto por:">
 <!ENTITY identity.connectionInternal "Esta es una página de &brandShortName; segura.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; ha bloqueado partes de esta página que no son seguras.">
+<!ENTITY identity.passiveLoaded "Partes de esta página no son seguras (como las imágenes).">
+<!ENTITY identity.activeLoaded "Ha deshabilitado la protección en esta página.">
+<!ENTITY identity.weakEncryption "Esta página usa cifrado débil.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "La conexión a este sitio no es privada. La información que envíe puede ser vista por otros (como contraseñas, mensajes, tarjetas de crédito, etc.).">
+<!ENTITY identity.description.weakCipher "La conexión a este sitio usa cifrado débil y no es privada.">
+<!ENTITY identity.description.weakCipher2 "Otras personas pueden ver la información o modificar el comportamiento del sitio.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; ha bloqueado partes de esta página que no son seguras.">
+<!ENTITY identity.description.passiveLoaded "La conexión no es privada y la información que se comparta con el sitio puede ser vista por otros.">
+<!ENTITY identity.description.passiveLoaded2 "Este sitio incluye contenido que no es seguro (como las imágenes).">
+<!ENTITY identity.description.passiveLoaded3 "Aunque &brandShortName; ha bloqueado algún contenido, aún hay contenido en la página que no es seguro (como las imágenes).">
+<!ENTITY identity.description.activeLoaded "Este sitio incluye contenido que no es seguro (como scripts) y la conexión no es privada.">
+<!ENTITY identity.description.activeLoaded2 "La información compartida con este sitio puede ser vista por otros (como contraseñas, mensajes, tarjetas de crédito, etc.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Habilitar protección">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
+<!ENTITY identity.disableMixedContentBlocking.label "Deshabilitar protección por ahora">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "Conocer más">
 
 <!ENTITY identity.moreInfoLinkText2 "Más información">
 
@@ -756,20 +792,25 @@ The word "toolbar" is appended automatically and should not be contained below! 
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "Micrófono a compartir:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "El audio de la pestaña será compartido.">
 <!ENTITY getUserMedia.allWindowsShared.message "Todas las ventanas visibles de su pantalla serán compartidas.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "La mayor parte de los sitios web funcionarán correctamente aún si el contenido es bloqueado.">
-
-<!ENTITY mixedContentBlocked2.message "Contenido inseguro">
-<!ENTITY mixedContentBlocked2.moreinfo "Algunos elementos de este sitio sin cifrar han sido bloqueados.">
-<!ENTITY mixedContentBlocked2.learnMore "Conocer más">
-<!ENTITY mixedContentBlocked2.options "Opciones">
-<!ENTITY mixedContentBlocked2.unblock.label "Deshabilitar protección por ahora">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Habilitar protección">
-<!ENTITY mixedContentBlocked2.block.accesskey "e">
-<!ENTITY mixedContentBlocked2.disabled.message "La protección está deshabilitada">
+<!ENTITY trackingProtection.title "Protección de rastreo">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; está bloqueando partes de la página que pueden rastrear la navegación.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Este sitio incluye elementos que pueden rastrear la navegación. La protección está deshabilitada.">
+<!ENTITY trackingProtection.notDetected3 "No se detectaron elementos de rastreo en esta página.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Deshabilitar protección para este sitio">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Deshabilitar protección para esta sesión">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "Habilitar protección">
+<!ENTITY trackingProtection.block2.accesskey "E">
 
 <!ENTITY trackingContentBlocked.message "Rastreo">
 <!ENTITY trackingContentBlocked.moreinfo "Partes de la página que rastrean su actividad en línea han sido bloqueadas.">
@@ -834,8 +875,6 @@ The word "toolbar" is appended automatically and should not be contained below! 
 <!ENTITY processHang.terminateProcess.label       "Matar proceso web">
 <!ENTITY processHang.terminateProcess.accessKey   "w">
 
-<!ENTITY readingList.label                        "Lista de lectura">
-<!ENTITY readingList.sidebar.commandKey           "r">
 <!ENTITY emeLearnMoreContextMenu.label            "Conocer más sobre DRM…">
 <!ENTITY emeLearnMoreContextMenu.accesskey        "D">
 
@@ -843,19 +882,6 @@ The word "toolbar" is appended automatically and should not be contained below! 
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "No preguntarme nuevamente">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "o">
-
-<!ENTITY readingList.label                        "Lista de lectura">
-<!ENTITY readingList.sidebar.commandKey           "r">
-<!ENTITY readingList.showSidebar.label            "Mostrar barra lateral de lista de lectura">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Mostrar más…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Agregue artículos a su lista de lectura para guardarlos y encontrarlos fácilmente cuando los necesite en el futuro.">
-<!-- Pre-landed string for bug 1123525 -->
-<!ENTITY readingList.sidebar.delete.tooltip       "Eliminar de la lista de lectura">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Agregar a lista de lectura">
-<!ENTITY readingList.sidebar.add.tooltip          "Agregar esta página a la lista de lectura">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Guardar página en Pocket">

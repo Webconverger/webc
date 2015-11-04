@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "ك">
 
 <!ENTITY fxaSignIn.label "لِج إلى &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "افتح تفضيلات &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "أعِد الاتصال مع &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; مفعّل">
 <!ENTITY syncStartPanel2.subTitle "سيبدأ &brandShortName; في المزامنة حالًا.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "خ">
 <!ENTITY fullScreenExit.label "اخرج من وضع ملء الشاشة">
 <!ENTITY fullScreenExit.accesskey "و">
-<!ENTITY fullscreenAllowButton.label "اسمح">
-<!ENTITY fullscreenExitButton.label "ارفض">
 
 <!ENTITY fullscreenExitHint2.value "اضغط ESC في أي وقت للمغادرة.">
 <!ENTITY leaveDOMFullScreen.label "غادر ملء الشاشة">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "ابحث أو أدخل عنوانا">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "انتقل إلى اللسان:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "أتريد تحسين نتائج بالبحث بالاقتراحات؟">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "اطّلع على المزيد…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "لا">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "نعم">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "استعلام بحث">
+<!ENTITY contentSearchSubmit.label    "أرسل البحث">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -548,8 +558,8 @@ items are mutually exclusive. -->
 
 <!ENTITY mediaPlay.label             "شغّل">
 <!ENTITY mediaPlay.accesskey         "ش">
-<!ENTITY mediaPause.label            "أوقِف">
-<!ENTITY mediaPause.accesskey        "ق">
+<!ENTITY mediaPause.label            "ألبِث">
+<!ENTITY mediaPause.accesskey        "ث">
 <!-- LOCALIZATION NOTE: The access keys for "Mute" and
 "Unmute" are the same because the two context-menu
 items are mutually exclusive. -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "غ">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "طراز الصفحة">
 <!ENTITY pageStyleMenu.accesskey "ط">
 <!ENTITY pageStyleNoStyle.label "بلا طراز">
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "اتصال آمن">
 <!ENTITY identity.connectionNotSecure "الاتصال غير آمن">
+<!ENTITY identity.connectionFile "هذه الصفحة مخزنة على حاسوبك.">
 <!ENTITY identity.connectionVerified "تحقق &brandShortName; من أنك تتصل بأمان مع هذا الموقع، و الذي يديره:">
 <!ENTITY identity.connectionInternal "هذه صفحة &brandShortName; آمنة.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "منع &brandShortName; الأجزاء غير الآمنة من هذه الصفحة.">
+<!ENTITY identity.passiveLoaded "بعض أجزاء هذه الصفحة غير آمنة (مثل الصور).">
+<!ENTITY identity.activeLoaded "لقد أوقفت الحماية على هذه الصفحة.">
+<!ENTITY identity.weakEncryption "تستخدم هذه الصفحة تعمية ضعيفة.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "اتصالك بهذا الموقع ليس خاصًّا. يمكن للآخرين مطالعة المعلومات التي ترسلها (مثل كلمات السر، و الرسائل، و بطاقات الائتمان و غيرها).">
+<!ENTITY identity.description.weakCipher "اتصالك بهذا الموقع يستخدم تعمية ضعيفة وليس خاصًّا أيضًا.">
+<!ENTITY identity.description.weakCipher2 "يمكن للآخرين الاطلاع على معلوماتك أو تغيير سلوك الموقع.">
+<!ENTITY identity.description.activeBlocked "منع &brandShortName; الأجزاء غير الآمنة في هذه الصفحة.">
+<!ENTITY identity.description.passiveLoaded "اتصالك ليس خاصًا و يمكن للآخرين مطالعة المعلومات التي تشاركها مع الموقع.">
+<!ENTITY identity.description.passiveLoaded2 "يحوي هذا الموقع محتوى غير آمن (مثل الصور).">
+<!ENTITY identity.description.passiveLoaded3 "مع أنّ &brandShortName; منع بعض المحتويات، إلا أن هناك أخرى غير آمنة ما زالت في الصفحة (مثل الصور).">
+<!ENTITY identity.description.activeLoaded "يحوي هذا الموقع محتوى غير آمن (مثل السكربتات) و اتصالك به ليس خاصا.">
+<!ENTITY identity.description.activeLoaded2 "يمكن للآخرين مطالعة المعلومات التي تشاركها مع الموقع (مثل كلمات السر، و الرسائل، و بطاقات الائتمان و غيرها).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "فعّل الحماية">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "ف">
+<!ENTITY identity.disableMixedContentBlocking.label "عطّل الحماية في الوقت الحالي">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "ع">
+<!ENTITY identity.learnMore "اطّلع على المزيد">
 
 <!ENTITY identity.moreInfoLinkText2 "المزيد من المعلومات">
 
@@ -754,20 +790,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "م">
 <!ENTITY getUserMedia.selectMicrophone.label "الميكروفون الذي سيُشارك:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "ك">
+<!ENTITY getUserMedia.audioCapture.label "الصوت في هذا اللسان سيُشارك.">
 <!ENTITY getUserMedia.allWindowsShared.message "ستُشارك كل النوافذ الظاهرة على شاشتك.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "أغلب المواقع ستستمر في العمل كما ينبغي حتى بعد منع المحتوى.">
-
-<!ENTITY mixedContentBlocked2.message "محتوى غير آمن">
-<!ENTITY mixedContentBlocked2.moreinfo "منعت بعض العناصر غير المُعمّاة في هذا الموقع.">
-<!ENTITY mixedContentBlocked2.learnMore "اطّلع على المزيد">
-<!ENTITY mixedContentBlocked2.options "الخيارات">
-<!ENTITY mixedContentBlocked2.unblock.label "عطّل الحماية في الوقت الحالي">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "ع">
-<!ENTITY mixedContentBlocked2.block.label "فعّل الحماية">
-<!ENTITY mixedContentBlocked2.block.accesskey "ف">
-<!ENTITY mixedContentBlocked2.disabled.message "الحماية مُعطّلة">
+<!ENTITY trackingProtection.title "الحماية من التعقّب">
+<!ENTITY trackingProtection.detectedBlocked3 "يحظر &brandShortName; أجزاءً من الصفحة ربما تتعقب تصفّحك.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "في هذا الموقع عناصر قد تتعقّب تصفّحك. لقد عطّلتَ الحماية.">
+<!ENTITY trackingProtection.notDetected3 "لم تُكتشف أيّة عناصر تعقّب في هذه الصفحة.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "أوقف الحماية لهذا الموقع">
+<!ENTITY trackingProtection.unblock.accesskey "ق">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "أوقف الحماية لهذه الجلسة">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "ق">
+<!ENTITY trackingProtection.block2.label "فعّل الحماية">
+<!ENTITY trackingProtection.block2.accesskey "ف">
 
 <!ENTITY trackingContentBlocked.message "التعقب">
 <!ENTITY trackingContentBlocked.moreinfo "منعت بعض أجزاء من الصفحة تحاول تتبع نشاطك على الإنترنت.">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "س">
 <!ENTITY emeNotificationsDontAskAgain.label       "لا تسألني ثانيا">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "ل">
-
-<!ENTITY readingList.label                        "قائمة القراءة">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "أظهر شريط قائمة القراءة الجانبي">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "اعرض المزيد…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "أضف المقالات إلى قائمة قراءتك لحفظهم إلى وقت لاحق و العثور عليهم بسهولة عندما تحتاجهم.">
-<!ENTITY readingList.sidebar.delete.tooltip       "أزل هذا من قائمة قراءتك">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "أضِف إلى قائمة القراءة">
-<!ENTITY readingList.sidebar.add.tooltip          "أضف هذه الصفحة إلى قائمة قراءتك">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "احفظ الصفحة في بوكِت">

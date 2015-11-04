@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "Aanmelden bij &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "&syncBrand.shortName.label;-voorkeuren openen">
 <!ENTITY fxaSignInError.label "Opnieuw verbinden met &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; ingeschakeld">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; zal over enkele ogenblikken beginnen met synchroniseren.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "W">
 <!ENTITY fullScreenExit.label "Volledigschermmodus verlaten">
 <!ENTITY fullScreenExit.accesskey "d">
-<!ENTITY fullscreenAllowButton.label "Toestaan">
-<!ENTITY fullscreenExitButton.label "Weigeren">
 
 <!ENTITY fullscreenExitHint2.value "Druk op ESC om te verlaten.">
 <!ENTITY leaveDOMFullScreen.label "Volledig scherm verlaten">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Wisselen naar tabblad:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Wilt u uw zoekervaring verbeteren met suggesties?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Meer info…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Nee">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Ja">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Zoekterm">
+<!ENTITY contentSearchSubmit.label    "Zoekopdracht verzenden">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "S">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Paginastijl">
 <!ENTITY pageStyleMenu.accesskey "P">
 <!ENTITY pageStyleNoStyle.label "Geen stijl">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Beveiligde verbinding">
 <!ENTITY identity.connectionNotSecure "Verbinding is niet beveiligd">
+<!ENTITY identity.connectionFile "Deze pagina is op uw computer opgeslagen.">
 <!ENTITY identity.connectionVerified "&brandShortName; heeft geverifieerd dat u een beveiligde verbinding hebt met deze website, welke wordt beheerd door:">
 <!ENTITY identity.connectionInternal "Dit is een beveiligde &brandShortName;-pagina.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; heeft onderdelen op deze pagina die niet zijn beveiligd geblokkeerd.">
+<!ENTITY identity.passiveLoaded "Onderdelen van deze pagina zijn niet beveiligd (zoals afbeeldingen).">
+<!ENTITY identity.activeLoaded "U hebt beveiliging op deze pagina uitgeschakeld.">
+<!ENTITY identity.weakEncryption "Deze pagina gebruikt zwakke beveiliging.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Uw verbinding met deze website is niet privé. Gegevens die u verzendt zouden door anderen kunnen worden bekeken (zoals wachtwoorden, berichten, creditcardgegevens, etc.).">
+<!ENTITY identity.description.weakCipher "Uw verbinding met deze website gebruikt zwakke versleuteling en is niet privé.">
+<!ENTITY identity.description.weakCipher2 "Andere personen kunnen uw gegevens bekijken of het gedrag van de website aanpassen.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; heeft onderdelen van deze pagina die niet zijn beveiligd geblokkeerd.">
+<!ENTITY identity.description.passiveLoaded "Uw verbinding is niet privé en gegevens die u met de website deelt zouden door anderen kunnen worden bekeken.">
+<!ENTITY identity.description.passiveLoaded2 "Deze website bevat inhoud die niet is beveiligd (zoals afbeeldingen).">
+<!ENTITY identity.description.passiveLoaded3 "Hoewel &brandShortName; bepaalde inhoud heeft geblokkeerd, is er nog steeds inhoud op de pagina die niet is beveiligd (zoals afbeeldingen).">
+<!ENTITY identity.description.activeLoaded "Deze website bevat inhoud die niet is beveiligd (zoals scripts) en uw verbinding ermee is niet privé.">
+<!ENTITY identity.description.activeLoaded2 "Gegevens die u met deze website deelt zouden door anderen kunnen worden gelezen (zoals wachtwoorden, berichten, creditcardgegevens, etc.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Bescherming inschakelen">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "s">
+<!ENTITY identity.disableMixedContentBlocking.label "Bescherming voor nu uitschakelen">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "u">
+<!ENTITY identity.learnMore "Meer info">
 
 <!ENTITY identity.moreInfoLinkText2 "Meer informatie">
 
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "c">
 <!ENTITY getUserMedia.selectMicrophone.label "Te delen microfoon:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label "Audio van het tabblad wordt gedeeld.">
 <!ENTITY getUserMedia.allWindowsShared.message "Alle zichtbare vensters op uw scherm worden gedeeld.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "De meeste websites zullen gewoon werken, zelfs wanneer inhoud wordt geblokkeerd.">
-
-<!ENTITY mixedContentBlocked2.message "Onveilige inhoud ">
-<!ENTITY mixedContentBlocked2.moreinfo "Enkele niet-versleutelde elementen op deze website zijn geblokkeerd.">
-<!ENTITY mixedContentBlocked2.learnMore "Meer info">
-<!ENTITY mixedContentBlocked2.options "Opties">
-<!ENTITY mixedContentBlocked2.unblock.label "Bescherming voor nu uitschakelen">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "u">
-<!ENTITY mixedContentBlocked2.block.label "Bescherming inschakelen">
-<!ENTITY mixedContentBlocked2.block.accesskey "B">
-<!ENTITY mixedContentBlocked2.disabled.message "Bescherming is uitgeschakeld">
+<!ENTITY trackingProtection.title "Bescherming tegen volgen">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokkeert onderdelen van de pagina die uw surfgedrag zouden kunnen volgen.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Deze website bevat elementen die uw surfgedrag zouden kunnen volgen. U hebt bescherming uitgeschakeld.">
+<!ENTITY trackingProtection.notDetected3 "Geen volgelementen op deze pagina gedetecteerd.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Bescherming voor deze website uitschakelen">
+<!ENTITY trackingProtection.unblock.accesskey "u">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Bescherming voor deze sessie uitschakelen">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "u">
+<!ENTITY trackingProtection.block2.label "Bescherming inschakelen">
+<!ENTITY trackingProtection.block2.accesskey "s">
 
 <!ENTITY trackingContentBlocked.message "Volgen">
 <!ENTITY trackingContentBlocked.moreinfo "Delen van de pagina die uw online-activiteit volgen zijn geblokkeerd.">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "Dit niet meer vragen">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "Leeslijst">
-<!ENTITY readingList.sidebar.commandKey           "L">
-<!ENTITY readingList.showSidebar.label            "Zijbalk voor leeslijst tonen">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Meer tonen…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Voeg artikelen toe aan uw leeslijst om deze voor later te bewaren en makkelijk te vinden als u ze nodig hebt.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Dit uit uw leeslijst verwijderen">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Toevoegen aan leeslijst">
-<!ENTITY readingList.sidebar.add.tooltip          "Deze pagina aan uw leeslijst toevoegen">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Pagina opslaan naar Pocket">

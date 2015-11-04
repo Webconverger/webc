@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "w">
 
 <!ENTITY fxaSignIn.label "Dony iye &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Yab ter me &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Nwo kube bot &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; ki ye">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; bi cako tic marom will begin syncing i cawa manok.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "K">
 <!ENTITY fullScreenExit.label "Kat woko ki i kit wang komputa ma opong">
 <!ENTITY fullScreenExit.accesskey "w">
-<!ENTITY fullscreenAllowButton.label "Ye">
-<!ENTITY fullscreenExitButton.label "Kwer">
 
 <!ENTITY fullscreenExitHint2.value "Dii ESC i cawa mo keken wek i kat woko.">
 <!ENTITY leaveDOMFullScreen.label "Kat woko ki i wang komputa ma opong">
@@ -274,7 +273,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  application menu item that opens the browser content toolbox UI in the Tools menu.
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 
-<!ENTITY browserContentToolboxMenu.label     "Gitic me gin manonge iye layeny">
+<!ENTITY browserContentToolboxMenu.label     "Gitic pi jami ma iye layeny">
+<!ENTITY browserContentToolboxMenu.accesskey "t">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Lor gintic pa Layub">
 <!ENTITY devToolbarMenu.label              "Gintic pa layub">
@@ -304,6 +304,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "D">
 <!ENTITY newPrivateWindow.label     "Dirica manyen me mung">
 <!ENTITY newPrivateWindow.accesskey "D">
+<!ENTITY newNonRemoteWindow.label   "Dirica manyen me Non-e10s">
 
 <!ENTITY editMenu.label         "Yub"> 
 <!ENTITY editMenu.accesskey       "Y"> 
@@ -393,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Yeny onyo ket kanonge">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Lokke bot dirica matidi:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Imito yilo rwom me yeny mamegi ki tam ikom yeny?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Nong ngec mapol…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Pe">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Eyo">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -417,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Lapeny me yeny">
+<!ENTITY contentSearchSubmit.label    "Cwal yeny">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -632,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "L">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Kit pot buk">
 <!ENTITY pageStyleMenu.accesskey "t">
 <!ENTITY pageStyleNoStyle.label "Kite Pe">
@@ -672,29 +686,38 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Ngol">
 <!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
-<!ENTITY identity.unverifiedsite2 "Kakube man pe miyo ngec me moko ada.">
-<!ENTITY identity.connectedTo "I kube bot">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "Kube maber">
+<!ENTITY identity.connectionNotSecure "Kube pe tye ki ber bedo">
+<!ENTITY identity.connectionFile "Kigwoko potbuk man i kompiuta mamegi.">
+<!ENTITY identity.connectionVerified "&brandShortName; omoko ni itye ki kube maber ki kakube man, ma lakelo ne aye:">
+<!ENTITY identity.connectionInternal "Man potbuk me &brandShortName; matye ki ber bedo.">
+<!-- Strings for connection state warnings. -->
 
-example.com
-which is run by
-Example Enterprises, Inc.
+<!ENTITY identity.activeBlocked "&brandShortName; ogengo but potbuk man ma pe tye ki ber bedo.">
+<!ENTITY identity.passiveLoaded "But potbuk man pe tye ki ber bedo (calo cal).">
+<!ENTITY identity.activeLoaded "I juko gwokke woko ki i potbuk man.">
+<!ENTITY identity.weakEncryption "Potbuk man tiyo ki loko ngec i kod ma goro.">
+<!-- Strings for connection state warnings in the subview. -->
 
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "ma tiyo ki">
+<!ENTITY identity.description.insecure "Kube ni ki kakube man pe tye i mung. Jo mukene twero neno ngec ma i cwalo (calo mung me donyo, kwena, ka me wil, ki mukene).">
+<!ENTITY identity.description.weakCipher "Kube ni ki kakube man tiyo ki loko ngec i kod ma goro ki peke i mung.">
+<!ENTITY identity.description.weakCipher2 "Jo mukene twero neno ngec mamegi onyo loko time pa kakube.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; ogengo but potbuk man ma pe tye ki ber bedo.">
+<!ENTITY identity.description.passiveLoaded "Kube mamegi pe tye ki ber bedo kadong jo mukene twero neno ngec ma i nywako ki kakube ne.">
+<!ENTITY identity.description.passiveLoaded2 "Kakube man tye ki jami mogo ma pe tye ki ber bedo (calo cal).">
+<!ENTITY identity.description.passiveLoaded3 "Kadi bed &brandShortName; ogengo jami mogo, pud tye jami i potbuk man ma pe tye ki ber bedo (calo cal).">
+<!ENTITY identity.description.activeLoaded "Kakube man tye ki jami ma pe tye ki ber bedo (calo coc) ki kube mamegi iye pe tye i mung.">
+<!ENTITY identity.description.activeLoaded2 "Jo mukene twero neno ngec ma i nywako ki kakube man (calo mung me donyo, kwena, ka me wil, ki mukene).">
 
-<!ENTITY identity.moreInfoLinkText "Ngec mapol…">
+<!ENTITY identity.enableMixedContentBlocking.label "Cak gwoke">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "C">
+<!ENTITY identity.disableMixedContentBlocking.label "Juk gwoke pi kombedi">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "J">
+<!ENTITY identity.learnMore "Nong ngec mapol">
+
+<!ENTITY identity.moreInfoLinkText2 "Ngec mapol">
 
 <!ENTITY identity.permissions "Rukuca">
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-
-<!ENTITY identity.help.tooltip "A wacco ningning kace kube na bot kakube tye labongo ayela?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -715,7 +738,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY socialToolbar.title        "Jarara me gintic me kube ki lwak">
 
-<!ENTITY social.ok.label       "Kakare">
+<!ENTITY social.ok.label       "KAKARE">
 <!ENTITY social.ok.accesskey   "K">
 
 <!ENTITY social.toggleSidebar.label "Nyut gintic ma i nget">
@@ -767,26 +790,31 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectCamera.accesskey "L">
 <!ENTITY getUserMedia.selectMicrophone.label "Micropon me anywaka:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Ki binywako dwon ma i dirica matidi.">
 <!ENTITY getUserMedia.allWindowsShared.message "Ki binywako dirica weng ma nen i wang kompiuta ni.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Pol kakube pud bitic maber kadi ki geng gin manonge iye.">
-
-<!ENTITY mixedContentBlocked2.message "Gin manonge iye mape ber ">
-<!ENTITY mixedContentBlocked2.moreinfo "Kigengo woko gin mogo mape ki mungo i kakube man.">
-<!ENTITY mixedContentBlocked2.learnMore "Nong ngec mapol">
-<!ENTITY mixedContentBlocked2.options "Gin ayera">
-<!ENTITY mixedContentBlocked2.unblock.label "Juk gwoke pi kombedi">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "J">
-<!ENTITY mixedContentBlocked2.block.label "Cak gwoke">
-<!ENTITY mixedContentBlocked2.block.accesskey "C">
-<!ENTITY mixedContentBlocked2.disabled.message "Kijuko gwoke woko">
+<!ENTITY trackingProtection.title "Gwokke ikom lubo kor">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; tye kagengo but potbuk ma twero lubo kor yeny mamegi.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Kakube man tye ki jami ma twero lubo kor yeny mamegi. I juko woko gwokke.">
+<!ENTITY trackingProtection.notDetected3 "Pe kinongo jami ma lubo kor i potbuk man.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Juk gwokke pi pot buk man">
+<!ENTITY trackingProtection.unblock.accesskey "J">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Juk gwokke pi kare man">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "J">
+<!ENTITY trackingProtection.block2.label "Cak gwokke">
+<!ENTITY trackingProtection.block2.accesskey "C">
 
 <!ENTITY trackingContentBlocked.message "Lubo">
 <!ENTITY trackingContentBlocked.moreinfo "Kigengo woko but pot buk ma lubo kor tici me wi yamo.">
 <!ENTITY trackingContentBlocked.learnMore "Nong ngec mapol">
 <!ENTITY trackingContentBlocked.options "Gin ayera">
-<!ENTITY trackingContentBlocked.unblock2.label "Juk gwokke pi pot buk man">
+<!ENTITY trackingContentBlocked.unblock2.label "Juk gwokke pi kakube man">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "J">
 <!ENTITY trackingContentBlocked.block.label "Cak gwoke">
 <!ENTITY trackingContentBlocked.block.accesskey "C">
@@ -832,7 +860,7 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY panicButton.view.openNewWindow           "Yabo dirica manyen maleng">
 
 <!ENTITY panicButton.view.undoWarning             "Tic man pe kitwero gonyo ne.">
-<!ENTITY panicButton.view.forgetButton            "Wek wi wil">
+<!ENTITY panicButton.view.forgetButton            "Wek wi owilo!">
 
 <!ENTITY panicButton.thankyou.msg1                "Gin mukato cokcok mamegi kijwayo woko.">
 <!ENTITY panicButton.thankyou.msg2                "Yeny ma ber!">
@@ -840,12 +868,12 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 
 <!ENTITY processHang.terminateScript.label        "Juk coc">
 <!ENTITY processHang.terminateScript.accessKey    "J">
-
-
-
-
-
-
+<!ENTITY processHang.debugScript.label            "Coc me nongo bal">
+<!ENTITY processHang.debugScript.accessKey        "n">
+<!ENTITY processHang.terminatePlugin.label        "Nek larwak">
+<!ENTITY processHang.terminatePlugin.accessKey    "a">
+<!ENTITY processHang.terminateProcess.label       "Nek tic me Kakube">
+<!ENTITY processHang.terminateProcess.accessKey   "N">
 
 <!ENTITY emeLearnMoreContextMenu.label            "Nong ngec mapol ikom DRM…">
 <!ENTITY emeLearnMoreContextMenu.accesskey        "D">
@@ -853,40 +881,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY emeNotificationsNotNow.accesskey         "P">
 <!ENTITY emeNotificationsDontAskAgain.label       "Pe i penya doki">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "P">
-
-<!ENTITY readingList.label                        "Jami akwana">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Nyut gintic ma inget me jami akwana">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Nyut mapol…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.delete.tooltip       "Kwany man woko ki i Jami akwana ni">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Med ikom jami akwana">
-
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY processHang.debugScript.accessKey        "D">
-<!ENTITY processHang.debugScript.label            "Debug Script">
-<!ENTITY processHang.terminatePlugin.accessKey    "P">
-<!ENTITY processHang.terminatePlugin.label        "Kill Plugin">
-<!ENTITY processHang.terminateProcess.accessKey   "K">
-<!ENTITY processHang.terminateProcess.label       "Kill Web Process">
-<!ENTITY readingList.sidebar.add.tooltip          "Add this page to your Reading List">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Add articles to your Reading List to save them for later and find them easily when you need them.">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
-<!ENTITY saveToPocketCmd.accesskey "k">
-
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
+
+<!ENTITY saveToPocketCmd.label     "Gwok potbuk i Pocket">
+<!ENTITY saveToPocketCmd.accesskey "k">
+<!ENTITY saveLinkToPocketCmd.label     "Gwok kakube iye Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "y">
+<!ENTITY pocketMenuitem.label      "Nen jami ma i Pocket">

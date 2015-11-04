@@ -78,6 +78,7 @@
 <!ENTITY showAllTabsCmd.label "Показать все вкладки">
 <!ENTITY showAllTabsCmd.accesskey "в">
 <!ENTITY fxaSignIn.label "Войти в Синхронизацию">
+<!ENTITY fxaSignedIn.tooltip "Открыть настройки Синхронизации">
 <!ENTITY fxaSignInError.label "Снова подсоединиться к Синхронизации">
 <!ENTITY syncStartPanel2.heading "Синхронизация включена">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; сейчас начнёт синхронизироваться.">
@@ -92,8 +93,6 @@
 <!ENTITY fullScreenAutohide.accesskey "к">
 <!ENTITY fullScreenExit.label "Выйти из полноэкранного режима">
 <!ENTITY fullScreenExit.accesskey "ы">
-<!ENTITY fullscreenAllowButton.label "Разрешить">
-<!ENTITY fullscreenExitButton.label "Запретить">
 <!ENTITY fullscreenExitHint2.value "Для выхода в любой момент нажмите клавишу ESC.">
 <!ENTITY leaveDOMFullScreen.label "Выйти из полноэкранного режима">
 <!ENTITY leaveDOMFullScreen.accesskey "ы">
@@ -293,9 +292,15 @@
 <!ENTITY urlbar.placeholder2 "Введите поисковый запрос или адрес">
 <!ENTITY urlbar.accesskey "d">
 <!ENTITY urlbar.switchToTab.label "Перейти на вкладку:">
+<!ENTITY urlbar.searchSuggestionsNotification.question "Вы хотели бы расширить свои возможности поиска с помощью предложений?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Подробнее…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Нет">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Да">
 <!ENTITY searchFocus.commandkey "k">
 <!ENTITY searchFocus.commandkey2 "e">
 <!ENTITY searchFocusUnix.commandkey "j">
+<!ENTITY contentSearchInput.label "Поисковый запрос">
+<!ENTITY contentSearchSubmit.label "Произвести поиск">
 <!ENTITY searchFor.label "Искать ">
 <!ENTITY searchWith.label " в:">
 <!ENTITY search.label "Искать в ">
@@ -454,6 +459,7 @@
 <!ENTITY closeCmd.label "Закрыть">
 <!ENTITY closeCmd.key "W">
 <!ENTITY closeCmd.accesskey "З">
+<!ENTITY toggleMuteCmd.key "M">
 <!ENTITY pageStyleMenu.label "Стиль страницы">
 <!ENTITY pageStyleMenu.accesskey "и">
 <!ENTITY pageStyleNoStyle.label "Без стиля">
@@ -486,8 +492,27 @@
 <!ENTITY editBookmark.removeBookmark.accessKey "д">
 <!ENTITY identity.connectionSecure "Защищённое соединение">
 <!ENTITY identity.connectionNotSecure "Незащищённое соединение">
+<!ENTITY identity.connectionFile "Эта страница хранится на вашем компьютере.">
 <!ENTITY identity.connectionVerified "&brandShortName; подтверждает, что вы подключились по защищённому соединению к этому сайту, управляемому:">
 <!ENTITY identity.connectionInternal "Это защищённая страница &brandShortName;.">
+<!ENTITY identity.activeBlocked "&brandShortName; заблокировал незащищённые части этой страницы.">
+<!ENTITY identity.passiveLoaded "Части этой страницы (такие как изображения) не защищены.">
+<!ENTITY identity.activeLoaded "Вы отключили защиту на этой странице.">
+<!ENTITY identity.weakEncryption "Эта страница использует слабое шифрование.">
+<!ENTITY identity.description.insecure "Ваше соединение с этим сайтом не защищено. Вводимая вами информация может быть видна посторонним (например, пароли, сообщения, номера кредитных карт и т.д.).">
+<!ENTITY identity.description.weakCipher "Ваше соединение с этим веб-сайтом использует слабое шифрование и не защищено.">
+<!ENTITY identity.description.weakCipher2 "Посторонние лица могут просматривать вашу информацию или изменять поведение веб-сайта.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; заблокировал незащищённые части этой страницы.">
+<!ENTITY identity.description.passiveLoaded "Ваше соединение не является защищённым и информация, вводимая вами на этом сайте, может быть видна посторонним.">
+<!ENTITY identity.description.passiveLoaded2 "Этот веб-сайт содержит незащищённое содержимое (такое как изображения).">
+<!ENTITY identity.description.passiveLoaded3 "Хотя &brandShortName; заблокировал некоторое содержимое, на этой странице всё ещё имеется незащищённое содержимое (такое как изображения).">
+<!ENTITY identity.description.activeLoaded "Этот веб-сайт содержит незащищённое содержимое (такое как сценарии) и ваше соединение с ним является незащищённым.">
+<!ENTITY identity.description.activeLoaded2 "Информация, вводимая вами на этом сайте, может быть видна посторонним (например, пароли, сообщения, номера кредитных карт и т.д.).">
+<!ENTITY identity.enableMixedContentBlocking.label "Включить защиту">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "ю">
+<!ENTITY identity.disableMixedContentBlocking.label "Пока отключить защиту">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "а">
+<!ENTITY identity.learnMore "Подробнее">
 <!ENTITY identity.moreInfoLinkText2 "Подробнее">
 <!ENTITY identity.permissions "Разрешения">
 <!ENTITY tabsToolbar.label "Вкладки браузера">
@@ -544,17 +569,18 @@
 <!ENTITY getUserMedia.selectCamera.accesskey "к">
 <!ENTITY getUserMedia.selectMicrophone.label "Доступ к микрофону:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "м">
+<!ENTITY getUserMedia.audioCapture.label "Будет предоставлен доступ к аудио из вкладки.">
 <!ENTITY getUserMedia.allWindowsShared.message "Будет предоставлен доступ ко всем видимым окнам на вашем экране.">
-<!ENTITY badContentBlocked.moreinfo "Большинство веб-сайтов будут продолжать нормально работать, даже если содержимое заблокировано.">
-<!ENTITY mixedContentBlocked2.message "Незащищённое содержимое">
-<!ENTITY mixedContentBlocked2.moreinfo "Некоторые незащищенные элементы на этом веб-сайте были заблокированы.">
-<!ENTITY mixedContentBlocked2.learnMore "Подробнее">
-<!ENTITY mixedContentBlocked2.options "Настройки">
-<!ENTITY mixedContentBlocked2.unblock.label "На время отключить защиту">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "ю">
-<!ENTITY mixedContentBlocked2.block.label "Включить защиту">
-<!ENTITY mixedContentBlocked2.block.accesskey "к">
-<!ENTITY mixedContentBlocked2.disabled.message "Защита отключена">
+<!ENTITY trackingProtection.title "Защита от отслеживания">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; блокирует части страницы, которые могут отслеживать ваше поведение в Интернете.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Этот сайт содержит элементы, которые могут отслеживать ваше поведение в Интернете. Вы отключили защиту.">
+<!ENTITY trackingProtection.notDetected3 "На этой странице не обнаружено ни одного отслеживающего элемента.">
+<!ENTITY trackingProtection.unblock.label "Отключить защиту для этого сайта">
+<!ENTITY trackingProtection.unblock.accesskey "к">
+<!ENTITY trackingProtection.unblockPrivate.label "Отключить защиту для этой сессии">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "и">
+<!ENTITY trackingProtection.block2.label "Включить защиту">
+<!ENTITY trackingProtection.block2.accesskey "ю">
 <!ENTITY trackingContentBlocked.message "Отслеживание">
 <!ENTITY trackingContentBlocked.moreinfo "Части страницы, которые отслеживали ваши действия в Интернете, были заблокированы.">
 <!ENTITY trackingContentBlocked.learnMore "Подробнее">
@@ -601,14 +627,6 @@
 <!ENTITY emeNotificationsNotNow.accesskey "е">
 <!ENTITY emeNotificationsDontAskAgain.label "Не спрашивать в следующий раз">
 <!ENTITY emeNotificationsDontAskAgain.accesskey "а">
-<!ENTITY readingList.label "Список для чтения">
-<!ENTITY readingList.sidebar.commandKey "R">
-<!ENTITY readingList.showSidebar.label "Показать боковую панель Списка для чтения">
-<!ENTITY readingList.sidebar.showMore.label "Показать ещё…">
-<!ENTITY readingList.sidebar.emptyText "Добавьте статьи в свой Список для чтения, чтобы попозже их прочесть. Когда они понадобятся, вы сможете легко их найти.">
-<!ENTITY readingList.sidebar.delete.tooltip "Удалить это из вашего Списка для чтения">
-<!ENTITY readingList.sidebar.add.label "Добавить в Список для чтения">
-<!ENTITY readingList.sidebar.add.tooltip "Добавить эту страницу в ваш Список для чтения">
 <!ENTITY saveToPocketCmd.label "Сохранить страницу в Pocket">
 <!ENTITY saveToPocketCmd.accesskey "х">
 <!ENTITY saveLinkToPocketCmd.label "Сохранить ссылку в Pocket">

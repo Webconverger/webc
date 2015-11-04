@@ -2,6 +2,9 @@
 
 //@line 6 "/builds/slave/rel-m-rel-lx_rpk_6-00000000000/l10n/ja/browser/firefox-l10n.js"
 
+//@line 9 "/builds/slave/rel-m-rel-lx_rpk_6-00000000000/l10n/ja/browser/firefox-l10n.js"
+pref("browser.search.geoSpecificDefaults", true);
+
 pref("general.useragent.locale", "ja");
 
 pref("browser.search.order.3", "chrome://browser-region/locale/region.properties");

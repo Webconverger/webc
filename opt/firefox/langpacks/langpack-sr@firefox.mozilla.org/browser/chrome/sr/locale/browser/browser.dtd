@@ -110,10 +110,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "П">
 
 <!ENTITY fxaSignIn.label "Пријави се на &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Отвори &syncBrand.shortName.label; поставке">
 <!ENTITY fxaSignInError.label "Поново се повежи на &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; омогућен">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; ће започети синхронизацију моментално.">
-<!ENTITY syncErrorPanel.heading "Онемогућена конекција на &syncBrand.shortName.label;">
+<!ENTITY syncErrorPanel.heading "Не могу се повезати на &syncBrand.shortName.label;">
 <!ENTITY syncErrorPanel.subTitle "Пријавите се да бисте наставили синхронизацију.">
 <!ENTITY syncErrorPanel.signInButton.label "Пријави се">
 <!ENTITY syncErrorPanel.signInButton.accesskey "П">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "С">
 <!ENTITY fullScreenExit.label "Обустави приказ на целом екрану">
 <!ENTITY fullScreenExit.accesskey "ц">
-<!ENTITY fullscreenAllowButton.label "Дозволи">
-<!ENTITY fullscreenExitButton.label "Забрани">
 
 <!ENTITY fullscreenExitHint2.value "Притисните ESC било кад да бисте изашли.">
 <!ENTITY leaveDOMFullScreen.label "Обустави приказ преко целог екрана">
@@ -366,7 +365,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY appMenuCustomizeExit.tooltip "Завршите прилагођавање">
 <!ENTITY appMenuHistory.label "Историјат">
 <!ENTITY appMenuHistory.showAll.label "Прикажи целу историју">
-<!ENTITY appMenuHistory.clearRecent.label "Обриши скорашњу историјат…">
+<!ENTITY appMenuHistory.clearRecent.label "Обриши скорашњи историјат…">
 <!ENTITY appMenuHistory.restoreSession.label "Обнови претходну сесију">
 <!ENTITY appMenuHistory.viewSidebar.label "Прикажи бочну палету историјата">
 <!ENTITY appMenuHelp.tooltip "Отворите мени за помоћ">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Премести на језичак:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Да ли желите да побољшате искуство са предлозима претраге?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Сазнајте више…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Не">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Да">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Упит претраге">
+<!ENTITY contentSearchSubmit.label    "Пошаљи претрагу">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -553,8 +563,8 @@ items are mutually exclusive. -->
 <!-- LOCALIZATION NOTE: The access keys for "Mute" and
 "Unmute" are the same because the two context-menu
 items are mutually exclusive. -->
-<!ENTITY mediaMute.label             "Искљ. звук">
-<!ENTITY mediaMute.accesskey         "И">
+<!ENTITY mediaMute.label             "Пригуши">
+<!ENTITY mediaMute.accesskey         "П">
 <!ENTITY mediaUnmute.label           "Пусти тон">
 <!ENTITY mediaUnmute.accesskey       "т">
 <!ENTITY mediaPlaybackRate.label     "Брзина пуштања">
@@ -580,7 +590,7 @@ items are mutually exclusive. -->
 <!ENTITY videoFullScreen.label       "Користи цео екран">
 <!ENTITY videoFullScreen.accesskey   "ц">
 <!ENTITY videoSaveImage.label        "Сачувај слику као…">
-<!ENTITY videoSaveImage.accesskey    "S">
+<!ENTITY videoSaveImage.accesskey    "и">
 <!-- LOCALIZATION NOTE: The access keys for "Show Statistics" and
 "Hide Statistics" are the same because the two context-menu
 items are mutually exclusive. -->
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "З">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Стил странице">
 <!ENTITY pageStyleMenu.accesskey "С">
 <!ENTITY pageStyleNoStyle.label "Без стила">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Безбедна веза">
 <!ENTITY identity.connectionNotSecure "Веза није безбедна">
+<!ENTITY identity.connectionFile "Ова страница се складишти на рачунару.">
 <!ENTITY identity.connectionVerified "&brandShortName; је потрдио да сте безбедно повезани на овај сајт, којим управља:">
 <!ENTITY identity.connectionInternal "Ово је безбедна &brandShortName; страница.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; је блокирао делове странице које нису безбедне.">
+<!ENTITY identity.passiveLoaded "Делови ове странице нису безбедни (као што су слике).">
+<!ENTITY identity.activeLoaded "Заштита на овој страници је искључена.">
+<!ENTITY identity.weakEncryption "Страница користи слабо шифровање.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Веза до овог сајта није приватна. Информације које шаљете могу бити прочитане од стране других (као што су лозинке, поруке, кредитне картице, итд.).">
+<!ENTITY identity.description.weakCipher "Веза до овог сајта користи слабо шифровање и није приватна.">
+<!ENTITY identity.description.weakCipher2 "Друге особе могу да виде ваше информације или да модификују понашање веб сајта.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; је лоцирао делове сајта који нису сигурни.">
+<!ENTITY identity.description.passiveLoaded "Веза није приватна и информације које делите могу бити прочитане од стране других.">
+<!ENTITY identity.description.passiveLoaded2 "Сајт садржи садржај који није безбедан (као што су слике).">
+<!ENTITY identity.description.passiveLoaded3 "Иако је &brandShortName; блокирао неки садржај, још увек има садржаја на странци који није безбедан (као што су слике).">
+<!ENTITY identity.description.activeLoaded "Сајт садржи садржај који није безбедан (као што су скрипте) и веза није приватна.">
+<!ENTITY identity.description.activeLoaded2 "Информације које делите могу бити виђене од стране осталих (као што су лозинке, поруке, кредитне картице, итд.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Омогући заштиту">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "О">
+<!ENTITY identity.disableMixedContentBlocking.label "Онемогући заштиту за сада">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "н">
+<!ENTITY identity.learnMore "Сазнајте више">
 
 <!ENTITY identity.moreInfoLinkText2 "Више информација">
 
@@ -695,11 +731,11 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY syncSetup.accesskey          "и">
 <!ENTITY syncSyncNowItem.label        "Синхронизуј сада">
 <!ENTITY syncSyncNowItem.accesskey    "С">
-<!ENTITY syncReAuthItem.label         "Поново се конектуј на &syncBrand.shortName.label;…">
+<!ENTITY syncReAuthItem.label         "Поново се повежи на &syncBrand.shortName.label;…">
 <!ENTITY syncReAuthItem.accesskey     "к">
 <!ENTITY syncToolbarButton.label      "Sync">
 
-<!ENTITY socialToolbar.title        "Social Button трака">
+<!ENTITY socialToolbar.title        "Друштвена трака">
 
 <!ENTITY social.ok.label       "У реду">
 <!ENTITY social.ok.accesskey   "У">
@@ -719,8 +755,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY social.learnMore.accesskey "С">
 <!ENTITY social.closeNotificationItem.label "Не сад">
 
-<!ENTITY social.directory.label "Директоријум активација">
-<!ENTITY social.directory.text "Можете активирати сервисе за дељење из директоријума.">
+<!ENTITY social.directory.label "Фасцикла активација">
+<!ENTITY social.directory.text "Можете активирати сервисе за дељење из фасцикле.">
 <!ENTITY social.directory.button "Одведи ме тамо!">
 <!ENTITY social.directory.introText "Кликните на сервис да бисте га додали на &brandShortName;.">
 <!ENTITY social.directory.viewmore.text "Прикажи више">
@@ -741,8 +777,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "Н">
 
 <!ENTITY social.chatBar.commandkey "c">
-<!ENTITY social.chatBar.label "Focus chats">
-<!ENTITY social.chatBar.accesskey "c">
+<!ENTITY social.chatBar.label "Разговори">
+<!ENTITY social.chatBar.accesskey "Р">
 
 <!ENTITY social.markpageMenu.accesskey "с">
 <!ENTITY social.markpageMenu.label "Сачувај страницу…">
@@ -753,23 +789,28 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "К">
 <!ENTITY getUserMedia.selectMicrophone.label "Микрофон за дељење:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "М">
-<!ENTITY getUserMedia.allWindowsShared.message "Сви видљиви прозори на Вашем екрану ће бити подељени.">
+<!ENTITY getUserMedia.audioCapture.label "Звук из овог језичка ће бити подељен.">
+<!ENTITY getUserMedia.allWindowsShared.message "Сви видљиви прозори на екрану ће бити подељени.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Већина сајтова ће радити исправно, чак и ако је садржај блокиран.">
-
-<!ENTITY mixedContentBlocked2.message "Несигуран садржај">
-<!ENTITY mixedContentBlocked2.moreinfo "Неки елементи енкрипције на овом сајту су блокирани.">
-<!ENTITY mixedContentBlocked2.learnMore "Сазнајте више">
-<!ENTITY mixedContentBlocked2.options "Опције">
-<!ENTITY mixedContentBlocked2.unblock.label "Онемогући заштиту за сада">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "н">
-<!ENTITY mixedContentBlocked2.block.label "Омогући заштиту">
-<!ENTITY mixedContentBlocked2.block.accesskey "О">
-<!ENTITY mixedContentBlocked2.disabled.message "Заштита је онемогућена">
+<!ENTITY trackingProtection.title "Заштита од праћења">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; блокира делове странице који можда прате ваше активности.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Овај сајт садржи елементе који прате ваше активности. Ви сте искључили заштиту.">
+<!ENTITY trackingProtection.notDetected3 "Елементи који прате нису пронађени на овој страници.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Онемогући заштиту за овај сајт">
+<!ENTITY trackingProtection.unblock.accesskey "с">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Онемогући заштиту за ову сесију">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "н">
+<!ENTITY trackingProtection.block2.label "Омогући заштиту">
+<!ENTITY trackingProtection.block2.accesskey "О">
 
 <!ENTITY trackingContentBlocked.message "Праћење">
-<!ENTITY trackingContentBlocked.moreinfo "Делови странице које прате Ваше активности на мрежи су блокиране.">
+<!ENTITY trackingContentBlocked.moreinfo "Делови странице које прате ваше активности на мрежи су блокиране.">
 <!ENTITY trackingContentBlocked.learnMore "Сазнајте више">
 <!ENTITY trackingContentBlocked.options "Опције">
 <!ENTITY trackingContentBlocked.unblock2.label "Онемогући заштиту за овај сајт">
@@ -820,7 +861,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY panicButton.view.undoWarning             "Ова радња не може да се поништи.">
 <!ENTITY panicButton.view.forgetButton            "Заборави!">
 
-<!ENTITY panicButton.thankyou.msg1                "Ваша недавна историја је обрисана.">
+<!ENTITY panicButton.thankyou.msg1                "Недавна историја је обрисана.">
 <!ENTITY panicButton.thankyou.msg2                "Безбедно прегледање!">
 <!ENTITY panicButton.thankyou.buttonlabel         "Хвала!">
 
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "Н">
 <!ENTITY emeNotificationsDontAskAgain.label       "Немој ме поново питати">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "е">
-
-<!ENTITY readingList.label                        "Листа за читање">
-<!ENTITY readingList.sidebar.commandKey           "ч">
-<!ENTITY readingList.showSidebar.label            "Прикажи траку листе за читање">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Прикажи више…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Додајте чланке Вашој листи за читање да бисте их сачували за касније и лако пронашли када су Вам потребни.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Уклони ово са листе за читање">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Додај листи за читање">
-<!ENTITY readingList.sidebar.add.tooltip          "Додај ову страницу листи за читање">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Сними страницу у Pocket">

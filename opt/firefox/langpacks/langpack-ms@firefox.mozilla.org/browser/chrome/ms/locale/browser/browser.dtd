@@ -95,8 +95,8 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY pageInfoCmd.label "Info Laman">
 <!ENTITY pageInfoCmd.accesskey "L">
 <!ENTITY pageInfoCmd.commandkey "L">
-
-
+<!ENTITY mirrorTabCmd.label "Cermin Tab">
+<!ENTITY mirrorTabCmd.accesskey "C">
 <!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
 These should match what Safari and other Apple applications use on OS X Lion. -->
 <!ENTITY enterFullScreenCmd.label "Masukkan Skrin Penuh">
@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "S">
 
 <!ENTITY fxaSignIn.label "Daftar masuk ke &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Buka &syncBrand.shortName.label; keutamaan">
 <!ENTITY fxaSignInError.label "Sambung semula ke &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; dibolehkan">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; akan memulakan penyegerakan sebentar lagi.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "S">
 <!ENTITY fullScreenExit.label "Keluar Mod Skrin Penuh">
 <!ENTITY fullScreenExit.accesskey "M">
-<!ENTITY fullscreenAllowButton.label "Benarkan">
-<!ENTITY fullscreenExitButton.label "Nafikan">
 
 <!ENTITY fullscreenExitHint2.value "Tekan ESC pada bila-bila masa untuk keluar.">
 <!ENTITY leaveDOMFullScreen.label "Keluar dari Muka Penuh">
@@ -145,17 +144,19 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!-- LOCALIZATION NOTE (findShareServices.label):
   -  Use the unicode ellipsis char, \u2026,
   -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
+<!ENTITY findShareServices.label "Cari lebih banyak perkhidmatan Kongsi…">
 <!ENTITY sharePageCmd.label "Kongsi Halaman Ini">
 <!ENTITY sharePageCmd.commandkey "S">
 <!ENTITY sharePageCmd.accesskey "K">
 <!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
-
-
-
-
-
-
-
+<!ENTITY shareLink.label "Kongsi Pautan Ini">
+<!ENTITY shareLink.accesskey "i">
+<!ENTITY shareImage.label "Kongsi Imej Ini">
+<!ENTITY shareImage.accesskey "i">
+<!ENTITY shareSelect.label "Kongsi Pilihan">
+<!ENTITY shareSelect.accesskey "i">
+<!ENTITY shareVideo.label "Kongsi Video Ini">
+<!ENTITY shareVideo.accesskey "i">
 <!ENTITY feedsMenu.label "Langgan">
 <!ENTITY subscribeToPageMenupopup.label "Langgan ke Laman Ini">
 <!ENTITY subscribeToPageMenuitem.label "Langgan ke Laman Ini…">
@@ -217,8 +218,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY addons.label                 "Add-ons">
 <!ENTITY addons.accesskey             "A">
 <!ENTITY addons.commandkey            "A">
-
-
+<!ENTITY webapps.label                "Aplikasi">
+<!ENTITY webapps.accesskey            "p">
 
 <!ENTITY webDeveloperMenu.label       "Pembangun Web">
 <!ENTITY webDeveloperMenu.accesskey   "W">
@@ -267,9 +268,13 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY browserToolboxMenu.label     "Alatan Pelayar">
 <!ENTITY browserToolboxMenu.accesskey "a">
+<!ENTITY browserToolboxCmd.commandkey "i">
 <!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
   -  application menu item that opens the browser content toolbox UI in the Tools menu.
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
+
+<!ENTITY browserContentToolboxMenu.label     "Kotak Alatan Kandungan Pelayar">
+<!ENTITY browserContentToolboxMenu.accesskey "K">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Tutup Developer Toolbar">
 <!ENTITY devToolbarMenu.label              "Perkakas Pembangun">
@@ -299,6 +304,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "n">
 <!ENTITY newPrivateWindow.label     "Tetingkap Persendirian Baharu">
 <!ENTITY newPrivateWindow.accesskey "B">
+<!ENTITY newNonRemoteWindow.label   "Tetingkap Non-e10s Baru">
 
 <!ENTITY editMenu.label         "Ubah"> 
 <!ENTITY editMenu.accesskey       "U"> 
@@ -388,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Cari atau masukkan alamat">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Tukar ke tab:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Adakah anda ingin meningkatkan pengalaman carian anda dengan cadangan?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Ketahui lebih lanjut…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Tidak">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Ya">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -412,17 +423,37 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Pertanyaan gelintar">
+<!ENTITY contentSearchSubmit.label    "Hantar carian">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
 
+<!ENTITY searchFor.label              "Mencari: ">
+<!ENTITY searchWith.label             " dengan:">
+<!-- LOCALIZATION NOTE (search.label, searchAfter.label):
+     This string is used to build the header above the list of one-click search
+     providers when a one off engine has been selected.  The searchAfter text is
+     intentionally left empty for en-US and can be used by other localizations to
+     display a string after the search engine name.  This string will be displayed
+     as:  "Search <selected engine name><searchAfter.label text>" -->
+
+<!ENTITY search.label                 "Carian ">
+<!ENTITY searchAfter.label            "">
 <!-- LOCALIZATION NOTE (searchWithHeader.label):
      The wording of this string should be as close as possible to
      searchFor.label and searchWith.label. This string will be used instead of
      them when the user has not typed any keyword. -->
+
+<!ENTITY searchWithHeader.label       "Laman Carian:">
 <!-- LOCALIZATION NOTE (changeSearchSettings.button):
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
+<!ENTITY changeSearchSettings.button  "Ubah Tetapan Carian">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -498,8 +529,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY emailImageCmd.accesskey      "E">
 <!ENTITY emailVideoCmd.label          "Emailkan Video…">
 <!ENTITY emailVideoCmd.accesskey      "V">
-
-
+<!ENTITY castVideoCmd.label           "Hantar Video Ke Peranti">
+<!ENTITY castVideoCmd.accesskey       "e">
 <!ENTITY emailAudioCmd.label          "Emailkan Audio…">
 <!ENTITY emailAudioCmd.accesskey      "a">
 <!ENTITY playPluginCmd.label          "Activate plugin ini">
@@ -605,13 +636,15 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY goForwardCmd.commandKey "]">
 <!ENTITY quitApplicationCmd.label       "Keluar"> 
 <!ENTITY quitApplicationCmd.accesskey   "K">
-
+<!ENTITY quitApplicationCmdMac2.label   "Hentikan &brandShorterName;">
 <!-- LOCALIZATION NOTE(quitApplicationCmdUnix.key): This keyboard shortcut is used by both Linux and OSX builds. -->
 <!ENTITY quitApplicationCmdUnix.key     "Q">
 
 <!ENTITY closeCmd.label                 "Tutup">  
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "T">
+
+<!ENTITY toggleMuteCmd.key              "M">
 
 <!ENTITY pageStyleMenu.label "Gaya Halaman">
 <!ENTITY pageStyleMenu.accesskey "y">
@@ -653,29 +686,38 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Batal">
 <!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
-<!ENTITY identity.unverifiedsite2 "Laman sesawang ini tidak membekalkan maklumat identiti.">
-<!ENTITY identity.connectedTo "Anda telah disambungkan ke">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "Sambungan Selamat">
+<!ENTITY identity.connectionNotSecure "Sambungan Tidak Selamat">
+<!ENTITY identity.connectionFile "Halaman ini disimpan dalam komputer anda.">
+<!ENTITY identity.connectionVerified "&brandShortName; telah mengesahkan yang anda disambungkan ke halaman ini dengan selamat, yang dijalankan oleh:">
+<!ENTITY identity.connectionInternal "Ini adalah halaman &brandShortName; yang selamat.">
+<!-- Strings for connection state warnings. -->
 
-example.com
-which is run by
-Example Enterprises, Inc.
+<!ENTITY identity.activeBlocked "&brandShortName; telah menghalang sebahagian halaman ini yang tidak selamat">
+<!ENTITY identity.passiveLoaded "Sebahagian daripada halaman ini tidak selamat (seperti imej).">
+<!ENTITY identity.activeLoaded "Anda telah melumpuhkan perlindungan untuk halaman ini.">
+<!ENTITY identity.weakEncryption "Halaman ini menggunakan enkripsi yang lemah.">
+<!-- Strings for connection state warnings in the subview. -->
 
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "yang dijalankan oleh">
+<!ENTITY identity.description.insecure "Sambungan anda ke laman ini adalah terbuka. Maklumat yang anda hantar mampu dilihat oleh orang lain (seperti kata laluan, mesej, kad kredit, dll.).">
+<!ENTITY identity.description.weakCipher "Sambungan anda ke halaman ini menggunakan enkripsi yang lemah dan bukan secara persendirian.">
+<!ENTITY identity.description.weakCipher2 "Orang lain boleh melihat maklumat anda atau mengubah tingkah laku laman web.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; telah menyekat sebahagian halaman ini yang tidak selamat">
+<!ENTITY identity.description.passiveLoaded "Sambungan anda adalah terbuka dan maklumat yang anda kongsi dengan halaman ini mampu dilihat oleh orang lain.">
+<!ENTITY identity.description.passiveLoaded2 "Laman web ini mengandungi kandungan yang tidak selamat (seperti imej).">
+<!ENTITY identity.description.passiveLoaded3 "Walaupun &brandShortName; telah menyekat beberapa kandungan, masih ada kandungan pada halaman ini yang tidak selamat (seperti imej).">
+<!ENTITY identity.description.activeLoaded "Laman web ini mengandungi kandungan yang tidak selamat (seperti skrip) dan sambungan anda kepadanya adalah terbuka.">
+<!ENTITY identity.description.activeLoaded2 "Maklumat yang anda kongsi dengan laman ini boleh dilihat oleh orang lain (seperti kata laluan, mesej, kad kredit, dll.).">
 
-<!ENTITY identity.moreInfoLinkText "Lebih Banyak Maklumat…">
+<!ENTITY identity.enableMixedContentBlocking.label "Bolehkan perlindungan">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "B">
+<!ENTITY identity.disableMixedContentBlocking.label "Lumpuhkan perlindungan untuk sekarang">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "L">
+<!ENTITY identity.learnMore "Ketahui Lebih Lanjut">
+
+<!ENTITY identity.moreInfoLinkText2 "Lebih Banyak Maklumat">
 
 <!ENTITY identity.permissions "Kebenaran">
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-
-<!ENTITY identity.help.tooltip "Bagaimana saya mengetahui sambungan saya ke sesebuah lama web adalah selamat?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -714,10 +756,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY social.learnMore.accesskey "K">
 <!ENTITY social.closeNotificationItem.label "Bukan Sekarang">
 
-
-
-
-
+<!ENTITY social.directory.label "Direktori Pengaktifan">
+<!ENTITY social.directory.text "Anda boleh mengaktifkan perkhidmatan Kongsi dari direktori. ">
+<!ENTITY social.directory.button "Bawa saya ke sana!">
+<!ENTITY social.directory.introText "Klik pada perkhidmatan untuk menambah ia ke &brandShortName;.">
+<!ENTITY social.directory.viewmore.text "Lihat Lagi">
 
 <!ENTITY customizeMode.tabTitle "Menyesuai &brandShortName;">
 <!ENTITY customizeMode.menuAndToolbars.header2 "Alatan dan Ciri Tambahan ">
@@ -731,9 +774,8 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY customizeMode.lwthemes.recommended "Disyorkan">
 <!ENTITY customizeMode.lwthemes.menuManage "Urus">
 <!ENTITY customizeMode.lwthemes.menuManage.accessKey "M">
-<!ENTITY customizeMode.lwthemes.menuGetMore "Dapatkan Lebih Banyak Tema">
+<!ENTITY customizeMode.lwthemes.menuGetMore "Dapatkan Lagi Banyak Tema">
 <!ENTITY customizeMode.lwthemes.menuGetMore.accessKey "G">
-<!ENTITY customizeMode.deveditionTheme.label2 "Guna Tema Edisi Pembangun">
 
 <!ENTITY social.chatBar.commandkey "c">
 <!ENTITY social.chatBar.label "Focus chats">
@@ -748,30 +790,35 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon untuk dikongsi:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Audio dari tab akan dikongsi.">
 <!ENTITY getUserMedia.allWindowsShared.message "Semua tetingkap yang kelihatan pada skrin anda akan dikongsi.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Kebanyakan laman web masih lagi akan berfungsi walapun jika kandungan ini terhalang.">
-
-<!ENTITY mixedContentBlocked2.message "Kandungan tidak selamat">
-
-<!ENTITY mixedContentBlocked2.learnMore "Ketahui Lebih Lanjut">
-<!ENTITY mixedContentBlocked2.options "Pilihan">
-
-
-
-
-
+<!ENTITY trackingProtection.title "Perlindungan Penjejakan">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; sedang menyekat sebahagian halaman yang mungkin menjejaki pelayaran anda.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Laman ini mengandungi elemen yang boleh menjejaki pelayaran anda. Anda telah melumpuhkan perlindungan.">
+<!ENTITY trackingProtection.notDetected3 "Tiada elemen dijumpai pada laman ini.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Lumpuhkan perlindungan pada halaman ini">
+<!ENTITY trackingProtection.unblock.accesskey "L">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Lumpuhkan perlindungan pada halaman ini">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "L">
+<!ENTITY trackingProtection.block2.label "Bolehkan perlindungan">
+<!ENTITY trackingProtection.block2.accesskey "B">
 
 <!ENTITY trackingContentBlocked.message "Penjejakan">
-
-
-
-
-
-
-
-
+<!ENTITY trackingContentBlocked.moreinfo "Sebahagian daripada halaman yang menjejaki aktiviti dalam talian anda telah disekat.">
+<!ENTITY trackingContentBlocked.learnMore "Ketahui Lebih Lanjut">
+<!ENTITY trackingContentBlocked.options "Pilihan">
+<!ENTITY trackingContentBlocked.unblock2.label "Lumpuhkan perlindungan pada halaman ini">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "d">
+<!ENTITY trackingContentBlocked.block.label "Bolehkan perlindungan">
+<!ENTITY trackingContentBlocked.block.accesskey "B">
+<!ENTITY trackingContentBlocked.disabled.message "Perlindungan penjejakan dilumpuhkan">
 
 <!ENTITY pointerLock.notification.message "Tekan ESC bila-bila masa untuk paparkan semula.">
 
@@ -793,11 +840,11 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY uiTour.infoPanel.close "Tutup">
 
 <!ENTITY appMenuSidebars.label         "Bar sebelah">
-
-<!ENTITY switchToMetroCmd2.label       "Lancar semula dalam &brandShortName; untuk Windows 8 Touch">
 <!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
      The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
      Please ensure that this remains the case in the translation. -->
+
+<!ENTITY panicButton.view.mainTimeframeDesc       "Lupakan untuk:">
 <!ENTITY panicButton.view.5min                    "Lima minit">
 <!ENTITY panicButton.view.2hr                     "Dua jam">
 <!ENTITY panicButton.view.day                     "24 jam">
@@ -806,162 +853,38 @@ just addresses the organization to follow, e.g. "This site is run by " -->
      Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
      The translation should do the same. -->
 
-
-
-
+<!ENTITY panicButton.view.mainActionDesc          "Dengan meneruskan akan:">
+<!ENTITY panicButton.view.deleteCookies           "<html:strong>Kukis</html:strong> terakhir akan dihapus">
+<!ENTITY panicButton.view.deleteHistory           "<html:strong>Sejarah</html:strong> terakhir akan dihapus">
+<!ENTITY panicButton.view.deleteTabsAndWindows    "Semua <html:strong>Tab</html:strong> dan <html:strong>Tetingkap</html:strong> akan ditutup">
+<!ENTITY panicButton.view.openNewWindow           "Buka tetingkap pelayar yang baru">
 
 <!ENTITY panicButton.view.undoWarning             "Tindakan ini tidak dapat dilakukan.">
 <!ENTITY panicButton.view.forgetButton            "Lupakan!">
 
-
+<!ENTITY panicButton.thankyou.msg1                "Sejarah terakhir anda telah dipadam.">
+<!ENTITY panicButton.thankyou.msg2                "Berhati-hati dalam pelayaran!">
 <!ENTITY panicButton.thankyou.buttonlabel         "Terima kasih!">
 
-<!ENTITY processHang.terminateScript.label        "Henti Skrip">
-<!ENTITY processHang.terminateScript.accessKey    "H">
-
-
-
-
-
-
+<!ENTITY processHang.terminateScript.label        "Hentikan Skrip">
+<!ENTITY processHang.terminateScript.accessKey    "S">
+<!ENTITY processHang.debugScript.label            "Skrip nyahpijat">
+<!ENTITY processHang.debugScript.accessKey        "S">
+<!ENTITY processHang.terminatePlugin.label        "Hentikan Plugin">
+<!ENTITY processHang.terminatePlugin.accessKey    "P">
+<!ENTITY processHang.terminateProcess.label       "Hentikan Proses Web">
+<!ENTITY processHang.terminateProcess.accessKey   "W">
 
 <!ENTITY emeLearnMoreContextMenu.label            "Ketahui lebih lanjut mengenai DRM…">
 <!ENTITY emeLearnMoreContextMenu.accesskey        "D">
-
-
+<!ENTITY emeNotificationsNotNow.label             "Bukan sekarang">
+<!ENTITY emeNotificationsNotNow.accesskey         "n">
 <!ENTITY emeNotificationsDontAskAgain.label       "Jangan tanya saya lagi">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "J">
-
-
-
-<!-- Pre-landed string for bug 1124153 -->
-<!-- Pre-landed string for bug 1133662 -->
-<!-- Pre-landed string for bug 1123525 -->
-<!-- Pre-landed strings for bug 1123519 -->
-
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-
-<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser content toolbox UI in the Tools menu.
-  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
-<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
-<!ENTITY browserToolboxCmd.commandkey "i">
-<!ENTITY castVideoCmd.accesskey       "e">
-<!ENTITY castVideoCmd.label           "Send Video To Device">
-<!-- LOCALIZATION NOTE (changeSearchSettings.button):
-     This string won't wrap, so if the translated string is longer,
-     consider translating it as if it said only "Search Settings". -->
-<!ENTITY changeSearchSettings.button  "Change Search Settings">
-<!ENTITY emeNotificationsNotNow.accesskey         "N">
-<!ENTITY emeNotificationsNotNow.label             "Not now">
-<!-- LOCALIZATION NOTE (findShareServices.label):
-  -  Use the unicode ellipsis char, \u2026,
-  -  or use "..." if \u2026 doesn't suit traditions in your locale. -->
-<!ENTITY findShareServices.label "Find more Share services…">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY mirrorTabCmd.accesskey "m">
-<!ENTITY mirrorTabCmd.label "Mirror Tab">
-<!ENTITY mixedContentBlocked2.block.accesskey "E">
-<!ENTITY mixedContentBlocked2.block.label "Enable protection">
-<!ENTITY mixedContentBlocked2.disabled.message "Protection is disabled">
-<!ENTITY mixedContentBlocked2.moreinfo "Some unencrypted elements on this website have been blocked.">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.unblock.label "Disable protection for now">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-
-<!ENTITY panicButton.thankyou.msg1                "Your recent history is cleared.">
-<!ENTITY panicButton.thankyou.msg2                "Safe browsing!">
-<!ENTITY panicButton.view.deleteCookies           "Delete Recent <html:strong>Cookies</html:strong>">
-<!ENTITY panicButton.view.deleteHistory           "Delete Recent <html:strong>History</html:strong>">
-<!ENTITY panicButton.view.deleteTabsAndWindows    "Close all <html:strong>Tabs</html:strong> and <html:strong>Windows</html:strong>">
-
-<!-- LOCALIZATION NOTE: (panicButton.view.mainLabel, panicButton.view.deleteCookies, panicButton.view.deleteHistory, panicButton.view.deleteTabsAndWindows, panicButton.view.openNewWindow):
-     The .mainActionDesc string combined with any of the 4 others is meant to form a complete sentence, e.g. "Proceeding will: Delete Recent Cookies".
-     Note also that the deleteCookies, deleteHistory and deleteTabsAndWindows strings include <html:strong> tags for emphasis on the words "Cookies", "History", "Tabs" and "Windows".
-     The translation should do the same. -->
-<!ENTITY panicButton.view.mainActionDesc          "Proceeding will:">
-
-<!-- LOCALIZATION NOTE: (panicButton.view.mainTimeframeDesc, panicButton.view.5min, panicButton.view.2hr, panicButton.view.day):
-     The .mainTimeframeDesc string combined with any of the 3 others is meant to form a complete sentence, e.g. "Forget the last: Five minutes".
-     Please ensure that this remains the case in the translation. -->
-<!ENTITY panicButton.view.mainTimeframeDesc       "Forget the last:">
-<!ENTITY panicButton.view.openNewWindow           "Open a new clean Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY processHang.debugScript.accessKey        "D">
-<!ENTITY processHang.debugScript.label            "Debug Script">
-<!ENTITY processHang.terminatePlugin.accessKey    "P">
-<!ENTITY processHang.terminatePlugin.label        "Kill Plugin">
-<!ENTITY processHang.terminateProcess.accessKey   "K">
-<!ENTITY processHang.terminateProcess.label       "Kill Web Process">
-<!ENTITY quitApplicationCmdMac2.label   "Quit &brandShorterName;">
-
-<!ENTITY readingList.label                        "Reading List">
-<!ENTITY readingList.showSidebar.label            "Show Reading List Sidebar">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Add to Reading List">
-<!ENTITY readingList.sidebar.add.tooltip          "Add this page to your Reading List">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.sidebar.delete.tooltip       "Remove this from your Reading List">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Add articles to your Reading List to save them for later and find them easily when you need them.">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Show more…">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
-<!ENTITY saveToPocketCmd.accesskey "k">
-
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
 
-<!-- LOCALIZATION NOTE (search.label, searchAfter.label):
-     This string is used to build the header above the list of one-click search
-     providers when a one off engine has been selected.  The searchAfter text is
-     intentionally left empty for en-US and can be used by other localizations to
-     display a string after the search engine name.  This string will be displayed
-     as:  "Search <selected engine name><searchAfter.label text>" -->
-<!ENTITY search.label                 "Search ">
-<!ENTITY searchAfter.label            "">
-
-<!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
-     These two strings are used to build the header above the list of one-click
-     search providers:  "Search for <used typed keywords> with:" -->
-<!ENTITY searchFor.label              "Search for ">
-<!ENTITY searchWith.label             " with:">
-
-<!-- LOCALIZATION NOTE (searchWithHeader.label):
-     The wording of this string should be as close as possible to
-     searchFor.label and searchWith.label. This string will be used instead of
-     them when the user has not typed any keyword. -->
-<!ENTITY searchWithHeader.label       "Search with:">
-<!ENTITY shareImage.accesskey "r">
-<!ENTITY shareImage.label "Share This Image">
-<!ENTITY shareLink.accesskey "h">
-<!-- LOCALIZATION NOTE (shareLink.accesskey): must be different than the following share access keys -->
-<!ENTITY shareLink.label "Share This Link">
-<!ENTITY shareSelect.accesskey "r">
-<!ENTITY shareSelect.label "Share Selection">
-<!ENTITY shareVideo.accesskey "r">
-<!ENTITY shareVideo.label "Share This Video">
-<!ENTITY social.directory.button "Take me there!">
-<!ENTITY social.directory.introText "Click on a service to add it to &brandShortName;.">
-
-<!ENTITY social.directory.label "Activations Directory">
-<!ENTITY social.directory.text "You can activate Share services from the directory.">
-<!ENTITY social.directory.viewmore.text "View More">
-<!ENTITY trackingContentBlocked.block.accesskey "E">
-<!ENTITY trackingContentBlocked.block.label "Enable protection">
-<!ENTITY trackingContentBlocked.disabled.message "Tracking protection is disabled">
-<!ENTITY trackingContentBlocked.learnMore "Learn More">
-<!ENTITY trackingContentBlocked.moreinfo "Parts of the page that track your online activity have been blocked.">
-<!ENTITY trackingContentBlocked.options "Options">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "D">
-<!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
-<!ENTITY webapps.accesskey            "p">
-<!ENTITY webapps.label                "Apps">
+<!ENTITY saveToPocketCmd.label     "Simpan Halaman ke Pocket">
+<!ENTITY saveToPocketCmd.accesskey "k">
+<!ENTITY saveLinkToPocketCmd.label     "Simpan Pautan ke Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "o">
+<!ENTITY pocketMenuitem.label      "Lihat Senarai Poket">

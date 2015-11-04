@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "k">
 
 <!ENTITY fxaSignIn.label "Jungtis prie „&syncBrand.shortName.label;“">
+<!ENTITY fxaSignedIn.tooltip "Atverti „&syncBrand.shortName.label;“ nuostatas">
 <!ENTITY fxaSignInError.label "Iš naujo jungtis prie „&syncBrand.shortName.label;“">
 <!ENTITY syncStartPanel2.heading "„&syncBrand.shortName.label;“ įgalinta">
 <!ENTITY syncStartPanel2.subTitle "„&brandShortName;“ tuoj pat pradės sinchronizavimą.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "S">
 <!ENTITY fullScreenExit.label "Grįžti iš viso ekrano veiksenos">
 <!ENTITY fullScreenExit.accesskey "v">
-<!ENTITY fullscreenAllowButton.label "Leisti">
-<!ENTITY fullscreenExitButton.label "Neleisti">
 
 <!ENTITY fullscreenExitHint2.value "Kai norėsite išeiti, spauskite klavišą Gr.">
 <!ENTITY leaveDOMFullScreen.label "Grįžti iš viso ekrano">
@@ -330,8 +329,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY selectAllCmd.label         "Pažymėti viską">  
 <!ENTITY selectAllCmd.key         "A">  
 <!ENTITY selectAllCmd.accesskey       "v"> 
-<!ENTITY preferencesCmd2.label       "Parinktys">
-<!ENTITY preferencesCmd2.accesskey     "P">
+<!ENTITY preferencesCmd2.label       "Nuostatos">
+<!ENTITY preferencesCmd2.accesskey     "N">
 <!ENTITY preferencesCmdUnix.label       "Nuostatos">
 <!ENTITY preferencesCmdUnix.accesskey     "N"> 
 
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Įveskite adresą arba paieškos žodžius">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Pereiti į kortelę:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Ar norėtumėte paieškos metu matyti siūlymus?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Sužinoti daugiau…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ne">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Taip">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Paieškos užklausa">
+<!ENTITY contentSearchSubmit.label    "Išsiųsti paiešką">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "U">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Tinklalapio stilius">
 <!ENTITY pageStyleMenu.accesskey "k">
 <!ENTITY pageStyleNoStyle.label "Nėra">
@@ -662,8 +674,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY findOnCmd.accesskey "I">
 <!ENTITY findOnCmd.commandkey "f">
 <!ENTITY findAgainCmd.label  "Ieškoti toliau">
-<!ENTITY findAgainCmd.accesskey "e">
-<!ENTITY findAgainCmd.commandkey "g">
+<!ENTITY findAgainCmd.accesskey "o">
+<!ENTITY findAgainCmd.commandkey "o">
 <!ENTITY findAgainCmd.commandkey2 "VK_F3">
 <!ENTITY findSelectionCmd.commandkey "e">
 
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Saugus ryšys">
 <!ENTITY identity.connectionNotSecure "Ryšys nėra saugus">
+<!ENTITY identity.connectionFile "Šis tinklalapis yra įrašytas jūsų kompiuteryje.">
 <!ENTITY identity.connectionVerified "„&brandShortName;“ patvirtino, kad esate saugiai prisijungę prie šios svetainės, kurią valdo: ">
 <!ENTITY identity.connectionInternal "Tai yra saugus „&brandShortName;“ tinklalapis.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "„&brandShortName;“ užblokavo nesaugias šio tinklalapio dalis.">
+<!ENTITY identity.passiveLoaded "Kai kurios šio tinklalapio dalys nėra saugios (pvz., paveikslai).">
+<!ENTITY identity.activeLoaded "Šiame tinklalapyje esate išjungę apsaugą.">
+<!ENTITY identity.weakEncryption "Šis tinklalapis naudoja silpną šifravimą.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "Jūsų ryšys su šia svetaine nėra privatus. Jūsų pateikta informacija gali būti peržiūrėta kitų (pvz., slaptažodžiai, žinutės, banko kortelės, kita).">
+<!ENTITY identity.description.weakCipher "Jūsų ryšys su šia svetaine naudoja silpną šifravimą ir nėra privatus.">
+<!ENTITY identity.description.weakCipher2 "Pašaliniai asmenys gali matyti jūsų duomenis ir keisti svetainės elgseną.">
+<!ENTITY identity.description.activeBlocked "„&brandShortName;“ užblokavo nesaugias šio tinklalapio dalis.">
+<!ENTITY identity.description.passiveLoaded "Jūsų ryšys nėra privatus, tad šiai svetainei pateikta informacija gali būti peržiūrėta kitų.">
+<!ENTITY identity.description.passiveLoaded2 "Šioje svetainėje yra nesaugaus turinio (pvz., paveikslų).">
+<!ENTITY identity.description.passiveLoaded3 "Nors „&brandShortName;“ užblokavo dalį turinio, šiame tinklalapyje vis dar yra nesaugaus turinio (pvz., paveikslų).">
+<!ENTITY identity.description.activeLoaded "Šioje svetainėje yra nesaugaus turinio (pvz., scenarijų), be to, jūsų ryšys su ja nėra privatus.">
+<!ENTITY identity.description.activeLoaded2 "Šiai svetainei pateikta informacija gali būti peržiūrėta kitų (pvz., slaptažodžiai, žinutės, banko kortelės, kita).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Įjungti apsaugą">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "Į">
+<!ENTITY identity.disableMixedContentBlocking.label "Laikinai išjungti apsaugą">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "L">
+<!ENTITY identity.learnMore "Sužinoti daugiau">
 
 <!ENTITY identity.moreInfoLinkText2 "Daugiau informacijos">
 
@@ -692,7 +728,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
-<!ENTITY syncSetup.label              "Konfigūruoti sinchronizavimą…">
+<!ENTITY syncSetup.label              "Konfigūruoti „&syncBrand.shortName.label;“…">
 <!ENTITY syncSetup.accesskey          "K">
 <!ENTITY syncSyncNowItem.label        "Sinchronizuoti dabar">
 <!ENTITY syncSyncNowItem.accesskey    "S">
@@ -754,25 +790,30 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofonas, kurį leisite pasiekti:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Bus pasiekiamas kortelės garsas.">
 <!ENTITY getUserMedia.allWindowsShared.message "Bus leidžiama matyti visus jūsų ekrane matomus langus.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Dauguma svetainių veikia korektiškai net ir neįkėlus tokio turinio.">
-
-<!ENTITY mixedContentBlocked2.message "Nesaugus turinys">
-<!ENTITY mixedContentBlocked2.moreinfo "Kai kurie šiame tinklalapyje esantys nešifruoti elementai neįkelti.">
-<!ENTITY mixedContentBlocked2.learnMore "Sužinoti daugiau">
-<!ENTITY mixedContentBlocked2.options "Parinktys">
-<!ENTITY mixedContentBlocked2.unblock.label "Laikinai išjungti apsaugą">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "L">
-<!ENTITY mixedContentBlocked2.block.label "Įjungti apsaugą">
-<!ENTITY mixedContentBlocked2.block.accesskey "Į">
-<!ENTITY mixedContentBlocked2.disabled.message "Apsauga išjungta">
+<!ENTITY trackingProtection.title "Apsauga nuo stebėjimo">
+<!ENTITY trackingProtection.detectedBlocked3 "„&brandShortName;“ blokuoja jūsų naršymą galinčias stebėti šio tinklalapio dalis.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Šiame tinklalapyje yra jūsų naršymą galinčių stebėti elementų. Jūsų apsauga yra išjungta.">
+<!ENTITY trackingProtection.notDetected3 "Tinklalapyje nerasta stebėjimui naudojamų elementų.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Išjungti apsaugą šioje svetainėje">
+<!ENTITY trackingProtection.unblock.accesskey "I">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Išjungti apsaugą šiam seansui">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "I">
+<!ENTITY trackingProtection.block2.label "Įjungti apsaugą">
+<!ENTITY trackingProtection.block2.accesskey "Į">
 
 <!ENTITY trackingContentBlocked.message "Stebėjimas">
 <!ENTITY trackingContentBlocked.moreinfo "Tinklalapio dalys, stebinčios jūsų veiksmus internete, buvo užblokuotos.">
 <!ENTITY trackingContentBlocked.learnMore "Sužinoti daugiau">
-<!ENTITY trackingContentBlocked.options "Parinktys">
+<!ENTITY trackingContentBlocked.options "Nuostatos">
 <!ENTITY trackingContentBlocked.unblock2.label "Išjungti apsaugą šioje svetainėje">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "I">
 <!ENTITY trackingContentBlocked.block.label "Įjungti apsaugą">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "Šio klausimo ateityje nepateikti">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "k">
-
-<!ENTITY readingList.label                        "Skaitinių sąrašas">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Rodyti skaitinių sąrašo parankinę">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Rodyti daugiau…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Pridėkite straipsnius į savo skaitinių sąrašą ir vėliau juos galėsite lengvai rasti.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Pašalinti iš skaitinių sąrašo">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Pridėti į skaitinių sąrašą">
-<!ENTITY readingList.sidebar.add.tooltip          "Pridėti šį tinklalapį į skaitinių sąrašą">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Išsaugoti tinklalapį į „Pocket“">

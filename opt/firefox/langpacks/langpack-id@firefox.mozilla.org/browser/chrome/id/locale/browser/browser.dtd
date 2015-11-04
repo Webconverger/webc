@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "S">
 
 <!ENTITY fxaSignIn.label "Masuk ke &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Buka preferensi &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Sambungkan ulang ke &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; diaktifkan">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; akan memulai penyinkronan sesaat lagi.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "S">
 <!ENTITY fullScreenExit.label "Keluar dari Mode Layar Penuh">
 <!ENTITY fullScreenExit.accesskey "P">
-<!ENTITY fullscreenAllowButton.label "Izinkan">
-<!ENTITY fullscreenExitButton.label "Tolak">
 
 <!ENTITY fullscreenExitHint2.value "Tekan ESC kapan saja untuk keluar dari mode layar penuh.">
 <!ENTITY leaveDOMFullScreen.label "Keluar dari Mode Layar Penuh">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Cari atau Buka Situs Web">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Pindah ke tab:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Ingin meningkatkan pengalaman pencarian Anda dengan saran?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Pelajari lebih lanjut…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Tidak">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Ya">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Kueri penelusuran">
+<!ENTITY contentSearchSubmit.label    "Kirim penelusuran">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "u">
 
+<!ENTITY toggleMuteCmd.key              "S">
+
 <!ENTITY pageStyleMenu.label "Gaya Laman">
 <!ENTITY pageStyleMenu.accesskey "G">
 <!ENTITY pageStyleNoStyle.label "Tanpa Gaya">
@@ -672,12 +684,36 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY editBookmark.done.label                     "Selesai">
 <!ENTITY editBookmark.cancel.label                   "Batal">
-<!ENTITY editBookmark.removeBookmark.accessKey       "H">
+<!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
 <!ENTITY identity.connectionSecure "Sambungan Aman">
 <!ENTITY identity.connectionNotSecure "Sambungan Tidak Aman">
+<!ENTITY identity.connectionFile "Laman ini tersimpan di komputer Anda.">
 <!ENTITY identity.connectionVerified "&brandShortName; telah memverifikasi bahwa Anda tersambung dengan aman ke situs ini, yang dijalankan oleh:">
 <!ENTITY identity.connectionInternal "Ini adalah laman &brandShortName; aman.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName; telah memblokir bagian dari laman ini yang tidak aman.">
+<!ENTITY identity.passiveLoaded "Bagian dari laman ini tidak aman (misalnya, gambar):">
+<!ENTITY identity.activeLoaded "Anda telah menonaktifkan perlindungan di laman ini.">
+<!ENTITY identity.weakEncryption "Laman ini menggunakan enkripsi lemah.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "Koneksi Anda ke laman ini tidak pribadi. Informasi yang Anda kirim dapat dilihat oleh pihak lain (misalnya, sandi, pesan, kartu kredit, dll.).">
+<!ENTITY identity.description.weakCipher "Koneksi Anda ke situs web ini menggunakan enkripsi lemah dan tidak pribadi.">
+<!ENTITY identity.description.weakCipher2 "Orang lain dapat melihat informasi Anda atau memodifikasi perilaku situs web ini.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; telah memblokir bagian dari laman ini yang tidak aman.">
+<!ENTITY identity.description.passiveLoaded "Sambungan Anda tidak pribadi dan informasi yang Anda bagikan dengan situs ini dapat dilihat oleh pihak lain.">
+<!ENTITY identity.description.passiveLoaded2 "Situs web ini mengandung konten yang tidak aman (misalnya, gambar).">
+<!ENTITY identity.description.passiveLoaded3 "Meskipun &brandShortName; telah memblokir sejumlah konten, tetapi masih ada konten di laman ini yang tidak aman (misalnya gambar).">
+<!ENTITY identity.description.activeLoaded "Situs web ini mengandung konten yang tidak aman (misalnya skrip) dan sambungan Anda tidak pribadi.">
+<!ENTITY identity.description.activeLoaded2 "Informasi yang Anda bagikan dengan situs ini dapat dilihat oleh pihak lain (misalnya sandi, pesan, kartu kredit, dll.)">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Aktifkan perlindungan">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "A">
+<!ENTITY identity.disableMixedContentBlocking.label "Nonaktifkan perlindungan untuk saat ini">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "N">
+<!ENTITY identity.learnMore "Pelajari Lebih Lanjut">
 
 <!ENTITY identity.moreInfoLinkText2 "Informasi Lebih Lanjut">
 
@@ -754,26 +790,31 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon untuk dibagikan:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Audio dari tab akan dibagikan.">
 <!ENTITY getUserMedia.allWindowsShared.message "Semua jendela yang terlihat pada layar Anda akan dibagikan.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Sebagian besar situs web tetap berfungsi dengan baik walau pun sebagian kontennya diblokir.">
-
-<!ENTITY mixedContentBlocked2.message "Konten tidak aman">
-<!ENTITY mixedContentBlocked2.moreinfo "Beberapa elemen yang tidak dienkripsi pada situs web ini telah diblokir.">
-<!ENTITY mixedContentBlocked2.learnMore "Pelajari Lebih Lanjut">
-<!ENTITY mixedContentBlocked2.options "Opsi">
-<!ENTITY mixedContentBlocked2.unblock.label "Nonaktifkan perlindungan untuk saat ini">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "N">
-<!ENTITY mixedContentBlocked2.block.label "Aktifkan perlindungan">
-<!ENTITY mixedContentBlocked2.block.accesskey "A">
-<!ENTITY mixedContentBlocked2.disabled.message "Perlindungan dinonaktifkan">
+<!ENTITY trackingProtection.title "Perlindungan Pelacakan">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; memblokir bagian dari laman yang mungkin melacak penjelajahan Anda.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Situs ini mengandung elemen yang mungkin melacak penjelajahan Anda. Anda telah menonaktifkan perlindungan.">
+<!ENTITY trackingProtection.notDetected3 "Tidak ada elemen pelacakan terdeteksi di laman ini.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Nonaktifkan perlindungan untuk situs ini">
+<!ENTITY trackingProtection.unblock.accesskey "N">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Nonaktifkan perlindungan untuk sesi ini">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "N">
+<!ENTITY trackingProtection.block2.label "Aktifkan perlindungan">
+<!ENTITY trackingProtection.block2.accesskey "A">
 
 <!ENTITY trackingContentBlocked.message "Pelacakan">
 <!ENTITY trackingContentBlocked.moreinfo "Sebagian isi laman yang melacak aktivitas daring Anda telah diblokir.">
 <!ENTITY trackingContentBlocked.learnMore "Pelajari Lebih Lanjut">
 <!ENTITY trackingContentBlocked.options "Opsi">
-<!ENTITY trackingContentBlocked.unblock2.label "Nonaktifkan perlindungan untuk situs web ini">
+<!ENTITY trackingContentBlocked.unblock2.label "Nonaktifkan perlindungan untuk situs ini">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "N">
 <!ENTITY trackingContentBlocked.block.label "Aktifkan perlindungan">
 <!ENTITY trackingContentBlocked.block.accesskey "A">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "J">
 <!ENTITY emeNotificationsDontAskAgain.label       "Jangan tanyakan lagi">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "J">
-
-<!ENTITY readingList.label                        "Daftar Bacaan">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Tampilkan Bilah Samping Daftar Bacaan">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Tampilkan lainnya…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Tambahkan artikel ke Daftar Bacaan Anda untuk dibaca nanti dan juga agar mudah ditemukan saat dibutuhkan.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Hapus ini dari Daftar Bacaan">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Tambahkan ke Daftar Bacaan">
-<!ENTITY readingList.sidebar.add.tooltip          "Tambahkan laman ini ke Daftar Bacaan Anda">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Simpan Laman ke Pocket">

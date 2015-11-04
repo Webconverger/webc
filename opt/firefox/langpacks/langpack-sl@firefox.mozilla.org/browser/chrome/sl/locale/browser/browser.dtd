@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "Prijava v &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Odpri nastavitve &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Ponovna povezava s &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; omogočen">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; bo začel s sinhronizacijo.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "S">
 <!ENTITY fullScreenExit.label "Končaj celoten zaslon">
 <!ENTITY fullScreenExit.accesskey "C">
-<!ENTITY fullscreenAllowButton.label "Dovoli">
-<!ENTITY fullscreenExitButton.label "Zavrni">
 
 <!ENTITY fullscreenExitHint2.value "Za izhod lahko kadarkoli pritisnete ESC.">
 <!ENTITY leaveDOMFullScreen.label "Končaj celoten zaslon">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Preklopi na zavihek:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Želite obogatiti vaše iskanje s predlogi?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Več o tem …">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ne">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Da">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Iskalna poizvedba">
+<!ENTITY contentSearchSubmit.label    "Začni iskanje">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "Z">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Slog strani">
 <!ENTITY pageStyleMenu.accesskey "g">
 <!ENTITY pageStyleNoStyle.label "Brez sloga">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Varna povezava">
 <!ENTITY identity.connectionNotSecure "Povezava ni varna">
+<!ENTITY identity.connectionFile "Ta stran je shranjena na vašem računalniku.">
 <!ENTITY identity.connectionVerified "&brandShortName; je preveril, da ste varno povezani na to stran, ki jo upravlja:">
 <!ENTITY identity.connectionInternal "To je varna stran &brandShortName;a.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; je zavrnil dele strani, ki niso varni.">
+<!ENTITY identity.passiveLoaded "Deli strani niso varni (npr. slike).">
+<!ENTITY identity.activeLoaded "Zaščita na tej strani je onemogočena.">
+<!ENTITY identity.weakEncryption "Stran uporablja šibko šifriranje.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Vaša povezava na to stran ni zasebna. Podatke, ki jih pošiljate (npr. gesla, sporočila in kreditne kartice), si lahko ogledajo tudi druge osebe.">
+<!ENTITY identity.description.weakCipher "Vaša povezava na to stran uporablja šibko šifriranje in ni zasebna.">
+<!ENTITY identity.description.weakCipher2 "Druge osebe lahko vidijo vaše podatke ali spreminjajo obnašanje spletne strani.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; je zavrnil dele strani, ki niso varni.">
+<!ENTITY identity.description.passiveLoaded "Vaša povezava ni zasebna, zato lahko podatke, ki jih delite s stranjo, vidijo tudi druge osebe.">
+<!ENTITY identity.description.passiveLoaded2 "Spletna stran vsebuje elemente, ki niso varni (npr. slike).">
+<!ENTITY identity.description.passiveLoaded3 "Čeprav je &brandShortName; zavrnil dele vsebine, nekateri drugi deli še vedno niso varni (npr. slike).">
+<!ENTITY identity.description.activeLoaded "Spletna stran vsebuje elemente, ki niso varni (npr. skripti) in vaša povezava nanjo ni zasebna.">
+<!ENTITY identity.description.activeLoaded2 "Podatke, ki jih delite s to stranjo, si lahko ogledajo druge osebe (npr. gesla, sporočila in kreditne kartice).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Omogoči zaščito">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "O">
+<!ENTITY identity.disableMixedContentBlocking.label "Onemogoči zaščito za zdaj">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "N">
+<!ENTITY identity.learnMore "Več o tem">
 
 <!ENTITY identity.moreInfoLinkText2 "Več informacij">
 
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Uporabi mikrofon:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Zvok zavihka bo v skupni rabi.">
 <!ENTITY getUserMedia.allWindowsShared.message "Vsa vidna okna na vašem zaslonu bodo v skupni rabi.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Večina strani bo delovala pravilno, četudi je vsebina zavrnjena.">
-
-<!ENTITY mixedContentBlocked2.message "Nevarna vsebina">
-<!ENTITY mixedContentBlocked2.moreinfo "Nekateri nešifrirani elementi strani so bili zavrnjeni.">
-<!ENTITY mixedContentBlocked2.learnMore "Več o tem">
-<!ENTITY mixedContentBlocked2.options "Možnosti">
-<!ENTITY mixedContentBlocked2.unblock.label "Onemogoči zaščito za zdaj">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Omogoči zaščito">
-<!ENTITY mixedContentBlocked2.block.accesskey "M">
-<!ENTITY mixedContentBlocked2.disabled.message "Zaščita je onemogočena">
+<!ENTITY trackingProtection.title "Zaščita pred sledenjem">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; zavrača dele strani, ki lahko sledijo vašemu brskanju.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Stran vsebuje elemente, ki lahko sledijo vašemu brskanju. Zaščita je onemogočena.">
+<!ENTITY trackingProtection.notDetected3 "Na strani ni bilo zaznanih elementov sledenja.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Onemogoči zaščito za to stran">
+<!ENTITY trackingProtection.unblock.accesskey "N">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Onemogoči zaščito za to sejo">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "N">
+<!ENTITY trackingProtection.block2.label "Omogoči zaščito">
+<!ENTITY trackingProtection.block2.accesskey "O">
 
 <!ENTITY trackingContentBlocked.message "Sledenje">
 <!ENTITY trackingContentBlocked.moreinfo "Deli strani, ki sledijo vašim dejanjem na spletu, so bili zavrnjeni.">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "Ne sprašuj več">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "V">
-
-<!ENTITY readingList.label                        "Bralni seznam">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Prikaži stransko vrstico z bralnim seznamom">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Prikaži več …">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Dodajte članke na bralni seznam, da jih boste lahko prebrali pozneje in jih lažje našli, ko jih boste potrebovali.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Odstrani z bralnega seznama">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Dodaj na bralni seznam">
-<!ENTITY readingList.sidebar.add.tooltip          "Dodaj stran na bralni seznam">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Shrani stran v Pocket">

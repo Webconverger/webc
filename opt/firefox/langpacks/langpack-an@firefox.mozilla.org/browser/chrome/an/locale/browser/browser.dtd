@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "a">
 
 <!ENTITY fxaSignIn.label "Connectar-se a &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Ubre as preferencias d'o &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Tornar a connectar-se a &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; activau">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; prencipiará a sincronizar en breu.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "f">
 <!ENTITY fullScreenExit.label "Salir d'o modo pantalla completa">
 <!ENTITY fullScreenExit.accesskey "m">
-<!ENTITY fullscreenAllowButton.label "Permitir">
-<!ENTITY fullscreenExitButton.label "Refusar">
 
 <!ENTITY fullscreenExitHint2.value "Pretar ESC en qualsiquier momento ta zarrar.">
 <!ENTITY leaveDOMFullScreen.label "Salir d'a pantalla completa">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Termen a mirar u adreza">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Ir ta la pestanya:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Quiere amillorar a suya experiencia de busca con sucherencias?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Saber-ne &amp;mas…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "No">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Sí">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Consulta de busca">
+<!ENTITY contentSearchSubmit.label    "Ninvia la busca">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "Z">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Estilo de pachina">
 <!ENTITY pageStyleMenu.accesskey "i">
 <!ENTITY pageStyleNoStyle.label "Sin estilo">
@@ -672,12 +684,36 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY editBookmark.done.label                     "Rematar">
 <!ENTITY editBookmark.cancel.label                   "Cancelar">
-<!ENTITY editBookmark.removeBookmark.accessKey       "r">
+<!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
 <!ENTITY identity.connectionSecure "Connexión segura">
 <!ENTITY identity.connectionNotSecure "A connexion no ye segura">
+<!ENTITY identity.connectionFile "Ista pachina s'alza en o suyo ordinadora">
 <!ENTITY identity.connectionVerified "&brandShortName; ha verificau que yes connectau a iste puesto de traza segura, fendo:">
 <!ENTITY identity.connectionInternal "Ista ye una pachina segura de &brandShortName;.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName; ha blocau partes d'ista pachina que no son seguras.">
+<!ENTITY identity.passiveLoaded "Bella parte d'ista pachina no ye segura (p. eix. imachens)">
+<!ENTITY identity.activeLoaded "Ha desactivau a protección en ista pachina.">
+<!ENTITY identity.weakEncryption "Ista pachina fa servir zifrau feble.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "A connexión ta iste puesto no ye privada. A información que ninvia podría estar visualizada por atras personas (como claus, mensaches, tarchetas de credito, etc.).">
+<!ENTITY identity.description.weakCipher "A suya connexión ta ista web fa servir un zifrau feble y no ye privada.">
+<!ENTITY identity.description.weakCipher2 "Atras personas podrían visualizar a información u modificar o comportamiento d'o puesto">
+<!ENTITY identity.description.activeBlocked "&brandShortName; ha blocau partes d'ista pachina que no son seguras.">
+<!ENTITY identity.description.passiveLoaded "A connexión no ye privada y a información que comparte con o puesto podría estar visualizada por atras personas.">
+<!ENTITY identity.description.passiveLoaded2 "Iste puesto web inclui contenius que no son seguros (p. eix. imachens).">
+<!ENTITY identity.description.passiveLoaded3 "Tot y que &brandShortName; ha blocau bell conteniu, encara queda conteniu no seguro en a pachina (p.eix. imachens).">
+<!ENTITY identity.description.activeLoaded "Iste puesto web tien contenius que no son seguros (p. eix. scripts) y a suya connexión no ye privada.">
+<!ENTITY identity.description.activeLoaded2 "A información que comparte con iste puesto podría estar vista por atros (como claus, mensaches, tarchetas de credito, etc.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Activar a protección">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "v">
+<!ENTITY identity.disableMixedContentBlocking.label "Desactivar a protección por agora">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "Saber-ne mas">
 
 <!ENTITY identity.moreInfoLinkText2 "Mas información">
 
@@ -754,20 +790,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "Microfono ta compartir:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Se compartirá audio d'a pestanya.">
 <!ENTITY getUserMedia.allWindowsShared.message "Se compartirán todas as finestras visibles en a suya pantalla.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "A mayoría de puestos web funcionan adequadament mesmo si i ha contenius blocaus.">
-
-<!ENTITY mixedContentBlocked2.message "Conteniu no seguro">
-<!ENTITY mixedContentBlocked2.moreinfo "S'ha blocau bells elementos no zifraus d'ista web.">
-<!ENTITY mixedContentBlocked2.learnMore "Saber-ne mas">
-<!ENTITY mixedContentBlocked2.options "Opcions">
-<!ENTITY mixedContentBlocked2.unblock.label "Desactivar a protección por agora">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Activar a protección">
-<!ENTITY mixedContentBlocked2.block.accesskey "v">
-<!ENTITY mixedContentBlocked2.disabled.message "A protección ye desactivada">
+<!ENTITY trackingProtection.title "Protección contra o seguimiento">
+<!ENTITY trackingProtection.detectedBlocked3 "O &brandShortName; ha blocau as partes d'a pachina que podrían fer o seguimiento d'a suya navegación.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Iste puesto inclui elementos que pueden seguir a suya navegación. Ha desactivau a protección.">
+<!ENTITY trackingProtection.notDetected3 "No s'ha detectau elementos de seguimiento en ista pachina.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Desactivar a protección ta iste puesto">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Desactivar a protección ta ista sesión">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "Activar a protección">
+<!ENTITY trackingProtection.block2.accesskey "v">
 
 <!ENTITY trackingContentBlocked.message "Seguimiento">
 <!ENTITY trackingContentBlocked.moreinfo "S'ha blocau bellas partes d'a pachina que fan seguimiento d'a suya actividat online">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "No tornar a preguntar-me">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "N">
-
-<!ENTITY readingList.label                        "Lista de lectura">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Barra lateral d'amostrar a lista de lectura">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Amostrar-ne mas…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Anyade articlos ta la tuya Lista de Lectura ta alzar-los y que dimpués sigan de buen trobar quan te faigan falta.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Elimina isto d'a tuya Lista de Lectura">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Anyade en la Lista de Lectura">
-<!ENTITY readingList.sidebar.add.tooltip          "Anyade ista pachina en a tuya Lista de Lectura">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Alzar o vinclo en Pocket">

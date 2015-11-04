@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "а">
 
 <!ENTITY fxaSignIn.label "&syncBrand.shortName.label; ішіне кіру">
+<!ENTITY fxaSignedIn.tooltip "&syncBrand.shortName.label; баптауларын ашу">
 <!ENTITY fxaSignInError.label "&syncBrand.shortName.label; үшін қайта байланысу">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; іске қосылған">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; синхрондауды лезде бастайды.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "С">
 <!ENTITY fullScreenExit.label "Толық экран режимінен шығу">
 <!ENTITY fullScreenExit.accesskey "Т">
-<!ENTITY fullscreenAllowButton.label "Рұқсат беру">
-<!ENTITY fullscreenExitButton.label "Тыйым салу">
 
 <!ENTITY fullscreenExitHint2.value "Шығу үшін ESC басыңыз.">
 <!ENTITY leaveDOMFullScreen.label "Толық экраннан шығу">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Іздеу үшін сұранымды немесе адресті енгізіңіз">
 <!ENTITY urlbar.accesskey             "з">
 <!ENTITY urlbar.switchToTab.label     "Бетке ауысу:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Іздеу тәжірибесін ұсыныстармен жақсартуды қалайсыз ба?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Көбірек білу…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Жоқ">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Иә">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Іздеу сұранымы">
+<!ENTITY contentSearchSubmit.label    "Іздеуді жіберу">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "Ж">
 
+<!ENTITY toggleMuteCmd.key              "а">
+
 <!ENTITY pageStyleMenu.label "Парақ стилі">
 <!ENTITY pageStyleMenu.accesskey "с">
 <!ENTITY pageStyleNoStyle.label "Стильсіз">
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Қауіпсіз байланыс">
 <!ENTITY identity.connectionNotSecure "Байланыс қауіпсіз емес">
+<!ENTITY identity.connectionFile "Бұл парақ сіздің компьютеріңізде сақталған.">
 <!ENTITY identity.connectionVerified "&brandShortName; бұл сайтқа қауіпсіз түрде қосылғаныңызды тексерді, сайт иесі:">
 <!ENTITY identity.connectionInternal "Бұл - қауіпсіз &brandShortName; беті.">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName; бұл парақтың кейбір қауіпсіз емес бөліктерін блоктаған.">
+<!ENTITY identity.passiveLoaded "Бұл парақтың кейбір бөліктері қауіпсіз емес (суреттер сияқты).">
+<!ENTITY identity.activeLoaded "Бұл парақта қорғанысты сөндіргенсіз.">
+<!ENTITY identity.weakEncryption "Бұл парақ әлсіз шифрлеуді қолданады.">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "Бұл веб сайтқа байланысыңыз шынымен жеке емес. Басқа адамдар сіздің жіберетін ақпаратыңызды көре алады (парольдер, хабарламалар, кредит карталар, т.б.).">
+<!ENTITY identity.description.weakCipher "Бұл веб сайтқа байланысыңыз әлсіз шифрлеуді қолданады және шын жеке емес.">
+<!ENTITY identity.description.weakCipher2 "Басқа адамдар сіздің ақпаратыңызды көре алады немесе веб сайттың мінез-құлығын өзгерте алады.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; бұл парақтың кейбір қауіпсіз емес бөліктерін блоктаған.">
+<!ENTITY identity.description.passiveLoaded "Бұл веб сайтқа байланысыңыз шынымен жеке емес және басқа адамдар сіз осы сайтпен бөліскен ақпаратты көре алады.">
+<!ENTITY identity.description.passiveLoaded2 "Бұл веб сайттың кейбір құрамасы қауіпсіз емес (суреттер сияқты).">
+<!ENTITY identity.description.passiveLoaded3 "&brandShortName; кейбір құраманы блоктаса да, бұл парақтың кейбір құрамасы қауіпсіз емес (суреттер сияқты).">
+<!ENTITY identity.description.activeLoaded "Бұл веб сайттың кейбір құрамасы қауіпсіз емес (скрипттер сияқты) және сіздің оған байланысыңыз шынымен жеке емес.">
+<!ENTITY identity.description.activeLoaded2 "Бұл сайтпен сіз бөліскен ақпаратты басқа адамдар көре алады (парольдер, хабарламалар, кредит карталар, т.б.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Қорғанысты іске қосу">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "е">
+<!ENTITY identity.disableMixedContentBlocking.label "Қорғанысты қазірге сөндіру">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "н">
+<!ENTITY identity.learnMore "Көбірек білу">
 
 <!ENTITY identity.moreInfoLinkText2 "Көбірек білу">
 
@@ -754,26 +790,31 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "м">
 <!ENTITY getUserMedia.selectMicrophone.label "Бөлісу үшін микрофон:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "м">
+<!ENTITY getUserMedia.audioCapture.label "Беттің аудиосымен бөлісетін боласыз.">
 <!ENTITY getUserMedia.allWindowsShared.message "Экраныңыздаға барлық көрінетін терезелермен бөлісетін боласыз.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Веб-сайттардың көбі құрама сөндірілген болса да, дұрыс жұмыс жасайды.">
-
-<!ENTITY mixedContentBlocked2.message "Қауіпсіз емес құрама">
-<!ENTITY mixedContentBlocked2.moreinfo "Бұл вебсайтта кейбір шифрленбеген элементтер блокталды.">
-<!ENTITY mixedContentBlocked2.learnMore "Көбірек білу">
-<!ENTITY mixedContentBlocked2.options "Опциялар">
-<!ENTITY mixedContentBlocked2.unblock.label "Қорғанысты қазірге сөндіру">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "н">
-<!ENTITY mixedContentBlocked2.block.label "Қорғанысты іске қосу">
-<!ENTITY mixedContentBlocked2.block.accesskey "е">
-<!ENTITY mixedContentBlocked2.disabled.message "Қорғаныс сөндірілген">
+<!ENTITY trackingProtection.title "Бақылаудан қорғаныс">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; бұл парақтың сіздің желідегі әрекеттеріңізді бақылай алатын бөліктерін блоктаған.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Бұл сайтта сіздің желідегі әрекеттеріңізді бақылай алатын элементтер бар. Сіз бақылаудан қорғанысты сөндіргенсіз.">
+<!ENTITY trackingProtection.notDetected3 "Бұл парақта бақылайтын элементтер табылмады.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Бұл сайтта қорғанысты сөндіру">
+<!ENTITY trackingProtection.unblock.accesskey "д">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Бұл сессияда қорғанысты сөндіру">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "д">
+<!ENTITY trackingProtection.block2.label "Қорғанысты іске қосу">
+<!ENTITY trackingProtection.block2.accesskey "е">
 
 <!ENTITY trackingContentBlocked.message "Тексеріп отыру">
 <!ENTITY trackingContentBlocked.moreinfo "Беттің сіздің желілік белсенділікті бақылайтын құрамасы блокталды.">
 <!ENTITY trackingContentBlocked.learnMore "Көбірек білу">
-<!ENTITY trackingContentBlocked.options "Опциялар">
-<!ENTITY trackingContentBlocked.unblock2.label "Бұл парақта қорғанысты сөндіру">
+<!ENTITY trackingContentBlocked.options "Баптаулар">
+<!ENTITY trackingContentBlocked.unblock2.label "Бұл сайт үшін қорғанысты сөндіру">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "д">
 <!ENTITY trackingContentBlocked.block.label "Қорғанысты іске қосу">
 <!ENTITY trackingContentBlocked.block.accesskey "е">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "м">
 <!ENTITY emeNotificationsDontAskAgain.label       "Келесіде осы сұрақты қоймау">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "Оқу тізімі">
-<!ENTITY readingList.sidebar.commandKey           "м">
-<!ENTITY readingList.showSidebar.label            "Оқу тізімінің бүйір панелін көрсету">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Көбірек көрсету…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Мақалаларды кейінірек үшін сақтап, керек кезінде оңай табу үшін, оларды өзіңіздің оқу тізіміңізге қосыңыз.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Бұны сіздің оқу тізіміңізден өшіру">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Оқу тізіміне қосу">
-<!ENTITY readingList.sidebar.add.tooltip          "Бұл парақты сіздің оқу тізіміңізге қосу">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Бетті Pocket-ке сақтау">

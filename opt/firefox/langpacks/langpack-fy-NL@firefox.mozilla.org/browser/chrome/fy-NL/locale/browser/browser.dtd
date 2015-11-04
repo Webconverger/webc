@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "Oanmelde by &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "&syncBrand.shortName.label;-foarkarren iepenje">
 <!ENTITY fxaSignInError.label "Opnij ferbine mei &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; ynskeakele">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; sil ynkoarten starte mei syngronisearjen.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "A">
 <!ENTITY fullScreenExit.label "Folsleinskermmoadus ôfslute">
 <!ENTITY fullScreenExit.accesskey "F">
-<!ENTITY fullscreenAllowButton.label "Tastean">
-<!ENTITY fullscreenExitButton.label "Wegerje">
 
 <!ENTITY fullscreenExitHint2.value "Druk op ESC om te ferlitten wannear't jo dat wolle.">
 <!ENTITY leaveDOMFullScreen.label "Folsleinskerm ferlitte">
@@ -394,7 +393,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY openCmd.commandkey           "l">
 <!ENTITY urlbar.placeholder2          "Fier in sykterm of adres yn">
 <!ENTITY urlbar.accesskey             "d">
-<!ENTITY urlbar.switchToTab.label     "Skeakel nei ljepblêd:">
+<!ENTITY urlbar.switchToTab.label     "Wikselje nei ljepblêd:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Wolle jo jo sykûnderfining ferbetterje mei suggestjes?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Mear ynfo…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Nee">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Ja">
 
 <!-- 
   Comment duplicated from browser-sets.inc:
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Sykterm">
+<!ENTITY contentSearchSubmit.label    "Sykopdracht ferstjoere">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "S">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Sidestyl">
 <!ENTITY pageStyleMenu.accesskey "S">
 <!ENTITY pageStyleNoStyle.label "Gjin styl">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Befeilige ferbining">
 <!ENTITY identity.connectionNotSecure "Ferbining is net befeilige">
+<!ENTITY identity.connectionFile "Dizze side is op jo kompjûter bewarre.">
 <!ENTITY identity.connectionVerified "&brandShortName; hat ferifiearre dat jo in befeilige ferbining hawwe mei dizze website, hokker beheerd wurdt troch:">
 <!ENTITY identity.connectionInternal "Dit is in befeilige &brandShortName;-side.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; hat ûnderdielen op dizze side dy't net befeilige binne blokkearre.">
+<!ENTITY identity.passiveLoaded "Underdielen fan dizze side binne net befeilige (lykas ôfbyldingen).">
+<!ENTITY identity.activeLoaded "Jo hawwe befeiliging op dizze side útskeakele.">
+<!ENTITY identity.weakEncryption "Dizze side brûkt swakke befeiliging.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Jo ferbining mei dizze website is net privee. Gegevens dy't jo ferstjoere soenen troch oaren besjoen wurde kinne (lykas wachtwurden, berjochten, creditcardgegevens, ensfh.).">
+<!ENTITY identity.description.weakCipher "Jo ferbining mei dizze website brûkt swakke fersifering en is net privee.">
+<!ENTITY identity.description.weakCipher2 "Oare persoanen kinne jo gegevens besjen of it gedrach fan de website oanpasse.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; hat ûnderdielen fan dizze side dy't net befeilige binne blokkearre.">
+<!ENTITY identity.description.passiveLoaded "Jo ferbining is net privee en gegevens dy't jo mei de website diele soenen troch oaren besjoen wurde kinne.">
+<!ENTITY identity.description.passiveLoaded2 "Dizze website befettet ynhâld dy't net befeilige is (lekas ôfbyldingen).">
+<!ENTITY identity.description.passiveLoaded3 "Hoewol &brandShortName; bepaalde ynhâld blokkearre hat, is der noch hieltyd ynhâld op de side dy't net befeilige is (lykas ôfbyldingen).">
+<!ENTITY identity.description.activeLoaded "Dizze website befettet ynhâld dy't net befeilige is (lykas scripts) en jo ferbining dêrmei is net privee.">
+<!ENTITY identity.description.activeLoaded2 "Gegevens dy't jo mei dizze website diele soenen troch oaren lêzen wurde kinne (lykas wachtwurden, berjochten, creditcardgegevens, ensfh.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Beskerming ynskeakelje">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "s">
+<!ENTITY identity.disableMixedContentBlocking.label "Beskerming foar no útskeakelje">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "t">
+<!ENTITY identity.learnMore "Mear ynfo">
 
 <!ENTITY identity.moreInfoLinkText2 "Mear ynformaasje">
 
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofoan om te dielen:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Audio fan it ljepblêd wurdt dield.">
 <!ENTITY getUserMedia.allWindowsShared.message "Alle sichtbere finsters op jo skerm sille dield wurde.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "De measte websites sille goed wurkje sels as ynhâld blokkearre is.">
-
-<!ENTITY mixedContentBlocked2.message "Unfeilige ynhâld">
-<!ENTITY mixedContentBlocked2.moreinfo "Guon fersifere eleminten op dizze website binne blokkezrre.">
-<!ENTITY mixedContentBlocked2.learnMore "Lês mear">
-<!ENTITY mixedContentBlocked2.options "Opsjes">
-<!ENTITY mixedContentBlocked2.unblock.label "Beskerming op dit stuit útskeakelje">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "B">
-<!ENTITY mixedContentBlocked2.block.label "Beskerming ynskeakelje">
-<!ENTITY mixedContentBlocked2.block.accesskey "y">
-<!ENTITY mixedContentBlocked2.disabled.message "Beskerming is útskeakele">
+<!ENTITY trackingProtection.title "Beskerming tsjin folgjen">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokkearret ûnderdielen fan de side dy't jo sneupgedrach folgje soenen kinne.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Dizze website befettet eleminten dy't jo sneupgedrach folgje soenen kinne. Jo hawwe beskerming útskeakele.">
+<!ENTITY trackingProtection.notDetected3 "Gjin folcheleminten op dizze side detektearre.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Beskerming foar dizze website útskeakelje">
+<!ENTITY trackingProtection.unblock.accesskey "t">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Beskerming foar dizze sesje útskeakelje">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "u">
+<!ENTITY trackingProtection.block2.label "Beskerming ynskeakelje">
+<!ENTITY trackingProtection.block2.accesskey "s">
 
 <!ENTITY trackingContentBlocked.message "Folgjen">
 <!ENTITY trackingContentBlocked.moreinfo "Parten fan de side dy't jo online aktiviteiten folgje binne blokkearre.">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "Dit net mear freegje">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "Lêslist">
-<!ENTITY readingList.sidebar.commandKey           "L">
-<!ENTITY readingList.showSidebar.label            "Sidebalke foar lêslist toane">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Mear toane…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Foegje artikelen ta oan jo lêslist om se foar letter te bewarjen en se wer maklik werom te finen as jo se nedich hawwe.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Dit út jo lêslist fuortsmite">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Oan lêslist tafoegje">
-<!ENTITY readingList.sidebar.add.tooltip          "Dizze side oan jo lêslist tafoegje">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Side bewarje nei Pocket">

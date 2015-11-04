@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "H">
 
 <!ENTITY fxaSignIn.label "Đăng nhập vào &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Mở tùy chỉnh của &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Kết nối lại tới &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; đã bật">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; sẽ bắt đầu đồng bộ ngay.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "h">
 <!ENTITY fullScreenExit.label "Thoát chế độ toàn màn hình">
 <!ENTITY fullScreenExit.accesskey "c">
-<!ENTITY fullscreenAllowButton.label "Cho phép">
-<!ENTITY fullscreenExitButton.label "Từ chối">
 
 <!ENTITY fullscreenExitHint2.value "Ấn ESC để thoát bất kỳ lúc nào.">
 <!ENTITY leaveDOMFullScreen.label "Thoát chế độ toàn màn hình">
@@ -275,6 +274,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 
 <!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
+<!ENTITY browserContentToolboxMenu.accesskey "x">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Đóng thanh công cụ lập trình">
 <!ENTITY devToolbarMenu.label              "Thanh công cụ lập trình">
@@ -304,6 +304,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "m">
 <!ENTITY newPrivateWindow.label     "Cửa sổ riêng tư mới">
 <!ENTITY newPrivateWindow.accesskey "W">
+<!ENTITY newNonRemoteWindow.label   "Cửa sổ không e10s mới">
 
 <!ENTITY editMenu.label         "Chỉnh sửa"> 
 <!ENTITY editMenu.accesskey       "C"> 
@@ -393,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Nhập địa chỉ hoặc từ khóa tìm kiếm">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Chuyển qua thẻ:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Bạn có muốn cải thiện trải nghiệm tìm kiếm có gợi ý không?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Tìm hiểu thêm…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Không">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Có">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -417,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Câu tìm kiếm">
+<!ENTITY contentSearchSubmit.label    "Tìm kiếm">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -632,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "g">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Kiểu của trang">
 <!ENTITY pageStyleMenu.accesskey "K">
 <!ENTITY pageStyleNoStyle.label "Không dùng">
@@ -672,29 +686,38 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Hủy bỏ">
 <!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
-<!ENTITY identity.unverifiedsite2 "Trang web này không cung cấp thông tin định danh.">
-<!ENTITY identity.connectedTo "Bạn đang kết nối đến">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "Kết nối an toàn">
+<!ENTITY identity.connectionNotSecure "Kết nối này không an toàn">
+<!ENTITY identity.connectionFile "Trang này đã được lưu ở máy tính của bạn.">
+<!ENTITY identity.connectionVerified "&brandShortName; xác thực bạn đã được kết nối an toàn tới trang này">
+<!ENTITY identity.connectionInternal "Đây là một trang an toàn của &brandShortName;">
+<!-- Strings for connection state warnings. -->
 
-example.com
-which is run by
-Example Enterprises, Inc.
+<!ENTITY identity.activeBlocked "&brandShortName; đã chặn những phần không an toàn của trang này.">
+<!ENTITY identity.passiveLoaded "Có nhiều thành phân của trang không an toàn (ví dụ như ảnh).">
+<!ENTITY identity.activeLoaded "Bạn đã tắt tính năng bảo vệ trên trang này.">
+<!ENTITY identity.weakEncryption "Trang này sử dụng mã hóa yếu.">
+<!-- Strings for connection state warnings in the subview. -->
 
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "thuộc quyền kiểm soát của">
+<!ENTITY identity.description.insecure "Kết nối của bạn đến trang này không được bảo mật. Thông tin bạn gửi có thể bị thấy bởi người khác (ví dụ như mật khẩu, tin nhắn, thẻ tín dụng).">
+<!ENTITY identity.description.weakCipher "Kết nối đến trang này sử dụng mã hóa yếu và không bảo mật.">
+<!ENTITY identity.description.weakCipher2 "Người khác có thể thấy thông tin của bạn hoặc thay đổi hành vi của trang.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; đã chặn những phần không an toàn của trang này.">
+<!ENTITY identity.description.passiveLoaded "Kết nối không được bảo mật và thông tin bạn chia sẻ với trang này có thể bị thấy bởi người khác.">
+<!ENTITY identity.description.passiveLoaded2 "Trang web này chứa nội dung không an toàn (ví dụ: ảnh).">
+<!ENTITY identity.description.passiveLoaded3 "Dù &brandShortName; đã chặn một số nội dung, vẫn có những nội dung trên trang không an toàn (ví dụ: ảnh).">
+<!ENTITY identity.description.activeLoaded "Trang web này chứa nội dung không an toàn (ví dụ: các đoạn mã) và kết nối tới nội dung này không bảo mật.">
+<!ENTITY identity.description.activeLoaded2 "Thông tin bạn chia sẻ với trang này có thể bị thấy bởi người khác (ví dụ: mật khẩu, tin nhắn, thẻ tín dụng).">
 
-<!ENTITY identity.moreInfoLinkText "Thông tin chi tiết hơn…">
+<!ENTITY identity.enableMixedContentBlocking.label "Bật bảo vệ">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "B">
+<!ENTITY identity.disableMixedContentBlocking.label "Tạm thời tắt bảo vệ">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "T">
+<!ENTITY identity.learnMore "Tìm hiểu thêm">
+
+<!ENTITY identity.moreInfoLinkText2 "Thông tin thêm">
 
 <!ENTITY identity.permissions "Quyền hạn">
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-
-<!ENTITY identity.help.tooltip "Làm sao để biết kết nối tới website có an toàn hay không?">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -767,27 +790,32 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectCamera.accesskey "c">
 <!ENTITY getUserMedia.selectMicrophone.label "Chia sẻ micro:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label "Audio trên thẻ này sẽ bị chia sẻ.">
 <!ENTITY getUserMedia.allWindowsShared.message "Tất cả các cửa sổ trên màn hình sẽ được chia sẻ.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Hầu hết các trang web sẽ vẫn hoạt động tốt ngay cả khi nội dung bị chặn.">
-
-<!ENTITY mixedContentBlocked2.message "Nội dung không bảo mật">
-<!ENTITY mixedContentBlocked2.moreinfo "Một số thành phần không mã hóa của trang này đã bị chặn.">
-<!ENTITY mixedContentBlocked2.learnMore "Tìm hiểu thêm">
-<!ENTITY mixedContentBlocked2.options "Tù&amp;y chỉnh">
-<!ENTITY mixedContentBlocked2.unblock.label "Tạm thời tắt bảo vệ">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "T">
-<!ENTITY mixedContentBlocked2.block.label "Bật bảo vệ">
-<!ENTITY mixedContentBlocked2.block.accesskey "B">
-<!ENTITY mixedContentBlocked2.disabled.message "Chế độ bảo vệ đã bị tắt">
+<!ENTITY trackingProtection.title "Chống theo dõi">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; chặn một số phần của trang có thẻ đang theo dõi bạn.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Trang này chứa các thành phần có thể theo dõi bạn. Bãn đã tắt tính năng chống theo dõi.">
+<!ENTITY trackingProtection.notDetected3 "Không phát hiện các thành phần theo bạn trên trang này.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Tắt bảo vệ cho trang này">
+<!ENTITY trackingProtection.unblock.accesskey "T">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Tắt bảo vệ cho phiên này">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "T">
+<!ENTITY trackingProtection.block2.label "Bật bảo vệ">
+<!ENTITY trackingProtection.block2.accesskey "B">
 
 <!ENTITY trackingContentBlocked.message "Theo dõi">
 <!ENTITY trackingContentBlocked.moreinfo "Một số thành phần của trang web này có thể theo dõi hoạt động trên mạng của bạn và đã bị chặn.">
 <!ENTITY trackingContentBlocked.learnMore "Tìm hiểu thêm">
-<!ENTITY trackingContentBlocked.options "Tù&amp;y chỉnh">
+<!ENTITY trackingContentBlocked.options "Tùy chỉnh">
 <!ENTITY trackingContentBlocked.unblock2.label "Tắt bảo vệ cho trang web này">
-<!ENTITY trackingContentBlocked.unblock2.accesskey "w">
+<!ENTITY trackingContentBlocked.unblock2.accesskey "T">
 <!ENTITY trackingContentBlocked.block.label "Bật bảo vệ">
 <!ENTITY trackingContentBlocked.block.accesskey "B">
 <!ENTITY trackingContentBlocked.disabled.message "Chế độ bảo vệ theo dõi đã bị tắt">
@@ -853,32 +881,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY emeNotificationsNotNow.accesskey         "K">
 <!ENTITY emeNotificationsDontAskAgain.label       "Đừng hỏi lại">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "h">
-
-<!ENTITY readingList.label                        "Danh sách đọc">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Hiển thị thanh lề danh sách đọc">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Hiển thị thêm…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Thêm bài vào danh sách đọc để lưu lại và dễ dàng tìm kiếm khi bạn cần.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Xóa khỏi danh sách đọc">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Thêm vào danh sách đọc">
-<!ENTITY readingList.sidebar.add.tooltip          "Thêm trang này vào danh sách đọc">
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
-<!ENTITY saveToPocketCmd.accesskey "k">
-
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
+
+<!ENTITY saveToPocketCmd.label     "Lưu trang này vào Pocket">
+<!ENTITY saveToPocketCmd.accesskey "k">
+<!ENTITY saveLinkToPocketCmd.label     "Lưu đường dẫn vào Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "o">
+<!ENTITY pocketMenuitem.label      "Hiển thị danh sách của Pocket">

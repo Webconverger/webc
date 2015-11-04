@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "բ">
 
 <!ENTITY fxaSignIn.label "Մուտք գործել &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Բացել &syncBrand.shortName.label;-ի կարգավորումները">
 <!ENTITY fxaSignInError.label "Վերակապակցվել &syncBrand.shortName.label;ին">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; միացրած է">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName;-ը միանգամից կհամաժամեցնի:">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "Թ">
 <!ENTITY fullScreenExit.label "Դուրս գալ Լիաէկրան վիճակից">
 <!ENTITY fullScreenExit.accesskey "Լ">
-<!ENTITY fullscreenAllowButton.label "Թույլատրել">
-<!ENTITY fullscreenExitButton.label "Արգելել">
 
 <!ENTITY fullscreenExitHint2.value "Սեղմեք ESC՝ փակելու համար:">
 <!ENTITY leaveDOMFullScreen.label "Դուրս գալ Լիաէկրան վիճակից">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Փնտրել կամ մուտքագրել հասցեն">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Անցնել ներդիրի՝">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Ցանկանու՞մ եք լավարկել որոնման փորձառությունը առաջարկություններով:">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Իմանալ ավելին...">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ոչ">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Այո">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Որոնման հարցում">
+<!ENTITY contentSearchSubmit.label    "Որոնում">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "Փ">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Էջի Ոճը">
 <!ENTITY pageStyleMenu.accesskey "ճ">
 <!ENTITY pageStyleNoStyle.label "Առանց Ոճի">
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Անվտանգ կապակցում">
 <!ENTITY identity.connectionNotSecure "Կապակցումը անվտանգ չէ">
+<!ENTITY identity.connectionFile "Այս էջը գտնվում է համակարգչում:">
 <!ENTITY identity.connectionVerified "&brandShortName;-ը ստուգել է, որ կապակցումը անվտանգ է այս կայքին, աշխատեցնել ըստ՝">
 <!ENTITY identity.connectionInternal "Սա անվտանգ &brandShortName; էջ է:">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName;-ը արգելափակել է այս էջի մասերը, քանի որ դրանք անվտանգ չեն:">
+<!ENTITY identity.passiveLoaded "Այս էջի մասերը անվտանգ չեն (օր.՝ պատկերները):">
+<!ENTITY identity.activeLoaded "Դուք անջատել եք պաշտպանությունը այս էջում:">
+<!ENTITY identity.weakEncryption "Այս էջը օգտագործում է աղքատ գաղտնագրում:">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "Ձեր կապակցումը այս կայքին գաղտնի չէ: Ուղկլարկված տեղեկությունները կարող են դիտվել ուրիշների կողմից (գաղտնաբառերը, հաղորդագրությունները, քարտային տվյալները և այլն):">
+<!ENTITY identity.description.weakCipher "Ձեր կապակցումը այս կայքին օգտագործում է աղքատ գաղտնագրում և այն գաղտնի չէ:">
+<!ENTITY identity.description.weakCipher2 "Այլ անձինք կարող են դիտել ձեր տեղեկատվությունը կամ փոփոխել կայքի ժառանգորդին:">
+<!ENTITY identity.description.activeBlocked "&brandShortName;-ը արգելափակել է այս էջի մասերը, որոնք անվտանգ չեն:">
+<!ENTITY identity.description.passiveLoaded "Ձեր կապակցումը գատնի չէ և կայք ուղարկված տեղեկատվությունը կարող է դիտվել ուրիշների կողմից:">
+<!ENTITY identity.description.passiveLoaded2 "Այս կայքը պարունակում է բովանդակություն, որն անվտանգ չէ (օր.՝ պատկերներ):">
+<!ENTITY identity.description.passiveLoaded3 "Չնայած &brandShortName;-ը արգելափակել է որոշ բովանդակություն՝ այս էջում դեռ կա ոչ անվտանգ բովանդակություն (օր.՝ պատկերներ):">
+<!ENTITY identity.description.activeLoaded "Այս կայքը պարունակում է բովանդակություն, որն անվտանգ չէ (օր.՝ գրվածքներ) և ձեր կապակցումը գաղտնի չէ:">
+<!ENTITY identity.description.activeLoaded2 "Կայք ուղարկված տեղեկատվությունը կարող է դիտվել ուրիշների կողմից (գաղտնաբառերը, հաղորդագրությունները, քարտային տվյալները և այլն):">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Միացնել պաշտպանություն">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "Մ">
+<!ENTITY identity.disableMixedContentBlocking.label "Անջատել պաշտպանությունը">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "Ա">
+<!ENTITY identity.learnMore "Իմանալ ավելին">
 
 <!ENTITY identity.moreInfoLinkText2 "Մանրամասն">
 
@@ -716,8 +752,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY social.activated.description "Ծառայությունները <label/>-ից միացվել են: Կարող եք փոփոխել կարգավորումները ծառայությունների համար <label class='text-link'>Հավելումների կառավարիչից</label>:">
 <!ENTITY social.activated.undo.label "Ախ, չեղյալ համարել սա                ">
 <!ENTITY social.activated.undo.accesskey "չ">
-<!ENTITY social.learnMore.label "Ավելին...">
-<!ENTITY social.learnMore.accesskey "Ա">
+<!ENTITY social.learnMore.label "Իմանալ ավելին...">
+<!ENTITY social.learnMore.accesskey "Ի">
 <!ENTITY social.closeNotificationItem.label "Ոչ հիմա">
 
 <!ENTITY social.directory.label "Ակտիվացումների գրացուցակ">
@@ -731,7 +767,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY customizeMode.menuAndToolbars.empty "Ի՞նչ լրացուցիչ գործիք">
 <!ENTITY customizeMode.menuAndToolbars.emptyLink "Ընտրություն կատարեք հազարավոր հավելումներից">
 <!ENTITY customizeMode.restoreDefaults "Վերականգնել ծրագրայինը">
-<!ENTITY customizeMode.toolbars "Ցուցադրել կամ թաքցնել գործիքավահանակները">
+<!ENTITY customizeMode.toolbars "Ցուցադրել կամ թաքցնել Գործիքագոտիները">
 <!ENTITY customizeMode.titlebar "Անվանագոտի">
 <!ENTITY customizeMode.lwthemes "Ձևավորումներ">
 <!ENTITY customizeMode.lwthemes.myThemes "Իմ ձևավորումները">
@@ -754,30 +790,35 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "Մ">
 <!ENTITY getUserMedia.selectMicrophone.label "Մուտք խոսափողին.">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "Մ">
+<!ENTITY getUserMedia.audioCapture.label "Ներդիրի ձայնանյութը կհամաօգտագործվի:">
 <!ENTITY getUserMedia.allWindowsShared.message "Էկրանի բոլոր տեսանելի պատուհանները կտարածվեն:">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "Կայքերի մեծամասնությունը կշարունակի նորմալ աշխատել, անգամ եթե բովանդակությունը արգելափակված լինի:">
+<!ENTITY trackingProtection.title "Հետագծման պաշտպանություն">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName;-ը արգելափակում է այս էջի մասերը, որոնք կարող են հետևել ձեր դիտարկիչին:">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Այս կայքը ներառում է տարրեր, որոնք կարող են հետևել ձեր դիտարկիչին: Դուք անջատել եք պաշտպանությունը:">
+<!ENTITY trackingProtection.notDetected3 "Այս էջում չկան հետագծող տարրեր:">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Անջատել պաշտպանությունը այս կայքի համար:">
+<!ENTITY trackingProtection.unblock.accesskey "Ա">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Անջատել պաշտպանությունը այս ա/շրջանի համար">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "Ա">
+<!ENTITY trackingProtection.block2.label "Միացնել պաշտպանությունը">
+<!ENTITY trackingProtection.block2.accesskey "Մ">
 
-<!ENTITY mixedContentBlocked2.message "Ոչ անվտանգ բովանդակություն">
-<!ENTITY mixedContentBlocked2.moreinfo "Որոշ չգաղտնագրված տարրեր այս կայքում արգելափակված են:">
-<!ENTITY mixedContentBlocked2.learnMore "Ավելին">
-<!ENTITY mixedContentBlocked2.options "Կարգավորումներ">
-<!ENTITY mixedContentBlocked2.unblock.label "Անջատել պաշտպանությունը">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "Ա">
-<!ENTITY mixedContentBlocked2.block.label "Միացնել պաշտպանությունը">
-<!ENTITY mixedContentBlocked2.block.accesskey "Մ">
-<!ENTITY mixedContentBlocked2.disabled.message "Պաշտպանությունը անջատած է">
-
-<!ENTITY trackingContentBlocked.message "Հետևում">
+<!ENTITY trackingContentBlocked.message "Հետագծում">
 <!ENTITY trackingContentBlocked.moreinfo "Էջի հատվածները, որոնք հետևում են ձեր առցանց ակտիվությանը, արգելափակված են:">
-<!ENTITY trackingContentBlocked.learnMore "Ավելին">
+<!ENTITY trackingContentBlocked.learnMore "Իմանալ ավելին">
 <!ENTITY trackingContentBlocked.options "Կարգավորումներ">
 <!ENTITY trackingContentBlocked.unblock2.label "Անջատել պաշտպանությունը այս կայքի համար">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "Ա">
 <!ENTITY trackingContentBlocked.block.label "Միացնել պաշտպանությունը">
 <!ENTITY trackingContentBlocked.block.accesskey "Մ">
-<!ENTITY trackingContentBlocked.disabled.message "Հետևելու պաշտպանությունը անջատած է:">
+<!ENTITY trackingContentBlocked.disabled.message "Հետագծման պաշտպանությունը անջատված է">
 
 <!ENTITY pointerLock.notification.message "Սեղմեք ESC՝ կրկին ցուցադրելու համար:">
 
@@ -834,24 +875,12 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY processHang.terminateProcess.label       "Սպանել վեբ ընթացը">
 <!ENTITY processHang.terminateProcess.accessKey   "Ս">
 
-<!ENTITY emeLearnMoreContextMenu.label            "Մանրամասներ DRM...">
+<!ENTITY emeLearnMoreContextMenu.label            "Իմանալ ավելին DRM-ի մասին...">
 <!ENTITY emeLearnMoreContextMenu.accesskey        "D">
 <!ENTITY emeNotificationsNotNow.label             "Ոչ հիմա">
 <!ENTITY emeNotificationsNotNow.accesskey         "Ո">
 <!ENTITY emeNotificationsDontAskAgain.label       "Այլևս չհարցնել">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "Ա">
-
-<!ENTITY readingList.label                        "Ընթերցացուցակ">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Ցուցադրել Ընթերցացուցակի կողային վահանակը">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Մանրամասներ...">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Ավելացրեք հոդվածները Ընթերցացուցակում՝ հետագայում դրանց դյուրին մուտք ունենալու համար:">
-<!ENTITY readingList.sidebar.delete.tooltip       "Հեռացնել Ընթերցացուցակից">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Ավելացնել Ընթերցացուցակում">
-<!ENTITY readingList.sidebar.add.tooltip          "Էջը ավելացել Ընթերցացուցակում">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "Պահպանել էջը Pocket-ում">

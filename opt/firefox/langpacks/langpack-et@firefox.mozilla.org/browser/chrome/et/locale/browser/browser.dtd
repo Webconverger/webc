@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey                "K">
 
 <!ENTITY fxaSignIn.label                         "Logi &syncBrand.shortName.label;i sisse">
+<!ENTITY fxaSignedIn.tooltip                     "Ava &syncBrand.shortName.label;i sätted">
 <!ENTITY fxaSignInError.label                    "Ühenda &syncBrand.shortName.label;iga uuesti">
 <!ENTITY syncStartPanel2.heading                 "&syncBrand.shortName.label; on lubatud">
 <!ENTITY syncStartPanel2.subTitle                "&brandShortName; alustab kohe sünkroniseerimist.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey            "P">
 <!ENTITY fullScreenExit.label                    "Välju täisekraanirežiimist">
 <!ENTITY fullScreenExit.accesskey                "V">
-<!ENTITY fullscreenAllowButton.label             "Luba">
-<!ENTITY fullscreenExitButton.label              "Keela">
 
 <!ENTITY fullscreenExitHint2.value               "Väljumiseks võid igal ajal vajutada klahvi ESC.">
 <!ENTITY leaveDOMFullScreen.label                "Välju täisekraanirežiimist">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey                        "d">
 <!ENTITY urlbar.switchToTab.label                "Lülitu kaardile:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Kas soovid oma otsinguid soovituste abil paremaks muuta?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Rohkem teavet…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ei">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Jah">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey                  "k">
 <!ENTITY searchFocus.commandkey2                 "e">
 <!ENTITY searchFocusUnix.commandkey              "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label                "Otsingukast">
+<!ENTITY contentSearchSubmit.label               "Alusta otsingut">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                            "W">
 <!ENTITY closeCmd.accesskey                      "u">
 
+<!ENTITY toggleMuteCmd.key                       "M">
+
 <!ENTITY pageStyleMenu.label                     "Veebilehe stiil">
 <!ENTITY pageStyleMenu.accesskey                 "h">
 <!ENTITY pageStyleNoStyle.label                  "Stiil puudub">
@@ -675,10 +687,34 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure               "Turvaline ühendus">
 <!ENTITY identity.connectionNotSecure            "Ebaturvaline ühendus">
+<!ENTITY identity.connectionFile                 "See leht on loodud arvutisse salvestatud faili põhjal.">
 <!ENTITY identity.connectionVerified             "&brandShortName; verifitseeris turvalise ühenduse selle saidiga, mida hooldab ">
 <!ENTITY identity.connectionInternal             "See on turvaline &brandShortName;i leht.">
 
-<!ENTITY identity.moreInfoLinkText2              "Rohkem infot">
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked                  "&brandShortName; blokkis sellel lehel mõned ebaturvalised osad.">
+<!ENTITY identity.passiveLoaded                  "Mõned selle lehe osad on ebaturvalised (nt pildid).">
+<!ENTITY identity.activeLoaded                   "Kaitse sellel lehel on keelatud.">
+<!ENTITY identity.weakEncryption                 "See leht kasutab nõrka krüpeeringut.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure           "Ühendus selle saidiga pole privaatne. Edastatavaid andmeid (nt paroolid, sõnumid, krediitkaardi andmed jne) võivad näha ka teised.">
+<!ENTITY identity.description.weakCipher         "Ühendus selle saidiga on turvatud nõrga krüpteeringuga ja pole seetõttu privaatne.">
+<!ENTITY identity.description.weakCipher2        "Teised inimesed saavad vaadata sinu andmeid või muuta veebilehe käitumist.">
+<!ENTITY identity.description.activeBlocked      "&brandShortName; blokkis selle lehe ebaturvalised osad.">
+<!ENTITY identity.description.passiveLoaded      "Ühendus pole privaatne ja sinu edastatavaid andmeid võivad näha ka teised.">
+<!ENTITY identity.description.passiveLoaded2     "See veebileht sisaldab ebaturvalist sisu (nt pilte).">
+<!ENTITY identity.description.passiveLoaded3     "Vaatamata sellele, et &brandShortName; blokkis mõned selle lehe osad, sisaldab see jätkuvalt ebaturvalist sisu (nt pilte).">
+<!ENTITY identity.description.activeLoaded       "See veebileht sisaldab ebaturvalist sisu (nt skripte) ja ühendus sellega pole privaatne.">
+<!ENTITY identity.description.activeLoaded2      "Saidiga jagatavaid andmeid (nt paroolid, sõnumid, krediitkaardi andmed jne) võivad näha ka teised.">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Luba kaitse">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "L">
+<!ENTITY identity.disableMixedContentBlocking.label "Keela kaitse ajutiselt">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "K">
+<!ENTITY identity.learnMore                      "Rohkem teavet">
+
+<!ENTITY identity.moreInfoLinkText2              "Rohkem teavet">
 
 <!ENTITY identity.permissions                    "Õigused">
 
@@ -753,23 +789,28 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey     "J">
 <!ENTITY getUserMedia.selectMicrophone.label     "Jagatav mikrofon:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label         "Kaardi heli jagatakse välja.">
 <!ENTITY getUserMedia.allWindowsShared.message   "Jagatakse kõiki nähtavaid aknaid sinu ekraanil.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo              "Enamik saite töötab korralikult edasi ka siis, kui see sisu on blokitud.">
-
-<!ENTITY mixedContentBlocked2.message            "Ebaturvaline sisu">
-<!ENTITY mixedContentBlocked2.moreinfo           "Mõned krüptimata elemendid sellel veebilehel blokiti.">
-<!ENTITY mixedContentBlocked2.learnMore          "Rohkem teavet">
-<!ENTITY mixedContentBlocked2.options            "Sätted">
-<!ENTITY mixedContentBlocked2.unblock.label      "Keela kaitse">
-<!ENTITY mixedContentBlocked2.unblock.accesskey  "K">
-<!ENTITY mixedContentBlocked2.block.label        "Luba kaitse">
-<!ENTITY mixedContentBlocked2.block.accesskey    "L">
-<!ENTITY mixedContentBlocked2.disabled.message   "Kaitse on keelatud">
+<!ENTITY trackingProtection.title                "Jälitamisvastane kaitse">
+<!ENTITY trackingProtection.detectedBlocked3     "&brandShortName; blokib selle lehe osasid, mis võivad sinu tegevust jälitada.">
+<!ENTITY trackingProtection.detectedNotBlocked3  "See sait sisaldab elemente, mis võivad sinu tegevust jälitada. Kaitse on keelatud.">
+<!ENTITY trackingProtection.notDetected3         "Sellel lehel ei tuvastatud jälitavaid elemente.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label        "Keela kaitse sellel saidil">
+<!ENTITY trackingProtection.unblock.accesskey    "K">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Keela kaitse selle seansi ajaks">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "K">
+<!ENTITY trackingProtection.block2.label         "Luba kaitse">
+<!ENTITY trackingProtection.block2.accesskey     "L">
 
 <!ENTITY trackingContentBlocked.message          "Jälitamine">
-<!ENTITY trackingContentBlocked.moreinfo         "Sellest lehest blokiti mõned osad, mis jälitavad sinu tegevusi internetis.">
+<!ENTITY trackingContentBlocked.moreinfo         "Sellel lehel blokiti mõned osad, mis jälitavad sinu tegevusi internetis.">
 <!ENTITY trackingContentBlocked.learnMore        "Rohkem teavet">
 <!ENTITY trackingContentBlocked.options          "Sätted">
 <!ENTITY trackingContentBlocked.unblock2.label   "Keela kaitse sellel saidil">
@@ -839,19 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "M">
 <!ENTITY emeNotificationsDontAskAgain.label       "Rohkem ei küsita">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "R">
-
-<!ENTITY readingList.label                        "Lugemisnimekiri">
-<!ENTITY readingList.sidebar.commandKey           "L">
-<!ENTITY readingList.showSidebar.label            "Kuva lugemisnimekirja külgribal">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Kuva veel…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Artiklite salvestamiseks hilisemaks lugemiseks või nende lihtsamaks leidmiseks lisa need lugemisnimekirja.">
-<!-- Pre-landed string for bug 1123525 -->
-<!ENTITY readingList.sidebar.delete.tooltip       "Eemalda see oma lugemisnimekirjast">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Lisa lugemisnimekirja">
-<!ENTITY readingList.sidebar.add.tooltip          "Lisa see leht oma lugemisnimekirja">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label                    "Salvesta leht Pocketisse">

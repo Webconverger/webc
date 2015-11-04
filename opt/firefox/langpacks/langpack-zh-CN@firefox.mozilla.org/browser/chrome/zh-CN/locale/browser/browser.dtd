@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "登录以&syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "打开 &syncBrand.shortName.label; 首选项">
 <!ENTITY fxaSignInError.label "重新连接 &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; 已启用">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; 将立即开始同步。">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "H">
 <!ENTITY fullScreenExit.label "退出全屏模式">
 <!ENTITY fullScreenExit.accesskey "F">
-<!ENTITY fullscreenAllowButton.label "允许">
-<!ENTITY fullscreenExitButton.label "拒绝">
 
 <!ENTITY fullscreenExitHint2.value "随时可以按 ESC 键退出。">
 <!ENTITY leaveDOMFullScreen.label "退出全屏">
@@ -176,7 +175,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY reloadButton.tooltip         "重新载入当前页面">
 <!ENTITY stopCmd.label                "停止">
 <!ENTITY stopCmd.macCommandKey        ".">
-<!ENTITY stopButton.tooltip           "停止载入当前页">
+<!ENTITY stopButton.tooltip           "停止载入此页面">
 <!ENTITY goEndCap.tooltip             "转到地址栏中指向的地址">
 <!ENTITY printButton.label            "打印">
 <!ENTITY printButton.tooltip          "打印当前页">
@@ -395,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "搜索或输入网址">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "切换到标签页：">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "您希望用“搜索建议”改善您的搜索体验吗？">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "详细了解…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "不用">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "是的">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,11 +423,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "搜索查询">
+<!ENTITY contentSearchSubmit.label    "提交搜索">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
 
-<!ENTITY searchFor.label              "搜索”">
+<!ENTITY searchFor.label              "搜索“">
 <!ENTITY searchWith.label             "”，使用：">
 <!-- LOCALIZATION NOTE (search.label, searchAfter.label):
      This string is used to build the header above the list of one-click search
@@ -579,7 +589,7 @@ items are mutually exclusive. -->
 <!ENTITY mediaHideControls.accesskey "C">
 <!ENTITY videoFullScreen.label       "全屏">
 <!ENTITY videoFullScreen.accesskey   "F">
-<!ENTITY videoSaveImage.label        "将快照另存为…">
+<!ENTITY videoSaveImage.label        "将截图另存为…">
 <!ENTITY videoSaveImage.accesskey    "S">
 <!-- LOCALIZATION NOTE: The access keys for "Show Statistics" and
 "Hide Statistics" are the same because the two context-menu
@@ -634,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "C">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "页面样式">
 <!ENTITY pageStyleMenu.accesskey "y">
 <!ENTITY pageStyleNoStyle.label "无样式">
@@ -676,8 +688,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "安全连接">
 <!ENTITY identity.connectionNotSecure "连接不安全">
+<!ENTITY identity.connectionFile "此页面存储在您的计算机上。">
 <!ENTITY identity.connectionVerified "&brandShortName; 已验证您目前安全连接至此网站，运营者：">
 <!ENTITY identity.connectionInternal "这是一个安全的 &brandShortName; 页面。">
+<!-- Strings for connection state warnings. -->
+
+<!ENTITY identity.activeBlocked "&brandShortName; 已阻止此页面上的不安全内容。">
+<!ENTITY identity.passiveLoaded "此页面上的不安全内容（例如图像）">
+<!ENTITY identity.activeLoaded "您在此页面上已禁用保护。">
+<!ENTITY identity.weakEncryption "此页面使用较弱加密。">
+<!-- Strings for connection state warnings in the subview. -->
+
+<!ENTITY identity.description.insecure "您至此网站的连接非私密。您提交的信息可能被其他人看到（例如密码、邮件、信用卡等）。">
+<!ENTITY identity.description.weakCipher "您至此网站的连接使用了一个较弱的加密并且非私密。">
+<!ENTITY identity.description.weakCipher2 "其他人可能查看您的信息和修改该网站的行为。">
+<!ENTITY identity.description.activeBlocked "&brandShortName; 已阻止此页面上的不安全内容。">
+<!ENTITY identity.description.passiveLoaded "您的连接非私密，并且您与此网站分享的信息可能被其他人看到。">
+<!ENTITY identity.description.passiveLoaded2 "此网站包含不安全内容（例如图像）。">
+<!ENTITY identity.description.passiveLoaded3 "尽管 &brandShortName; 已阻止部分内容，但页面上仍有内容不安全（例如图像）。">
+<!ENTITY identity.description.activeLoaded "此网站包含的内容不安全（例如脚本），并且您至它的连接非私密。">
+<!ENTITY identity.description.activeLoaded2 "您与此网站分享的信息可能被其他人看到（例如密码、邮件、信用卡等）。">
+
+<!ENTITY identity.enableMixedContentBlocking.label "启用保护">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
+<!ENTITY identity.disableMixedContentBlocking.label "暂时解除保护">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "详细了解">
 
 <!ENTITY identity.moreInfoLinkText2 "更多信息">
 
@@ -754,20 +790,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "共享的麦克风：">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "来自此标签页的音频将被共享。">
 <!ENTITY getUserMedia.allWindowsShared.message "您的屏幕上的所有可见窗口都将被共享。">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "即使这些内容被阻止，大多数网站仍能正常使用。">
-
-<!ENTITY mixedContentBlocked2.message "不安全内容">
-<!ENTITY mixedContentBlocked2.moreinfo "此网站上的一些未加密的元素已被阻止。">
-<!ENTITY mixedContentBlocked2.learnMore "详细了解">
-<!ENTITY mixedContentBlocked2.options "选项">
-<!ENTITY mixedContentBlocked2.unblock.label "暂时解除保护">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "启用保护">
-<!ENTITY mixedContentBlocked2.block.accesskey "E">
-<!ENTITY mixedContentBlocked2.disabled.message "保护已禁用">
+<!ENTITY trackingProtection.title "跟踪保护">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; 已阻止该页面可能跟踪您的浏览行为的部分。">
+<!ENTITY trackingProtection.detectedNotBlocked3 "此网站包含的元素可能跟踪您的浏览行为。您已经禁用保护。">
+<!ENTITY trackingProtection.notDetected3 "此页面上未检测到跟踪元素。">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "在此网站上禁用保护">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "在本次会话期间禁用保护">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "启用保护">
+<!ENTITY trackingProtection.block2.accesskey "E">
 
 <!ENTITY trackingContentBlocked.message "跟踪">
 <!ENTITY trackingContentBlocked.moreinfo "已阻止此页面中跟踪您的网上活动的部分。">
@@ -840,18 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "不再询问">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "阅读列表">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "显示阅读列表侧栏">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "显示更多…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "添加文章到您的阅读列表，保存它们供稍后阅读，便于您在以后找到它们。">
-<!ENTITY readingList.sidebar.delete.tooltip       "从您的阅读列表中移除此项">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "添加到阅读列表">
-<!ENTITY readingList.sidebar.add.tooltip          "添加此页面到您的阅读列表">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
 <!ENTITY saveToPocketCmd.label     "保存页面到 Pocket">

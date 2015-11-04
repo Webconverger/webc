@@ -95,8 +95,8 @@ when there are no windows but Firefox is still running. -->
 <!ENTITY pageInfoCmd.label "Інформація про сторінку">
 <!ENTITY pageInfoCmd.accesskey "І">
 <!ENTITY pageInfoCmd.commandkey "i">
-<!ENTITY mirrorTabCmd.label "Mirror Tab">
-<!ENTITY mirrorTabCmd.accesskey "m">
+<!ENTITY mirrorTabCmd.label "Дзеркальна вкладка">
+<!ENTITY mirrorTabCmd.accesskey "з">
 <!-- LOCALIZATION NOTE (enterFullScreenCmd.label, exitFullScreenCmd.label):
 These should match what Safari and other Apple applications use on OS X Lion. -->
 <!ENTITY enterFullScreenCmd.label "Повноекранний режим">
@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "в">
 
 <!ENTITY fxaSignIn.label "Увійти в Синхронізацію">
+<!ENTITY fxaSignedIn.tooltip "Відкрити налаштування синхронізації">
 <!ENTITY fxaSignInError.label "Повторно підключитись до Синхронізації">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; увімкнена">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; почне синхронізацію негайно.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "П">
 <!ENTITY fullScreenExit.label "Вийти з повноекранного режиму">
 <!ENTITY fullScreenExit.accesskey "В">
-<!ENTITY fullscreenAllowButton.label "Дозволити">
-<!ENTITY fullscreenExitButton.label "Відмовити">
 
 <!ENTITY fullscreenExitHint2.value "Натисніть ESC для виходу у будь-який момент.">
 <!ENTITY leaveDOMFullScreen.label "Вийти з повноекранного режиму">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "с">
 <!ENTITY urlbar.switchToTab.label     "Перемкнутись на вкладку:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Чи бажаєте покращити свій пошук з пошуковими пропозиціями?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Докладніше…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ні">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Так">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Черга пошуку">
+<!ENTITY contentSearchSubmit.label    "Почати пошук">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "к">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Стиль сторінки">
 <!ENTITY pageStyleMenu.accesskey "С">
 <!ENTITY pageStyleNoStyle.label "Без стилю">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Захищене з'єднання">
 <!ENTITY identity.connectionNotSecure "Незахищене з'єднання">
+<!ENTITY identity.connectionFile "Ця сторінка збережена на вашому комп'ютері.">
 <!ENTITY identity.connectionVerified "&brandShortName; підтверджує, що ваше з'єднання з цим сайтом є захищеним і керується:">
 <!ENTITY identity.connectionInternal "Це захищена сторінка &brandShortName;.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; заблокував частини вмісту цієї сторінки, які не є безпечними.">
+<!ENTITY identity.passiveLoaded "Частини цієї сторінки не є безпечними (наприклад зображення).">
+<!ENTITY identity.activeLoaded "Ви вимкнули захист на цій сторінці.">
+<!ENTITY identity.weakEncryption "Ця сторінка використовує слабке шифрування.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Ваше з'єднання з цим сайтом не є приватним. Інформація, яку ви відправляєте може бути переглянута іншими (наприклад, паролі, повідомлення, дані кредитних карт та ін.).">
+<!ENTITY identity.description.weakCipher "Ваше з'єднання з цим веб-сайтом використовує слабке шифрування і не є приватним.">
+<!ENTITY identity.description.weakCipher2 "Інші люди можуть переглядати вашу інформацію чи змінювати поведінку веб-сайту.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; заблокував частини вмісту цієї сторінки, які не є безпечними.">
+<!ENTITY identity.description.passiveLoaded "Ваше з'єднання не є приватним й інформація, якою ви ділитесь з сайтом може бути переглянута іншими.">
+<!ENTITY identity.description.passiveLoaded2 "Цей веб-сайт має вміст, який не є безпечним (наприклад, зображення).">
+<!ENTITY identity.description.passiveLoaded3 "Хоча &brandShortName; заблокував деякий вміст, все ж на сторінці ще залишається вміст, який не є безпечним (наприклад, зображення).">
+<!ENTITY identity.description.activeLoaded "Цей веб-сайт має вміст, який не є безпечним (наприклад, сценарії) і ваше з'єднання з ним не є приватним.">
+<!ENTITY identity.description.activeLoaded2 "Інформація, якою ви ділитесь з цим сайтом може бути переглянута іншими (наприклад, паролі, повідомлення, дані кредитних карт та ін.).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Увімкнути захист">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "У">
+<!ENTITY identity.disableMixedContentBlocking.label "Тимчасово вимкнути захист">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "в">
+<!ENTITY identity.learnMore "Докладніше">
 
 <!ENTITY identity.moreInfoLinkText2 "Докладніше">
 
@@ -731,7 +767,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY customizeMode.menuAndToolbars.emptyLink "Оберіть з тисяч додатків">
 <!ENTITY customizeMode.restoreDefaults "Відновити типові">
 <!ENTITY customizeMode.toolbars "Показати / Сховати панелі">
-<!ENTITY customizeMode.titlebar "Панель заголовку">
+<!ENTITY customizeMode.titlebar "Панель заголовка">
 <!ENTITY customizeMode.lwthemes "Теми">
 <!ENTITY customizeMode.lwthemes.myThemes "Мої теми">
 <!ENTITY customizeMode.lwthemes.recommended "Рекомендовані">
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "к">
 <!ENTITY getUserMedia.selectMicrophone.label "Доступ до мікрофону:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "м">
+<!ENTITY getUserMedia.audioCapture.label "Аудіо з вкладки буде загальнодоступним.">
 <!ENTITY getUserMedia.allWindowsShared.message "Буде надано доступ до всіх видимих вікон на вашому дисплеї.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Більшість веб-сайтів будуть працювати правильно, навіть якщо вміст заблокований.">
-
-<!ENTITY mixedContentBlocked2.message "Небезпечний вміст">
-<!ENTITY mixedContentBlocked2.moreinfo "Деякі незашифровані елементи на цьому веб-сайті заблоковано.">
-<!ENTITY mixedContentBlocked2.learnMore "Дізнатися більше">
-<!ENTITY mixedContentBlocked2.options "Налаштування">
-<!ENTITY mixedContentBlocked2.unblock.label "Тимчасово вимкнути захист">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "в">
-<!ENTITY mixedContentBlocked2.block.label "Увімкнути захист">
-<!ENTITY mixedContentBlocked2.block.accesskey "У">
-<!ENTITY mixedContentBlocked2.disabled.message "Захист вимкнено">
+<!ENTITY trackingProtection.title "Захист від стеження">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; блокує частини сторінки, які можуть стежити за вашим переглядом.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Цей сайт включає елементи, які можуть стежити за вашим переглядом. Ви вимкнули захист.">
+<!ENTITY trackingProtection.notDetected3 "На цій сторінці не виявлено елементів стеження.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Вимкнути захист для цього сайту">
+<!ENTITY trackingProtection.unblock.accesskey "В">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Вимкнути захист для цього сеансу">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "В">
+<!ENTITY trackingProtection.block2.label "Увімкнути захист">
+<!ENTITY trackingProtection.block2.accesskey "У">
 
 <!ENTITY trackingContentBlocked.message "Стеження">
 <!ENTITY trackingContentBlocked.moreinfo "Частини сторінки, які стежать за вашою активністю в Інтернеті заблоковано.">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "е">
 <!ENTITY emeNotificationsDontAskAgain.label       "Не питати знову">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "п">
-
-<!ENTITY readingList.label                        "Список читання">
-<!ENTITY readingList.sidebar.commandKey           "С">
-<!ENTITY readingList.showSidebar.label            "Показати бічну панель списку читання">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Показати ще…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Додавайте статті до свого списку читання, щоб зберегти їх на потім та, при потребі, легко знаходити їх.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Прибрати це зі списку читання">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Додати до списку читання">
-<!ENTITY readingList.sidebar.add.tooltip          "Додати цю сторінку до списку читання">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Зберегти сторінку в Pocket">

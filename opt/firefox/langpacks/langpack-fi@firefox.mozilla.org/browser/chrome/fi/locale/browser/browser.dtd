@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "N">
 
 <!ENTITY fxaSignIn.label "Kirjaudu sisään &syncBrand.shortName.label;-palveluun">
+<!ENTITY fxaSignedIn.tooltip "Avaa &syncBrand.shortName.label;-asetukset">
 <!ENTITY fxaSignInError.label "Palauta yhteys &syncBrand.shortName.label;-palveluun">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; käytössä">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; aloittaa synkronoinnin hetken kuluttua.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "P">
 <!ENTITY fullScreenExit.label "Poistu kokoruututilasta">
 <!ENTITY fullScreenExit.accesskey "o">
-<!ENTITY fullscreenAllowButton.label "Salli">
-<!ENTITY fullscreenExitButton.label "Estä">
 
 <!ENTITY fullscreenExitHint2.value "Poistu koska tahansa painamalla ESC-näppäintä.">
 <!ENTITY leaveDOMFullScreen.label "Poistu kokoruututilasta">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Siirry välilehteen:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Näytetäänkö hakuja tehdessä hakuehdotuksia?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Lue lisää…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Ei">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Kyllä">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -420,10 +424,16 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
 
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Hakutermit">
+<!ENTITY contentSearchSubmit.label    "Suorita haku">
+
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
-<!ENTITY searchFor.label              "Haku ">
+<!ENTITY searchFor.label              "Hae ">
 <!ENTITY searchWith.label             " palvelusta:">
 
 <!-- LOCALIZATION NOTE (search.label, searchAfter.label):
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                    "W">
 <!ENTITY closeCmd.accesskey              "S">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label  "Sivun tyylit">
 <!ENTITY pageStyleMenu.accesskey  "v">
 <!ENTITY pageStyleNoStyle.label  "Ei tyylimäärittelyjä">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "Suojattu yhteys">
 <!ENTITY identity.connectionNotSecure "Yhteys ei ole suojattu">
+<!ENTITY identity.connectionFile "Sivu on tallennettu tietokoneellesi.">
 <!ENTITY identity.connectionVerified "&brandShortName; on varmistanut, että yhteys sivustoon on suojattu, sivustoa hallinnoi:">
 <!ENTITY identity.connectionInternal "Tämä on suojattu &brandShortName;-sivu.">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; on estänyt suojaamattoman sisällön näyttämisen.">
+<!ENTITY identity.passiveLoaded "Tällä sivulla on suojaamatonta sisältöä (kuten kuvat).">
+<!ENTITY identity.activeLoaded "Suojaamattoman sisällön estäminen on otettu pois päältä sivustolla.">
+<!ENTITY identity.weakEncryption "Sivusto käyttää heikkoa salausta.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Yhteytesi verkkosivustoon ei ole yksityinen. Sivullisten on mahdollista tarkastella lähetettyjä tietoja (esim. salasanat, viestit, luottokorttitiedot).">
+<!ENTITY identity.description.weakCipher "Yhteytesi verkkosivustoon käyttää heikkoa salausta eikä sen takia ole yksityinen.">
+<!ENTITY identity.description.weakCipher2 "Sivullisten on mahdollista tarkastella lähetettyjä tietoja tai vaikuttaa sivuston toimintaan.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; on estänyt suojaamattoman sisällön näyttämisen.">
+<!ENTITY identity.description.passiveLoaded "Yhteytesi verkkosivustoon ei ole yksityinen ja sivullisten on mahdollista tarkastella tietoja, joita lähetät sivustolle.">
+<!ENTITY identity.description.passiveLoaded2 "Tällä sivulla on suojaamatonta sisältöä (kuten kuvat).">
+<!ENTITY identity.description.passiveLoaded3 "Vaikka &brandShortName; on osaksi estänyt suojaamattoman sisällön, mutta osa näkyvästä sisällöstä on edelleen suojaamatonta (kuten kuvat).">
+<!ENTITY identity.description.activeLoaded "Tällä sivulla on suojaamatonta sisältöä (kuten komentosarjat) eikä yhteytesi sivustoon ei ole yksityinen.">
+<!ENTITY identity.description.activeLoaded2 "Sivullisten on mahdollista tarkastella lähetettyjä tietoja (esim. salasanat, viestit, luottokorttitiedot).">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Ota suojaus käyttöön">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "O">
+<!ENTITY identity.disableMixedContentBlocking.label "Poista suojaus käytöstä">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "P">
+<!ENTITY identity.learnMore "Lue lisää">
 
 <!ENTITY identity.moreInfoLinkText2 "Lisätietoja">
 
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "k">
 <!ENTITY getUserMedia.selectMicrophone.label "Jaettava mikrofoni:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "m">
+<!ENTITY getUserMedia.audioCapture.label "Välilehden äänet jaetaan.">
 <!ENTITY getUserMedia.allWindowsShared.message "Kaikki näkyvissä olevat ikkunat jaetaan.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Useimmat verkkosivut toimivat edelleen moitteettomasti vaikka sisältö on estetty.">
-
-<!ENTITY mixedContentBlocked2.message "Suojaamatonta sisältöä">
-<!ENTITY mixedContentBlocked2.moreinfo "Jotkin sivuston suojaamattomista elementeistä estettiin.">
-<!ENTITY mixedContentBlocked2.learnMore "Lue lisää">
-<!ENTITY mixedContentBlocked2.options "Asetukset">
-<!ENTITY mixedContentBlocked2.unblock.label "Poista suojaus käytöstä toistaiseksi">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "P">
-<!ENTITY mixedContentBlocked2.block.label "Ota suojaus käyttöön">
-<!ENTITY mixedContentBlocked2.block.accesskey "O">
-<!ENTITY mixedContentBlocked2.disabled.message "Suojaus on pois päältä">
+<!ENTITY trackingProtection.title "Seurannan suojaus">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; estää osia sivusta, jotka saattavat seurata selaamistasi.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Sivusto sisältää osia, jotka saattavat seurata sinua. Seurannan suojaus on pois päältä.">
+<!ENTITY trackingProtection.notDetected3 "Sivulta ei löytynyt seuraavia osia.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Poista suojaus tältä sivustolta">
+<!ENTITY trackingProtection.unblock.accesskey "s">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Poista suojaus tästä istunnosta">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "i">
+<!ENTITY trackingProtection.block2.label "Ota suojaus käyttöön">
+<!ENTITY trackingProtection.block2.accesskey "O">
 
 <!ENTITY trackingContentBlocked.message "Seuranta">
 <!ENTITY trackingContentBlocked.moreinfo "Sivun sinua verkossa seuraavat osat estettiin.">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "E">
 <!ENTITY emeNotificationsDontAskAgain.label       "Älä kysy uudestaan">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "Ä">
-
-<!ENTITY readingList.label                        "Lukulista">
-<!ENTITY readingList.sidebar.commandKey           "L">
-<!ENTITY readingList.showSidebar.label            "Näytä lukulistasivupaneeli">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Näytä enemmän…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Lisää sivuja lukulistaan, jotta löydät ne helposti myöhemmin kun tarvitset niitä.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Poista lukulistasta">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Lisää lukulistaan">
-<!ENTITY readingList.sidebar.add.tooltip          "Lisää sivu lukulistaan">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Tallenna sivu Pocket-palveluun">

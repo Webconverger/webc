@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "登入至 &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "開啟 &syncBrand.shortName.label; 偏好設定">
 <!ENTITY fxaSignInError.label "重新連線至 &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "已啟用 &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; 將會在稍後開始同步。">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "H">
 <!ENTITY fullScreenExit.label "離開全螢幕模式">
 <!ENTITY fullScreenExit.accesskey "F">
-<!ENTITY fullscreenAllowButton.label "允許">
-<!ENTITY fullscreenExitButton.label "拒絕">
 
 <!ENTITY fullscreenExitHint2.value "隨時按下 ESC 離開。">
 <!ENTITY leaveDOMFullScreen.label "離開全螢幕模式">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "切換到分頁:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "想要開啟搜尋建議功能，以改善您的搜尋體驗嗎？">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "更多資訊…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "不要">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "好">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "搜尋字串">
+<!ENTITY contentSearchSubmit.label    "送出搜尋">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "C">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "頁面樣式">
 <!ENTITY pageStyleMenu.accesskey "y">
 <!ENTITY pageStyleNoStyle.label "無樣式">
@@ -675,8 +687,32 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY identity.connectionSecure "安全連線">
 <!ENTITY identity.connectionNotSecure "連線不安全">
+<!ENTITY identity.connectionFile "此頁面位於您的電腦上。">
 <!ENTITY identity.connectionVerified "&brandShortName; 已確認您安全地連線至這個網站，此網站由下列單位擁有:">
 <!ENTITY identity.connectionInternal "這是安全的 &brandShortName; 頁面。">
+
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; 已經封鎖此頁面中不安全的部分。">
+<!ENTITY identity.passiveLoaded "本頁面中的部分內容（例如圖片）並不安全。">
+<!ENTITY identity.activeLoaded "您已停用此頁面中的保護。">
+<!ENTITY identity.weakEncryption "此頁面使用了弱強度的加密。">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "您到此網站的連線並不私密。您發送的資訊（像是密碼、訊息、信用卡等等）可能會被其他人看到。">
+<!ENTITY identity.description.weakCipher "您與此網站間的連線使用了弱強度的加密，並不私密。">
+<!ENTITY identity.description.weakCipher2 "其他人可以看到您的資訊，或修改網站的行為。">
+<!ENTITY identity.description.activeBlocked "&brandShortName; 已經封鎖此頁面中不安全的部分。">
+<!ENTITY identity.description.passiveLoaded "您的連線並不私密，您提供給此網站的資訊可能會被其他人看到。">
+<!ENTITY identity.description.passiveLoaded2 "此網站包含不安全的內容（例如圖片）。">
+<!ENTITY identity.description.passiveLoaded3 "雖然 &brandShortName; 已經封鎖部分內容，但頁面中還是有不安全的內容（例如圖片）。">
+<!ENTITY identity.description.activeLoaded "此網站包含不安全的內容（例如指令碼），與其之間的連線並不私密。">
+<!ENTITY identity.description.activeLoaded2 "您提供給此網站的資訊（例如密碼、訊息、信用卡號等等）可能會被其他人看到。">
+
+<!ENTITY identity.enableMixedContentBlocking.label "啟用保護">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
+<!ENTITY identity.disableMixedContentBlocking.label "暫時停止保護">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "更多資訊">
 
 <!ENTITY identity.moreInfoLinkText2 "更多資訊">
 
@@ -753,20 +789,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "要分享的麥克風:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "將分享來此分頁播放的音樂。">
 <!ENTITY getUserMedia.allWindowsShared.message "將分享您畫面上所有可見的視窗。">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "大部分網站都能在內容被封鎖時正常使用。">
-
-<!ENTITY mixedContentBlocked2.message "不安全的內容">
-<!ENTITY mixedContentBlocked2.moreinfo "此網頁中某些未加密的元素已被封鎖。">
-<!ENTITY mixedContentBlocked2.learnMore "更多資訊">
-<!ENTITY mixedContentBlocked2.options "選項">
-<!ENTITY mixedContentBlocked2.unblock.label "暫時停止保護">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "啟用保護">
-<!ENTITY mixedContentBlocked2.block.accesskey "B">
-<!ENTITY mixedContentBlocked2.disabled.message "已停止保護">
+<!ENTITY trackingProtection.title "追蹤保護">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; 已經封鎖頁面中可能會追蹤您瀏覽行為的部分。">
+<!ENTITY trackingProtection.detectedNotBlocked3 "此網站包含可能會追蹤您瀏覽行為的元素，但您已停用保護。">
+<!ENTITY trackingProtection.notDetected3 "未在此頁面偵測到追蹤元素。">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "為此網站停用保護">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "此次瀏覽階段停用保護">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "啟用保護">
+<!ENTITY trackingProtection.block2.accesskey "E">
 
 <!ENTITY trackingContentBlocked.message "追蹤">
 <!ENTITY trackingContentBlocked.moreinfo "已封鎖本頁面中部分追蹤您線上行為的內容。">
@@ -839,18 +880,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "N">
 <!ENTITY emeNotificationsDontAskAgain.label       "不要再問我">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "D">
-
-<!ENTITY readingList.label                        "閱讀清單">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "顯示閱讀清單側邊欄">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "顯示更多…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "新增文章至您的閱讀清單稍後再讀，並在您需要時快速簡便地找到它們。">
-<!ENTITY readingList.sidebar.delete.tooltip       "將此頁面自您的閱讀清單移除">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "新增至閱讀清單">
-<!ENTITY readingList.sidebar.add.tooltip          "新增此頁面至您的閱讀清單">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "將頁面儲存至 Pocket">

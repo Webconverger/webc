@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "a">
 
 <!ENTITY fxaSignIn.label "Log ind på &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Åbn indstillinger for &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Genopret forbindelse til &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; er aktiveret">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; begynder straks at synkronisere.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "S">
 <!ENTITY fullScreenExit.label "Afslut fuldskærmstilstand">
 <!ENTITY fullScreenExit.accesskey "A">
-<!ENTITY fullscreenAllowButton.label "Tillad">
-<!ENTITY fullscreenExitButton.label "Afvis">
 
 <!ENTITY fullscreenExitHint2.value "Tryk ESC for at afslutte visning i fuld skærm.">
 <!ENTITY leaveDOMFullScreen.label "Afslut fuldskærmstilstand">
@@ -396,6 +395,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Skift til faneblad:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Vil du have din søgning forbedret med søgeforslag?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Læs mere…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Nej">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Ja">
+
 <!--
   Comment duplicated from browser-sets.inc:
 
@@ -419,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Søgeforespørgsel">
+<!ENTITY contentSearchSubmit.label    "Søg">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -633,6 +643,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">
 <!ENTITY closeCmd.accesskey             "L">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Sidestil">
 <!ENTITY pageStyleMenu.accesskey "i">
 <!ENTITY pageStyleNoStyle.label "Ingen sidestil">
@@ -674,11 +686,36 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.removeBookmark.accessKey       "F">
 
 <!ENTITY identity.connectionSecure "Sikker forbindelse">
-<!ENTITY identity.connectionNotSecure "Usikker forbindelse">
+<!ENTITY identity.connectionNotSecure "Forbindelsen er usikker">
+<!ENTITY identity.connectionFile "Denne side er gemt på din computer.">
 <!ENTITY identity.connectionVerified "&brandShortName; bekræfter, at du er forbundet med en sikker forbindelse til dette websted, som ejes af:">
 <!ENTITY identity.connectionInternal "Dette er en sikker &brandShortName;-side.">
 
-<!ENTITY identity.moreInfoLinkText2 "Flere informationer">
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName; har blokeret usikre dele af denne side.">
+<!ENTITY identity.passiveLoaded "Dele af denne side (såsom billeder) er ikke sikre.">
+<!ENTITY identity.activeLoaded "Du har slået beskyttelse fra på denne side.">
+<!ENTITY identity.weakEncryption "Denne side bruger svag kryptering.">
+
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Din forbindelse til dette websted er ikke privat. Andre kan se de informationer, du indsender (fx adgangskoder, beskeder og oplysninger om betalingskort)">
+<!ENTITY identity.description.weakCipher "Din forbindelse til dette websted anvender svag kryptering og er ikke privat.">
+<!ENTITY identity.description.weakCipher2 "Andre kan se dine informationer eller ændre webstedets opførsel.">
+<!ENTITY identity.description.activeBlocked "&brandShortName; har blokeret usikre dele af denne side.">
+<!ENTITY identity.description.passiveLoaded "Din forbindelse er ikke privat og de informationer, du deler, kan ses af andre.">
+<!ENTITY identity.description.passiveLoaded2 "Noget af dette websteds indhold (fx billeder) er usikkert.">
+<!ENTITY identity.description.passiveLoaded3 "Selvom &brandShortName; har blokeret noget af indholdet, så findes der stadig usikkert indhold på siden (fx billeder).">
+<!ENTITY identity.description.activeLoaded "Dette websted indeholder usikkert indhold (fx scripts), og din forbindelse til det er ikke privat.">
+<!ENTITY identity.description.activeLoaded2 "Information, du deler med dette websted (fx adgangskoder, beskeder og oplysninger om betalingskort) kan ses af andre.">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Slå beskyttelse til">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "t">
+<!ENTITY identity.disableMixedContentBlocking.label "Slå beskyttelse fra indtil videre">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "f">
+<!ENTITY identity.learnMore "Læs mere">
+
+
+<!ENTITY identity.moreInfoLinkText2 "Mere information">
 
 <!ENTITY identity.permissions "Tilladelser">
 
@@ -753,23 +790,28 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon til deling:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Lyd fra fanebladet vil blive delt.">
 <!ENTITY getUserMedia.allWindowsShared.message "Alle synlige vinduer på din skærm vil blive delt.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "De fleste websteder vil virke, selvom indhold er blokeret.">
-
-<!ENTITY mixedContentBlocked2.message "Usikkert indhold">
-<!ENTITY mixedContentBlocked2.moreinfo "Ukrypteret indhold på dette websted er blevet blokeret.">
-<!ENTITY mixedContentBlocked2.learnMore "Læs mere">
-<!ENTITY mixedContentBlocked2.options "Indstillinger">
-<!ENTITY mixedContentBlocked2.unblock.label "Deaktiver beskyttelse for nu">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Aktiver beskyttelse">
-<!ENTITY mixedContentBlocked2.block.accesskey "A">
-<!ENTITY mixedContentBlocked2.disabled.message "Beskyttelse er deaktiveret">
+<!ENTITY trackingProtection.title "Sporingsbeskyttelse">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokerer de dele af siden, der kan spore dig på nettet.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Dette websted indeholder elementer, der kan spore dig på nettet. Du har slået beskyttelse fra.">
+<!ENTITY trackingProtection.notDetected3 "Ingen sporings-elementer fundet på denne side">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Deaktiver beskyttelse for dette websted.">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Deaktiver beskyttelse for denne session">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "Aktiver beskyttelse">
+<!ENTITY trackingProtection.block2.accesskey "A">
 
 <!ENTITY trackingContentBlocked.message "Sporing">
-<!ENTITY trackingContentBlocked.moreinfo "Dele af siden, der sporer din aktivitet på nettet, er blevet blokeret.">
+<!ENTITY trackingContentBlocked.moreinfo "De dele af siden, der sporer din aktivitet på nettet, er blevet blokeret.">
 <!ENTITY trackingContentBlocked.learnMore "Læs mere">
 <!ENTITY trackingContentBlocked.options "Indstillinger">
 <!ENTITY trackingContentBlocked.unblock2.label "Deaktiver beskyttelse for dette websted">
@@ -839,19 +881,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "I">
 <!ENTITY emeNotificationsDontAskAgain.label       "Spørg mig ikke igen">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "S">
-
-<!ENTITY readingList.label                        "Læseliste">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Vis læseliste i sidepanel">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Vis mere…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Føj artikler til din læseliste for at gemme dem til senere. Du kan nemt finde dem igen, når du har brug for det.">
-<!-- Pre-landed string for bug 1123525 -->
-<!ENTITY readingList.sidebar.delete.tooltip       "Fjern fra din læseliste">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Føj til læseliste">
-<!ENTITY readingList.sidebar.add.tooltip          "Føj denne side til din læseliste">
 
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 <!ENTITY saveToPocketCmd.label     "Gem webside til Pocket">

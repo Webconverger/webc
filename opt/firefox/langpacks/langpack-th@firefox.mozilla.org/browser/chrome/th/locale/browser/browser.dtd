@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "ม">
 
 <!ENTITY fxaSignIn.label "เข้าใช้ &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "เปิดการปรับแต่ง &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "เชื่อมต่อ &syncBrand.shortName.label; ใหม่">
 <!ENTITY syncStartPanel2.heading "เปิดใช้งาน &syncBrand.shortName.label; แล้ว">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; จะทำการซิงก์ในไม่ช้า">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "ซ">
 <!ENTITY fullScreenExit.label "ออกจากโหมดเต็มจอ">
 <!ENTITY fullScreenExit.accesskey "อ">
-<!ENTITY fullscreenAllowButton.label "อนุญาต">
-<!ENTITY fullscreenExitButton.label "ไม่อนุญาต">
 
 <!ENTITY fullscreenExitHint2.value "กด ESC เพื่อออก">
 <!ENTITY leaveDOMFullScreen.label "ออกจากการแสดงผลเต็มจอ">
@@ -275,6 +274,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 
 <!ENTITY browserContentToolboxMenu.label     "กล่องเครื่องมือเนื้อหาเบราว์เซอร์">
+<!ENTITY browserContentToolboxMenu.accesskey "อ">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "ปิดแถบเครื่องมือนักพัฒนา">
 <!ENTITY devToolbarMenu.label              "แถบเครื่องมือนักพัฒนา">
@@ -304,6 +304,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "ม">
 <!ENTITY newPrivateWindow.label     "หน้าต่างท่องเว็บแบบส่วนตัวใหม่">
 <!ENTITY newPrivateWindow.accesskey "น">
+<!ENTITY newNonRemoteWindow.label   "หน้าต่าง Non-e10s ใหม่">
 
 <!ENTITY editMenu.label         "แก้ไข"> 
 <!ENTITY editMenu.accesskey       "ก"> 
@@ -393,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "ค้นหาหรือป้อนที่อยู่">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "สลับไปยังแท็บ:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "คุณต้องการทำให้ประสบการณ์การค้นหาของคุณดีขึ้นด้วยการแนะนำคำค้นหรือไม่?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "เรียนรู้เพิ่มเติม…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "ไม่">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "ใช่">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -417,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "คำค้นหา">
+<!ENTITY contentSearchSubmit.label    "ค้นหา">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -429,6 +441,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      intentionally left empty for en-US and can be used by other localizations to
      display a string after the search engine name.  This string will be displayed
      as:  "Search <selected engine name><searchAfter.label text>" -->
+
+<!ENTITY search.label                 "ค้นหา ">
 <!ENTITY searchAfter.label            "">
 <!-- LOCALIZATION NOTE (searchWithHeader.label):
      The wording of this string should be as close as possible to
@@ -630,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "w">  
 <!ENTITY closeCmd.accesskey             "ป">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "รูปแบบหน้า">
 <!ENTITY pageStyleMenu.accesskey "บ">
 <!ENTITY pageStyleNoStyle.label "ไม่มีรูปแบบ">
@@ -668,31 +684,40 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY editBookmark.done.label                     "เสร็จ">
 <!ENTITY editBookmark.cancel.label                   "ยกเลิก">
-<!ENTITY editBookmark.removeBookmark.accessKey       "ล">
+<!ENTITY editBookmark.removeBookmark.accessKey       "R">
 
-<!ENTITY identity.unverifiedsite2 "เว็บไซต์นี้ไม่ระบุข้อมูลอัตลักษณ์">
-<!ENTITY identity.connectedTo "กำลังเชื่อมต่อไปยัง">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "การเชื่อมต่อนิรภัย">
+<!ENTITY identity.connectionNotSecure "การเชื่อมต่อไม่นิรภัย">
+<!ENTITY identity.connectionFile "หน้านี้ถูกจัดเก็บบนคอมพิวเตอร์ของคุณ">
+<!ENTITY identity.connectionVerified "&brandShortName; ได้ยืนยันความถูกต้องว่าคุณเชื่อมต่อไซต์นี้แบบนิรภัย ดำเนินงานโดย:">
+<!ENTITY identity.connectionInternal "นี้คือหน้า &brandShortName; ที่ปลอดภัย">
+<!-- Strings for connection state warnings. -->
 
-example.com
-which is run by
-Example Enterprises, Inc.
+<!ENTITY identity.activeBlocked "&brandShortName; ได้ปิดกั้นบางส่วนของหน้านี้ที่เชื่อถือไม่ได้">
+<!ENTITY identity.passiveLoaded "บางส่วนของหน้านี้มีเนื้อหาที่เชื่อถือไม่ได้ (เช่น รูปภาพ)">
+<!ENTITY identity.activeLoaded "คุณได้ปิดใช้งานการปกป้องหน้านี้">
+<!ENTITY identity.weakEncryption "หน้านี้ใช้การเข้ารหัสแบบอ่อนแอ">
+<!-- Strings for connection state warnings in the subview. -->
 
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "ให้บริการโดย">
+<!ENTITY identity.description.insecure "การเชื่อมต่อของคุณไปยังไซต์นี้ไม่เป็นส่วนตัว ข้อมูลที่คุณส่งไปบนเว็บไซต์คนอื่นสามารถดูได้ (เช่น รหัสผ่าน ข้อความ บัตรเครดิต)">
+<!ENTITY identity.description.weakCipher "การเชื่อมต่อของคุณสู่เว็บไซต์นี้ใช้การเข้ารหัสแบบอ่อนแอและไม่เป็นส่วนตัว">
+<!ENTITY identity.description.weakCipher2 "คนอื่นสามารถดูข้อมูลของคุณหรือแก้ไขพฤติกรรมของเว็บไซต์ได้">
+<!ENTITY identity.description.activeBlocked "&brandShortName; ได้ปิดกั้นบางส่วนของหน้านี้ที่ไม่ปลอดภัย">
+<!ENTITY identity.description.passiveLoaded "การเชื่อมต่อของคุณไม่เป็นส่วนตัวและข้อมูลที่คุณแบ่งปันกับเว็บไซต์คนอื่นสามารถดูได้">
+<!ENTITY identity.description.passiveLoaded2 "เว็บไซต์นี้มีเนื้อหาที่ไม่ได้เข้ารหัส (เช่น รูปภาพ)">
+<!ENTITY identity.description.passiveLoaded3 "ถึงแม้ว่า &brandShortName; ทำการปิดกั้นเนื้อหาบางส่วน แต่ก็ยังมีเนื้อหาบนเว็บที่เชื่อถือไม่ได้ (เช่น รูปภาพ)">
+<!ENTITY identity.description.activeLoaded "เว็บไซต์นี้ประกอบด้วยเนื้อหาที่เชื่อถือไม่ได้ (เช่น สคริปต์) และการเชื่อมต่อไปยังไซต์ก็ไม่เป็นส่วนตัว">
+<!ENTITY identity.description.activeLoaded2 "ข้อมูลที่คุณแบ่งปันกับเว็บไซต์นี้คนอื่นสามารถดูได้ด้วย (เช่น รหัสผ่าน ข้อความ บัตรเครดิต)">
 
-<!ENTITY identity.moreInfoLinkText "ข้อมูลเพิ่มเติม…">
+<!ENTITY identity.enableMixedContentBlocking.label "เปิดใช้งานการปกป้อง">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "เ">
+<!ENTITY identity.disableMixedContentBlocking.label "ปิดการปกป้องสำหรับตอนนี้">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "ป">
+<!ENTITY identity.learnMore "เรียนรู้เพิ่มเติม">
+
+<!ENTITY identity.moreInfoLinkText2 "ข้อมูลเพิ่มเติม">
 
 <!ENTITY identity.permissions "การอนุญาต">
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-
-<!ENTITY identity.help.tooltip "ฉันจะรู้ได้อย่างไรว่าการเชื่อมต่อของฉันไปที่เว็บไซต์จะมั่นคงปลอดภัย">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -765,26 +790,31 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectCamera.accesskey "ก">
 <!ENTITY getUserMedia.selectMicrophone.label "แบ่งปันไมโครโฟน:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "ม">
+<!ENTITY getUserMedia.audioCapture.label "เสียงจากแท็บจะถูกแบ่งปัน">
 <!ENTITY getUserMedia.allWindowsShared.message "หน้าตาที่ปรากฏอยู่ทั้งหมดบนหน้าจอของคุณจะถูกใช้ร่วมกัน">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "เว็บไซต์ส่วนใหญ่จะทำงานอย่างถูกต้องแม้เนื้อหาถูกปิดกั้น">
-
-<!ENTITY mixedContentBlocked2.message "เนื้อหาไม่ปลอดภัย">
-<!ENTITY mixedContentBlocked2.moreinfo "ส่วนย่อยบางอันที่ไม่ได้ถูกเข้ารหัสไว้บนเว็บไซต์นี้จะถูกปิดกั้น">
-<!ENTITY mixedContentBlocked2.learnMore "เรียนรู้เพิ่ม">
-<!ENTITY mixedContentBlocked2.options "ตัวเลือก">
-<!ENTITY mixedContentBlocked2.unblock.label "ปิดการปกป้องสำหรับตอนนี้">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "ป">
-<!ENTITY mixedContentBlocked2.block.label "เปิดการปกป้อง">
-<!ENTITY mixedContentBlocked2.block.accesskey "เ">
-<!ENTITY mixedContentBlocked2.disabled.message "การป้องกันถูกปิดใช้งาน">
+<!ENTITY trackingProtection.title "ป้องกันการติดตาม">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; กำลังปิดกั้นบางส่วนของหน้านี้ที่อาจจะติดตามการท่องเว็บของคุณ">
+<!ENTITY trackingProtection.detectedNotBlocked3 "เว็บไซต์นี้มีส่วนประกอบที่อาจจะตามรอยการเปิดเว็บของคุณ คุณได้ปิดใช้การป้องกัน">
+<!ENTITY trackingProtection.notDetected3 "ไม่พบส่วนประกอบที่ทำการติดตามในหน้านี้">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "ปิดใช้งานการปกป้องสำหรับไซต์นี้">
+<!ENTITY trackingProtection.unblock.accesskey "ป">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "ปิดใช้งานการปกป้องสำหรับวาระนี้">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "ป">
+<!ENTITY trackingProtection.block2.label "เปิดใช้งานการปกป้อง">
+<!ENTITY trackingProtection.block2.accesskey "เ">
 
 <!ENTITY trackingContentBlocked.message "การติดตาม">
 <!ENTITY trackingContentBlocked.moreinfo "บางส่วนของหน้าที่ติดตามกิจกรรมออนไลน์ของคุณถูกปิดกั้น">
 <!ENTITY trackingContentBlocked.learnMore "เรียนรู้เพิ่ม">
 <!ENTITY trackingContentBlocked.options "ตัวเลือก">
-<!ENTITY trackingContentBlocked.unblock2.label "ปิดการปกป้องสำหรับไซต์นี้">
+<!ENTITY trackingContentBlocked.unblock2.label "ปิดใช้งานการปกป้องสำหรับไซต์นี้">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "ป">
 <!ENTITY trackingContentBlocked.block.label "เปิดการปกป้อง">
 <!ENTITY trackingContentBlocked.block.accesskey "เ">
@@ -851,40 +881,10 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY emeNotificationsNotNow.accesskey         "ม">
 <!ENTITY emeNotificationsDontAskAgain.label       "ไม่ต้องถามฉันอีก">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "ม">
-
-<!ENTITY readingList.label                        "รายการอ่าน">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "แสดงแถบข้างรายการอ่าน">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "แสดงมากกว่านี้…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "เพิ่มบทความไปยังรายการอ่านของคุณเพื่อบันทึกไว้อ่านทีหลังและค้นหาได้อย่างง่ายดายเมื่อคุณต้องการ">
-<!ENTITY readingList.sidebar.delete.tooltip       "เอาออกจากรายการอ่าน">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "เพิ่มเข้ารายการอ่าน">
-<!ENTITY readingList.sidebar.add.tooltip          "เพิ่มหน้านี้เข้ารายการอ่านของคุณ">
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
-<!ENTITY saveToPocketCmd.accesskey "k">
-
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
 
-<!-- LOCALIZATION NOTE (search.label, searchAfter.label):
-     This string is used to build the header above the list of one-click search
-     providers when a one off engine has been selected.  The searchAfter text is
-     intentionally left empty for en-US and can be used by other localizations to
-     display a string after the search engine name.  This string will be displayed
-     as:  "Search <selected engine name><searchAfter.label text>" -->
-<!ENTITY search.label                 "Search ">
+<!ENTITY saveToPocketCmd.label     "บันทึกหน้าไปยัง Pocket">
+<!ENTITY saveToPocketCmd.accesskey "k">
+<!ENTITY saveLinkToPocketCmd.label     "บันทึกลิงก์ไปยัง Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "ป">
+<!ENTITY pocketMenuitem.label      "ดูรายการ Pocket">

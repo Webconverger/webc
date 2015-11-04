@@ -107,6 +107,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "T">
 
 <!ENTITY fxaSignIn.label "Hyni te &syncBrand.shortName.label;-u">
+<!ENTITY fxaSignedIn.tooltip "Hapni parapëlqimet mbi &syncBrand.shortName.label;-un">
 <!ENTITY fxaSignInError.label "Rilidhuni te &syncBrand.shortName.label;-u">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label;-u u aktivizua">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; do të fillojë menjëherë të njëkohësojë.">
@@ -122,8 +123,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "F">
 <!ENTITY fullScreenExit.label "Dilni nga Mënyra Krejt Ekrani">
 <!ENTITY fullScreenExit.accesskey "T">
-<!ENTITY fullscreenAllowButton.label "Lejoje">
-<!ENTITY fullscreenExitButton.label "Mos e Lejo">
 
 <!ENTITY fullscreenExitHint2.value "Që të dilni, shtypni ESC në çfarëdo kohe.">
 <!ENTITY leaveDOMFullScreen.label "Dilni Nga Mënyra Krejt Ekrani">
@@ -268,6 +267,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  application menu item that opens the browser content toolbox UI in the Tools menu.
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 <!ENTITY browserContentToolboxMenu.label     "Grup Mjetesh Lënde Shfletuesi">
+<!ENTITY browserContentToolboxMenu.accesskey "x">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Mbylleni Panelin e Zhvilluesit">
 <!ENTITY devToolbarMenu.label              "Paneli i Zhvilluesit">
@@ -297,6 +297,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "D">
 <!ENTITY newPrivateWindow.label     "Dritare e Re Private">
 <!ENTITY newPrivateWindow.accesskey "P">
+<!ENTITY newNonRemoteWindow.label   "Dritare e Re Non-e10s">
 
 <!ENTITY editMenu.label         "Përpunim"> 
 <!ENTITY editMenu.accesskey       "P"> 
@@ -387,6 +388,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey             "K">
 <!ENTITY urlbar.switchToTab.label     "Kalo te skeda:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Do të donit të përmirësoheshin kërkimet tuaja me këshillime?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Mësoni më tepër…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Jo">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Po">
+
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -410,6 +416,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+<!ENTITY contentSearchInput.label     "Varg kërkimi">
+<!ENTITY contentSearchSubmit.label    "Parashtrojeni kërkimin">
 
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
@@ -623,6 +635,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "M">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Stil Faqeje">
 <!ENTITY pageStyleMenu.accesskey "S">
 <!ENTITY pageStyleNoStyle.label "Pa Stil">
@@ -662,29 +676,38 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Anuloje">
 <!ENTITY editBookmark.removeBookmark.accessKey       "H">
 
-<!ENTITY identity.unverifiedsite2 "Ky sajt nuk furnizon të dhëna identiteti.">
-<!ENTITY identity.connectedTo "Jeni lidhur te">
-<!-- Localization note (identity.runBy) : This string appears between a
-domain name (above) and an organization name (below). E.g.
+<!ENTITY identity.connectionSecure "Lidhje e Sigurt">
+<!ENTITY identity.connectionNotSecure "Lidhja S&apos;është e Sigurt">
+<!ENTITY identity.connectionFile "Kjo është faqe e depozituar në kompjuterin tuaj.">
+<!ENTITY identity.connectionVerified "&brandShortName;-i verifikoi se jeni i lidhur në mënyrë të sigurt te ky sajt, që xhirohet nga:">
+<!ENTITY identity.connectionInternal "Kjo është një faqe &brandShortName; e sigurt.">
 
-example.com
-which is run by
-Example Enterprises, Inc.
+<!-- Strings for connection state warnings. -->
+<!ENTITY identity.activeBlocked "&brandShortName;-i ka bllokuar pjesë të kësaj faqeje që s&apos;janë të sigurta.">
+<!ENTITY identity.passiveLoaded "Pjesë të kësaj faqeje (fjala vjen, figura) s&apos;janë të sigurta.">
+<!ENTITY identity.activeLoaded "E keni çaktivizuar mbrojtjen për këtë faqe.">
+<!ENTITY identity.weakEncryption "Kjo faqe përdor fshehtëzim të dobët.">
 
-The layout of the identity dialog prevents combining this into a single string with
-substitution variables.  If it is difficult to translate the sense of the string
-with that structure, consider a translation which ignores the preceding domain and
-just addresses the organization to follow, e.g. "This site is run by " -->
-<!ENTITY identity.runBy "i cili xhiron për llogari të">
+<!-- Strings for connection state warnings in the subview. -->
+<!ENTITY identity.description.insecure "Lidhja juaj te ky sajt, s&apos;është private. Të dhënat që parashtroni mund të shihen nga të tjerë (fjalëkalime, mesazhe, karta krediti, etj.).">
+<!ENTITY identity.description.weakCipher "Lidhja juaj te ky sajt përdor fshehtëzim të dobët dhe s&apos;është private.">
+<!ENTITY identity.description.weakCipher2 "Të tjerët mund të shohin të dhënat tuaja ose të ndryshojnë sjelljen e sajtit.">
+<!ENTITY identity.description.activeBlocked "&brandShortName;-i ka bllokuar pjesë të kësaj faqeje që s&apos;janë të sigurta.">
+<!ENTITY identity.description.passiveLoaded "Lidhja juaj s&apos;është private dhe të dhënat që ndani me të tjerët në këtë saj mund të shihen nga të tjerë.">
+<!ENTITY identity.description.passiveLoaded2 "Ky sajt përmban lëndë që s&apos;është e sigurt (fjala vjen, figura).">
+<!ENTITY identity.description.passiveLoaded3 "Edhe pse &brandShortName;-i ka bllokuar një pjesë të lëndës, në këtë faqe prapë ka lëndë që s&apos;është e sigurt (fjala vjen, figura).">
+<!ENTITY identity.description.activeLoaded "Ky sajt përmban lëndë që s&apos;është e sigurt (fjala vjen, programthe) dhe lidhja juaj me të s&apos;është private.">
+<!ENTITY identity.description.activeLoaded2 "Të dhënat që ndani me këtë sajt mund të shihen nga të tjerë (fjala vjen, fjalëkalime, mesazhe, karta krediti, etj.).">
 
-<!ENTITY identity.moreInfoLinkText "Më Tepër të Dhëna…">
+<!ENTITY identity.enableMixedContentBlocking.label "Aktivizoni mbrojtjen">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "A">
+<!ENTITY identity.disableMixedContentBlocking.label "Çaktivizojeni mbrojtjen për tani">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "Ç">
+<!ENTITY identity.learnMore "Mësoni Më Tepër">
+
+<!ENTITY identity.moreInfoLinkText2 "Më tepër të Dhëna">
 
 <!ENTITY identity.permissions "Leje">
-
-<!-- LOCALIZATION NOTE (identity.help.tooltip) : This string should be the
-     localized title of this SUMO article
-     https://support.mozilla.org/kb/how-do-i-tell-if-my-connection-is-secure -->
-<!ENTITY identity.help.tooltip "Nga ta kuptoj nëse është a jo e sigurt lidhja ime me një sajt?">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
@@ -758,19 +781,24 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon për ndarje me të tjerët:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
 <!ENTITY getUserMedia.allWindowsShared.message "Do të ndahen me të tjerët krejt dritaret e dukshme në ekranin tuaj.">
+<!ENTITY getUserMedia.audioCapture.label "Audio prej skedës do të ndahet me të tjerët.">
 
-<!-- Bad Content Blocker Doorhanger Notification -->
-<!ENTITY badContentBlocked.moreinfo "Shumica e sajteve prapë do të funksionojnë si duhet, edhe kur bllokohet lëndë.">
-
-<!ENTITY mixedContentBlocked2.message "Lëndë e pasigurt">
-<!ENTITY mixedContentBlocked2.moreinfo "U bllokuan disa elementë të pafshehtëzuar në këtë sajt.">
-<!ENTITY mixedContentBlocked2.learnMore "Mësoni Më Tepër">
-<!ENTITY mixedContentBlocked2.options "Mundësi">
-<!ENTITY mixedContentBlocked2.unblock.label "Tani për tani çaktivizoje mbrojtjen">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "ç">
-<!ENTITY mixedContentBlocked2.block.label "Aktivizoje mbrojtjen">
-<!ENTITY mixedContentBlocked2.block.accesskey "A">
-<!ENTITY mixedContentBlocked2.disabled.message "Mbrojtja është e çaktivizuar">
+<!ENTITY trackingProtection.title "Mbrojtje Nga Gjurmimet">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName;-i po bllokon pjesë të këasj faqeje që mund të ndjekin shfletimin tuaj.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Ky sajt përmban elemente që mund të ndjekin shfletimin tuaj. Mbrojtjen e keni të çaktivizuar.">
+<!ENTITY trackingProtection.notDetected3 "S&apos;u diktuan elemente gjurmimi në këtë faqe.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Çaktivizoni mbrojtjen për këtë sajt">
+<!ENTITY trackingProtection.unblock.accesskey "Ç">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Çaktivizoni mbrojtjen për këtë sesion">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "Ç">
+<!ENTITY trackingProtection.block2.label "Aktivizoni mbrojtjen">
+<!ENTITY trackingProtection.block2.accesskey "A">
 
 <!ENTITY trackingContentBlocked.message "Gjurmim">
 <!ENTITY trackingContentBlocked.moreinfo "U bllokuan pjesë të faqes që gjurmojnë veprimtarinë tuaj në rrjet.">
@@ -848,32 +876,9 @@ just addresses the organization to follow, e.g. "This site is run by " -->
 <!ENTITY emeNotificationsDontAskAgain.label       "Mos më pyet sërish">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "M">
 
-<!ENTITY readingList.label                        "Listë Leximesh">
-<!ENTITY readingList.sidebar.commandKey           "L">
-<!ENTITY readingList.showSidebar.label            "Shfaq Anështyllë Liste Leximesh">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Shfaqni më tepër…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Shtoni artikuj te Lista juaj e Leximeve, që t’i ruani për më vonë dhe t’i gjeni kollaj kur ju duhen.">
-<!-- Pre-landed string for bug 1123525 -->
-<!ENTITY readingList.sidebar.delete.tooltip       "Hiqeni këtë prej Listës suaj të Leximeve">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Shtoje te Lista e Leximeve">
-<!ENTITY readingList.sidebar.add.tooltip          "Shtojeni këtë faqe te Lista juaj e Leximeve">
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
-<!ENTITY saveToPocketCmd.accesskey "k">
-
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
+<!ENTITY saveToPocketCmd.label     "Ruajeni Faqen te Pocket">
+<!ENTITY saveToPocketCmd.accesskey "f">
+<!ENTITY saveLinkToPocketCmd.label     "Ruajeni Lidhjen te Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "l">
+<!ENTITY pocketMenuitem.label      "Shihni Listën Pocket">

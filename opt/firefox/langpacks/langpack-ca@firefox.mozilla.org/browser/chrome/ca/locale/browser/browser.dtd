@@ -110,6 +110,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "a">
 
 <!ENTITY fxaSignIn.label "Inicia la sessió al &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Obre les preferències del &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Torna a connectar al &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; activat">
 <!ENTITY syncStartPanel2.subTitle "El &brandShortName; iniciarà la sincronització d'aquí a uns instants.">
@@ -126,8 +127,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "g">
 <!ENTITY fullScreenExit.label "Surt del mode en pantalla completa">
 <!ENTITY fullScreenExit.accesskey "p">
-<!ENTITY fullscreenAllowButton.label "Permet">
-<!ENTITY fullscreenExitButton.label "Rebutja">
 
 <!ENTITY fullscreenExitHint2.value "Premeu ESC en qualsevol moment per sortir.">
 <!ENTITY leaveDOMFullScreen.label "Surt de la pantalla completa">
@@ -274,6 +273,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
   -  application menu item that opens the browser content toolbox UI in the Tools menu.
   -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
 
+<!ENTITY browserContentToolboxMenu.label     "Caixa d'eines de contingut del navegador">
+<!ENTITY browserContentToolboxMenu.accesskey "x">
 
 <!ENTITY devToolbarCloseButton.tooltiptext "Tanca la barra per a desenvolupadors">
 <!ENTITY devToolbarMenu.label              "Barra d'eines per a desenvolupadors">
@@ -303,7 +304,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.accesskey      "n">
 <!ENTITY newPrivateWindow.label     "Finestra privada nova">
 <!ENTITY newPrivateWindow.accesskey "i">
-
+<!ENTITY newNonRemoteWindow.label   "Nova finestra no-e10s">
 
 <!ENTITY editMenu.label         "Edita"> 
 <!ENTITY editMenu.accesskey       "E"> 
@@ -393,6 +394,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.placeholder2          "Escriviu una cerca o adreça">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "Canvia a la pestanya:">
+
+<!ENTITY urlbar.searchSuggestionsNotification.question "Voleu millorar la vostra experiència de cerca amb suggeriments?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Més informació…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "No">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Sí">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -417,6 +423,12 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+<!-- LOCALIZATION NOTE (contentSearchInput.label, contentSearchSubmit.label):
+     These are set as the aria-label attribute for the search input box and
+     submit button in the in-content search UI, to be used by screen readers. -->
+
+<!ENTITY contentSearchInput.label     "Consulta de cerca">
+<!ENTITY contentSearchSubmit.label    "Envia la cerca">
 <!-- LOCALIZATION NOTE (searchFor.label, searchWith.label):
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
@@ -632,6 +644,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "c">
 
+<!ENTITY toggleMuteCmd.key              "M">
+
 <!ENTITY pageStyleMenu.label "Estil de pàgina">
 <!ENTITY pageStyleMenu.accesskey "i">
 <!ENTITY pageStyleNoStyle.label "Sense estil">
@@ -672,10 +686,36 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY editBookmark.cancel.label                   "Cancel·la">
 <!ENTITY editBookmark.removeBookmark.accessKey       "r">
 
+<!ENTITY identity.connectionSecure "Connexió segura">
+<!ENTITY identity.connectionNotSecure "La connexió no és segura">
+<!ENTITY identity.connectionFile "Aquesta pàgina està desada a l'ordinador.">
+<!ENTITY identity.connectionVerified "El &brandShortName; ha verificat que esteu connectat de forma segura a aquest lloc, mantingut per:">
+<!ENTITY identity.connectionInternal "Aquesta és una pàgina del &brandShortName; segura.">
+<!-- Strings for connection state warnings. -->
 
+<!ENTITY identity.activeBlocked "El &brandShortName; ha blocat parts d'aquesta pàgina que no són segures.">
+<!ENTITY identity.passiveLoaded "Parts d'aquesta pàgina no són segures (com les imatges).">
+<!ENTITY identity.activeLoaded "Heu desactivat la protecció en aquesta pàgina.">
+<!ENTITY identity.weakEncryption "Aquesta pàgina utilitza xifratge feble.">
+<!-- Strings for connection state warnings in the subview. -->
 
+<!ENTITY identity.description.insecure "La connexió a aquest lloc no és privada. La informació que envieu podria ser visualitzada per altres persones (com contrasenyes, missatges, targetes de crèdit, etc.).">
+<!ENTITY identity.description.weakCipher "La connexió a aquest lloc web utilitza un xifratge feble i no és privada.">
+<!ENTITY identity.description.weakCipher2 "Altres persones podrien visualitzar la informació o modificar el comportament del lloc web.">
+<!ENTITY identity.description.activeBlocked "El &brandShortName; ha blocat parts d'aquesta pàgina que no són segures.">
+<!ENTITY identity.description.passiveLoaded "La connexió no és privada i la informació que compartiu amb el lloc podria ser visualitzada per altres persones.">
+<!ENTITY identity.description.passiveLoaded2 "Aquest lloc web inclou contingut que no és segur (com les imatges).">
+<!ENTITY identity.description.passiveLoaded3 "Malgrat que el &brandShortName; ha blocat parts del contingut, encara hi ha contingut de la pàgina que no és segur (such as images).">
+<!ENTITY identity.description.activeLoaded "Aquest lloc web inclou contingut que no és segur (com els scripts) i la connexió no és privada.">
+<!ENTITY identity.description.activeLoaded2 "La informació que compartiu amb aquest lloc podria ser visualitzada per altres persones (com contrasenyes, missatges, targetes de crèdit, etc.).">
 
+<!ENTITY identity.enableMixedContentBlocking.label "Activa la protecció">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "v">
+<!ENTITY identity.disableMixedContentBlocking.label "Desactiva la protecció aquesta vegada">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "D">
+<!ENTITY identity.learnMore "Més informació">
 
+<!ENTITY identity.moreInfoLinkText2 "Més informació">
 
 <!ENTITY identity.permissions "Permisos">
 <!-- Name for the tabs toolbar as spoken by screen readers.
@@ -750,20 +790,25 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "Micròfon per compartir:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Es compartirà l'àudio de la pestanya.">
 <!ENTITY getUserMedia.allWindowsShared.message "Es compartiran totes les finestres visibles de la pantalla.">
-<!-- Bad Content Blocker Doorhanger Notification -->
 
-<!ENTITY badContentBlocked.moreinfo "La majoria de llocs web funcionaran correctament malgrat que es bloqui el contingut.">
-
-<!ENTITY mixedContentBlocked2.message "Contingut insegur">
-<!ENTITY mixedContentBlocked2.moreinfo "S'han blocat alguns elements sense xifrar d'aquest lloc web.">
-<!ENTITY mixedContentBlocked2.learnMore "Més informació">
-<!ENTITY mixedContentBlocked2.options "Opcions">
-<!ENTITY mixedContentBlocked2.unblock.label "Desactiva la protecció aquesta vegada">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "D">
-<!ENTITY mixedContentBlocked2.block.label "Activa la protecció">
-<!ENTITY mixedContentBlocked2.block.accesskey "v">
-<!ENTITY mixedContentBlocked2.disabled.message "La protecció està desactivada">
+<!ENTITY trackingProtection.title "Protecció contra el seguiment">
+<!ENTITY trackingProtection.detectedBlocked3 "El &brandShortName; ha blocat les parts de la pàgina que podrien fer el seguiment de la vostra navegació.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Aquest lloc inclou elements que podrien fer el seguiment de la vostra navegació. Heu desactivat la protecció.">
+<!ENTITY trackingProtection.notDetected3 "No s'ha detectat cap element de seguiment en aquesta pàgina.">
+<!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in NON-private browsing mode. -->
+<!ENTITY trackingProtection.unblock.label "Desactiva la protecció per a aquest lloc">
+<!ENTITY trackingProtection.unblock.accesskey "D">
+<!-- LOCALIZATION NOTE (trackingProtection.unblockPrivate.label, trackingProtection.unblockPrivate.accesskey):
+     The associated button with this label and accesskey is only shown when opening the control
+     center while looking at a site with trackers in PRIVATE browsing mode. -->
+<!ENTITY trackingProtection.unblockPrivate.label "Desactiva la protecció per a aquesta sessió">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "D">
+<!ENTITY trackingProtection.block2.label "Activa la protecció">
+<!ENTITY trackingProtection.block2.accesskey "v">
 
 <!ENTITY trackingContentBlocked.message "Seguiment">
 <!ENTITY trackingContentBlocked.moreinfo "S'han blocat les parts de la pàgina que fan el seguiment de la vostra activitat a Internet.">
@@ -836,42 +881,10 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY emeNotificationsNotNow.accesskey         "n">
 <!ENTITY emeNotificationsDontAskAgain.label       "No m'ho tornis a demanar">
 <!ENTITY emeNotificationsDontAskAgain.accesskey   "d">
-
-<!ENTITY readingList.label                        "Llista de lectura">
-<!ENTITY readingList.sidebar.commandKey           "R">
-<!ENTITY readingList.showSidebar.label            "Mostra la barra lateral de llista de lectura">
-<!-- Pre-landed string for bug 1124153 -->
-<!ENTITY readingList.sidebar.showMore.label       "Mostra'n més…">
-<!-- Pre-landed string for bug 1133662 -->
-<!ENTITY readingList.sidebar.emptyText            "Afegiu articles a la llista de lectura per desar-los per més endavant i trobeu-los fàcilment quan els necessiteu.">
-<!ENTITY readingList.sidebar.delete.tooltip       "Elimina-ho de la llista de lectura">
-<!-- Pre-landed strings for bug 1123519 -->
-<!ENTITY readingList.sidebar.add.label            "Afegeix a la llista de lectura">
-<!ENTITY readingList.sidebar.add.tooltip          "Afegeix aquesta pàgina a la llista de lectura">
 <!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
 
-
-
-
-
-<!ENTITY browserContentToolboxMenu.accesskey "x">
-
-<!-- LOCALIZATION NOTE (browserContentToolboxMenu.label): This is the label for the
-  -  application menu item that opens the browser content toolbox UI in the Tools menu.
-  -  This toolbox allows to debug the chrome of the content process in multiprocess builds.  -->
-<!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
-<!ENTITY identity.connectionInternal "This is a secure &brandShortName; page.">
-<!ENTITY identity.connectionNotSecure "Connection is Not Secure">
-
-<!ENTITY identity.connectionSecure "Secure Connection">
-<!ENTITY identity.connectionVerified "&brandShortName; verified that you are securely connected to this site, run by:">
-
-<!ENTITY identity.moreInfoLinkText2 "More Information">
-<!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
-<!ENTITY pocketMenuitem.label      "View Pocket List">
-<!ENTITY saveLinkToPocketCmd.accesskey "o">
-<!ENTITY saveLinkToPocketCmd.label     "Save Link to Pocket">
+<!ENTITY saveToPocketCmd.label     "Desa la &amp;pàgina al Pocket">
 <!ENTITY saveToPocketCmd.accesskey "k">
-
-<!-- LOCALIZATION NOTE (saveToPocketCmd.label, saveLinkToPocketCmd.label, pocketMenuitem.label): Pocket is a brand name -->
-<!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
+<!ENTITY saveLinkToPocketCmd.label     "Desa l'enllaç al Pocket">
+<!ENTITY saveLinkToPocketCmd.accesskey "o">
+<!ENTITY pocketMenuitem.label      "Mostra la llista del Pocket">

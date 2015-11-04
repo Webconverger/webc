@@ -2,17 +2,9 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!-- LOCALIZATION NOTE : FILE This file contains the browser main menu items -->
-<!-- LOCALIZATION NOTE : FILE Do not translate commandkeys -->
-
-<!-- LOCALIZATION NOTE (mainWindow.title): DONT_TRANSLATE -->
-<!ENTITY mainWindow.title "&brandFullName;" >
-<!-- LOCALIZATION NOTE (mainWindow.titlemodifier) : DONT_TRANSLATE -->
-<!ENTITY mainWindow.titlemodifier "&brandFullName;" >
-<!-- LOCALIZATION NOTE (mainWindow.titlemodifiermenuseparator): DONT_TRANSLATE -->
-<!ENTITY mainWindow.titlemodifiermenuseparator " - " >
-<!-- LOCALIZATION NOTE (mainWindow.titlePrivateBrowsingSuffix): This will be appended to the window's title
-                                                                inside the private browsing mode -->
+<!ENTITY mainWindow.title "&brandFullName;">
+<!ENTITY mainWindow.titlemodifier "&brandFullName;">
+<!ENTITY mainWindow.titlemodifiermenuseparator " - ">
 <!ENTITY mainWindow.titlePrivateBrowsingSuffix "(tryb prywatny)">
 
 <!ENTITY appmenu.tooltip "Otwórz menu">
@@ -107,6 +99,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "W">
 
 <!ENTITY fxaSignIn.label "Zaloguj się do &syncBrand.shortName.label;">
+<!ENTITY fxaSignedIn.tooltip "Otwórz ustawienia &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Zaloguj się ponownie do &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.heading "Włączono &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; za moment rozpocznie synchronizację.">
@@ -122,8 +115,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "U">
 <!ENTITY fullScreenExit.label "Opuść tryb pełnoekranowy">
 <!ENTITY fullScreenExit.accesskey "O">
-<!ENTITY fullscreenAllowButton.label "Zezwól">
-<!ENTITY fullscreenExitButton.label "Zabroń">
 
 <!ENTITY fullscreenExitHint2.value "Naciśnij ESC w dowolnej chwili, by wyjść.">
 <!ENTITY leaveDOMFullScreen.label "Opuść tryb pełnoekranowy">
@@ -375,9 +366,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY urlbar.accesskey "d" >
 <!ENTITY urlbar.switchToTab.label     "Przełącz na kartę:">
 
+<!ENTITY urlbar.searchSuggestionsNotification.question "Czy wyświetlać w podpowiedziach paska adresu podpowiedzi dostarczane przez wyszukiwarki?">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore "Więcej informacji…">
+<!ENTITY urlbar.searchSuggestionsNotification.disable "Nie">
+<!ENTITY urlbar.searchSuggestionsNotification.enable "Tak">
+
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
 <!ENTITY searchFocusUnix.commandkey   "j">
+
+<!ENTITY contentSearchInput.label "Pole wyszukiwania">
+<!ENTITY contentSearchSubmit.label "Szukaj">
 
 <!ENTITY searchFor.label "Wyszukaj „">
 <!ENTITY searchWith.label "” z:">
@@ -529,7 +528,7 @@ items are mutually exclusive. -->
 <!ENTITY videoShowStats.accesskey    "t">
 <!ENTITY videoHideStats.label        "Ukryj statystyki">
 <!ENTITY videoHideStats.accesskey    "t">
-    
+
 <!-- LOCALIZATION NOTE :
 fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey2 and 
 fullZoomResetCmd.commandkey2 are alternative acceleration keys for zoom.
@@ -574,6 +573,8 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY closeCmd.key "W" >
 <!ENTITY closeCmd.accesskey "Z" >
 
+<!ENTITY toggleMuteCmd.key "M">
+
 <!ENTITY pageStyleMenu.label "Styl strony">
 <!ENTITY pageStyleMenu.accesskey "S">
 <!ENTITY pageStyleNoStyle.label "Ignoruj style">
@@ -616,8 +617,31 @@ you can use these alternative items. Otherwise, their values should be empty. --
 
 <!ENTITY identity.connectionSecure "Zabezpieczone połączenie">
 <!ENTITY identity.connectionNotSecure "Połączenie nie jest bezpieczne">
+<!ENTITY identity.connectionFile "Strona wczytana z tego komputera">
 <!ENTITY identity.connectionVerified "Program &brandShortName; pozytywnie zweryfikował zabezpieczenia połączenia z tą stroną, prowadzoną przez:">
 <!ENTITY identity.connectionInternal "To jest strona programu &brandShortName;.">
+
+<!ENTITY identity.activeBlocked "&brandShortName; zablokował elementy tej strony, które nie były przesłane w sposób bezpieczny.">
+<!ENTITY identity.passiveLoaded "Niektóre elementy tej strony (np. obrazki) nie były przesłane w sposób bezpieczny.">
+<!ENTITY identity.activeLoaded "Ochrona na tej stronie została wyłączona przez użytkownika.">
+<!ENTITY identity.weakEncryption "Strona używa słabego szyfrowania.">
+
+<!ENTITY identity.description.insecure "Prywatność podczas łączenia się z tą stroną nie jest chroniona. Przesyłane informacje (np. hasła, wiadomości, numery kart) mogą być dostępne dla innych.">
+<!ENTITY identity.description.weakCipher "Połączenie z tą stroną nie zapewnia prywatności, ponieważ szyfrowanie nie jest wystarczające.">
+<!ENTITY identity.description.weakCipher2 "Informacje na stronie mogą być dostępne dla innych a jej działanie modyfikowane.">
+<!ENTITY identity.description.activeBlocked "Firefox zablokował elementy tej strony, które nie były przesłane w sposób bezpieczny.">
+<!ENTITY identity.description.passiveLoaded "Połączenie z tą stroną nie zapewnia prywatności a przesyłane informacje mogą być dostępne dla innych.">
+<!ENTITY identity.description.passiveLoaded2 "Niektóre elementy tej strony (np. obrazki) nie były przesłane w sposób bezpieczny.">
+<!ENTITY identity.description.passiveLoaded3 "&brandShortName; zablokował niektóre elementy strony, mimo to nie wszystkie pozostałe elementy były przesłane w sposób bezpieczny (np. obrazki).">
+<!ENTITY identity.description.activeLoaded "Strona zawiera elementy, które nie były przesłane w sposób bezpieczny (np. skrypty) i połączenie z nią nie zapewnia prywatności.">
+<!ENTITY identity.description.activeLoaded2 "Przesyłane informacje (np. hasła, wiadomości, numery kart) mogą być dostępne dla innych.">
+
+<!ENTITY identity.enableMixedContentBlocking.label "Włącz ochronę">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "W">
+<!ENTITY identity.disableMixedContentBlocking.label "Tymczasowo wyłącz ochronę">
+<!ENTITY identity.disableMixedContentBlocking.accesskey "T">
+<!ENTITY identity.learnMore "Więcej informacji">
+
 <!ENTITY identity.moreInfoLinkText2 "Więcej informacji…">
 <!ENTITY identity.permissions "Uprawnienia">
 
@@ -692,19 +716,19 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY getUserMedia.selectCamera.accesskey "K">
 <!ENTITY getUserMedia.selectMicrophone.label "Mikrofon do udostępnienia:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
+<!ENTITY getUserMedia.audioCapture.label "Dźwięk z karty będzie udostępniany.">
 <!ENTITY getUserMedia.allWindowsShared.message "Wszystkie widoczne na ekranie okna zostaną udostępnione.">
 
-<!ENTITY badContentBlocked.moreinfo "Większość stron będzie działać prawidłowo nawet, gdy blokowane są treści.">
-
-<!ENTITY mixedContentBlocked2.message "Niezabezpieczone treści">
-<!ENTITY mixedContentBlocked2.moreinfo "Niektóre niezaszyfrowane elementy tej strony zostały zablokowane.">
-<!ENTITY mixedContentBlocked2.learnMore "Więcej informacji">
-<!ENTITY mixedContentBlocked2.options "Ustawienia">
-<!ENTITY mixedContentBlocked2.unblock.label "Tymczasowo wyłącz ochronę">
-<!ENTITY mixedContentBlocked2.unblock.accesskey "T">
-<!ENTITY mixedContentBlocked2.block.label "Włącz ochronę">
-<!ENTITY mixedContentBlocked2.block.accesskey "W">
-<!ENTITY mixedContentBlocked2.disabled.message "Ochrona została wyłączona">
+<!ENTITY trackingProtection.title "Ochrona przed śledzeniem">
+<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokuje elementy strony mogące śledzić Twoją aktywność w sieci.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Strona zawiera elementy mogące śledzić Twoją aktywność w sieci, jednak ochona przed nimi została wyłączona.">
+<!ENTITY trackingProtection.notDetected3 "Nie wykryto elementów śledzących aktywność użytkownika na tej stronie.">
+<!ENTITY trackingProtection.unblock.label "Wyłącz ochronę dla tej strony">
+<!ENTITY trackingProtection.unblock.accesskey "W">
+<!ENTITY trackingProtection.unblockPrivate.label "Wyłącz ochronę w oknie prywatnym">
+<!ENTITY trackingProtection.unblockPrivate.accesskey "W">
+<!ENTITY trackingProtection.block2.label "Włącz ochronę dla tej strony">
+<!ENTITY trackingProtection.block2.accesskey "W">
 
 <!ENTITY trackingContentBlocked.message "Śledzenie">
 <!ENTITY trackingContentBlocked.moreinfo "Części strony odpowiedzialne za śledzenie aktywności użytkowników zostały zablokowane.">
@@ -761,15 +785,6 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY emeNotificationsNotNow.accesskey "Z">
 <!ENTITY emeNotificationsDontAskAgain.label "Nie pytaj ponownie">
 <!ENTITY emeNotificationsDontAskAgain.accesskey "e">
-
-<!ENTITY readingList.label "Czytelnia">
-<!ENTITY readingList.sidebar.commandKey "R">
-<!ENTITY readingList.showSidebar.label "Pokaż pasek boczny czytelni">
-<!ENTITY readingList.sidebar.showMore.label "Wyświetl więcej…">
-<!ENTITY readingList.sidebar.emptyText "Dodawaj artykuły do czytelni, aby zachować je na później i łatwo później odnajdywać.">
-<!ENTITY readingList.sidebar.delete.tooltip "Usuń z czytelni">
-<!ENTITY readingList.sidebar.add.label "Dodaj do czytelni">
-<!ENTITY readingList.sidebar.add.tooltip "Dodaj tę stronę do czytelni">
 
 <!ENTITY saveToPocketCmd.label "Wyślij stronę do Pocket">
 <!ENTITY saveToPocketCmd.accesskey "s">
