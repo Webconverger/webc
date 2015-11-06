@@ -214,7 +214,7 @@ do
 
 		if ! cmdline_has noclean
 		then
-			for d in /home/webc/{.mozilla,.adobe,.macromedia,Downloads} /tmp/webc
+			for d in /home/webc/{.mozilla,.cache,.config,Desktop,.gstreamer*,.adobe,.macromedia,Downloads} /tmp/webc
 			do
 				rm -rf $d
 			done
