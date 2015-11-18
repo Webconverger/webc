@@ -48,10 +48,12 @@
 		box.appendChild(image);
 		insertAfter.parentNode.appendChild(box);
 		}
-    document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
-	// Remove social API
-	SocialActivationListener = {};
-	gBrowser.getStatusPanel().setAttribute("hidden", "true");
+		document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
+		// Remove social API
+		SocialActivationListener = {
+			init: function() {}
+		};
+		gBrowser.getStatusPanel().setAttribute("hidden", "true");
 	}
 
 	function shutdown() {

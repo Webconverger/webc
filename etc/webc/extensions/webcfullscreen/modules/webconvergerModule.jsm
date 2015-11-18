@@ -82,3 +82,18 @@ try {
 } catch (ex) {}
 
 Services.obs.addObserver(HTTPObserver, "http-on-modify-request", false);
+
+try {
+  Components.utils.import("resource:///modules/UITour.jsm");
+  UITour.origOnPageEvent = UITour.onPageEvent;
+  UITour.onPageEvent = function(a, b) {
+    var aEvent = b;
+    if (!aEvent) {
+      aEvent = a;
+    }
+    if (aEvent.detail.action == "resetFirefox") {
+      return;
+    }
+    UITour.origOnPageEvent(a, b);
+  }
+} catch (e) {}

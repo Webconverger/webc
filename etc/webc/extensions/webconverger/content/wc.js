@@ -117,10 +117,12 @@ function BrowserLoadURL(aTriggeringEvent, aPostData) { // override browser.js
 			box.appendChild(image);
 			insertAfter.parentNode.appendChild(box);
 		}
-    document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
-	// Remove social API
-	SocialActivationListener = {};
-	CustomizableUI.destroyWidget("social-share-button");
+		document.getElementById("appcontent").addEventListener("DOMContentLoaded", onPageLoad, false);
+		// Remove social API
+		SocialActivationListener = {
+			init: function() {}
+		};
+		CustomizableUI.destroyWidget("social-share-button");
 	}
 
 	function shutdown() {
