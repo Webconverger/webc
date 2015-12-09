@@ -11,6 +11,9 @@ FileBlock.prototype = {
   tempDir: null,
   // List of domains for the whitelist
   whitelist: [],
+  // Chrome pages that should not be shown
+  chromeBlacklist: ["browser", "mozapps", "marionette", "specialpowers",
+                    "branding", "alerts"],
   initialize: function() {
     this.appDir = Services.io.newFileURI(Services.dirsvc.get("CurProcD", Ci.nsIFile)).spec;
     var profileDir = Services.dirsvc.get("ProfD", Ci.nsIFile);
@@ -77,7 +80,11 @@ FileBlock.prototype = {
       if (aRequestOrigin &&
           (aRequestOrigin.spec == "chrome://browser/content/browser.xul" ||
           aRequestOrigin.scheme == "moz-nullprincipal")) {
-        return Ci.nsIContentPolicy.ACCEPT;
+        for (var i=0; i < this.chromeBlacklist.length; i++) {
+          if (aContentLocation.host == this.chromeBlacklist[i]) {
+            return Ci.nsIContentPolicy.REJECT_REQUEST;
+          }
+        }
       }
       // All chrome requests come through here, so we have to allow them
       // (Like loading the main browser window for instance)
