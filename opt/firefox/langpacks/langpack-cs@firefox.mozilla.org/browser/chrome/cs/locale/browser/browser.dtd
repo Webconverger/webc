@@ -113,12 +113,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Přihlášení k &syncBrand.shortName.label;">
 <!ENTITY fxaSignedIn.tooltip "Otevřít předvolby &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Opětovné připojení k &syncBrand.shortName.label;">
+<!ENTITY fxaUnverified.label "Ověřte váš účet">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; povolen">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; se za chvíli začne synchronizovat.">
-<!ENTITY syncErrorPanel.heading "Není možné se připojit k &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.subTitle "Pro pokračování synchronizace se prosím přihlašte.">
-<!ENTITY syncErrorPanel.signInButton.label "Přihlásit">
-<!ENTITY syncErrorPanel.signInButton.accesskey "P">
 
 <!ENTITY fullScreenMinimize.tooltip "Minimalizovat">
 <!ENTITY fullScreenRestore.tooltip "Obnovit">
@@ -128,7 +125,19 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.label "Ukončit režim celé obrazovky">
 <!ENTITY fullScreenExit.accesskey "k">
 
-<!ENTITY fullscreenExitHint2.value "K ukončení stiskněte kdykoliv klávesu ESC">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "je nyní v režimu celé obrazovky">
+<!ENTITY fullscreenWarning.generic.label "Tento dokument je nyní v režimu celé obrazovky">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Ukončit režim celé obrazovky (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Ukončit režim celé obrazovky (esc)">
 <!ENTITY leaveDOMFullScreen.label "Ukončit režim celé obrazovky">
 <!ENTITY leaveDOMFullScreen.accesskey "k">
 
@@ -303,7 +312,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY newNavigatorCmd.label        "Nové okno">
 <!ENTITY newNavigatorCmd.key        "N">
 <!ENTITY newNavigatorCmd.accesskey      "N">
-<!ENTITY newPrivateWindow.label     "Anonymní okno">
+<!ENTITY newPrivateWindow.label     "Nové anonymní okno">
 <!ENTITY newPrivateWindow.accesskey "a">
 <!ENTITY newNonRemoteWindow.label   "Nové non-e10s okno">
 
@@ -399,8 +408,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Chtěli byste vylepšit své vyhledávání pomocí návrhů?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Zjistit více…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "z">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Ne">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Ano">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "a">
 
 <!--
   Comment duplicated from browser-sets.inc:
@@ -453,6 +465,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      them when the user has not typed any keyword. -->
 <!ENTITY searchWithHeader.label       "Hledat pomocí:">
 <!ENTITY changeSearchSettings.button  "Změnit nastavení vyhledávání">
+
+<!ENTITY searchInNewTab.label         "Hledat v novém panelu">
+<!ENTITY searchInNewTab.accesskey     "n">
+<!ENTITY searchSetAsDefault.label     "Nastavit jako výchozí vyhledávač">
+<!ENTITY searchSetAsDefault.accesskey "v">
 
 <!ENTITY tabView.commandkey "e">
 
@@ -688,8 +705,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Zabezpečené přípojení">
 <!ENTITY identity.connectionNotSecure "Připojení není zabezpečeno">
 <!ENTITY identity.connectionFile "Tato stránka je uložena na vašem počítači.">
-<!ENTITY identity.connectionVerified "Aplikace &brandShortName; ověřila, že jste zabezpečeně připojeni na tuto stránku, provozovanou:">
+<!ENTITY identity.connectionVerified1 "Jste zabezpečeně připojeni na tuto stránku, provozovanou:">
 <!ENTITY identity.connectionInternal "Toto je zabezpečená stránka aplikace &brandShortName;.">
+<!ENTITY identity.insecureLoginForms "Vaše přihlášení mohlo být vyzrazeno.">
 
 <!-- Strings for connection state warnings. -->
 <!ENTITY identity.activeBlocked "Aplikace &brandShortName; zablokovala nezabezpečené části této stránky.">
@@ -699,6 +717,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
  
 <!-- Strings for connection state warnings in the subview. -->
 <!ENTITY identity.description.insecure "Vaše připojení na tuto stránku není zabezpečené. Informace (jako jsou hesla, zprávy, číslo kreditní karty, atd.), které odešlete, mohou být viděny ostatními.">
+<!ENTITY identity.description.insecureLoginForms "Přihlašovací údaje, které zadáte na této stránce, nebudou zabezpečeny a mohou být vyzrazeny.">
 <!ENTITY identity.description.weakCipher "Vaše připojení na tuto stránku používá slabé šifrování a není tedy zabezpečeno.">
 <!ENTITY identity.description.weakCipher2 "Ostatní lidé mohou prohlížet vaše informace nebo pozměňovat chování webových stránek.">
 <!ENTITY identity.description.activeBlocked "Aplikace &brandShortName; zablokovala nezabezpečené části této stránky.">
@@ -717,6 +736,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2 "Další informace">
 
 <!ENTITY identity.permissions "Oprávnění">
+<!ENTITY identity.permissionsEmpty "Nemáte udělena pro tento web žádná zvláštní oprávnění.">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
@@ -727,8 +747,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label "Sync">
 
-<!ENTITY syncSetup.label "Nastavit &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey "y">
+<!ENTITY syncSignIn.label             "Přihlásit se do &syncBrand.shortName.label;…">
+<!ENTITY syncSignIn.accesskey         "i">
 <!ENTITY syncSyncNowItem.label "Synchronizovat">
 <!ENTITY syncSyncNowItem.accesskey "S">
 <!ENTITY syncReAuthItem.label         "Opětovné připojení k &syncBrand.shortName.label;…">

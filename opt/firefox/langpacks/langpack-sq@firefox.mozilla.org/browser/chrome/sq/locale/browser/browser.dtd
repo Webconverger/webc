@@ -109,12 +109,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Hyni te &syncBrand.shortName.label;-u">
 <!ENTITY fxaSignedIn.tooltip "Hapni parapëlqimet mbi &syncBrand.shortName.label;-un">
 <!ENTITY fxaSignInError.label "Rilidhuni te &syncBrand.shortName.label;-u">
+<!ENTITY fxaUnverified.label "Verifikoni Llogarinë Tuaj">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label;-u u aktivizua">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; do të fillojë menjëherë të njëkohësojë.">
-<!ENTITY syncErrorPanel.heading "Nuk lidhet dot te &syncBrand.shortName.label;-u">
-<!ENTITY syncErrorPanel.subTitle "Ju lutemi, hyni, që të rimerret njëkohësimi.">
-<!ENTITY syncErrorPanel.signInButton.label "Hyni">
-<!ENTITY syncErrorPanel.signInButton.accesskey "H">
 
 <!ENTITY fullScreenMinimize.tooltip "Minimizojeni">
 <!ENTITY fullScreenRestore.tooltip "Rikthejeni">
@@ -124,8 +121,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.label "Dilni nga Mënyra Krejt Ekrani">
 <!ENTITY fullScreenExit.accesskey "T">
 
-<!ENTITY fullscreenExitHint2.value "Që të dilni, shtypni ESC në çfarëdo kohe.">
-<!ENTITY leaveDOMFullScreen.label "Dilni Nga Mënyra Krejt Ekrani">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "tani është sa krejt ekrani">
+<!ENTITY fullscreenWarning.generic.label "Ky dokument tani shfaqet sa krejt ekrani">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Dilni Nga Gjendja Krejt Ekrani (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Dilni Nga Gjendja Krejt Ekrani (esc)">
+<!ENTITY leaveDOMFullScreen.label "Dilni Nga Gjendja Krejt Ekrani">
 <!ENTITY leaveDOMFullScreen.accesskey "D">
 
 <!ENTITY closeWindow.label "Mbylleni Dritaren">
@@ -390,8 +399,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Do të donit të përmirësoheshin kërkimet tuaja me këshillime?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Mësoni më tepër…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "M">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Jo">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "J">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Po">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "P">
 
 <!-- 
   Comment duplicated from browser-sets.inc:
@@ -444,6 +456,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      them when the user has not typed any keyword. -->
 <!ENTITY searchWithHeader.label       "Kërko me:">
 <!ENTITY changeSearchSettings.button  "Ndryshoni Rregullimet e Kërkimit">
+
+<!ENTITY searchInNewTab.label         "Kërkoni në Skedë të Re">
+<!ENTITY searchInNewTab.accesskey     "S">
+<!ENTITY searchSetAsDefault.label     "Caktojeni Si Motor Parazgjedhje Kërkimesh">
+<!ENTITY searchSetAsDefault.accesskey "P">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -679,8 +696,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Lidhje e Sigurt">
 <!ENTITY identity.connectionNotSecure "Lidhja S&apos;është e Sigurt">
 <!ENTITY identity.connectionFile "Kjo është faqe e depozituar në kompjuterin tuaj.">
-<!ENTITY identity.connectionVerified "&brandShortName;-i verifikoi se jeni i lidhur në mënyrë të sigurt te ky sajt, që xhirohet nga:">
+<!ENTITY identity.connectionVerified1 "Jeni i lidhur në mënyrë të sigurt te ky sajt, që xhirohet nga:">
 <!ENTITY identity.connectionInternal "Kjo është një faqe &brandShortName; e sigurt.">
+<!ENTITY identity.insecureLoginForms "Hyrja juaj mund të komprometohetYour login could be compromised.">
 
 <!-- Strings for connection state warnings. -->
 <!ENTITY identity.activeBlocked "&brandShortName;-i ka bllokuar pjesë të kësaj faqeje që s&apos;janë të sigurta.">
@@ -690,6 +708,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!-- Strings for connection state warnings in the subview. -->
 <!ENTITY identity.description.insecure "Lidhja juaj te ky sajt, s&apos;është private. Të dhënat që parashtroni mund të shihen nga të tjerë (fjalëkalime, mesazhe, karta krediti, etj.).">
+<!ENTITY identity.description.insecureLoginForms "Të dhënat e hyrjes që dhatë në këtë faqe s&apos;janë të sigurta dhe mund të komprometohen.">
 <!ENTITY identity.description.weakCipher "Lidhja juaj te ky sajt përdor fshehtëzim të dobët dhe s&apos;është private.">
 <!ENTITY identity.description.weakCipher2 "Të tjerët mund të shohin të dhënat tuaja ose të ndryshojnë sjelljen e sajtit.">
 <!ENTITY identity.description.activeBlocked "&brandShortName;-i ka bllokuar pjesë të kësaj faqeje që s&apos;janë të sigurta.">
@@ -705,9 +724,10 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.disableMixedContentBlocking.accesskey "Ç">
 <!ENTITY identity.learnMore "Mësoni Më Tepër">
 
-<!ENTITY identity.moreInfoLinkText2 "Më tepër të Dhëna">
+<!ENTITY identity.moreInfoLinkText2 "Më Tepër të Dhëna">
 
 <!ENTITY identity.permissions "Leje">
+<!ENTITY identity.permissionsEmpty "S&apos;i keni dhënë këtij sajti ndonjë leje speciale.">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
@@ -718,8 +738,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
-<!ENTITY syncSetup.label              "Rregulloni &syncBrand.shortName.label;-un…">
-<!ENTITY syncSetup.accesskey          "R">
+<!ENTITY syncSignIn.label             "Hyni Te &syncBrand.shortName.label;-u…">
+<!ENTITY syncSignIn.accesskey         "H">
 <!ENTITY syncSyncNowItem.label        "Njëkohësohu Tani">
 <!ENTITY syncSyncNowItem.accesskey    "N">
 <!ENTITY syncReAuthItem.label         "Rilidhuni me &syncBrand.shortName.label;-un…">

@@ -89,3 +89,7 @@ pref("media.mediasource.mp4.enabled", true);
 // https://wiki.mozilla.org/Security/Tracking_protection#Prefs
 pref("privacy.trackingprotection.enabled", false);
 pref("privacy.trackingprotection.pbmode.enabled", false);
+
+// https://wiki.mozilla.org/Addons/Extension_Signing
+// Can be removed from Firefox 44, assuming that we figure out how to get our addon signed
+pref("xpinstall.signatures.required", false);

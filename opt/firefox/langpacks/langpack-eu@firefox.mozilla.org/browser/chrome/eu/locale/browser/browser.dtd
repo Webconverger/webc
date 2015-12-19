@@ -112,12 +112,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Hasi saioa &syncBrand.shortName.label;(e)n">
 <!ENTITY fxaSignedIn.tooltip "Ireki &syncBrand.shortName.label; hobespenak">
 <!ENTITY fxaSignInError.label "Birkonektatu &syncBrand.shortName.label;(e)ra">
+<!ENTITY fxaUnverified.label "Egiaztatu zure kontua">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; gaituta">
 <!ENTITY syncStartPanel2.subTitle "Une batetik bestera hasiko da sinkronizatzen &brandShortName;.">
-<!ENTITY syncErrorPanel.heading "Ezin da &syncBrand.shortName.label;(e)ra konektatu">
-<!ENTITY syncErrorPanel.subTitle "Hasi saioa sinkronizatzeari berrekiteko.">
-<!ENTITY syncErrorPanel.signInButton.label "Hasi saioa">
-<!ENTITY syncErrorPanel.signInButton.accesskey "H">
 
 
 <!ENTITY fullScreenMinimize.tooltip "Txikitu">
@@ -127,8 +124,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "E">
 <!ENTITY fullScreenExit.label "Irten pantaila osoko ikuspegitik">
 <!ENTITY fullScreenExit.accesskey "p">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
 
-<!ENTITY fullscreenExitHint2.value "Sakatu ESK edozein unetan irteteko.">
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "pantaila osoan dago orain">
+<!ENTITY fullscreenWarning.generic.label "Dokumentua pantaila osoan dago orain">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Irten pantaila osotik (Esk)">
+<!ENTITY exitDOMFullscreenMac.button "Irten pantaila osotik (esk)">
 <!ENTITY leaveDOMFullScreen.label "Irten pantaila osotik">
 <!ENTITY leaveDOMFullScreen.accesskey "s">
 
@@ -397,8 +406,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Bilaketen esperientzia hobetu nahi duzu gomendioekin?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Argibide gehiago…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "A">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Ez">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "E">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Bai">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "B">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -454,6 +466,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
 <!ENTITY changeSearchSettings.button  "Aldatu bilaketa-ezarpenak">
+
+<!ENTITY searchInNewTab.label         "Bilatu fitxa berrian">
+<!ENTITY searchInNewTab.accesskey     "f">
+<!ENTITY searchSetAsDefault.label     "Ezarri bilaketa-motor lehenetsi gisa">
+<!ENTITY searchSetAsDefault.accesskey "h">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -689,8 +706,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Konexio segurua">
 <!ENTITY identity.connectionNotSecure "Konexioa ez da segurua">
 <!ENTITY identity.connectionFile "Orri hau zure ordenagailuan biltegiratuta dago.">
-<!ENTITY identity.connectionVerified "&brandShortName;(e)k egiaztatu du gune honetara modu seguruan konektatuta zaudela. Arduraduna:">
+<!ENTITY identity.connectionVerified1 "Modu seguruan zaude konektatuta gune honetara. Arduraduna:">
 <!ENTITY identity.connectionInternal "&brandShortName; orri segurua da hau.">
+<!ENTITY identity.insecureLoginForms "Zure saio-hasiera arriskuan egon liteke.">
 <!-- Strings for connection state warnings. -->
 
 <!ENTITY identity.activeBlocked "&brandShortName;(e)k seguruak ez diren orri honetako zatiak blokeatu ditu.">
@@ -700,6 +718,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!-- Strings for connection state warnings in the subview. -->
 
 <!ENTITY identity.description.insecure "Gune honetarako zure konexioa ez da pribatua. Bidaltzen duzun informazioa besteek ikus lezakete (adibidez pasahitzak, mezuak, kreditu txartelak, etab.).">
+<!ENTITY identity.description.insecureLoginForms "Orri honetan sartzen duzun saio-hasiera informazioa ez da segurua eta arriskuan egon liteke.">
 <!ENTITY identity.description.weakCipher "Gune honetarako zure konexioak zifraketa ahula erabiltzen du eta ez da pribatua.">
 <!ENTITY identity.description.weakCipher2 "Besteek zure informazioa ikusi edo webgunearen portaera alda lezakete.">
 <!ENTITY identity.description.activeBlocked "&brandShortName;(e)k seguruak ez diren orri honetako zatiak blokeatu ditu.">
@@ -718,6 +737,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2 "Informazio gehiago">
 
 <!ENTITY identity.permissions "Baimenak">
+<!ENTITY identity.permissionsEmpty "Ez diozu gune honi baimen berezirik eman.">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -728,8 +748,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
-<!ENTITY syncSetup.label              "Konfiguratu &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey          "Y">
+<!ENTITY syncSignIn.label             "Hasi saioa &syncBrand.shortName.label;(e)n…">
+<!ENTITY syncSignIn.accesskey         "Y">
 <!ENTITY syncSyncNowItem.label        "Sinkronizatu orain">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label         "Birkonektatu &syncBrand.shortName.label;(e)ra">

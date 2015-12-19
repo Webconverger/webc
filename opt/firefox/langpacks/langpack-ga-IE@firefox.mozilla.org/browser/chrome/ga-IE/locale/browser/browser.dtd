@@ -112,12 +112,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Logáil isteach i &syncBrand.shortName.label;">
 <!ENTITY fxaSignedIn.tooltip "Oscail sainroghanna &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Athcheangail le &syncBrand.shortName.label;">
+<!ENTITY fxaUnverified.label "Deimhnigh Do Chuntas">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; cumasaithe">
 <!ENTITY syncStartPanel2.subTitle "Tosóidh &brandShortName; ag sioncrónú go luath.">
-<!ENTITY syncErrorPanel.heading "Ní féidir ceangal le &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.subTitle "Logáil isteach chun sioncrónú a atosú.">
-<!ENTITY syncErrorPanel.signInButton.label "Logáil Isteach">
-<!ENTITY syncErrorPanel.signInButton.accesskey "L">
 
 
 <!ENTITY fullScreenMinimize.tooltip "Íoslaghdaigh">
@@ -127,8 +124,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "h">
 <!ENTITY fullScreenExit.label "Fág Mód Lánscáileáin">
 <!ENTITY fullScreenExit.accesskey "L">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
 
-<!ENTITY fullscreenExitHint2.value "Brúigh ESC am ar bith chun scor.">
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label " - ar lánscáileán anois">
+<!ENTITY fullscreenWarning.generic.label "Tá an cháipéis seo ar lánscáileán anois">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Fág Mód Lánscáileáin (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Fág Mód Lánscáileáin (esc)">
 <!ENTITY leaveDOMFullScreen.label "Scoir ón Lánscáileán">
 <!ENTITY leaveDOMFullScreen.accesskey "n">
 
@@ -397,8 +406,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Ar mhaith leat do chuardaigh a fheabhsú trí mholtaí a sheoladh?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Tuilleadh eolais…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "l">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Níl">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Tá">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "y">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -454,6 +466,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
 <!ENTITY changeSearchSettings.button  "Socruithe Cuardaigh">
+
+<!ENTITY searchInNewTab.label         "Cuardaigh i gCluaisín Nua">
+<!ENTITY searchInNewTab.accesskey     "r">
+<!ENTITY searchSetAsDefault.label     "Socraigh mar Inneall Cuardaigh Réamhshocraithe">
+<!ENTITY searchSetAsDefault.accesskey "d">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -689,8 +706,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Ceangal Slán">
 <!ENTITY identity.connectionNotSecure "Ní Ceangal Slán é seo">
 <!ENTITY identity.connectionFile "Stóráiltear an leathanach seo ar do ríomhaire.">
-<!ENTITY identity.connectionVerified "Dheimhnigh &brandShortName; go bhfuil ceangal slán agat leis an suíomh seo, suíomh faoi stiúir:">
+<!ENTITY identity.connectionVerified1 "Tá ceangal slán agat leis an suíomh seo, suíomh faoi stiúir:">
 <!ENTITY identity.connectionInternal "Is leathanach slán &brandShortName; é seo.">
+<!ENTITY identity.insecureLoginForms "Seans go mbeadh bradaí in ann teacht ar d'fhaisnéis logála isteach.">
 <!-- Strings for connection state warnings. -->
 
 <!ENTITY identity.activeBlocked "Chuir &brandShortName; bac ar chodanna den leathanach seo nach bhfuil slán.">
@@ -700,6 +718,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!-- Strings for connection state warnings in the subview. -->
 
 <!ENTITY identity.description.insecure "Níl do cheangal leis an suíomh seo príobháideach. D'fhéadfadh daoine eile an t-eolas a aighníonn tú a fheiscint (leithéidí focail faire, teachtaireachtaí, cártaí creidmheasa, etc.)">
+<!ENTITY identity.description.insecureLoginForms "Níl an fhaisnéis chuntais a chuireann tú isteach ar an leathanach seo seolta thar ceangal slán, agus seans go mbeadh bradaí in ann teacht air.">
 <!ENTITY identity.description.weakCipher "Úsáideann do cheangal leis an suíomh seo criptiúchán lag nach bhfuil príobháideach.">
 <!ENTITY identity.description.weakCipher2 "Is féidir le daoine eile do shonraí a fheicint agus iompar an tsuímh a athrú.">
 <!ENTITY identity.description.activeBlocked "Chuir &brandShortName; bac ar chodanna den leathanach seo nach bhfuil slán.">
@@ -718,6 +737,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2 "Tuilleadh Eolais">
 
 <!ENTITY identity.permissions "Ceadanna">
+<!ENTITY identity.permissionsEmpty "Níor thug tú aon chead speisialta don suíomh seo.">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -728,8 +748,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
-<!ENTITY syncSetup.label              "Socraigh &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey          "Y">
+<!ENTITY syncSignIn.label             "Logáil isteach i &syncBrand.shortName.label;…">
+<!ENTITY syncSignIn.accesskey         "Y">
 <!ENTITY syncSyncNowItem.label        "Sioncrónaigh Anois">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label         "Athcheangail le &syncBrand.shortName.label;…">

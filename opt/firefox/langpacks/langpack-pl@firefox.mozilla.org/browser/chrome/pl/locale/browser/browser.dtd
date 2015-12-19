@@ -101,12 +101,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Zaloguj się do &syncBrand.shortName.label;">
 <!ENTITY fxaSignedIn.tooltip "Otwórz ustawienia &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Zaloguj się ponownie do &syncBrand.shortName.label;">
+<!ENTITY fxaUnverified.label "Zweryfikuj konto">
 <!ENTITY syncStartPanel2.heading "Włączono &syncBrand.shortName.label;">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; za moment rozpocznie synchronizację.">
-<!ENTITY syncErrorPanel.heading "Nie można połączyć się z &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.subTitle "Zaloguj się, aby wznowić synchronizację.">
-<!ENTITY syncErrorPanel.signInButton.label "Zaloguj się">
-<!ENTITY syncErrorPanel.signInButton.accesskey "Z">
 
 <!ENTITY fullScreenMinimize.tooltip "Minimalizuj">
 <!ENTITY fullScreenRestore.tooltip "Przywróć">
@@ -116,7 +113,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.label "Opuść tryb pełnoekranowy">
 <!ENTITY fullScreenExit.accesskey "O">
 
-<!ENTITY fullscreenExitHint2.value "Naciśnij ESC w dowolnej chwili, by wyjść.">
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "działa teraz w trybie pełnoekranowym">
+<!ENTITY fullscreenWarning.generic.label "Dokument jest teraz wyświetlany w trybie pełnoekranowym">
+<!ENTITY exitDOMFullscreen.button "Opuść tryb pełnoekranowy (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Opuść tryb pełnoekranowy (esc)">
 <!ENTITY leaveDOMFullScreen.label "Opuść tryb pełnoekranowy">
 <!ENTITY leaveDOMFullScreen.accesskey "u">
 
@@ -368,8 +369,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Czy wyświetlać w podpowiedziach paska adresu podpowiedzi dostarczane przez wyszukiwarki?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Więcej informacji…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "W">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Nie">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "N">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Tak">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "T">
 
 <!ENTITY searchFocus.commandkey       "k">
 <!ENTITY searchFocus.commandkey2      "e">
@@ -384,6 +388,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY searchAfter.label "">
 <!ENTITY searchWithHeader.label "Szukaj z">
 <!ENTITY changeSearchSettings.button "Zmień ustawienia wyszukiwania">
+
+<!ENTITY searchInNewTab.label "Szukaj w nowej karcie">
+<!ENTITY searchInNewTab.accesskey "S">
+<!ENTITY searchSetAsDefault.label "Ustaw jako domyślną wyszukiwarkę">
+<!ENTITY searchSetAsDefault.accesskey "U">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -490,13 +499,10 @@ items are mutually exclusive. -->
 <!ENTITY mediaPlay.accesskey         "z">
 <!ENTITY mediaPause.label            "Wstrzymaj">
 <!ENTITY mediaPause.accesskey        "W">
-<!-- LOCALIZATION NOTE: The access keys for "Mute" and
-"Unmute" are the same because the two context-menu
-items are mutually exclusive. -->
 <!ENTITY mediaMute.label             "Wycisz">
 <!ENTITY mediaMute.accesskey         "c">
-<!ENTITY mediaUnmute.label           "Przywróć głośność">
-<!ENTITY mediaUnmute.accesskey       "P">
+<!ENTITY mediaUnmute.label "Włącz dźwięk">
+<!ENTITY mediaUnmute.accesskey "c">
 <!ENTITY mediaPlaybackRate.label     "Szybkość odtwarzania">
 <!ENTITY mediaPlaybackRate.accesskey "b">
 <!ENTITY mediaPlaybackRate050x.label "Zwolnione tempo (0.5×)">
@@ -618,8 +624,9 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY identity.connectionSecure "Zabezpieczone połączenie">
 <!ENTITY identity.connectionNotSecure "Połączenie nie jest bezpieczne">
 <!ENTITY identity.connectionFile "Strona wczytana z tego komputera">
-<!ENTITY identity.connectionVerified "Program &brandShortName; pozytywnie zweryfikował zabezpieczenia połączenia z tą stroną, prowadzoną przez:">
+<!ENTITY identity.connectionVerified1 "Połączenie bezpieczne, strona prowadzona przez:">
 <!ENTITY identity.connectionInternal "To jest strona programu &brandShortName;.">
+<!ENTITY identity.insecureLoginForms "Dane logowania nie są chronione">
 
 <!ENTITY identity.activeBlocked "&brandShortName; zablokował elementy tej strony, które nie były przesłane w sposób bezpieczny.">
 <!ENTITY identity.passiveLoaded "Niektóre elementy tej strony (np. obrazki) nie były przesłane w sposób bezpieczny.">
@@ -627,6 +634,7 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY identity.weakEncryption "Strona używa słabego szyfrowania.">
 
 <!ENTITY identity.description.insecure "Prywatność podczas łączenia się z tą stroną nie jest chroniona. Przesyłane informacje (np. hasła, wiadomości, numery kart) mogą być dostępne dla innych.">
+<!ENTITY identity.description.insecureLoginForms "Dane logowania wprowadzone na tej strone nie są bezpieczne i mogą być dostępne dla innych.">
 <!ENTITY identity.description.weakCipher "Połączenie z tą stroną nie zapewnia prywatności, ponieważ szyfrowanie nie jest wystarczające.">
 <!ENTITY identity.description.weakCipher2 "Informacje na stronie mogą być dostępne dla innych a jej działanie modyfikowane.">
 <!ENTITY identity.description.activeBlocked "Firefox zablokował elementy tej strony, które nie były przesłane w sposób bezpieczny.">
@@ -644,6 +652,7 @@ you can use these alternative items. Otherwise, their values should be empty. --
 
 <!ENTITY identity.moreInfoLinkText2 "Więcej informacji…">
 <!ENTITY identity.permissions "Uprawnienia">
+<!ENTITY identity.permissionsEmpty "Strona korzysta z domyślnych uprawnień.">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
@@ -652,10 +661,9 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!-- LOCALIZATION NOTE (syncTabsMenu.label): This appears in the history menu -->
 <!ENTITY syncTabsMenu2.label     "Karty z innych urządzeń">
 
-<!ENTITY syncBrand.shortName.label  "Sync">
-
-<!ENTITY syncSetup.label              "Skonfiguruj usługę &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey          "S">
+<!ENTITY syncBrand.shortName.label "Firefox Sync">
+<!ENTITY syncSignIn.label "Zaloguj się do &syncBrand.shortName.label;…">
+<!ENTITY syncSignIn.accesskey "s">
 <!ENTITY syncSyncNowItem.label        "Synchronizuj teraz">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label "Zaloguj się ponownie do &syncBrand.shortName.label;…">
@@ -721,7 +729,7 @@ you can use these alternative items. Otherwise, their values should be empty. --
 
 <!ENTITY trackingProtection.title "Ochrona przed śledzeniem">
 <!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; blokuje elementy strony mogące śledzić Twoją aktywność w sieci.">
-<!ENTITY trackingProtection.detectedNotBlocked3 "Strona zawiera elementy mogące śledzić Twoją aktywność w sieci, jednak ochona przed nimi została wyłączona.">
+<!ENTITY trackingProtection.detectedNotBlocked3 "Strona zawiera elementy mogące śledzić Twoją aktywność w sieci, jednak ochrona przed nimi została wyłączona.">
 <!ENTITY trackingProtection.notDetected3 "Nie wykryto elementów śledzących aktywność użytkownika na tej stronie.">
 <!ENTITY trackingProtection.unblock.label "Wyłącz ochronę dla tej strony">
 <!ENTITY trackingProtection.unblock.accesskey "W">
@@ -740,7 +748,7 @@ you can use these alternative items. Otherwise, their values should be empty. --
 <!ENTITY trackingContentBlocked.block.accesskey "W">
 <!ENTITY trackingContentBlocked.disabled.message "Ochrona przed śledzeniem jest wyłączona">
 
-<!ENTITY pointerLock.notification.message "Naciśnij ESC w dowolnej chwili, aby wyświetlić go ponownie.">
+<!ENTITY pointerLock.notification.message "Naciśnij Esc w dowolnej chwili, aby wyświetlić go ponownie.">
 
 <!ENTITY pluginNotification.showAll.label "Wyświetl wszystkie">
 <!ENTITY pluginNotification.showAll.accesskey "W">
@@ -772,7 +780,7 @@ you can use these alternative items. Otherwise, their values should be empty. --
 
 <!ENTITY processHang.terminateScript.label "Zatrzymaj skrypt">
 <!ENTITY processHang.terminateScript.accessKey "Z">
-<!ENTITY processHang.debugScript.label "Debuguj Skrypt">
+<!ENTITY processHang.debugScript.label "Debuguj skrypt">
 <!ENTITY processHang.debugScript.accessKey "D">
 <!ENTITY processHang.terminatePlugin.label "Zabij wtyczkę">
 <!ENTITY processHang.terminatePlugin.accessKey "w">

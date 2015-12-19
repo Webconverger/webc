@@ -112,12 +112,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Meld aan by &syncBrand.shortName.label;">
 <!ENTITY fxaSignedIn.tooltip "Open &syncBrand.shortName.label;-voorkeure">
 <!ENTITY fxaSignInError.label "Herkoppel aan &syncBrand.shortName.label;">
+
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; geaktiveer">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; sal binnekort begin sinchroniseer.">
-<!ENTITY syncErrorPanel.heading "Kan nie koppel aan &syncBrand.shortName.label; nie">
-<!ENTITY syncErrorPanel.subTitle "Meld aan om voort te gaan met sinkronisasie.">
-<!ENTITY syncErrorPanel.signInButton.label "Meld aan">
-<!ENTITY syncErrorPanel.signInButton.accesskey "M">
 
 
 <!ENTITY fullScreenMinimize.tooltip "Minimeer">
@@ -127,8 +124,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "V">
 <!ENTITY fullScreenExit.label "Sluit volskermmodus af">
 <!ENTITY fullScreenExit.accesskey "v">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
 
-<!ENTITY fullscreenExitHint2.value "Druk enige tyd ESC om te verlaat.">
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "beslaan nou die volle skerm">
+<!ENTITY fullscreenWarning.generic.label "Dié dokument beslaan nou die volle skerm">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Verlaat volskerm (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Verlaat volskerm (esc)">
 <!ENTITY leaveDOMFullScreen.label "Verlaat volskerm">
 <!ENTITY leaveDOMFullScreen.accesskey "o">
 
@@ -395,8 +404,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Wil u die soek-ervaring verbeter met voorstelle?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Meer inligting…">
+
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Nee">
+
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Ja">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "j">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -431,7 +443,7 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      These two strings are used to build the header above the list of one-click
      search providers:  "Search for <used typed keywords> with:" -->
 
-<!ENTITY searchFor.label              "Soek  ">
+<!ENTITY searchFor.label              "Soek ">
 <!ENTITY searchWith.label             " met:">
 <!-- LOCALIZATION NOTE (search.label, searchAfter.label):
      This string is used to build the header above the list of one-click search
@@ -452,6 +464,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
 <!ENTITY changeSearchSettings.button  "Verander soekinstellings">
+
+<!ENTITY searchInNewTab.label         "Soek in nuwe oortjie">
+<!ENTITY searchInNewTab.accesskey     "t">
+<!ENTITY searchSetAsDefault.label     "Stel as verstek-soekenjin">
+<!ENTITY searchSetAsDefault.accesskey "v">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -642,6 +659,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY closeCmd.key                   "W">  
 <!ENTITY closeCmd.accesskey             "S">
 
+<!ENTITY toggleMuteCmd.key              "M">
 
 <!ENTITY pageStyleMenu.label "Bladsystyl">
 <!ENTITY pageStyleMenu.accesskey "t">
@@ -686,8 +704,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Beveiligde verbinding">
 <!ENTITY identity.connectionNotSecure "Verbinding is nié beveilig nie">
 <!ENTITY identity.connectionFile "Dié blad word op u rekenaar gestoor.">
-<!ENTITY identity.connectionVerified "&brandShortName; het geverifieer dat u veilig verbind is met dié werf, aangebied deur:">
+<!ENTITY identity.connectionVerified1 "U is veilig verbind aan dié werf, aangebied deur:">
 <!ENTITY identity.connectionInternal "Hierdie is 'n beveiligde &brandShortName;-bladsy.">
+<!ENTITY identity.insecureLoginForms "Die aanmelding kan gekompromitteer word.">
 <!-- Strings for connection state warnings. -->
 
 <!ENTITY identity.activeBlocked "&brandShortName; het dele van dié blad geblok wat nie beveilig is nie.">
@@ -697,6 +716,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!-- Strings for connection state warnings in the subview. -->
 
 <!ENTITY identity.description.insecure "U verbinding aan dié werf is nie privaat nie. Inligting wat ingedien word kan deur ander gesien word (bv. wagwoorde, boodskappe, kredietkaartnommers, ens.)">
+<!ENTITY identity.description.insecureLoginForms "Die aanmeldinligting wat u op hierdie bladsy intik, is nie beveilig nie en kan gekompromitteer word. ">
 <!ENTITY identity.description.weakCipher "U verbinding aan dié werf gebruik swak enkripsie en is nie privaat nie.">
 <!ENTITY identity.description.weakCipher2 "Ander mense kan u inligting sien of die webwerf se gedrag verander.">
 <!ENTITY identity.description.activeBlocked "&brandShortName; het dele van dié blad geblok wat nie beveilig is nie.">
@@ -715,6 +735,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2 "Meer inligting">
 
 <!ENTITY identity.permissions "Toestemming">
+<!ENTITY identity.permissionsEmpty "U het geen spesiale toestemming aan dié werf gegee nie. ">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -725,8 +746,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "Sync">
 
-<!ENTITY syncSetup.label              "Stel &syncBrand.shortName.label; op…">
-<!ENTITY syncSetup.accesskey          "Y">
+<!ENTITY syncSignIn.label             "Meld aan by &syncBrand.shortName.label;…">
+
 <!ENTITY syncSyncNowItem.label        "Sinkroniseer nou">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label         "Herkoppel aan &syncBrand.shortName.label;…">
@@ -892,6 +913,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY browserContentToolboxMenu.label     "Browser Content Toolbox">
 <!ENTITY devToolboxMenuItem.keytext        "I">
 <!ENTITY editBookmark.removeBookmark.accessKey       "R">
+<!ENTITY fxaUnverified.label "Verify Your Account">
 <!ENTITY mirrorTabCmd.accesskey "m">
 <!ENTITY mirrorTabCmd.label "Mirror Tab">
 <!ENTITY newNonRemoteWindow.label   "New Non-e10s Window">
@@ -908,5 +930,6 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY saveToPocketCmd.label     "Save Page to Pocket">
 <!ENTITY social.chatBar.accesskey "c">
 <!ENTITY social.chatBar.label "Focus chats">
-
-<!ENTITY toggleMuteCmd.key              "M">
+<!ENTITY syncSignIn.accesskey         "Y">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "l">

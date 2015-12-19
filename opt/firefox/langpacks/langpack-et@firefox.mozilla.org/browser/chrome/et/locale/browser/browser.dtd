@@ -112,12 +112,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label                         "Logi &syncBrand.shortName.label;i sisse">
 <!ENTITY fxaSignedIn.tooltip                     "Ava &syncBrand.shortName.label;i sätted">
 <!ENTITY fxaSignInError.label                    "Ühenda &syncBrand.shortName.label;iga uuesti">
+<!ENTITY fxaUnverified.label                     "Kinnita oma konto">
 <!ENTITY syncStartPanel2.heading                 "&syncBrand.shortName.label; on lubatud">
 <!ENTITY syncStartPanel2.subTitle                "&brandShortName; alustab kohe sünkroniseerimist.">
-<!ENTITY syncErrorPanel.heading                  "Pole võimalik &syncBrand.shortName.label;iga ühendada">
-<!ENTITY syncErrorPanel.subTitle                 "Sünkroniseerimise jätkamiseks logi palun sisse.">
-<!ENTITY syncErrorPanel.signInButton.label       "Logi sisse">
-<!ENTITY syncErrorPanel.signInButton.accesskey   "L">
 
 
 <!ENTITY fullScreenMinimize.tooltip              "Minimeeri">
@@ -128,7 +125,19 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.label                    "Välju täisekraanirežiimist">
 <!ENTITY fullScreenExit.accesskey                "V">
 
-<!ENTITY fullscreenExitHint2.value               "Väljumiseks võid igal ajal vajutada klahvi ESC.">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
+<!ENTITY fullscreenWarning.beforeDomain.label    "Sait">
+<!ENTITY fullscreenWarning.afterDomain.label     "on nüüd täisekraanirežiimis">
+<!ENTITY fullscreenWarning.generic.label         "See dokument on nüüd täisekraanirežiimis">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button                "Välju täisekraanirežiimist (Esc)">
+<!ENTITY exitDOMFullscreenMac.button             "Välju täisekraanirežiimist (esc)">
 <!ENTITY leaveDOMFullScreen.label                "Välju täisekraanirežiimist">
 <!ENTITY leaveDOMFullScreen.accesskey            "t">
 
@@ -397,8 +406,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "Kas soovid oma otsinguid soovituste abil paremaks muuta?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Rohkem teavet…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "R">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "Ei">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "E">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Jah">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "J">
 
 <!-- 
   Comment duplicated from browser-sets.inc:
@@ -454,6 +466,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
 <!ENTITY changeSearchSettings.button             "Muuda otsingu sätteid">
+
+<!ENTITY searchInNewTab.label                    "Soorita otsing uuel kaardil">
+<!ENTITY searchInNewTab.accesskey                "S">
+<!ENTITY searchSetAsDefault.label                "Määra vaikeotsingumootoriks">
+<!ENTITY searchSetAsDefault.accesskey            "M">
 
 <!ENTITY tabView.commandkey                      "e">
 
@@ -688,8 +705,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure               "Turvaline ühendus">
 <!ENTITY identity.connectionNotSecure            "Ebaturvaline ühendus">
 <!ENTITY identity.connectionFile                 "See leht on loodud arvutisse salvestatud faili põhjal.">
-<!ENTITY identity.connectionVerified             "&brandShortName; verifitseeris turvalise ühenduse selle saidiga, mida hooldab ">
+<!ENTITY identity.connectionVerified1            "Ühenduse selle saidiga on turvaline. Saiti hooldab ">
 <!ENTITY identity.connectionInternal             "See on turvaline &brandShortName;i leht.">
+<!ENTITY identity.insecureLoginForms             "Sinu kasutajakonto andmed võivad ohus olla.">
 
 <!-- Strings for connection state warnings. -->
 <!ENTITY identity.activeBlocked                  "&brandShortName; blokkis sellel lehel mõned ebaturvalised osad.">
@@ -699,6 +717,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!-- Strings for connection state warnings in the subview. -->
 <!ENTITY identity.description.insecure           "Ühendus selle saidiga pole privaatne. Edastatavaid andmeid (nt paroolid, sõnumid, krediitkaardi andmed jne) võivad näha ka teised.">
+<!ENTITY identity.description.insecureLoginForms "Sisestatud kasutajakonto andmed pole turvalise ühendusega kaitstud ja võivad seetõttu ohus olla.">
 <!ENTITY identity.description.weakCipher         "Ühendus selle saidiga on turvatud nõrga krüpteeringuga ja pole seetõttu privaatne.">
 <!ENTITY identity.description.weakCipher2        "Teised inimesed saavad vaadata sinu andmeid või muuta veebilehe käitumist.">
 <!ENTITY identity.description.activeBlocked      "&brandShortName; blokkis selle lehe ebaturvalised osad.">
@@ -717,6 +736,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2              "Rohkem teavet">
 
 <!ENTITY identity.permissions                    "Õigused">
+<!ENTITY identity.permissionsEmpty               "Sellele saidile pole tagatud ühtki eriõigust.">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
@@ -727,8 +747,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label               "Sync">
 
-<!ENTITY syncSetup.label                         "Seadista &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey                     "y">
+<!ENTITY syncSignIn.label                        "Logi &syncBrand.shortName.label;i sisse…">
+<!ENTITY syncSignIn.accesskey                    "y">
 <!ENTITY syncSyncNowItem.label                   "Sünkroniseeri kohe">
 <!ENTITY syncSyncNowItem.accesskey               "S">
 <!ENTITY syncReAuthItem.label                    "Ühenda &syncBrand.shortName.label; uuesti…">

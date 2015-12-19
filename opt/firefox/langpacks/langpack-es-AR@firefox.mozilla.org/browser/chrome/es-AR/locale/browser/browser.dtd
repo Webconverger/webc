@@ -112,12 +112,9 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fxaSignIn.label "Ingresar a &syncBrand.shortName.label;">
 <!ENTITY fxaSignedIn.tooltip "Abrir preferencias de &syncBrand.shortName.label;">
 <!ENTITY fxaSignInError.label "Reconectar a &syncBrand.shortName.label;">
+<!ENTITY fxaUnverified.label "Verifique su cuenta">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; habilitado">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; comenzará a sincronizar momentáneamente.">
-<!ENTITY syncErrorPanel.heading "No se puede conectar a &syncBrand.shortName.label;">
-<!ENTITY syncErrorPanel.subTitle "Ingrese para continuar sincronización.">
-<!ENTITY syncErrorPanel.signInButton.label "Ingresar">
-<!ENTITY syncErrorPanel.signInButton.accesskey "s">
 
 <!ENTITY fullScreenMinimize.tooltip "Minimizar">
 <!ENTITY fullScreenRestore.tooltip "Restaurar">
@@ -127,9 +124,21 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenExit.label "Salir de pantalla completa">
 <!ENTITY fullScreenExit.accesskey "S">
 
-<!ENTITY fullscreenExitHint2.value "Pulse ESC en cualquier momento para salir.">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "ahora está en pantalla completa">
+<!ENTITY fullscreenWarning.generic.label "Este documento está ahora en pantalla completa">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "Salir de pantalla completa (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "Salir de pantalla completa (esc)">
 <!ENTITY leaveDOMFullScreen.label "Salir de pantalla completa">
-<!ENTITY leaveDOMFullScreen.accesskey "S">
+<!ENTITY leaveDOMFullScreen.accesskey "e">
 
 <!ENTITY closeWindow.label "Cerrar ventana">
 <!ENTITY closeWindow.accesskey "C">
@@ -400,8 +409,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "¿Desea mejorar la experienca de búsquedas con sugerencias?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "Conocer más…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "c">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "No">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "Sí">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "S">
 
 <!-- 
   Comment duplicated from browser-sets.inc:
@@ -454,6 +466,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      them when the user has not typed any keyword. -->
 <!ENTITY searchWithHeader.label       "Buscar con:">
 <!ENTITY changeSearchSettings.button  "Cambiar configuración de búsqueda">
+
+<!ENTITY searchInNewTab.label         "Buscar en nueva pestaña">
+<!ENTITY searchInNewTab.accesskey     "T">
+<!ENTITY searchSetAsDefault.label     "Configurar como buscador predeterminado">
+<!ENTITY searchSetAsDefault.accesskey "D">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -691,8 +708,9 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "Conexión segura">
 <!ENTITY identity.connectionNotSecure "Conexión insegura">
 <!ENTITY identity.connectionFile "Esta página está guardada en su computadora.">
-<!ENTITY identity.connectionVerified "&brandShortName; verificó que está en una conexión segura a este sitio, provisto por:">
+<!ENTITY identity.connectionVerified1 "Está conectado de forma segura a este sitio, provisto por:">
 <!ENTITY identity.connectionInternal "Esta es una página de &brandShortName; segura.">
+<!ENTITY identity.insecureLoginForms "El ingreso puede estar comprometido.">
 
 <!-- Strings for connection state warnings. -->
 <!ENTITY identity.activeBlocked "&brandShortName; ha bloqueado partes de esta página que no son seguras.">
@@ -702,6 +720,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!-- Strings for connection state warnings in the subview. -->
 <!ENTITY identity.description.insecure "La conexión a este sitio no es privada. La información que envíe puede ser vista por otros (como contraseñas, mensajes, tarjetas de crédito, etc.).">
+<!ENTITY identity.description.insecureLoginForms "La información de ingreso que se usó en esta página no es segura puede estar comprometida.">
 <!ENTITY identity.description.weakCipher "La conexión a este sitio usa cifrado débil y no es privada.">
 <!ENTITY identity.description.weakCipher2 "Otras personas pueden ver la información o modificar el comportamiento del sitio.">
 <!ENTITY identity.description.activeBlocked "&brandShortName; ha bloqueado partes de esta página que no son seguras.">
@@ -720,6 +739,7 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.moreInfoLinkText2 "Más información">
 
 <!ENTITY identity.permissions "Permisos">
+<!ENTITY identity.permissionsEmpty "No ha dado permisos especiales a este sitio.">
 
 <!-- Name for the tabs toolbar as spoken by screen readers.
 The word "toolbar" is appended automatically and should not be contained below! -->
@@ -730,8 +750,8 @@ The word "toolbar" is appended automatically and should not be contained below! 
 
 <!ENTITY syncBrand.shortName.label  "Sync">
 
-<!ENTITY syncSetup.label              "Configurar &syncBrand.shortName.label;…">
-<!ENTITY syncSetup.accesskey          "Y">
+<!ENTITY syncSignIn.label             "Ingresar a &syncBrand.shortName.label;…">
+<!ENTITY syncSignIn.accesskey         "Y">
 <!ENTITY syncSyncNowItem.label        "Sincronizar ahora">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label         "Reconectar a &syncBrand.shortName.label;…">
