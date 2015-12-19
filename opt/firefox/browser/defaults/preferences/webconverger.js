@@ -93,3 +93,6 @@ pref("privacy.trackingprotection.pbmode.enabled", false);
 // https://wiki.mozilla.org/Addons/Extension_Signing
 // Can be removed from Firefox 44, assuming that we figure out how to get our addon signed
 pref("xpinstall.signatures.required", false);
+
+// http://kb.mozillazine.org/Browser.search.suggest.enabled
+pref("browser.search.suggest.enabled",           false);
