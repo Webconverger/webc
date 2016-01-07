@@ -10,7 +10,7 @@ suids="
 /bin/ping
 /bin/su
 /usr/bin/sudo
-/usr/bin/X
+/usr/lib/xorg/Xorg.wrap
 "
 
 for s in $suids; do
