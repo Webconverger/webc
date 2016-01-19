@@ -21,7 +21,7 @@
 	,"DEBPKG:debian/deprecate-with-apt - http://bugs.debian.org/747628 Point users to Debian packages of deprecated core modules"
 	,"DEBPKG:debian/squelch-locale-warnings - http://bugs.debian.org/508764 Squelch locale warnings in Debian package maintainer scripts"
 	,"DEBPKG:debian/skip-upstream-git-tests - Skip tests specific to the upstream Git repository"
-	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.20.2-3+deb8u1 in patchlevel.h"
+	,"DEBPKG:debian/patchlevel - http://bugs.debian.org/567489 List packaged patches for 5.20.2-3+deb8u2 in patchlevel.h"
 	,"DEBPKG:debian/skip-kfreebsd-crash - http://bugs.debian.org/628493 [perl #96272] Skip a crashing test case in t/op/threads.t on GNU/kFreeBSD"
 	,"DEBPKG:fixes/document_makemaker_ccflags - http://bugs.debian.org/628522 [rt.cpan.org #68613] Document that CCFLAGS should include $Config{ccflags}"
 	,"DEBPKG:debian/find_html2text - http://bugs.debian.org/640479 Configure CPAN::Distribution with correct name of html2text"
@@ -40,3 +40,4 @@
 	,"DEBPKG:fixes/failed_require_diagnostics - http://bugs.debian.org/781120 [perl #123270] Report inaccesible file on failed require"
 	,"DEBPKG:fixes/array-cloning - http://bugs.debian.org/779357 [perl #124127] [902d169] fix cloning arrays with unused elements"
 	,"DEBPKG:fixes/perldb-threads - http://bugs.debian.org/779357 [perl #124127] [41ef2c6] lib/perl5db.pl: Restore noop lock prototype"
+	,"DEBPKG:fixes/CVE-2015-8607_file_spec_taint_fix - ensure File::Spec::canonpath() preserves taint"

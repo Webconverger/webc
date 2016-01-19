@@ -78,9 +78,9 @@ sub header_files {
 #
 ## Package name      : perl5
 ## Source directory  : .
-## Configuration time: Sun May  3 17:18:14 UTC 2015
+## Configuration time: Fri Jan  1 17:46:50 UTC 2016
 ## Configured by     : Debian Project
-## Target system     : linux babin 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt9-3~deb8u1 (2015-04-24) i686 gnulinux 
+## Target system     : linux x86-csail-01 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt20-1+deb8u1 (2015-12-14) i686 gnulinux 
 #
 #: Configure command line arguments.
 #
@@ -204,7 +204,7 @@ ccsymbols=''
 ccversion=''
 cf_by='Debian Project'
 cf_email='perl@packages.debian.org'
-cf_time='Sun May  3 17:18:14 UTC 2015'
+cf_time='Fri Jan  1 17:46:50 UTC 2016'
 charbits='8'
 charsize='1'
 chgrp=''
@@ -1014,7 +1014,7 @@ mv=''
 myarchname='i686-linux'
 mydomain=''
 myhostname='localhost'
-myuname='linux babin 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt9-3~deb8u1 (2015-04-24) i686 gnulinux '
+myuname='linux x86-csail-01 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt20-1+deb8u1 (2015-12-14) i686 gnulinux '
 n='-n'
 need_va_copy='undef'
 netdb_hlen_type='size_t'
