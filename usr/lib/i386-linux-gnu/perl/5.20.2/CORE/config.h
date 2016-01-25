@@ -9,9 +9,9 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Fri Jan  1 17:46:50 UTC 2016
+ * Configuration time: Fri Jan 15 04:24:23 UTC 2016
  * Configured by     : Debian Project
- * Target system     : linux x86-csail-01 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt20-1+deb8u1 (2015-12-14) i686 gnulinux 
+ * Target system     : linux x86-grnet-01 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt20-1+deb8u2 (2016-01-02) i686 gnulinux 
  */
 
 #ifndef _config_h_
