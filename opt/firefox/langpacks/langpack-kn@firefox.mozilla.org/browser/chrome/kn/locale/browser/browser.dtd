@@ -61,14 +61,14 @@ can reach it easily. -->
 displayed on OS X, and only on windows that aren't main browser windows, or
 when there are no windows but Firefox is still running. -->
 <!ENTITY openLocationCmd.label "ತಾಣವನ್ನು ತೆರೆ…">
-<!ENTITY openFileCmd.label "Open ಕಡತ…">
+<!ENTITY openFileCmd.label "ಕಡತವನ್ನು ತೆರೆ…">
 <!ENTITY openFileCmd.accesskey "O">
 <!ENTITY openFileCmd.commandkey "o">
 <!ENTITY printSetupCmd.label "ಪುಟದ Setup…">
 <!ENTITY printSetupCmd.accesskey "u">
 <!ENTITY printPreviewCmd.label "ಮುದ್ರಣ ಮುನ್ನೋಟ">
 <!ENTITY printPreviewCmd.accesskey "v">
-<!ENTITY printCmd.label "Print…">
+<!ENTITY printCmd.label "ಮುದ್ರಿಸು...">
 <!ENTITY printCmd.accesskey "P">
 <!ENTITY printCmd.commandkey "p">
 
@@ -110,14 +110,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY showAllTabsCmd.accesskey "A">
 
 <!ENTITY fxaSignIn.label "&syncBrand.shortName.label; ಗೆ ಸೈನ್-ಇನ್ ಆಗು">
-<!ENTITY fxaSignedIn.tooltip "ತೆಗೆ &syncBrand.shortName.label; ಇಚ್ಛೆಗಳು">
+<!ENTITY fxaSignedIn.tooltip "&syncBrand.shortName.label; ಇಚ್ಛೆಗಳು ತೆರೆ">
 <!ENTITY fxaSignInError.label "&syncBrand.shortName.label; ಗೆ ಮತ್ತೆ ಸಂಪರ್ಕ ಹೊಂದು">
+<!ENTITY fxaUnverified.label "ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ">
 <!ENTITY syncStartPanel2.heading "&syncBrand.shortName.label; ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ">
 <!ENTITY syncStartPanel2.subTitle "&brandShortName; ಸ್ವಲ್ಪದರಲ್ಲಿ ಸಿಂಕ್ ಆಗಲು ಪ್ರಾರಂಭಿಸುವುದು.">
-<!ENTITY syncErrorPanel.heading "&syncBrand.shortName.label; ಗೆ ಸಂಪರ್ಕಗೊಳ್ಳಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ">
-<!ENTITY syncErrorPanel.subTitle "ಸಿಂಕ್ ಪುನರಾರಂಭಿಸಲು ದಯವಿಟ್ಟು ಸೈನ್-ಇನ್ ಆಗಿ.">
-<!ENTITY syncErrorPanel.signInButton.label "Sign In">
-<!ENTITY syncErrorPanel.signInButton.accesskey "S">
 
 
 <!ENTITY fullScreenMinimize.tooltip "ಕುಗ್ಗಿಸು">
@@ -127,8 +124,20 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY fullScreenAutohide.accesskey "H">
 <!ENTITY fullScreenExit.label "ಪೂರ್ಣತೆರೆಯ ವಿಧಾನದಿಂದ ಹೊರನಡೆ">
 <!ENTITY fullScreenExit.accesskey "F">
+<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
+     fullscreenWarning.afterDomain.label): these two strings are used
+     respectively before and after the domain requiring fullscreen.
+     Localizers can use one of them, or both, to better adapt this
+     sentence to their language. -->
 
-<!ENTITY fullscreenExitHint2.value "ಯಾವುದೆ ಸಮಯದಲ್ಲಿ ನಿರ್ಗಮಿಸಲು ESC ಅನ್ನು ಒತ್ತಿ">
+<!ENTITY fullscreenWarning.beforeDomain.label "">
+<!ENTITY fullscreenWarning.afterDomain.label "ಈಗ ಪೂರ್ಣ ತೆರೆಯಲ್ಲಿದೆ">
+<!ENTITY fullscreenWarning.generic.label "ಈ ದಸ್ತಾವೇಜು ಈಗ ಪೂರ್ಣ ತೆರೆಯಲ್ಲಿದೆ">
+<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
+     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
+     is uppercase, while on Mac keyboards it is lowercase -->
+<!ENTITY exitDOMFullscreen.button "ಪೂರ್ಣತೆರೆಯಿಂದ ನಿರ್ಗಮಿಸು (Esc)">
+<!ENTITY exitDOMFullscreenMac.button "ಪೂರ್ಣತೆರೆಯಿಂದ ನಿರ್ಗಮಿಸು (esc)">
 <!ENTITY leaveDOMFullScreen.label "ಪೂರ್ಣತೆರೆಯಿಂದ ನಿರ್ಗಮಿಸು">
 <!ENTITY leaveDOMFullScreen.accesskey "u">
 
@@ -180,7 +189,35 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY printButton.label            "ಮುದ್ರಿಸು">
 <!ENTITY printButton.tooltip          "ಈ ಪುಟವನ್ನು ಮುದ್ರಿಸು">
 
-<!ENTITY locationItem.title           "ಸ್ಥಳ">
+<!ENTITY urlbar.viewSiteInfo.label                      "ತಾಣದ ಮಾಹಿತಿಯನ್ನು ನೋಡಿ">
+<!-- LOCALIZATION NOTE: all of the following urlbar NotificationAnchor.label strings are
+     used to provide accessible labels to users of assistive technology like screenreaders.
+     It is not possible to see them visually in the UI. -->
+<!ENTITY urlbar.defaultNotificationAnchor.label         "ಒಂದು ಸೂಚನೆಯನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.geolocationNotificationAnchor.label     "ಸ್ಥಳದ ಮನವಿಯನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.addonsNotificationAnchor.label          "ಆಡ್-ಆನ್ ಅನುಸ್ಥಾಪನಾ ಚಿತ್ರವನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.indexedDBNotificationAnchor.label       "ಆ‌್ಯಪ್‌-ಆಫ್‌ಲೈನ್ ಶೇಖರಣೆ ಸಂದೇಶವನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.loginFillNotificationAnchor.label       "ನಿಮ್ಮ ಲಾಗಿನ್ ಮಾಹಿತಿಯನ್ನು ನಿರ್ವಹಿಸಿ">
+<!ENTITY urlbar.passwordNotificationAnchor.label        "ನಿಮ್ಮ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಲು ಬಯಸಿದಲ್ಲಿ ಇದಕ್ಕೆ ಗುರುತುಹಾಕಿ">
+<!ENTITY urlbar.webappsNotificationAnchor.label         "ಆ‌್ಯಪ್‌ ಅನುಸ್ಥಾಪನಾ ಸಂದೇಶವನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.pluginsNotificationAnchor.label         "ಈ ಪುಟದಲ್ಲಿ ಪ್ಲಗ್‌ಇನ್ ಬಳಕೆಯನ್ನು ನಿರ್ವಹಿಸಿ">
+<!ENTITY urlbar.webNotsNotificationAnchor.label         "ತಾಣವು ನಿಮಗೆ ಸೂಚನೆಗಳನ್ನು ತೋರಿಸಬಹುದೆ ಎಂಬುದನ್ನು ಬದಲಾಯಿಸಿ">
+
+<!ENTITY urlbar.webRTCShareDevicesNotificationAnchor.label      "ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ ಮತ್ತು ಮೈಕ್ರೊಫೋನ್ ಅನ್ನು ನೀವು ಪ್ರಸಕ್ತ ಹಂಚಿಕೊಂಡಿರುವ ತಾಣಗಳನ್ನು ತೋರಿಸು">
+<!ENTITY urlbar.webRTCSharingDevicesNotificationAnchor.label    "ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ ಮತ್ತು/ಅಥವ ಮೈಕ್ರೊಫೋನ್ ಅನ್ನು ಈ ತಾಣದೊಂದಿಗೆ ಹಂಚಿಕೊಂಡಿದ್ದೀರಿ">
+<!ENTITY urlbar.webRTCShareMicrophoneNotificationAnchor.label   "ಈ ತಾಣದೊಂದಿಗೆ ನಿಮ್ಮ ಮೈಕ್ರೊಫೋನ್‌ ಅನ್ನು ಹಂಚಿಕೊಳ್ಳುವುದನ್ನು ನಿರ್ವಹಿಸಿ">
+<!ENTITY urlbar.webRTCSharingMicrophoneNotificationAnchor.label "ನೀವು ನಿಮ್ಮ ಮೈಕ್ರೊಫೋನ್ ಅನ್ನು ತಾಣದೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳುತ್ತಿದ್ದೀರಿ">
+<!ENTITY urlbar.webRTCShareScreenNotificationAnchor.label       "ನಿಮ್ಮ ಕಿಟಿಗಳನ್ನು ಅಥವ ತೆರೆಯನ್ನು ತಾಣದೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳುವುದನ್ನು ನಿರ್ವಹಿಸಿ">
+<!ENTITY urlbar.webRTCSharingScreenNotificationAnchor.label     "ನೀವು ಒಂದು ಕಿಟಕಿ ಅಥವ ಒಂದು ತೆರೆಯನ್ನು ತಾಣದೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳುತ್ತಿದ್ದೀರಿ">
+
+<!ENTITY urlbar.pointerLockNotificationAnchor.label     "ತಾಣವು ಸೂಚಕವನ್ನು ನಿಭಾಯಿಸಬಲ್ಲದೆ ಎಂಬುದನ್ನು ಬದಲಾಯಿಸಿ">
+<!ENTITY urlbar.servicesNotificationAnchor.label        "ಸೇವೆ ಅನುಸ್ಥಾಪನಾ ಸಂದೇಶವನ್ನು ನೋಡಿ">
+<!ENTITY urlbar.translateNotificationAnchor.label       "ಈ ಪುಟವನ್ನು ಅನುವಾದಿಸು">
+<!ENTITY urlbar.translatedNotificationAnchor.label      "ಪುಟದ ಅನುವಾದವನ್ನು ನಿರ್ವಹಿಸಿ">
+<!ENTITY urlbar.emeNotificationAnchor.label             "DRM ತಂತ್ರಾಂಶವನ್ನು ನಿರ್ವಹಿಸಿ">
+
+<!ENTITY urlbar.openHistoryPopup.tooltip                "ಇತಿಹಾಸವನ್ನು ತೋರಿಸು">
+
 <!ENTITY searchItem.title             "ಹುಡುಕು">
 <!-- Toolbar items --> 
 
@@ -220,6 +257,8 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY addons.commandkey            "A">
 <!ENTITY webapps.label                "Apps">
 <!ENTITY webapps.accesskey            "p">
+<!ENTITY loopMenuItem.label           "ಒಂದು ಸಂಭಾಷಣೆಯನ್ನು ಆರಂಭಿಸು…">
+<!ENTITY loopMenuItem.accesskey       "t">
 
 <!ENTITY webDeveloperMenu.label       "ಜಾಲ ವಿಕಸನೆಗಾರ">
 <!ENTITY webDeveloperMenu.accesskey   "W">
@@ -279,8 +318,6 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY devToolbarCloseButton.tooltiptext "ವಿಕಸನೆಗಾರ ಉಪಕರಣವನ್ನು ಮುಚ್ಚು">
 <!ENTITY devToolbarMenu.label              "ವಿಕಸನೆಗಾರ ಉಪಕರಣ">
 <!ENTITY devToolbarMenu.accesskey          "v">
-<!ENTITY devAppMgrMenu.label               "App ವ್ಯವಸ್ಥಾಪಕ">
-<!ENTITY devAppMgrMenu.accesskey           "A">
 <!ENTITY webide.label                      "WebIDE">
 <!ENTITY webide.accesskey                  "W">
 <!ENTITY webide.keycode                    "VK_F8">
@@ -299,6 +336,16 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 
 <!ENTITY fileMenu.label         "ಕಡತ"> 
 <!ENTITY fileMenu.accesskey       "F">
+<!ENTITY newUserContext.label             "ಹೊಸ ಕಂಟೇನರ್ ಟ್ಯಾಬ್">
+<!ENTITY newUserContext.accesskey         "C">
+<!ENTITY userContextPersonal.label        "ವೈಯಕ್ತಿಕ">
+<!ENTITY userContextPersonal.accesskey    "P">
+<!ENTITY userContextWork.label            "ಕೆಲಸ">
+<!ENTITY userContextWork.accesskey        "W">
+<!ENTITY userContextBanking.label         "ಬ್ಯಾಂಕಿಂಗ್">
+<!ENTITY userContextBanking.accesskey     "B">
+<!ENTITY userContextShopping.label        "ಶಾಪಿಂಗ್">
+<!ENTITY userContextShopping.accesskey    "S">
 <!ENTITY newNavigatorCmd.label        "ಹೊಸ ಕಿಟಕಿ">
 <!ENTITY newNavigatorCmd.key        "N">
 <!ENTITY newNavigatorCmd.accesskey      "N">
@@ -391,14 +438,17 @@ These should match what Safari and other Apple applications use on OS X Lion. --
 <!ENTITY customizeMenu.addMoreItems.accesskey "‌">
 
 <!ENTITY openCmd.commandkey           "l">
-<!ENTITY urlbar.placeholder2          "ವಿಳಾಸವನ್ನು ಹುಡುಕು ಅಥವ ನಮೂದಿಸು">
+<!ENTITY urlbar.placeholder2          "ವಿಳಾಸವನ್ನು ಹುಡುಕು ಅಥವಾ ನಮೂದಿಸು">
 <!ENTITY urlbar.accesskey             "d">
 <!ENTITY urlbar.switchToTab.label     "ಟ್ಯಾಬ್‌ಗೆ ಬದಲಾಯಿಸು:">
 
 <!ENTITY urlbar.searchSuggestionsNotification.question "ನಿಮ್ಮ ಹುಡುಕುವ ಅನುಭವವನ್ನು ಸಲಹೆಗಳಿಂದ ಉತ್ತಮಗೊಳಿಸಲು ಬಯಸುವಿರಾ?">
 <!ENTITY urlbar.searchSuggestionsNotification.learnMore "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ…">
+<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "l">
 <!ENTITY urlbar.searchSuggestionsNotification.disable "ಇಲ್ಲ">
+<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
 <!ENTITY urlbar.searchSuggestionsNotification.enable "ಹೌದು">
+<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "y">
 <!-- 
   Comment duplicated from browser-sets.inc:
 
@@ -454,6 +504,11 @@ These should match what Safari and other Apple applications use on OS X Lion. --
      This string won't wrap, so if the translated string is longer,
      consider translating it as if it said only "Search Settings". -->
 <!ENTITY changeSearchSettings.button  "ಹುಡುಕು ಸಿದ್ಧತೆಗಳನ್ನು ಬದಲಾಯಿಸು">
+
+<!ENTITY searchInNewTab.label         "ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ಹುಡುಕು">
+<!ENTITY searchInNewTab.accesskey     "T">
+<!ENTITY searchSetAsDefault.label     "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್‌ ಆಗಿ ಹೊಂದಿಸು">
+<!ENTITY searchSetAsDefault.accesskey "D">
 
 <!ENTITY tabView.commandkey           "e">
 
@@ -689,30 +744,38 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY identity.connectionSecure "ಸುರಕ್ಷಿತ ಸಂಪರ್ಕ">
 <!ENTITY identity.connectionNotSecure "ಸಂಪರ್ಕವು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲ">
 <!ENTITY identity.connectionFile "ನಿಮ್ಮ ಗಣಕದಲ್ಲಿ ಈ ಪುಟವನ್ನು ಶೇಖರಿಸಿಡಲಾಗಿದೆ.">
-<!ENTITY identity.connectionVerified "ನೀವು ಈ ತಾಣಕ್ಕೆ ಸುರಕ್ಷಿತವಾಗಿ ಸಂಪರ್ಕ ಹೊಂದಿದ್ದೀರೆಂದು &brandShortName; ಪರಿಶೀಲಿಸಿದೆ, ನಿರ್ವಹಿಸಿರುವುದು:">
+<!ENTITY identity.connectionVerified1 "ಇವರಿಂದ ಚಲಾಯಿತಗೊಳ್ಳುವ ಈ ತಾಣಕ್ಕೆ ಸುರಕ್ಷಿತವಾಗಿ ಸಂಪರ್ಕಿತಗೊಂಡಿದ್ದೀರಿ:">
 <!ENTITY identity.connectionInternal "ಇದು ಸುರಕ್ಷಿತ &brandShortName; ಪುಟ">
+<!ENTITY identity.insecureLoginForms "ನಿಮ್ಮ ಲಾಗಿನ್ ಮಾಹಿತಿಯನ್ನು ಕದಿಯಲಾಗಿರಬಹುದು.">
 <!-- Strings for connection state warnings. -->
-<!ENTITY identity.passiveLoaded "ಪುಟದ ಕೆಲ ಭಾಗಗಳು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲ(ಚಿತ್ರಗಳಂತಹ).">
-<!ENTITY identity.activeLoaded "ಈ ಪುಟದಲ್ಲಿ ಸಂರಕ್ಷಣೆಯನ್ನು ನೀವು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿದ್ದೀರಿ.">
-<!ENTITY identity.weakEncryption "ಈ ಪುಟವು ನಿಶ್ಶಕ್ತ ಎನ್‌ಕ್ರಿಪ್ಷನ್ ನನ್ನು ಬಳಸುತ್ತದೆ.">
+
+<!ENTITY identity.activeBlocked "ಈ ಪುಟದ ಸುರಕ್ಷಿತವಲ್ಲದ ಕೆಲ ಭಾಗಗಳನ್ನು &brandShortName; ವು ನಿರ್ಬಂಧಿಸಿದೆ.">
+<!ENTITY identity.passiveLoaded "ಪುಟದ ಕೆಲ ಭಾಗಗಳು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲ(ಉದಾ. ಚಿತ್ರಗಳು).">
+<!ENTITY identity.activeLoaded "ಈ ಪುಟದಲ್ಲಿ ಸುರಕ್ಷತೆಯನ್ನು ನೀವು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿದ್ದೀರಿ.">
+<!ENTITY identity.weakEncryption "ಈ ಪುಟವು ದುರ್ಬಲ ಎನ್‌ಕ್ರಿಪ್ಷನ್‌ ಅನ್ನು ಬಳಸುತ್ತದೆ.">
 <!-- Strings for connection state warnings in the subview. -->
 
+<!ENTITY identity.description.insecure "ಈ ತಾಣಕ್ಕೆ ನಿಮ್ಮ ಸಂಪರ್ಕವು ಗೌಪ್ಯವಾಗಿಲ್ಲ. ನೀವು ಇಲ್ಲಿ ಸಲ್ಲಿಸುವ ಮಾಹಿತಿಯನ್ನು ಇತರರು ನೋಡಬಹುದು (ಗುಪ್ತಪದಗಳು, ಸಂದೇಶಗಳು ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು, ಇತರೆ.)">
+<!ENTITY identity.description.insecureLoginForms "ನೀವು ಇಲ್ಲಿ ದಾಖಲಿಸಿದ ಮಾಹಿತಿಯು ಸುರಕ್ಷಿತವಾಗಿರುವುದಿಲ್ಲ ಮತ್ತು ಅದನ್ನು ಇತರರು ನೋಡಬಹುದಾಗಿರುತ್ತದೆ.">
+<!ENTITY identity.description.weakCipher "ಈ ಜಾಲತಾಣಕ್ಕೆ ನಿಮ್ಮ ಸಂಪರ್ಕವು ದುರ್ಬಲ ಎನ್‌ಕ್ರಿಪ್ಷನ್ ಅನ್ನು ಬಳಸುತ್ತದೆ ಮತ್ತು ಖಾಸಗಿಯಾಗಿಲ್ಲ.">
+<!ENTITY identity.description.weakCipher2 "ಇತರೆ ವ್ಯಕ್ತಿಗಳು ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ನೋಡಬಹುದು ಅಥವಾ ಜಾಲತಾಣದ ವರ್ತನೆಯನ್ನು ಬದಲಾಯಿಸಬಹುದು.">
+<!ENTITY identity.description.activeBlocked "ಈ ಪುಟದ ಸುರಕ್ಷಿತವಲ್ಲದ ಕೆಲ ಭಾಗಗಳನ್ನು &brandShortName; ವು ನಿರ್ಬಂಧಿಸಿದೆ.">
+<!ENTITY identity.description.passiveLoaded "ನಿಮ್ಮ ಸಂಪರ್ಕ ಖಾಸಗಿಯಾಗಿಲ್ಲ ಮತ್ತು ನೀವು ತಾಣದ ಜೊತೆ ಹಂಚಿಕೊಳ್ಳುವ ಮಾಹಿತಿಯನ್ನು ಇತರರು ನೋಡಬಹುದು.">
+<!ENTITY identity.description.passiveLoaded2 "ಈ ತಾಣವು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲದ ಕೆಲವು ವಿಷಯಗಳನ್ನು ಒಳಗೊಂಡಿದೆ (ಉದಾ. ಚಿತ್ರಗಳು).">
+<!ENTITY identity.description.passiveLoaded3 "&brandShortName; ವು ಸುರಕ್ಷಿತವಲ್ಲದ ವಿಷಯವನ್ನು ನಿರ್ಬಂಧಿಸಿದ್ದರೂ ಸಹ, ಪುಟವು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲದ ವಿಷಯಗಳನ್ನು ಒಳಗೊಂಡಿದೆ (ಉದಾ. ಚಿತ್ರಗಳು).">
+<!ENTITY identity.description.activeLoaded "ಈ ತಾಣವು ಸುರಕ್ಷಿತವಾಗಿಲ್ಲದ ಕೆಲವು ವಿಷಯಗಳನ್ನು ಒಳಗೊಂಡಿದೆ (ಉದಾ. ಸ್ಕ್ರಿಪ್ಟ್‌) ಮತ್ತು ನಿಮ್ಮ ಸಂಪರ್ಕ ಖಾಸಗಿಯಾದುದಲ್ಲ.">
+<!ENTITY identity.description.activeLoaded2 "ನೀವು ಈ ತಾಣದ ಜೊತೆ ಹಂಚಿಕೊಳ್ಳುವ ಮಾಹಿತಿಯನ್ನು ಇತರರು ನೋಡಬಹುದು (ಗುಪ್ತಪದಗಳು, ಸಂದೇಶಗಳು ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು, ಇತರೆ.">
 
-
-
-
-
-
-
-
-
+<!ENTITY identity.enableMixedContentBlocking.label "ಸಂರಕ್ಷಣೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸು">
+<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
 <!ENTITY identity.disableMixedContentBlocking.label "ಸಂರಕ್ಷಣೆಯನ್ನು ಸಧ್ಯಕ್ಕೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು (D)">
 <!ENTITY identity.disableMixedContentBlocking.accesskey "D">
-
+<!ENTITY identity.learnMore "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ">
 
 <!ENTITY identity.moreInfoLinkText2 "ಹೆಚ್ಚಿನ ಮಾಹಿತಿ">
 
 <!ENTITY identity.permissions "ಅನುಮತಿಗಳು">
+<!ENTITY identity.permissionsEmpty "ನೀವು ಈ ತಾಣಕ್ಕೆ ಯಾವುದೆ ಅನುಮತಿಗಳನ್ನು ನೀಡಿಲ್ಲ.">
 <!-- Name for the tabs toolbar as spoken by screen readers.
      The word "toolbar" is appended automatically and should not be contained below! -->
 
@@ -723,8 +786,8 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 
 <!ENTITY syncBrand.shortName.label    "ಸಿಂಕ್‌">
 
-<!ENTITY syncSetup.label              "&syncBrand.shortName.label; ಅನ್ನು ಸಿದ್ಧಗೊಳಿಸಿ…">
-<!ENTITY syncSetup.accesskey          "Y">
+<!ENTITY syncSignIn.label             "&syncBrand.shortName.label; ಗೆ ಸೈನ್-ಇನ್ ಆಗು...">
+<!ENTITY syncSignIn.accesskey         "Y">
 <!ENTITY syncSyncNowItem.label        "ಈಗಲೆ ಸಿಂಕ್ ಮಾಡು">
 <!ENTITY syncSyncNowItem.accesskey    "S">
 <!ENTITY syncReAuthItem.label         "&syncBrand.shortName.label; ಗೆ Reconnect">
@@ -785,10 +848,11 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY getUserMedia.selectCamera.accesskey "C">
 <!ENTITY getUserMedia.selectMicrophone.label "ಹಂಚಲು ಮೈಕ್ರೊಫೋನ್:">
 <!ENTITY getUserMedia.selectMicrophone.accesskey "M">
-<!ENTITY getUserMedia.audioCapture.label "ಹಾಳೆಯಿಂದ ಆಡಿಯೋವನ್ನು ಹಂಚಲಾಗುತ್ತದೆ.">
+<!ENTITY getUserMedia.audioCapture.label "ಟ್ಯಾಬ್‌ನಿಂದ ಆಡಿಯೋವನ್ನು ಹಂಚಲಾಗುತ್ತದೆ.">
 <!ENTITY getUserMedia.allWindowsShared.message "ನಿಮ್ಮ ತೆರೆಯಲ್ಲಿರುವ ಎಲ್ಲಾ ಗೋಚರಿಸುವ ಕಿಟಕಿಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಲಾಗುತ್ತದೆ.">
 
-
+<!ENTITY trackingProtection.title "ಜಾಡು ಇರಿಸದಂತೆ ರಕ್ಷಣೆ">
+<!ENTITY trackingProtection.detectedBlocked3 "ನಿಮ್ಮ ಜಾಲವೀಕ್ಷಣೆಯ ಜಾಡನ್ನು ಇರಿಸಿಕೊಳ್ಳಬಹುದಾದ ಪುಟದ ಕೆಲವು ಭಾಗಗಳನ್ನು &brandShortName; ನಿರ್ಬಂಧಿಸುತ್ತಿದೆ.">
 
 
 <!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
@@ -881,61 +945,13 @@ you can use these alternative items. Otherwise, their values should be empty.  -
 <!ENTITY saveLinkToPocketCmd.accesskey "o">
 <!ENTITY pocketMenuitem.label      "ಪಾಕೆಟ್ ಪಟ್ಟಿಯನ್ನು ನೋಡಿ">
 
-<!-- LOCALIZATION NOTE (exitDOMFullscreen.button,
-     exitDOMFullscreenMac.button): the "escape" button on PC keyboards
-     is uppercase, while on Mac keyboards it is lowercase -->
-<!ENTITY exitDOMFullscreen.button "Exit Full Screen (Esc)">
-<!ENTITY exitDOMFullscreenMac.button "Exit Full Screen (esc)">
-<!ENTITY fullscreenWarning.afterDomain.label "is now full screen">
-
-<!-- LOCALIZATION NOTE (fullscreenWarning.beforeDomain.label,
-     fullscreenWarning.afterDomain.label): these two strings are used
-     respectively before and after the domain requiring fullscreen.
-     Localizers can use one of them, or both, to better adapt this
-     sentence to their language. -->
-<!ENTITY fullscreenWarning.beforeDomain.label "">
-<!ENTITY fullscreenWarning.generic.label "This document is now full screen">
-<!ENTITY fxaUnverified.label "Verify Your Account">
-
-<!-- Strings for connection state warnings. -->
-<!ENTITY identity.activeBlocked "&brandShortName; has blocked parts of this page that are not secure.">
-<!ENTITY identity.connectionVerified1 "You are securely connected to this site, run by:">
-<!ENTITY identity.description.activeBlocked "&brandShortName; has blocked parts of this page that are not secure.">
-<!ENTITY identity.description.activeLoaded "This website contains content that is not secure (such as scripts) and your connection to it is not private.">
-<!ENTITY identity.description.activeLoaded2 "Information you share with this site could be viewed by others (like passwords, messages, credit cards, etc.).">
-
-<!-- Strings for connection state warnings in the subview. -->
-<!ENTITY identity.description.insecure "Your connection to this site is not private. Information you submit could be viewed by others (like passwords, messages, credit cards, etc.).">
-<!ENTITY identity.description.insecureLoginForms "The login information you enter on this page is not secure and could be compromised.">
-<!ENTITY identity.description.passiveLoaded "Your connection is not private and information you share with the site could be viewed by others.">
-<!ENTITY identity.description.passiveLoaded2 "This website contains content that is not secure (such as images).">
-<!ENTITY identity.description.passiveLoaded3 "Although &brandShortName; has blocked some content, there is still content on the page that is not secure (such as images).">
-<!ENTITY identity.description.weakCipher "Your connection to this website uses weak encryption and is not private.">
-<!ENTITY identity.description.weakCipher2 "Other people can view your information or modify the website's behavior.">
-<!ENTITY identity.enableMixedContentBlocking.accesskey "E">
-
-<!ENTITY identity.enableMixedContentBlocking.label "Enable protection">
-<!ENTITY identity.insecureLoginForms "Your login could be compromised.">
-<!ENTITY identity.learnMore "Learn More">
-<!ENTITY identity.permissionsEmpty "You have not granted this site any special permissions.">
-<!ENTITY searchInNewTab.accesskey     "T">
-
-<!ENTITY searchInNewTab.label         "Search in New Tab">
-<!ENTITY searchSetAsDefault.accesskey "D">
-<!ENTITY searchSetAsDefault.label     "Set As Default Search Engine">
-<!ENTITY syncSignIn.accesskey         "Y">
-
-<!ENTITY syncSignIn.label             "Sign In To &syncBrand.shortName.label;…">
 <!ENTITY trackingContentBlocked.options "Options">
 <!ENTITY trackingContentBlocked.unblock2.accesskey "D">
 <!ENTITY trackingContentBlocked.unblock2.label "Disable protection for this site">
 <!ENTITY trackingProtection.block2.accesskey "E">
 <!ENTITY trackingProtection.block2.label "Enable protection">
-<!ENTITY trackingProtection.detectedBlocked3 "&brandShortName; is blocking parts of the page that may track your browsing.">
 <!ENTITY trackingProtection.detectedNotBlocked3 "This site includes elements that may track your browsing. You have disabled protection.">
 <!ENTITY trackingProtection.notDetected3 "No tracking elements detected on this page.">
-
-<!ENTITY trackingProtection.title "Tracking Protection">
 <!ENTITY trackingProtection.unblock.accesskey "D">
 <!-- LOCALIZATION NOTE (trackingProtection.unblock.label, trackingProtection.unblock.accesskey):
      The associated button with this label and accesskey is only shown when opening the control
@@ -946,6 +962,3 @@ you can use these alternative items. Otherwise, their values should be empty.  -
      The associated button with this label and accesskey is only shown when opening the control
      center while looking at a site with trackers in PRIVATE browsing mode. -->
 <!ENTITY trackingProtection.unblockPrivate.label "Disable protection for this session">
-<!ENTITY urlbar.searchSuggestionsNotification.disable.accesskey "n">
-<!ENTITY urlbar.searchSuggestionsNotification.enable.accesskey "y">
-<!ENTITY urlbar.searchSuggestionsNotification.learnMore.accesskey "l">
