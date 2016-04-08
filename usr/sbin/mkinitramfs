@@ -343,7 +343,7 @@ fi
 
 (
 # preserve permissions if root builds the image, see #633582
-[ "$UID" != 0 ] && cpio_owner_root="-R 0:0"
+[ "$(id -ru)" != 0 ] && cpio_owner_root="-R 0:0"
 
 # work around lack of "set -o pipefail" for the following pipe:
 # cd "${DESTDIR}" && find . | cpio --quiet $cpio_owner_root -o -H newc | gzip >>"${outfile}" || exit 1

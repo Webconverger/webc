@@ -367,7 +367,9 @@ dep_add_modules_mount()
 		fi
 		# luks or lvm on cciss or ida
 		if [ "${block#cciss}" != "${block}" ] \
-		|| [ "${block#ida}" != "${block}" ]; then
+		|| [ "${block#ida}" != "${block}" ] \
+		|| [ "${block#mmcblk}" != "${block}" ] \
+		|| [ "${block#nvme}" != "${block}" ]; then
 			block="${block%p*}"
 		else
 			block=${block%%[0-9]*}
@@ -434,6 +436,10 @@ dep_add_modules_mount()
 		block=${dev_node#/dev/i2o/}
 		block=${block%%[0-9]*}
 		block='i2o!'$block
+	# nvme device
+	elif [ "${dev_node#/dev/nvme}" != "${dev_node}" ]; then
+		block=${dev_node#/dev/}
+		block=${block%p*}
 	# classical block device
 	else
 		block=${dev_node#/dev/}
@@ -524,7 +530,7 @@ auto_add_modules()
 			modules="$modules btrfs ext2 ext3 ext4 ext4dev "
 			modules="$modules isofs jfs reiserfs udf xfs"
 			modules="$modules nfs nfsv2 nfsv3 nfsv4"
-			modules="$modules af_packet atkbd i8042"
+			modules="$modules af_packet atkbd i8042 psmouse"
 			modules="$modules virtio_pci virtio_mmio"
 
 			# Include all HID drivers unless we're sure they

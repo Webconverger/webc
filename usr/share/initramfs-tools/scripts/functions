@@ -53,6 +53,9 @@ panic()
 	modprobe -v uhci-hcd || true
 	modprobe -v ohci-hcd || true
 	modprobe -v usbhid || true
+
+	run_scripts /scripts/panic
+
 	REASON="$@" PS1='(initramfs) ' /bin/sh -i </dev/console >/dev/console 2>&1
 }
 
@@ -358,17 +361,22 @@ _checkfs_once()
 		force=""
 	fi
 
-	if [ "$fsckfix" = yes ]
+	if [ "$fsckfix" = "y" ]
 	then
 		fix="-y"
+	elif [ "$fsckfix" = "n" ]
+	then
+		fix="-n"
 	else
 		fix="-a"
 	fi
 
-	# spinner="-C" -- only if on an interactive terminal
 	spinner=""
+	if [ -z "${debug}" ]; then
+		spinner="-C"
+	fi
 
-	if [ "$VERBOSE" = no ]
+	if [ "${quiet}" = n ]
 	then
 		log_begin_msg "Will now check $NAME file system"
 		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -V -t $TYPE $DEV
@@ -376,7 +384,7 @@ _checkfs_once()
 		log_end_msg
 	else
 		log_begin_msg "Checking $NAME file system"
-		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -t $TYPE $DEV
+		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -T -t $TYPE $DEV
 		FSCKCODE=$?
 		log_end_msg
 	fi
@@ -398,7 +406,7 @@ _checkfs_once()
 		log_warning_msg "File system check failed but did not detect errors"
 		sleep 5
 	else
-		touch $FSCK_STAMPFILE
+		> $FSCK_STAMPFILE
 	fi
 	return 0
 }

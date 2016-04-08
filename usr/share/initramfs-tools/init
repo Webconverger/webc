@@ -61,7 +61,7 @@ export resume_offset=
 export drop_caps=
 export fastboot=n
 export forcefsck=n
-export fsckfix=n
+export fsckfix=
 
 
 # Bring in the main config
@@ -169,14 +169,17 @@ for x in $(cat /proc/cmdline); do
 	BOOTIF=*)
 		BOOTIF=${x#BOOTIF=}
 		;;
-	fastboot)
+	fastboot|fsck.mode=skip)
 		fastboot=y
 		;;
-	forcefsck)
+	forcefsck|fsck.mode=force)
 		forcefsck=y
 		;;
-	fsckfix)
+	fsckfix|fsck.repair=yes)
 		fsckfix=y
+		;;
+	fsck.repair=no)
+		fsckfix=n
 		;;
 	esac
 done

@@ -172,6 +172,8 @@ generate_initramfs()
 	if mkinitramfs ${OPTS} "${initramfs}.new" "${version}"; then
 		mv -f "${initramfs}.new" "${initramfs}"
 		set_sha1
+		# Guard against an unclean shutdown
+		sync
 	else
 		mkinitramfs_return="$?"
 		remove_initramfs_bak
