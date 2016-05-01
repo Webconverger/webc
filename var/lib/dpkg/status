@@ -1562,6 +1562,26 @@ Description: XZ-format compression library
  format, use the p7zip package instead.)
 Homepage: http://tukaani.org/xz/
 
+Package: libjson-glib-1.0-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 348
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: json-glib
+Version: 1.0.2-1
+Description: GLib JSON manipulation library (common files)
+ JSON-GLib is a library for parsing, generating and manipulating JavaScript
+ Object Notation (JSON) data streams using the GLib type system. It allows
+ manipulating JSON data types with a Document Object Model API. It also
+ allows serializing and deserializing simple or complex GObjects to and
+ from JSON data types.
+ .
+ This package contains the translations files.
+Homepage: https://wiki.gnome.org/JsonGlib
+
 Package: fontconfig-config
 Status: install ok installed
 Priority: optional
@@ -2281,6 +2301,28 @@ Description: Debian base system master password and group files
  (/etc/passwd and /etc/group), containing the Debian-allocated user and
  group IDs. The update-passwd tool is provided to keep the system databases
  synchronized with these master files.
+
+Package: librsvg2-2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 425
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: librsvg
+Version: 2.40.5-1+deb8u1
+Depends: libc6 (>= 2.4), libcairo2 (>= 1.10.0), libcroco3 (>= 0.6.2), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libpango-1.0-0 (>= 1.36.0), libpangocairo-1.0-0 (>= 1.36.0), libxml2 (>= 2.8.0)
+Pre-Depends: multiarch-support
+Recommends: librsvg2-common
+Suggests: librsvg2-bin
+Description: SAX-based renderer library for SVG files (runtime)
+ The rsvg library is an efficient renderer for Scalable Vector Graphics
+ (SVG) pictures.
+ .
+ This package contains the runtime library, necessary to run
+ applications using librsvg.
+Homepage: https://wiki.gnome.org/Projects/LibRsvg
 
 Package: libisccfg-export90
 Status: install ok installed
@@ -3413,6 +3455,31 @@ Description: General Purpose Mouse - shared library
  package for more information.
 Homepage: http://www.nico.schottelius.org/software/gpm/
 
+Package: libgtk-3-common
+Status: install ok installed
+Priority: optional
+Section: misc
+Installed-Size: 21727
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Source: gtk+3.0
+Version: 3.14.5-1+deb8u1
+Replaces: libgtk-3-0 (<< 3.5.4)
+Depends: dconf-gsettings-backend | gsettings-backend, adwaita-icon-theme (>= 3.14)
+Recommends: libgtk-3-0
+Breaks: libgtk-3-0 (<< 3.5.4)
+Conffiles:
+ /etc/gtk-3.0/im-multipress.conf c358838e1789c1d4e6da7f525fc922cf
+Description: common files for the GTK+ graphical user interface library
+ GTK+ is a multi-platform toolkit for creating graphical user
+ interfaces. Offering a complete set of widgets, GTK+ is suitable
+ for projects ranging from small one-off tools to complete application
+ suites.
+ .
+ This package contains the common files which the libraries need.
+Homepage: http://www.gtk.org/
+
 Package: libdb5.3
 Status: install ok installed
 Priority: standard
@@ -4245,6 +4312,24 @@ Description: UBSan -- undefined behaviour sanitizer (runtime)
  Various computations will be instrumented to detect undefined behavior
  at runtime. Available for C and C++.
 Homepage: http://gcc.gnu.org/
+
+Package: libatspi2.0-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 211
+Maintainer: Debian Accessibility Team <debian-accessibility@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: at-spi2-core
+Version: 2.14.0-1
+Depends: libc6 (>= 2.7), libdbus-1-3 (>= 1.1.1), libglib2.0-0 (>= 2.37.3), libx11-6
+Pre-Depends: multiarch-support
+Recommends: at-spi2-core (= 2.14.0-1)
+Description: Assistive Technology Service Provider Interface - shared library
+ This package contains the shared library for applications that wish to use
+ the at-spi interface.
+Homepage: https://wiki.gnome.org/Accessibility
 
 Package: xserver-xorg-video-mga
 Status: install ok installed
@@ -6700,6 +6785,31 @@ Description: networking and traffic control tools
  legacy net-tools commands 'ifconfig' and 'route'.
 Homepage: http://www.linux-foundation.org/en/Net:Iproute2
 
+Package: libgtk-3-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 9309
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: gtk+3.0
+Version: 3.14.5-1+deb8u1
+Provides: gtk3-binver-3.0.0
+Depends: libgtk-3-common (>= 3.14.5-1+deb8u1), libatk-bridge2.0-0 (>= 2.5.3), libatk1.0-0 (>= 2.12.0), libc6 (>= 2.4), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.14.0), libcolord2 (>= 0.1.29), libcups2 (>= 1.6.0), libfontconfig1 (>= 2.11), libfreetype6 (>= 2.2.1), libgdk-pixbuf2.0-0 (>= 2.30.1), libglib2.0-0 (>= 2.41.2), libjson-glib-1.0-0 (>= 0.12.0), libpango-1.0-0 (>= 1.36.7), libpangocairo-1.0-0 (>= 1.36.7), libpangoft2-1.0-0 (>= 1.36.7), librest-0.7-0 (>= 0.7), libsoup2.4-1 (>= 2.4.0), libwayland-client0 (>= 1.5.91), libwayland-cursor0 (>= 1.5.91), libx11-6 (>= 2:1.4.99.1), libxcomposite1 (>= 1:0.3-1), libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxi6 (>= 2:1.2.99.4), libxinerama1, libxkbcommon0 (>= 0.2.0), libxml2 (>= 2.6.27), libxrandr2 (>= 2:1.2.99.3), shared-mime-info
+Pre-Depends: multiarch-support
+Recommends: hicolor-icon-theme, libgtk-3-bin
+Suggests: librsvg2-common, gvfs
+Breaks: gnome-themes-standard (<< 3.6), libvte-2.90-9 (<< 1:0.32), libwebkitgtk-3.0-0 (<< 1.8.0), murrine-themes (<= 0.98.2)
+Description: GTK+ graphical user interface library
+ GTK+ is a multi-platform toolkit for creating graphical user
+ interfaces. Offering a complete set of widgets, GTK+ is suitable
+ for projects ranging from small one-off tools to complete application
+ suites.
+ .
+ This package contains the shared libraries.
+Homepage: http://www.gtk.org/
+
 Package: libbsd0
 Status: install ok installed
 Priority: optional
@@ -6995,6 +7105,26 @@ Replaces: xfonts-base (<< 1:1.0.0)
 Depends: x11-common
 Description: Encodings for X.Org fonts
  This package contains the encodings that map to specific characters.
+
+Package: librsvg2-common
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 174
+Maintainer: Josselin Mouette <joss@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: librsvg
+Version: 2.40.5-1+deb8u1
+Depends: libc6 (>= 2.3.6-6~), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), librsvg2-2 (= 2.40.5-1+deb8u1)
+Breaks: libgdk-pixbuf2.0-0 (<< 2.23.5-2), libgtk2.0-0 (<< 2.24.5-4)
+Description: SAX-based renderer library for SVG files (extra runtime)
+ The rsvg library is an efficient renderer for Scalable Vector Graphics
+ (SVG) pictures.
+ .
+ This package includes the gdk-pixbuf loader allowing
+ to load SVG images transparently inside GTK+ applications.
+Homepage: https://wiki.gnome.org/Projects/LibRsvg
 
 Package: libkmod2
 Status: install ok installed
@@ -7672,6 +7802,26 @@ Description: File type determination library using "magic" numbers
  command.
 Homepage: http://www.darwinsys.com/file/
 
+Package: libjson-glib-1.0-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 310
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: json-glib
+Version: 1.0.2-1
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.37.6), libjson-glib-1.0-common (>= 1.0.2-1)
+Pre-Depends: multiarch-support
+Description: GLib JSON manipulation library
+ JSON-GLib is a library for parsing, generating and manipulating JavaScript
+ Object Notation (JSON) data streams using the GLib type system. It allows
+ manipulating JSON data types with a Document Object Model API. It also
+ allows serializing and deserializing simple or complex GObjects to and
+ from JSON data types.
+Homepage: https://wiki.gnome.org/JsonGlib
+
 Package: lsb-base
 Status: install ok installed
 Priority: required
@@ -7754,6 +7904,39 @@ Description: /proc file system utilities
  It contains free, kill, pkill, pgrep, pmap, ps, pwdx, skill, slabtop,
  snice, sysctl, tload, top, uptime, vmstat, w, and watch.
 Homepage: http://gitorious.org/procps
+
+Package: libcroco3
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 339
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libcroco (0.6.8-3)
+Version: 0.6.8-3+b1
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.16.0), libxml2 (>= 2.7.4)
+Pre-Depends: multiarch-support
+Description: Cascading Style Sheet (CSS) parsing and manipulation toolkit
+ Services provided by Libcroco
+  * A parser module that provides
+    o A SAC like API. SAC stands for Simple API for CSS. SAC is an event driven
+      API which resembles SAX in the xml world.
+    o A CSSOM like API. CSSOM stands for Cascading Style Sheet Object Model.
+ .
+    The libcroco parser implements the CSS Level 2 specification, the CSS
+    forward compatibility rules and the CSS cascading rules.
+ .
+  * A CSS2 selection engine
+    Given an xml element node (that obviously comes from an xml document) and
+    a stylesheet cascade, the Libcroco selection engine can evaluate the css
+    selectors of the cascade and return the style properties associated to
+    the xml element node.
+ .
+    Note that the xml manipulation toolkit used by the libcroco selection
+    engine at the moment is libxml2.
+ .
+ This package contains the shared libraries.
 
 Package: libpangoft2-1.0-0
 Status: install ok installed
@@ -8443,6 +8626,27 @@ Description: Multiprecision arithmetic library
  It has a rich set of functions, and the functions have a regular
  interface.
 Homepage: http://gmplib.org/
+
+Package: libgtk-3-bin
+Status: install ok installed
+Priority: optional
+Section: misc
+Installed-Size: 210
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: foreign
+Source: gtk+3.0
+Version: 3.14.5-1+deb8u1
+Depends: libatk-bridge2.0-0 (>= 2.5.3), libatk1.0-0 (>= 2.7.5), libc6 (>= 2.4), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.12.0), libfontconfig1 (>= 2.11), libfreetype6 (>= 2.2.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.41.2), libgtk-3-0 (>= 3.14.5-1+deb8u1), libpango-1.0-0 (>= 1.36.7), libpangocairo-1.0-0 (>= 1.36.7), libpangoft2-1.0-0 (>= 1.36.7), libwayland-client0 (>= 1.5.91), libwayland-cursor0 (>= 1.5.91), libx11-6, libxcomposite1 (>= 1:0.3-1), libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxi6, libxinerama1, libxkbcommon0 (>= 0.2.0), libxrandr2, libgtk-3-common (>= 3.14.5-1+deb8u1)
+Description: programs for the GTK+ graphical user interface library
+ GTK+ is a multi-platform toolkit for creating graphical user
+ interfaces. Offering a complete set of widgets, GTK+ is suitable
+ for projects ranging from small one-off tools to complete application
+ suites.
+ .
+ This package contains the utilities which are used by the libraries
+ and other packages.
+Homepage: http://www.gtk.org/
 
 Package: sensible-utils
 Status: install ok installed
@@ -10239,6 +10443,22 @@ Version: 17.0.1
 Provides: firefox
 Description: Firefox Web browser
 
+Package: libatk-bridge2.0-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 244
+Maintainer: Debian Accessibility Team <debian-accessibility@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: at-spi2-atk
+Version: 2.14.0-2
+Depends: libatk1.0-0 (>= 2.11.90), libatspi2.0-0 (>= 2.9.90), libc6 (>= 2.4), libdbus-1-3 (>= 1.0.2), libglib2.0-0 (>= 2.41.1)
+Pre-Depends: multiarch-support
+Description: AT-SPI 2 toolkit bridge - shared library
+ This package contains the ATK bridge shared library.
+Homepage: https://wiki.gnome.org/Accessibility
+
 Package: firmware-linux-free
 Status: install ok installed
 Priority: optional
@@ -11487,6 +11707,31 @@ Description: FreeDesktop.org shared MIME database and spec
  At this time at least ROX, GNOME, KDE and XFCE use this database.
 Homepage: http://freedesktop.org/wiki/Software/shared-mime-info
 
+Package: libxkbcommon0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 286
+Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: libxkbcommon
+Version: 0.4.3-2
+Depends: xkb-data, libc6 (>= 2.17)
+Pre-Depends: multiarch-support
+Description: library interface to the XKB compiler - shared library
+ This package provides a library to handle keyboard descriptions, including
+ loading them from disk, parsing them and handling their state. It's mainly
+ meant for client toolkits, window systems, and other system applications;
+ currently that includes Wayland, kmscon, GTK+, Clutter, and more.
+ .
+ More information about X.Org can be found at:
+ <URL:http://www.X.org>
+ .
+ This module can be found at
+ git://anongit.freedesktop.org/git/xorg/lib/libxkbcommon
+Homepage: http://www.xkbcommon.org/
+
 Package: libtag1-vanilla
 Status: install ok installed
 Priority: optional
@@ -11589,6 +11834,24 @@ Description: GObject-based wrapper library for libudev
  programming languages, such as Javascript, because of GObject introspection
  support.
 Homepage: http://www.freedesktop.org/wiki/Software/systemd
+
+Package: librest-0.7-0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 134
+Maintainer: Ying-Chun Liu (PaulLiu) <paulliu@debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: librest
+Version: 0.7.92-3
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.37.3), libsoup-gnome2.4-1 (>= 2.27.4), libsoup2.4-1 (>= 2.30), libxml2 (>= 2.7.4)
+Pre-Depends: multiarch-support
+Description: REST service access library
+ This library was designed to make it easier to access web services that
+ claim to be "RESTful".  It includes convenience wrappers for libsoup and
+ libxml to ease remote use of the RESTful API.
+Homepage: https://wiki.gnome.org/Librest
 
 Package: libavahi-client3
 Status: install ok installed
@@ -12355,6 +12618,30 @@ Description: tool for configuring Linux wireless devices
  configuration and iwconfig/wireless-tools will no longer be required. See
  /usr/share/doc/iw/README.Debian for a more detailed overview of iw.
 Homepage: http://wireless.kernel.org/en/users/Documentation/iw
+
+Package: libcolord2
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 510
+Maintainer: Christopher James Halse Rogers <raof@ubuntu.com>
+Architecture: i386
+Multi-Arch: same
+Source: colord (1.2.1-1)
+Version: 1.2.1-1+b2
+Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.37.3), liblcms2-2 (>= 2.6), libudev1 (>= 196)
+Pre-Depends: multiarch-support
+Recommends: colord
+Description: system service to manage device colour profiles -- runtime
+ colord is a system service that makes it easy to manage, install and generate
+ colour profiles to accurately colour manage input and output devices.
+ .
+ It provides a D-Bus API for system frameworks to query, a persistent data
+ store, and a mechanism for session applications to set system policy.
+ .
+ This package contains a gobject-based convenience library for programs to
+ interact with the colord system daemon.
+Homepage: http://www.freedesktop.org/software/colord/
 
 Package: libthai-data
 Status: install ok installed
@@ -13517,6 +13804,19 @@ Description: Library for computing Fast Fourier Transforms - Long precision
  libfftw3-dev. For documentation, see libfftw3-doc.
 Homepage: http://fftw.org
 
+Package: hicolor-icon-theme
+Status: install ok installed
+Priority: optional
+Section: misc
+Installed-Size: 1415
+Maintainer: Ross Burton <ross@debian.org>
+Architecture: all
+Multi-Arch: foreign
+Version: 0.13-1
+Description: default fallback theme for FreeDesktop.org icon themes
+ This is the default fallback theme used by implementations of the
+ Freedesktop.org Icon Theme specification.
+
 Package: libopencore-amrwb0
 Status: install ok installed
 Priority: optional
@@ -13856,6 +14156,31 @@ Description: userspace USB programming library
  Library for programming USB applications without the knowledge
  of Linux kernel internals.
 Homepage: http://www.linux-usb.org/
+
+Package: libwayland-cursor0
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 35
+Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: wayland
+Version: 1.6.0-2
+Replaces: libwayland0 (<< 1.1.0-1)
+Depends: libc6 (>= 2.7), libwayland-client0 (>= 1.3.92)
+Pre-Depends: multiarch-support
+Conflicts: libwayland0 (<< 1.1.0-1)
+Description: wayland compositor infrastructure - cursor library
+ Wayland is a protocol for a compositor to talk to its clients as well
+ as a C library implementation of that protocol. The compositor can be
+ a standalone display server running on Linux kernel modesetting and
+ evdev input devices, an X application, or a wayland client
+ itself. The clients can be traditional applications, X servers
+ (rootless or fullscreen) or other display servers.
+ .
+ This package ships a helper library to manage cursors.
+Homepage: http://wayland.freedesktop.org/
 
 Package: locales
 Status: install ok installed
@@ -15033,4 +15358,21 @@ Description: VP8 and VP9 video codec (shared library)
  .
  This package contains the shared libraries.
 Homepage: http://www.webmproject.org
+
+Package: adwaita-icon-theme
+Status: install ok installed
+Priority: optional
+Section: gnome
+Installed-Size: 14087
+Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
+Architecture: all
+Multi-Arch: foreign
+Version: 3.14.0-2
+Replaces: gnome-themes-standard-data (<< 3.13.90)
+Depends: hicolor-icon-theme, libgtk-3-bin, librsvg2-common
+Breaks: gnome-themes-standard-data (<< 3.13.90)
+Description: default icon theme of GNOME
+ This package contains the default icon theme used by the GNOME desktop.
+ The icons are used in many of the official gnome applications like eog,
+ evince, system monitor, and many more.
 

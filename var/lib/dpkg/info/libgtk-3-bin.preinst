@@ -1,0 +1,24 @@
+#!/bin/sh -e
+set -e
+
+if [ "$1" = install ] || [ "$1" = upgrade ] ; then
+    if dpkg-divert --listpackage /usr/sbin/update-icon-caches | grep -q libgtk3.0-bin; then
+      dpkg-divert --remove --package libgtk3.0-bin --rename \
+          --divert /usr/sbin/update-icon-caches.gtk2 \
+          /usr/sbin/update-icon-caches
+      dpkg-divert --remove --package libgtk3.0-bin --rename \
+          --divert /usr/share/man/man8/update-icon-caches.gtk2.8.gz \
+          /usr/share/man/man8/update-icon-caches.8.gz
+    fi
+
+    dpkg-divert --add --package libgtk-3-bin --rename \
+        --divert /usr/sbin/update-icon-caches.gtk2 \
+        /usr/sbin/update-icon-caches
+    dpkg-divert --add --package libgtk-3-bin --rename \
+        --divert /usr/share/man/man8/update-icon-caches.gtk2.8.gz \
+        /usr/share/man/man8/update-icon-caches.8.gz
+fi
+
+
+
+exit 0
