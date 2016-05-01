@@ -1,8 +1,8 @@
-//@line 4 "/builds/slave/rel-m-rel-lx_rpk_9-00000000000/l10n/son/browser/firefox-l10n.js"
+//@line 4 "/builds/slave/rel-m-rel_fx_lx_l10n_rpk-00000/build/l10n/son/browser/firefox-l10n.js"
 
-//@line 6 "/builds/slave/rel-m-rel-lx_rpk_9-00000000000/l10n/son/browser/firefox-l10n.js"
+//@line 6 "/builds/slave/rel-m-rel_fx_lx_l10n_rpk-00000/build/l10n/son/browser/firefox-l10n.js"
 
-//@line 9 "/builds/slave/rel-m-rel-lx_rpk_9-00000000000/l10n/son/browser/firefox-l10n.js"
+//@line 9 "/builds/slave/rel-m-rel_fx_lx_l10n_rpk-00000/build/l10n/son/browser/firefox-l10n.js"
 pref("browser.search.geoSpecificDefaults", true);
 
 pref("general.useragent.locale", "son");
