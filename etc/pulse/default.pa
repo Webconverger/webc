@@ -13,8 +13,7 @@
 # General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with PulseAudio; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+# along with PulseAudio; if not, see <http://www.gnu.org/licenses/>.
 
 # This startup script is used only if PulseAudio is started per-user
 # (i.e. not in system mode)
@@ -22,10 +21,10 @@
 .nofail
 
 ### Load something into the sample cache
-#load-sample-lazy x11-bell /usr/share/sounds/gtk-events/activate.wav
-#load-sample-lazy pulse-hotplug /usr/share/sounds/startup3.wav
-#load-sample-lazy pulse-coldplug /usr/share/sounds/startup3.wav
-#load-sample-lazy pulse-access /usr/share/sounds/generic.wav
+#load-sample-lazy x11-bell /usr/share/sounds/freedesktop/stereo/bell.oga
+#load-sample-lazy pulse-hotplug /usr/share/sounds/freedesktop/stereo/device-added.oga
+#load-sample-lazy pulse-coldplug /usr/share/sounds/freedesktop/stereo/device-added.oga
+#load-sample-lazy pulse-access /usr/share/sounds/freedesktop/stereo/message.oga
 
 .fail
 
@@ -148,7 +147,7 @@ load-module module-filter-apply
 # can be shared by multiple sessions.
 
 ### Load X11 bell module
-#load-module module-x11-bell sample=bell-windowing-system
+#load-module module-x11-bell sample=x11-bell
 
 ### Register ourselves in the X11 session manager
 #load-module module-x11-xsmp

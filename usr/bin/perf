@@ -24,5 +24,13 @@ shopt -s execfail
 exec "perf_$version" "$@"
 
 # Not found? Tell the user which package to install.
-echo >&2 "E: linux-tools-$version is not installed."
+case "$version" in
+    2.6.* | 3.* | 4.0 | 4.0.*)
+	package=linux-tools-$version
+	;;
+    *)
+	package=linux-perf-$version
+	;;
+esac
+echo >&2 "E: $package is not installed."
 exit 1

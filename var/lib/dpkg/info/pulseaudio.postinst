@@ -16,6 +16,14 @@ set -e
 
 PULSEAUDIO=/usr/bin/pulseaudio
 
+trigger_udev() {
+	if ! which udevadm >/dev/null 2>&1 ; then
+		return 0;
+	fi
+	udevadm control --reload-rules || true
+	udevadm trigger --subsystem-match=sound --action=change || true
+}
+
 case "$1" in
   configure)
     if ! getent passwd pulse >/dev/null; then
@@ -27,6 +35,7 @@ case "$1" in
     if ! getent group pulse-access >/dev/null; then
       addgroup --quiet --system pulse-access
     fi
+    trigger_udev
   ;;
   abort-upgrade|abort-remove|abort-deconfigure)
   ;;
@@ -46,6 +55,15 @@ dpkg-maintscript-helper rm_conffile /etc/default/pulseaudio 5.0-3~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/init.d/pulseaudio 5.0-3~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/xdg/autostart/pulseaudio-kde.desktop 6.0-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper mv_conffile /etc/bash_completion.d/pulseaudio-bash-completion.sh /etc/bash_completion.d/pulseaudio 5.99.1-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/pulseaudio 6.99.1-1~ -- "$@"
 # End automatically added section
 
 

@@ -27,10 +27,10 @@ BEGIN {
 }
 
 sub version_split {
-    # Split into numbers, hyphens with optional non-numeric suffixes
-    # (for pre-releases), and strings of any other characters
+    # Split into numbers and non-numeric strings, but break the non-
+    # numeric strings at hyphens
     my $version = shift;
-    return $version =~ /(?:\d+|-\D*|[^-\d]+)/g;
+    return $version =~ /(?:\d+|-?[^-\d]*)/g;
 }
 
 sub version_cmp {

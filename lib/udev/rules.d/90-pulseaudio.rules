@@ -13,8 +13,7 @@
 # Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with PulseAudio; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+# along with PulseAudio; if not, see <http://www.gnu.org/licenses/>.
 
 SUBSYSTEM!="sound", GOTO="pulseaudio_end"
 ACTION!="change", GOTO="pulseaudio_end"
@@ -22,10 +21,6 @@ KERNEL!="card*", GOTO="pulseaudio_end"
 SUBSYSTEMS=="usb", GOTO="pulseaudio_check_usb"
 
 SUBSYSTEMS=="platform", DRIVERS=="thinkpad_acpi", ENV{PULSE_IGNORE}="1"
-
-# NVidia and Intel HDAs often have more than one HDMI codec/port on the same card
-ATTRS{vendor}=="0x10de", ENV{PULSE_PROFILE_SET}="extra-hdmi.conf"
-ATTRS{vendor}=="0x8086", ENV{PULSE_PROFILE_SET}="extra-hdmi.conf"
 
 # Force enable speaker and internal mic for some laptops
 # This should only be necessary for kernels 3.3, 3.4 and 3.5 (as they are lacking the phantom jack kctls).
@@ -102,5 +97,6 @@ ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1011", ENV{PULSE_PROFILE_SET}="nativ
 ATTRS{idVendor}=="17cc", ATTRS{idProduct}=="1021", ENV{PULSE_PROFILE_SET}="native-instruments-traktor-audio10.conf"
 ATTRS{idVendor}=="0763", ATTRS{idProduct}=="2012", ENV{PULSE_PROFILE_SET}="maudio-fasttrack-pro.conf"
 ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02bb", ENV{PULSE_PROFILE_SET}="kinect-audio.conf"
+ATTRS{idVendor}=="041e", ATTRS{idProduct}=="322c", ENV{PULSE_PROFILE_SET}="sb-omni-surround-5.1.conf"
 
 LABEL="pulseaudio_end"
