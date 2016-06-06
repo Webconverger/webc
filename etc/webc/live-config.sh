@@ -168,6 +168,11 @@ for x in $( cmdline ); do
 			fi
 		;;
 
+	opensearch=*)
+		opensearch="$( /bin/busybox httpd -d ${x#opensearch=} )"
+			wget --timeout=5 "${opensearch}" -O /opt/firefox/distribution/searchplugins/common/DDG.xml
+		;;
+
 	filter=*)
 		# Not to be used in conjuction with hosts=
 		# dns= trumps filter
