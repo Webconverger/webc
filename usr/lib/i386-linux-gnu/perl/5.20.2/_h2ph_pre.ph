@@ -1,4 +1,5 @@
-# This file was created by h2ph version 3
+# This file was created by h2ph version 4
+no warnings qw(portable);
 unless (defined &_FILE_OFFSET_BITS) { sub _FILE_OFFSET_BITS() { 64 } }
 
 unless (defined &_GNU_SOURCE) { sub _GNU_SOURCE() { 1 } }

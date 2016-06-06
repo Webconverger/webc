@@ -693,12 +693,12 @@ Package: xserver-xorg-video-intel
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 3257
+Installed-Size: 3406
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 2:2.99.917-2~bpo8+1
+Version: 2:2.99.917+git20160522-1~bpo8+1
 Provides: xorg-driver-video
-Depends: libc6 (>= 2.17), libdrm-intel1 (>= 2.4.38), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.8.0+git20071002), libpixman-1-0 (>= 0.30.0), libudev1 (>= 183), libx11-6, libx11-xcb1, libxcb-dri2-0, libxcb-dri3-0, libxcb-sync1, libxcb-util0 (>= 0.3.8), libxcb1, libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxinerama1, libxrandr2 (>= 2:1.2.99.2), libxrender1, libxshmfence1, libxtst6, libxv1, libxvmc1, xorg-video-abi-18, xserver-xorg-core (>= 2:1.15.99.903)
+Depends: libc6 (>= 2.17), libdrm-intel1 (>= 2.4.38), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.8.0+git20071002), libpixman-1-0 (>= 0.30.0), libudev1 (>= 183), libx11-6, libx11-xcb1, libxcb-dri2-0, libxcb-dri3-0, libxcb-sync1, libxcb-util0 (>= 0.3.8), libxcb1, libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxinerama1, libxrandr2 (>= 2:1.2.99.2), libxrender1, libxshmfence1, libxss1, libxtst6, libxv1, libxvmc1, xorg-video-abi-18, xserver-xorg-core (>= 2:1.15.99.903)
 Conffiles:
  /etc/modprobe.d/i915-kms.conf 2ea78dbb794e6f512da751d5a61c44e3 obsolete
 Description: X.Org X server -- Intel i8xx, i9xx display driver
@@ -710,6 +710,10 @@ Description: X.Org X server -- Intel i8xx, i9xx display driver
  for i810/i815 and i9xx and newer chipsets.
  .
  This package is built from the X.org xf86-video-intel driver module.
+ .
+ The use of this driver is discouraged if your hw is new enough (ca.
+ 2007 and newer). You can try uninstalling this driver and let the
+ server use it's builtin modesetting driver instead.
 Homepage: http://www.x.org/
 
 Package: perl-base
@@ -717,11 +721,11 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: perl
-Installed-Size: 4735
+Installed-Size: 4739
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
 Source: perl
-Version: 5.20.2-3+deb8u4
+Version: 5.20.2-3+deb8u5
 Replaces: libfile-path-perl, libfile-temp-perl, libio-socket-ip-perl, libperl5.8 (<< 5.8.0-20), libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl (<< 5.10.1-12), perl-modules (<< 5.20.1-3)
 Provides: libfile-path-perl, libfile-temp-perl, libio-socket-ip-perl, libscalar-list-utils-perl, libsocket-perl, libxsloader-perl, perl5-base, perlapi-5.20.0, perlapi-5.20.1, perlapi-5.20.2
 Pre-Depends: libc6 (>= 2.11), dpkg (>= 1.17.17)
@@ -1335,12 +1339,12 @@ Package: libexpat1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 385
+Installed-Size: 342
 Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: expat
-Version: 2.1.0-6+deb8u1
+Version: 2.1.0-6+deb8u2
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Conflicts: wink (<= 1.5.1060-4)
@@ -2299,12 +2303,12 @@ Package: libssl1.0.0
 Status: install ok installed
 Priority: important
 Section: libs
-Installed-Size: 7434
+Installed-Size: 7461
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: openssl
-Version: 1.0.1k-3+deb8u5
+Version: 1.0.1t-1+deb8u2
 Depends: libc6 (>= 2.7), debconf (>= 0.5) | debconf-2.0
 Pre-Depends: multiarch-support
 Description: Secure Sockets Layer toolkit - shared libraries
@@ -2342,7 +2346,7 @@ Maintainer: Josselin Mouette <joss@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: librsvg
-Version: 2.40.5-1+deb8u1
+Version: 2.40.5-1+deb8u2
 Depends: libc6 (>= 2.4), libcairo2 (>= 1.10.0), libcroco3 (>= 0.6.2), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libpango-1.0-0 (>= 1.36.0), libpangocairo-1.0-0 (>= 1.36.0), libxml2 (>= 2.8.0)
 Pre-Depends: multiarch-support
 Recommends: librsvg2-common
@@ -4054,11 +4058,11 @@ Package: tzdata
 Status: install ok installed
 Priority: required
 Section: localization
-Installed-Size: 1518
+Installed-Size: 1532
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 2016c-0+deb8u1
+Version: 2016d-0+deb8u1
 Replaces: libc0.1, libc0.3, libc6, libc6.1
 Provides: tzdata-jessie
 Depends: debconf (>= 0.5) | debconf-2.0
@@ -5123,10 +5127,10 @@ Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: perl
-Version: 5.20.2-3+deb8u4
+Version: 5.20.2-3+deb8u5
 Replaces: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcgi-pm-perl, libcpan-meta-perl, libcpan-meta-requirements-perl, libcpan-meta-yaml-perl, libdigest-perl, libexperimental-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-spec-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-build-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libnet-perl, libnet-ping-perl, libpackage-constants-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
 Provides: libansicolor-perl, libarchive-tar-perl, libattribute-handlers-perl, libautodie-perl, libcpan-meta-perl, libcpan-meta-requirements-perl, libcpan-meta-yaml-perl, libdigest-perl, libexperimental-perl, libextutils-cbuilder-perl, libextutils-command-perl, libextutils-install-perl, libextutils-parsexs-perl, libfile-spec-perl, libhttp-tiny-perl, libi18n-langtags-perl, libio-zlib-perl, libjson-pp-perl, liblocale-codes-perl, liblocale-maketext-perl, liblocale-maketext-simple-perl, libmath-bigint-perl, libmath-complex-perl, libmodule-corelist-perl, libmodule-load-conditional-perl, libmodule-load-perl, libmodule-metadata-perl, libnet-perl, libnet-ping-perl, libparams-check-perl, libparent-perl, libparse-cpan-meta-perl, libperl-ostype-perl, libpod-escapes-perl, libpod-parser-perl, libpod-simple-perl, libtest-harness-perl, libtest-simple-perl, libthread-queue-perl, libtime-local-perl, libunicode-collate-perl, libversion-perl, libversion-requirements-perl, podlators-perl
-Depends: perl-base (>= 5.20.2-3+deb8u4)
+Depends: perl-base (>= 5.20.2-3+deb8u5)
 Pre-Depends: dpkg (>= 1.17.17)
 Recommends: perl (>= 5.20.2-1), libarchive-extract-perl, libmodule-pluggable-perl, libpod-latex-perl, libterm-ui-perl, libtext-soundex-perl, libcgi-pm-perl, libmodule-build-perl, libpackage-constants-perl
 Suggests: libb-lint-perl, libcpanplus-dist-build-perl, libcpanplus-perl, libfile-checktree-perl, liblog-message-simple-perl, liblog-message-perl, libobject-accessor-perl
@@ -6442,7 +6446,7 @@ Installed-Size: 347
 Maintainer: Debian kernel team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
-Version: 0.120+deb8u1
+Version: 0.120+deb8u2
 Provides: linux-initramfs-tool
 Depends: klibc-utils (>= 2.0-1~), cpio, kmod | module-init-tools, udev, klibc-utils (>= 2.0.4-1.2~) | busybox (>= 1:1.01-3) | busybox-initramfs | busybox-static
 Recommends: busybox (>= 1:1.01-3) | busybox-initramfs | busybox-static
@@ -6675,9 +6679,9 @@ Installed-Size: 372
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: lvm2 (2.02.111-2.2)
-Version: 2:1.02.90-2.2
-Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev1 (>= 183), dmsetup (>= 2:1.02.90-2.2)
+Source: lvm2 (2.02.111-2.2+deb8u1)
+Version: 2:1.02.90-2.2+deb8u1
+Depends: libc6 (>= 2.4), libselinux1 (>= 1.32), libudev1 (>= 183), dmsetup (>= 2:1.02.90-2.2+deb8u1)
 Pre-Depends: multiarch-support
 Breaks: lvm2 (<< 2.02.66)
 Conflicts: libdevmapper1.02
@@ -7552,8 +7556,8 @@ Maintainer: Josselin Mouette <joss@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: librsvg
-Version: 2.40.5-1+deb8u1
-Depends: libc6 (>= 2.3.6-6~), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), librsvg2-2 (= 2.40.5-1+deb8u1)
+Version: 2.40.5-1+deb8u2
+Depends: libc6 (>= 2.3.6-6~), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), librsvg2-2 (= 2.40.5-1+deb8u2)
 Breaks: libgdk-pixbuf2.0-0 (<< 2.23.5-2), libgtk2.0-0 (<< 2.24.5-4)
 Description: SAX-based renderer library for SVG files (extra runtime)
  The rsvg library is an efficient renderer for Scalable Vector Graphics
@@ -8010,7 +8014,7 @@ Installed-Size: 99
 Maintainer: Debian GnuTLS Maintainers <pkg-gnutls-maint@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Version: 4.2-3+deb8u1
+Version: 4.2-3+deb8u2
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Description: Manage ASN.1 structures (runtime)
@@ -8521,14 +8525,14 @@ Package: perl
 Status: install ok installed
 Priority: standard
 Section: perl
-Installed-Size: 11311
+Installed-Size: 11324
 Maintainer: Niko Tyni <ntyni@debian.org>
 Architecture: i386
 Multi-Arch: allowed
-Version: 5.20.2-3+deb8u4
+Version: 5.20.2-3+deb8u5
 Replaces: libarchive-tar-perl (<= 1.38-2), libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libmodule-corelist-perl (<< 2.14-2), libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl-base (<< 5.10.1-12), perl-doc (<< 5.8.0-1), perl-modules (<< 5.8.1-1)
 Provides: data-dumper, libcompress-raw-bzip2-perl, libcompress-raw-zlib-perl, libcompress-zlib-perl, libdigest-md5-perl, libdigest-sha-perl, libencode-perl, libio-compress-base-perl, libio-compress-bzip2-perl, libio-compress-perl, libio-compress-zlib-perl, libmime-base64-perl, libstorable-perl, libsys-syslog-perl, libthreads-perl, libthreads-shared-perl, libtime-hires-perl, libtime-piece-perl, perl5
-Depends: perl-base (= 5.20.2-3+deb8u4), perl-modules (>= 5.20.2-3+deb8u4), libbz2-1.0, libc6 (>= 2.11), libdb5.3, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.2.3)
+Depends: perl-base (= 5.20.2-3+deb8u5), perl-modules (>= 5.20.2-3+deb8u5), libbz2-1.0, libc6 (>= 2.11), libdb5.3, libgdbm3 (>= 1.8.3), zlib1g (>= 1:1.2.2.3)
 Pre-Depends: dpkg (>= 1.17.17)
 Recommends: netbase, rename
 Suggests: perl-doc, libterm-readline-gnu-perl | libterm-readline-perl-perl, make
@@ -8899,21 +8903,21 @@ Installed-Size: 220
 Maintainer: Santiago Vila <sanvila@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 8+deb8u4
+Version: 8+deb8u5
 Replaces: base, dpkg (<= 1.15.0), miscutils
 Provides: base
 Pre-Depends: awk
 Breaks: initscripts (<< 2.88dsf-13.3), sendfile (<< 2.1b.20080616-5.2~)
 Conffiles:
- /etc/debian_version 1bd15e9d3b3f6160db5fa6f6c3e8c515
+ /etc/debian_version b444d7fbec51ee0260c0de1bc9079e55
  /etc/dpkg/origins/debian 731423fa8ba067262f8ef37882d1e742
  /etc/host.conf 4eb63731c9f5e30903ac4fc07a7fe3d6
  /etc/issue a7eef95d86c3649a192350845d8cb2ae
  /etc/issue.net 8b9e8badfb7d547ef236e3165dd363e4
- /etc/dpkg/origins/progress eb8cd942c2cc678ca65dcb012ad92d5e obsolete
- /etc/lsb-release 22d02316f358a0cfb6c002c42bb5d41a obsolete
- /etc/dpkg/origins/progress-linux 86aba0f382eb064563a2ad4de5d31b28 obsolete
  /etc/progress-linux_version 3cf918272ffa5de195752d73f3da3e5e obsolete
+ /etc/dpkg/origins/progress-linux 86aba0f382eb064563a2ad4de5d31b28 obsolete
+ /etc/lsb-release 22d02316f358a0cfb6c002c42bb5d41a obsolete
+ /etc/dpkg/origins/progress eb8cd942c2cc678ca65dcb012ad92d5e obsolete
 Description: Debian base system miscellaneous files
  This package contains the basic filesystem hierarchy of a Debian system, and
  several important miscellaneous files, such as /etc/debian_version,
@@ -10139,10 +10143,10 @@ Package: iucode-tool
 Status: install ok installed
 Priority: optional
 Section: contrib/utils
-Installed-Size: 64
+Installed-Size: 69
 Maintainer: Henrique de Moraes Holschuh <hmh@debian.org>
 Architecture: i386
-Version: 1.5.2-1~bpo8+1
+Version: 1.6-1~bpo8+1
 Depends: libc6 (>= 2.7)
 Recommends: intel-microcode (>= 1)
 Description: Intel processor microcode tool
@@ -10766,18 +10770,18 @@ Essential: yes
 Status: install ok installed
 Priority: required
 Section: admin
-Installed-Size: 6673
+Installed-Size: 6676
 Origin: debian
 Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
 Bugs: debbugs://bugs.debian.org
 Architecture: i386
 Multi-Arch: foreign
-Version: 1.17.26
+Version: 1.17.27
 Replaces: manpages-it (<< 2.80-4)
 Pre-Depends: libbz2-1.0, libc6 (>= 2.11), liblzma5 (>= 5.1.1alpha+20120614), libselinux1 (>= 2.3), zlib1g (>= 1:1.1.4), tar (>= 1.23)
 Suggests: apt
 Breaks: apt (<< 0.7.7~), apt-cudf (<< 3.3~beta1-3~), aptitude (<< 0.4.7-1~), auctex (<< 11.87-3+deb8u1~), ccache (<< 3.1.10-1~), cups (<< 1.7.5-10~), debian-security-support (<< 2014.10.26~), distcc (<< 3.1-6.1~), doc-base (<< 0.10.5~), dpkg-dev (<< 1.15.8), fontconfig (<< 2.11.0-6.2~), fusionforge-plugin-mediawiki (<< 5.3.2+20141104-3~), gap-core (<< 4r7p5-2~), gitweb (<< 1:2.1.4-2.1~), grace (<< 1:5.1.24-3~), gxine (<< 0.5.908-3.1~), hoogle (<< 4.2.33-4~), icecc (<< 1.0.1-2~), install-info (<< 5.1.dfsg.1-3~), libapache2-mod-php5 (<< 5.6.4+dfsg-3~), libapache2-mod-php5filter (<< 5.6.4+dfsg-3~), libdpkg-perl (<< 1.15.8), libjs-protoaculous (<< 5~), man-db (<< 2.6.3-6~), mcollective (<< 2.6.0+dfsg-2.1~), php5-fpm (<< 5.6.4+dfsg-3~), pypy (<< 2.4.0+dfsg-3~), readahead-fedora (<< 2:1.5.6-5.2~), wordpress (<< 4.1+dfsg-1~), xfonts-traditional (<< 1.7~), xine-ui (<< 0.99.9-1.2~)
-Conflicts: ada-reference-manual (<< 20021112web-4~), asn1-mode (<< 2.7-7~), bogosort (<< 0.4.2-3~), cl-yacc (<< 0.3-3~), cpp-4.1-doc (<< 4.1.2.nf2-4~), cpp-4.2-doc (<< 4.2.4.nf1-4~), gcc-4.1-doc (<< 4.1.2.nf2-4~), gcc-4.2-doc (<< 4.2.4.nf1-4~), gcj-4.1-doc (<< 4.1.2.nf2-4~), gcj-4.2-doc (<< 4.2.4.nf1-4~), gfortran-4.1-doc (<< 4.1.2.nf2-4~), gfortran-4.2-doc (<< 4.2.4.nf1-4~), ggz-docs (<< 0.0.14.1-2~), glame (<< 2.0.1-6~), gnat-4.1-doc (<< 4.1.2.nf2-4~), gnat-4.2-doc (<< 4.2.4.nf1-4~), gtalk (<< 0.99.10-16~), libalogg-dev (<< 1.3.7-2~), libgtk1.2-doc (<< 1.2.10-19~), libnettle-dev (<< 2~), liborbit-dev (<< 0.5.17-12~), libreadline5-dev (<< 5.2-8~), librep-doc (<< 0.90~), mmucl (<< 1.5.2-3~), nxml-mode (<< 20041004-9~), octave3.0-info (<< 1:3.0.5-7+rm), octave3.2-info (<< 3.2.4-12+rm), polgen-doc (<< 1.3-3+rm), r6rs-doc (<< 1.0-2~), serveez-doc (<< 0.1.5-3~), slat (<< 2.0-6~), texlive-base-bin-doc (<< 2007.dfsg.2-9~), ttcn-el (<< 0.6.9-2~), ulog-acctd (<< 0.4.3-3~), xconq-doc (<< 7.4.1-5~), zenirc (<< 2.112.dfsg-1~)
+Conflicts: ada-mode (<< 3.6-3+rm), ada-reference-manual (<< 20021112web-4~), asn1-mode (<< 2.7-7~), bogosort (<< 0.4.2-3~), cl-yacc (<< 0.3-3~), cpp-4.1-doc (<< 4.1.2.nf2-4~), cpp-4.2-doc (<< 4.2.4.nf1-4~), gcc-4.1-doc (<< 4.1.2.nf2-4~), gcc-4.2-doc (<< 4.2.4.nf1-4~), gcj-4.1-doc (<< 4.1.2.nf2-4~), gcj-4.2-doc (<< 4.2.4.nf1-4~), gfortran-4.1-doc (<< 4.1.2.nf2-4~), gfortran-4.2-doc (<< 4.2.4.nf1-4~), ggz-docs (<< 0.0.14.1-2~), glame (<< 2.0.1-6~), gnat-4.1-doc (<< 4.1.2.nf2-4~), gnat-4.2-doc (<< 4.2.4.nf1-4~), gtalk (<< 0.99.10-16~), libalogg-dev (<< 1.3.7-2~), libgtk1.2-doc (<< 1.2.10-19~), libnettle-dev (<< 2~), liborbit-dev (<< 0.5.17-12~), libreadline5-dev (<< 5.2-8~), librep-doc (<< 0.90~), mmucl (<< 1.5.2-3~), nxml-mode (<< 20041004-9~), octave2.1-info (<< 1:2.1.73-19+rm), octave3.0-info (<< 1:3.0.5-7+rm), octave3.2-info (<< 3.2.4-12+rm), polgen-doc (<< 1.3-3+rm), r6rs-doc (<< 1.0-2~), serveez-doc (<< 0.1.5-3~), slat (<< 2.0-6~), texlive-base-bin-doc (<< 2007.dfsg.2-9~), ttcn-el (<< 0.6.9-2~), ulog-acctd (<< 0.4.3-3~), xconq-doc (<< 7.4.1-5~), zenirc (<< 2.112.dfsg-1~)
 Conffiles:
  /etc/alternatives/README 69c4ba7f08363e998e0f2e244a04f881
  /etc/cron.daily/dpkg b8065b6bfc248caba501c3f5bb508e66
@@ -10949,10 +10953,10 @@ Package: openssl
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 1086
+Installed-Size: 1076
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1.0.1k-3+deb8u5
+Version: 1.0.1t-1+deb8u2
 Depends: libc6 (>= 2.15), libssl1.0.0 (>= 1.0.1k-3+deb8u3)
 Suggests: ca-certificates
 Conffiles:
@@ -11844,8 +11848,8 @@ Installed-Size: 125
 Maintainer: Debian LVM Team <pkg-lvm-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Source: lvm2 (2.02.111-2.2)
-Version: 2:1.02.90-2.2
+Source: lvm2 (2.02.111-2.2+deb8u1)
+Version: 2:1.02.90-2.2+deb8u1
 Depends: libc6 (>= 2.4), libdevmapper1.02.1 (>= 2:1.02.90), util-linux (>> 2.16)
 Conflicts: devicekit-disks (<< 009)
 Description: Linux Kernel Device Mapper userspace library
@@ -14884,12 +14888,12 @@ Package: libidn11
 Status: install ok installed
 Priority: standard
 Section: libs
-Installed-Size: 318
+Installed-Size: 314
 Maintainer: Debian Libidn Team <help-libidn@gnu.org>
 Architecture: i386
 Multi-Arch: same
-Source: libidn (1.29-1)
-Version: 1.29-1+b2
+Source: libidn
+Version: 1.29-1+deb8u1
 Replaces: libidn11-dev
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support

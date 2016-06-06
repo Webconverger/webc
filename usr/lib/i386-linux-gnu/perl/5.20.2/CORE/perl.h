@@ -176,7 +176,9 @@
 #  define pTHX_8	9
 #  define pTHX_9	10
 #  define pTHX_12	13
-#  if defined(DEBUGGING) && !defined(PERL_TRACK_MEMPOOL)
+/* PERL_TRACK_MEMPOOL temporarily disabled for DEBUGGING */
+/* see https://bugs.debian.org/810326 */
+#  if 0 && defined(DEBUGGING) && !defined(PERL_TRACK_MEMPOOL)
 #    define PERL_TRACK_MEMPOOL
 #  endif
 #else

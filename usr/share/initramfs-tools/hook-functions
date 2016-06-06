@@ -581,6 +581,7 @@ auto_add_modules()
 		;;
 		block)
 			copy_modules_dir kernel/drivers/block
+			copy_modules_dir kernel/drivers/nvme
 		;;
 		ubi)
 			modules="$modules deflate zlib lzo ubi ubifs"
@@ -723,6 +724,7 @@ cache_run_scripts()
 	initdir=${DESTDIR}${scriptdir}
 	[ ! -d ${initdir} ] && return
 
+	> ${initdir}/ORDER
 	runlist=$(get_prereq_pairs | tsort)
 	for crs_x in ${runlist}; do
 		[ -f ${initdir}/${crs_x} ] || continue
