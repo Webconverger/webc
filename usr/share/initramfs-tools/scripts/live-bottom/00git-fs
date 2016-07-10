@@ -22,7 +22,9 @@ fi
 # /live/root.pid. With live-boot 3.0, this feature is dropped in
 # favor of writing directly to /run (which doesn't seem to be available
 # in lenny yet). To be sure, we just write to both.
-
+# This applies to shutdown using systemv init only
+# (/etc/init.d/sendsigs). When using systemd, git-fs takes care of this
+# itself when -o initrd-root is passed (see git-fs source).
 if pidof git-fs >/dev/null; then
 	mkdir -p /run/sendsigs.omit.d;
 	pidof git-fs >> /run/sendsigs.omit.d/git-fs
