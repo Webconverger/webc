@@ -19,11 +19,12 @@ package DebianLinux;
 use strict;
 use warnings;
 use POSIX qw(uname);
+use FileHandle;
 
 BEGIN {
     use Exporter ();
     our @ISA = qw(Exporter);
-    our @EXPORT_OK = qw(version_cmp image_list);
+    our @EXPORT_OK = qw(version_cmp image_stem image_list read_kernelimg_conf);
 }
 
 sub version_split {
@@ -80,6 +81,10 @@ if ((uname())[4] =~ /^(?:mips|parisc|powerpc|ppc)/) {
     $image_stem = 'vmlinuz';
 }
 
+sub image_stem {
+    return $image_stem;
+}
+
 sub image_list {
     my @results;
     my $prefix = "/boot/$image_stem-";
@@ -88,6 +93,87 @@ sub image_list {
 	push @results, [substr($_, length($prefix)), $_];
     }
     return @results;
+}
+
+sub read_kernelimg_conf {
+    my $conf_loc = shift || '/etc/kernel-img.conf';
+    my @bool_param = qw(do_symlinks link_in_boot no_symlinks);
+    my @path_param = qw(image_dest);
+    # These are still set in the jessie installer even though they
+    # have no effect.  Ignore them quietly.
+    my @quiet_param = qw(do_bootloader do_initrd);
+    # These are used only by kernel-package, and are not relevant to
+    # anything that linux-base does.  Ignore them quietly.
+    push @quiet_param, qw(clobber_modules force_build_link
+                          relink_build_link relink_src_link
+                          silent_modules warn_reboot);
+
+    # Initialise configuration to defaults
+    my $conf = {
+	do_symlinks =>		1,
+	image_dest =>		'/',
+	link_in_boot =>		0,
+	no_symlinks =>		0,
+    };
+
+    if (my $fh = new FileHandle($conf_loc, 'r')) {
+	while (<$fh>) {
+	    # Delete line endings, comments and blank lines
+	    chomp;
+	    s/\#.*$//g;
+	    next if /^\s*$/;
+
+	    # Historically this was done by matching against one
+	    # (path) or two (bool) regexps per parameter, with no
+	    # attempt to ensure that each line matched one.  We now
+	    # warn about syntax errors, but for backward compatibility
+	    # we never treat them as fatal.
+
+	    # Parse into name = value
+	    if (!/^\s*(\w+)\s*=\s*(.*)/) {
+		print STDERR "$conf_loc:$.: W: ignoring line with syntax error\n";
+		next;
+	    }
+	    my ($name, $value) = (lc($1), $2);
+
+	    # Parse value according to expected type
+	    if (grep({$_ eq $name} @bool_param)) {
+		if ($value =~ /^(?:no|false|0)\s*$/i) {
+		    $conf->{$name} = 0;
+		} elsif ($value =~ /^(?:yes|true|1)\s*$/i) {
+		    $conf->{$name} = 1;
+		} else {
+		    print STDERR "$conf_loc:$.: W: ignoring invalid value for $name\n";
+		}
+	    } elsif (grep({$_ eq $name} @path_param)) {
+		# Only one space-separated word is supported
+		$value =~ /^(\S*)(.*)/;
+		($conf->{$name}, my $excess) = ($1, $2);
+		if ($excess =~ /\S/) {
+		    print STDERR "$conf_loc:$.: W: ignoring excess values for $name\n";
+		}
+	    } elsif (grep({$_ eq $name} @quiet_param)) {
+		;
+	    } else {
+		print STDERR "$conf_loc:$.: W: ignoring unknown parameter $name\n";
+	    }
+	}
+	$fh->close();
+    }
+
+    # This is still set (to 0) by default in jessie so we should only
+    # warn if the default is changed
+    if ($conf->{no_symlinks}) {
+	print STDERR "$conf_loc: W: ignoring no_symlinks; only symlinks are supported\n";
+    }
+    delete $conf->{no_symlinks};
+
+    if ($conf->{link_in_boot}) {
+	$conf->{image_dest} = '/boot';
+    }
+    delete $conf->{link_in_boot};
+
+    return $conf;
 }
 
 1;
