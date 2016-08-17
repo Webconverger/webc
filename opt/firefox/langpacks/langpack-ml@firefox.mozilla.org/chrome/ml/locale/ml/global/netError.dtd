@@ -83,10 +83,6 @@
 <!ENTITY phishingBlocked.longDesc "<p>നിങ്ങളുടെ സ്വകാര്യ വിവരങ്ങള്‍ ഈ താളില്‍ നല്‍കുന്നതു് സുരക്ഷിതമല്ല.</p> 
 <p>ഇത്തരത്തിലുള്ള വെബ് തട്ടിപ്പുകളെ ഫിഷിങ് അതിക്രമങ്ങള്‍ എന്നു് അറിയപ്പെടുന്നു. ഇവയില്‍, ഇങ്ങനെ നിങ്ങള്‍ക്കു് വിശ്വസനീയ ശ്രതസ്സുകളായ ഈമെയിലുകളും വെബ് താളുകളും ഉപയോഗിച്ചു് നിങ്ങളെ ഇരയാക്കുന്നു.</p>">
 
-
-
-
-
 <!ENTITY cspBlocked.title "ഉള്ളടക്കത്തിനുള്ള സുരക്ഷാ പോളിസി തടസ്സപ്പെടുത്തിയിരിയ്ക്കുന്നു">
 <!ENTITY cspBlocked.longDesc "<p>ഉള്ളടക്കത്തിനുള്ള സുരക്ഷാ പോളിസി കാരണം ഈ തരത്തില്‍ ഈ താള്‍ ലഭ്യമാക്കുന്നതിനു് ബ്രൌസര്‍ അനുവദിയ്ക്കുന്നതല്ല.</p>">
 
@@ -95,7 +91,18 @@
 
 <!ENTITY remoteXUL.title "റിമോട്ട് XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>ദയവായി വെബ് സൈറ്റ് ഉടമസ്ഥാക്കളെ ഈ പ്രശ്നത്തെപ്പറ്റി അറിയിയ്ക്കുക.</li></ul></p>">
+<!-- Include app-specific error messages - do not change this in localization!
+     Some applications might override netErrorApp.dtd with their specific version,
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
 
+<!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
+%netErrorAppDTD;
+
+<!ENTITY forbiddenBlocked.longDesc "<p>The browser prevented this page from loading because it is configured to block it.</p>
+">
+
+<!ENTITY forbiddenBlocked.title "Forbidden Site">
 
 <!ENTITY securityOverride.linkText "Or you can add an exception…">
 <!ENTITY securityOverride.warningContent "

@@ -83,10 +83,6 @@
 <!ENTITY phishingBlocked.longDesc "<p>การป้อนข้อมูลส่วนบุคคลลงในหน้าเว็บนี้อาจนำไปสู่การขโมยข้อมูลส่วนบุคคลหรือการหลอกลวงชนิดอื่น ๆ ได้</p> 
 <p>การปลอมแปลงเว็บเช่นนี้จะพบในการหลอกลวงแบบที่เรียกว่าการโจมตีแบบตกเหยื่อ (phishing attack) ซึ่งคือการทำปลอมหน้าเว็บและอีเมลให้เหมือนกับแหล่งที่คุณเชื่อถือ</p>">
 
-
-
-
-
 <!ENTITY cspBlocked.title "ถูกปิดกั้นโดยนโยบายความปลอดภัยของเนื้อหา">
 <!ENTITY cspBlocked.longDesc "<p>เบราเซอร์ทำการปิดกั้นหน้านี้เพราะว่าหน้านี้มีเนื้อหาที่นโยบายความปลอดภัยของเนื้อหาไม่อนุญาตให้แสดงผล</p>">
 
@@ -95,7 +91,18 @@
 
 <!ENTITY remoteXUL.title "รีโมท XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>โปรดติดต่อเจ้าของเว็บไซต์เพื่อแจ้งปัญหาข้างต้น</li></ul></p>">
+<!-- Include app-specific error messages - do not change this in localization!
+     Some applications might override netErrorApp.dtd with their specific version,
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
 
+<!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
+%netErrorAppDTD;
+
+<!ENTITY forbiddenBlocked.longDesc "<p>The browser prevented this page from loading because it is configured to block it.</p>
+">
+
+<!ENTITY forbiddenBlocked.title "Forbidden Site">
 
 <!ENTITY securityOverride.linkText "Or you can add an exception…">
 <!ENTITY securityOverride.warningContent "

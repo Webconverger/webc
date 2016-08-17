@@ -38,7 +38,9 @@
 <!ENTITY contentEncodingError.longDesc "<p>No pot mostrar-se la pàgina que esteu intentant visualitzar perquè utilitza una forma de compressió no vàlida o incompatible.</p><ul><li>Poseu-vos en contacte amb els propietaris del lloc web per informar-los del problema.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Tipus de fitxer insegur">
-<!ENTITY unsafeContentType.longDesc "<ul> <li>Poseu-vos en contacte amb els propietaris del lloc web per informar-los del problema.</li> </ul>">
+<!ENTITY unsafeContentType.longDesc "<ul> 
+<li>Poseu-vos en contacte amb els propietaris del lloc web per informar-los del problema.</li> 
+</ul>">
 
 <!ENTITY netReset.title "S'ha interromput la connexió">
 <!ENTITY netReset.longDesc "<p>S'ha interromput l'enllaç a la xarxa mentre es negociava una connexió. Torneu-ho a provar.</p>">
@@ -65,10 +67,21 @@
 <!ENTITY nssFailure2.longDesc2 "<p>La pàgina que esteu intentant veure no es pot mostrar perquè no s'ha pogut verificar l'autenticitat de les dades rebudes.</p><ul><li>Poseu-vos en contacte amb els propietaris del lloc web per informar-los del problema.</li></ul>">
 
 <!ENTITY nssBadCert.title "La connexió segura ha fallat">
-<!ENTITY nssBadCert.longDesc2 "<ul> <li>Això podria ser un problema amb la configuració del servidor, o bé podria ser que algú estigués provant de fer-se passar pel servidor.</li> <li>Si us hi heu connectat sense cap problema alguna altra vegada, l'error podria ser temporal, i podeu tornar-ho a provar més tard.</li> </ul>">
+<!ENTITY nssBadCert.longDesc2 "<ul> 
+<li>Això podria ser un problema amb la configuració del servidor, o bé podria ser que algú estigués provant de fer-se passar pel servidor.</li> 
+<li>Si us hi heu connectat sense cap problema alguna altra vegada, l'error podria ser temporal, i podeu tornar-ho a provar més tard.</li> 
+</ul>">
 
-<!ENTITY securityOverride.linkText "O bé, podeu afegir una excepció…">
-<!ENTITY securityOverride.warningContent "<p>No hauríeu d'afegir una excepció si esteu utilitzant una connexió d'Internet de la qual no en confieu completament, o si no esteu acostumat a veure un avís d'aquest servidor.</p> <p>Si tot i això voleu afegir una excepció per a aquest lloc web, podeu fer-ho des dels paràmetres avançats de xifratge.</p>">
+<!ENTITY malwareBlocked.title "Aquest lloc pot ser atacant!">
+<!ENTITY malwareBlocked.longDesc "<p>Els llocs atacants instal·len programari que roba informació privada, utilitzen el vostre ordinador per atacar-ne d'altres, o fan malbé el vostre sistema.</p> 
+<p>Els propietaris que creguin que llurs llocs web s'han informat de forma errònia, poden <a href='http://www.stopbadware.org/home/reviewinfo'>demanar que es revisin</a>.</p>">
+
+<!ENTITY unwantedBlocked.title "Aquest lloc pot contenir programari indesitjable!">
+<!ENTITY unwantedBlocked.longDesc "<p>Les pàgines amb programari indesitjable intenten instal·lar programari que pot portar a enganys i afectar el vostre sistema de formes inesperades.</p>">
+
+<!ENTITY phishingBlocked.title "Aquest lloc pot ser una falsificació!">
+<!ENTITY phishingBlocked.longDesc "<p>La informació personal inserida en aquesta pàgina podria ser emprada per cometre frau o suplantació de la vostra identitat.</p> 
+<p>Aquest tipus de falsificacions web s'utilitzen en enganys coneguts com a pesca electrònica (phishing), on es tracta suplantar la identitat de pàgines web i correus electrònics que són de la vostra confiança.</p>">
 
 <!ENTITY cspBlocked.title "Blocat per la política de seguretat del contingut">
 <!ENTITY cspBlocked.longDesc "<p>El navegador ha impedit que la pàgina es carregui d'aquesta manera perquè la pàgina té una política de seguretat del contingut que no ho permet.</p>">
@@ -78,3 +91,21 @@
 
 <!ENTITY remoteXUL.title "XUL remot">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Poseu-vos en contacte amb els propietaris del lloc web per informar-los del problema.</li></ul></p>">
+<!-- Include app-specific error messages - do not change this in localization!
+     Some applications might override netErrorApp.dtd with their specific version,
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
+
+<!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
+%netErrorAppDTD;
+
+<!ENTITY forbiddenBlocked.longDesc "<p>The browser prevented this page from loading because it is configured to block it.</p>
+">
+
+<!ENTITY forbiddenBlocked.title "Forbidden Site">
+
+<!ENTITY securityOverride.linkText "Or you can add an exception…">
+<!ENTITY securityOverride.warningContent "
+<p>You should not add an exception if you are using an internet connection that you do not trust completely or if you are not used to seeing a warning for this server.</p>
+<p>If you still wish to add an exception for this site, you can do so in your advanced encryption settings.</p>
+">

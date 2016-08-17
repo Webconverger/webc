@@ -83,11 +83,6 @@
 <!ENTITY phishingBlocked.longDesc "<p>ఈ సైటునందు వ్యక్తిగతసమాచారం ప్రవేశపెట్టుటవలన  అపహరణకు లేదా ఇతరమోసాలకు గురికావచ్చు.</p> 
 <p>ఈ రకమైన వెబ్‌మోసాలు పిష్షింగ్ దాడులవంటి స్కామ్‌లలో వుపయోగించబడతాయి,వీటిలో మోసపూరిత వెబ్‌పుటలు మరియు ఈమెయిల్సు ‌  మీరునమ్మే మూలాలను అనుకరిస్తాయి.</p>">
 
-
-
-<!ENTITY securityOverride.linkText "లేదా మీరు మినహాయింపును చేర్చవచ్చు…">
-
-
 <!ENTITY cspBlocked.title "కాంటెంట్ సెక్యూరిటీ పాలసీ చేత నిరోధించబడింది">
 <!ENTITY cspBlocked.longDesc "<p>విహరిణి యీ పేజీ యీ మార్గంలో లోడవ్వుటనుండి నిరోధించుచున్నది యెంచేతంటే ఆ పేజీ కాంటెంట్ సెక్యూరిటీ పాలసీ కలిగివుంది అది దీనిని నిరాకరిస్తోంది.</p>">
 
@@ -96,7 +91,20 @@
 
 <!ENTITY remoteXUL.title "రిమోట్ XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>ఈ సమస్య గురించి వారికి తెలుపుటకు దయచేసి వెబ్‌సైట్ స్వంతదారులను సంప్రదించండి.</li></ul></p>">
+<!-- Include app-specific error messages - do not change this in localization!
+     Some applications might override netErrorApp.dtd with their specific version,
+     this inclusion needs to be intact for that approach to work correctly.
+     Please, try to keep this at the end of the file. -->
 
+<!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
+%netErrorAppDTD;
+
+<!ENTITY forbiddenBlocked.longDesc "<p>The browser prevented this page from loading because it is configured to block it.</p>
+">
+
+<!ENTITY forbiddenBlocked.title "Forbidden Site">
+
+<!ENTITY securityOverride.linkText "Or you can add an exception…">
 <!ENTITY securityOverride.warningContent "
 <p>You should not add an exception if you are using an internet connection that you do not trust completely or if you are not used to seeing a warning for this server.</p>
 <p>If you still wish to add an exception for this site, you can do so in your advanced encryption settings.</p>
