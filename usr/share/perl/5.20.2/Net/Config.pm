@@ -15,7 +15,12 @@ use strict;
 @ISA     = qw(Net::LocalCfg Exporter);
 $VERSION = "1.13";
 
-eval { local $SIG{__DIE__}; require Net::LocalCfg };
+eval {
+  local @INC = @INC;
+  pop @INC if $INC[-1] eq '.';
+  local $SIG{__DIE__};
+  require Net::LocalCfg;
+};
 
 %NetConfig = (
   nntp_hosts      => [],

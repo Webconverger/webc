@@ -248,6 +248,8 @@ sub import
     # see if we can find Math::BigInt::Lite
     if (!defined $a && !defined $p)		# rounding won't work to well
       {
+      local @INC = @INC;
+      pop @INC if $INC[-1] eq '.';
       eval 'require Math::BigInt::Lite;';
       if ($@ eq '')
         {

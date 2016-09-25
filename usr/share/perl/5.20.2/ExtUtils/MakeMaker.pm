@@ -5,6 +5,11 @@ use strict;
 
 BEGIN {require 5.006;}
 
+# Assure anything called from Makefile.PL is allowed to have . in @INC.
+BEGIN {
+    $ENV{PERL_USE_UNSAFE_INC} = 1;
+}
+
 require Exporter;
 use ExtUtils::MakeMaker::Config;
 use Carp;

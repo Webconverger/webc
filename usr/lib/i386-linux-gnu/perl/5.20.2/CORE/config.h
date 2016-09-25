@@ -9,9 +9,9 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Thu May 26 05:45:50 UTC 2016
+ * Configuration time: Sun Jul 24 19:46:25 UTC 2016
  * Configured by     : Debian Project
- * Target system     : linux babin 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt25-2 (2016-04-08) i686 gnulinux 
+ * Target system     : linux x86-csail-01 3.16.0-4-amd64 #1 smp debian 3.16.7-ckt25-2+deb8u3 (2016-07-02) i686 gnulinux 
  */
 
 #ifndef _config_h_
@@ -3908,7 +3908,7 @@
  *	be used.
  */
 #ifndef USE_SITECUSTOMIZE
-/*#define	USE_SITECUSTOMIZE		/ **/
+#define	USE_SITECUSTOMIZE		/**/
 #endif
 
 /* HAS_SNPRINTF:

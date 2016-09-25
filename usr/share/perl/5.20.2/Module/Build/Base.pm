@@ -1860,6 +1860,8 @@ BEGIN {
     (
 $quoted_INC
     );
+  push \@INC, "." unless grep { \$_ eq "." } \@INC; # Force my process to include . in \@INC.
+  \$ENV{"PERL_USE_UNSAFE_INC"} = 1; # Force all child processes to include . in \@INC.
 }
 
 close(*DATA) unless eof(*DATA); # ensure no open handles to this script

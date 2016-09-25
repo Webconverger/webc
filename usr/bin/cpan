@@ -3,8 +3,14 @@
 	if $running_under_some_shell;
 #!/usr/local/bin/perl
 
+BEGIN { pop @INC if $INC[-1] eq '.' }
 use strict;
 use vars qw($VERSION);
+
+BEGIN {
+    # make sure we can install any modules from CPAN without patching them
+    $ENV{PERL_USE_UNSAFE_INC} = 1;
+}
 
 use App::Cpan '1.60_02';
 $VERSION = '1.61';

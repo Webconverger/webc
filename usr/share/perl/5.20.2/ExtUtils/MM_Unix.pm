@@ -3462,7 +3462,7 @@ PERL_DL_NONLAZY set for tests.
 
 sub test_via_harness {
     my($self, $perl, $tests) = @_;
-    return $self->SUPER::test_via_harness("PERL_DL_NONLAZY=1 $perl", $tests);
+    return $self->SUPER::test_via_harness("PERL_DL_NONLAZY=1 PERL_USE_UNSAFE_INC=1 $perl", $tests);
 }
 
 =item test_via_script (override)
@@ -3473,7 +3473,7 @@ Again, the PERL_DL_NONLAZY thing.
 
 sub test_via_script {
     my($self, $perl, $script) = @_;
-    return $self->SUPER::test_via_script("PERL_DL_NONLAZY=1 $perl", $script);
+    return $self->SUPER::test_via_script("PERL_DL_NONLAZY=1 PERL_USE_UNSAFE_INC=1 $perl", $script);
 }
 
 
