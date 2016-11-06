@@ -1,0 +1,28 @@
+sudo: required
+language: generic
+services:
+- docker
+before_install:
+- pip install --user awscli
+- export PATH=$PATH:$HOME/.local/bin
+- docker pull webc/isobuilder
+- isobuildersha256=$(docker inspect --format='{{.RepoDigests}}' webc/isobuilder | grep -o sha256:....... | sed 's,sha256:,,')
+- docker run --name webc -it -v $TRAVIS_BUILD_DIR:/root/Debian-Live-config/webconverger/chroot
+  webc/isobuilder make
+- docker cp webc:/root/Debian-Live-config/webconverger/live-image-i386.hybrid.iso
+  ${TRAVIS_COMMIT::7}.iso
+- sha1=($(sha1sum ${TRAVIS_COMMIT::7}.iso))
+- echo ISO SHA1 ${sha1}
+- export key="$(date --rfc-3339=date)/${isobuildersha256}-${TRAVIS_COMMIT::7}/${sha1}.iso"
+- aws s3 cp --storage-class REDUCED_REDUNDANCY --acl public-read --metadata "travis_build_id=${TRAVIS_BUILD_ID}" ${TRAVIS_COMMIT::7}.iso
+  s3://build.webconverger.com/$key
+- touch index.html
+- aws s3 cp --acl public-read --storage-class REDUCED_REDUNDANCY index.html s3://build.webconverger.com/latest.iso 
+  --website-redirect="https://build.webconverger.com/$key"
+- aws s3api list-objects --bucket build.webconverger.com --output json --prefix "20" | jq -r '.Contents | sort_by(.LastModified) | reverse | .[] | .Key + " " + ((.Size / 1000000000)|tostring)' | while read -r key size; do buildid=$(aws s3api head-object --bucket build.webconverger.com --key "$key" | jq -r .Metadata.travis_build_id);printf "<li><a href=https://travis-ci.org/Webconverger/webc/builds/%s>TravisCI</a> <a href=/%s>%s %.2f GB</a></li>\n" "$buildid" "$key" "$key" "$size"; done > index.html
+- aws s3 cp --acl public-read --storage-class REDUCED_REDUNDANCY index.html s3://build.webconverger.com/index.html
+
+env:
+  global:
+  - secure: dpGJ4Nr+M+PNXXt/zlqdbKVyvXefL+Nl0/Tph1NVz1F/X4iibg4N7brNg0tKf3YxV8VM2h6w4FPCmpyT/hLFJeOLPkGOvbu54h2DNBCqIxXqEn0CsbeBqrJ2wPdHSkNkNlixRmL5pP61rDRx6dqvrn0XJtUfDV91QQKaJMhn0bNB0gf3PI/byv6xgF84YsVGmY8w6KyiWg1BXO5L237Yyp3+PqPAKYzJKf9Sh+sVTRM5WbAoPNJP1taFJslbvRmj9x0lSz6mZPuCQrXCaN9bqyX3PV68AWiLOW/ir36bnjtm2wRtdt3IJCfuJCdA7iBFIQ4oGYLHPfAH6s3SbHDa6323WzDnyaKoXSQSDL2EpBHw09Jae5f1kGYsOOvw5UFOT+sHXRV1u++mmrBik2JwVZICmAscWiDshxcPY0OaxfyBGQtjF/FOt//JcE3mDGSI1dyVv/6/9isa9cuXbgEAc4sO8xFLDf3jvxlSHCLibVdfGP1StLDJpZ1TjttaQTodZu1o9UJFEZ2KnXhwVWtmiKGzeHl2IWKwhKoySHigWVvFZpRHyDOwJKFJKfyuPzBzJHeBrSZ9jHM3U8zcWGK3I8jA49SJ7cWdZoFWOn5tPGFqdj804zcS47dcs6UwZWVFDw2I4Dt2PSZnx/gHWM+DEdqxCZHETEYk64DzAMMSKxM=
+  - secure: Ckit7M3KMxkNJYGcrOYe3PTfCqANwQf6MkwrYoj4j8uyvQ3iWtHdeuTPgW/g+Uzw/qT1oDSCOA7OXX02ePG5WKPbKKivIWkd139LcSSXiO9Uwc3oO42PnrdJnhZwyltmBuWpnH60a9I6+cSS3VYXh6+lBfe3AXAcSb8dxalZI8sdMDUTbIPTeqMpqQL2niVYdcdYL+d+EyLP2PQHdFEdR2qwKCx12SoS/bl7cWIPIdPOY7dLGxul/hglb28kxX40DlzRAH/zjNzxc2wBKleeQu55ZyV0F3w/C+GeYNM+BF4A3i+qXM5VUAwXThjegUza2H8Ka1gNT+tkCB6B+4qhaYVldlpeXBixXUgwbAZT1TmQCQd5TceWiqBNRZ8yUDyKVgPCxQ7y6OoqAHKclvkZjDvaaUGDitiUXDYMDIALtr8OVEFaD5NE96dCQlZd/3iuFP2sYOgHagN7S7VrJRDzDWtxhKQZYptDsM7C6d+i3mRoGVk/c1CayJHNXndZ86JzGSx5OG06M7FkbaD6p3wFf3Jv3NDjfGC9JK8aE6UQxf0aqpoIqwrUOfXvDo2ONvgCNOZNSQ4GTH1IPVXS73SDKr6AewltMQQMJ4A1ECgV5OjYesC/eF4h3Duk9igtTA42PsTgyjQRgzN8ZPs4bRAc4f9NoUKP/+2vge00Xrd9y4U=
