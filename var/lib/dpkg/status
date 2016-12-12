@@ -46,8 +46,8 @@ Installed-Size: 723
 Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gst-plugins-good0.10 (0.10.31-3+nmu4)
-Version: 0.10.31-3+nmu4+b1
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu4+deb8u2
 Replaces: gstreamer0.10-plugins-good (<< 0.10.30-2)
 Depends: gconf2 (>= 2.28.1-2), gconf-service, libc6 (>= 2.4), libgconf-2-4 (>= 3.2.5), libglib2.0-0 (>= 2.31.8), libgstreamer0.10-0 (>= 0.10.36)
 Conflicts: gstreamer0.10-plugins-good (<< 0.10.30-2)
@@ -69,11 +69,11 @@ Package: libgs9-common
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 3987
+Installed-Size: 3988
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: all
 Source: ghostscript
-Version: 9.06~dfsg-2+deb8u1
+Version: 9.06~dfsg-2+deb8u4
 Recommends: fonts-droid
 Description: interpreter for the PostScript language and for PDF - common files
  GPL Ghostscript is used for PostScript/PDF preview and printing.
@@ -204,9 +204,9 @@ Installed-Size: 1014
 Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Source: vim
-Version: 2:7.4.488-7
+Version: 2:7.4.488-7+deb8u1
 Provides: editor
-Depends: vim-common (= 2:7.4.488-7), libacl1 (>= 2.2.51-8), libc6 (>= 2.15), libselinux1 (>= 1.32), libtinfo5
+Depends: vim-common (= 2:7.4.488-7+deb8u1), libacl1 (>= 2.2.51-8), libc6 (>= 2.15), libselinux1 (>= 1.32), libtinfo5
 Suggests: indent
 Conffiles:
  /etc/vim/vimrc.tiny cda3c912e5fd54a07996ee29b14c58eb
@@ -498,16 +498,36 @@ Description: Lightweight pdf viewer based on poppler libs
  Evince but without using the GNOME libraries.
 Homepage: http://trac.emma-soft.com/epdfview/
 
+Package: libllvm3.8
+Status: install ok installed
+Priority: optional
+Section: libs
+Installed-Size: 45399
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Architecture: i386
+Multi-Arch: same
+Source: llvm-toolchain-3.8
+Version: 1:3.8.1-12~bpo8+1
+Depends: libc6 (>= 2.15), libedit2 (>= 2.11-20080614), libffi6 (>= 3.0.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.9), libtinfo5, zlib1g (>= 1:1.2.0)
+Pre-Depends: multiarch-support
+Description: Modular compiler and toolchain technologies, runtime library
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ This package contains the LLVM runtime library.
+Homepage: http://www.llvm.org/
+
 Package: libavcodec56
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 15781
+Installed-Size: 15786
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:11.7-1~deb8u1
+Version: 6:11.8-1~deb8u1
 Replaces: libavcodec-extra-56
 Depends: libavresample2 (>= 6:11~beta1), libavutil54 (>= 6:11~beta1), libc6 (>= 2.7), libgsm1 (>= 1.0.13), libmp3lame0, libopenjpeg5 (>= 1.3+dfsg), libopus0 (>= 1.1), libschroedinger-1.0-0 (>= 1.0.7), libspeex1 (>= 1.2~beta3-1), libtheora0 (>= 1.0), libva1 (>= 1.0.3), libvorbis0a (>= 1.1.2), libvorbisenc2 (>= 1.1.2), libvpx1 (>= 1.3.0), libx264-142, libxvidcore4 (>= 1.2.2), zlib1g (>= 1:1.2.0)
 Pre-Depends: multiarch-support
@@ -693,10 +713,10 @@ Package: xserver-xorg-video-intel
 Status: install ok installed
 Priority: optional
 Section: x11
-Installed-Size: 3406
+Installed-Size: 3419
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
-Version: 2:2.99.917+git20160522-1~bpo8+1
+Version: 2:2.99.917+git20161105-1~bpo8+1
 Provides: xorg-driver-video
 Depends: libc6 (>= 2.17), libdrm-intel1 (>= 2.4.38), libdrm2 (>= 2.4.25), libpciaccess0 (>= 0.8.0+git20071002), libpixman-1-0 (>= 0.30.0), libudev1 (>= 183), libx11-6, libx11-xcb1, libxcb-dri2-0, libxcb-dri3-0, libxcb-sync1, libxcb-util0 (>= 0.3.8), libxcb1, libxcursor1 (>> 1.1.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxinerama1, libxrandr2 (>= 2:1.2.99.2), libxrender1, libxshmfence1, libxss1, libxtst6, libxv1, libxvmc1, xorg-video-abi-18, xserver-xorg-core (>= 2:1.15.99.903)
 Conffiles:
@@ -1380,12 +1400,12 @@ Package: firmware-realtek
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 1025
+Installed-Size: 978
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Suggests: initramfs-tools
 Description: Binary firmware for Realtek wired/wifi/BT adapters
  This package contains the binary firmware for Realtek Ethernet, wifi and
@@ -2303,12 +2323,12 @@ Package: libssl1.0.0
 Status: install ok installed
 Priority: important
 Section: libs
-Installed-Size: 7457
+Installed-Size: 7465
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: openssl
-Version: 1.0.1t-1+deb8u3
+Version: 1.0.1t-1+deb8u5
 Depends: libc6 (>= 2.7), debconf (>= 0.5) | debconf-2.0
 Pre-Depends: multiarch-support
 Description: Secure Sockets Layer toolkit - shared libraries
@@ -2363,11 +2383,11 @@ Package: libisccfg-export90
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 108
+Installed-Size: 77
 Maintainer: LaMont Jones <lamont@debian.org>
 Architecture: i386
 Source: bind9
-Version: 1:9.9.5.dfsg-9+deb8u6
+Version: 1:9.9.5.dfsg-9+deb8u8
 Depends: libc6 (>= 2.4), libisc-export95
 Pre-Depends: multiarch-support
 Description: Exported ISC CFG Shared Library
@@ -2687,8 +2707,8 @@ Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alio
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:11.7-1~deb8u1
-Depends: libavcodec56 (>= 6:11~beta1) | libavcodec-extra-56 (>= 6:11.7), libavutil54 (>= 6:11~beta1), libbz2-1.0, libc6 (>= 2.7), libgnutls-deb0-28 (>= 3.3.0), librtmp1 (>= 2.3), zlib1g (>= 1:1.2.0.2)
+Version: 6:11.8-1~deb8u1
+Depends: libavcodec56 (>= 6:11~beta1) | libavcodec-extra-56 (>= 6:11.8), libavutil54 (>= 6:11~beta1), libbz2-1.0, libc6 (>= 2.7), libgnutls-deb0-28 (>= 3.3.0), librtmp1 (>= 2.3), zlib1g (>= 1:1.2.0.2)
 Pre-Depends: multiarch-support
 Description: Libav file format library
  Libav is a complete, cross-platform solution to decode, encode, record,
@@ -2757,12 +2777,12 @@ Package: libdrm-amdgpu1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 64
+Installed-Size: 68
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.70-1~bpo8+1
+Version: 2.4.73-1~bpo8+1
 Depends: libc6 (>= 2.17), libdrm2 (>= 2.4.60)
 Pre-Depends: multiarch-support
 Description: Userspace interface to amdgpu-specific kernel DRM services -- runtime
@@ -2771,7 +2791,7 @@ Description: Userspace interface to amdgpu-specific kernel DRM services -- runti
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI).
  The DRI is currently used on Linux to provide hardware-accelerated
  OpenGL drivers.
-Homepage: http://cgit.freedesktop.org/mesa/drm/
+Homepage: https://cgit.freedesktop.org/mesa/drm/
 
 Package: gsfonts
 Status: install ok installed
@@ -3096,8 +3116,8 @@ Installed-Size: 289
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 7.38.0-4+deb8u4
-Depends: libc6 (>= 2.17), libcurl3 (= 7.38.0-4+deb8u4), zlib1g (>= 1:1.1.4)
+Version: 7.38.0-4+deb8u5
+Depends: libc6 (>= 2.17), libcurl3 (= 7.38.0-4+deb8u5), zlib1g (>= 1:1.1.4)
 Description: command line tool for transferring data with URL syntax
  curl is a command line tool for transferring data with URL syntax, supporting
  DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, POP3,
@@ -3558,12 +3578,12 @@ Package: libcurl3
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 602
+Installed-Size: 598
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.38.0-4+deb8u4
+Version: 7.38.0-4+deb8u5
 Depends: libc6 (>= 2.17), libcomerr2 (>= 1.01), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libk5crypto3 (>= 1.6.dfsg.2), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), librtmp1 (>= 2.4+20131018.git79459a2-3~), libssh2-1 (>= 1.2.6), libssl1.0.0 (>= 1.0.1), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Recommends: ca-certificates
@@ -3960,12 +3980,12 @@ Package: libcurl3-gnutls
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 574
+Installed-Size: 578
 Maintainer: Alessandro Ghedini <ghedo@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: curl
-Version: 7.38.0-4+deb8u4
+Version: 7.38.0-4+deb8u5
 Depends: libc6 (>= 2.17), libcomerr2 (>= 1.01), libgnutls-deb0-28 (>= 3.3.0), libgssapi-krb5-2 (>= 1.10+dfsg~), libidn11 (>= 1.13), libk5crypto3 (>= 1.6.dfsg.2), libkrb5-3 (>= 1.6.dfsg.2), libldap-2.4-2 (>= 2.4.7), libnettle4, librtmp1 (>= 2.4+20131018.git79459a2-3~), libssh2-1 (>= 1.2.6), zlib1g (>= 1:1.1.4)
 Pre-Depends: multiarch-support
 Recommends: ca-certificates
@@ -4321,12 +4341,12 @@ Package: firmware-ipw2x00
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 1234
+Installed-Size: 1187
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Depends: debconf (>= 0.5) | debconf-2.0
 Pre-Depends: debconf | debconf-2.0
 Suggests: initramfs-tools
@@ -4954,12 +4974,12 @@ Package: libgbm1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 97
+Installed-Size: 103
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
+Version: 12.0.4-2~bpo8+1
 Depends: libc6 (>= 2.8), libdrm2 (>= 2.4.3), libexpat1 (>= 2.0.1), libwayland-client0 (>= 1.2.0), libwayland-server0 (>= 1.2.0), libudev1
 Pre-Depends: multiarch-support
 Description: generic buffer management API -- runtime
@@ -5302,18 +5322,18 @@ Package: libgl1-mesa-dri
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 16520
+Installed-Size: 17878
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
-Depends: libc6 (>= 2.17), libdrm-amdgpu1 (>= 2.4.63), libdrm-intel1 (>= 2.4.48), libdrm-nouveau2 (>= 2.4.38), libdrm-radeon1 (>= 2.4.31), libdrm2 (>= 2.4.38), libelf1 (>= 0.142), libexpat1 (>= 2.0.1), libgcc1 (>= 1:4.1.1), libllvm3.5, libstdc++6 (>= 4.9)
+Version: 12.0.4-2~bpo8+1
+Depends: libc6 (>= 2.17), libdrm-amdgpu1 (>= 2.4.63), libdrm-intel1 (>= 2.4.48), libdrm-nouveau2 (>= 2.4.66), libdrm-radeon1 (>= 2.4.31), libdrm2 (>= 2.4.66), libelf1 (>= 0.142), libexpat1 (>= 2.0.1), libgcc1 (>= 1:4.1.1), libgcrypt20 (>= 1.6.1), libllvm3.8, libstdc++6 (>= 4.9)
 Pre-Depends: multiarch-support
-Recommends: libtxc-dxtn-s2tc0 | libtxc-dxtn0
+Recommends: libtxc-dxtn-s2tc | libtxc-dxtn-s2tc0 | libtxc-dxtn0
 Breaks: xserver-xorg-core (<< 2:1.14.3-5)
 Conffiles:
- /etc/drirc f2e32942030a4a59506fd9d230e6e616
+ /etc/drirc d279cb60294ad49d90803416a310683e
 Description: free implementation of the OpenGL API -- DRI modules
  This version of Mesa provides GLX and DRI capabilities: it is capable of
  both direct and indirect rendering.  For direct rendering, it can use DRI
@@ -5375,8 +5395,8 @@ Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lis
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.10.7-1+deb8u1
-Depends: libnspr4 (= 2:4.10.7-1+deb8u1)
+Version: 2:4.12-1+debu8u1
+Depends: libnspr4 (= 2:4.12-1+debu8u1)
 Description: NetScape Portable Runtime Library - transitional package
  This is a transitional package to ensure smooth transition of all packages
  to libnspr4.
@@ -5545,12 +5565,12 @@ Package: firmware-amd-graphics
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 11259
+Installed-Size: 14023
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Replaces: firmware-linux-nonfree (<< 20151018-1~)
 Suggests: initramfs-tools
 Breaks: firmware-linux-nonfree (<< 20151018-1~)
@@ -5581,6 +5601,32 @@ Description: Binary firmware for AMD/ATI graphics chips
   * amdgpu/fiji_smc.bin
   * amdgpu/fiji_uvd.bin
   * amdgpu/fiji_vce.bin
+  * amdgpu/polaris10_ce.bin
+  * amdgpu/polaris10_mc.bin
+  * amdgpu/polaris10_me.bin
+  * amdgpu/polaris10_mec.bin
+  * amdgpu/polaris10_mec2.bin
+  * amdgpu/polaris10_pfp.bin
+  * amdgpu/polaris10_rlc.bin
+  * amdgpu/polaris10_sdma.bin
+  * amdgpu/polaris10_sdma1.bin
+  * amdgpu/polaris10_smc.bin
+  * amdgpu/polaris10_smc_sk.bin
+  * amdgpu/polaris10_uvd.bin
+  * amdgpu/polaris10_vce.bin
+  * amdgpu/polaris11_ce.bin
+  * amdgpu/polaris11_mc.bin
+  * amdgpu/polaris11_me.bin
+  * amdgpu/polaris11_mec.bin
+  * amdgpu/polaris11_mec2.bin
+  * amdgpu/polaris11_pfp.bin
+  * amdgpu/polaris11_rlc.bin
+  * amdgpu/polaris11_sdma.bin
+  * amdgpu/polaris11_sdma1.bin
+  * amdgpu/polaris11_smc.bin
+  * amdgpu/polaris11_smc_sk.bin
+  * amdgpu/polaris11_uvd.bin
+  * amdgpu/polaris11_vce.bin
   * amdgpu/stoney_ce.bin
   * amdgpu/stoney_me.bin
   * amdgpu/stoney_mec.bin
@@ -6226,11 +6272,11 @@ Package: libirs-export91
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 103
+Installed-Size: 72
 Maintainer: LaMont Jones <lamont@debian.org>
 Architecture: i386
 Source: bind9
-Version: 1:9.9.5.dfsg-9+deb8u6
+Version: 1:9.9.5.dfsg-9+deb8u8
 Depends: libc6 (>= 2.4), libdns-export100, libisc-export95, libisccfg-export90
 Pre-Depends: multiarch-support
 Description: Exported IRS Shared Library
@@ -6549,9 +6595,9 @@ Installed-Size: 119
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Multi-Arch: foreign
-Version: 9.06~dfsg-2+deb8u1
+Version: 9.06~dfsg-2+deb8u4
 Provides: postscript-viewer
-Depends: libc6 (>= 2.4), libgs9 (= 9.06~dfsg-2+deb8u1), gsfonts, debconf | debconf-2.0
+Depends: libc6 (>= 2.4), libgs9 (= 9.06~dfsg-2+deb8u4), gsfonts, debconf | debconf-2.0
 Suggests: ghostscript-x
 Description: interpreter for the PostScript language and for PDF
  GPL Ghostscript is used for PostScript/PDF preview and printing.
@@ -6638,12 +6684,12 @@ Package: libglapi-mesa
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 149
+Installed-Size: 154
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
+Version: 12.0.4-2~bpo8+1
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Description: free implementation of the GL API -- shared library
@@ -6932,13 +6978,13 @@ Package: libxatracker2
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 3373
+Installed-Size: 3529
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
-Depends: libc6 (>= 2.17), libdrm-nouveau2 (>= 2.4.38), libdrm2 (>= 2.4.38), libexpat1 (>= 2.0.1), libgcc1 (>= 1:4.1.1), libllvm3.5, libstdc++6 (>= 4.9)
+Version: 12.0.4-2~bpo8+1
+Depends: libc6 (>= 2.17), libdrm-nouveau2 (>= 2.4.66), libdrm2 (>= 2.4.38), libexpat1 (>= 2.0.1), libgcc1 (>= 1:4.1.1), libgcrypt20 (>= 1.6.0), libllvm3.8, libstdc++6 (>= 4.9)
 Pre-Depends: multiarch-support
 Description: X acceleration library -- runtime
  This package contains the XA (X acceleration) library.  It is used exclusively
@@ -7030,11 +7076,11 @@ Package: libdns-export100
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 1473
+Installed-Size: 1442
 Maintainer: LaMont Jones <lamont@debian.org>
 Architecture: i386
 Source: bind9
-Version: 1:9.9.5.dfsg-9+deb8u6
+Version: 1:9.9.5.dfsg-9+deb8u8
 Depends: libc6 (>= 2.4), libisc-export95
 Pre-Depends: multiarch-support
 Description: Exported DNS Shared Library
@@ -7348,8 +7394,7 @@ Installed-Size: 2286
 Maintainer: Bdale Garbee <bdale@gag.com>
 Architecture: i386
 Multi-Arch: foreign
-Source: tar (1.27.1-2)
-Version: 1.27.1-2+b1
+Version: 1.27.1-2+deb8u1
 Replaces: cpio (<< 2.4.2-39)
 Pre-Depends: libacl1 (>= 2.2.51-8), libc6 (>= 2.17), libselinux1 (>= 1.32)
 Suggests: bzip2, ncompress, xz-utils, tar-scripts
@@ -7475,13 +7520,13 @@ Package: libnspr4
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 329
+Installed-Size: 337
 Maintainer: Maintainers of Mozilla-related packages <pkg-mozilla-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: nspr
-Version: 2:4.10.7-1+deb8u1
-Depends: libc6 (>= 2.15)
+Version: 2:4.12-1+debu8u1
+Depends: libc6 (>= 2.17)
 Pre-Depends: multiarch-support
 Conflicts: libnspr4-0d (<< 2:4.9-2~)
 Description: NetScape Portable Runtime Library
@@ -8111,7 +8156,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.70-1~bpo8+1
+Version: 2.4.73-1~bpo8+1
 Depends: libc6 (>= 2.17)
 Pre-Depends: multiarch-support
 Description: Userspace interface to kernel DRM services -- runtime
@@ -8122,7 +8167,7 @@ Description: Userspace interface to kernel DRM services -- runtime
  OpenGL drivers.
  .
  This package provides the runtime environment for libdrm.
-Homepage: http://cgit.freedesktop.org/mesa/drm/
+Homepage: https://cgit.freedesktop.org/mesa/drm/
 
 Package: isc-dhcp-client
 Status: install ok installed
@@ -8491,12 +8536,12 @@ Package: libxslt1.1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 490
+Installed-Size: 494
 Maintainer: Debian XML/SGML Group <debian-xml-sgml-pkgs@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libxslt
-Version: 1.1.28-2+deb8u1
+Version: 1.1.28-2+deb8u2
 Depends: libc6 (>= 2.17), libgcrypt20 (>= 1.6.0), libxml2 (>= 2.9.0)
 Pre-Depends: multiarch-support
 Description: XSLT 1.0 processing library - runtime library
@@ -8772,8 +8817,8 @@ Installed-Size: 831
 Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gst-plugins-good0.10 (0.10.31-3+nmu4)
-Version: 0.10.31-3+nmu4+b1
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu4+deb8u2
 Provides: gstreamer0.10-audiosink, gstreamer0.10-audiosource
 Depends: libc6 (>= 2.4), libglib2.0-0 (>= 2.37.3), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36), libpulse0 (>= 0.99.4)
 Description: GStreamer plugin for PulseAudio
@@ -8966,12 +9011,12 @@ Package: libdrm-intel1
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 171
+Installed-Size: 187
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.70-1~bpo8+1
+Version: 2.4.73-1~bpo8+1
 Depends: libc6 (>= 2.17), libdrm2 (>= 2.4.38), libpciaccess0
 Pre-Depends: multiarch-support
 Description: Userspace interface to intel-specific kernel DRM services -- runtime
@@ -8980,7 +9025,7 @@ Description: Userspace interface to intel-specific kernel DRM services -- runtim
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI).
  The DRI is currently used on Linux to provide hardware-accelerated
  OpenGL drivers.
-Homepage: http://cgit.freedesktop.org/mesa/drm/
+Homepage: https://cgit.freedesktop.org/mesa/drm/
 
 Package: libfontembed1
 Status: install ok installed
@@ -9175,11 +9220,11 @@ Package: libisc-export95
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 413
+Installed-Size: 381
 Maintainer: LaMont Jones <lamont@debian.org>
 Architecture: i386
 Source: bind9
-Version: 1:9.9.5.dfsg-9+deb8u6
+Version: 1:9.9.5.dfsg-9+deb8u8
 Depends: libc6 (>= 2.15)
 Pre-Depends: multiarch-support
 Description: Exported ISC Shared Library
@@ -9368,35 +9413,41 @@ Package: firmware-iwlwifi
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 27331
+Installed-Size: 45577
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Suggests: initramfs-tools
 Description: Binary firmware for Intel Wireless cards
  This package contains the binary firmware for Intel Wireless cards
  supported by the iwlegacy/iwl3945 and iwlwifi/iwlagn drivers.
  .
  Contents:
-  * Intel Wireless 8260 Bluetooth configuration (intel/ibt-11-5.ddc)
-  * Intel Wireless 8260 Bluetooth firmware (intel/ibt-11-5.sfi)
-  * Intel Wireless 3160 (B6) Bluetooth firmware patch, version 34
+  * Intel Wireless 8260 Bluetooth configuration, version REL0330
+    (intel/ibt-11-5.ddc)
+  * Intel Wireless 8260 Bluetooth firmware, version REL0330
+    (intel/ibt-11-5.sfi)
+  * Intel Wireless 8264 Bluetooth configuration, version REL0060
+    (intel/ibt-12-16.ddc)
+  * Intel Wireless 8264 Bluetooth firmware, version REL0060
+    (intel/ibt-12-16.sfi)
+  * Intel Wireless 3160 (B6) Bluetooth firmware patch, version 38
     (intel/ibt-hw-37.7.10-fw-1.0.1.2d.d.bseq)
-  * Intel Wireless 3160 (B4) Bluetooth firmware patch, version 83
+  * Intel Wireless 3160 (B4) Bluetooth firmware patch, version 86
     (intel/ibt-hw-37.7.10-fw-1.0.2.3.d.bseq)
-  * Intel Wireless 7260 (B5) Bluetooth firmware patch, version 34
+  * Intel Wireless 7260 (B5) Bluetooth firmware patch, version 38
     (intel/ibt-hw-37.7.10-fw-1.80.1.2d.d.bseq)
-  * Intel Wireless 7260 (B3) Bluetooth firmware patch, version 83
+  * Intel Wireless 7260 (B3) Bluetooth firmware patch, version 86
     (intel/ibt-hw-37.7.10-fw-1.80.2.3.d.bseq)
   * Intel Wireless 7260 Bluetooth firmware generic patch
     (intel/ibt-hw-37.7.bseq)
-  * Intel Wireless 7265 (C0) Bluetooth firmware patch, version 55
+  * Intel Wireless 7265 (C0) Bluetooth firmware patch, version 58
     (intel/ibt-hw-37.8.10-fw-1.10.2.27.d.bseq)
-  * Intel Wireless 7265 (D0) Bluetooth firmware patch, version 32
+  * Intel Wireless 7265 (D0) Bluetooth firmware patch, version 37
     (intel/ibt-hw-37.8.10-fw-1.10.3.11.e.bseq)
-  * Intel Wireless 7265 (D1) Bluetooth firmware patch, version 09
+  * Intel Wireless 7265 (D1) Bluetooth firmware patch, version 20
     (intel/ibt-hw-37.8.10-fw-22.50.19.14.f.bseq)
   * Intel Wireless 7265 Bluetooth firmware generic patch
     (intel/ibt-hw-37.8.bseq)
@@ -9419,6 +9470,12 @@ Description: Binary firmware for Intel Wireless cards
     (iwlwifi-3160-14.ucode)
   * Intel Wireless 3160 firmware, version 16.242414.0
     (iwlwifi-3160-16.ucode)
+  * Intel Wireless 3160 firmware, version 17.352738.0
+    (iwlwifi-3160-17.ucode)
+  * Intel Wireless 3168 firmware, version 21.302800.0
+    (iwlwifi-3168-21.ucode)
+  * Intel Wireless 3168 firmware, version 22.361476.0
+    (iwlwifi-3168-22.ucode)
   * Intel Wireless 3945 firmware, version 15.32.2.9
     (iwlwifi-3945-2.ucode)
   * Intel Wireless 4965 firmware, version 228.61.2.24
@@ -9449,6 +9506,8 @@ Description: Binary firmware for Intel Wireless cards
     (iwlwifi-7260-14.ucode)
   * Intel Wireless 7260 firmware, version 16.242414.0
     (iwlwifi-7260-16.ucode)
+  * Intel Wireless 7260 firmware, version 17.352738.0
+    (iwlwifi-7260-17.ucode)
   * Intel Wireless 7265 firmware, version 25.228.9.0
     (iwlwifi-7265-9.ucode)
   * Intel Wireless 7265 firmware, version 25.17.12.0
@@ -9457,16 +9516,32 @@ Description: Binary firmware for Intel Wireless cards
     (iwlwifi-7265-14.ucode)
   * Intel Wireless 7265 firmware, version 16.242414.0
     (iwlwifi-7265-16.ucode)
+  * Intel Wireless 7265 firmware, version 17.352738.0
+    (iwlwifi-7265-17.ucode)
   * Intel Wireless 7265D firmware, version 25.17.12.0
     (iwlwifi-7265D-12.ucode)
   * Intel Wireless 7265D firmware, version 25.30.14.0
     (iwlwifi-7265D-14.ucode)
   * Intel Wireless 7265D firmware, version 16.242414.0
     (iwlwifi-7265D-16.ucode)
+  * Intel Wireless 7265D firmware, version 17.352738.0
+    (iwlwifi-7265D-17.ucode)
+  * Intel Wireless 7265D firmware, version 21.302800.0
+    (iwlwifi-7265D-21.ucode)
+  * Intel Wireless 7265D firmware, version 22.361476.0
+    (iwlwifi-7265D-22.ucode)
   * Intel Wireless 8000C firmware, version 25.30.14.0
     (iwlwifi-8000C-14.ucode)
   * Intel Wireless 8000C firmware, version 16.242414.0
     (iwlwifi-8000C-16.ucode)
+  * Intel Wireless 8000C firmware, version 21.302800.0
+    (iwlwifi-8000C-21.ucode)
+  * Intel Wireless 8000C firmware, version 22.361476.0
+    (iwlwifi-8000C-22.ucode)
+  * Intel Wireless 8265 firmware, version 21.302800.0
+    (iwlwifi-8265-21.ucode)
+  * Intel Wireless 8265 firmware, version 22.361476.0
+    (iwlwifi-8265-22.ucode)
 Homepage: https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git
 
 Package: passwd
@@ -9632,15 +9707,15 @@ Package: gstreamer0.10-plugins-good
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 6028
+Installed-Size: 6019
 Maintainer: Maintainers of GStreamer packages <pkg-gstreamer-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
-Source: gst-plugins-good0.10 (0.10.31-3+nmu4)
-Version: 0.10.31-3+nmu4+b1
+Source: gst-plugins-good0.10
+Version: 0.10.31-3+nmu4+deb8u2
 Replaces: gstreamer0.10-plugins-bad (<< 0.10.21.2), gstreamer0.10-plugins-good-doc (<< 0.10.6-2), gstreamer0.10-plugins-really-bad (<< 0.10.21.2)
 Provides: gstreamer0.10-audiosink, gstreamer0.10-audiosource, gstreamer0.10-videosink, gstreamer0.10-videosource, gstreamer0.10-visualization
-Depends: libaa1 (>= 1.4p5), libavc1394-0 (>= 0.5.3), libbz2-1.0, libc6 (>= 2.11), libcaca0 (>= 0.99.beta17-1), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.10.0), libdv4, libflac8 (>= 1.3.0), libgcc1 (>= 1:4.1.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36-1.1), libgudev-1.0-0 (>= 146), libiec61883-0 (>= 1.2.0), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libjpeg62-turbo (>= 1:1.3.1), liborc-0.4-0 (>= 1:0.4.20), libpng12-0 (>= 1.2.13-4), libraw1394-11, libshout3, libsoup-gnome2.4-1 (>= 2.27.4), libsoup2.4-1 (>= 2.26.1), libspeex1 (>= 1.2~beta3-1), libstdc++6 (>= 4.1.1), libtag1c2a (>= 1.5), libv4l-0 (>= 0.5.0), libwavpack1 (>= 4.40.0), libx11-6, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxml2 (>= 2.7.4), libxv1, zlib1g (>= 1:1.1.4), gstreamer0.10-plugins-base, gstreamer0.10-gconf
+Depends: libaa1 (>= 1.4p5), libavc1394-0 (>= 0.5.3), libbz2-1.0, libc6 (>= 2.11), libcaca0 (>= 0.99.beta17-1), libcairo-gobject2 (>= 1.10.0), libcairo2 (>= 1.10.0), libdv4, libflac8 (>= 1.3.0), libgcc1 (>= 1:4.1.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.37.3), libgstreamer-plugins-base0.10-0 (>= 0.10.36), libgstreamer0.10-0 (>= 0.10.36-1.1), libgudev-1.0-0 (>= 146), libiec61883-0 (>= 1.2.0), libjack-jackd2-0 (>= 1.9.5~dfsg-14) | libjack-0.116, libjpeg62-turbo (>= 1.3.1), liborc-0.4-0 (>= 1:0.4.20), libpng12-0 (>= 1.2.13-4), libraw1394-11, libshout3, libsoup-gnome2.4-1 (>= 2.27.4), libsoup2.4-1 (>= 2.26.1), libspeex1 (>= 1.2~beta3-1), libstdc++6 (>= 4.1.1), libtag1c2a (>= 1.5), libv4l-0 (>= 0.5.0), libwavpack1 (>= 4.40.0), libx11-6, libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxml2 (>= 2.7.4), libxv1, zlib1g (>= 1:1.1.4), gstreamer0.10-plugins-base, gstreamer0.10-gconf
 Recommends: gstreamer0.10-x
 Conflicts: gstreamer0.10-plugins-bad (<< 0.10.21.2), gstreamer0.10-plugins-really-bad (<< 0.10.21.2)
 Description: GStreamer plugins from the "good" set
@@ -9653,8 +9728,8 @@ Description: GStreamer plugins from the "good" set
  .
  This package contains the GStreamer plugins from the "good" set, a set
  of good-quality plug-ins under the LGPL license.
-Gstreamer-Decoders: application/x-3gp; application/x-apetag; application/x-icy; application/x-id3; application/x-navi-animation; application/x-rtcp; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ AMR, AMR-WB }, encoding-params=(string)1, octet-align=(string)1, crc=(string){ 0, 1 }, robust-sorting=(string)0, interleaving=(string)0; application/x-rtp, media=(string){ video, audio, application }, payload=(int)[ 96, 127 ], encoding-name=(string)MPEG4-GENERIC, streamtype=(string){ 4, 5 }, mode=(string){ generic, CELP-cbr, CELP-vbr, AAC-lbr, AAC-hbr }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SPEEX, encoding-params=(string)1; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SIREN, dct-length=(int)320; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)ILBC, mode=(string){ 20, 30 }; application/x-rtp, media=(string){ video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)DV, encode=(string){ SD-VCR/525-60, SD-VCR/625-50, HD-VCR/1125-60, HD-VCR/1250-50, SDL-VCR/525-60, SDL-VCR/625-50, 306M/525-60, 306M/625-50, 314M-25/525-60, 314M-25/625-50, 314M-50/525-60, 314M-50/625-50 }; application/x-rtp, payload=(int)[ 96, 127 ], media=(string){ audio, video }, encoding-name=(string){ X-QT, X-QUICKTIME }; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string){ RAW, THEORA, X-SV3V-ES, X-SORENSON-VIDEO, X-SORENSONVIDEO, X-SorensonVideo, MP4V-ES, MP2T-ES, MP1S, JPEG, JPEG2000, H264, H263, H263-2000, MPV, H263-1998 }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ VORBIS, X-QDM, QCELP, MP4A-LATM, L16, MPA-ROBUST, X-MP3-DRAFT-00, X-MP3-DRAFT-01, X-MP3-DRAFT-02, X-MP3-DRAFT-03, X-MP3-DRAFT-04, X-MP3-DRAFT-05, X-MP3-DRAFT-06, MPA, PCMU, PCMA, GSM, G729, G726, G726-16, G726-24, G726-32, G726-40, AAL2-G726-16, AAL2-G726-24, AAL2-G726-32, AAL2-G726-40, G723, G722, CELT, BV16, BV32, AC3 }; application/x-rtp, media=(string)other, payload=(int)[ 96, 127 ], encoding-name=(string)MP1S; application/x-rtp, media=(string)video, payload=(int)34, encoding-name=(string)H263; application/x-rtp, media=(string)audio, payload=(int)0, encoding-name=(string)PCMU; application/x-rtp, media=(string)audio, payload=(int)8, encoding-name=(string)PCMA; application/x-rtp, media=(string)application, payload=(int)[ 96, 127 ], encoding-name=(string)X-GST; application/x-rtp, media=(string)audio, payload=(int){ 12, 10, 11, 14, 3, 18, 4, 9 }; application/x-rtp, media=(string)video, payload=(int){ 33, 26, 32 }; application/x-subtitle-avi; audio/ac3; audio/mpeg, mpegversion=(int){ 1, 2, 4 }; audio/x-ac3; audio/x-alaw; audio/x-amr-nb-sh; audio/x-amr-wb-sh; audio/x-au; audio/x-dts; audio/x-eac3; audio/x-flac; audio/x-m4a; audio/x-mulaw; audio/x-speex; audio/x-wav; audio/x-wavpack, framed=(boolean){ true, false }; audio/x-wavpack-correction, framed=(boolean)false; image/bmp; image/gif; image/jpeg, sof-marker=(int){ 0, 1, 2, 5, 6, 7, 9, 10, 13, 14 }; image/png; image/svg; image/svg+xml; image/tiff; image/vnd.wap.wbmp; image/x-MS-bmp; image/x-bitmap; image/x-bmp; image/x-cmu-raster; image/x-icon; image/x-pcx; image/x-pixmap; image/x-portable-anymap; image/x-portable-bitmap; image/x-portable-graymap; image/x-portable-pixmap; image/x-sun-raster; image/x-tga; multipart/x-mixed-replace; text/x-cmml, encoded=(boolean)true; video/mj2; video/quicktime; video/webm; video/x-dv, systemstream=(boolean){ false, true }; video/x-fli; video/x-flv; video/x-matroska; video/x-msvideo; video/x-smoke
-Gstreamer-Elements: 3gppmux, aacparse, aasink, ac3parse, agingtv, alawdec, alawenc, alpha, alphacolor, amrparse, apedemux, apev2mux, aspectratiocrop, asteriskh263, audioamplify, audiochebband, audiocheblimit, audiodynamic, audioecho, audiofirfilter, audioiirfilter, audioinvert, audiokaraoke, audiopanorama, audiowsincband, audiowsinclimit, auparse, autoaudiosink, autoaudiosrc, autovideosink, autovideosrc, avidemux, avimux, avisubtitle, breakmydata, cacasink, cairooverlay, cairorender, cairotextoverlay, cairotimeoverlay, capsdebug, capssetter, cmmldec, cmmlenc, cpureport, cutter, dcaparse, deinterlace, deinterleave, dicetv, dv1394src, dvdec, dvdemux, dynudpsink, edgetv, efence, equalizer-10bands, equalizer-3bands, equalizer-nbands, flacdec, flacenc, flacparse, flactag, flvdemux, flvmux, flxdec, gamma, gdkpixbufdec, gdkpixbufscale, gdkpixbufsink, goom, goom2k1, gppmux, gstrtpbin, gstrtpjitterbuffer, gstrtpptdemux, gstrtpsession, gstrtpssrcdemux, hdv1394src, icydemux, id3demux, id3v2mux, imagefreeze, interleave, ismlmux, jackaudiosink, jackaudiosrc, jpegdec, jpegenc, level, matroskademux, matroskamux, matroskaparse, mj2mux, monoscope, mp4mux, mpegaudioparse, mulawdec, mulawenc, multifilesink, multifilesrc, multipartdemux, multipartmux, multiudpsink, navigationtest, navseek, optv, oss4mixer, oss4sink, oss4src, ossmixer, osssink, osssrc, pngdec, pngenc, progressreport, pushfilesrc, qtdemux, qtmoovrecover, qtmux, quarktv, radioactv, revtv, rganalysis, rglimiter, rgvolume, rippletv, rndbuffersize, rtpL16depay, rtpL16pay, rtpac3depay, rtpac3pay, rtpamrdepay, rtpamrpay, rtpbvdepay, rtpbvpay, rtpceltdepay, rtpceltpay, rtpdec, rtpdepay, rtpdvdepay, rtpdvpay, rtpg722depay, rtpg722pay, rtpg723depay, rtpg723pay, rtpg726depay, rtpg726pay, rtpg729depay, rtpg729pay, rtpgsmdepay, rtpgsmpay, rtpgstdepay, rtpgstpay, rtph263depay, rtph263pay, rtph263pdepay, rtph263ppay, rtph264depay, rtph264pay, rtpilbcdepay, rtpilbcpay, rtpj2kdepay, rtpj2kpay, rtpjpegdepay, rtpjpegpay, rtpmp1sdepay, rtpmp2tdepay, rtpmp2tpay, rtpmp4adepay, rtpmp4apay, rtpmp4gdepay, rtpmp4gpay, rtpmp4vdepay, rtpmp4vpay, rtpmpadepay, rtpmpapay, rtpmparobustdepay, rtpmpvdepay, rtpmpvpay, rtppcmadepay, rtppcmapay, rtppcmudepay, rtppcmupay, rtpqcelpdepay, rtpqdm2depay, rtpsirendepay, rtpsirenpay, rtpspeexdepay, rtpspeexpay, rtpsv3vdepay, rtptheoradepay, rtptheorapay, rtpvorbisdepay, rtpvorbispay, rtpvrawdepay, rtpvrawpay, rtpxqtdepay, rtspsrc, shagadelictv, shapewipe, shout2send, smokedec, smokeenc, smpte, smptealpha, souphttpclientsink, souphttpsrc, spectrum, speexdec, speexenc, splitfilesrc, streaktv, taginject, testsink, udpsink, udpsrc, v4l2radio, v4l2sink, v4l2src, vertigotv, videobalance, videobox, videocrop, videoflip, videomixer, videomixer2, warptv, wavenc, wavpackdec, wavpackenc, wavpackparse, wavparse, webmmux, ximagesrc, y4menc
+Gstreamer-Decoders: application/x-3gp; application/x-apetag; application/x-icy; application/x-id3; application/x-navi-animation; application/x-rtcp; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ AMR, AMR-WB }, encoding-params=(string)1, octet-align=(string)1, crc=(string){ 0, 1 }, robust-sorting=(string)0, interleaving=(string)0; application/x-rtp, media=(string){ video, audio, application }, payload=(int)[ 96, 127 ], encoding-name=(string)MPEG4-GENERIC, streamtype=(string){ 4, 5 }, mode=(string){ generic, CELP-cbr, CELP-vbr, AAC-lbr, AAC-hbr }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SPEEX, encoding-params=(string)1; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SIREN, dct-length=(int)320; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)ILBC, mode=(string){ 20, 30 }; application/x-rtp, media=(string){ video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)DV, encode=(string){ SD-VCR/525-60, SD-VCR/625-50, HD-VCR/1125-60, HD-VCR/1250-50, SDL-VCR/525-60, SDL-VCR/625-50, 306M/525-60, 306M/625-50, 314M-25/525-60, 314M-25/625-50, 314M-50/525-60, 314M-50/625-50 }; application/x-rtp, payload=(int)[ 96, 127 ], media=(string){ audio, video }, encoding-name=(string){ X-QT, X-QUICKTIME }; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string){ RAW, THEORA, X-SV3V-ES, X-SORENSON-VIDEO, X-SORENSONVIDEO, X-SorensonVideo, MP4V-ES, MP2T-ES, MP1S, JPEG, JPEG2000, H264, H263, H263-2000, MPV, H263-1998 }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ VORBIS, X-QDM, QCELP, MP4A-LATM, L16, MPA-ROBUST, X-MP3-DRAFT-00, X-MP3-DRAFT-01, X-MP3-DRAFT-02, X-MP3-DRAFT-03, X-MP3-DRAFT-04, X-MP3-DRAFT-05, X-MP3-DRAFT-06, MPA, PCMU, PCMA, GSM, G729, G726, G726-16, G726-24, G726-32, G726-40, AAL2-G726-16, AAL2-G726-24, AAL2-G726-32, AAL2-G726-40, G723, G722, CELT, BV16, BV32, AC3 }; application/x-rtp, media=(string)other, payload=(int)[ 96, 127 ], encoding-name=(string)MP1S; application/x-rtp, media=(string)video, payload=(int)34, encoding-name=(string)H263; application/x-rtp, media=(string)audio, payload=(int)0, encoding-name=(string)PCMU; application/x-rtp, media=(string)audio, payload=(int)8, encoding-name=(string)PCMA; application/x-rtp, media=(string)application, payload=(int)[ 96, 127 ], encoding-name=(string)X-GST; application/x-rtp, media=(string)audio, payload=(int){ 12, 10, 11, 14, 3, 18, 4, 9 }; application/x-rtp, media=(string)video, payload=(int){ 33, 26, 32 }; application/x-subtitle-avi; audio/ac3; audio/mpeg, mpegversion=(int){ 1, 2, 4 }; audio/x-ac3; audio/x-alaw; audio/x-amr-nb-sh; audio/x-amr-wb-sh; audio/x-au; audio/x-dts; audio/x-eac3; audio/x-flac; audio/x-m4a; audio/x-mulaw; audio/x-speex; audio/x-wav; audio/x-wavpack, framed=(boolean){ true, false }; audio/x-wavpack-correction, framed=(boolean)false; image/bmp; image/gif; image/jpeg, sof-marker=(int){ 0, 1, 2, 5, 6, 7, 9, 10, 13, 14 }; image/png; image/svg; image/svg+xml; image/tiff; image/vnd.wap.wbmp; image/x-MS-bmp; image/x-bitmap; image/x-bmp; image/x-cmu-raster; image/x-icon; image/x-pcx; image/x-pixmap; image/x-portable-anymap; image/x-portable-bitmap; image/x-portable-graymap; image/x-portable-pixmap; image/x-sun-raster; image/x-tga; multipart/x-mixed-replace; text/x-cmml, encoded=(boolean)true; video/mj2; video/quicktime; video/webm; video/x-dv, systemstream=(boolean){ false, true }; video/x-flv; video/x-matroska; video/x-msvideo; video/x-smoke
+Gstreamer-Elements: 3gppmux, aacparse, aasink, ac3parse, agingtv, alawdec, alawenc, alpha, alphacolor, amrparse, apedemux, apev2mux, aspectratiocrop, asteriskh263, audioamplify, audiochebband, audiocheblimit, audiodynamic, audioecho, audiofirfilter, audioiirfilter, audioinvert, audiokaraoke, audiopanorama, audiowsincband, audiowsinclimit, auparse, autoaudiosink, autoaudiosrc, autovideosink, autovideosrc, avidemux, avimux, avisubtitle, breakmydata, cacasink, cairooverlay, cairorender, cairotextoverlay, cairotimeoverlay, capsdebug, capssetter, cmmldec, cmmlenc, cpureport, cutter, dcaparse, deinterlace, deinterleave, dicetv, dv1394src, dvdec, dvdemux, dynudpsink, edgetv, efence, equalizer-10bands, equalizer-3bands, equalizer-nbands, flacdec, flacenc, flacparse, flactag, flvdemux, flvmux, gamma, gdkpixbufdec, gdkpixbufscale, gdkpixbufsink, goom, goom2k1, gppmux, gstrtpbin, gstrtpjitterbuffer, gstrtpptdemux, gstrtpsession, gstrtpssrcdemux, hdv1394src, icydemux, id3demux, id3v2mux, imagefreeze, interleave, ismlmux, jackaudiosink, jackaudiosrc, jpegdec, jpegenc, level, matroskademux, matroskamux, matroskaparse, mj2mux, monoscope, mp4mux, mpegaudioparse, mulawdec, mulawenc, multifilesink, multifilesrc, multipartdemux, multipartmux, multiudpsink, navigationtest, navseek, optv, oss4mixer, oss4sink, oss4src, ossmixer, osssink, osssrc, pngdec, pngenc, progressreport, pushfilesrc, qtdemux, qtmoovrecover, qtmux, quarktv, radioactv, revtv, rganalysis, rglimiter, rgvolume, rippletv, rndbuffersize, rtpL16depay, rtpL16pay, rtpac3depay, rtpac3pay, rtpamrdepay, rtpamrpay, rtpbvdepay, rtpbvpay, rtpceltdepay, rtpceltpay, rtpdec, rtpdepay, rtpdvdepay, rtpdvpay, rtpg722depay, rtpg722pay, rtpg723depay, rtpg723pay, rtpg726depay, rtpg726pay, rtpg729depay, rtpg729pay, rtpgsmdepay, rtpgsmpay, rtpgstdepay, rtpgstpay, rtph263depay, rtph263pay, rtph263pdepay, rtph263ppay, rtph264depay, rtph264pay, rtpilbcdepay, rtpilbcpay, rtpj2kdepay, rtpj2kpay, rtpjpegdepay, rtpjpegpay, rtpmp1sdepay, rtpmp2tdepay, rtpmp2tpay, rtpmp4adepay, rtpmp4apay, rtpmp4gdepay, rtpmp4gpay, rtpmp4vdepay, rtpmp4vpay, rtpmpadepay, rtpmpapay, rtpmparobustdepay, rtpmpvdepay, rtpmpvpay, rtppcmadepay, rtppcmapay, rtppcmudepay, rtppcmupay, rtpqcelpdepay, rtpqdm2depay, rtpsirendepay, rtpsirenpay, rtpspeexdepay, rtpspeexpay, rtpsv3vdepay, rtptheoradepay, rtptheorapay, rtpvorbisdepay, rtpvorbispay, rtpvrawdepay, rtpvrawpay, rtpxqtdepay, rtspsrc, shagadelictv, shapewipe, shout2send, smokedec, smokeenc, smpte, smptealpha, souphttpclientsink, souphttpsrc, spectrum, speexdec, speexenc, splitfilesrc, streaktv, taginject, testsink, udpsink, udpsrc, v4l2radio, v4l2sink, v4l2src, vertigotv, videobalance, videobox, videocrop, videoflip, videomixer, videomixer2, warptv, wavenc, wavpackdec, wavpackenc, wavpackparse, wavparse, webmmux, ximagesrc, y4menc
 Gstreamer-Encoders: application/pdf; application/postscript; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ AMR, AMR-WB }, encoding-params=(string)1, octet-align=(string)1, crc=(string)0, robust-sorting=(string)0, interleaving=(string)0, mode-set=(int)[ 0, 7 ], mode-change-period=(int)[ 1, 2147483647 ], mode-change-neighbor=(string){ 0, 1 }, maxptime=(int)[ 20, 2147483647 ], ptime=(int)[ 20, 2147483647 ]; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string)RAW, sampling=(string){ RGB, RGBA, BGR, BGRA, YCbCr-4:4:4, YCbCr-4:2:2, YCbCr-4:2:0, YCbCr-4:1:1 }, colorimetry=(string){ BT601-5, BT709-2, SMPTE240M }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SIREN, bitrate=(string)16000, dct-length=(int)320; application/x-rtp, media=(string){ video, audio, application }, payload=(int)[ 96, 127 ], encoding-name=(string)MPEG4-GENERIC, streamtype=(string){ 4, 5 }, mode=(string){ generic, CELP-cbr, CELP-vbr, AAC-lbr, AAC-hbr }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)SPEEX, encoding-params=(string)1; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string)ILBC, mode=(string){ 20, 30 }; application/x-rtp, media=(string){ video, audio }, payload=(int)[ 96, 127 ], encoding-name=(string)DV, encode=(string){ SD-VCR/525-60, SD-VCR/625-50, HD-VCR/1125-60, HD-VCR/1250-50, SDL-VCR/525-60, SDL-VCR/625-50, 306M/525-60, 306M/625-50, 314M-25/525-60, 314M-25/625-50, 314M-50/525-60, 314M-50/625-50 }; application/x-rtp, media=(string)audio, payload=(int)[ 96, 127 ], encoding-name=(string){ VORBIS, MP4A-LATM, L16, MPA, PCMA, PCMU, GSM, G729, G726-16, G726-24, G726-32, G726-40, AAL2-G726-16, AAL2-G726-24, AAL2-G726-32, AAL2-G726-40, G723, CELT, BV16, BV32, AC3 }; application/x-rtp, media=(string)video, payload=(int)[ 96, 127 ], encoding-name=(string){ THEORA, MP4V-ES, MP2T-ES, JPEG2000, H264, H263, H263-1998, H263-2000 }; application/x-rtp, media=(string)audio, encoding-name=(string)L16, payload=(int){ 10, 11 }; application/x-rtp, media=(string)video, payload=(int)26, encoding-name=(string)JPEG; application/x-rtp, media=(string)video, payload=(int)34, encoding-name=(string)H263; application/x-rtp, media=(string)video, payload=(int)32, encoding-name=(string)MPV; application/x-rtp, media=(string)audio, payload=(int)8, encoding-name=(string)PCMA; application/x-rtp, media=(string)audio, payload=(int)0, encoding-name=(string)PCMU; application/x-rtp, media=(string)audio, payload=(int)3, encoding-name=(string)GSM; application/x-rtp, media=(string)audio, payload=(int)18, encoding-name=(string)G729; application/x-rtp, media=(string)audio, payload=(int)4, encoding-name=(string)G723; application/x-rtp, media=(string)audio, encoding-name=(string)G722, payload=(int)9; application/x-rtp, media=(string)application, payload=(int)[ 96, 127 ], encoding-name=(string)X-GST; application/x-rtp, media=(string)audio, payload=(int)14; application/x-yuv4mpeg, y4mversion=(int)2; audio/x-alaw; audio/x-flac; audio/x-mulaw; audio/x-speex; audio/x-wav; audio/x-wavpack-correction, framed=(boolean)true; image/jpeg; image/png; image/svg+xml; multipart/x-mixed-replace; text/x-cmml, encoded=(boolean)true; video/mj2; video/quicktime; video/webm; video/x-flv; video/x-matroska; video/x-msvideo; video/x-smoke
 Gstreamer-Uri-Sinks: udp
 Gstreamer-Uri-Sources: dv, hdv, http, https, pushfile, radio, rtsp, rtsp-sdp, rtsph, rtspt, rtspu, udp, v4l2
@@ -9857,12 +9932,12 @@ Package: firmware-libertas
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 7449
+Installed-Size: 7410
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Replaces: libertas-firmware
 Provides: libertas-firmware
 Suggests: initramfs-tools
@@ -9898,9 +9973,9 @@ Description: Binary firmware for Marvell Libertas 8xxx wireless cards
   * USB8388 firmware, version 9.x (libertas/usb8388_v9.bin)
   * USB8682 firmware (libertas/usb8682.bin)
   * PCIE8897 firmware, version 15.68.7.p53 (mrvl/pcie8897_uapsta.bin)
-  * SD8688 main code (mrvl/sd8688.bin, libertas/sd8688.bin, sd8688.bin)
-  * SD8688 boot code (mrvl/sd8688_helper.bin, sd8688_helper.bin,
-    libertas/sd8688_helper.bin)
+  * SD8688 main code (mrvl/sd8688.bin, sd8688.bin, libertas/sd8688.bin)
+  * SD8688 boot code (mrvl/sd8688_helper.bin,
+    libertas/sd8688_helper.bin, sd8688_helper.bin)
   * SD8787 firmware, version 14.66.35.p52 (mrvl/sd8787_uapsta.bin)
   * SD8797 firmware, version 14.66.11.p151 (mrvl/sd8797_uapsta.bin)
   * SD8801 firmware, version 14.68.36.p60 (mrvl/sd8801_uapsta.bin)
@@ -9958,15 +10033,15 @@ Package: libgl1-mesa-glx
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 513
+Installed-Size: 525
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
+Version: 12.0.4-2~bpo8+1
 Replaces: libgl1
 Provides: libgl1
-Depends: libc6 (>= 2.8), libdrm2 (>= 2.3.1), libexpat1 (>= 2.0.1), libglapi-mesa (= 11.1.3-1~bpo8+1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-dri2-0 (>= 1.8), libxcb-dri3-0, libxcb-glx0 (>= 1.8), libxcb-present0, libxcb-sync1, libxcb1 (>= 1.9.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxshmfence1, libxxf86vm1, libudev1
+Depends: libc6 (>= 2.8), libdrm2 (>= 2.3.1), libexpat1 (>= 2.0.1), libglapi-mesa (= 12.0.4-2~bpo8+1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-dri2-0 (>= 1.8), libxcb-dri3-0, libxcb-glx0 (>= 1.8), libxcb-present0, libxcb-sync1, libxcb1 (>= 1.9.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxshmfence1, libxxf86vm1, libudev1
 Pre-Depends: multiarch-support
 Recommends: libgl1-mesa-dri
 Breaks: glx-diversions (<< 0.4), libopengl-perl (<< 0.6704+dfsg-2)
@@ -10145,10 +10220,10 @@ Package: iucode-tool
 Status: install ok installed
 Priority: optional
 Section: contrib/utils
-Installed-Size: 68
+Installed-Size: 85
 Maintainer: Henrique de Moraes Holschuh <hmh@debian.org>
 Architecture: i386
-Version: 1.6.1-1~bpo8+1
+Version: 2.1-1~bpo8+1
 Depends: libc6 (>= 2.7)
 Recommends: intel-microcode (>= 1)
 Description: Intel processor microcode tool
@@ -10955,10 +11030,10 @@ Package: openssl
 Status: install ok installed
 Priority: optional
 Section: utils
-Installed-Size: 1076
+Installed-Size: 1077
 Maintainer: Debian OpenSSL Team <pkg-openssl-devel@lists.alioth.debian.org>
 Architecture: i386
-Version: 1.0.1t-1+deb8u3
+Version: 1.0.1t-1+deb8u5
 Depends: libc6 (>= 2.15), libssl1.0.0 (>= 1.0.1k-3+deb8u3)
 Suggests: ca-certificates
 Conffiles:
@@ -11038,12 +11113,12 @@ Package: firmware-misc-nonfree
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 6483
+Installed-Size: 6980
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Replaces: firmware-adi, firmware-ivtv (<< 0.38~), firmware-linux (<< 0.19), firmware-linux-nonfree (<< 20151018-1~), firmware-ralink
 Provides: firmware-adi, firmware-ralink
 Suggests: initramfs-tools
@@ -11082,9 +11157,9 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Chelsio T3 main firmware, version 7.12.0 (cxgb3/t3fw-7.12.0.bin)
   * Chelsio T4 10GBASE-T firmware (AQ1202 PHY) (cxgb4/aq1202_fw.cld)
   * Chelsio T4 10GBASE-T firmware (BCM84834 PHY) (cxgb4/bcm8483.bin)
-  * Chelsio T4 firmware, version 1.14.4.0 (cxgb4/t4fw-1.14.4.0.bin,
+  * Chelsio T4 firmware, version 1.15.37.0 (cxgb4/t4fw-1.15.37.0.bin,
     cxgb4/t4fw.bin)
-  * Chelsio T5 firmware, version 1.14.4.0 (cxgb4/t5fw-1.14.4.0.bin,
+  * Chelsio T5 firmware, version 1.15.37.0 (cxgb4/t5fw-1.15.37.0.bin,
     cxgb4/t5fw.bin)
   * DAB-USB FPGA bitfile (dabusb/bitstream.bin)
   * DAB-USB firmware (dabusb/firmware.fw)
@@ -11097,6 +11172,7 @@ Description: Binary firmware for various drivers in the Linux kernel
     (dvb-usb-dib0700-1.20.fw)
   * DiBcom dib9135 DVB-T USB firmware (dvb-usb-it9135-01.fw)
   * DiBcom dib9135 DVB-T USB firmware (dvb-usb-it9135-02.fw)
+  * Terratec H5 DRX-K firmware (dvb-usb-terratec-h5-drxk.fw)
   * Intel 82559 D101M microcode (e100/d101m_ucode.bin)
   * Intel 82559 D101S microcode (e100/d101s_ucode.bin)
   * Intel 82551-F and 82551-10 microcode (e100/d102e_ucode.bin)
@@ -11106,6 +11182,7 @@ Description: Binary firmware for various drivers in the Linux kernel
   * ENE UB6250 SD init stage 1 firmware (ene-ub6250/sd_init1.bin)
   * ENE UB6250 SD init stage 2 firmware (ene-ub6250/sd_init2.bin)
   * ENE UB6250 SD read/write firmware (ene-ub6250/sd_rdwr.bin)
+  * Sensoray 2255 firmware (f2255usb.bin)
   * Micronas GO7007SB encoder stage 1 firmware (go7007/go7007fw.bin)
   * Micronas GO7007SB encoder stage 2 firmware (go7007/go7007tv.bin)
   * WISchip WinFast WalkieTV firmware (go7007/lr192.fw)
@@ -11114,24 +11191,34 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Sensoray S2250 stage 1 firmware (go7007/s2250-1.fw, s2250_loader.fw)
   * Sensoray S2250 stage 2 firmware (go7007/s2250-2.fw, s2250.fw)
   * WISchip WinFast WalkieTV firmware (go7007/wis-startrek.fw)
-  * Intel "Broxton" DMC firmware, version 1.04
-    (i915/bxt_dmc_ver1_04.bin)
-  * Intel "Broxton" DMC firmware, version 1.05
-    (i915/bxt_dmc_ver1_05.bin)
-  * Intel "Broxton" DMC firmware, version 1.06
-    (i915/bxt_dmc_ver1_06.bin, i915/bxt_dmc_ver1.bin)
+  * Intel "Broxton" DMC firmware, version 1.07
+    (i915/bxt_dmc_ver1_07.bin, i915/bxt_dmc_ver1.bin)
   * Intel "Skylake" DMC firmware, version 1.23
-    (i915/skl_dmc_ver1_23.bin, i915/skl_dmc_ver1.bin)
-  * Intel "Skylake" GuC firmware, version 1.1059
-    (i915/skl_guc_ver1_1059.bin, i915/skl_guc_ver1.bin)
-  * Intel "Skylake" GuC firmware, version 4.3 (i915/skl_guc_ver4_3.bin,
-    i915/skl_guc_ver4.bin)
+    (i915/skl_dmc_ver1_23.bin)
+  * Intel "Skylake" DMC firmware, version 1.26
+    (i915/skl_dmc_ver1_26.bin, i915/skl_dmc_ver1.bin)
+  * Intel "Skylake" GuC firmware, version 1.1059 (i915/skl_guc_ver1.bin)
+  * Intel "Skylake" GuC firmware, version 4.3 (i915/skl_guc_ver4.bin)
   * kaweth/new_code.bin
   * kaweth/new_code_fix.bin
   * kaweth/trigger_code.bin
   * kaweth/trigger_code_fix.bin
   * Matrox G200 WARP engine microcode (matrox/g200_warp.fw)
   * Matrox G400/G550 WARP engine microcode (matrox/g400_warp.fw)
+  * MOXA UPort 1110 firmware (moxa/moxa-1110.fw)
+  * MOXA UPort 1130 firmware (moxa/moxa-1130.fw)
+  * MOXA UPort 1130I firmware (moxa/moxa-1131.fw)
+  * MOXA UPort 1150 firmware (moxa/moxa-1150.fw)
+  * MOXA UPort 1150I firmware (moxa/moxa-1151.fw)
+  * MOXA UPort 1250 firmware (moxa/moxa-1250.fw)
+  * MOXA UPort 1250I firmware (moxa/moxa-1251.fw)
+  * MOXA UPort 1410 firmware (moxa/moxa-1410.fw)
+  * MOXA UPort 1450 firmware (moxa/moxa-1450.fw)
+  * MOXA UPort 1450I firmware (moxa/moxa-1451.fw)
+  * MOXA UPort 1610-16 firmware (moxa/moxa-1613.fw)
+  * MOXA UPort 1610-8 firmware (moxa/moxa-1618.fw)
+  * MOXA UPort 1650-16 firmware (moxa/moxa-1653.fw)
+  * MOXA UPort 1650-8 firmware (moxa/moxa-1658.fw)
   * MediaTek MT7601U firmware, version 34 (mt7601u.bin)
   * MediaTek MT7630/MT7650 Bluetooth firmware (mt7650.bin)
   * Multi-Tech USB CDMA modem firmware (mts_cdma.fw)
@@ -11156,6 +11243,7 @@ Description: Binary firmware for various drivers in the Linux kernel
   * Intel QAT C3xxx MMP firmware (qat_c3xxx_mmp.bin)
   * Intel QAT C62x UOF firmware (qat_c62x.bin)
   * Intel QAT C62x MMP firmware (qat_c62x_mmp.bin)
+  * Comtrol RocketPort 2 firmware (rp2.fw)
   * Ralink RT2561 (RT2501/RT5201 chipset) firmware, version 1.2
     (rt2561.bin)
   * Ralink RT2561S (RT2501 Turbo/RT5201 Turbo chipset) firmware, version
@@ -11164,9 +11252,9 @@ Description: Binary firmware for various drivers in the Linux kernel
     (rt2661.bin)
   * Ralink RT2760/RT2790/RT2860/RT2890/RT3090
     (RT2700P[D]/RT2700E[D]/RT2800P[D]/RT2800E[D]/RT3000E[D] chipset)
-    firmware, version 34 (rt2860.bin, rt3090.bin)
+    firmware, version 0.40 (rt2860.bin, rt3090.bin)
   * Ralink RT2870/RT3070/RT3071/RT3072 (RT2800U[D] chipset) firmware,
-    version 29 (rt2870.bin, rt3070.bin)
+    version 0.36 (rt2870.bin, rt3070.bin)
   * Ralink RT3071/RT3072 firmware, version 29 (rt3071.bin)
   * Ralink RT3290 firmware, version 1 (rt3290.bin)
   * Ralink RT2571W/RT2671 (RT2501USB/RT5201USB chipset) firmware,
@@ -11243,7 +11331,7 @@ Installed-Size: 235
 Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Source: vim
-Version: 2:7.4.488-7
+Version: 2:7.4.488-7+deb8u1
 Replaces: vim-gui-common (<< 2:7.4.488-4~)
 Depends: libc6 (>= 2.3.4)
 Recommends: vim | vim-gnome | vim-gtk | vim-athena | vim-nox | vim-tiny
@@ -11510,12 +11598,12 @@ Package: firmware-atheros
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 4177
+Installed-Size: 7684
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Suggests: initramfs-tools
 Description: Binary firmware for Atheros wireless cards
  This package contains the binary firmware for USB wireless network and
@@ -11530,6 +11618,7 @@ Description: Binary firmware for Atheros wireless cards
   * Atheros AR3012 rev 11020000 patch (ar3k/AthrBT_0x11020000.dfu)
   * Atheros AR3012 rev 11020100 patch (ar3k/AthrBT_0x11020100.dfu)
   * Atheros AR3012 rev 31010000 patch (ar3k/AthrBT_0x31010000.dfu)
+  * Atheros AR3012 rev 31010100 patch (ar3k/AthrBT_0x31010100.dfu)
   * Atheros AR3012 rev 41020000 patch (ar3k/AthrBT_0x41020000.dfu)
   * Atheros AR3012 rev 01020001 config (ar3k/ramps_0x01020001_26.dfu)
   * Atheros AR3012 rev 01020200 26 MHz config
@@ -11543,26 +11632,53 @@ Description: Binary firmware for Atheros wireless cards
   * Atheros AR3012 rev 11020000 config (ar3k/ramps_0x11020000_40.dfu)
   * Atheros AR3012 rev 11020100 config (ar3k/ramps_0x11020100_40.dfu)
   * Atheros AR3012 rev 31010000 config (ar3k/ramps_0x31010000_40.dfu)
+  * Atheros AR3012 rev 31010100 config (ar3k/ramps_0x31010100_40.dfu)
   * Atheros AR3012 rev 41020000 config (ar3k/ramps_0x41020000_40.dfu)
   * Atheros AR5523 firmware (ar5523.bin)
   * Atheros AR7010 rev 1.0 firmware (ar7010.fw)
   * Atheros AR7010 rev 1.1 firmware (ar7010_1_1.fw)
   * Atheros AR9271 firmware (ar9271.fw)
-  * Qualcomm Atheros QCA6174 rev 2.1 board configuration
+  * Qualcomm Atheros QCA4019 rev 1.0 board configuration, version 2
+    (ath10k/QCA4019/hw1.0/board-2.bin)
+  * Qualcomm Atheros QCA4019 rev 1.0 firmware, version 10.4-3.2.1-00028
+    (ath10k/QCA4019/hw1.0/firmware-5.bin)
+  * Qualcomm Atheros QCA6174 rev 2.1 board configuration, version 1
     (ath10k/QCA6174/hw2.1/board.bin)
-  * Qualcomm Atheros QCA6174 rev 2.1 firmware, version WLAN.RM.1.1-00141
-    (ath10k/QCA6174/hw2.1/firmware-5.bin)
-  * Qualcomm Atheros QCA6174 rev 3.0 board configuration
+  * Qualcomm Atheros QCA6174 rev 2.1 board configuration, version 2
+    (ath10k/QCA6174/hw2.1/board-2.bin)
+  * Qualcomm Atheros QCA6174 rev 2.1 firmware, version
+    SW_RM.1.1.1-00157-QCARMSWPZ-1 (ath10k/QCA6174/hw2.1/firmware-5.bin)
+  * Qualcomm Atheros QCA6174 rev 3.0 board configuration, version 1
     (ath10k/QCA6174/hw3.0/board.bin)
+  * Qualcomm Atheros QCA6174 rev 3.0 board configuration, version 2
+    (ath10k/QCA6174/hw3.0/board-2.bin)
   * Qualcomm Atheros QCA6174 rev 3.0 firmware, version
     WLAN.RM.2.0-00180-QCARMSWPZ-1 (ath10k/QCA6174/hw3.0/firmware-4.bin)
-  * Qualcomm Atheros QCA988X board configuration
+  * Qualcomm Atheros QCA9377 rev 1.0 board configuration, version 1
+    (ath10k/QCA9377/hw1.0/board.bin)
+  * Qualcomm Atheros QCA9377 rev 1.0 board configuration, version 2
+    (ath10k/QCA9377/hw1.0/board-2.bin)
+  * Qualcomm Atheros QCA9377 rev 1.0 firmware, version
+    WLAN.TF.1.0-00267-1 (ath10k/QCA9377/hw1.0/firmware-5.bin)
+  * Qualcomm Atheros QCA9987 rev 1.0 board configuration, version 1
+    (ath10k/QCA9887/hw1.0/board.bin)
+  * Qualcomm Atheros QCA9987 rev 1.0 firmware, version 10.2.4-1.0-00013.
+    (ath10k/QCA9887/hw1.0/firmware-5.bin)
+  * Qualcomm Atheros QCA9988 rev 2.0 board configuration, version 2
+    (ath10k/QCA9888/hw2.0/board-2.bin)
+  * Qualcomm Atheros QCA9988 rev 2.0 firmware, version 10.4-3.2-00072
+    (ath10k/QCA9888/hw2.0/firmware-5.bin)
+  * Qualcomm Atheros QCA988X board configuration, version 1
     (ath10k/QCA988X/hw2.0/board.bin)
   * Qualcomm Atheros QCA988X firmware, version 10.2.4.45
     (ath10k/QCA988X/hw2.0/firmware-4.bin)
-  * Qualcomm Atheros QCA988X firmware, version 10.2.4.70.9-2
+  * Qualcomm Atheros QCA988X firmware, version 10.2.4.70.54
     (ath10k/QCA988X/hw2.0/firmware-5.bin)
-  * Qualcomm Atheros QCA99X0 board configuration
+  * Qualcomm Atheros QCA9984 rev 1.0 board configuration, version 2
+    (ath10k/QCA9984/hw1.0/board-2.bin)
+  * Qualcomm Atheros QCA9984 rev 1.0 firmware, version 10.4-3.2-00072
+    (ath10k/QCA9984/hw1.0/firmware-5.bin)
+  * Qualcomm Atheros QCA99X0 board configuration, version 1
     (ath10k/QCA99X0/hw2.0/board.bin)
   * Qualcomm Atheros QCA99X0 firmware, version 10.4.1.00030-1
     (ath10k/QCA99X0/hw2.0/firmware-5.bin)
@@ -12752,7 +12868,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.70-1~bpo8+1
+Version: 2.4.73-1~bpo8+1
 Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.38)
 Pre-Depends: multiarch-support
 Description: Userspace interface to radeon-specific kernel DRM services -- runtime
@@ -12761,7 +12877,7 @@ Description: Userspace interface to radeon-specific kernel DRM services -- runti
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI).
  The DRI is currently used on Linux to provide hardware-accelerated
  OpenGL drivers.
-Homepage: http://cgit.freedesktop.org/mesa/drm/
+Homepage: https://cgit.freedesktop.org/mesa/drm/
 
 Package: x11-apps
 Status: install ok installed
@@ -12933,12 +13049,12 @@ Package: firmware-linux-nonfree
 Status: install ok installed
 Priority: optional
 Section: non-free/metapackages
-Installed-Size: 36
+Installed-Size: 13
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
-Depends: firmware-misc-nonfree (= 20160110-1~bpo8+1), firmware-amd-graphics (= 20160110-1~bpo8+1)
+Version: 20160824-1~bpo8+1
+Depends: firmware-misc-nonfree (= 20160824-1~bpo8+1), firmware-amd-graphics (= 20160824-1~bpo8+1)
 Recommends: intel-microcode, amd64-microcode
 Description: Binary firmware for various drivers in the Linux kernel (meta-package)
  This package depends on non-free firmware which may be used with drivers
@@ -13292,7 +13408,7 @@ Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libdrm
-Version: 2.4.70-1~bpo8+1
+Version: 2.4.73-1~bpo8+1
 Depends: libc6 (>= 2.4), libdrm2 (>= 2.4.38)
 Pre-Depends: multiarch-support
 Description: Userspace interface to nouveau-specific kernel DRM services -- runtime
@@ -13301,7 +13417,7 @@ Description: Userspace interface to nouveau-specific kernel DRM services -- runt
  kernelspace portion of the "Direct Rendering Infrastructure" (DRI).
  The DRI is currently used on Linux to provide hardware-accelerated
  OpenGL drivers.
-Homepage: http://cgit.freedesktop.org/mesa/drm/
+Homepage: https://cgit.freedesktop.org/mesa/drm/
 
 Package: libreadline5
 Status: install ok installed
@@ -13844,12 +13960,12 @@ Package: firmware-brcm80211
 Status: install ok installed
 Priority: optional
 Section: non-free/kernel
-Installed-Size: 11299
+Installed-Size: 12223
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all
 Multi-Arch: foreign
 Source: firmware-nonfree
-Version: 20160110-1~bpo8+1
+Version: 20160824-1~bpo8+1
 Suggests: initramfs-tools
 Description: Binary firmware for Broadcom 802.11 wireless cards
  This package contains the binary firmware for wireless network cards
@@ -13883,6 +13999,7 @@ Description: Binary firmware for Broadcom 802.11 wireless cards
   * Broadcom BCM43570 firmware (brcm/brcmfmac43570-pcie.bin)
   * Broadcom BCM43602 AP-mode firmware (brcm/brcmfmac43602-pcie.ap.bin)
   * Broadcom BCM43602 firmware (brcm/brcmfmac43602-pcie.bin)
+  * Broadcom BCM4366 firmware (brcm/brcmfmac4366b-pcie.bin)
   * Broadcom BCM4371 firmware (brcm/brcmfmac4371-pcie.bin)
 Homepage: https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git
 
@@ -13975,7 +14092,7 @@ Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alio
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:11.7-1~deb8u1
+Version: 6:11.8-1~deb8u1
 Replaces: libavresample0
 Depends: libavutil54 (>= 6:11~beta1), libc6 (>= 2.4)
 Pre-Depends: multiarch-support
@@ -13990,12 +14107,12 @@ Package: libavutil54
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 434
+Installed-Size: 435
 Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: libav
-Version: 6:11.7-1~deb8u1
+Version: 6:11.8-1~deb8u1
 Depends: libc6 (>= 2.4)
 Pre-Depends: multiarch-support
 Description: Libav utility library
@@ -14241,8 +14358,8 @@ Installed-Size: 9512
 Maintainer: Debian Printing Team <debian-printing@lists.debian.org>
 Architecture: i386
 Source: ghostscript
-Version: 9.06~dfsg-2+deb8u1
-Depends: libc6 (>= 2.11), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libfontconfig1 (>= 2.11), libfreetype6 (>= 2.2.1), libidn11 (>= 1.13), libijs-0.35 (>= 0.35), libjasper1, libjbig2dec0, libjpeg62-turbo (>= 1.3.1), liblcms2-2 (>= 2.2+git20110628), libpaper1, libpng12-0 (>= 1.2.13-4), libtiff5 (>= 4.0.3), zlib1g (>= 1:1.1.4), poppler-data (>= 0.4.5-3~) | gs-cjk-resource, libgs9-common (= 9.06~dfsg-2+deb8u1)
+Version: 9.06~dfsg-2+deb8u4
+Depends: libc6 (>= 2.11), libcups2 (>= 1.4.0), libcupsimage2 (>= 1.4.0), libfontconfig1 (>= 2.11), libfreetype6 (>= 2.2.1), libidn11 (>= 1.13), libijs-0.35 (>= 0.35), libjasper1, libjbig2dec0, libjpeg62-turbo (>= 1.3.1), liblcms2-2 (>= 2.2+git20110628), libpaper1, libpng12-0 (>= 1.2.13-4), libtiff5 (>= 4.0.3), zlib1g (>= 1:1.1.4), poppler-data (>= 0.4.5-3~) | gs-cjk-resource, libgs9-common (= 9.06~dfsg-2+deb8u4)
 Description: interpreter for the PostScript language and for PDF - Library
  GPL Ghostscript is used for PostScript/PDF preview and printing.
  Usually as a back-end to a program such as ghostview, it can display
@@ -15436,12 +15553,12 @@ Package: libicu52
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 27387
+Installed-Size: 27391
 Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: icu
-Version: 52.1-8+deb8u3
+Version: 52.1-8+deb8u4
 Depends: libc6 (>= 2.7), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.9)
 Pre-Depends: multiarch-support
 Description: International Components for Unicode
@@ -15555,15 +15672,15 @@ Package: libegl1-mesa
 Status: install ok installed
 Priority: optional
 Section: libs
-Installed-Size: 244
+Installed-Size: 265
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Architecture: i386
 Multi-Arch: same
 Source: mesa
-Version: 11.1.3-1~bpo8+1
+Version: 12.0.4-2~bpo8+1
 Replaces: libegl1-x11
 Provides: libegl1-x11
-Depends: libc6 (>= 2.8), libdrm2 (>= 2.4.60), libexpat1 (>= 2.0.1), libgbm1 (>= 7.11~1), libwayland-client0 (>= 1.3.92), libwayland-server0 (>= 1.2.0), libx11-6, libx11-xcb1, libxcb-dri2-0 (>= 1.8), libxcb-dri3-0, libxcb-present0, libxcb-render0, libxcb-shape0, libxcb-sync1, libxcb-xfixes0, libxcb1 (>= 1.9.2), libxshmfence1, libudev1
+Depends: libc6 (>= 2.17), libdrm2 (>= 2.4.60), libexpat1 (>= 2.0.1), libgbm1 (= 12.0.4-2~bpo8+1), libwayland-client0 (>= 1.3.92), libwayland-server0 (>= 1.2.0), libx11-6, libx11-xcb1, libxcb-dri2-0 (>= 1.8), libxcb-dri3-0, libxcb-present0, libxcb-render0, libxcb-shape0, libxcb-sync1, libxcb-xfixes0, libxcb1 (>= 1.9.2), libxshmfence1, libudev1
 Pre-Depends: multiarch-support
 Conflicts: libegl1-x11
 Description: free implementation of the EGL API -- runtime
