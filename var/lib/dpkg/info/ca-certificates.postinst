@@ -136,13 +136,16 @@ EOF
 	        -e 's/^[[:space:]]*1[[:space:]]*/!/' \
 	    >> /etc/ca-certificates.conf
 	fi
+	# update /etc/ssl/certs without running the hooks
 	# fix bogus symlink to ca-certificates.crt on upgrades; see
 	# Debian #643667; drop after wheezy
 	if dpkg --compare-versions "$2" lt-nl 20111025; then
-	    dpkg-trigger --no-await update-ca-certificates-fresh
+	    update-ca-certificates --hooksdir "" --fresh
 	else
-	    dpkg-trigger --no-await update-ca-certificates
+	    update-ca-certificates --hooksdir ""
 	fi
+	# deferred update of /etc/ssl/certs including running the hooks
+	dpkg-trigger --no-await update-ca-certificates
     ;;
 
     triggered)
