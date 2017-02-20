@@ -212,6 +212,12 @@ for x in $( cmdline ); do
 		logs "Set autoconfig: $prefs"
 		;;
 
+	xorg=*) # https://github.com/Webconverger/webc/issues/159
+		xorg="$( /bin/busybox httpd -d ${x#xorg=} )"
+		wget -P /etc/X11/xorg.conf.d/ "${xorg}" &&
+		logs "Set Xorg: $(cat /etc/X11/xorg.conf.d/*)"
+		;;
+
 	iptables=*)
 		options=$( /bin/busybox httpd -d ${x#iptables=} )
 
