@@ -39,11 +39,24 @@
 </ul>
 ">
 
+<!ENTITY fileAccessDenied.title "파일 접근 거부됨">
+<!ENTITY fileAccessDenied.longDesc "
+<ul>
+  <li>삭제, 이동 또는 권한이 없어서 접근할 수 없습니다.</li>
+</ul>
+">
 
 <!ENTITY generic.title "이런.">
 <!ENTITY generic.longDesc "
 <p>&brandShortName;가 어떠한 이유로 인하여 현재 페이지를 읽을 수 없습니다.</p>
 ">
+
+<!ENTITY captivePortal.title "네트워크에 로그인">
+<!ENTITY captivePortal.longDesc "
+<p>이 네트워크는 인터넷에 접속하기 위해 로그인 정보를 요청할 수 있습니다.</p>
+">
+
+<!ENTITY openPortalLoginPage.label "로그인 페이지 열기">
 
 <!ENTITY malformedURI.title "주소가 유효하지 않음">
 <!ENTITY malformedURI.longDesc "
@@ -139,15 +152,11 @@
 </ul>
 ">
 
-<!ENTITY nssBadCert.title "보안 연결 실패">
-<!ENTITY nssBadCert.longDesc2 "
-<ul>
-  <li>현재 웹 서버 설정에 문제가 있거나
-    누군가가 원래 접속하려던 진짜 서버처럼 가장하고 있을 가능성이 있습니다.</li>
-  <li>만약 이전에 이 웹 서버에 정상적으로 접속을 한적이 있다면,
-    일시적인 문제일 수 있으니 나중에 다시 접속해 보시기 바랍니다.</li>
-</ul>
-">
+<!ENTITY certerror.longpagetitle1 "연결이 안전하지 않음">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "<span class='hostname'/>의 소유자가 웹사이트를 적절히 설정하지 않았습니다. 정보가 도난당하는 것을 막기 위해서 &brandShortName;가 웹사이트에 연결하지 않았습니다.">
 
 <!ENTITY sharedLongDesc "
 <ul>
@@ -160,56 +169,17 @@
 </ul>
 ">
 
-<!ENTITY malwareBlocked.title "공격 의심 사이트!">
-<!ENTITY malwareBlocked.longDesc "
-<p>공격 사이트가 개인 정보를 탈취하거나, 다른 컴퓨터를 공격하기 위해 사용자 컴퓨터를 이용하거나, 사용자 시스템에 손상 입히는데 사용할 악성 프로그램을 설치하려고 합니다.</p>
-<p>만약 사용자가 공격 사이트로 지정된 웹 사이트의 소유자이고 잘못 등록되어 있다면 <a href='http://www.stopbadware.org/home/reviewinfo'>확인 요청</a>을 하실 수 있습니다.</p>
-">
-
-<!ENTITY unwantedBlocked.title "원하지않는 소프트웨어 의심 사이트!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>원하지않는 소프트웨어 페이지가 의도하지 않은 방법으로 시스템을 속이거나 영향을 미칠 수 있는 소프트웨어를 설치하려고 합니다.</p>
-">
-
-<!ENTITY phishingBlocked.title "위조 의심 사이트!">
-<!ENTITY phishingBlocked.longDesc "
-<p>현재 페이지에 개인 정보나 금융 정보를 입력하면 개인 정보 유출과 같은 신원 도난이나 유출한 개인 정보를 이용한 사기를 당할 수 있습니다.</p>
-<p>이런 종류의 위조 웹 사이트들은 피싱 (Phishing) 공격을 하는 것으로 알려져있는데, 사용자가 신뢰할만한 사이트의 웹 페이지와 전자 메일 주소를 거의 원본에 가깝게 위조해서, 마치 신뢰된 웹 사이트에서 개인 정보 입력을 요구하는 것처럼 위장하여 사용자를 속입니다.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "금지된 사이트">
-<!ENTITY forbiddenBlocked.longDesc "<p>이 페이지는 차단 사이트로 설정되어 있어서 &brandShortName;가 페이지 로딩을 차단했습니다.</p>
-">
-
 <!ENTITY cspBlocked.title "콘텐츠 보안 정책에 의한 차단">
 <!ENTITY cspBlocked.longDesc "<p>이 페이지는 콘텐츠 보안 정책에서 허락하지 않는 방법으로 로딩되어 &brandShortName;가 차단했습니다.</p>">
 
-<!ENTITY corruptedContentError.title "콘텐츠 전송 오류">
-<!ENTITY corruptedContentError.longDesc "<p>이 페이지는 전송 데이터에 오류가 감지되어서 표시할 수 없습니다.</p><ul><li>웹 사이트 관리자에게 본 문제점을 알려 주시기 바랍니다.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "손상된 콘텐츠 오류">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>데이터 전송에 오류가 발생하여서 페이지를 표시할 수 없습니다.</p><ul><li>이 문제를 웹사이트 소유자에게 알려주세요.</li></ul>">
 
 
-<!ENTITY securityOverride.linkText "예외 추가…">
-<!ENTITY securityOverride.getMeOutOfHereButton "페이지 나가기">
 <!ENTITY securityOverride.exceptionButtonLabel "예외 추가…">
-
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
-
-<!ENTITY securityOverride.warningContent "
-<p>여러분이 완전히 신뢰할 수 없는 인터넷 연결을 사용하는 중이거나 이 서버에서 예전에 이러한 경고를 본 적이 없는 경우에는 예외로 추가해서는 안 됩니다.</p>
-
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button>
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>
-">
 
 <!ENTITY errorReporting.automatic2 "오류 보고서를 보내면 멜웨어 사이트를 차단하거나 그 오류를 분석하는데 도움이 됩니다.">
 <!ENTITY errorReporting.learnMore "더 알아보기…">
-<!ENTITY errorReporting.sending "보고서를 보내는 중">
-<!ENTITY errorReporting.sent "보고서를 보냄">
-<!ENTITY errorReporting.report "보고서">
-<!ENTITY errorReporting.tryAgain "다시 시도">
 
 <!ENTITY remoteXUL.title "원격 XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>현재 문제에 대해 웹 사이트 관리자에게 알려 주시기 바랍니다.</li></ul></p>">
@@ -226,3 +196,21 @@ functionality specific to firefox. -->
 <!ENTITY weakCryptoAdvanced.title "고급">
 <!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span>에서 사용하는 보안 기술이 오래되었고 공격에 취약합니다. 안전하다고 생각하는 정보가 공격에 의해 쉽게 노출될 수 있습니다.">
 <!ENTITY weakCryptoAdvanced.override "(안전하지 않음) 오래된 보안을 이용해서 <span class='hostname'></span> 로딩 시도">
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>사용자의 시간이 잘 못 설정되어 있어서 <span id='wrongSystemTime_URL'/>로의 보안 연결을 할 수 없습니다.</p> <p>사용자의 시간 설정이 <span id='wrongSystemTime_systemDate'/>로 되어 있지만 <span id='wrongSystemTime_actualDate'/>로 설정되어 있어야 합니다. 이 문제를 해결하기 위해서 올바른 시간 설정을 해 주세요.</p>">
+
+<!ENTITY certerror.pagetitle1  "안전하지 않은 연결">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "이 사이트는 &brandShortName;가 안전한 경우에만 
+연결함을 명시하기 위해서 HTTP Strict Transport Security (HSTS)를 사용합니다.
+그래서 이 인증서에 예외를 추가할 수 없습니다.">
+<!ENTITY certerror.copyToClipboard.label "클립보드에 텍스트 복사">
+
+<!ENTITY inadequateSecurityError.title "연결이 안전하지 않음">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span>이 오래되어서 공격에 안전하지 않은 보안 기술을 사용하고 있습니다. 사용자가 안전하다고 여길 수 있는 정보를 공격자가 쉽게 탈취할 수 있습니다. 사용자가 사이트에 방문하기 위해서는 웹사이트 관리자가 서버를 고쳐야 합니다.</p><p>오류 코드: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY prefReset.longDesc "네트워크 보안 설정 때문에 이러한 현상이 발생한 것으로 보입니다. 기본 설정으로 되돌리겠습니까?">
+<!ENTITY prefReset.label "기본 설정으로 되돌리기">

@@ -16,8 +16,11 @@
 <!ENTITY dnsNotFound.title "Adressen kunne ikke findes">
 <!ENTITY dnsNotFound.longDesc "<p>Webstedet kunne ikke findes. Dette kan skyldes:</p><ul><li>At du har tastet forkert. Kontrollèr, at du har indtastet adressen korrekt, fx <q><strong>www</strong>.mozilla.org</q> og ikke <q><strong>ww</strong>.mozilla.org</q></li><li>At domænet ikke eksisterer. Det er måske blevet nedlagt?</li><li>At der er problemer med din internetforbindelse. Kontrollèr, om du kan besøge andre websteder, og at du ikke har blokeret webstedet i din DNS-opsætning.</li><li>At din computer beskyttes af en forkert opsat firewall eller proxy. Kontrollèr dine indstillinger for firewall og proxy.</li></ul>">
 
-<!ENTITY fileNotFound.title "Filen kunne ikke findes">
+<!ENTITY fileNotFound.title "Fil ikke fundet">
 <!ENTITY fileNotFound.longDesc "<ul><li>Er filen blevet omdøbt, fjernet eller flyttet?</li><li>Er der en stave- eller typografisk fejl i adressen? (Bemærk, at nogle servere behandler store og små bogstaver forskelligt)</li><li>Har du passende adgangstilladelse til den specifikke fil?</li></ul>">
+
+<!ENTITY fileAccessDenied.title "Filen kunne ikke tilgås">
+<!ENTITY fileAccessDenied.longDesc "<ul><li>Den kan være blevet slettet, flyttet eller tilladelserne for filen kan forhindre adgang.</li></ul>">
 
 <!ENTITY generic.title "Kan ikke færdiggøre forespørgsel">
 <!ENTITY generic.longDesc "<p>Siden kunne ikke vises, måske fordi den ikke eksisterer eller stien er forkert.<br/>Kontrollèr, at navnet og stien er rigtig.</p>">
@@ -35,7 +38,7 @@
 <!ENTITY netOffline.longDesc2 "<p>Browseren er sat i Offline-tilstand og kan ikke forbinde til nettet.</p><ul><li>Er computeren forbundet til et aktivt netværk?</li><li>Vælg &quot;Prøv igen&quot; for at skifte til online-tilstand og genindlæse siden.</li></ul>">
 
 <!ENTITY contentEncodingError.title "Indholdskodningsfejl">
-<!ENTITY contentEncodingError.longDesc "<p>Siden kunne ikke vises, da den bruger en ugyldig eller ikke-understøttet form for komprimering.</p><ul><li>Kontakt webstedets ejer og informèr dem om dette problem.</li></ul>">
+<!ENTITY contentEncodingError.longDesc "<p>Siden kunne ikke vises, da den bruger en ugyldig eller ikke-understøttet form for komprimering.</p><ul><li>Kontakt ejerne af webstedet omkring dette problem.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Usikker filtype">
 <!ENTITY unsafeContentType.longDesc "
@@ -66,34 +69,13 @@
 <!ENTITY unknownSocketType.longDesc "<p>Webstedet svarede på netværksforespørgslen på en uventet måde, og browseren kan ikke fortsætte.</p>">
 
 <!ENTITY nssFailure2.title "Sikker forbindelse mislykkedes">
-<!ENTITY nssFailure2.longDesc2 "<p>Siden kunne ikke vises da autenticiteten af de modtagne data ikke kunne bekræftes.</p><ul><li>Kontakt ejeren af webstedet omkring dette problem.</li></ul>">
+<!ENTITY nssFailure2.longDesc2 "<p>Siden kunne ikke vises da autenticiteten af de modtagne data ikke kunne bekræftes.</p><ul><li>Kontakt ejerne af webstedet omkring dette problem.</li></ul>">
 
 <!ENTITY nssBadCert.title "Sikker forbindelse mislykkedes">
 <!ENTITY nssBadCert.longDesc2 "<ul>
 <li>Dette kan skyldes et problem med serverens konfiguration, eller det kan skyldes, at nogen forsøger at give sig ud for at være serveren.</li>
 <li>Hvis du har kunnet tilgå serveren tidligere, kan problemet være midlertidligt, og du kan prøve igen senere.</li>
 </ul>
-">
-
-<!ENTITY malwareBlocked.title "Websted mistænkt for at sprede skadelige programmer!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Nogle websteder forsøger at installere programmer, som kan stjæle dine private data, bruge din computer til at angribe andre, eller som kan skade dit system.</p>
-<p>Er det dit websted, og du mener registreringen er en fejl, kan du <a href='http://www.stopbadware.org/home/reviewinfo'>bede om en gennemgang</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title "Webstedet er mistænkt for uønskede programmer!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Websteder med uønskede programmer kan forsøge at installere programmer, som kan være vildledende, og som kan påvirke dit system på uventede måder.</p>
-">
-
-<!ENTITY phishingBlocked.title "Mistænkt netsvindel!">
-<!ENTITY phishingBlocked.longDesc "
-<p>Indtastning af personlige informationer på denne side kan resultere i identitetstyveri eller andet forsøg på svindel.</p>
-<p>Denne type netsvindel er kendt som phishing-angreb, hvor falske websteder og emails bruges til at imitere kilder, du normalt stoler på.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Blokeret websted">
-<!ENTITY forbiddenBlocked.longDesc "<p>Browseren forhindrede indlæsning af denne webside, fordi den er indstillet til at blokere det.</p>
 ">
 
 <!ENTITY securityOverride.linkText "Eller du kan tilføje en undtagelse…">
@@ -105,8 +87,13 @@
 <!ENTITY cspBlocked.title "Blokeret grundet indholdssikkerhedspolitik">
 <!ENTITY cspBlocked.longDesc "<p>Browseren forhindrede denne side i at blive indlæst, da den har en indholdssikkerhedspolitik, der forbyder det.</p>">
 
-<!ENTITY corruptedContentError.title "Fejlbehæftet indhold">
-<!ENTITY corruptedContentError.longDesc "<p>Siden kan ikke vises, da der er fundet en fejl i overførslen af data.</p><ul><li>Kontakt ejerne af webstedet omkring dette problem.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Fejlbehæftet indhold">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>Siden kan ikke vises, da der er fundet en fejl i overførslen af data.</p><ul><li>Kontakt ejerne af webstedet omkring dette problem.</li></ul>">
 
 <!ENTITY remoteXUL.title "Remote XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Kontakt ejerne af webstedet omkring dette problem.</li></ul></p>">
+
+<!ENTITY inadequateSecurityError.title "Usikker forbindelse">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> bruger forældet sikkerheds-teknologi, der er sårbar overfor angreb. En angriber kan derfor nemt få adgang til information, som du troede var sikker. Webstedets administrator er nødt til at løse problemerne på serveren, før du kan besøge webstedet.</p><p>Fejlkode: NS_ERROR_NET_INADEQUATE_SECURITY</p>">

@@ -11,30 +11,13 @@
 <!ENTITY toggleToolboxF12.keytext          "F12">
 
 <!ENTITY toolboxCloseButton.tooltip    "Փակել Ծրագրավորողի գործիքները">
-<!ENTITY toolboxOptionsButton.key      "O">
-<!ENTITY toolboxNextTool.key           "]">
-<!ENTITY toolboxPreviousTool.key       "[">
-<!-- LOCALIZATION NOTE :
-fullZoomEnlargeCmd.commandkey, fullZoomEnlargeCmd.commandkey2,
-fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey,
-fullZoomReduceCmd.commandkey2, fullZoomResetCmd.commandkey,
-and fullZoomResetCmd.commandkey2 should all match the corresponding
-values from browser.dtd.  -->
-
-<!ENTITY fullZoomEnlargeCmd.commandkey3 "">
-
-<!ENTITY fullZoomReduceCmd.commandkey2  "">
-
-<!ENTITY fullZoomResetCmd.commandkey2   "">
-
-<!ENTITY toolboxReload.key             "r">
-<!-- This key is used with the accel+shift modifiers to minimize the toolbox -->
-<!ENTITY toolboxToggleMinimize.key     "U">
-
-<!ENTITY toolboxToggle.key             "d">
 <!-- LOCALIZATION NOTE (toolboxFramesButton): This is the label for
   -  the iframes menu list that appears only when the document has some.
   -  It allows you to switch the context of the whole toolbox. -->
+<!-- LOCALIZATION NOTE (toolboxNoAutoHideButton): This is the label for
+  -  the button to force the popups/panels to stay visible on blur.
+  -  This is only visible in the browser toolbox as it is meant for
+  -  addon developers and Firefox contributors. -->
 <!-- LOCALIZATION NOTE (browserToolboxErrorMessage): This is the label
   -  shown next to error details when the Browser Toolbox is unable to open. -->
 
@@ -52,6 +35,10 @@ values from browser.dtd.  -->
   -  panel. -->
 
 <!ENTITY options.showUserAgentStyles.label "Ցուցադրել դիտարկիչի ոճերը">
+
+<!-- LOCALIZATION NOTE (options.collapseAttrs.label): This is the label
+  -  for the checkbox option to enable collapse attributes in the Inspector
+  -  panel. -->
 
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
   -  dropdown list that controls the default color unit used in the inspector.
@@ -96,7 +83,7 @@ values from browser.dtd.  -->
   -  boolean preference in about:config, in the options panel. -->
 
 <!ENTITY options.enableRemote.label3    "Դարձնել հնարին հեռակառավարվող կարգաբերումը">
-<!ENTITY options.enableRemote.tooltip   "Այս ընտրանքի կապակցումը թույլ կտա ծրագրավորողի գործիքներին հեռակա կարգաբերել Firefox-ի նմուշը,  ինչպիսինն Firefox OS-ն է">
+<!ENTITY options.enableRemote.tooltip2  "Այս ընտրանքի կապակցումը թույլ կտա ծրագրավորողի գործիքներին հեռակա կարգաբերել Firefox-ի նմուշը, ինչպիսինն Firefox OS-ն է">
 <!-- LOCALIZATION NOTE (options.enableWorkers.label): This is the label for the
   -  checkbox that toggles worker debugging, i.e. devtools.debugger.workers
   -  boolean preference in about:config, in the options panel. -->
@@ -109,19 +96,17 @@ values from browser.dtd.  -->
 
 <!ENTITY options.disableJavaScript.label     "Անջատել JavaScript-­ը *">
 <!ENTITY options.disableJavaScript.tooltip   "Այս ընտրանքը կանջատի JavaScript-ը տվյալ ներդիրի համար: Եթե ներդիրը կամ գործիքները փակ են, ապա այս ընտրանքը կմոռացվի:">
-<!-- LOCALIZATION NOTE (options.disableCache.label2,
-  -  options.disableCache.tooltip2): This is the options panel label and
-  -  tooltip for the checkbox that toggles the cache on or off. -->
+<!-- LOCALIZATION NOTE (options.disableHTTPCache.label,
+  -  options.disableHTTPCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the HTTP cache on or off. -->
 
 <!-- LOCALIZATION NOTE (options.enableServiceWorkersHTTP.label,
   -  options.enableServiceWorkersHTTP.tooltip): This is the options panel label and
   -  tooltip for the checkbox that toggles the service workers testing features on or off. This option enables service workers over HTTP. -->
 
-<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label2): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tools. -->
-
-<!ENTITY options.selectDefaultTools.label     "Firefox-ի հիմնական Ծրագրավորողի Գործիքները">
 <!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
   -  the heading of group of checkboxes corresponding to the developer tools
   -  added by add-ons. This heading is hidden when there is no developer tool
@@ -150,6 +135,11 @@ values from browser.dtd.  -->
 <!ENTITY options.webconsole.label            "Վեբ Կառավարակետ">
 <!-- LOCALIZATION NOTE (options.timestampMessages.label): This is the
    - label for the checkbox that toggles timestamps in the Web Console -->
+
+<!-- LOCALIZATION NOTE (options.debugger.label): This is the label for the
+  -  heading of the group of Debugger preferences in the options panel. -->
+<!-- LOCALIZATION NOTE (options.sourceMap.label): This is the
+   - label for the checkbox that toggles source maps in the Debugger -->
 
 <!-- LOCALIZATION NOTE (options.styleeditor.label): This is the label for the
   -  heading of the group of Style Editor preferences in the options
@@ -180,8 +170,7 @@ values from browser.dtd.  -->
   -  in about:config, in the options panel. -->
 
 <!ENTITY options.showPlatformData.label    "Ցուցադրել Gecko հարթակի տվյալները">
-<!ENTITY options.showPlatformData.tooltip  "Եթե միացնեք այս ընտրանքը, ապա JavaScript-ի Հատկագրի զեկույցները կներառվեն: 
-Gecko հարթակի նշանները">
+<!ENTITY options.showPlatformData.tooltip  "Եթե միացնեք այս ընտրանքը, ապա JavaScript-ի Հատկագրի զեկույցները կներառվեն: Gecko հարթակի նշանները">
 <!-- LOCALIZATION NOTE (options.sourceeditor.*): Options under the editor
   -  section. -->
 
@@ -194,40 +183,36 @@ Gecko հարթակի նշանները">
 
 
 <!ENTITY options.sourceeditor.tabsize.label             "Ներդիրի չափը">
-<!ENTITY options.sourceeditor.tabsize.accesskey         "T">
+<!ENTITY options.sourceeditor.tabsize.accesskey         "Ն">
 
 
 <!ENTITY options.sourceeditor.keybinding.default.label  "Լռելյայն">
 
 
-
-<!-- LOCALIZATION NOTE :
-fullZoomEnlargeCmd.commandkey, fullZoomEnlargeCmd.commandkey2,
-fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey,
-fullZoomReduceCmd.commandkey2, fullZoomResetCmd.commandkey,
-and fullZoomResetCmd.commandkey2 should all match the corresponding
-values from browser.dtd.  -->
-<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
-
-<!ENTITY fullZoomReduceCmd.commandkey   "-">
-
-<!ENTITY fullZoomResetCmd.commandkey    "0">
+<!-- LOCALIZATION NOTE (options.collapseAttrs.label): This is the label
+  -  for the checkbox option to enable collapse attributes in the Inspector
+  -  panel. -->
+<!ENTITY options.collapseAttrs.label "Truncate DOM attributes">
+<!ENTITY options.collapseAttrs.tooltip "Truncate long attributes in the inspector">
 
 <!-- LOCALIZATION NOTE (options.commonprefs): This is the label for the heading
       of all preferences that affect both the Web Console and the Network
       Monitor -->
 <!ENTITY options.commonPrefs.label           "Common Preferences">
 
+<!-- LOCALIZATION NOTE (options.debugger.label): This is the label for the
+  -  heading of the group of Debugger preferences in the options panel. -->
+<!ENTITY options.debugger.label            "Debugger">
+
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.authored): This is used in the
   -  'Default color unit' dropdown list and is visible in the options panel. -->
 <!ENTITY options.defaultColorUnit.authored "As Authored">
 
-<!-- LOCALIZATION NOTE (options.disableCache.label2,
-  -  options.disableCache.tooltip2): This is the options panel label and
-  -  tooltip for the checkbox that toggles the cache on or off. -->
-<!ENTITY options.disableCache.label2     "Disable Cache (when toolbox is open)">
-<!ENTITY options.disableCache.tooltip2   "Turning this option on will disable the cache for all tabs that have the toolbox open.">
+<!-- LOCALIZATION NOTE (options.disableHTTPCache.label,
+  -  options.disableHTTPCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the HTTP cache on or off. -->
+<!ENTITY options.disableHTTPCache.label     "Disable HTTP Cache (when toolbox is open)">
+<!ENTITY options.disableHTTPCache.tooltip   "Turning this option on will disable the HTTP cache for all tabs that have the toolbox open. Service Workers are not affected by this option.">
 
 <!-- LOCALIZATION NOTE (options.enableChrome.label4): This is the label for the
   -  checkbox that toggles chrome debugging, i.e. devtools.chrome.enabled
@@ -242,11 +227,21 @@ values from browser.dtd.  -->
 <!ENTITY options.enableServiceWorkersHTTP.tooltip   "Turning this option on will enable the service workers over HTTP for all tabs that have the toolbox open.">
 <!ENTITY options.enableWorkers.tooltip  "Turning this option on will allow the developer tools to debug workers">
 
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label2): This is the label for
+  -  the heading of group of checkboxes corresponding to the default developer
+  -  tools. -->
+<!ENTITY options.selectDefaultTools.label2    "Default Developer Tools">
+
 <!-- LOCALIZATION NOTE (options.selectEnabledToolboxButtons.label): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tool buttons. -->
 <!ENTITY options.selectEnabledToolboxButtons.label     "Available Toolbox Buttons">
 <!ENTITY options.showUserAgentStyles.tooltip "Turning this on will show default styles that are loaded by the browser.">
+
+<!-- LOCALIZATION NOTE (options.sourceMap.label): This is the
+   - label for the checkbox that toggles source maps in the Debugger -->
+<!ENTITY options.sourceMaps.label      "Enable Source Maps">
+<!ENTITY options.sourceMaps.tooltip    "If you enable this option sources will be mapped in the Debugger and Console.">
 <!ENTITY options.sourceeditor.autoclosebrackets.label   "Autoclose brackets">
 <!ENTITY options.sourceeditor.autoclosebrackets.tooltip "Automatically insert closing brackets">
 <!ENTITY options.sourceeditor.detectindentation.label   "Detect indentation">
@@ -270,7 +265,14 @@ values from browser.dtd.  -->
   -  toolbox for enabling and disabling the Developer Edition browser theme. -->
 <!ENTITY options.usedeveditiontheme.label   "Use Developer Edition browser theme">
 <!ENTITY options.usedeveditiontheme.tooltip "Toggles the Developer Edition browser theme.">
+
 <!-- LOCALIZATION NOTE (toolboxFramesButton): This is the label for
   -  the iframes menu list that appears only when the document has some.
   -  It allows you to switch the context of the whole toolbox. -->
 <!ENTITY toolboxFramesTooltip          "Select an iframe as the currently targeted document">
+
+<!-- LOCALIZATION NOTE (toolboxNoAutoHideButton): This is the label for
+  -  the button to force the popups/panels to stay visible on blur.
+  -  This is only visible in the browser toolbox as it is meant for
+  -  addon developers and Firefox contributors. -->
+<!ENTITY toolboxNoAutoHideTooltip      "Disable popup auto hide">

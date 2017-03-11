@@ -11,35 +11,17 @@
 <!ENTITY toggleToolboxF12.keytext          "F12">
 
 <!ENTITY toolboxCloseButton.tooltip    "Zatvori razvojne alate">
-<!ENTITY toolboxOptionsButton.key      "O">
-<!ENTITY toolboxNextTool.key           "]">
-<!ENTITY toolboxPreviousTool.key       "[">
-<!-- LOCALIZATION NOTE :
-fullZoomEnlargeCmd.commandkey, fullZoomEnlargeCmd.commandkey2,
-fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey,
-fullZoomReduceCmd.commandkey2, fullZoomResetCmd.commandkey,
-and fullZoomResetCmd.commandkey2 should all match the corresponding
-values from browser.dtd.  -->
-
-<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
-<!ENTITY fullZoomEnlargeCmd.commandkey3 "">
-
-<!ENTITY fullZoomReduceCmd.commandkey   "-">
-<!ENTITY fullZoomReduceCmd.commandkey2  "">
-
-<!ENTITY fullZoomResetCmd.commandkey    "0">
-<!ENTITY fullZoomResetCmd.commandkey2   "">
-
-<!ENTITY toolboxReload.key             "r">
-<!-- This key is used with the accel+shift modifiers to minimize the toolbox -->
-<!ENTITY toolboxToggleMinimize.key     "U">
-
-<!ENTITY toolboxToggle.key             "d">
 <!-- LOCALIZATION NOTE (toolboxFramesButton): This is the label for
   -  the iframes menu list that appears only when the document has some.
   -  It allows you to switch the context of the whole toolbox. -->
+
 <!ENTITY toolboxFramesTooltip          "Izaberite iframe kao trenutno ciljani dokument">
+<!-- LOCALIZATION NOTE (toolboxNoAutoHideButton): This is the label for
+  -  the button to force the popups/panels to stay visible on blur.
+  -  This is only visible in the browser toolbox as it is meant for
+  -  addon developers and Firefox contributors. -->
+
+<!ENTITY toolboxNoAutoHideTooltip      "Onemogući automatsko skrivanje popup-a">
 <!-- LOCALIZATION NOTE (browserToolboxErrorMessage): This is the label
   -  shown next to error details when the Browser Toolbox is unable to open. -->
 
@@ -58,6 +40,12 @@ values from browser.dtd.  -->
 
 <!ENTITY options.showUserAgentStyles.label "Prikaz stilova browsera">
 <!ENTITY options.showUserAgentStyles.tooltip "Uključivanje ovoga će prikazati izvorne stilove koje je učitao browser.">
+<!-- LOCALIZATION NOTE (options.collapseAttrs.label): This is the label
+  -  for the checkbox option to enable collapse attributes in the Inspector
+  -  panel. -->
+
+<!ENTITY options.collapseAttrs.label "Skrati DOM atribute">
+<!ENTITY options.collapseAttrs.tooltip "Skrati duge atribute u inspektoru">
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
   -  dropdown list that controls the default color unit used in the inspector.
   -  This label is visible in the options panel. -->
@@ -70,6 +58,8 @@ values from browser.dtd.  -->
 <!ENTITY options.defaultColorUnit.accesskey "j">
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.authored): This is used in the
   -  'Default color unit' dropdown list and is visible in the options panel. -->
+
+<!ENTITY options.defaultColorUnit.authored "As Authored">
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.hex): This is used in the
   -  'Default color unit' dropdown list and is visible in the options panel. -->
 
@@ -103,7 +93,7 @@ values from browser.dtd.  -->
   -  boolean preference in about:config, in the options panel. -->
 
 <!ENTITY options.enableRemote.label3    "Omogući udaljeno debuggiranje">
-<!ENTITY options.enableRemote.tooltip   "Uključivanje ove opcije će omogućiti razvojnim alatima da debuggiraju udaljene instance Firefoxa poput Firefox OS-a">
+<!ENTITY options.enableRemote.tooltip2  "Uključivanje ove opcije će omogućiti razvojnim alatima da debagiraju udaljene instance poput Firefox OS-a">
 <!-- LOCALIZATION NOTE (options.enableWorkers.label): This is the label for the
   -  checkbox that toggles worker debugging, i.e. devtools.debugger.workers
   -  boolean preference in about:config, in the options panel. -->
@@ -116,23 +106,23 @@ values from browser.dtd.  -->
 
 <!ENTITY options.disableJavaScript.label     "Onemogući JavaScript *">
 <!ENTITY options.disableJavaScript.tooltip   "Uključivanje ove opcije će onemogućiti JavaScript za trenutni tab. Ukoliko zatvorite tab ili toolbox ova postavka će biti zaboravljena.">
-<!-- LOCALIZATION NOTE (options.disableCache.label2,
-  -  options.disableCache.tooltip2): This is the options panel label and
-  -  tooltip for the checkbox that toggles the cache on or off. -->
+<!-- LOCALIZATION NOTE (options.disableHTTPCache.label,
+  -  options.disableHTTPCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the HTTP cache on or off. -->
 
-<!ENTITY options.disableCache.label2     "Onemogući keš memoriju (kada je alatna traka otvorena)">
-<!ENTITY options.disableCache.tooltip2   "Uključivanje ove opcije će isključiti keš memoriju za sve tabove dok imate otvorenu alatnu traku.">
+<!ENTITY options.disableHTTPCache.label     "Onemogući HTTP keš (kada je toolbox otvoren)">
+<!ENTITY options.disableHTTPCache.tooltip   "Uključivanje ove opcije će onemogućiti HTTP keš za sve tabove koji imaju otvoren toolbox. Ovo neće uticati na Service Workere.">
 <!-- LOCALIZATION NOTE (options.enableServiceWorkersHTTP.label,
   -  options.enableServiceWorkersHTTP.tooltip): This is the options panel label and
   -  tooltip for the checkbox that toggles the service workers testing features on or off. This option enables service workers over HTTP. -->
 
 <!ENTITY options.enableServiceWorkersHTTP.label     "Omogući Service Workere preko HTTP (kada je alatna traka otvorena)">
 <!ENTITY options.enableServiceWorkersHTTP.tooltip   "Uključivanje ove opcije će omogućiti korištenje opcija testiranja service workera putem HTTP-a za sve tabove koji imaju otvorenu alatnu traku.">
-<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label2): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tools. -->
 
-<!ENTITY options.selectDefaultTools.label     "Izvorni Firefox developer alati">
+<!ENTITY options.selectDefaultTools.label2    "Izvorni razvojni alati">
 <!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
   -  the heading of group of checkboxes corresponding to the developer tools
   -  added by add-ons. This heading is hidden when there is no developer tool
@@ -168,6 +158,15 @@ values from browser.dtd.  -->
 
 <!ENTITY options.timestampMessages.label      "Uključi vremenske oznake">
 <!ENTITY options.timestampMessages.tooltip    "Ako omogućite ovu opciju, naredbe i rezultati u web konzoli će prikazivati vremensku oznaku">
+<!-- LOCALIZATION NOTE (options.debugger.label): This is the label for the
+  -  heading of the group of Debugger preferences in the options panel. -->
+
+<!ENTITY options.debugger.label            "Debugger">
+<!-- LOCALIZATION NOTE (options.sourceMap.label): This is the
+   - label for the checkbox that toggles source maps in the Debugger -->
+
+<!ENTITY options.sourceMaps.label      "Omogući mape izvora">
+<!ENTITY options.sourceMaps.tooltip    "Ukoliko omogućite ovu opciju, izvori će biti mapirani u Debuggeru i Konzoli.">
 <!-- LOCALIZATION NOTE (options.styleeditor.label): This is the label for the
   -  heading of the group of Style Editor preferences in the options
   -  panel. -->
@@ -201,8 +200,7 @@ values from browser.dtd.  -->
   -  in about:config, in the options panel. -->
 
 <!ENTITY options.showPlatformData.label    "Prikaži podatke Gecko platforme">
-<!ENTITY options.showPlatformData.tooltip  "Ukoliko uključite ovu opciju JavaScript Profiler izvještaji će uključivati 
-simbole Gecko platforme">
+<!ENTITY options.showPlatformData.tooltip  "Ukoliko uključite ovu opciju JavaScript Profiler izvještaji će uključivati simbole Gecko platforme">
 <!-- LOCALIZATION NOTE (options.sourceeditor.*): Options under the editor
   -  section. -->
 
@@ -219,9 +217,3 @@ simbole Gecko platforme">
 <!ENTITY options.sourceeditor.keybinding.label          "Kratice">
 <!ENTITY options.sourceeditor.keybinding.accesskey      "K">
 <!ENTITY options.sourceeditor.keybinding.default.label  "Izvorno">
-
-
-
-<!-- LOCALIZATION NOTE (options.defaultColorUnit.authored): This is used in the
-  -  'Default color unit' dropdown list and is visible in the options panel. -->
-<!ENTITY options.defaultColorUnit.authored "As Authored">

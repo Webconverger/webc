@@ -4,11 +4,11 @@
 
 <!ENTITY loadError.label "Sidelastingsfeil">
 <!ENTITY retry.label "Prøv igjen">
-
 <!-- Specific error messages -->
 
+
 <!ENTITY connectionFailure.title "Klarte ikke koble til nettstedet">
-<!ENTITY connectionFailure.longDesc "<p>Selv om adressen ser ut til å være gyldig, klarte ikke nettleseren å koble til det.</p><ul><li>Kan nettstedet midlertidig være utilgjengelig? Prøv igjen senere.</li><li>Klarer du å åpne andre nettsider?  Kontroller datamaskinens nettverksforbindelse.</li><li>Er datamaskinen eller nettverket ditt beskyttet av en brannmur eller proxy? Feil innstillinger kan gjøre det umulig å åpne nettsider.</li></ul>">
+<!ENTITY connectionFailure.longDesc "<p>Selv om adressen ser ut til å være gyldig, klarte ikke nettleseren å koble til det.</p><ul><li>Kan nettstedet midlertidig være utilgjengelig? Prøv igjen senere.</li><li>Klarer du å åpne andre nettsider?  Kontroller datamaskinens nettverksforbindelse.</li><li>Er datamaskinen eller nettverket ditt beskyttet av en brannmur eller proxy? Feil innstillinger kan forstyrre åpning av nettsider.</li></ul>">
 
 <!ENTITY deniedPortAccess.title "Porten er adgangsbegrenset av sikkerhetsårsaker">
 <!ENTITY deniedPortAccess.longDesc "<p>Forespørselsadressen oppgav en port (f.eks. <q>mozilla.org:80</q> for port 80 på mozilla.org) som normalt brukes til et <em>annet</em> formål enn nettlesing. Nettleseren har avbrutt forespørselen av sikkerhetsårsaker.</p>">
@@ -18,6 +18,9 @@
 
 <!ENTITY fileNotFound.title "Fant ikke filen">
 <!ENTITY fileNotFound.longDesc "<ul><li>Kan filen ha endret navn, blitt fjernet, eller kanskje endret plassering?</li><li>Er navnet skrevet korrekt, er bokstavene skrevet riktig (f.eks. 'a' vs. 'A'), eller er det andre typografiske feil i adressen?</li><li>Har du tilstrekkelige tilgangsprivilegier for å åpne filen?</li></ul>">
+
+<!ENTITY fileAccessDenied.title "Tilgang til filen ble nektet">
+<!ENTITY fileAccessDenied.longDesc "<ul><li>Den kan være fjernet, flyttet eller filrettighetene forhindrer tilgang.</li></ul>">
 
 <!ENTITY generic.title "Klarte ikke fullføre forspørselen">
 <!ENTITY generic.longDesc "<p>Mer informasjon om denne feilen er ikke tilgjengelig.</p>">
@@ -38,11 +41,7 @@
 <!ENTITY contentEncodingError.longDesc "<p>Nettsiden du forsøker å åpne kan ikke vises fordi den bruker en ukjent eller ugyldig komprimeringsmetode.</p><ul><li>Kontakt den ansvarlige for nettstedet og informer dem om problemet.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Utrygg filtype">
-<!ENTITY unsafeContentType.longDesc "
-<ul>
-  <li>Kontakt nettsideeierne og informer dem om dette problemet.</li>
-</ul>
-">
+<!ENTITY unsafeContentType.longDesc "<ul> <li>Kontakt nettsideeierne og informer dem om dette problemet.</li> </ul>">
 
 <!ENTITY netReset.title "Tilkobling avbrutt">
 <!ENTITY netReset.longDesc "<p>Nettverksforbindelsen ble avbrutt mens en tilkobling ble opprettet. Prøv igjen.</p>">
@@ -69,44 +68,21 @@
 <!ENTITY nssFailure2.longDesc2 "<p>Nettsiden du forsøker å åpne kan ikke vises, fordi det ikke kunne bekreftes at mottatte data er autentiske.</p><ul><li>Kontakt den ansvarlige for nettstedet og informer om problemet.</li></ul>">
 
 <!ENTITY nssBadCert.title "Sikker tilkobling mislyktes">
-<!ENTITY nssBadCert.longDesc2 "<ul>
-<li>Dette kan være på grunn av et problem med serverens konfigurasjon, eller det kan være fordi noen forsøker å forfalske tilkoblingen til serveren.</li>
-<li>Dersom du har klart å koble til serveren tidligere kan problemet være midlertidig, og du kan prøve igjen senere.</li>
-</ul>
-">
-
-<!ENTITY malwareBlocked.title "Mistenkt farlig nettsted!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Farlige nettsted kan forsøke å installere programvare som stjeler privat informasjon, bruker datamaskinen din til å angripe andre, eller skader datamaskinen din.</p>
-<p>Nettstedseiere som tror at deres nettsted er feilaktig rapportert som farlig kan <a href='http://www.stopbadware.org/home/reviewinfo' >be om å bli vurdert på nytt</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title "Nettsted mistenkt for uønsket programvare!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Nettsted som sprer uønsket programvare kan forsøke å installere programmer som er villedende og påvirker systemet ditt på uventede måter.</p>
-">
-
-<!ENTITY phishingBlocked.title "Mistenkt nettsvindel!">
-<!ENTITY phishingBlocked.longDesc "
-<p>Dersom du skriver inn personlig informasjon på denne nettsiden kan føre til identitetstyveri eller annen svindel.</p>
-<p>Disse typene nettsvindler brukes i såkalte «phishing-angrep», hvor forfalskede nettsider og e-post imiterer kilder som du stoler på.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Blokkert nettsted">
-<!ENTITY forbiddenBlocked.longDesc "<p>Nettleseren forhindret denne siden fra å lastes fordi den er konfigurert til å blokkere den.</p>
-">
+<!ENTITY nssBadCert.longDesc2 "<ul> <li>Dette kan være på grunn av et problem med serverens konfigurasjon, eller det kan være fordi noen forsøker å forfalske tilkoblingen til serveren.</li> <li>Dersom du har klart å koble til serveren tidligere kan problemet være midlertidig, og du kan prøve igjen senere.</li> </ul>">
 
 <!ENTITY securityOverride.linkText "Eller du kan lage et unntak …">
-<!ENTITY securityOverride.warningContent "
-<p>Du bør ikke lage et unntak hvis du bruker en Internett-forbindelse som du ikke stoler fullstendig på, eller hvis du ikke er vant med å se en slik advarsel for denne serveren.</p>
-<p>Hvis du fortsatt ønsker å lage et unntak for dette nettstedet, kan du gjøre det i avansert kryptering-innstillingene.</p>
-">
+<!ENTITY securityOverride.warningContent "<p>Du bør ikke lage et unntak hvis du bruker en Internett-forbindelse som du ikke stoler fullstendig på, eller hvis du ikke er vant med å se en slik advarsel for denne serveren.</p> <p>Hvis du fortsatt ønsker å lage et unntak for dette nettstedet, kan du gjøre det i avansert kryptering-innstillingene.</p>">
 
 <!ENTITY cspBlocked.title "Blokkert av sikkerhetspolicy">
 <!ENTITY cspBlocked.longDesc "<p>Nettleseren forhindret denne siden fra å lastes inn på denne måten, fordi nettsiden har en sikkerhetspolicy som forbyr det.</p>">
 
-<!ENTITY corruptedContentError.title "Feil - ødelagt innhold">
-<!ENTITY corruptedContentError.longDesc "<p>Siden du forsøker å vise kan ikke åpnes på grunn av en feil i dataoverføringen</p><ul><li>Kontakt nettstedseierne og informer dem om problemet.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Feil - ødelagt innhold">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>Siden du forsøker å vise kan ikke åpnes på grunn av en feil i dataoverføringen</p><ul><li>Kontakt nettstedseierne og informer dem om problemet.</li></ul>">
 
 <!ENTITY remoteXUL.title "Remote XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Kontakt nettstedseierne og informer dem om dette problemet.</li></ul></p>">
+
+<!ENTITY inadequateSecurityError.title "Tilkoblingen din er ikke sikker">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> bruker sikkerhetsteknologi som er utdatert eller sårbar for angrep. En angriper kan enkelt fremskaffe informasjon som du trodde var sikker. Nettstedsadministratoren må endre serveren først, før du kan besøke nettstedet.</p><p>Feilkode: NS_ERROR_NET_INADEQUATE_SECURITY</p>">

@@ -2,7 +2,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!ENTITY loadError.label "Falha no carregamento da página">
+<!ENTITY loadError.label "Erro ao carregar a página">
 <!ENTITY retry.label "Tentar de novo">
 
 <!-- Specific error messages -->
@@ -19,11 +19,14 @@
 <!ENTITY fileNotFound.title "Arquivo não encontrado">
 <!ENTITY fileNotFound.longDesc "<ul><li>Este item poderia ter sido renomeado, removido ou movido?</li><li>Há algum erro de digitação no endereço, como uma letra maiúscula em vez de minúscula?</li><li>Você possui permissões para acessar o item solicitado?</li></ul>">
 
-<!ENTITY generic.title "Não foi possível concluir o pedido">
+<!ENTITY fileAccessDenied.title "Acesso ao arquivo foi negado">
+<!ENTITY fileAccessDenied.longDesc "<ul><li>Pode ter sido removido, movido ou as permissões do arquivo podem estar impedindo o acesso.</li></ul>">
+
+<!ENTITY generic.title "Não foi possível concluir a solicitação">
 <!ENTITY generic.longDesc "<p>Informações adicionais sobre este problema ou erro não estão disponíveis neste momento.</p>">
 
 <!ENTITY malformedURI.title "Endereço inválido">
-<!ENTITY malformedURI.longDesc "<p>O endereço fornecido não possui um formato reconhecido. Por favor, verifique se há erro na barra de endereço e tente de novo.</p>">
+<!ENTITY malformedURI.longDesc "<p>O endereço fornecido não possui um formato reconhecido. Por favor, verificar se há erros no endereço na barra de endereço e tentar de novo.</p>">
 
 <!ENTITY netInterrupt.title "Transferência de dados interrompida">
 <!ENTITY netInterrupt.longDesc "<p>A conexão foi efetuada com êxito, mas foi interrompida durante a transferência de dados. Por favor, tente de novo.</p><ul><li>Não consegue abrir outros sites? Verifique a conexão de rede do computador.</li><li>O problema persiste? Consulte seu administrador de rede ou o suporte do provedor internet.</li></ul>">
@@ -35,7 +38,7 @@
 <!ENTITY netOffline.longDesc2 "<p>O navegador está no modo offline e não pode conectar-se ao item solicitado.</p><ul><li>O computador está conectado a uma rede ativa?</li><li>Pressione “Tentar de novo” para sair do modo offline e recarregar a página.</li></ul>">
 
 <!ENTITY contentEncodingError.title "Erro na codificação do conteúdo">
-<!ENTITY contentEncodingError.longDesc "<p>A página que você está tentando abrir não pode ser exibida porque usa uma forma não suportada ou inválida de compactação.</p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul>">
+<!ENTITY contentEncodingError.longDesc "<p>A página que você está tentando ver não pode ser vista porque usa uma forma não suportada ou inválida de compactação.</p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Tipo de arquivo inseguro">
 <!ENTITY unsafeContentType.longDesc "<ul> 
@@ -43,7 +46,7 @@
 </ul>">
 
 <!ENTITY netReset.title "Conexão interrompida">
-<!ENTITY netReset.longDesc "<p>O link de rede foi interrompido durante a negociação da conexão. Por favor, tente de novo.</p>">
+<!ENTITY netReset.longDesc "<p>O link de rede foi interrompido durante a negociação da conexão. Por favor, tentar de novo.</p>">
 
 <!ENTITY netTimeout.title "Atingido o tempo limite de conexão">
 <!ENTITY netTimeout.longDesc "<p>O site solicitado não respondeu ao pedido de conexão e o navegador desistiu de esperar pela resposta.</p><ul><li>O servidor poderia estar sobrecarregado ou temporariamente fora do ar? Tente de novo mais tarde.</li><li>Não consegue abrir outros sites? Verifique a conexão de rede do computador.</li><li>O seu computador ou rede é protegido por um firewall ou proxy? Configurações incorretas podem interferir na navegação.</li><li>O problema persiste? Consulte seu administrador de rede ou o suporte do provedor internet.</li></ul>">
@@ -61,31 +64,16 @@
 <!ENTITY redirectLoop.longDesc "<p>As tentativas para acessar o item solicitado foram interrompidas. O site está redirecionando o pedido de um modo que impede a sua conclusão.</p><ul><li>Você desativou ou bloqueou cookies exigidos por este site?</li><li><em>NOTA</em>: se aceitar os cookies do site não resolver o problema, provavelmente a causa é alguma configuração no servidor e não o seu computador.</li></ul>">
 
 <!ENTITY unknownSocketType.title "Resposta incorreta">
-<!ENTITY unknownSocketType.longDesc "<p>O site respondeu ao pedido de conexão de um modo não esperado. Não é possível prosseguir.</p>">
+<!ENTITY unknownSocketType.longDesc "<p>O site respondeu à solicitação de rede de uma maneira inesperada e o navegador não pode continuar.</p>">
 
 <!ENTITY nssFailure2.title "Falha na conexão segura">
-<!ENTITY nssFailure2.longDesc2 "<p>A página que você está tentando abrir não pode ser exibida porque a autenticidade dos dados recebidos não pôde ser comprovada.</p><ul><li>Por favor, contate os responsáveis pelo site para informá-los sobre este problema.</li></ul>">
+<!ENTITY nssFailure2.longDesc2 "<p>A página que você está tentando ver não pode ser vista porque a autenticidade dos dados recebidos não pôde ser verificada.</p><ul><li>Por favor, contatar os responsáveis pelo site para informá-los sobre este problema.</li></ul>">
 
 <!ENTITY nssBadCert.title "Falha na conexão segura">
 <!ENTITY nssBadCert.longDesc2 "<ul> 
 <li>Pode ser um problema com a configuração do servidor ou pode ser alguém tentando se passar por ele.</li> 
 <li>Se você já conectou-se com êxito a este servidor, o erro pode ser temporário e você pode tentar de novo mais tarde.</li> 
 </ul>">
-
-<!ENTITY malwareBlocked.title "Site suspeito de ser um foco de ataques!">
-<!ENTITY malwareBlocked.longDesc "<p>Sites de ataque tentam instalar programas que roubam informações privadas, usam o seu computador para atacar outros ou danificam o seu sistema.</p>
-<p>Proprietários de sites que acreditem estar sendo injustamente classificados como focos de ataques podem <a href='http://www.stopbadware.org/home/reviewinfo'>solicitar uma reavaliação</a>.</p>">
-
-<!ENTITY unwantedBlocked.title "Site suspeito de software indesejado!">
-<!ENTITY unwantedBlocked.longDesc "<p>As páginas de software indesejado tentam instalar software que pode ser enganoso e afetar o seu sistema de formas inesperadas. </p>">
-
-<!ENTITY phishingBlocked.title "Site suspeito de ser uma fraude!">
-<!ENTITY phishingBlocked.longDesc "<p>O fornecimento de dados pessoais nesta página pode resultar em roubo de identidade ou outros golpes.</p> 
-<p>Estes tipos de fraude são usados em golpes conhecidos como phishing attacks, em que páginas falsas e emails se fazem passar por fontes que você confiaria.</p>">
-
-<!ENTITY forbiddenBlocked.title "Site proibido">
-<!ENTITY forbiddenBlocked.longDesc "<p>O navegador impediu nesta página de ser carregada porque está configurado para bloqueá-la.</p>
-">
 
 <!ENTITY securityOverride.linkText "Ou pode adicionar uma exceção…">
 <!ENTITY securityOverride.warningContent "<p>Você não deve adicionar uma exceção se estiver usando uma conexão com a internet que não confie totalmente ou se não costumava ver um alerta para este servidor.</p> 
@@ -94,8 +82,13 @@
 <!ENTITY cspBlocked.title "Bloqueado pela política de segurança de conteúdo">
 <!ENTITY cspBlocked.longDesc "<p>O navegador impediu esta página de carregar desta forma porque a política de segurança de conteúdo da página não permite.</p>">
 
-<!ENTITY corruptedContentError.title "Conteúdo corrompido">
-<!ENTITY corruptedContentError.longDesc "<p>A página que você está tentando abrir não pôde ser exibida porque foi detectado um erro na transmissão.</p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Corrupted Content Error">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>The page you are trying to view cannot be shown because an error in the data transmission was detected.</p><ul><li>Please contact the website owners to inform them of this problem.</li></ul>">
 
 <!ENTITY remoteXUL.title "XUL remoto">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul></p>">
+
+<!ENTITY inadequateSecurityError.title "Sua conexão não é segura">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> usa uma tecnologia de segurança que está ultrapassada e vulnerável a ataques. Um cracker poderia facilmente coletar informações enquanto você acreditava estar seguro. O administrador do website precisa consertar essa brecha no servidor primeiro antes de você poder acessar esse site.</p><p>Código de erro: NS_ERROR_NET_INADEQUATE_SECURITY</p>">

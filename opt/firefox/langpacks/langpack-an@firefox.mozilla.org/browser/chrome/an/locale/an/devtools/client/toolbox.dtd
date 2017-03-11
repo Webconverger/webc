@@ -11,35 +11,17 @@
 <!ENTITY toggleToolboxF12.keytext          "F12">
 
 <!ENTITY toolboxCloseButton.tooltip    "Zarrar as ferramientas ta desembolicadors">
-<!ENTITY toolboxOptionsButton.key      "O">
-<!ENTITY toolboxNextTool.key           "]">
-<!ENTITY toolboxPreviousTool.key       "[">
-<!-- LOCALIZATION NOTE :
-fullZoomEnlargeCmd.commandkey, fullZoomEnlargeCmd.commandkey2,
-fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey,
-fullZoomReduceCmd.commandkey2, fullZoomResetCmd.commandkey,
-and fullZoomResetCmd.commandkey2 should all match the corresponding
-values from browser.dtd.  -->
-
-<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
-<!ENTITY fullZoomEnlargeCmd.commandkey3 "">
-
-<!ENTITY fullZoomReduceCmd.commandkey   "-">
-<!ENTITY fullZoomReduceCmd.commandkey2  "">
-
-<!ENTITY fullZoomResetCmd.commandkey    "0">
-<!ENTITY fullZoomResetCmd.commandkey2   "">
-
-<!ENTITY toolboxReload.key             "r">
-<!-- This key is used with the accel+shift modifiers to minimize the toolbox -->
-<!ENTITY toolboxToggleMinimize.key     "U">
-
-<!ENTITY toolboxToggle.key             "d">
 <!-- LOCALIZATION NOTE (toolboxFramesButton): This is the label for
   -  the iframes menu list that appears only when the document has some.
   -  It allows you to switch the context of the whole toolbox. -->
+
 <!ENTITY toolboxFramesTooltip          "Trigue un iframe como o documento obchectivo">
+<!-- LOCALIZATION NOTE (toolboxNoAutoHideButton): This is the label for
+  -  the button to force the popups/panels to stay visible on blur.
+  -  This is only visible in the browser toolbox as it is meant for
+  -  addon developers and Firefox contributors. -->
+
+<!ENTITY toolboxNoAutoHideTooltip      "Desactivar auto amagar panels popup">
 <!-- LOCALIZATION NOTE (browserToolboxErrorMessage): This is the label
   -  shown next to error details when the Browser Toolbox is unable to open. -->
 
@@ -58,6 +40,12 @@ values from browser.dtd.  -->
 
 <!ENTITY options.showUserAgentStyles.label "Amostrar os estilos d'o navegador">
 <!ENTITY options.showUserAgentStyles.tooltip "Activando ista opción amostrará os estilos por defecto cargaus por o navegador">
+<!-- LOCALIZATION NOTE (options.collapseAttrs.label): This is the label
+  -  for the checkbox option to enable collapse attributes in the Inspector
+  -  panel. -->
+
+<!ENTITY options.collapseAttrs.label "Truncar atributos DOM">
+<!ENTITY options.collapseAttrs.tooltip "Truncar atributos largos en o inspector">
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
   -  dropdown list that controls the default color unit used in the inspector.
   -  This label is visible in the options panel. -->
@@ -105,7 +93,7 @@ values from browser.dtd.  -->
   -  boolean preference in about:config, in the options panel. -->
 
 <!ENTITY options.enableRemote.label3    "Activar a depuración remota">
-<!ENTITY options.enableRemote.tooltip   "Activar ista opción permitirá a las ferramientas de desembolicador depurar instancias remotas de Firefox, como Firefox OS">
+<!ENTITY options.enableRemote.tooltip2  "Activar ista opción permitirá a las ferramientas de desembolicador depurar instancias remotas de Firefox, como Firefox OS">
 <!-- LOCALIZATION NOTE (options.enableWorkers.label): This is the label for the
   -  checkbox that toggles worker debugging, i.e. devtools.debugger.workers
   -  boolean preference in about:config, in the options panel. -->
@@ -118,23 +106,23 @@ values from browser.dtd.  -->
 
 <!ENTITY options.disableJavaScript.label     "Desactivar JavaScript *">
 <!ENTITY options.disableJavaScript.tooltip   "Activando ista opción se desactivará JavaScript en a pestanya actual. Si a pestanya u caixa de ferramientas de zarra alavez iste achuste se descartará.">
-<!-- LOCALIZATION NOTE (options.disableCache.label2,
-  -  options.disableCache.tooltip2): This is the options panel label and
-  -  tooltip for the checkbox that toggles the cache on or off. -->
+<!-- LOCALIZATION NOTE (options.disableHTTPCache.label,
+  -  options.disableHTTPCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the HTTP cache on or off. -->
 
-<!ENTITY options.disableCache.label2     "Desactivar caché (quan a caixa de ferramientas siga ubierta)">
-<!ENTITY options.disableCache.tooltip2   "Activando ista opción desactivará a cacé en todas as pestanyas que tiengan ubierta a caixa de ferramientas.">
+<!ENTITY options.disableHTTPCache.label     "Desactivar la caché HTTP (quan a caixa de ferramientas ye ubierta)">
+<!ENTITY options.disableHTTPCache.tooltip   "Activar ista opción desactiva la caché HTTP en totas las pestanyas que tienen la caixa de ferramientas ubierta. Los Service Workers no son afectaus por ista opción.">
 <!-- LOCALIZATION NOTE (options.enableServiceWorkersHTTP.label,
   -  options.enableServiceWorkersHTTP.tooltip): This is the options panel label and
   -  tooltip for the checkbox that toggles the service workers testing features on or off. This option enables service workers over HTTP. -->
 
 <!ENTITY options.enableServiceWorkersHTTP.label     "Activar os Service Workers sobre HTTP (quan a caixa de ferramientas siga ubierta)">
 <!ENTITY options.enableServiceWorkersHTTP.tooltip   "En activar ista opción s'habilitarán os service workers sobre HTTP pa todas as pestanyas que tienen a caixa de ferramientas ubierta.">
-<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label2): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tools. -->
 
-<!ENTITY options.selectDefaultTools.label     "Ferramientas de desembolicador de Firefox predeterminadas">
+<!ENTITY options.selectDefaultTools.label2    "Ferramientas de desenvolvimiento por defecto">
 <!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
   -  the heading of group of checkboxes corresponding to the developer tools
   -  added by add-ons. This heading is hidden when there is no developer tool
@@ -170,6 +158,15 @@ values from browser.dtd.  -->
 
 <!ENTITY options.timestampMessages.label      "Activar as marcas de tiempo">
 <!ENTITY options.timestampMessages.tooltip    "Si activa ista opción as ordens y as suyas salidas amostrarán una marca de tiempo">
+<!-- LOCALIZATION NOTE (options.debugger.label): This is the label for the
+  -  heading of the group of Debugger preferences in the options panel. -->
+
+<!ENTITY options.debugger.label            "Depurador">
+<!-- LOCALIZATION NOTE (options.sourceMap.label): This is the
+   - label for the checkbox that toggles source maps in the Debugger -->
+
+<!ENTITY options.sourceMaps.label      "Habilitar los mapas fuent">
+<!ENTITY options.sourceMaps.tooltip    "Si habilita ista opción las fuents serán mapiadas en o depurador y la consola.">
 <!-- LOCALIZATION NOTE (options.styleeditor.label): This is the label for the
   -  heading of the group of Style Editor preferences in the options
   -  panel. -->
@@ -203,8 +200,7 @@ values from browser.dtd.  -->
   -  in about:config, in the options panel. -->
 
 <!ENTITY options.showPlatformData.label    "Amostrar os datos d'a plataforma Gecko">
-<!ENTITY options.showPlatformData.tooltip  "Si activa ista opción, os informes d'o perfilador JavaScript incluirán 
-os simbolos d'a plataforma Gecko">
+<!ENTITY options.showPlatformData.tooltip  "Si activa ista opción, os informes d'o perfilador JavaScript incluirán os simbolos d'a plataforma Gecko">
 <!-- LOCALIZATION NOTE (options.sourceeditor.*): Options under the editor
   -  section. -->
 
@@ -221,4 +217,3 @@ os simbolos d'a plataforma Gecko">
 <!ENTITY options.sourceeditor.keybinding.label          "Combinaciones de teclas">
 <!ENTITY options.sourceeditor.keybinding.accesskey      "C">
 <!ENTITY options.sourceeditor.keybinding.default.label  "Predeterminau">
-

@@ -5,14 +5,14 @@
 <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
 %brandDTD;
 
-<!ENTITY loadError.label "Falha no carregamento da página">
+<!ENTITY loadError.label "Problemas ao carregar a página">
 <!ENTITY retry.label "Tentar de novo">
 <!ENTITY returnToPreviousPage.label "Voltar">
 <!ENTITY advanced.label "Avançado">
 
 <!-- Specific error messages -->
 
-<!ENTITY connectionFailure.title "Não é possível conectar-se">
+<!ENTITY connectionFailure.title "Não foi possível conectar">
 <!ENTITY connectionFailure.longDesc "&sharedLongDesc;">
 
 <!ENTITY deniedPortAccess.title "Endereço restrito">
@@ -35,9 +35,18 @@ do seu computador.</li> 
   <li>Verifique se o arquivo foi movido, renomeado ou excluído.</li>
 </ul>">
 
+<!ENTITY fileAccessDenied.title "Acesso ao arquivo foi negado">
+<!ENTITY fileAccessDenied.longDesc "<ul>
+  <li>Pode ter sido removido, movido ou as permissões do arquivo podem estar impedindo o acesso.</li>
+</ul>">
 
 <!ENTITY generic.title "Oops.">
 <!ENTITY generic.longDesc "<p>Algo impediu o &brandShortName; de carregar esta página.</p>">
+
+<!ENTITY captivePortal.title "Autenticar na rede">
+<!ENTITY captivePortal.longDesc "<p>Esta rede pode exigir sua autenticação para usar a internet.</p>">
+
+<!ENTITY openPortalLoginPage.label "Abrir página de autenticação">
 
 <!ENTITY malformedURI.title "Endereço inválido">
 <!ENTITY malformedURI.longDesc "<ul> 
@@ -47,7 +56,7 @@ do seu computador.</li> 
 (isto é, <strong>/</strong>).</li> 
 </ul>">
 
-<!ENTITY netInterrupt.title "Conexão interrompida">
+<!ENTITY netInterrupt.title "A conexão foi interrompida">
 <!ENTITY netInterrupt.longDesc "&sharedLongDesc;">
 
 <!ENTITY notCached.title "Documento fora de validade">
@@ -68,10 +77,10 @@ do seu computador.</li> 
 <li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li> 
 </ul>">
 
-<!ENTITY netReset.title "Conexão reiniciada">
+<!ENTITY netReset.title "A conexão foi redefinida">
 <!ENTITY netReset.longDesc "&sharedLongDesc;">
 
-<!ENTITY netTimeout.title "Tempo limite atingido">
+<!ENTITY netTimeout.title "A conexão expirou">
 <!ENTITY netTimeout.longDesc "&sharedLongDesc;">
 
 <!ENTITY unknownProtocolFound.title "Endereço não compreendido">
@@ -79,14 +88,14 @@ do seu computador.</li> 
 <li>Pode ser necessário instalar algum aplicativo para abrir este endereço.</li> 
 </ul>">
 
-<!ENTITY proxyConnectFailure.title "Conexão recusada pelo servidor proxy">
+<!ENTITY proxyConnectFailure.title "O servidor proxy está recusando conexões">
 <!ENTITY proxyConnectFailure.longDesc "<ul> 
 <li>Verifique as configurações de proxy para se certificar que estão corretas</li> 
 <li>Contate seu administrador de rede para se certificar que o servidor proxy está 
 funcionando.</li> 
 </ul>">
 
-<!ENTITY proxyResolveFailure.title "Servidor proxy não encontrado">
+<!ENTITY proxyResolveFailure.title "Não foi possível localizar o servidor proxy">
 <!ENTITY proxyResolveFailure.longDesc "<ul> 
 <li>Verifique as configurações de proxy para certificar-se de que estejam corretas.</li> 
 <li>Certifique-se de que a conexão de rede do seu computador esteja funcionando.</li> 
@@ -100,7 +109,7 @@ de que o &brandShortName; esteja autorizado a acessar a web.</li>
 cookies.</li> 
 </ul>">
 
-<!ENTITY unknownSocketType.title "Resposta não prevista do servidor">
+<!ENTITY unknownSocketType.title "Resposta inesperada do servidor">
 <!ENTITY unknownSocketType.longDesc "<ul> 
 <li>Certifique-se de que o seu sistema possui o Personal Security Manager 
 instalado.</li> 
@@ -109,17 +118,15 @@ instalado.</li>
 
 <!ENTITY nssFailure2.title "Falha na conexão segura">
 <!ENTITY nssFailure2.longDesc2 "<ul> 
-<li>A página que você está tentando abrir não pode ser exibida porque a autenticidade dos dados recebidos não pôde ser comprovada.</li> 
+<li>A página que está tentando ver não pode ser vista porque a autenticidade dos dados recebidos não pôde ser verificada.</li> 
 <li>Por favor, contate os responsáveis pelo site para informá-los sobre este problema.</li> 
 </ul>">
 
-<!ENTITY nssBadCert.title "Falha na conexão segura">
-<!ENTITY nssBadCert.longDesc2 "<ul> 
-<li>Pode ser um problema com a configuração do servidor ou pode 
-ser alguém tentando se passar por ele.</li> 
-<li>Se já conectou-se com êxito a este servidor, o erro pode 
-ser temporário e você pode tentar de novo mais tarde.</li> 
-</ul>">
+<!ENTITY certerror.longpagetitle1 "Sua conexão não é segura">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "O proprietário do <span class='hostname'/> configurou este site incorretamente. Para proteger suas informações de serem roubadas, o &brandShortName; não se conectou a ele.">
 
 <!ENTITY sharedLongDesc "<ul> 
 <li>Este site pode estar temporariamente fora do ar ou sobrecarregado. Tente de novo 
@@ -130,53 +137,22 @@ do computador.</li>
 de que o &brandShortName; esteja autorizado a acessar a web.</li> 
 </ul>">
 
-<!ENTITY malwareBlocked.title "Site suspeito de ser um foco de ataques!">
-<!ENTITY malwareBlocked.longDesc "<p>Sites de ataque tentam instalar programas que roubam informações pessoais, usam o seu computador para atacar outros ou danificam o seu sistema.</p> 
-<p>Proprietários de sites que acreditem estar sendo injustamente classificados como um foco de ataques podem <a href='http://www.stopbadware.org/home/reviewinfo'>solicitar uma reavaliação</a>.</p>">
-
-<!ENTITY unwantedBlocked.title "Site suspeito de software indesejado!">
-<!ENTITY unwantedBlocked.longDesc "<p>As páginas de software indesejado tentam instalar software que pode ser enganoso e afetar o seu sistema de formas inesperadas.</p>">
-
-<!ENTITY phishingBlocked.title "Site suspeito de ser uma fraude!">
-<!ENTITY phishingBlocked.longDesc "<p>O fornecimento de dados pessoais nesta página pode resultar em roubo de identidade ou outros golpes.</p> 
-<p>Estes tipos de fraude são usados em golpes conhecidos como phishing attacks, em que páginas falsas e emails se fazem passar por fontes que você confiaria.</p>">
-
-<!ENTITY forbiddenBlocked.title "Sites proibidos">
-<!ENTITY forbiddenBlocked.longDesc "<p>O &brandShortName; impediu esta página de ser carregada porque está configurado para bloqueá-la.</p>
-">
-
 <!ENTITY cspBlocked.title "Bloqueado pela política de segurança de conteúdo">
 <!ENTITY cspBlocked.longDesc "<p>O &brandShortName; impediu esta página de carregar desta forma porque a política de segurança de conteúdo da página não permite.</p>">
 
-<!ENTITY corruptedContentError.title "Conteúdo corrompido">
-<!ENTITY corruptedContentError.longDesc "<p>A página que você está tentando abrir não pôde ser exibida porque foi detectado um erro na transmissão.</p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Erro de conteúdo corrompido">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>A página que está tentando ver não pode ser vista porque foi detectado um erro na transmissão de dados.</p><ul><li>Entre em contato com os proprietários do site para informá-los sobre este problema.</li></ul>">
 
 
-<!ENTITY securityOverride.linkText "Ou você pode adicionar uma exceção…">
-<!ENTITY securityOverride.getMeOutOfHereButton "Me tire daqui!">
 <!ENTITY securityOverride.exceptionButtonLabel "Adicionar exceção…">
 
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
-
-<!ENTITY securityOverride.warningContent "<p>Você não deve adicionar uma exceção se estiver usando uma conexão com a internet que não confie totalmente ou se você não costumava ver um alerta para este servidor.</p> 
- 
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button> 
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>">
-
 <!ENTITY errorReporting.automatic2 "Relatar erros como este para ajudar a Mozilla a identificar e bloquear sites maliciosos">
-<!ENTITY errorReporting.learnMore "Saiba mais…">
-<!ENTITY errorReporting.sending "Enviando relatório">
-<!ENTITY errorReporting.sent "Relatório enviado">
-<!ENTITY errorReporting.report "Relatório">
-<!ENTITY errorReporting.tryAgain "Tentar novamente">
+<!ENTITY errorReporting.learnMore "Saber mais…">
 
 <!ENTITY remoteXUL.title "XUL remoto">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Por favor, contate os responsáveis pelo site para informá-los deste problema.</li></ul></p>">
 
-<!ENTITY sslv3Used.title "Não é possível se conectar com segurança">
+<!ENTITY sslv3Used.title "Não foi possível conectar com segurança">
 <!-- LOCALIZATION NOTE (sslv3Used.longDesc2) - Do not translate
      "SSL_ERROR_UNSUPPORTED_VERSION". -->
 <!ENTITY sslv3Used.longDesc2 "Informações avançadas: SSL_ERROR_UNSUPPORTED_VERSION">
@@ -188,3 +164,22 @@ functionality specific to firefox. -->
 <!ENTITY weakCryptoAdvanced.title "Avançado">
 <!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> usa tecnologia de segurança está desatualizada e vulnerável a ataque. Um invasor pode facilmente revelar informações que você pensou estarem seguras.">
 <!ENTITY weakCryptoAdvanced.override "(Não seguro) Tentando carregar <span class='hostname'></span> usando a segurança desatualizada">
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>Não é possível se conectar com segurança a <span id='wrongSystemTime_URL'/> pois seu relógio parece estar com a hora incorreta.</p> <p>Seu computador pensa que é <span id='wrongSystemTime_systemDate'/>, quando deveria ser <span id='wrongSystemTime_actualDate'/>. Para corrigir esse problema, ajuste as configurações de data e hora para os valores corretos.</p>">
+
+<!ENTITY certerror.pagetitle1  "Conexão insegura">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "Este site usa HTTP
+Strict Transport Security (HSTS) para especificar que o &brandShortName; só pode se conectar
+a ele com segurança. Como resultado, não é possível adicionar uma exceção para este
+certificado.">
+<!ENTITY certerror.copyToClipboard.label "Copiar texto para a área de transferência">
+
+<!ENTITY inadequateSecurityError.title "Sua conexão não é segura">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> usa uma tecnologia de segurança que está ultrapassada e vulnerável a ataques. Um cracker poderia facilmente coletar informações enquanto você acreditava estar seguro. O administrador do website precisa consertar essa brecha no servidor antes de você poder visitar esse site.</p><p>Código de Erro: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY prefReset.longDesc "Parece que suas configurações de segurança de rede podem estar causando isso. Você quer restaurar as configurações padrão?">
+<!ENTITY prefReset.label "Restaurar configurações padrão">

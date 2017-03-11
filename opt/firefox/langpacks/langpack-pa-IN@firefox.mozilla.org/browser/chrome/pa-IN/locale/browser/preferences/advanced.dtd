@@ -1,9 +1,8 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
-   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
-   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!-- Note: due to bug 143065, the only remaining accesskeys available to be used
-     in the Advanced pane are: "b", "j", "q", "z" -->
+<!-- Note: each tab panel must contain unique accesskeys -->
 
 <!ENTITY generalTab.label                "ਆਮ">
 
@@ -14,13 +13,15 @@
 <!ENTITY searchStartTyping.label         "ਜਦੋਂ ਮੈਂ ਟੈਕਸਟ ਲਿਖਦਾ ਹੋਵਾਂ ਤਾਂ ਖੋਜ ਕਰੋ">
 <!ENTITY searchStartTyping.accesskey     "x">
 <!ENTITY blockAutoRefresh.label          "ਮੈਨੂੰ ਸਾਵਧਾਨ ਕਰੋ, ਜਦੋਂ ਵੈੱਬ ਸਾਇਟਾਂ ਰੀ-ਡਾਇਰੈਕਟ ਕਰਨ ਜਾਂ ਪੇਜ਼ ਰੀ-ਲੋਡ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਨ">
-<!ENTITY blockAutoRefresh.accesskey      "r">
+<!ENTITY blockAutoRefresh.accesskey      "b">
+<!ENTITY useOnScreenKeyboard.label       "ਜਦੋਂ ਲੋੜ ਹੋਵੇ ਤਾਂ ਟੱਚ ਕੀਬੋਰਡ ਨੂੰ ਵੇਖਾਓ">
+<!ENTITY useOnScreenKeyboard.accesskey   "k">
 
 <!ENTITY browsing.label                  "ਬਰਾਊਜ਼ਿੰਗ">
 
-<!ENTITY useAutoScroll.label             "ਆਟੋ-ਸਕਰੋਲਿੰਗ ਵਰਤੋਂ">
+<!ENTITY useAutoScroll.label             "ਆਟੋ-ਸਕਰੋਲਿੰਗ ਨੂੰ ਵਰਤੋਂ">
 <!ENTITY useAutoScroll.accesskey         "a">
-<!ENTITY useSmoothScrolling.label        "ਸਮੂਥ ਸਕਰੋਲਿੰਗ ਵਰਤੋਂ">
+<!ENTITY useSmoothScrolling.label        "ਸਮੂਥ ਸਕਰੋਲਿੰਗ ਨੂੰ ਵਰਤੋਂ">
 <!ENTITY useSmoothScrolling.accesskey    "m">
 <!ENTITY allowHWAccel.label              "ਜਦੋਂ ਵੀ ਉਪਲੱਬਧ ਹੋਵੇ ਹਾਰਡਵੇਅਰ ਐਕਸਰਲੇਸ਼ਨ ਵਰਤੋਂ">
 <!ENTITY allowHWAccel.accesskey          "h">
@@ -34,16 +35,15 @@
 <!ENTITY enableHealthReport.accesskey    "R">
 <!ENTITY healthReportLearnMore.label     "ਹੋਰ ਜਾਣੋ">
 
-
 <!ENTITY telemetryDesc.label             "&vendorShortName; ਨਾਲ ਸਾਨੂੰ &brandShortName; ਵਧੀਆ ਬਣਾਉਣ ਲਈ ਆਪਣੇ ਬਰਾਊਜ਼ਰ ਦੀ ਕਾਰਗੁਜ਼ਾਰੀ, ਵਰਤੋ, ਹਾਰਡਵੇਅਰ ਅਤੇ ਪਸੰਦ ਬਦਲਣ ਦਾ ਡਾਟਾ ਸਾਂਝਾ ਕਰੋ">
 <!ENTITY enableTelemetryData.label       "ਵਾਧੂ ਡਾਟਾ ਸਾਂਝਾ ਕਰੋ (ਜਿਵੇਂ ਟੈਲੀਮੈਂਟਰੀ)">
 <!ENTITY enableTelemetryData.accesskey   "T">
 <!ENTITY telemetryLearnMore.label        "ਹੋਰ ਜਾਣੋ">
 
-<!ENTITY crashReporterDesc.label         "&brandShortName; ਕਰੈਸ਼ ਰਿਪੋਰਟਾਂ &vendorShortName; ਨੂੰ ਭੇਜ ਕੇ ਤੁਹਾਡੇ ਬਰਾਊਜ਼ਰ ਵੱਧ ਸਥਿਰ ਅਤੇ ਸੁਰੱਖਿਅਤ ਬਣਾਉਣ ਲਈ ਮੱਦਦ ਕਰਦਾ ਹੈ।">
-<!ENTITY enableCrashReporter.label       "ਕਰੈਸ਼ ਰਿਪੋਟਰ ਚਾਲੂ">
-<!ENTITY enableCrashReporter.accesskey   "C">
-<!ENTITY crashReporterLearnMore.label    "ਹੋਰ ਜਾਣੋ">
+<!ENTITY crashReporterDesc2.label         "Crash reports help &vendorShortName; fix problems and make your browser more stable and secure">
+<!ENTITY alwaysSubmitCrashReports.label   "Allow &brandShortName; to send backlogged crash reports on your behalf">
+<!ENTITY alwaysSubmitCrashReports.accesskey "c">
+<!ENTITY crashReporterLearnMore.label     "ਹੋਰ ਜਾਣੋ">
 
 <!ENTITY networkTab.label                "ਨੈੱਟਵਰਕ">
 
@@ -55,9 +55,7 @@
 
 <!ENTITY httpCache.label                 "ਕੈਸ਼ ਕੀਤੀ ਵੈੱਬ ਸਮੱਗਰੀ">
 
-
 <!ENTITY offlineStorage2.label           "ਆਫਲਾਈਨ ਵੈੱਬ ਸਮੱਗਰੀ ਅਤੇ ਯੂਜ਼ਰ ਡਾਟਾ">
-
 
 <!-- LOCALIZATION NOTE:
   The entities limitCacheSizeBefore.label and limitCacheSizeAfter.label appear on a single
@@ -78,34 +76,22 @@
 <!ENTITY updateTab.label                 "ਅੱਪਡੇਟ">
 
 <!ENTITY updateApp.label                 "&brandShortName; ਅੱਪਡੇਟ:">
-<!-- Note either updateAuto1 is used or (updateAutoMetro and updateAutoDesktop),
-     so re-using accesss key in updateAuto1 is OK. updateAutoDesktop can be found
-     in preferences.properties -->
-<!ENTITY updateAuto1.label               "ਅੱਪਡੇਟ ਆਪਣੇ-ਆਪ ਹੀ ਇੰਸਟਾਲ ਕਰੋ (ਸਿਫਾਰਸ਼ੀ: ਸੁਰੱਖਿਆ ਸੁਧਾਰਾਂ ਲਈ)">
+<!ENTITY updateAuto1.label               "ਅੱਪਡੇਟ ਨੂੰ ਆਪਣੇ-ਆਪ ਹੀ ਇੰਸਟਾਲ ਕਰੋ (ਸਿਫਾਰਸ਼ੀ: ਸੁਰੱਖਿਆ ਸੁਧਾਰਾਂ ਲਈ)">
 <!ENTITY updateAuto1.accesskey           "A">
 <!ENTITY updateCheck.label               "ਅੱਪਡੇਟ ਦੀ ਜਾਂਚ ਕਰੋ, ਪਰ ਮੈਨੂੰ ਚੁਣਨ ਦਿਉ ਕਿ ਕੀ ਉਹਨਾਂ ਨੂੰ ਇੰਸਟਾਲ ਕਰਨਾ ਹੈ">
 <!ENTITY updateCheck.accesskey           "C">
 <!ENTITY updateManual.label              "ਅੱਪਡੇਟ ਲਈ ਕਦੇ ਜਾਂਚ ਨਾ ਕਰੋ (ਸਿਫਾਰਸ਼ ਨਹੀਂ ਕੀਤੀ ਜਾਂਦੀ: ਸੁਰੱਖਿਆ ਲਈ ਖਤਰਾ)">
 <!ENTITY updateManual.accesskey          "N">
 
-<!ENTITY updateAutoAddonWarn.label       "ਮੈਨੂੰ ਸਾਵਧਾਨ ਕਰੋ ਜੇ ਇਹ ਮੇਰੀ ਕੋਈ ਵੀ ਐਡ-ਆਨ ਨੂੰ ਬੰਦ ਕਰ ਦੇਵੇ">
-<!ENTITY updateAutoAddonWarn.accesskey   "W">
-
-<!ENTITY updateHistory.label             "ਅੱਪਡੇਟ ਅਤੀਤ ਵੇਖਾਓ">
+<!ENTITY updateHistory.label             "ਅੱਪਡੇਟ ਅਤੀਤ ਨੂੰ ਵੇਖੋ">
 <!ENTITY updateHistory.accesskey         "p">
 
 <!ENTITY useService.label                "ਅੱਪਡੇਟ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਬੈਕਗਰਾਊਂਡ ਸਰਵਿਸ ਵਰਤੋਂ">
 <!ENTITY useService.accesskey            "b">
 
 <!ENTITY updateOthers.label              "ਆਟੋਮੈਟਿਕ ਅੱਪਡੇਟ ਕਰੋ:">
-
-
 <!ENTITY enableSearchUpdate.label        "ਖੋਜ ਇੰਜਣ">
 <!ENTITY enableSearchUpdate.accesskey    "E">
-
-
-<!ENTITY updateHistory.label             "ਅੱਪਡੇਟ ਅਤੀਤ ਵੇਖੋ">
-<!ENTITY updateHistory.accesskey         "p">
 
 <!ENTITY offlineNotify.label             "ਮੈਨੂੰ ਦੱਸੋ ਜਦੋਂ ਕਿ ਇੱਕ ਵੈੱਬਸਾਈਟ ਆਫਲਾਈਨ ਵਰਤੋਂ ਲਈ ਡਾਟਾ ਸਟੋਰ ਕਰਨ ਲਈ ਪੁੱਛੋ">
 <!ENTITY offlineNotify.accesskey         "T">
@@ -116,18 +102,18 @@
 <!ENTITY offlineAppsList.height          "7em">
 <!ENTITY offlineAppsListRemove.label     "…ਹਟਾਓ">
 <!ENTITY offlineAppsListRemove.accesskey "R">
-<!ENTITY offlineAppRemove.confirm        "ਆਫਲਾਈਨ ਡਾਟਾ ਹਟਾਓ">
+<!ENTITY offlineAppRemove.confirm        "ਆਫਲਾਈਨ ਡਾਟੇ ਨੂੰ ਹਟਾਓ">
 
 <!ENTITY certificateTab.label            "ਸਰਟੀਫਿਕੇਟ">
 <!ENTITY certSelection.label             "ਬੇਨਤੀ">
-<!ENTITY certSelection.description          "ਜਦੋਂ ਇੱਕ ਵੈੱਬ ਸਾਈਟ ਨੂੰ ਇੱਕ ਸਰਟੀਫਿਕੇਟ ਦੀ ਲੋੜ ਹੋਵੇ:">
+<!ENTITY certSelection.description       "ਜਦੋਂ ਇੱਕ ਵੈੱਬ ਸਾਈਟ ਨੂੰ ਇੱਕ ਸਰਟੀਫਿਕੇਟ ਦੀ ਲੋੜ ਹੋਵੇ:">
 <!ENTITY certs.auto                      "ਇੱਕ ਆਟੋਮੈਟਿਕ ਹੀ ਚੁਣੋ">
 <!ENTITY certs.auto.accesskey            "l">
 <!ENTITY certs.ask                       "ਮੈਨੂੰ ਹਰ ਵਾਰ ਪੁੱਛੋ">
 <!ENTITY certs.ask.accesskey             "i">
 <!ENTITY enableOCSP.label                " ਕਿਊਰੀ OCSP ਜਵਾਬ-ਦੇਣ ਵਾਲੇ ਸਰਵਰਾਂ ਨੂੰ ਸਰਟੀਫਿਕੇਟਾਂ ਦੀ ਮੌਜੂਦਾ ਵੈਧਤਾ ਦੀ ਪਸ਼ਟੀ ਕਰਨ">
 <!ENTITY enableOCSP.accesskey            "Q">
-<!ENTITY viewCerts.label                 "ਸਰਟੀਫਿਕੇਟ ਵੇਖੋ">
+<!ENTITY viewCerts.label                 "ਸਰਟੀਫਿਕੇਟ ਨੂੰ ਵੇਖੋ">
 <!ENTITY viewCerts.accesskey             "s">
 <!ENTITY viewSecurityDevices.label       "ਸਕਿਉਰ ਡਿਵਾਇਸ">
 <!ENTITY viewSecurityDevices.accesskey   "y">

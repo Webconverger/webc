@@ -17,7 +17,10 @@
 <!ENTITY dnsNotFound.longDesc "<p>Veebilehitseja ei leidnud sellele aadressile vastavat serverit.</p><ul><li>Kas tegid ehk aadressi sisestamisel vea? (nt <q><strong>www</strong>.mozilla.org</q> asemel hoopis <q><strong>ww</strong>.mozilla.org</q>)</li><li>Kas oled kindel, et see aadress veel kehtib?  See ei pruugi enam registreeritud olla.</li><li>Kas ka teiste lehtede vaatamisel esineb probleeme?  Kontrolli oma võrguühendust ja nimeserveri sätteid.</li><li>Kas sinu arvuti või võrk on kaitstud tulemüüriga? Vigased tulemüüri sätted võivad segada veebilehitsemist.</li></ul>">
 
 <!ENTITY fileNotFound.title "Faili ei leitud">
-<!ENTITY fileNotFound.longDesc "<ul><li>Kas soovitud objekt võib olla ümber nimetatud, kustutatud või mujale paigutatud?</li><li>Kas aadressis võib olla kirjaviga või probleeme suurtähtedega?</li><li>Kas sul on objektile ligipääsemiseks piisavalt õigusi?</li></ul>">
+<!ENTITY fileNotFound.longDesc "<ul><li>Kas soovitud objekt võib olla ümber nimetatud, kustutatud või mujale paigutatud?</li><li>Kas aadressis võib olla sisestusviga või probleeme suurtähtedega?</li><li>Kas sul on objektile ligipääsemiseks piisavalt õigusi?</li></ul>">
+
+<!ENTITY fileAccessDenied.title "Ligipääs failile keelati">
+<!ENTITY fileAccessDenied.longDesc "<ul><li>Fail võib olla kustutatud, mujale liigutatud või on sellele seatud ligipääsu piiravad õigused.</li></ul>">
 
 <!ENTITY generic.title "Päringut pole võimalik lõpetada">
 <!ENTITY generic.longDesc "<p>Selle probleemi kohta pole lisainformatsiooni.</p>">
@@ -75,46 +78,22 @@
 </ul>
 ">
 
-<!ENTITY malwareBlocked.title "Ründava veebilehe kahtlus!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Ründavad lehed üritavad paigaldada privaatandmeid varastavaid rakendusi, kasutavad sinu arvutit teiste ründamiseks või kahjustavad sinu arvutit.</p>
-<p>Veebilehe omanikud, kes usuvad, et nende leht on raporteeritud  ilma põhjuseta, võivad <a href='http://www.stopbadware.org/home/reviewinfo' >nõuda teistkordset ülevaatust</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title "Soovimatu tarkvara levitamise kahtlus!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Soovimatut tarkvara levitavad veebilehed üritavad paigaldada tarkvara, mis võib olla petlik ja mõjutada süsteemi ootamatul viisil.</p>
-">
-
-<!ENTITY phishingBlocked.title "Veebivõltsingu kahtlus!">
-<!ENTITY phishingBlocked.longDesc "
-<p>Sellistele lehtedele andmete sisestamine võib kaasa tuua identiteedivarguse või muu pettuse.</p>
-<p>Seda tüüpi veebivõltsinguid kasutatakse pettustes, mis on tuntud ka kui veebikelmused, kus pettust sisaldavad lehed või e-kirjad jäljendavad allikaid, mida sa võid usaldada.</p>
+<!ENTITY securityOverride.linkText "Või võid ka lisada erandi…">
+<!ENTITY securityOverride.warningContent "
+<p>Erandit ei tohiks lisada, kui kasutad internetiühendust, mida sa täielikult ei usalda, või kui sa pole harjunud nägema hoiatusi sellelt serverilt.</p>
+<p>Kui sa siiski soovid lisada erandi selle saidi jaoks, siis saad seda teha krüptimise täpsemate sätete all.</p>
 ">
 
 <!ENTITY cspBlocked.title "Blokitud sisu kaitsva turvareegliga">
 <!ENTITY cspBlocked.longDesc "<p>Brauser keeldus lehe laadimisest sellisel moel, sest lehe sisu kaitsvate turvareeglite kohaselt on see keelatud.</p>">
 
-<!ENTITY corruptedContentError.title           "Vigane sisu">
-<!ENTITY corruptedContentError.longDesc        "<p>Andmete edastamisel esinenud vea tõttu pole soovitud lehte võimalik kuvada.</p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title         "Vigane sisu">
+<!ENTITY corruptedContentErrorv2.longDesc      "<p>Andmete edastamisel esinenud vea tõttu pole soovitud lehte võimalik kuvada.</p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul>">
 
 <!ENTITY remoteXUL.title "Remote XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul></p>">
 
-<!-- Include app-specific error messages - do not change this in localization!
-     Some applications might override netErrorApp.dtd with their specific version,
-     this inclusion needs to be intact for that approach to work correctly.
-     Please, try to keep this at the end of the file. -->
-<!ENTITY % netErrorAppDTD SYSTEM "chrome://global/locale/netErrorApp.dtd">
-%netErrorAppDTD;
-
-<!ENTITY forbiddenBlocked.longDesc "<p>The browser prevented this page from loading because it is configured to block it.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Forbidden Site">
-
-<!ENTITY securityOverride.linkText "Or you can add an exception…">
-<!ENTITY securityOverride.warningContent "
-<p>You should not add an exception if you are using an internet connection that you do not trust completely or if you are not used to seeing a warning for this server.</p>
-<p>If you still wish to add an exception for this site, you can do so in your advanced encryption settings.</p>
-">
+<!ENTITY inadequateSecurityError.title "Ühendus pole turvaline">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> kasutab turvalisuse tehnoloogiaid, mis on aegunud ja avatud rünnakutele. Ründaja võib suurema vaevata pääseda ligi teabele, mis sinu arvates on kaitstud. Saidi külastamiseks peab saidi administraator selle serveri kõigepealt ära parandama.</p><p>Veakood: NS_ERROR_NET_INADEQUATE_SECURITY</p>">

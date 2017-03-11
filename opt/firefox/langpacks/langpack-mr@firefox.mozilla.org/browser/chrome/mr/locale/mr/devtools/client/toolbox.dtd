@@ -11,35 +11,17 @@
 <!ENTITY toggleToolboxF12.keytext          "F12">
 
 <!ENTITY toolboxCloseButton.tooltip    "डेव्हलपर साधने बंद करा">
-<!ENTITY toolboxOptionsButton.key      "O">
-<!ENTITY toolboxNextTool.key           "]">
-<!ENTITY toolboxPreviousTool.key       "[">
-<!-- LOCALIZATION NOTE :
-fullZoomEnlargeCmd.commandkey, fullZoomEnlargeCmd.commandkey2,
-fullZoomEnlargeCmd.commandkey3, fullZoomReduceCmd.commandkey,
-fullZoomReduceCmd.commandkey2, fullZoomResetCmd.commandkey,
-and fullZoomResetCmd.commandkey2 should all match the corresponding
-values from browser.dtd.  -->
-
-<!ENTITY fullZoomEnlargeCmd.commandkey  "+">
-<!ENTITY fullZoomEnlargeCmd.commandkey2 "=">
-<!ENTITY fullZoomEnlargeCmd.commandkey3 "">
-
-<!ENTITY fullZoomReduceCmd.commandkey   "-">
-<!ENTITY fullZoomReduceCmd.commandkey2  "">
-
-<!ENTITY fullZoomResetCmd.commandkey    "0">
-<!ENTITY fullZoomResetCmd.commandkey2   "">
-
-<!ENTITY toolboxReload.key             "r">
-<!-- This key is used with the accel+shift modifiers to minimize the toolbox -->
-<!ENTITY toolboxToggleMinimize.key     "U">
-
-<!ENTITY toolboxToggle.key             "d">
 <!-- LOCALIZATION NOTE (toolboxFramesButton): This is the label for
   -  the iframes menu list that appears only when the document has some.
   -  It allows you to switch the context of the whole toolbox. -->
-<!ENTITY toolboxFramesTooltip          "iframe म्हणून सध्याचा हवा असेलेला दस्तएवज निवडा">
+
+<!ENTITY toolboxFramesTooltip          "iframe म्हणून सध्याचा हवा असेलेला दस्तऐवज निवडा">
+<!-- LOCALIZATION NOTE (toolboxNoAutoHideButton): This is the label for
+  -  the button to force the popups/panels to stay visible on blur.
+  -  This is only visible in the browser toolbox as it is meant for
+  -  addon developers and Firefox contributors. -->
+
+<!ENTITY toolboxNoAutoHideTooltip      "पॉपअप स्वंय पद्धतीने लपवीणे निष्क्रीय करा">
 <!-- LOCALIZATION NOTE (browserToolboxErrorMessage): This is the label
   -  shown next to error details when the Browser Toolbox is unable to open. -->
 
@@ -56,8 +38,14 @@ values from browser.dtd.  -->
   -  for the checkbox option to show user agent styles in the Inspector
   -  panel. -->
 
-<!ENTITY options.showUserAgentStyles.label "ब्राउजर शैली दाखवा">
-<!ENTITY options.showUserAgentStyles.tooltip "याला सुरू करून ब्राउजरतर्फे लोड करण्याजोगी पूर्वनिर्धारित शेली दाखवले जाईल.">
+<!ENTITY options.showUserAgentStyles.label "ब्राउझर शैली दाखवा">
+<!ENTITY options.showUserAgentStyles.tooltip "याला सुरू करून ब्राउझरतर्फे लोड करण्याजोगी पूर्वनिर्धारित शेली दाखवले जाईल.">
+<!-- LOCALIZATION NOTE (options.collapseAttrs.label): This is the label
+  -  for the checkbox option to enable collapse attributes in the Inspector
+  -  panel. -->
+
+<!ENTITY options.collapseAttrs.label "DOM गुणधर्म संकुचित करा">
+<!ENTITY options.collapseAttrs.tooltip "इन्स्पेक्टर चे लांब गुणधर्म संकुचित करा">
 <!-- LOCALIZATION NOTE (options.defaultColorUnit.label): This is the label for a
   -  dropdown list that controls the default color unit used in the inspector.
   -  This label is visible in the options panel. -->
@@ -98,14 +86,14 @@ values from browser.dtd.  -->
   -  checkbox that toggles chrome debugging, i.e. devtools.chrome.enabled
   -  boolean preference in about:config, in the options panel. -->
 
-<!ENTITY options.enableChrome.label5    "chrome आणि ॲडऑन डिबगिंग साधनपेट्या सक्रीय करा">
+<!ENTITY options.enableChrome.label5    "ब्राउझर chrome आणि ॲड-ऑन डिबगिंग साधनपेट्या सक्रीय करा">
 <!ENTITY options.enableChrome.tooltip3  "हे पर्याय सुरु केल्यामुळे आपल्याला खूप डेवलपर साधने ब्राउझर मध्ये वापरता येतील (साधने > वेब डेवलपर > साधनपेटी) आणि ॲड-ऑन्स् व्यवस्थापकाहून ॲड-ऑन्स् डीबग करा.">
 <!-- LOCALIZATION NOTE (options.enableRemote.label3): This is the label for the
   -  checkbox that toggles remote debugging, i.e. devtools.debugger.remote-enabled
   -  boolean preference in about:config, in the options panel. -->
 
 <!ENTITY options.enableRemote.label3    "दूरस्त डिबगिंग सुरू करा">
-<!ENTITY options.enableRemote.tooltip   "हा पर्याय निवडल्यामुळे डेव्हलपर साधनांना Firefox OS सारख्या रिमोट Firefox साधनाला सुद्धा डिबग करता येईल">
+<!ENTITY options.enableRemote.tooltip2  "हा पर्याय निवडल्यामुळे डेव्हलपर साधनांना Firefox OS सारख्या रिमोट Firefox साधनाला सुद्धा डिबग करता येईल">
 <!-- LOCALIZATION NOTE (options.enableWorkers.label): This is the label for the
   -  checkbox that toggles worker debugging, i.e. devtools.debugger.workers
   -  boolean preference in about:config, in the options panel. -->
@@ -118,23 +106,23 @@ values from browser.dtd.  -->
 
 <!ENTITY options.disableJavaScript.label     "JavaScript * बंद करा">
 <!ENTITY options.disableJavaScript.tooltip   "सध्याच्या टॅबकरिता ह्या पर्यायची निवड केल्यास JavaScript बंद होईल. टॅब किंवा साधनपेटी बंद केल्यास ह्या सेटिंगकडे दुर्लक्ष केले जाईल.">
-<!-- LOCALIZATION NOTE (options.disableCache.label2,
-  -  options.disableCache.tooltip2): This is the options panel label and
-  -  tooltip for the checkbox that toggles the cache on or off. -->
+<!-- LOCALIZATION NOTE (options.disableHTTPCache.label,
+  -  options.disableHTTPCache.tooltip): This is the options panel label and
+  -  tooltip for the checkbox that toggles the HTTP cache on or off. -->
 
-<!ENTITY options.disableCache.label2     "कॅशे बंद करा (साधनपेटी खुले असतेवेळी)">
-<!ENTITY options.disableCache.tooltip2   "हा पर्याय सुरू केल्याने साधनपेटी खुले असणाऱ्या सर्व टॅब्जकरिता कॅशे बंद केले जाईल.">
+<!ENTITY options.disableHTTPCache.label     "HTTP कॅशे निष्क्रिय करा (साधनपेटी खुले असतेवेळी)">
+<!ENTITY options.disableHTTPCache.tooltip   "हा पर्याय सुरु केल्यामुळे साधनपेटी उघडे असलेले सर्व टॅब्ससाठी HTTP कॅशे निष्क्रिय होईल. सेवा कामगारांवर याचा परिणाम होणार नाही.">
 <!-- LOCALIZATION NOTE (options.enableServiceWorkersHTTP.label,
   -  options.enableServiceWorkersHTTP.tooltip): This is the options panel label and
   -  tooltip for the checkbox that toggles the service workers testing features on or off. This option enables service workers over HTTP. -->
 
 <!ENTITY options.enableServiceWorkersHTTP.label     "वर्कर्स सेवा वर सक्रिय करा (जेव्हा साधनपेटी उघडी असेल)">
 <!ENTITY options.enableServiceWorkersHTTP.tooltip   "हा पर्याय सुरू केल्याने, असे टॅब्स ज्यांची साधनपेटी उघडी आहे त्यासाठी, HTTP वरील सर्विस वर्कर्स सुरू केले जाईल.">
-<!-- LOCALIZATION NOTE (options.selectDefaultTools.label): This is the label for
+<!-- LOCALIZATION NOTE (options.selectDefaultTools.label2): This is the label for
   -  the heading of group of checkboxes corresponding to the default developer
   -  tools. -->
 
-<!ENTITY options.selectDefaultTools.label     "पूर्वनिर्धारित Firefox डेव्हलपर साधने">
+<!ENTITY options.selectDefaultTools.label2    "पूर्वनिर्धारित डेव्हलपर साधने">
 <!-- LOCALIZATION NOTE (options.selectAdditionalTools.label): This is the label for
   -  the heading of group of checkboxes corresponding to the developer tools
   -  added by add-ons. This heading is hidden when there is no developer tool
@@ -170,6 +158,15 @@ values from browser.dtd.  -->
 
 <!ENTITY options.timestampMessages.label      "टाइमस्टॅम्प्स सुरू करा">
 <!ENTITY options.timestampMessages.tooltip    "हे पर्याय आदेश सुरू केल्यास वेब कंसोलमधील आउटपुट टाइमस्टॅम्प दाखवेल">
+<!-- LOCALIZATION NOTE (options.debugger.label): This is the label for the
+  -  heading of the group of Debugger preferences in the options panel. -->
+
+<!ENTITY options.debugger.label            "डिबगर">
+<!-- LOCALIZATION NOTE (options.sourceMap.label): This is the
+   - label for the checkbox that toggles source maps in the Debugger -->
+
+<!ENTITY options.sourceMaps.label      "सोर्स नकाशे सक्षम करा">
+<!ENTITY options.sourceMaps.tooltip    "जर तुम्ही हा पर्याय सक्षम केलात तर सोर्सस डिबगर आणि कंसोलमध्ये मॅप केले जातील.">
 <!-- LOCALIZATION NOTE (options.styleeditor.label): This is the label for the
   -  heading of the group of Style Editor preferences in the options
   -  panel. -->
@@ -203,8 +200,7 @@ values from browser.dtd.  -->
   -  in about:config, in the options panel. -->
 
 <!ENTITY options.showPlatformData.label    "Gecko प्लॅटफॉर्म माहिती दाखवा">
-<!ENTITY options.showPlatformData.tooltip  "हा पर्याय सुरू केल्यास, JavaScript प्रोफाइलर रिपोर्ट्समध्ये खालील समाविष्ट होईल 
-Gecko प्लॅटफॉर्म सिम्बल्स">
+<!ENTITY options.showPlatformData.tooltip  "हा पर्याय सुरू केल्यास, JavaScript प्रोफाइलर रिपोर्ट्समध्ये खालील समाविष्ट होईल Gecko प्लॅटफॉर्म सिम्बल्स">
 <!-- LOCALIZATION NOTE (options.sourceeditor.*): Options under the editor
   -  section. -->
 
@@ -221,4 +217,3 @@ Gecko प्लॅटफॉर्म सिम्बल्स">
 <!ENTITY options.sourceeditor.keybinding.label          "किबाइंडिंग्ज">
 <!ENTITY options.sourceeditor.keybinding.accesskey      "K">
 <!ENTITY options.sourceeditor.keybinding.default.label  "पूर्वनिर्धारीत">
-

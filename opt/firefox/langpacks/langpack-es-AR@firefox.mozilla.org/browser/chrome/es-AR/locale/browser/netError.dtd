@@ -39,11 +39,22 @@
 </ul>
 ">
 
+<!ENTITY fileAccessDenied.title "Acceso denegado al archivo">
+<!ENTITY fileAccessDenied.longDesc "
+<ul>
+  <li>Puede haber sido eliminado, movido o los permisos del archivo pueden evitar el acceso.</li>
+</ul>
+">
 
 <!ENTITY generic.title "Oops.">
 <!ENTITY generic.longDesc "
 <p>&brandShortName; no puede cargar esta página por alguna razón.</p>
 ">
+
+<!ENTITY captivePortal.title "Ingresar a una red">
+<!ENTITY captivePortal.longDesc "<p>Esta red puede requerir que ingrese para acceder a internet.</p>">
+
+<!ENTITY openPortalLoginPage.label "Abrir página de ingreso">
 
 <!ENTITY malformedURI.title "La dirección no es válida">
 <!ENTITY malformedURI.longDesc "
@@ -130,7 +141,6 @@
 </ul>
 ">
 
-
 <!ENTITY nssFailure2.title "Fallo en conexión segura">
 <!ENTITY nssFailure2.longDesc2 "
 <ul>
@@ -139,15 +149,11 @@
 </ul>
 ">
 
-<!ENTITY nssBadCert.title "Fallo en conexión segura">
-<!ENTITY nssBadCert.longDesc2 "
-<ul>
-  <li>Ésto podría ser un problema con la configuración del servidor o podría ser
-aguien tratando de hacerse pasar por el servidor.</li>
-  <li>Si se ha conectado a este servidor exitosamente en el pasado, el error puede
-ser temporal y puede inentarlo nuevamente más tarde.</li>
-</ul>
-">
+<!ENTITY certerror.longpagetitle1 "La conexión no es segura">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "El dueño de <span class='hostname'/> ha configurado mal el sitio we.  Para proteger la información contra robos, &brandShortName; no ha conectado a este sitio web.">
 
 <!ENTITY sharedLongDesc "
 <ul>
@@ -160,55 +166,17 @@ ser temporal y puede inentarlo nuevamente más tarde.</li>
 </ul>
 ">
 
-<!ENTITY malwareBlocked.title "¡Sitio sospechoso de ataque!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Los sitios de ataque tratan de instalar programas que roban información privada, usan su computadora para atacar otras o dañan su sistema.</p>
-<p>Los dueños de sitios web que creen que su sitio ha sido reportado como un sitio de ataque por error pueden <a href='http://www.stopbadware.org/home/reviewinfo' >pedir una revisión</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title "¡Sitio sospechoso de software no deseado!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Páginas de software no deseado tratan de instalar programas que pueden ser engañosos y afectar a su sistema en formas inesperadas.</p>
-">
-
-<!ENTITY phishingBlocked.title "¡Sitio sospechoso de fraude!">
-<!ENTITY phishingBlocked.longDesc "
-<p>Ingresando cualquier información personal en esta página puede resultar en robo de identidad o algún otro fraude.</p>
-<p>Estos tipos de falsificaciones web son usados en estafas conocidas como ataques de <i>phishing</i>, en los que páginas web y correos electrónicos fraudulentos son usados para imitar fuentes en las que puede confiar.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Sitio prohibido">
-<!ENTITY forbiddenBlocked.longDesc "<p>&brandShortName; evitó que esta página se cargue porque se configuró su bloqueo.</p>
-">
-
 <!ENTITY cspBlocked.title "Bloqueado por política de seguridad de contenido">
 <!ENTITY cspBlocked.longDesc "<p>&brandShortName; evitó que esta página se cargue de esta forma porque tiene una política de seguridad que la deshabilita.</p>">
 
-<!ENTITY corruptedContentError.title "Error de contenido corrupto">
-<!ENTITY corruptedContentError.longDesc "<p>La página que está tratando de ver no puede mostrarse porque se detectó un error en la transmisión de los datos.</p><ul><li>Contacte a los dueños del sitio web para informarles de este problema.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Error de contenido corrupto">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>La página que está tratando de ver no puede mostrarse porque se detectó un error en la transmisión de los datos.</p><ul><li>Contacte a los dueños del sitio web para informarles de este problema.</li></ul>">
 
-<!ENTITY securityOverride.linkText "O puede agregar una excepción…">
-<!ENTITY securityOverride.getMeOutOfHereButton "Sáquenme de aquí">
+
 <!ENTITY securityOverride.exceptionButtonLabel "Agregar excepción">
-
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
-
-<!ENTITY securityOverride.warningContent "
-<p>No debería agregar una excepción si está usando una conexión a internet en la que no confía completamente o si no suele recibir una advertencia de este servidor.</p>
-
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button>
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>
-">
 
 <!ENTITY errorReporting.automatic2 "Informar errores como este para ayudar a Mozilla a identificarlo y bloquear sitios maliciosos">
 <!ENTITY errorReporting.learnMore "Conocer más…">
-<!ENTITY errorReporting.sending "Enviando informe">
-<!ENTITY errorReporting.sent "Informe enviado">
-<!ENTITY errorReporting.report "Informar">
-<!ENTITY errorReporting.tryAgain "Intentar nuevamente">
 
 <!ENTITY remoteXUL.title "XUL remoto">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Contacte a los dueños de sitio web para informarles de este problema.</li></ul></p>">
@@ -225,3 +193,22 @@ functionality specific to firefox. -->
 <!ENTITY weakCryptoAdvanced.title "Avanzado">
 <!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> usa tecnología de seguridad que es obsoleta y vulnerable para los ataques. Un atacante podría revelar fácilmente información que se pensaría que es segura.">
 <!ENTITY weakCryptoAdvanced.override "(No es seguro) Intente cargar <span class='hostname'></span> usando seguridad obsoleta">
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>No es posible una conexión segura a <span id='wrongSystemTime_URL'/> porque el reloj parece estar mostrando la hora incorrecta.</p><p>La computadora piensa que es <span id='wrongSystemTime_systemDate'/> cuando debería ser <span id='wrongSystemTime_actualDate'/>. Para solucionar el problema, cambie la fecha y hora para que coincidan con las correctas.</p>">
+
+<!ENTITY certerror.pagetitle1  "Conexión insegura">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "Este sitio usa HTTP
+Strict Transport Security (HSTS) para especificar que &brandShortName; solamente se conecte
+de forma segura. Como resultado, no es posible agregar una excepción para este
+certificado.">
+<!ENTITY certerror.copyToClipboard.label "Copiar texto al portapapeles">
+
+<!ENTITY inadequateSecurityError.title "La conexión no es segura">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> usa tecnología de seguridad que es obsoleta y vulnerable a los ataques. Un atacante podría fácilmente revelar información que se piensa segura. El administrador del sitio web necesitará corregir el servidor antes de poder visitar el sitio.</p><p>Código de error: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY prefReset.longDesc "Parece que la configuración de seguridad de la red puede estar causando esto. ¿Desea que se restaure la configuración predeterminada?">
+<!ENTITY prefReset.label "Restaurar configuración predeterminada">

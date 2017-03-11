@@ -4,8 +4,8 @@
 
 <!ENTITY loadError.label "Lapas ielādes kļūda">
 <!ENTITY retry.label "Mēģināt vēlreiz">
-<!-- Specific error messages -->
 
+<!-- Specific error messages -->
 
 <!ENTITY connectionFailure.title "Neizdevās pieslēgties">
 <!ENTITY connectionFailure.longDesc "<p>Lai arī izvēlētā lapa liekas pareiza, pārlūks nevarēja nodibināt savienojumu.</p><ul><li>Iespējams, lapa ir īslaicīgi nepieejama? Mēģiniet vēlreiz nedaudz vēlāk.</li><li>Vai jums ir problēmas arī ar citu lapu aplūkošanu? Pārbaudiet sava datora tīkla savienojumu.</li><li>Vai jūsu dators ir aizsargāts no tīkla ar ugunsmūri? Nepareizi ugunsmūra iestatījumi var traucēt tīmekļa pārlūkošanu.</li></ul>">
@@ -18,6 +18,9 @@
 
 <!ENTITY fileNotFound.title "Fails nav atrasts">
 <!ENTITY fileNotFound.longDesc "<ul><li>Vai jūsu meklējamā lieta varētu būt pārsaukta, aizvākta vai pārvietota?</li><li>Vai adresē ir kāda drukas, burtu lieluma vai kāda cita tipa kļūda?</li><li>Vai jums ir pietiekamas pieejas tiesības, lai piekļūtu šai lietai?</li></ul>">
+
+<!ENTITY fileAccessDenied.title "Pieeja failam tika liegta">
+<!ENTITY fileAccessDenied.longDesc "<ul> <li>Tas varētu būt aizvākts, pārvietots vai arī faila piekļuves tiesības liedz piekļuvi tam.</li> </ul>">
 
 <!ENTITY generic.title "Nevar pabeigt pieprasījumu">
 <!ENTITY generic.longDesc "<p>Papildu informācija par notikušo problēmu šobrīd nav pieejama.</p>">
@@ -38,9 +41,7 @@
 <!ENTITY contentEncodingError.longDesc "<p>Lapa, kuru jūs mēģināt aplūkot, satur nederīgu vai neatbalstītu saspiešanas formu un tāpēc to nevar parādīt.</p><ul><li>Lūdzu sazinieties ar lapas īpašniekiem un ziņojiet par šo problēmu.</li></ul>">
 
 <!ENTITY unsafeContentType.title "Nedrošs faila tips">
-<!ENTITY unsafeContentType.longDesc "<ul> 
-<li>Lūdzu informējiet mājas lapas īpašniekus par šo problēmu.</li> 
-</ul>">
+<!ENTITY unsafeContentType.longDesc "<ul> <li>Lūdzu, informējiet mājas lapas īpašniekus par šo problēmu.</li> </ul>">
 
 <!ENTITY netReset.title "Savienojums pārtraukts">
 <!ENTITY netReset.longDesc "<p>Tīkla savienojums tika pārtraukts vienojoties par savienojumu. Lūdzu mēģiniet vēlreiz.</p>">
@@ -67,34 +68,21 @@
 <!ENTITY nssFailure2.longDesc2 "<p>Lapu, kurai mēģināt pieslēgties, nevar parādīt, jo nevar pārbaudīt saņemto datu autentiskumu.</p><ul><li>Lūdzu sazinieties ar lapas īpašniekiem un informējiet viņus par šo problēmu.</li></ul>">
 
 <!ENTITY nssBadCert.title "Neizdevās drošais savienojums">
-<!ENTITY nssBadCert.longDesc2 "<ul> 
-<li>Tā varētu būt problēma ar servera konfigurāciju, vai arī kāds cits mēģina izlikties par šo serveri.</li> 
-<li>Ja iepriekš jums ir izdevies veiksmīgi pieslēgties šim serverim, problēma varētu būt īslaicīga. Mēģiniet vēlreiz nedaudz vēlāk.</li> 
-</ul>">
-
-<!ENTITY malwareBlocked.title "Iespējama kaitnieku lapa!">
-<!ENTITY malwareBlocked.longDesc "<p>Kaitnieku lapas mēģina instalēt programmas, lai nozagtu jūsu privāto informāciju vai neatļauti izmantotu jūsu datoru uzbrukumu veikšanai pret citiem lietotājiem, vai kā savādāk kaitētu jūsu datoram.</p> 
-<p>Lapu īpašnieki, kuru lapas tiek nepamatoti uzskatītas par kaitnieku lapām var <a href='http://www.stopbadware.org/home/reviewinfo' >lūgt atkārtotu izvērtējumu</a>.</p>">
-
-<!ENTITY unwantedBlocked.title "Iespējama nevēlamas programmatūras lapa!">
-<!ENTITY unwantedBlocked.longDesc "<p>Nevēlamas programmatūras lapas mēģina uzinstalēt programmatūru, kas ietekmēt jūsu sistēmu negaidītos veidos.</p>">
-
-<!ENTITY phishingBlocked.title "Iespējama krāpnieku lapa!">
-<!ENTITY phishingBlocked.longDesc "<p>Personiskās informācijas ievadīšana šajā lapā var novest pie tās zādzības un ļaunprātīgas izmantošanas vai krāpšanas.</p> 
-<p>Šāda tipa lapas tiek izmantotas uzbrukumos, kas pazīstami kā fišinga uzbrukumi, kuros ar neīstu mājas lapu vai e-pastu palīdzību krāpnieki mēģina izlikties par uzticamiem Interneta avotiem.</p>">
-
-<!ENTITY forbiddenBlocked.title "Aizliegta lapa">
-<!ENTITY forbiddenBlocked.longDesc "<p>Pārlūks liedza šai lapai ielādēties šādā veidā, jo to neatļauj lapas drošības politika.</p>">
+<!ENTITY nssBadCert.longDesc2 "<ul> <li>Tā varētu būt problēma ar servera konfigurāciju, vai arī kāds cits mēģina izlikties par šo serveri.</li> <li>Ja iepriekš jums ir izdevies veiksmīgi pieslēgties šim serverim, problēma varētu būt īslaicīga. Mēģiniet vēlreiz nedaudz vēlāk.</li> </ul>">
 
 <!ENTITY securityOverride.linkText "Vai arī varat pievienot izņēmumu…">
-<!ENTITY securityOverride.warningContent "<p>Jums nevajadzētu pievienot izņēmumus, ja izmantojat Interneta savienojumu, kuram pilnībā neuzticaties vai arī, ja redzat brīdinājumu serverī, kurā parasti viss ir kārtībā.</p> 
-<p>Ja joprojām vēlaties pievienot izņēmumu, to varat izdarīt paplašinātajos pārlūka šifrēšanas iestatījumos.</p>">
+<!ENTITY securityOverride.warningContent "<p>Jums nevajadzētu pievienot izņēmumus, ja izmantojat Interneta savienojumu, kuram pilnībā neuzticaties vai arī, ja redzat brīdinājumu serverī, kurā parasti viss ir kārtībā.</p> <p>Ja joprojām vēlaties pievienot izņēmumu, to varat izdarīt paplašinātajos pārlūka šifrēšanas iestatījumos.</p>">
 
 <!ENTITY cspBlocked.title "Bloķē satura drošības politika">
 <!ENTITY cspBlocked.longDesc "<p>Pārlūks liedza šai lapai ielādēties šādā veidā, jo to neatļauj lapas drošības politika.</p>">
 
-<!ENTITY corruptedContentError.title "Bojāta satura kļūda">
-<!ENTITY corruptedContentError.longDesc "<p>Lapu, ko mēģināt apskatīt nevar attēlot datu pārraides kļūdas dēļ.</p><ul><li>Lūdzu sazinieties ar lapas īpašniekiem un informējiet viņus par šo problēmu.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Bojāta satura kļūda">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>Lappuse, kuru mēģināt skatīt nevar parādīt, jo tika atrasta kļūda datu pārraidi.</p><ul><li>Lūdzu, sazinieties ar mājas īpašniekiem, lai informētu viņus par šo problēmu.</li></ul>">
 
 <!ENTITY remoteXUL.title "Attālināts XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Lūdzu sazinieties ar mājas lapas īpašniekiem un informējiet viņus par šo problēmu.</li></ul></p>">
+
+<!ENTITY inadequateSecurityError.title "Savienojums nav drošs">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> izmanto novecojušu un nedrošu drošības tehnoloģiju. Uzbrucējs varētu piekļūt informācijai, kuru uzskatījāt par droši aizsargātu. Lapas administratoram vajadzēs salabot serveri, pirms varēsiet apmeklē lapu.</p><p>Kļūdas kods: NS_ERROR_NET_INADEQUATE_SECURITY</p>">

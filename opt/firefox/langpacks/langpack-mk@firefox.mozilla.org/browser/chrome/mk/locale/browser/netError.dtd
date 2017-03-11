@@ -7,8 +7,8 @@
 
 <!ENTITY loadError.label "Проблем со вчитувањето на страницата">
 <!ENTITY retry.label "Обиди се повторно">
-<!-- Specific error messages -->
 
+<!-- Specific error messages -->
 
 <!ENTITY connectionFailure.title "Врската не може да се воспостави">
 <!ENTITY connectionFailure.longDesc "&sharedLongDesc;">
@@ -74,10 +74,6 @@
 <!ENTITY netTimeout.title "Времето за врската истече">
 <!ENTITY netTimeout.longDesc "&sharedLongDesc;">
 
-<!ENTITY protocolNotFound.title "Адресата не беше разбрана">
-<!ENTITY protocolNotFound.longDesc "<ul> 
-<li>Можеби ќе треба да инсталирате друг софтвер за да ја отворите оваа адреса.</li> 
-</ul>">
 
 <!ENTITY proxyConnectFailure.title "Серверот посредник одбива врски">
 <!ENTITY proxyConnectFailure.longDesc "<ul> 
@@ -105,17 +101,10 @@
 <li>Ова може да се случува поради нестандардна конфигурација на серверот.</li></ul>">
 
 <!ENTITY nssFailure2.title "Безбедната врска не успеа">
-<!ENTITY nssFailure2.longDesc "<ul> 
-<li>Страницата која сакате да ја видите не може да биде прикажана бидејќи веродостојноста на примените податоци не може да биде проверена.</li> 
-<li>Контактирајте со сопствениците на мрежното место за да ги информирате за овој проблем. Исто така, можете да ја користите командата во менито „Помош“ за да го пријавите ова расипано место.</li> 
-</ul>">
 
-<!ENTITY nssBadCert.title "Безбедната врска не успеа">
-<!ENTITY nssBadCert.longDesc2 "<ul> 
-<li>Ова можеби е проблем со конфигурацијата на серверот, или можеби 
-некој сака да се претстави како серверот.</li> 
-<li>Ако во минатото успешно сте се поврзувале на серверот, грешката можеби е привремена па подоцна обидете се повторно.</li> 
-</ul>">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
 
 <!ENTITY sharedLongDesc "<ul> 
 <li>Можеби местото е привремено недостапно или зафатено. Обидете се повторно по неколку секунди.</li> 
@@ -124,61 +113,82 @@
 ѕид или посредник, проверете дали &brandShortName; има дозвола да пристапи на Интернет.</li> 
 </ul>">
 
-<!ENTITY malwareBlocked.title "Се сомневаме во напад од страницата!">
-<!ENTITY malwareBlocked.longDesc "<p>Напаѓачките места се обидуваат да инсталираат програми кои крадат приватни информации, го користат Вашиот компјутер за да нападнат други или да му наштетат на Вашиот систем.</p> 
-<p>Сопствениците на местата кои веруваат дека нивните страници се пријавени по грешка може да <a href='http://www.stopbadware.org/home/reviewinfo' >побараат повторно разгледување</a>.</p>">
-
-<!ENTITY phishingBlocked.title "Се сомневаме во измама на Интернет!">
-<!ENTITY phishingBlocked.longDesc "<p>Внесувањето на било какви лични информации на оваа страница може да резултира со кражба на идентитетот или друга измама.</p> 
-<p>Ваквите измами се користат во акции познати како „риболовни напади“, во кои измамничка страница и е-пошта се користи за имитирање на извори на кои им верувате.</p>">
-
-<!ENTITY cspFrameAncestorBlocked.title "Блокирано од политика за безбедност на содржина">
-<!ENTITY cspFrameAncestorBlocked.longDesc "<p>&brandShortName;  ја спречи страницата да се вчита на ваков начин бидејќи таа има безбедносна политика за содржина што го забранува тоа.</p>">
-
-<!ENTITY corruptedContentError.title "Грешка поради корумпирана содржина">
-<!ENTITY corruptedContentError.longDesc "<p>Страницата што сакате да ја видите не може да се прикаже 
-поради грешка во пренеост на податоците.</p><ul><li>Контактирајтесо сопствениците на страницата за да ги известите за овој проблем.</li></ul>">
 
 
-<!ENTITY securityOverride.linkText "Или додај исклучок…">
-<!ENTITY securityOverride.getMeOutOfHereButton "Однеси ме на сигурно!">
+
 <!ENTITY securityOverride.exceptionButtonLabel "Додај исклучок..">
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
 
-
-<!ENTITY securityOverride.warningContent "<p>Не додавајте исклучок ако користите интернет врска во која немате целосна доверба или ако до сега не сте виделе предупредување за овој сервер.</p> 
- 
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button> 
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>">
 
 <!ENTITY remoteXUL.title "Мрежен XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Контактирајте со сопствениците на страницата за да 
 ги информирате за овој проблем.</li></ul></p>">
 
+<!-- LOCALIZATION NOTE (sslv3Used.longDesc2) - Do not translate
+     "SSL_ERROR_UNSUPPORTED_VERSION". -->
+
+<!-- LOCALIZATION NOTE (weakCryptoUsed.longDesc2) - Do not translate
+     "SSL_ERROR_NO_CYPHER_OVERLAP". -->
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>Воспоставувањето на безбедна врска со <span id='wrongSystemTime_URL'/> не е можно бидејќи часовникот на Вашиот компјутер прикажува погрешно време.</p> <p>Вашиот компјутер смета дека е <span id='wrongSystemTime_systemDate'/>, кога би требало да смета дека е <span id='wrongSystemTime_actualDate'/>. За да го решите овој проблем, поставете ги точниот датум и време.</p>">
+
+
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+
+
 <!ENTITY advanced.label "Advanced">
+<!ENTITY captivePortal.longDesc "
+<p>This network may require you to login to access the internet.</p>
+">
+
+<!ENTITY captivePortal.title "Login to network">
+<!ENTITY certerror.copyToClipboard.label "Copy text to clipboard">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "The owner of <span class='hostname'/> has configured their website improperly.  To protect your information from being stolen, &brandShortName; has not connected to this website.">
+
+<!ENTITY certerror.longpagetitle1 "Your connection is not secure">
+
+<!ENTITY certerror.pagetitle1  "Insecure Connection">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "This site uses HTTP
+Strict Transport Security (HSTS) to specify that &brandShortName; may only connect
+to it securely. As a result, it is not possible to add an exception for this
+certificate.">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>The page you are trying to view cannot be shown because an error in the data transmission was detected.</p><ul><li>Please contact the website owners to inform them of this problem.</li></ul>">
+
+<!ENTITY corruptedContentErrorv2.title "Corrupted Content Error">
 <!ENTITY cspBlocked.longDesc "<p>&brandShortName; prevented this page from loading in this way because the page has a content security policy that disallows it.</p>">
 
 <!ENTITY cspBlocked.title "Blocked by Content Security Policy">
 
 <!ENTITY errorReporting.automatic2 "Report errors like this to help Mozilla identify and block malicious sites">
 <!ENTITY errorReporting.learnMore "Learn more…">
-<!ENTITY errorReporting.report "Report">
-<!ENTITY errorReporting.sending "Sending report">
-<!ENTITY errorReporting.sent "Report sent">
-<!ENTITY errorReporting.tryAgain "Try again">
-<!ENTITY forbiddenBlocked.longDesc "<p>&brandShortName; prevented this page from loading because it is configured to block it.</p>
+<!ENTITY fileAccessDenied.longDesc "
+<ul>
+  <li>It may have been removed, moved, or file permissions may be preventing access.</li>
+</ul>
 ">
 
-<!ENTITY forbiddenBlocked.title "Forbidden Site">
+<!ENTITY fileAccessDenied.title "Access to the file was denied">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe. The website administrator will need to fix the server first before you can visit the site.</p><p>Error code: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY inadequateSecurityError.title "Your connection is not secure">
 <!ENTITY nssFailure2.longDesc2 "
 <ul>
   <li>The page you are trying to view cannot be shown because the authenticity of the received data could not be verified.</li>
   <li>Please contact the website owners to inform them of this problem.</li>
 </ul>
 ">
+
+<!ENTITY openPortalLoginPage.label "Open Login Page">
+<!ENTITY prefReset.label "Restore default settings">
+
+<!ENTITY prefReset.longDesc "It looks like your network security settings might be causing this. Do you want the default settings to be restored?">
 <!ENTITY returnToPreviousPage.label "Go Back">
 <!-- LOCALIZATION NOTE (sslv3Used.longDesc2) - Do not translate
      "SSL_ERROR_UNSUPPORTED_VERSION". -->
@@ -191,12 +201,7 @@ functionality specific to firefox. -->
 </ul>
 ">
 
-<!ENTITY unknownProtocolFound.title "The address wasn't understood">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Unwanted software pages try to install software that can be deceptive and affect your system in unexpected ways.</p>
-">
-
-<!ENTITY unwantedBlocked.title "Suspected Unwanted Software Site!">
+<!ENTITY unknownProtocolFound.title "The address wasn’t understood">
 <!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe.">
 <!ENTITY weakCryptoAdvanced.override "(Not secure) Try loading <span class='hostname'></span> using outdated security">
 <!ENTITY weakCryptoAdvanced.title "Advanced">

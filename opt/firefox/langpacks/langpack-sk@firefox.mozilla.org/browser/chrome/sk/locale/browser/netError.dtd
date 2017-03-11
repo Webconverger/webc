@@ -22,8 +22,8 @@
 <!ENTITY dnsNotFound.longDesc "
 <ul>
   <li>Skontrolujte, či ste nezadali napr.
-    <strong>ww</strong>.priklad.com namiesto
-    <strong>www</strong>.priklad.com</li>
+    <strong>ww</strong>.example.com namiesto
+    <strong>www</strong>.example.com</li>
   <li>Ak sa nedá načítať žiadna stránka, skontrolujte pripojenie počítača k sieti.</li>
   <li>Ak sú počítač alebo sieť chránené bránou firewall alebo serverom proxy, uistite sa, že &brandShortName; má povolený prístup k webu.</li>
 </ul>
@@ -37,17 +37,30 @@
 </ul>
 ">
 
+<!ENTITY fileAccessDenied.title "Prístup k súboru bol zamietnutý">
+<!ENTITY fileAccessDenied.longDesc "
+<ul>
+  <li>Mohol byť odstránený, premiestnený alebo vám v prístupe bránia jeho oprávnenia.</li>
+</ul>
+">
 
 <!ENTITY generic.title "Problém.">
 <!ENTITY generic.longDesc "
 <p>&brandShortName; nedokáže z nejakého dôvodu načítať stránku.</p>
 ">
 
+<!ENTITY captivePortal.title "Prihlásiť sa do siete">
+<!ENTITY captivePortal.longDesc "
+<p>Pre prístup do siete sa možno budete musieť prihlásiť.</p>
+">
+
+<!ENTITY openPortalLoginPage.label "Otvoriť stránku pre prihlásenie">
+
 <!ENTITY malformedURI.title "Adresa nie je platná">
 <!ENTITY malformedURI.longDesc "
 <ul>
   <li>Webové adresy sú zvyčajne zadávané v tvare
-    <strong>http://www.priklad.com/</strong></li>
+    <strong>http://www.example.com/</strong></li>
   <li>Skontrolujte, či používate správne lomky (t.j. <strong>/</strong>). </li>
 </ul>
 ">
@@ -132,13 +145,11 @@
 </ul>
 ">
 
-<!ENTITY nssBadCert.title "Zabezpečené pripojenie zlyhalo">
-<!ENTITY nssBadCert.longDesc2 "
-<ul>
-  <li>Toto môže byť problém s konfiguráciou servera alebo sa ho niekto snaží napodobniť.</li>
-  <li>Ak ste sa k tomuto serveru úspešne pripojili v minulosti, chyba môže byť dočasná a pokus by ste mali opakovať neskôr.</li>
-</ul>
-">
+<!ENTITY certerror.longpagetitle1 "Vaše pripojenie nie je zabezpečené">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "Vlastník servera <span class='hostname'/> nakonfiguroval svoju stránku nesprávne. Kvôli ochrane vašich údajov pred odcudzením &brandShortName; blokuje pripojenie k tejto webovej stránke.">
 
 <!ENTITY sharedLongDesc "
 <ul>
@@ -148,56 +159,17 @@
 </ul>
 ">
 
-<!ENTITY malwareBlocked.title "Podozrivá škodlivá stránka!">
-<!ENTITY malwareBlocked.longDesc "
-<p>Škodlivé stránky sa pokúšajú nainštalovať programy, ktoré kradnú súkromné údaje, používajú počítač na útoky na iné počítače alebo poškodzujú systém.</p>
-<p>Vlastníci stránok, ktorí si myslia, že ich stránky boli označené ako škodlivé neprávom, môžu <a href='http://www.stopbadware.org/home/reviewinfo' >požiadať o prehodnotenie</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title "Podozrivá stránka s nevyžiadaným softvérom!">
-<!ENTITY unwantedBlocked.longDesc "
-<p>Stránky s nevyžiadaným softvérom sa pokúšajú inštalovať softér, ktorý môže byť klamlivý a môže ovplyvňovať rôznymi spôsobmi celý systém.</p>
-">
-
-<!ENTITY phishingBlocked.title "Podozrivá stránka!">
-<!ENTITY phishingBlocked.longDesc "
-<p>Ak na tejto stránke zadáte nejaké osobné údaje, môžu byť použité na krádež identity alebo inak zneužité.</p>
-<p>Tieto typy falošných stránok sa používajú na podvody, pri ktorých sa kombináciou webovej stránky a e-mailových správ napodobňujú dôveryhodné zdroje.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Zakázaná stránka">
-<!ENTITY forbiddenBlocked.longDesc "<p>Aplikácia &brandShortName; zabránila v načítaní tejto stránky, pretože je nastavené jej blokovanie.</p>
-">
-
 <!ENTITY cspBlocked.title "Blokované kvôli zásadám ochrany obsahu">
 <!ENTITY cspBlocked.longDesc "<p>Prehliadač &brandShortName; nepovolil načítanie stránky týmto spôsobom, pretože stránka obsahuje zásady ochrany obsahu, ktoré takéto načítanie neumožňujú.</p>">
 
-<!ENTITY corruptedContentError.title "Poškodený obsah stránky">
-<!ENTITY corruptedContentError.longDesc "<p>Táto stránka nemohla byť zobrazená kvôli chybe pri prenose údajov.</p><ul><li>Kontaktuje prevádzkovateľa webovej stránky a informujte ho o tomto probléme.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title "Poškodený obsah stránky">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>Požadovanú stránku nemožno zobraziť, pretože pri prenose údajov došlo k chybe.</p><ul><li>Kontaktujte prosím vlastníkov webového servera a informujte ich o tomto probléme.</li></ul>">
 
 
-<!ENTITY securityOverride.linkText "Alebo môžete pridať výnimku…">
-<!ENTITY securityOverride.getMeOutOfHereButton "Rýchlo odtiaľto preč!">
 <!ENTITY securityOverride.exceptionButtonLabel "Pridať výnimku…">
-
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
-
-<!ENTITY securityOverride.warningContent "
-<p>Výnimku by ste nemali pridávať v prípade, že používate internetové pripojenie, ktorému úplne neveríte, alebo sa toto upozornenie predtým neobjavovalo.</p>
-
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button>
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>
-">
 
 <!ENTITY errorReporting.automatic2 "Hlásiť chyby ako je táto a pomôcť tým organizácii Mozilla identifikovať a blokovať škodlivé stránky">
 <!ENTITY errorReporting.learnMore "Ďalšie informácie…">
-<!ENTITY errorReporting.sending "Hlásenie sa odosiela">
-<!ENTITY errorReporting.sent "Hlásenie odoslané">
-<!ENTITY errorReporting.report "Nahlásiť">
-<!ENTITY errorReporting.tryAgain "Skúsiť znova">
 
 <!ENTITY remoteXUL.title "Vzdialené XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>Kontaktujte správcu webovej stránky a informujte ho o tomto probléme.</li></ul></p>">
@@ -214,3 +186,21 @@ functionality specific to firefox. -->
 <!ENTITY weakCryptoAdvanced.title "Rozšírené">
 <!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> používa bezpečnostnú technológiu, ktorá je zastaraná a je náchylná na útoky. Útočník sa môže jednoducho dostať k informáciám, o ktorých si myslíte, že sú v bezpečí.">
 <!ENTITY weakCryptoAdvanced.override "(Nezabezpečené) Vyskúšať načítať <span class='hostname'></span> použitím zastaraného zabezpečenia">
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>Nie je možné naviazať zabezpečené pripojenie k <span id='wrongSystemTime_URL'/>, pretože sa zdá, že vaše hodiny ukazujú nesprávny čas.</p> <p>Váš počítač si myslí, že je <span id='wrongSystemTime_systemDate'/> a malo by byť <span id='wrongSystemTime_actualDate'/>. Pre vyriešenie tohto problému prosím opravte nastavenie dátumu a času.</p>">
+
+<!ENTITY certerror.pagetitle1  "Nezabezpečené pripojenie">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "Táto stránka používa HTTP
+Strict Transport Security (HSTS), čím určuje, že &brandShortName; sa k nej má pripájať len zabezpečene.
+Výsledkom toho je, že pre tento certifikát nie je možné pridať výnimku.">
+<!ENTITY certerror.copyToClipboard.label "Kopírovať text do schránky">
+
+<!ENTITY inadequateSecurityError.title "Vaše pripojenie nie je zabezpečené">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> využíva technológiu zabezpečenia, ktorá je zastaraná a zraniteľná voči útokom. Útočník by mohol jednoducho odhaliť informácie, o ktorých ste si mysleli, že sú v bezpečí. Správca webovej stránky ju bude musieť pred jej ďalšou návštevou opraviť.</p><p>Kód chyby: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY prefReset.longDesc "Zdá sa, že príčinou môžu byť vaše nastavenia zabezpečenia internetu. Chceli by ste obnoviť predvolené nastavenia?">
+<!ENTITY prefReset.label "Obnoviť predvolené nastavenia">

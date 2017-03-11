@@ -7,8 +7,10 @@
 
 <!ENTITY loadError.label "පිටුව පූරණය ගැටලු සහිතයි">
 <!ENTITY retry.label "නැවත උත්සාහ කරන්න">
-<!-- Specific error messages -->
+<!ENTITY returnToPreviousPage.label "පසුපසට යන්න">
+<!ENTITY advanced.label "සංකීර්ණ">
 
+<!-- Specific error messages -->
 
 <!ENTITY connectionFailure.title "සම්බන්ධ වීමට නොහැක">
 <!ENTITY connectionFailure.longDesc "&sharedLongDesc;">
@@ -33,6 +35,12 @@
 <li>ගොනුව ඉවත්කර, නම වෙනස්කර හෝ මකා ඇති දැයි පරික්‍ෂා කරන්න.</li> 
 </ul>">
 
+<!ENTITY fileAccessDenied.title "ගොනුවට පිවිසීම වළක්වා ඇත">
+<!ENTITY fileAccessDenied.longDesc "
+<ul>
+  <li>එය ඉවත් කර හෝ ස්ථාන මාරු කර තිබිය හැකි, හෝ පිවිසුම වළක්වමින් ගොනු බලතල සකසා තිබිය හැක.</li>
+</ul>
+">
 
 <!ENTITY generic.title "ඔහ්!">
 <!ENTITY generic.longDesc "<p> කුමන හෝ හේතුවක් නිසා මේ පිටුව &brandShortName; හට පූරණය කළ නොහැක.</p>">
@@ -111,13 +119,11 @@
 <li>කරුණාකර අඩවියේ හිමිකරුට මෙම ගැටලුව දන්වා සිටින්න.</li> 
 </ul>">
 
-<!ENTITY nssBadCert.title "ආරක්‍ෂිත සම්බන්ධය බිද වැටිණි">
-<!ENTITY nssBadCert.longDesc2 "<ul> 
-<li>මෙය සේවාදායකයේ සැකසුම් සම්බන්ධ ගැටලුවක් විය හැක, එසේ නැතිනම් වෙනත් 
- අයෙකු සේවාදායකය ලෙස ව්‍යාජව පෙනිසීටිමක් විය හැක.</li> 
-<li>ඔබ සේවාදායකයට මිට පෙර සාර්ථකව සම්බන්ධ වි ඇත්නම්, මෙය තාවකාලික දෝෂයක් 
- විය හැකි නිසා පසුව යළි උත්සාහ කරන්න.</li> 
-</ul>">
+<!ENTITY certerror.longpagetitle1 "ඔබේ සබඳතාවය අනාරක්ෂිතයි">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara "<span class='hostname'/> වෙබ් අඩවියේ හිමිකරු එය නිසි ලෙස සකසා නැත. ඔබේ තොරතුරු  සොරකම් කිරීම වැලක් වීම සඳහා, &brandShortName; මෙම වෙබ් අඩවියට සම්බන්ධ වී නැත.">
 
 <!ENTITY sharedLongDesc "<ul> 
 <li>මෙම අඩවිය තාවකාලිකව ආභාවිතව හෝ ඉතාමත් කාර්යය බහුලව තිබිය හැක. 
@@ -128,72 +134,64 @@
  &brandShortName; මඟින් අන්තර්ජාල ප්‍රවේශය අනුමත කර ඇති බවට තහවුරු කරගන්න.</li> 
 </ul>">
 
-<!ENTITY malwareBlocked.title "ප්‍රහාරත්මක අඩවියක්!">
-<!ENTITY malwareBlocked.longDesc "<p>ප්‍රහාරක අඩවි පෞද්ගලික දත්ත සොරකම් කළ හැකි,  වෙනත් අයට හානි කිරීමට ඔබගේ පද්ධතිය භාවිතා කළ හැකි, ඔබගේ පද්ධතියට හානි කළ හැකි වැඩසටහන් ස්ථාපනය කළ හැක.</p> 
-<p>දෝෂයක් නිසා තමාගේ අඩවිය අක්‍රමණීය අඩවියක් ලෙස වාර්තා කරැති බව විශ්වාස කරන වෙබ් අඩවි හිමිකරුවන් <a href='http://www.stopbadware.org/home/reviewinfo' > යළි සලකා බැලීමට ඉල්ලීමක් කරන්න</a>.</p>">
-
-<!ENTITY unwantedBlocked.title "අනවශ්‍ය මෘදුකාංග අඩවියක සැකයක්!">
-<!ENTITY unwantedBlocked.longDesc "<p>අනවශ්‍ය මෘදුකාංග අඩවියක් ඔබගේ පරිගණකයට හානිවිය හැකි අන්දමේ මෘදුකංගයන් ස්ථාපනය කිරීමට උත්සහ දරයි.</p>">
-
-<!ENTITY phishingBlocked.title "සැක කළ ව්‍යාජ වෙව් අඩවියක්!">
-<!ENTITY phishingBlocked.longDesc "<p>මෙම පිටුවේදී ඕනෑම තොරතුරක් ඇතුළත් කිරීම අනන්‍යතා සොරා ගැනීමකට හෝ වෙනත් වංචාවකට හේතු විය හැක.</p> 
-<p>මෙවැනි ව්‍යාජ වෙබ් phishing ආක්‍රමණ ලෙස හදුන්වන වංචාවන් තුළ ඇත, එම ව්‍යාජ වෙබ් පිටු විද්‍යුත් තැපැල් තුළ ඔබ විශ්වාස කරන මූලයක් අනුකරණය කිරීම මඟින්  තොරතුරු අනාවරණය කරගනී.</p>">
-
 <!ENTITY cspBlocked.title "ආරක්ෂක ප්‍රතිපත්තියට අනුව අවහිර කර ඇත">
 <!ENTITY cspBlocked.longDesc "<p>මේ සඳහා ඉඩ නොදෙන අන්තර්ගත ආරක්ෂක ප්‍රතිපත්තියක් පිටුවේ ඇති නිසා  &brandShortName; මේ ආකාරයෙන් පූරණය කිරීමෙන් වැලකී සිටී.</p>">
 
-<!ENTITY corruptedContentError.title "Corrupted Content Error">
-<!ENTITY corruptedContentError.longDesc "<p>The page you are trying to view cannot be shown because an error in the data transmission was detected.</p><ul><li>Please contact the website owners to inform them of this problem.</li></ul>">
 
 
-<!ENTITY securityOverride.linkText "හෝ ඔබට හැරදැමීමක් එක් කළ හැක…">
-<!ENTITY securityOverride.getMeOutOfHereButton "මා මෙතනින් ඉවතට ගන්න!">
 <!ENTITY securityOverride.exceptionButtonLabel "හැරදැමීමක් එක් කරන්න…">
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
 
-
-<!ENTITY securityOverride.warningContent "<p>ඔබ පූර්ණ විශ්වාසයක් නොමැති අන්තර්ජාල සම්බන්ධතාවයක් භාවිතා කරයි නම් හෝ ඔබ මෙම අඩවියට අවවාද පණිවිඩ දැක නැත්නම් ඔබ හැරදැමීම් එක් කළ නොකළ යුතුයි.</p> 
- 
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button> 
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>">
-
-<!ENTITY errorReporting.title "මෙම දෝශය වාර්ථා කරන්න">
-<!ENTITY errorReporting.longDesc "දෝශසහගත අඩවි හඳුනාගෙන අවහිර කිරීමට <span id='hostname'></span> සඳහා ලිපිනය හා සහතික තොරතුරු වාර්ථා කිරීමෙන් සහය විය හැක. වඩා ආරක්ෂිත ජාලයක් සඳහා සහායට ස්තූතියි!">
-<!ENTITY errorReporting.automatic "අනාගතයේදී දෝශ ස්වයංක්‍රීයව වාර්ථා කරන්න">
+<!ENTITY errorReporting.automatic2 "Mozilla ට මෙවැනි ද්වේශ සහගත අඩවි පිළිබඳ දැන අවහිර කිරීමට උදව් වීම සඳහා මෙවැනි දෝෂ වාර්ථා කරන්න">
 <!ENTITY errorReporting.learnMore "තවත් දැනගන්න...">
-<!ENTITY errorReporting.sending "වාර්තාව යවමින්">
-<!ENTITY errorReporting.sent "වාර්ථාව යැවිනි">
-<!ENTITY errorReporting.report "වාර්ථාව">
-<!ENTITY errorReporting.tryAgain "නැවත උත්සාහ කරන්න">
 
 <!ENTITY remoteXUL.title "Remote XUL">
 <!ENTITY remoteXUL.longDesc "<p><ul><li>කරුණාකර මෙම ගැටලුව පිළිබද අඩවියේ හිමිකරුට දන්වන්න.</li></ul></p>">
 
 <!ENTITY sslv3Used.title "ආරක්ෂිතව සබඳවිය නොහැකි විය">
-<!-- LOCALIZATION NOTE (sslv3Used.longDesc) - Do not translate
-     "ssl_error_unsupported_version". -->
-<!ENTITY sslv3Used.longDesc "විශේෂිත විස්තර‍: ssl_error_unsupported_version">
-<!ENTITY sslv3Used.learnMore "තවත් දැනගන්න...">
-
-<!ENTITY advanced.label "Advanced">
-
-<!ENTITY errorReporting.automatic2 "Report errors like this to help Mozilla identify and block malicious sites">
-<!ENTITY forbiddenBlocked.longDesc "<p>&brandShortName; prevented this page from loading because it is configured to block it.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Forbidden Site">
-<!ENTITY returnToPreviousPage.label "Go Back">
 <!-- LOCALIZATION NOTE (sslv3Used.longDesc2) - Do not translate
      "SSL_ERROR_UNSUPPORTED_VERSION". -->
-<!ENTITY sslv3Used.longDesc2 "Advanced info: SSL_ERROR_UNSUPPORTED_VERSION">
-<!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe.">
-<!ENTITY weakCryptoAdvanced.override "(Not secure) Try loading <span class='hostname'></span> using outdated security">
-<!ENTITY weakCryptoAdvanced.title "Advanced">
+<!ENTITY sslv3Used.longDesc2 "සංකීර්ණ තොරතුරු: SSL_ERROR_UNSUPPORTED_VERSION">
+
+<!ENTITY weakCryptoUsed.title "ඔබේ සබඳතාවය අනාරක්ෂිතයි">
 <!-- LOCALIZATION NOTE (weakCryptoUsed.longDesc2) - Do not translate
      "SSL_ERROR_NO_CYPHER_OVERLAP". -->
-<!ENTITY weakCryptoUsed.longDesc2 "Advanced info: SSL_ERROR_NO_CYPHER_OVERLAP">
+<!ENTITY weakCryptoUsed.longDesc2 "සංකීර්ණ තොරතුරු: SSL_ERROR_NO_CYPHER_OVERLAP">
+<!ENTITY weakCryptoAdvanced.title "සංකීර්ණ">
+<!ENTITY weakCryptoAdvanced.override "(අනාරක්ශිතයි) යල්පැනගිය ආරක්ශණයක් මගින් <span class='hostname'></span> පූර්ණයට උත්සහ කරන්න">
 
-<!ENTITY weakCryptoUsed.title "Your connection is not secure">
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+
+<!ENTITY certerror.pagetitle1  "අනාරක්ෂිත සම්බන්ධයක්">
+<!ENTITY certerror.copyToClipboard.label "පෙළ පසුරු පුවරුවට පිටපත් කරන්න">
+
+<!ENTITY inadequateSecurityError.title "ඔබේ සබඳතාවය අනාරක්ෂිතයි">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+
+
+<!ENTITY captivePortal.longDesc "
+<p>This network may require you to login to access the internet.</p>
+">
+
+<!ENTITY captivePortal.title "Login to network">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "This site uses HTTP
+Strict Transport Security (HSTS) to specify that &brandShortName; may only connect
+to it securely. As a result, it is not possible to add an exception for this
+certificate.">
+
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime "<p>A secure connection to <span id='wrongSystemTime_URL'/> isn’t possible because your clock appears to show the wrong time.</p> <p>Your computer thinks it is <span id='wrongSystemTime_systemDate'/>, when it should be <span id='wrongSystemTime_actualDate'/>. To fix this problem, change your date and time settings to match the correct time.</p>">
+<!ENTITY corruptedContentErrorv2.longDesc "<p>The page you are trying to view cannot be shown because an error in the data transmission was detected.</p><ul><li>Please contact the website owners to inform them of this problem.</li></ul>">
+
+<!ENTITY corruptedContentErrorv2.title "Corrupted Content Error">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe. The website administrator will need to fix the server first before you can visit the site.</p><p>Error code: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY openPortalLoginPage.label "Open Login Page">
+<!ENTITY prefReset.label "Restore default settings">
+
+<!ENTITY prefReset.longDesc "It looks like your network security settings might be causing this. Do you want the default settings to be restored?">
+<!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe.">

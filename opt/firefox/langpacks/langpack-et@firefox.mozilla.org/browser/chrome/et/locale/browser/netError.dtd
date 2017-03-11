@@ -7,6 +7,8 @@
 
 <!ENTITY loadError.label                       "Probleem lehe laadimisel">
 <!ENTITY retry.label                           "Proovi uuesti">
+<!ENTITY returnToPreviousPage.label            "Mine tagasi">
+<!ENTITY advanced.label                        "Edasijõudnuile">
 
 <!-- Specific error messages -->
 
@@ -19,21 +21,28 @@
 <!ENTITY dnsNotFound.title                     "Serverit ei leitud">
 <!ENTITY dnsNotFound.longDesc                  "
 <ul>
-  <li>Kontrolli, kas aadressis pole kirjavigu, näiteks
+  <li>Kontrolli, kas aadressis pole sisestusvigu, näiteks
     <strong>www</strong>.eesti.ee asemel hoopis
     <strong>ww</strong>.eesti.ee.</li>
   <li>Kui sa ei saa avada ühtegi lehte, siis kontrolli oma arvuti
     võrguühendust.</li>
   <li>Kui sinu arvuti või võrk on kaitstud tulemüüri või puhverserveri poolt, siis tee kindlaks,
-    et &brandShortName;il on lubatud ligipääs internetile.</li>
+    et &brandShortName;il on lubatud internetti pääseda.</li>
 </ul>
 ">
 
 <!ENTITY fileNotFound.title                    "Faili ei leitud">
 <!ENTITY fileNotFound.longDesc                 "
 <ul>
-  <li>Kontrolli faili nimes olevaid suurtähti või muid kirjavigu.</li>
+  <li>Kontrolli faili nimes olevaid suurtähti või muid sisestusvigu.</li>
   <li>Kontrolli, kas faili pole mujale liigutatud, ümber nimetatud või kustutatud.</li>
+</ul>
+">
+
+<!ENTITY fileAccessDenied.title                "Ligipääs failile keelati">
+<!ENTITY fileAccessDenied.longDesc             "
+<ul>
+  <li>Fail võib olla kustutatud, mujale liigutatud või on sellele seatud ligipääsu piiravad õigused.</li>
 </ul>
 ">
 
@@ -107,7 +116,7 @@
   <li>Kontrolli puhverserveri sätteid, et teha kindlaks, kas need on õiged.</li>
   <li>Tee kindlaks, kas sinu arvuti võrguühendus töötab korrektselt.</li>
   <li>Kui sinu arvuti või võrk on kaitstud tulemüüri või puhverserveri poolt, siis tee kindlaks,
-    et &brandShortName;il on lubatud ligipääs internetile.</li>
+    et &brandShortName;il on lubatud internetti pääseda.</li>
 </ul>
 ">
 
@@ -136,15 +145,11 @@
 </ul>
 ">
 
-<!ENTITY nssBadCert.title                      "Turvalise ühenduse viga">
-<!ENTITY nssBadCert.longDesc2                  "
-<ul>
-  <li>Tegemist võib olla serveri seadistuste probleemiga või siis üritab keegi antud
-serverina välja paista.</li>
-  <li>Kui sa oled varem selle serveriga edukalt ühendunud, siis võib olla tegemist ajutise veaga
-ja sa võid hiljem uuesti proovida.</li>
-</ul>
-">
+<!ENTITY certerror.longpagetitle1              "Ühendus pole turvaline">
+<!-- Localization note (certerror.introPara) - The text content of the span tag
+will be replaced at runtime with the name of the server to which the user
+was trying to connect. -->
+<!ENTITY certerror.introPara                   "Saidi <span class='hostname'/> omanik on oma veebilehe valesti häälestanud.  Sinu andmete kaitsmiseks varastamise eest ei loonud &brandShortName; selle veebilehega ühendust.">
 
 <!ENTITY sharedLongDesc                        "
 <ul>
@@ -153,83 +158,61 @@ ja sa võid hiljem uuesti proovida.</li>
   <li>Kui sa ei saa avada ühtegi lehte, siis kontrolli oma arvuti
     võrguühendust.</li>
   <li>Kui sinu arvuti või võrk on kaitstud tulemüüri või puhverserveri poolt, siis tee kindlaks,
-    et &brandShortName;il on lubatud ligipääs internetile.</li>
+    et &brandShortName;il on lubatud internetti pääseda.</li>
 </ul>
-">
-
-<!ENTITY malwareBlocked.title                  "Ründava veebilehe kahtlus!">
-<!ENTITY malwareBlocked.longDesc               "
-<p>Ründavad lehed üritavad paigaldada privaatandmeid varastavaid rakendusi, kasutavad sinu arvutit teiste ründamiseks või kahjustavad sinu arvutit.</p>
-<p>Veebilehe omanikud, kes usuvad, et nende leht on raporteeritud  ilma põhjuseta, võivad <a href='http://www.stopbadware.org/home/reviewinfo' >nõuda teistkordset ülevaatust</a>.</p>
-">
-
-<!ENTITY unwantedBlocked.title                 "Soovimatu tarkvara levitamise kahtlus!">
-<!ENTITY unwantedBlocked.longDesc              "
-<p>Soovimatut tarkvara levitavad veebilehed üritavad paigaldada tarkvara, mis võib olla petlik ja mõjutada süsteemi ootamatul viisil.</p>
-">
-
-<!ENTITY phishingBlocked.title                 "Veebivõltsingu kahtlus!">
-<!ENTITY phishingBlocked.longDesc              "
-<p>Sellistele lehtedele andmete sisestamine võib kaasa tuua identiteedivarguse või muu pettuse.</p>
-<p>Seda tüüpi veebivõltsinguid kasutatakse pettustes, mis on tuntud ka kui veebikelmused, kus pettust sisaldavad lehed või e-kirjad jäljendavad allikaid, mida sa võid usaldada.</p>
 ">
 
 <!ENTITY cspBlocked.title                      "Blokitud sisu kaitsva turvareegliga">
 <!ENTITY cspBlocked.longDesc                   "<p>&brandShortName; keeldus lehe laadimisest sellisel moel, sest lehe sisu kaitsvate turvareeglite kohaselt on see keelatud.</p>">
 
-<!ENTITY corruptedContentError.title           "Vigane sisu">
-<!ENTITY corruptedContentError.longDesc        "<p>Andmete edastamisel esinenud vea tõttu pole soovitud lehte võimalik kuvada.</p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul>">
+<!ENTITY corruptedContentErrorv2.title        "Vigane sisu">
+<!ENTITY corruptedContentErrorv2.longDesc      "<p>Andmete edastamisel esinenud vea tõttu pole soovitud lehte võimalik kuvada.</p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul>">
 
-<!ENTITY securityOverride.linkText             "Või võid ka lisada erandi...">
-<!ENTITY securityOverride.getMeOutOfHereButton "Aita mind siit välja!">
-<!ENTITY securityOverride.exceptionButtonLabel "Lisa erand...">
 
-<!-- LOCALIZATION NOTE (securityOverride.warningContent) - Do not translate the
-contents of the <button> tags. It uses strings already defined above. The
-button is included here (instead of netError.xhtml) because it exposes
-functionality specific to firefox. -->
+<!ENTITY securityOverride.exceptionButtonLabel "Lisa erand…">
 
-<!ENTITY securityOverride.warningContent       "
-<p>Erandit ei tohiks lisada, kui kasutad internetiühendust, mida sa täielikult ei usalda, või kui sa pole harjunud nägema hoiatusi sellelt serverilt.</p>
-
-<button id='getMeOutOfHereButton'>&securityOverride.getMeOutOfHereButton;</button>
-<button id='exceptionDialogButton'>&securityOverride.exceptionButtonLabel;</button>
-">
-
-<!ENTITY errorReporting.title                  "Vea raporteerimine">
-<!ENTITY errorReporting.longDesc               "<span id='hostname'></span> aadressi ja sertifikaadi info raporteerimine aitab meil tuvastada ja blokkida pahatahtlikud saidid. Täname, et aitad luua ohutumat veebi!">
-<!ENTITY errorReporting.automatic              "Edaspidi raporteeritakse vead automaatselt">
+<!ENTITY errorReporting.automatic2             "Raporteeri taolistest vigadest, et Mozilla saaks tuvastada ja blokkida ohtlikud veebilehed">
 <!ENTITY errorReporting.learnMore              "Rohkem teavet…">
-<!ENTITY errorReporting.sending                "Raporti saatmine">
-<!ENTITY errorReporting.sent                   "Raport on saadetud">
-<!ENTITY errorReporting.report                 "Raporteeri">
-<!ENTITY errorReporting.tryAgain               "Proovi uuesti">
 
 <!ENTITY remoteXUL.title                       "Remote XUL">
 <!ENTITY remoteXUL.longDesc                    "<p><ul><li>Palun võta ühendust veebilehe omanikega, et teavitada neid sellest probleemist.</li></ul></p>">
 
 <!ENTITY sslv3Used.title                       "Turvaline ühendumine pole võimalik">
-<!-- LOCALIZATION NOTE (sslv3Used.longDesc) - Do not translate
-     "ssl_error_unsupported_version". -->
-<!ENTITY sslv3Used.longDesc                    "Täpsem teave: ssl_error_unsupported_version">
-<!ENTITY sslv3Used.learnMore                   "Loe edasi…">
-
-<!ENTITY advanced.label "Advanced">
-
-<!ENTITY errorReporting.automatic2 "Report errors like this to help Mozilla identify and block malicious sites">
-<!ENTITY forbiddenBlocked.longDesc "<p>&brandShortName; prevented this page from loading because it is configured to block it.</p>
-">
-
-<!ENTITY forbiddenBlocked.title "Forbidden Site">
-<!ENTITY returnToPreviousPage.label "Go Back">
 <!-- LOCALIZATION NOTE (sslv3Used.longDesc2) - Do not translate
      "SSL_ERROR_UNSUPPORTED_VERSION". -->
-<!ENTITY sslv3Used.longDesc2 "Advanced info: SSL_ERROR_UNSUPPORTED_VERSION">
-<!ENTITY weakCryptoAdvanced.longDesc "<span class='hostname'></span> uses security technology that is outdated and vulnerable to attack. An attacker could easily reveal information which you thought to be safe.">
-<!ENTITY weakCryptoAdvanced.override "(Not secure) Try loading <span class='hostname'></span> using outdated security">
-<!ENTITY weakCryptoAdvanced.title "Advanced">
+<!ENTITY sslv3Used.longDesc2                   "Täpsem teave: SSL_ERROR_UNSUPPORTED_VERSION">
+
+<!ENTITY weakCryptoUsed.title                  "Ühendus pole turvaline">
 <!-- LOCALIZATION NOTE (weakCryptoUsed.longDesc2) - Do not translate
      "SSL_ERROR_NO_CYPHER_OVERLAP". -->
-<!ENTITY weakCryptoUsed.longDesc2 "Advanced info: SSL_ERROR_NO_CYPHER_OVERLAP">
+<!ENTITY weakCryptoUsed.longDesc2              "Täpsem teave: SSL_ERROR_NO_CYPHER_OVERLAP">
+<!ENTITY weakCryptoAdvanced.title              "Edasijõudnuile">
+<!ENTITY weakCryptoAdvanced.longDesc           "<span class='hostname'></span> kasutab turvalisuse tehnoloogiaid, mis on aegunud ja avatud rünnakutele. Ründaja võib suurema vaevata pääseda ligi teabele, mis sinu arvates on kaitstud.">
+<!ENTITY weakCryptoAdvanced.override           "(Ebaturvaline!) Proovi laadida saiti <span class='hostname'></span>, kasutades aegunud turvalisuse tehnoloogiaid">
 
-<!ENTITY weakCryptoUsed.title "Your connection is not secure">
+<!-- LOCALIZATION NOTE (certerror.wrongSystemTime) - The <span id='..' /> tags will be injected with actual values,
+     please leave them unchanged. -->
+<!ENTITY certerror.wrongSystemTime             "<p>Turvaline ühendus aadressiga <span id='wrongSystemTime_URL'/> pole võimalik, sest sinu kell näib vale aega näitavat.</p> <p>Sinu arvuti arvab ajaks olevat <span id='wrongSystemTime_systemDate'/>, kuid see peaks olema <span id='wrongSystemTime_actualDate'/>. Probleemi lahendamiseks muuda oma kuupäeva ja kellaaja sätteid nii, et need kattuks õige ajaga.</p>">
+
+<!ENTITY certerror.pagetitle1                  "Ebaturvaline ühendus">
+<!ENTITY certerror.whatShouldIDo.badStsCertExplanation "See sait kasutab HTTP
+Strict Transport Security (HSTS) tehnoloogiat, et sundida &brandShortName; ühenduma ainult
+turvalise protokolli kaudu. Seetõttu pole selle sertifikaadi jaoks erandi lisamine
+võimalik.">
+<!ENTITY certerror.copyToClipboard.label       "Kopeeri tekst vahemällu">
+
+<!ENTITY inadequateSecurityError.title         "Ühendus pole turvaline">
+<!-- LOCALIZATION NOTE (inadequateSecurityError.longDesc) - Do not translate
+     "NS_ERROR_NET_INADEQUATE_SECURITY". -->
+<!ENTITY inadequateSecurityError.longDesc "<p><span class='hostname'></span> kasutab turvalisuse tehnoloogiaid, mis on aegunud ja avatud rünnakutele. Ründaja võib suurema vaevata pääseda ligi teabele, mis sinu arvates on kaitstud. Saidi külastamiseks peab saidi administraator selle serveri kõigepealt ära parandama.</p><p>Veakood: NS_ERROR_NET_INADEQUATE_SECURITY</p>">
+
+<!ENTITY prefReset.longDesc                    "Paistab, et seda probleemi võivad põhjustada sinu võrguturvalisuse sätted. Kas soovid taastada vaikesätted?">
+<!ENTITY prefReset.label                       "Taasta vaikesätted">
+
+<!ENTITY captivePortal.longDesc "
+<p>This network may require you to login to access the internet.</p>
+">
+
+<!ENTITY captivePortal.title "Login to network">
+
+<!ENTITY openPortalLoginPage.label "Open Login Page">
