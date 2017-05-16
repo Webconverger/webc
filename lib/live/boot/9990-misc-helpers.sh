@@ -5,7 +5,7 @@
 is_live_path()
 {
 	DIRECTORY="${1}/${LIVE_MEDIA_PATH}"
-	for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs
+	for FILESYSTEM in squashfs ext2 ext3 ext4 xfs dir jffs git
 	do
 		if ls "${DIRECTORY}/"*.${FILESYSTEM} > /dev/null 2>&1
 		then
