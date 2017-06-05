@@ -245,10 +245,10 @@ for x in $(cmdline); do
 esac
 done
 # AGA begin
- wget -N --timeout=10 "${install_base_url}/bg${neon}.png" -O /home/webc/bg.png.custom
- file /home/webc/bg.png.custom | grep -qs "image data" && {
-  cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
-  update_background /home/webc/bg.png
+wget -N --timeout=10 "${install_base_url}/bg${neon}.png" -O /home/webc/bg.png.custom
+ file /home/webc/bg.png.custom | grep -qs "image data" && {
+  cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+  update_background /home/webc/bg.png
  }
 # AGA end
 
