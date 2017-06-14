@@ -10,13 +10,14 @@ AGA_resolv_file="/etc/resolv.conf"
 AGA_net="unknown-net"
 AGA_shop_id="unknown-shop"
 AGA_ID=1
+AGA_mode="kiosk"
 
 . "$AGA_cfg_file"
 . "$AGA_mod_file"
 
 AGA_has_eth0()
 {
-  ifconfig | grep -qs '^eth0'
+  /sbin/ifconfig | grep -qs '^eth0'
 }
 
 AGA_dhcp_on()
