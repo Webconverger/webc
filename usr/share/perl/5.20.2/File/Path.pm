@@ -284,13 +284,21 @@ sub _rmtree {
             if (!chdir($root)) {
                 # see if we can escalate privileges to get in
                 # (e.g. funny protection mask such as -w- instead of rwx)
-                $perm &= 07777;
-                my $nperm = $perm | 0700;
-                if (!($arg->{safe} or $nperm == $perm or chmod($nperm, $root))) {
-                    _error($arg, "cannot make child directory read-write-exec", $canon);
-                    next ROOT_DIR;
+                # This uses fchmod to avoid traversing outside of the proper
+                # location (CVE-2017-6512)
+                my $root_fh;
+                if (open($root_fh, '<', $root)) {
+                    my ($fh_dev, $fh_inode) = (stat $root_fh )[0,1];
+                    $perm &= 07777;
+                    my $nperm = $perm | 0700;
+                    local $@;
+                    if (!($arg->{safe} or $nperm == $perm or !-d _ or $fh_dev ne $ldev or $fh_inode ne $lino or eval { chmod( $nperm, $root_fh ) } )) {
+                        _error($arg, "cannot make child directory read-write-exec", $canon);
+                        next ROOT_DIR;
+                    }
+                    close $root_fh;
                 }
-                elsif (!chdir($root)) {
+                if (!chdir($root)) {
                     _error($arg, "cannot chdir to child", $canon);
                     next ROOT_DIR;
                 }

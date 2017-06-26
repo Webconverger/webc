@@ -23,6 +23,13 @@
 
 verbose=0
 fresh=0
+CERTSCONF=/etc/ca-certificates.conf
+CERTSDIR=/usr/share/ca-certificates
+LOCALCERTSDIR=/usr/local/share/ca-certificates
+CERTBUNDLE=ca-certificates.crt
+ETCCERTSDIR=/etc/ssl/certs
+HOOKSDIR=/etc/ca-certificates/update.d
+
 while [ $# -gt 0 ];
 do
   case $1 in
@@ -30,6 +37,24 @@ do
       verbose=1;;
     --fresh|-f)
       fresh=1;;
+    --certsconf)
+      shift
+      CERTSCONF="$1";;
+    --certsdir)
+      shift
+      CERTSDIR="$1";;
+    --localcertsdir)
+      shift
+      LOCALCERTSDIR="$1";;
+    --certbundle)
+      shift
+      CERTBUNDLE="$1";;
+    --etccertsdir)
+      shift
+      ETCCERTSDIR="$1";;
+    --hooksdir)
+      shift
+      HOOKSDIR="$1";;
     --help|-h|*)
       echo "$0: [--verbose] [--fresh]"
       exit;;
@@ -37,11 +62,10 @@ do
   shift
 done
 
-CERTSCONF=/etc/ca-certificates.conf
-CERTSDIR=/usr/share/ca-certificates
-LOCALCERTSDIR=/usr/local/share/ca-certificates
-CERTBUNDLE=ca-certificates.crt
-ETCCERTSDIR=/etc/ssl/certs
+if [ ! -s "$CERTSCONF" ]
+then
+  fresh=1
+fi
 
 cleanup() {
   rm -f "$TEMPBUNDLE"
@@ -89,7 +113,7 @@ if [ "$fresh" = 1 ]; then
   find . -type l -print | while read symlink
   do
     case $(readlink $symlink) in
-      $CERTSDIR*) rm -f $symlink;;
+      $CERTSDIR*|$LOCALCERTSDIR*) rm -f $symlink;;
     esac
   done
   find . -type l -print | while read symlink
@@ -151,7 +175,9 @@ mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
 
 echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
 
-HOOKSDIR=/etc/ca-certificates/update.d
+if [ -d "$HOOKSDIR" ]
+then
+
 echo -n "Running hooks in $HOOKSDIR...."
 VERBOSE_ARG=
 [ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
@@ -161,6 +187,8 @@ do
     cat $REMOVED ) | $hook || echo E: $hook exited with code $?.
 done
 echo "done."
+
+fi
 
 # vim:set et sw=2:
 
