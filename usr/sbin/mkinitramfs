@@ -315,11 +315,6 @@ if [ ! -e "${DESTDIR}/bin/sh" ]; then
 	copy_exec /bin/sh "${DESTDIR}/bin/"
 fi
 
-# Remove any looping or broken symbolic links, since they break cpio.
-[ "${verbose}" = y ] && xargs_verbose="-t"
-(cd "${DESTDIR}" && find . -type l -printf '%p %Y\n' | sed -n 's/ [LN]$//p' \
-	| xargs ${xargs_verbose:-} -rL1 rm -f)
-
 # dirty hack for armhf's double-linker situation; if we have one of
 # the two known eglibc linkers, nuke both and re-create sanity
 if [ "$DPKG_ARCH" = armhf ]; then

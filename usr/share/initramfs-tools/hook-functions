@@ -206,7 +206,7 @@ sys_walk_mod_add()
 		if [ -e "$driver_path" ]; then
 			module="$(basename $(readlink -f $driver_path))"
 			if [ -n "${module}" ]; then
-				force_load "${module}"
+				manual_add_modules "${module}"
 			fi
 		fi
 		device_path="$(dirname ${device_path})"
@@ -223,7 +223,7 @@ sys_walk_modalias()
 		if [ -e "${device_path}/modalias" ]; then
 			modalias=$(cat "${device_path}/modalias")
 			if [ -n "${modalias}" ]; then
-				force_load "${modalias}"
+				manual_add_modules "${modalias}"
 			fi
 		fi
 		device_path="$(dirname ${device_path})"
@@ -472,6 +472,17 @@ dep_add_modules_mount()
 	add_loaded_modules 'phy[-_]*'
 	add_loaded_modules 'pinctrl[-_]*'
 
+	# Sys walk keyboards.  We identify keyboards as input devices
+	# that can generate at least key events 1-31; udev has the
+	# same heuristic.  Note that the format of the bitmap
+	# properties depends on the word size of the process reading
+	# the uevent file!
+	for device in /sys/class/input/input*; do
+		if grep -qs "^KEY=.*fffffff[ef]$" "${device}/uevent"; then
+			sys_walk_mod_add "$(readlink -f "$device")"
+		fi
+	done
+
 	# catch old-style IDE
 	if [ -e /sys/bus/ide/devices/ ]; then
 		sys_walk_modalias ${dev_sys_path}
@@ -525,13 +536,25 @@ auto_add_modules()
 	for arg in "$@" ; do
 		case "$arg" in
 		base)
-			modules="$modules ehci-pci ehci-orion ehci-hcd ohci-hcd ohci-pci uhci-hcd usbhid"
-			modules="$modules xhci xhci-pci xhci-hcd"
 			modules="$modules btrfs ext2 ext3 ext4 ext4dev "
 			modules="$modules isofs jfs reiserfs udf xfs"
 			modules="$modules nfs nfsv2 nfsv3 nfsv4"
 			modules="$modules af_packet atkbd i8042 psmouse"
 			modules="$modules virtio_pci virtio_mmio"
+
+			# Include most USB host and dual-role drivers
+			copy_modules_dir kernel/drivers/usb/host \
+				hwa-hc.ko sl811_cs.ko sl811-hcd.ko \
+				u132-hcd.ko whci-hcd.ko
+			copy_modules_dir kernel/drivers/usb/c67x00
+			copy_modules_dir kernel/drivers/usb/chipidea
+			copy_modules_dir kernel/drivers/usb/dwc2
+			copy_modules_dir kernel/drivers/usb/dwc3
+			copy_modules_dir kernel/drivers/usb/isp1760
+			copy_modules_dir kernel/drivers/usb/musb
+			copy_modules_dir kernel/drivers/usb/renesas_usbhs
+			# and any extcon drivers for USB
+			modules="$modules extcon-usb-gpio"
 
 			# Include all HID drivers unless we're sure they
 			# don't support keyboards.  hid-*ff covers various
@@ -551,8 +574,11 @@ auto_add_modules()
 				hid-wiimote.ko hid-zydacron.ko
 
 			# Any of these might be needed by other drivers
+			copy_modules_dir kernel/drivers/bus
 			copy_modules_dir kernel/drivers/clk
 			copy_modules_dir kernel/drivers/gpio
+			copy_modules_dir kernel/drivers/i2c/busses
+			copy_modules_dir kernel/drivers/i2c/muxes
 			copy_modules_dir kernel/drivers/phy
 			copy_modules_dir kernel/drivers/pinctrl
 			copy_modules_dir kernel/drivers/regulator
