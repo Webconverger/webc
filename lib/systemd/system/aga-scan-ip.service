@@ -1,0 +1,11 @@
+[Unit]
+Description=Scan IP-net for noDHSP
+
+[Service]
+Type=simple
+KillMode=process
+ExecStart=/etc/webc/logbot.sh /etc/webc/aga-scan-ip.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

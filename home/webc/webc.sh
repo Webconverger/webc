@@ -12,16 +12,53 @@ fi
 
 wm="/usr/bin/dwm.web" # default
 
-if test "$(cmdline_get chrome)" = neon
-then
-	cmdline_has neonshowid && wm="/usr/bin/dwm.neon" # special version to show version/id info on top bar
-	neon="-neon"
-	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
-	xsetroot -solid black
-else
-	update_background() { xloadimage -quiet -onroot -center "$1"; }
-	xsetroot -solid white
+#AGA Begin
+# As i don't use "neon" variable, i'll use it for screen resolutions of bg 
+#if test "$(cmdline_get chrome)" = neon
+#then
+#	cmdline_has neonshowid && wm="/usr/bin/dwm.neon" # special version to show version/id info on top bar
+#	neon="-neon"
+#	update_background() { xloadimage -border black -quiet -onroot -center "$1"; }
+#	xsetroot -solid black
+#else
+#	update_background() { xloadimage -quiet -onroot -center "$1"; }
+#	xsetroot -solid white
+#fi
+# I use nettops. As thay was made on notebook's chipsets, thay have virtual LVDS. And i have the problem with screen resolution.   
+if (xrandr | grep -qs "LVDS")&&(xrandr | grep -qs "VGA") ; then
+  AGA_LVDS=$(xrandr | grep "LVDS" | sed "s~^\(LVDS.*\) connected.*~\1~")
+  AGA_VGA=$(xrandr | grep "VGA" | sed "s~^\(VGA.*\) connected.*~\1~")
+  test "$AGA_LVDS" != "" && xrandr --output $AGA_LVDS --off
+  test "$AGA_VGA" != "" && xrandr --output ${AGA_VGA} --auto
 fi
+
+AGA_bb="unknown"
+AGA_screenW_old="unknown"
+AGA_screenH_old="unknown"
+
+if test -e $AGA_bb_file; then
+  . "$AGA_bb_file"
+  AGA_screenW_old=$AGA_screenW
+  AGA_screenH_old=$AGA_screenH
+fi
+AGA_screenW=$(xrandr | grep '*+'| sed "s~\s*\([0-9]*\)x\([0-9]*\).*~\1~")
+AGA_screenH=$(xrandr | grep '*+'| sed "s~\s*\([0-9]*\)x\([0-9]*\).*~\2~")
+
+echo AGA_screenW=\""$AGA_screenW"\" >  ${AGA_bb_file}
+echo AGA_screenH=\""$AGA_screenH"\" >> ${AGA_bb_file}
+AGA_clean=false
+test "$AGA_screenW" = "$AGA_screenW_old" || AGA_clean=true
+test "$AGA_screenH" = "$AGA_screenH_old" || AGA_clean=true
+echo AGA_clean="$AGA_clean" >> ${AGA_bb_file}
+test "$AGA_bb" = "unknown" || echo AGA_bb=\""$AGA_bb"\" >> ${AGA_bb_file}
+
+neon=${AGA_screenW}x${AGA_screenH}
+if !(test -e /home/webc/bg-orig${neon}.png); then
+  test $(($AGA_screenW*100/$AGA_screenH)) -gt 155 && neon="1920x1080" || neon="1280x1024"
+fi
+update_background() { xloadimage -border rgb:00/80/C3 -quiet -onroot -fullscreen "$1"; }
+xsetroot -solid rgb:00/80/C3
+#AGA End
 
 cp /home/webc/bg-orig${neon}.png /home/webc/bg.png
 
@@ -40,6 +77,11 @@ while ! test -e /etc/webc/id; do
 	sleep 0.25
 	test $SECONDS -gt 30 && break
 done
+
+# AGA begin
+# Wait while I don't see my Web-server, all configurations must be available
+while (! cmdline_has debug)&&(! ping ${AGA_cfg_srv} -c 1 -w 5); do :; done
+# AGA end
 
 # get the $webc_id
 . "/etc/webc/webc.conf"
@@ -183,22 +225,32 @@ for x in $(cmdline); do
 		homepage=*)
 			homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' )"
 			;;
-
-		bgurl=*)
-			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
-			# only download if newer
-			wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
-			file /home/webc/bg.png.custom | grep -qs "image data" && {
-			cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
-			update_background /home/webc/bg.png
-		}
-		;;
+# AGA begin
+# Always wget bg
+#
+#		bgurl=*)
+#			bgurl="$( /bin/busybox httpd -d ${x#bgurl=} )"
+#			# only download if newer
+#			wget -N --timeout=5 "${bgurl}" -O /home/webc/bg.png.custom
+#			file /home/webc/bg.png.custom | grep -qs "image data" && {
+#			cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+#			update_background /home/webc/bg.png
+#		}
+#		;;
+# AGA end
 
 	install)
 		homepage="$install_qa_url"
 		;;
 esac
 done
+# AGA begin
+wget -N --timeout=10 "${install_base_url}/bg${neon}.png" -O /home/webc/bg.png.custom
+ file /home/webc/bg.png.custom | grep -qs "image data" && {
+  cp /home/webc/bg.png.custom /home/webc/bg.png # leave .custom around for wget
+  update_background /home/webc/bg.png
+ }
+# AGA end
 
 mac=$( mac_address )
 usbid=$( usb_serials | head -n1 )
