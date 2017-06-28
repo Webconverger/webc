@@ -86,7 +86,9 @@ sleep 20
 if AGA_has_network; then
   echo AGA_net=\""unknown-net"\" > ${AGA_cfg_file}
   echo AGA_shop_id=\""unknown-shop"\" >> ${AGA_cfg_file}
-  exit 
+  chmod 644 ${AGA_cfg_file}
+  AGA_update_cfg
+  exit
 fi
 
 if !(test $AGA_shop_id = "unknown-shop") then
@@ -114,12 +116,11 @@ if !(test $AGA_shop_id = "unknown-shop") then
       echo AGA_shop_id=\""$AGA_shop_id"\" >> ${AGA_cfg_file}
       if (test $AGA_mode = "showcase");
         then
-          echo AGA_ID=\""(($AGA_ip-59))"\" >> ${AGA_cfg_file}
+          echo AGA_ID=\""$(($AGA_ip-59))"\" >> ${AGA_cfg_file}
         else
-          echo AGA_ID=\""(($AGA_ip-29))"\" >> ${AGA_cfg_file}
+          echo AGA_ID=\""$(($AGA_ip-29))"\" >> ${AGA_cfg_file}
       fi
       chmod 644 ${AGA_cfg_file}
-      AGA_update_cfg
     fi
     ifdown eth0
     cat > $AGA_int_file << EOF
@@ -138,6 +139,7 @@ iface eth0 inet static
 EOF
     echo nameserver 172.$AGA_net.$AGA_shop_id.1 > ${AGA_resolv_file}
     ifup eth0
+    AGA_update_cfg
     exit
   fi
 fi
@@ -163,12 +165,11 @@ while (true); do
         echo AGA_shop_id=\""$AGA_shop_id"\" >> ${AGA_cfg_file}
         if (test $AGA_mode = "showcase");
           then
-            echo AGA_ID=\""(($AGA_ip-59))"\" >> ${AGA_cfg_file}
+            echo AGA_ID=\""$(($AGA_ip-59))"\" >> ${AGA_cfg_file}
           else
-            echo AGA_ID=\""(($AGA_ip-29))"\" >> ${AGA_cfg_file}
+            echo AGA_ID=\""$(($AGA_ip-29))"\" >> ${AGA_cfg_file}
         fi
         chmod 644 ${AGA_cfg_file}
-        AGA_update_cfg
         ifdown eth0
         cat > $AGA_int_file << EOF
 # The loopback network interface
@@ -187,6 +188,7 @@ iface eth0 inet static
 EOF
         echo nameserver 172.$AGA_net.$AGA_shop_id.1 > $AGA_resolv_file
         ifup eth0
+        AGA_update_cfg
         exit
       fi
     done
