@@ -350,7 +350,9 @@ if touch ${live_image}
 then
 	# Cache cmdline in case subsequent boots can't reach $config_url
 	cp "$config_runtime" "$config_cached"
-	logs "CONFIG: cached $(md5sum $config_cached) $(tr '\n' ' ' < $config_cached)"
+        logs "CONFIG: cached $(md5sum $config_cached) $(tr '\n' ' ' < $config_cached)"
+#AGA
+        cp "$AGA_cfg_file" "$AGA_cfg_file_cached"
 
 	# Kicks off an upgrade
 	mkfifo $upgrade_pipe
