@@ -9,6 +9,8 @@ treefile = '%gconf-tree.xml'
 import os,tempfile,shutil,sys
 from optparse import OptionParser
 
+import re
+
 parser = OptionParser()
 parser.add_option("--source", dest="source_dir", default="/usr/share/gconf/defaults",
                   help="directory where to find the defaults", metavar="DIR")
@@ -64,13 +66,27 @@ def float_entry(value):
 def string_entry(value):
   return '  <string>' + htmlescape(value) + '</string>\n'
 
+def int_list_entry(value):
+  ret = '  <list type="int">\n'
+  for v in value[1:-1].split(','):
+    ret += '    <value><int>' + v + '</int></value>\n'
+  ret += '  </list>\n'
+  return ret
+
 def list_entry(value):
+  if is_int_list(value):
+    return int_list_entry(value)
   ret = '  <list type="string">\n'
   for v in value[1:-1].split(','):
     ret += '    <value><string>' + htmlescape(v) + '</string></value>\n'
   ret += '  </list>\n'
   return ret
 
+def is_int_list(value):
+  if re.search('^\[(?:\d+,?)+\]$', value) == None:
+    return False
+  else:
+    return True
 
 def listcmp(a,b):
   """Number of starting similar elements in a and b"""

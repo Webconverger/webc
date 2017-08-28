@@ -1,3 +1,5 @@
+.\" -*- nroff -*-
+.\"
 .\" This file is loaded after doc.tmac.
 .\" Put any local modifications to doc.tmac here.
 .
@@ -18,4 +20,14 @@
 .  \" manual pages you're writing are clear of this problem.
 .  \" if '\*[.T]'utf8' \
 .  \"   char - \[hy]
+.
+.  \" Debian: "\-" is more commonly used for option dashes than for minus
+.  \" signs in manual pages, so map it to plain "-" for HTML/XHTML output
+.  \" rather than letting it be rendered as "&minus;".
+.  ie '\*[.T]'html' \
+.    char \- \N'45'
+.  el \{\
+.    if '\*[.T]'xhtml' \
+.      char \- \N'45'
+.  \}
 .\}

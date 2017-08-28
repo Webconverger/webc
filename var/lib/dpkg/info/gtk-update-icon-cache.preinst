@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+# Clean up existing diversions from libgtk-3-bin
+if dpkg --compare-versions "$2" lt "3.20.5-2" ; then
+    dpkg-divert --remove --package libgtk-3-bin --rename \
+        --divert /usr/sbin/update-icon-caches.gtk2 \
+        /usr/sbin/update-icon-caches
+    dpkg-divert --remove --package libgtk-3-bin --rename \
+        --divert /usr/share/man/man8/update-icon-caches.gtk2.8.gz \
+        /usr/share/man/man8/update-icon-caches.8.gz
+fi
+
+

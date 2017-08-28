@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## live-config(7) - System Configuration Components
-## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2006-2015 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -84,13 +84,22 @@ Config ()
 	then
 		case "${LIVE_X_SESSION_MANAGER}" in
 			none)
-				rm -f /etc/X11/default-display-manager
+				_DM_FILE="/etc/X11/default-display-manager"
+				if [ -e "${_DM_FILE}" ]
+				then
+					sed -i "s|\(.*\)|\1 # disabled by live-config:|" -- "${_DM_FILE}"
+				fi
 				;;
 
 			*)
 				update-alternatives --quiet --set x-session-manager "${LIVE_X_SESSION_MANAGER}"
 				;;
 		esac
+	fi
+
+	if [ "${LIVE_XORG_DRIVER}" = "noproprietary" ] ; then
+		NOPROPRIETARY=true
+		unset LIVE_XORG_DRIVER
 	fi
 
 	if [ -z "${LIVE_XORG_DRIVER}" ] && [ -e /usr/bin/lspci ]
@@ -117,14 +126,8 @@ Config ()
 				done
 			fi
 
-			if [ -z "${LIVE_XORG_DRIVER}" ]
+			if [ -z "${LIVE_XORG_DRIVER}" ] && [ -z "${NOPROPRIETARY}" ]
 			then
-				# xorg-driver automatic override for virtualbox
-				if [ -e /var/lib/dpkg/info/virtualbox-guest-x11.list ] && echo "${_DEVICE}" | grep -qs '^80EEBEEF'
-				then
-					LIVE_XORG_DRIVER="vboxvideo"
-				fi
-
 				# xorg-driver automatic override for fglrx
 				if echo "${_DEVICE}" | grep -qs '^1002'
 				then

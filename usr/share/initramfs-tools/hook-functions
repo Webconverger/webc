@@ -59,21 +59,19 @@ manual_add_modules()
 		return
 	fi
 
-	modprobe --all --set-version="${version}" --ignore-install --quiet --show-depends "$@" |
+	# modprobe --ignore-install inhibits processing of 'install'
+	# configuration lines, so that instead we will see 'insmod
+	# module.ko' as we want.  However it also means that 'softdep'
+	# configuration lines and embedded softdep information is not
+	# processed.  So we run twice, with and without this option.
+	{ modprobe --all --set-version="${version}" --ignore-install --quiet --show-depends "$@";
+	  modprobe --all --set-version="${version}" --quiet --show-depends "$@"; } |
 	while read prefix kmod options ; do
 		if [ "${prefix}" != "insmod" ]; then
 			continue
 		fi
 
-		# Prune duplicates
-		if [ -e "${DESTDIR}/${kmod}" ]; then
-			continue
-		fi
-
-		install -Dpm 644 "$kmod" "${DESTDIR}/$kmod"
-		if [ "${verbose}" = "y" ]; then
-			echo "Adding module ${kmod}"
-		fi
+		copy_file module "${kmod}" || continue
 
 		# Add required firmware
 		for firmware in $(modinfo -k "${version}" -F firmware "${kmod}"); do
@@ -101,41 +99,76 @@ manual_add_modules()
 			fi
 
 			if [ -e "/lib/firmware/${version}/${firmware}" ]; then
-				copy_exec "/lib/firmware/${version}/${firmware}"
+				copy_file firmware \
+					"/lib/firmware/${version}/${firmware}"
 			else
-				copy_exec "/lib/firmware/${firmware}"
-			fi
-			if [ "${verbose}" = "y" ]; then
-				echo "Adding firmware ${firmware}"
+				copy_file firmware "/lib/firmware/${firmware}"
 			fi
 		done
 	done
 }
 
-# $1 = file to copy to ramdisk
+# $1 = file type (for logging)
+# $2 = file to copy to ramdisk
+# $3 (optional) Name for the file on the ramdisk
+# Location of the image dir is assumed to be $DESTDIR
+# If the target exists, we leave it and return 1.
+# On any other error, we return >1.
+copy_file() {
+	local type src target link_target
+
+	type="${1}"
+	src="${2}"
+	target="${3:-$2}"
+
+	[ -f "${src}" ] || return 2
+
+	if [ -d "${DESTDIR}/${target}" ]; then
+		target="${target}/${src##*/}"
+	fi
+
+	# check if already copied
+	[ -e "${DESTDIR}/${target}" ] && return 1
+
+	#FIXME: inst_dir
+	mkdir -p "${DESTDIR}/${target%/*}"
+
+	if [ -h "${src}" ]; then
+		# We don't need to replicate a chain of links completely;
+		# just link directly to the ultimate target
+		link_target="$(readlink -f "${src}")" || return $(($? + 1))
+
+		if [ "${link_target}" != "${target}" ]; then
+			[ "${verbose}" = "y" ] && echo "Adding ${type}-link ${src}"
+
+			# Create a relative link so it always points
+			# to the right place
+			ln -rs "${DESTDIR}/${link_target}" "${DESTDIR}/${target}"
+		fi
+
+		# Copy the link target if it doesn't already exist
+		src="${link_target}"
+		target="${link_target}"
+		[ -e "${DESTDIR}/${target}" ] && return 0
+		mkdir -p "${DESTDIR}/${target%/*}"
+	fi
+
+	[ "${verbose}" = "y" ] && echo "Adding ${type} ${src}"
+
+	cp -pP "${src}" "${DESTDIR}/${target}" || return $(($? + 1))
+}
+
+# $1 = executable to copy to ramdisk, with library dependencies
 # $2 (optional) Name for the file on the ramdisk
 # Location of the image dir is assumed to be $DESTDIR
 # We never overwrite the target if it exists.
 copy_exec() {
-	local src target x nonoptlib
-	local libname dirname
+	local src target x nonoptlib ret
 
 	src="${1}"
 	target="${2:-$1}"
 
-	[ -f "${src}" ] || return 1
-
-	if [ -d "${DESTDIR}/${target}" ]; then
-		# check if already copied
-		[ -e "${DESTDIR}/$target/${src##*/}" ] && return 0
-	else
-		[ -e "${DESTDIR}/$target" ] && return 0
-		#FIXME: inst_dir
-		mkdir -p "${DESTDIR}/${target%/*}"
-	fi
-
-	[ "${verbose}" = "y" ] && echo "Adding binary ${src}"
-	cp -pL "${src}" "${DESTDIR}/${target}"
+	copy_file binary "${src}" "${target}" || return $(($? - 1))
 
 	# Copy the dependant libraries
 	for x in $(ldd "${src}" 2>/dev/null | sed -e '
@@ -154,15 +187,10 @@ copy_exec() {
 			x="${nonoptlib}"
 		fi
 
-		libname=$(basename "${x}")
-		dirname=$(dirname "${x}")
-
-		# FIXME inst_lib
-		mkdir -p "${DESTDIR}/${dirname}"
-		if [ ! -e "${DESTDIR}/${dirname}/${libname}" ]; then
-			cp -pL "${x}" "${DESTDIR}/${dirname}"
-			[ "${verbose}" = "y" ] && echo "Adding library ${x}" || true
-		fi
+		copy_file library "${x}" || {
+			ret=$?
+			[ ${ret} = 1 ] || return $((ret - 1))
+		}
 	done
 }
 
@@ -196,12 +224,19 @@ copy_modules_dir()
 # walk /sys for relevant modules
 sys_walk_mod_add()
 {
-	local driver_path module
+	local driver_path module device_path modalias
 	device_path="$1"
 
-	sys_walk_modalias "${device_path}"
-
 	while [ "${device_path}" != "/sys" ]; do
+		# device modalias
+		if [ -e "${device_path}/modalias" ]; then
+			modalias=$(cat "${device_path}/modalias")
+			if [ -n "${modalias}" ]; then
+				manual_add_modules "${modalias}"
+			fi
+		fi
+
+		# current driver module
 		driver_path="$(readlink -f ${device_path}/driver/module)"
 		if [ -e "$driver_path" ]; then
 			module="$(basename $(readlink -f $driver_path))"
@@ -209,25 +244,52 @@ sys_walk_mod_add()
 				manual_add_modules "${module}"
 			fi
 		fi
+
 		device_path="$(dirname ${device_path})"
 	done
 }
 
-# walk /sys for relevant modalias
-sys_walk_modalias()
+block_dev_sys_walk_mod_add()
 {
-	local device_path modalias
-	device_path="$1"
+	local dev_sys_path disk_sys_path component
 
-	while [ "${device_path}" != "/sys" ]; do
-		if [ -e "${device_path}/modalias" ]; then
-			modalias=$(cat "${device_path}/modalias")
-			if [ -n "${modalias}" ]; then
-				manual_add_modules "${modalias}"
-			fi
-		fi
-		device_path="$(dirname ${device_path})"
+	# Resolve symlink so sys_walk_mod_add can walk up the hierarchy
+	dev_sys_path="$(readlink -f "$1")"
+
+	# Find whole disk from partition
+	if grep -q "^DEVTYPE=partition$" "$dev_sys_path/uevent"; then
+		disk_sys_path="$dev_sys_path/.."
+	else
+		disk_sys_path="$dev_sys_path"
+	fi
+
+	# Iterate over component of a layered device
+	ls -1 "$disk_sys_path/slaves" | while read component; do
+		block_dev_sys_walk_mod_add "$disk_sys_path/slaves/$component"
 	done
+
+	sys_walk_mod_add ${dev_sys_path}
+}
+
+block_dev_mod_add()
+{
+	local dev_node dev_num dev_sys_path
+	dev_node="$1"
+
+	# Look up device number and convert to decimal as it appears in sysfs
+	dev_num="$(stat -L -c %t:%T "$dev_node")"
+	dev_num="$((0x${dev_num%:*})):$((0x${dev_num#*:}))"
+
+	# Look up device in sysfs
+	dev_sys_path="/sys/dev/block/$dev_num"
+	if [ ! -d "$dev_sys_path" ]; then
+		echo "mkinitramfs: for device ${dev_node} missing ${dev_sys_path}" >&2
+		echo "mkinitramfs: workaround is MODULES=most" >&2
+		echo "mkinitramfs: Error please report the bug" >&2
+		exit 1
+	fi
+
+	block_dev_sys_walk_mod_add "$dev_sys_path"
 }
 
 # Copy all loaded or built-in modules matching the given pattern.
@@ -259,8 +321,7 @@ add_loaded_modules()
 # find and only copy modules relevant to a mountpoint
 dep_add_modules_mount()
 {
-	local dir block minor dev_node FSTYPE dev_sys_path
-	local modules=
+	local dir dev_node FSTYPE
 
 	dir="$1"
 
@@ -271,18 +332,10 @@ dep_add_modules_mount()
 	fi
 
 	# find out block device + fstype
-	eval "$( mount | while read -r dev foo mp foo fs opts rest ; do \
+	eval "$(while read dev mp fs opts rest ; do \
 		[ "$mp" = "$dir" ] && [ "$fs" != "rootfs" ] \
-		&& printf "dev_node='%s'\nFSTYPE='%s'" "$dev" "$fs" \
-		&& break; done)"
-
-	# On failure fallback to /proc/mounts if readable
-	if [ -z "$dev_node" ] && [ -r /proc/mounts ]; then
-		eval "$(while read dev mp fs opts rest ; do \
-			[ "$mp" = "$dir" ] && [ "$fs" != "rootfs" ] \
-			&& printf "dev_node=$dev\nFSTYPE=$fs"\
-			&& break; done < /proc/mounts)"
-	fi
+		&& printf "dev_node=$dev\nFSTYPE=$fs"\
+		&& break; done < /proc/mounts)"
 
 	# Only the root mountpoint has to exist; do nothing if any other
 	# directory is not a mountpoint.
@@ -350,116 +403,28 @@ dep_add_modules_mount()
 	fi
 
 	# Add filesystem
-	modules="$modules ${FSTYPE}"
+	manual_add_modules ${FSTYPE}
 
-	# lvm or luks device
-	if [ "${dev_node#/dev/mapper/}" != "${dev_node}" ] \
-		|| [ "${dev_node#/dev/dm-}" != "${dev_node}" ]; then
-		minor=$((0x$(stat --format "%T" ${dev_node}) % 256))
-		block=$(ls -1 /sys/block/dm-${minor}/slaves | head -n 1)
-		# lvm on luks or luks on lvm, possibly lvm snapshots
-		while [ "${block#dm-}" != "${block}" ]; do
-			block=$(ls -1 /sys/block/${block}/slaves | head -n 1)
-		done
-		# lvm on md or luks on md
-		if [ "${block#md}" != "${block}" ]; then
-			block=$(sed -ne 's/multipath/[/' -e 's/linear/[/' -e 's/raid[0-9][0-9]*/[/' -e 's/\([hs]d[a-z][a-z]*\)[0-9][0-9]*/\1/g' -e '/^'${block}' :/s/^[^[]*\[ \([^\[]*\)\[.*$/\1/p' </proc/mdstat)
+	block_dev_mod_add "$dev_node"
+}
+
+dep_add_modules()
+{
+	local device dev_node
+	local modules=
+
+	dep_add_modules_mount /
+	dep_add_modules_mount /usr
+
+	if [ -n "${RESUME}" ]; then
+		dev_node="$(resolve_device "${RESUME}")"
+		if [ -n "${dev_node}" ]; then
+			block_dev_mod_add "${dev_node}"
 		fi
-		# luks or lvm on cciss or ida
-		if [ "${block#cciss}" != "${block}" ] \
-		|| [ "${block#ida}" != "${block}" ] \
-		|| [ "${block#mmcblk}" != "${block}" ] \
-		|| [ "${block#nvme}" != "${block}" ]; then
-			block="${block%p*}"
-		else
-			block=${block%%[0-9]*}
-		fi
-	# md device new naming scheme /dev/md/X
-	elif [ "${dev_node#/dev/md/}" != "${dev_node}" ]; then
-		dev_node=${dev_node#/dev/md/}
-		# strip partion number
-		dev_node=${dev_node%%p[0-9]*}
-		# drop the partition number only for sdX and hdX devices
-		# and keep it for other devices like loop#, dm-# devices
-		block=$(sed -ne 's/multipath/[/' -e 's/linear/[/' -e 's/raid[0-9][0-9]*/[/' -e 's/\([hs]d[a-z][a-z]*\)[0-9][0-9]*/\1/g' -e '/^md'$dev_node' :/s/^[^[]*\[ \([^\[]*\)\[.*$/\1/p' </proc/mdstat)
-	# md device /dev/mdX
-	elif [ "${dev_node#/dev/md}" != "${dev_node}" ]; then
-		dev_node=${dev_node#/dev/md}
-		# strip partion number
-		dev_node=${dev_node%%p[0-9]*}
-		# drop the partition number only for sdX and hdX devices
-		# and keep it for other devices like loop#, dm-# devices
-		block=$(sed -ne 's/multipath/[/' -e 's/linear/[/' -e 's/raid[0-9][0-9]*/[/' -e 's/\([hs]d[a-z][a-z]*\)[0-9][0-9]*/\1/g' -e '/^md'$dev_node' :/s/^[^[]*\[ \([^\[]*\)\[.*$/\1/p' </proc/mdstat)
-	# cciss device
-	elif [ "${dev_node#/dev/cciss/}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/cciss/*}
-		block="cciss!${block%p*}"
-	# ida device
-	elif [ "${dev_node#/dev/ida/}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/ida/*}
-		block="ida!${block%p*}"
-	# loop device /dev/loopX
-	elif [ "${dev_node#/dev/loop}" != "${dev_node}" ]; then
-		dev_node=${dev_node#/dev/}
-		block=$(losetup -a \
-			| awk "/${dev_node}/{print substr(\$3, 7, 3); exit}")
-	# Xen virtual device /dev/xvdX
-	elif [ "${dev_node#/dev/xvd}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/}
-		# Xen has a mode where only the individual partitions are
-		# registered with the kernel as well as the usual full disk
-		# with partition table scheme.
-		if [ ! -e /sys/block/${block} ] ; then
-			block=${block%%[0-9]*}
-		fi
-	# mmc device /dev/mmcblkXpX
-	elif [ "${dev_node#/dev/mmcblk}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/}
-		block=${block%%p[0-9]*}
-
-	# nbd device /dev/nbdXpX
-	elif [ "${dev_node#/dev/nbd}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/}
-		block=${block%%p[0-9]*}
-
-	# DAC960 - good old mylex raid - device format /dev/rd/cXdXpX
-	elif [ "${dev_node#/dev/rd/c}" != "${dev_node}" ]; then
-		block="rd!c${dev_node#/dev/rd/c}"
-		block=${block%%p[0-9]*}
-
-	# etherd device
-	elif [ "${dev_node#/dev/etherd/}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/etherd/*}
-		block="etherd!${block%p*}"
-	# i2o raid device
-	elif [ "${dev_node#/dev/i2o/}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/i2o/}
-		block=${block%%[0-9]*}
-		block='i2o!'$block
-	# nvme device
-	elif [ "${dev_node#/dev/nvme}" != "${dev_node}" ]; then
-		block=${dev_node#/dev/}
-		block=${block%p*}
-	# classical block device
-	else
-		block=${dev_node#/dev/}
-		block=${block%%[0-9]*}
 	fi
-
-	# Error out if /sys lack block dev
-	if [ -z "${block}" ] || [ ! -e /sys/block/${block} ]; then
-		echo "mkinitramfs: for device ${dev_node} missing ${block} /sys/block/ entry" >&2
-		echo "mkinitramfs: workaround is MODULES=most" >&2
-		echo "mkinitramfs: Error please report the bug" >&2
-		exit 1
-	fi
-
-	# sys walk ATA
-	dev_sys_path=$(readlink -f /sys/block/${block}/device)
-	sys_walk_mod_add ${dev_sys_path}
 
 	# sys walk some important device classes
-	for class in gpio phy regulator; do
+	for class in gpio phy regulator rtc; do
 		for device in /sys/class/$class/*; do
 			device="$(readlink -f "$device")" \
 				&& sys_walk_mod_add "$device"
@@ -485,7 +450,6 @@ dep_add_modules_mount()
 
 	# catch old-style IDE
 	if [ -e /sys/bus/ide/devices/ ]; then
-		sys_walk_modalias ${dev_sys_path}
 		modules="$modules ide-gd_mod ide-cd"
 	fi
 
@@ -515,12 +479,6 @@ dep_add_modules_mount()
 	fi
 
 	manual_add_modules $modules
-}
-
-dep_add_modules()
-{
-	dep_add_modules_mount /
-	dep_add_modules_mount /usr
 }
 
 # The modules "most" classes added per default to the initramfs
@@ -583,6 +541,9 @@ auto_add_modules()
 			copy_modules_dir kernel/drivers/pinctrl
 			copy_modules_dir kernel/drivers/regulator
 			copy_modules_dir kernel/drivers/usb/phy
+
+			# Needed for periodic fsck
+			copy_modules_dir kernel/drivers/rtc
 		;;
 		net)
 			copy_modules_dir kernel/drivers/net \

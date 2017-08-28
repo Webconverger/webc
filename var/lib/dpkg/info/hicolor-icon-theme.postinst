@@ -2,9 +2,9 @@
 set -e
 
 UPDATE_CACHE=
-if [ -x /usr/bin/gtk-update-icon-cache-3.0 ]; then
+if which gtk-update-icon-cache-3.0 >/dev/null 2>&1 ; then
     UPDATE_CACHE=gtk-update-icon-cache-3.0
-elif [ -x /usr/bin/gtk-update-icon-cache ]; then
+elif which gtk-update-icon-cache >/dev/null 2>&1 ; then
     UPDATE_CACHE=gtk-update-icon-cache
 fi
 

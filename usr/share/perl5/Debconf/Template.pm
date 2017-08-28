@@ -36,8 +36,13 @@ sub new {
 	
 	if ($Debconf::Db::templates->exists($template) and
 	    $Debconf::Db::templates->owners($template)) {
-		my $q=Debconf::Question->get($template);
-		$q->addowner($owner, $type) if $q;
+		if ($Debconf::Db::config->exists($template)) {
+			my $q=Debconf::Question->get($template);
+			$q->addowner($owner, $type) if $q;
+		} else {
+			my $q=Debconf::Question->new($template, $owner, $type);
+			$q->template($template);
+		}
 
 		my @owners=$Debconf::Db::templates->owners($template);
 		foreach my $question (@owners) {

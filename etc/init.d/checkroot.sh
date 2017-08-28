@@ -152,6 +152,12 @@ Will restart in 5 seconds."
 	# See if we want to check the root file system.
 	#
 	FSCKCODE=0
+
+	if [ -e /run/initramfs/fsck-root ]
+	then
+		rootcheck=no
+	fi
+
 	if is_fastboot_active
 	then
 		[ "$rootcheck" = yes ] && log_warning_msg "Fast boot enabled, so skipping root file system check."

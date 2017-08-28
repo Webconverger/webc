@@ -1,0 +1,19 @@
+#! /bin/sh
+
+set -e
+
+
+
+case "$1" in
+    purge)
+	rm -rf /etc/cups/interfaces
+	rm -rf /etc/cups/ppd
+	;;
+    remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 0
+
+esac

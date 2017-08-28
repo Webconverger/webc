@@ -1,0 +1,14 @@
+# perf(1) completion
+
+# Get completions for the right version of perf for the current kernel.
+# Remove flavour or custom suffix and fix number of version components to 2.
+version="$(uname -r)"
+version="${version%%-*}"
+case "$version" in
+    *.*.*)
+	version="${version%.*}"
+	;;
+esac
+if [ -f /usr/share/bash-completion/completions/"perf_$version" ]; then
+    . /usr/share/bash-completion/completions/"perf_$version"
+fi

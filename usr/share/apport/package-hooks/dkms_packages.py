@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 #  Dynamic Kernel Module Support (DKMS) <dkms-devel@dell.com>
 #  Copyright (C) 2009 Dell, Inc.
@@ -36,24 +36,28 @@ optparser.add_option('-k', help="Specify the kernel version",
 options=optparser.parse_args()[0]
 
 if not options.module or not options.version:
-    print >> sys.stderr, 'ERROR (dkms apport): both -m and -v are required'
+    sys.stderr.write('ERROR (dkms apport): both -m and -v are required\n')
     sys.exit(2)
 
 package=packaging.get_file_package('/usr/src/' + options.module + '-' + options.version)
 if package is None:
-    print >> sys.stderr, 'ERROR (dkms apport): binary package for %s: %s not found' % (options.module,options.version)
+    sys.stderr.write('ERROR (dkms apport): binary package for %s: %s not found\n' % (options.module,options.version))
     sys.exit(1)
 
 if options.kernel:
     # TODO: Ubuntu specific
     kernel_package = "linux-headers-" + options.kernel
 
+    supported_kernel = True
     try:
-        apport.packaging.is_distro_package(kernel_package)
-    except ValueError, e:
-        if e == 'package does not exist':
-            print >> sys.stderr, 'ERROR (dkms apport): kernel package %s is not supported' % (kernel_package)
-            sys.exit(1)
+        supported_kernel = apport.packaging.is_distro_package(kernel_package)
+    except ValueError as e:
+        if str(e) == 'package does not exist':
+            supported_kernel = False
+
+    if not supported_kernel:
+        sys.stderr.write('ERROR (dkms apport): kernel package %s is not supported\n' % (kernel_package))
+        sys.exit(1)
 
 make_log=os.path.join('/var','lib','dkms',options.module,options.version,'build','make.log')
 
@@ -62,7 +66,7 @@ report['Package'] = package
 try:
     report['SourcePackage'] = apport.packaging.get_source(package)
 except ValueError:
-    print >> sys.stderr, 'ERROR (dkms apport): unable to determine source package for %s' % package
+    sys.stderr.write('ERROR (dkms apport): unable to determine source package for %s\n' % package)
     sys.exit(3)
 try:
     version = packaging.get_version(package)
@@ -81,15 +85,14 @@ attach_file_if_exists(report, make_log, 'DKMSBuildLog')
 if 'DKMSBuildLog' in report:
     this_year = str(datetime.today().year)
     if 'Segmentation fault' in report['DKMSBuildLog']:
-        print >> sys.stderr, 'ERROR (dkms apport): There was a segmentation fault when trying to build the module'
+        sys.stderr.write('ERROR (dkms apport): There was a segmentation fault when trying to build the module\n')
         sys.exit(1)
-    dupe_sig = ''
     for line in report['DKMSBuildLog'].split('\n'):
-        if line.endswith(this_year):
-            continue
-        dupe_sig += line + '\n'
-    report['DuplicateSignature'] = dupe_sig
+        if ': error:' in line:
+            report['DuplicateSignature'] = 'dkms:%s:%s:%s' % (package, version, line.strip())
+            break
 
 if options.kernel:
     report['DKMSKernelVersion'] = options.kernel
-report.write(open(apport.fileutils.make_report_path(report), 'w'))
+with open(apport.fileutils.make_report_path(report), 'wb') as f:
+    report.write(f)

@@ -260,7 +260,7 @@ get_lsb_header_val () {
         fi
         LSB_S="### BEGIN INIT INFO"
         LSB_E="### END INIT INFO"
-        sed -n "/$LSB_S/,/$LSB_E/ s/# $2: \(.*\)/\1/p" $1
+        sed -n "/$LSB_S/,/$LSB_E/ s/# $2: \+\(.*\)/\1/p" "$1"
 }
 
 # If the currently running init daemon is upstart, return zero; if the

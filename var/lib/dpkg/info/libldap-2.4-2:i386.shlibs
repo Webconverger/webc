@@ -1,3 +1,9 @@
+# While only libldap_r is packaged, the client programs are linked 
+# against libldap during build. This is here just to satisfy 
+# dpkg-shlibdeps for ldap-utils: libldap is not around when 
+# dpkg-gensymbols runs, so it's not listed in the symbols file. A better 
+# long-term workaround will be to patch the upstream build system so the 
+# client programs are linked against libldap_r.
 liblber-2.4 2 libldap-2.4-2 (>= 2.4.7)
 libldap-2.4 2 libldap-2.4-2 (>= 2.4.7)
 libldap_r-2.4 2 libldap-2.4-2 (>= 2.4.7)

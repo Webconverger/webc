@@ -13,7 +13,7 @@
 
   <!-- output conditions of a rule but not an action -->
   <xsl:template match="iptables-rules/table/chain/rule/conditions/*">
-    <!-- <match> is the psuedo module when a match module doesn't need to be loaded
+    <!-- <match> is the pseudo module when a match module doesn't need to be loaded
          and when -m does not need to be inserted -->
     <xsl:if test="name() != 'match'">
       <xsl:text> -m </xsl:text><xsl:value-of select="name()"/>

@@ -33,7 +33,7 @@ case ${0##*/} in
   *)       prog=xzgrep; grep=${GREP:-grep};;
 esac
 
-version="$prog (XZ Utils) 5.1.0alpha"
+version="$prog (XZ Utils) 5.2.2"
 
 usage="Usage: ${0##*/} [OPTION]... [-e] PATTERN [FILE]...
 Look for instances of PATTERN in the input FILEs, using their
@@ -106,10 +106,12 @@ while test $# -ne 0; do
     with_filename=1
     continue;;
   (-l | --files-with-*)
-    files_with_matches=1;;
+    files_with_matches=1
+    continue;;
   (-L | --files-witho*)
-    files_without_matches=1;;
-  (--no-f*)
+    files_without_matches=1
+    continue;;
+  (-h | --no-f*)
     no_filename=1;;
   (-V | --v | --ve | --ver | --vers | --versi | --versio | --version)
     echo "$version" || exit 2
@@ -147,7 +149,9 @@ if test $# -eq 0; then
 fi
 
 exec 3>&1
-res=0
+
+# res=1 means that no file matched yet
+res=1
 
 for i; do
   case $i in
@@ -195,8 +199,17 @@ for i; do
     fi >&3 5>&-
   )
   r=$?
+
+  # fail occured previously, nothing worse can happen
+  test $res -gt 1 && continue
+
   test "$xz_status" -eq 0 || test "$xz_status" -eq 2 \
       || test "$(kill -l "$xz_status" 2> /dev/null)" = "PIPE" || r=2
-  test $res -lt $r && res=$r
+
+  # still no match
+  test $r -eq 1 && continue
+
+  # 0 == match, >=2 == fail
+  res=$r
 done
 exit $res

@@ -17,7 +17,7 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 umask 022
 
 do_stop () {
-	PROTECTED_MOUNTS="$(sed -n ':a;/^[^ ]* \/ /!{H;n;ba};{H;s/.*//;x;s/\n//;p}' /proc/mounts)"
+	PROTECTED_MOUNTS="$(sed -n ':a;/^[^ ]* \(\/\|\/usr\) /!{H;n;ba};{H;s/.*//;x;s/\n//;p}' /proc/mounts)"
 	WEAK_MTPTS="" # be gentle, don't use force
 	REG_MTPTS=""
 	TMPFS_MTPTS=""

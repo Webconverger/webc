@@ -3,18 +3,19 @@
 # This program resolves merge conflicts in git
 #
 # Copyright (c) 2006 Theodore Y. Ts'o
+# Copyright (c) 2009-2016 David Aguilar
 #
 # This file is licensed under the GPL v2, or a later version
 # at the discretion of Junio C Hamano.
 #
 
-USAGE='[--tool=tool] [--tool-help] [-y|--no-prompt|--prompt] [file to merge] ...'
+USAGE='[--tool=tool] [--tool-help] [-y|--no-prompt|--prompt] [-O<orderfile>] [file to merge] ...'
 SUBDIRECTORY_OK=Yes
+NONGIT_OK=Yes
 OPTIONS_SPEC=
 TOOL_MODE=merge
 . git-sh-setup
 . git-mergetool--lib
-require_work_tree
 
 # Returns true if the mode reflects a symlink
 is_symlink () {
@@ -37,6 +38,19 @@ base_present () {
 	test -n "$base_mode"
 }
 
+mergetool_tmpdir_init () {
+	if test "$(git config --bool mergetool.writeToTemp)" != true
+	then
+		MERGETOOL_TMPDIR=.
+		return 0
+	fi
+	if MERGETOOL_TMPDIR=$(mktemp -d -t "git-mergetool-XXXXXX" 2>/dev/null)
+	then
+		return 0
+	fi
+	die "error: mktemp is needed when 'mergetool.writeToTemp' is true"
+}
+
 cleanup_temp_files () {
 	if test "$1" = --save-backup
 	then
@@ -45,6 +59,10 @@ cleanup_temp_files () {
 		rm -f -- "$LOCAL" "$REMOTE" "$BASE"
 	else
 		rm -f -- "$LOCAL" "$REMOTE" "$BASE" "$BACKUP"
+	fi
+	if test "$MERGETOOL_TMPDIR" != "."
+	then
+		rmdir "$MERGETOOL_TMPDIR"
 	fi
 }
 
@@ -109,7 +127,12 @@ resolve_deleted_merge () {
 		case "$ans" in
 		[mMcC]*)
 			git add -- "$MERGED"
-			cleanup_temp_files --save-backup
+			if test "$merge_keep_backup" = "true"
+			then
+				cleanup_temp_files --save-backup
+			else
+				cleanup_temp_files
+			fi
 			return 0
 			;;
 		[dD]*)
@@ -118,6 +141,10 @@ resolve_deleted_merge () {
 			return 0
 			;;
 		[aA]*)
+			if test "$merge_keep_temporaries" = "false"
+			then
+				cleanup_temp_files
+			fi
 			return 1
 			;;
 		esac
@@ -228,11 +255,27 @@ merge_file () {
 		return 1
 	fi
 
-	ext="$$$(expr "$MERGED" : '.*\(\.[^/]*\)$')"
-	BACKUP="./$MERGED.BACKUP.$ext"
-	LOCAL="./$MERGED.LOCAL.$ext"
-	REMOTE="./$MERGED.REMOTE.$ext"
-	BASE="./$MERGED.BASE.$ext"
+	if BASE=$(expr "$MERGED" : '\(.*\)\.[^/]*$')
+	then
+		ext=$(expr "$MERGED" : '.*\(\.[^/]*\)$')
+	else
+		BASE=$MERGED
+		ext=
+	fi
+
+	mergetool_tmpdir_init
+
+	if test "$MERGETOOL_TMPDIR" != "."
+	then
+		# If we're using a temporary directory then write to the
+		# top-level of that directory.
+		BASE=${BASE##*/}
+	fi
+
+	BACKUP="$MERGETOOL_TMPDIR/${BASE}_BACKUP_$$$ext"
+	LOCAL="$MERGETOOL_TMPDIR/${BASE}_LOCAL_$$$ext"
+	REMOTE="$MERGETOOL_TMPDIR/${BASE}_REMOTE_$$$ext"
+	BASE="$MERGETOOL_TMPDIR/${BASE}_BASE_$$$ext"
 
 	base_mode=$(git ls-files -u -- "$MERGED" | awk '{if ($3==1) print $1;}')
 	local_mode=$(git ls-files -u -- "$MERGED" | awk '{if ($3==2) print $1;}')
@@ -249,8 +292,14 @@ merge_file () {
 		return
 	fi
 
-	mv -- "$MERGED" "$BACKUP"
-	cp -- "$BACKUP" "$MERGED"
+	if test -f "$MERGED"
+	then
+		mv -- "$MERGED" "$BACKUP"
+		cp -- "$BACKUP" "$MERGED"
+	fi
+	# Create a parent directory to handle delete/delete conflicts
+	# where the base's directory no longer exists.
+	mkdir -p "$(dirname "$MERGED")"
 
 	checkout_staged_file 1 "$MERGED" "$BASE"
 	checkout_staged_file 2 "$MERGED" "$LOCAL"
@@ -262,7 +311,9 @@ merge_file () {
 		describe_file "$local_mode" "local" "$LOCAL"
 		describe_file "$remote_mode" "remote" "$REMOTE"
 		resolve_deleted_merge
-		return
+		status=$?
+		rmdir -p "$(dirname "$MERGED")" 2>/dev/null
+		return $status
 	fi
 
 	if is_symlink "$local_mode" || is_symlink "$remote_mode"
@@ -315,51 +366,10 @@ merge_file () {
 	return 0
 }
 
-prompt=$(git config --bool mergetool.prompt)
-guessed_merge_tool=false
-
-while test $# != 0
-do
-	case "$1" in
-	--tool-help)
-		show_tool_help
-		;;
-	-t|--tool*)
-		case "$#,$1" in
-		*,*=*)
-			merge_tool=$(expr "z$1" : 'z-[^=]*=\(.*\)')
-			;;
-		1,*)
-			usage ;;
-		*)
-			merge_tool="$2"
-			shift ;;
-		esac
-		;;
-	-y|--no-prompt)
-		prompt=false
-		;;
-	--prompt)
-		prompt=true
-		;;
-	--)
-		shift
-		break
-		;;
-	-*)
-		usage
-		;;
-	*)
-		break
-		;;
-	esac
-	shift
-done
-
 prompt_after_failed_merge () {
 	while true
 	do
-		printf "Continue merging other unresolved paths (y/n) ? "
+		printf "Continue merging other unresolved paths [y/n]? "
 		read ans || return 1
 		case "$ans" in
 		[yY]*)
@@ -372,62 +382,113 @@ prompt_after_failed_merge () {
 	done
 }
 
-if test -z "$merge_tool"
-then
-	# Check if a merge tool has been configured
-	merge_tool=$(get_configured_merge_tool)
-	# Try to guess an appropriate merge tool if no tool has been set.
-	if test -z "$merge_tool"
-	then
-		merge_tool=$(guess_merge_tool) || exit
-		guessed_merge_tool=true
-	fi
-fi
-merge_keep_backup="$(git config --bool mergetool.keepBackup || echo true)"
-merge_keep_temporaries="$(git config --bool mergetool.keepTemporaries || echo false)"
-
-last_status=0
-rollup_status=0
-files=
-
-if test $# -eq 0
-then
-	cd_to_toplevel
-
-	if test -e "$GIT_DIR/MERGE_RR"
-	then
-		files=$(git rerere remaining)
-	else
-		files=$(git ls-files -u | sed -e 's/^[^	]*	//' | sort -u)
-	fi
-else
-	files=$(git ls-files -u -- "$@" | sed -e 's/^[^	]*	//' | sort -u)
-fi
-
-if test -z "$files"
-then
+print_noop_and_exit () {
 	echo "No files need merging"
 	exit 0
-fi
+}
 
-printf "Merging:\n"
-printf "%s\n" "$files"
+main () {
+	prompt=$(git config --bool mergetool.prompt)
+	guessed_merge_tool=false
+	orderfile=
 
-IFS='
-'
-for i in $files
-do
-	if test $last_status -ne 0
+	while test $# != 0
+	do
+		case "$1" in
+		--tool-help=*)
+			TOOL_MODE=${1#--tool-help=}
+			show_tool_help
+			;;
+		--tool-help)
+			show_tool_help
+			;;
+		-t|--tool*)
+			case "$#,$1" in
+			*,*=*)
+				merge_tool=$(expr "z$1" : 'z-[^=]*=\(.*\)')
+				;;
+			1,*)
+				usage ;;
+			*)
+				merge_tool="$2"
+				shift ;;
+			esac
+			;;
+		-y|--no-prompt)
+			prompt=false
+			;;
+		--prompt)
+			prompt=true
+			;;
+		-O*)
+			orderfile="$1"
+			;;
+		--)
+			shift
+			break
+			;;
+		-*)
+			usage
+			;;
+		*)
+			break
+			;;
+		esac
+		shift
+	done
+
+	git_dir_init
+	require_work_tree
+
+	if test -z "$merge_tool"
 	then
-		prompt_after_failed_merge || exit 1
+		# Check if a merge tool has been configured
+		merge_tool=$(get_configured_merge_tool)
+		# Try to guess an appropriate merge tool if no tool has been set.
+		if test -z "$merge_tool"
+		then
+			merge_tool=$(guess_merge_tool) || exit
+			guessed_merge_tool=true
+		fi
 	fi
-	printf "\n"
-	merge_file "$i"
-	last_status=$?
-	if test $last_status -ne 0
-	then
-		rollup_status=1
-	fi
-done
+	merge_keep_backup="$(git config --bool mergetool.keepBackup || echo true)"
+	merge_keep_temporaries="$(git config --bool mergetool.keepTemporaries || echo false)"
 
-exit $rollup_status
+	if test $# -eq 0 && test -e "$GIT_DIR/MERGE_RR"
+	then
+		set -- $(git rerere remaining)
+		if test $# -eq 0
+		then
+			print_noop_and_exit
+		fi
+	fi
+
+	files=$(git -c core.quotePath=false \
+		diff --name-only --diff-filter=U \
+		${orderfile:+"$orderfile"} -- "$@")
+
+	cd_to_toplevel
+
+	if test -z "$files"
+	then
+		print_noop_and_exit
+	fi
+
+	printf "Merging:\n"
+	printf "%s\n" "$files"
+
+	rc=0
+	for i in $files
+	do
+		printf "\n"
+		if ! merge_file "$i"
+		then
+			rc=1
+			prompt_after_failed_merge || exit 1
+		fi
+	done
+
+	exit $rc
+}
+
+main "$@"

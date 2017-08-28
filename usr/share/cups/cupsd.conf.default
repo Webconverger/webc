@@ -1,12 +1,12 @@
 #
-#
-# Sample configuration file for the CUPS scheduler.  See "man cupsd.conf" for a
+# Configuration file for the CUPS scheduler.  See "man cupsd.conf" for a
 # complete description of this file.
 #
 
 # Log general information in error_log - change "warn" to "debug"
 # for troubleshooting...
 LogLevel warn
+PageLogFormat
 
 # Deactivate CUPS' internal logrotating, as we provide a better one, especially
 # LogLevel debug2 gets usable now
@@ -38,6 +38,13 @@ WebInterface Yes
 
 # Restrict access to configuration files...
 <Location /admin/conf>
+  AuthType Default
+  Require user @SYSTEM
+  Order allow,deny
+</Location>
+
+# Restrict access to log files...
+<Location /admin/log>
   AuthType Default
   Require user @SYSTEM
   Order allow,deny
@@ -131,6 +138,3 @@ WebInterface Yes
     Order deny,allow
   </Limit>
 </Policy>
-
-#
-#

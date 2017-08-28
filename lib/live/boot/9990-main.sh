@@ -58,6 +58,7 @@ Live ()
 				then
 					# We found a memdisk, set up phram
 					modprobe phram phram=memdisk,${MEMDISK}
+					modprobe phram phram=memdisk,${MEMDISK}
 
 					# Load mtdblock, the memdisk will be /dev/mtdblock0
 					modprobe mtdblock
@@ -148,15 +149,6 @@ Live ()
 
 	log_end_msg
 
-	# unionfs-fuse needs /dev to be bind-mounted for the duration of
-	# live-bottom; udev's init script will take care of things after that
-	case "${UNIONTYPE}" in
-		unionfs-fuse)
-			mount -n -o bind /dev "${rootmnt}/dev"
-			;;
-	esac
-
-
 	# aufs2 in kernel versions around 2.6.33 has a regression:
 	# directories can't be accessed when read for the first the time,
 	# causing a failure for example when accessing /var/lib/fai
@@ -200,12 +192,6 @@ Live ()
 	Netbase
 
 	Swap
-
-	case "${UNIONFS}" in
-		unionfs-fuse)
-			umount "${rootmnt}/dev"
-			;;
-	esac
 
 	exec 1>&6 6>&-
 	exec 2>&7 7>&-

@@ -6,6 +6,9 @@ dpkg -L debconf |
 	awk '$0~/\.py$/ {print $0"c\n" $0"o"}' |
 	xargs rm -f >&2
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/debconf 1.5.58~ -- "$@"
+# End automatically added section
 
 # Automatically added by dh_python2:
 if which pyclean >/dev/null 2>&1; then
@@ -15,16 +18,6 @@ else
 	do
 		rm -f "${file}"[co] >/dev/null
   	done
-fi
-
-# End automatically added section
-
-# Automatically added by dhpython:
-if which py3clean >/dev/null 2>&1; then
-	py3clean -p debconf 
-else
-	dpkg -L debconf | perl -ne 's,/([^/]*)\.py$,/__pycache__/\1.*, or next; unlink $_ or die $! foreach glob($_)'
-	find /usr/lib/python3/dist-packages/ -type d -name __pycache__ -empty -print0 | xargs --null --no-run-if-empty rmdir
 fi
 
 # End automatically added section

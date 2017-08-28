@@ -17,15 +17,4 @@ if dpkg --compare-versions "$2" lt-nl "2.0.21.1-1~" ; then
 	fi
 fi
 
-# Automatically added by dh_installmodules
-if [ "$1" = configure ]; then
-	if [ -e "/etc/modprobe.d/dkms" ]; then
-		echo "Preserving user changes to /etc/modprobe.d/dkms.conf ..."
-		if [ -e "/etc/modprobe.d/dkms.conf" ]; then
-			mv -f "/etc/modprobe.d/dkms.conf" "/etc/modprobe.d/dkms.conf.dpkg-new"
-		fi
-		mv -f "/etc/modprobe.d/dkms" "/etc/modprobe.d/dkms.conf"
-	fi
-fi
-# End automatically added section
 

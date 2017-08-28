@@ -1,8 +1,9 @@
 [Unit]
-Description=CUPS Printer Service Spool
+Description=CUPS Scheduler
+PartOf=cups.service
 
 [Path]
-PathExistsGlob=/var/spool/cups/d*
+PathExists=/var/cache/cups/org.cups.cupsd
 
 [Install]
-WantedBy=paths.target
+WantedBy=multi-user.target

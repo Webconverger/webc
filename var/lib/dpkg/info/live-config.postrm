@@ -7,8 +7,9 @@ case "${1}" in
 		rm -f /etc/sudoers.d/live
 		rm -f /etc/profile.d/zz-live-config_*.sh
 		rm -f /etc/X11/xorg.conf.d/zz-live-config_xserver-xorg.conf
+		rm -f /etc/systemd/system/getty@tty*.service.d/live-config_autologin.conf
 
-		rmdir --ignore-fail-on-non-empty /etc/live/config > /dev/null 2>&1 || true
+		rmdir --ignore-fail-on-non-empty /etc/live/config.conf.d > /dev/null 2>&1 || true
 		rmdir --ignore-fail-on-non-empty /etc/live > /dev/null 2>&1 || true
 
 		rm -rf /var/lib/live/config

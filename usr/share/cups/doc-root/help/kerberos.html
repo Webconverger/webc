@@ -32,8 +32,6 @@ DNS server(s).</li>
 	server(s).</li>
 	</ol></li>
 
-	<li>A "host" Service Granting Ticket (SGT) for every CUPS server</li>
-
 </ol>
 
 
@@ -46,7 +44,7 @@ DNS server(s).</li>
 	<LI><A HREF="http://web.mit.edu/kerberos/">Kerberos: The Network Authentication Protocol</A></LI>
 
 	<LI><A HREF="http://web.mit.edu/macdev/KfM/Common/Documentation/faq-osx.html">Kerberos
-	on OS X Frequently Asked Questions</A></LI>
+	on macOS Frequently Asked Questions</A></LI>
 
 </UL>
 
@@ -62,7 +60,7 @@ DNS server(s).</li>
 
 <H2 CLASS="title"><A NAME="CUPS">Configuring CUPS to Use Kerberos</A></H2>
 
-<P>Once youhave configured Kerberos on your system(s), you can then enable Kerberos authentication by selecting the <tt>Negotiate</tt> authentication type. The simplest way to do this is using the <tt>cupsctl(8)</tt> command on your server(s):</P>
+<P>Once you have configured Kerberos on your system(s), you can then enable Kerberos authentication by selecting the <tt>Negotiate</tt> authentication type. The simplest way to do this is using the <tt>cupsctl(8)</tt> command on your server(s):</P>
 
 <PRE CLASS="command">
 <KBD>cupsctl DefaultAuthType=Negotiate</KBD>
@@ -83,7 +81,7 @@ http://server.example.com:631/admin
 
 <P>When doing printing tasks that require authentication, CUPS requests single-use "tickets" from your login session to authenticate who you are. These tickets give CUPS a username of the form "user@REALM", which is then converted to just "user" for purposes of user and group checks.</P>
 
-<P>In order to support printing to a shared printer, CUPS runs the IPP backend as the owner of the print job so it can obtain the necessary credentials.</P>
+<P>In order to support printing to a shared printer, CUPS runs the IPP backend as the owner of the print job so it can obtain the necessary credentials when the job is de-spooled to the server.</P>
 
 </BODY>
 </HTML>

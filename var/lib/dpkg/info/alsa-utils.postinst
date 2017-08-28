@@ -1,7 +1,20 @@
 #!/bin/sh
 set -e
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/alsa-utils" ]; then
-	update-rc.d alsa-utils defaults >/dev/null || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/alsa-utils" ]; then
+		update-rc.d alsa-utils defaults >/dev/null || exit $?
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+	if [ -n "$2" ]; then
+		_dh_action=try-restart
+	else
+		_dh_action=start
+	fi
+	deb-systemd-invoke $_dh_action alsa-restore.service alsa-state.service >/dev/null || true
 fi
 # End automatically added section

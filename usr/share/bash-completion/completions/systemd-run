@@ -34,10 +34,17 @@ _systemd_run() {
     local cur=${COMP_WORDS[COMP_CWORD]} prev=${COMP_WORDS[COMP_CWORD-1]}
     local OPTS='-h --help --version --user --system --scope --unit --description --slice
                 -r --remain-after-exit --send-sighup -H --host -M --machine --service-type
-                --uid --gid --nice --setenv -p --property'
+                --on-active --on-boot --on-startup --on-unit-active --on-unit-inactive
+                --on-calendar --timer-property -t --pty -q --quiet --no-block
+                --uid --gid --nice --setenv -p --property --no-ask-password
+                --wait'
 
     local mode=--system
     local i
+    local opts_with_values=(
+        --unit --description --slice --service-type -H --host -M --machine -p --property --on-active
+        --on-boot --on-startup --on-unit-active --on-unit-inactive --on-calendar --timer-property
+    )
     for (( i=1; i <= COMP_CWORD; i++ )); do
         if [[ ${COMP_WORDS[i]} != -* ]]; then
             local root_command=${COMP_WORDS[i]}
@@ -47,11 +54,11 @@ _systemd_run() {
 
         [[ ${COMP_WORDS[i]} == "--user" ]] && mode=--user
 
-        [[ $i -lt $COMP_CWORD && ${COMP_WORDS[i]} == @(--unit|--description|--slice|--service-type|-H|--host|-M|--machine|-p|--property) ]] && ((i++))
+        [[ $i -lt $COMP_CWORD && " ${opts_with_values[@]} " =~ " ${COMP_WORDS[i]} " ]] && ((i++))
     done
 
     case "$prev" in
-        --unit|--description)
+        --unit|--description|--on-active|--on-boot|--on-startup|--on-unit-active|--on-unit-inactive|--on-calendar)
             # argument required but no completions available
             return
             ;;
@@ -75,7 +82,12 @@ _systemd_run() {
                          KillSignal= LimitCPU= LimitFSIZE= LimitDATA= LimitSTACK=
                          LimitCORE= LimitRSS= LimitNOFILE= LimitAS= LimitNPROC=
                          LimitMEMLOCK= LimitLOCKS= LimitSIGPENDING= LimitMSGQUEUE=
-                         LimitNICE= LimitRTPRIO= LimitRTTIME='
+                         LimitNICE= LimitRTPRIO= LimitRTTIME= PrivateTmp= PrivateDevices=
+                         PrivateNetwork= NoNewPrivileges= WorkingDirectory= RootDirectory=
+                         TTYPath= SyslogIdentifier= SyslogLevelPrefix= SyslogLevel=
+                         SyslogFacility= TimerSlackNSec= OOMScoreAdjust= ReadWritePaths=
+                         ReadOnlyPaths= InaccessiblePaths= EnvironmentFile=
+                         ProtectSystem= ProtectHome= RuntimeDirectory= PassEnvironment='
 
             COMPREPLY=( $(compgen -W '$comps' -- "$cur") )
             return 0
@@ -89,6 +101,11 @@ _systemd_run() {
         -M|--machine)
             local comps=$( __get_machines )
 
+            COMPREPLY=( $(compgen -W '$comps' -- "$cur") )
+            return 0
+            ;;
+        --timer-property)
+            local comps='AccuracySec= WakeSystem='
             COMPREPLY=( $(compgen -W '$comps' -- "$cur") )
             return 0
             ;;

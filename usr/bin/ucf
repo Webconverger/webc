@@ -36,8 +36,8 @@
 set -e
 
 # set the version and revision
-boseprogname="`basename \"$0\"`"
-pversion='$Revision: 1.26 $'
+progname="$(basename $0)"
+pversion='Revision: 3.00 '
 
 ######################################################################
 ########                                                     #########
@@ -57,12 +57,57 @@ setq() {
     fi
 }
 
+# Usage: get_file_metadate file_name
+get_file_metadata()
+{
+    if [ -e "$1" ]; then
+        # get file modification date without the nanoseconds and timezone info
+        local moddate="$(date +"%F %T" --date $(stat --format '@%Y' "$1"))"
+        # print file_name user.group permissions above_date
+        stat --format "%n %U.%G 0%a $moddate" "$1"
+    else
+        echo "/dev/null"
+    fi
+}
+
+# Runs the diff command with approrpiate arguments
+# Usage run_diff diff|sdiff diff_opts old_file new_file
+run_diff()
+{
+    local diff_cmd="$1"
+    local diff_opt="$2"
+    local old_file="$3"
+    local new_file="$4"
+
+    # Note: get_file_metadata not in quotes to ignore "\n" characters
+    local old_file_label=$(get_file_metadata "$old_file")
+    local new_file_label=$(get_file_metadata "$new_file")
+
+    [ -e "$old_file" ] || old_file=/dev/null
+    [ -e "$new_file" ] || new_file=/dev/null
+
+    if [ "$diff_cmd" = "diff" ] ; then
+      diff "$diff_opt" --label "$old_file_label" "$old_file" \
+            --label "$new_file_label" "$new_file" || true
+    elif [ "$diff_cmd" = "sdiff" ] ; then
+      # unfortunatelly the sdiff command does not support --label option
+      local out="$(sdiff "$diff_opt" "$old_file" "$new_file")" || true
+      [ -z "$out" ] || printf "Old file: %s\nNew file: %s\n\n%s" \
+                               "$old_file_label" "$new_file_label" "$out"
+    else
+      echo "Unknown diff command: $diff_cmd" >&2
+      exit 1
+    fi
+}
+
+
 # Use debconf to show the differences
+# Usage: show_diff actual_file_differences file_stat_differences
 show_diff() {
     if [ -z "$1" ]; then
 	DIFF="There are no non-white space differences in the files."
     else
-        if  [ 99999 -lt $(echo $1 | wc -c | awk '{print $1; }') ]; then
+        if  [ 99999 -lt "$(echo $1 | wc -c | awk '{print $1; }')" ]; then
             DIFF="The differences between the files are too large to display."
         else
             DIFF="$1"
@@ -83,7 +128,7 @@ show_diff() {
 	db_reset $templ
 	db_capb
     else
-        if [ -z $my_pager ]; then
+        if [ -z "$my_pager" ]; then
 	    echo "$DIFF" | sensible-pager
         else
 	    echo "$DIFF" | $my_pager
@@ -92,7 +137,7 @@ show_diff() {
 }
 
 withecho () {
-        echo " $@" >&2
+        echo "$@" >&2
         "$@"
 }
 
@@ -227,7 +272,7 @@ replace_md5sum () {
 	fi
     fi
     file_size=$(stat -c '%s' "$orig_new_file")
-    if [ "X$THREEWAY" != "X" ] || [ $file_size -lt 25600 ]; then
+    if [ "X$THREEWAY" != "X" ] || [ "$file_size" -lt 25600 ]; then
 	$action cp -pf "$orig_new_file" "$statedir/cache/$cached_file"
     fi
     # cp -pf "$orig_new_file" "$dest_file.${DIST_SUFFIX}"
@@ -291,13 +336,12 @@ for arg in "$@"; do
     saved="${saved:+$saved }'$(quote_single "$arg")'"
 done
 
-
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
 # We need TEMP as the `eval set --' would nuke the return value of getopt.
-TEMP=`getopt -a -o hs:d::D::nv -n "$progname" \
+TEMP=$(getopt -a -o hs:d::D::nv -n "$progname" \
       --long help,src-dir:,sum-file:,dest-dir:,debug::,DEBUG::,no-action,purge,verbose,three-way,debconf-ok,debconf-template:,state-dir: \
-             -- "$@"`
+             -- "$@")
 
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
@@ -338,7 +382,7 @@ done
 ########                                                     #########
 ######################################################################
 # Need to run as root, or else the
-if test $(id -u) != 0; then
+if test "$(id -u)" != 0; then
     if [ "$docmd" = "YES" ]; then
         echo "$progname: Need to be run as root." >&2
         echo "$progname: Setting up no action mode." >&2
@@ -353,8 +397,12 @@ if [ "X$PURGE" = "XYES" ]; then
 	usageversion;
 	exit 2 ;
     fi
-    temp_dest_file=$1;
-    setq dest_file "$(readlink -q -m $temp_dest_file)" "The Destination file";
+    temp_dest_file="$1";
+    if [ -e "$temp_dest_file" ]; then
+        setq dest_file "$(readlink -q -m $temp_dest_file)" "The Destination file";
+    else
+        setq dest_file "$temp_dest_file" "The Destination file";
+    fi
 else
     if [ $# != 2 ]; then
 	echo >&2 "*** ERROR: Need exactly two arguments, got $#";
@@ -362,19 +410,23 @@ else
 	usageversion;
 	exit 2 ;
     fi
-    temp_new_file=$1;
-    temp_dest_file=$2;
+    temp_new_file="$1";
+    temp_dest_file="$2";
 
-    if [ ! -e "$temp_new_file" ]; then
+    if [ ! -e "${temp_new_file}" ]; then
 	echo >&2 "Error: The new file ${temp_new_file} does not exist!";
 	exit 1;
     fi
     setq new_file  "$(readlink -q -m $temp_new_file)"  "The new file";
-    setq dest_file "$(readlink -q -m $temp_dest_file)" "The Destination file";
+    if [ -e "$temp_dest_file" ]; then
+        setq dest_file "$(readlink -q -m $temp_dest_file)" "The Destination file";
+    else
+        setq dest_file "$temp_dest_file" "The Destination file";
+    fi
 fi
 
 
-safe_dest_file=$(echo $dest_file | perl -nle 'print "\Q$_\E\n"')
+safe_dest_file=$(echo "$dest_file" | perl -nle 'print "\Q$_\E\n"')
 
 
 
@@ -397,15 +449,15 @@ elif [ ! "x$conf_source_dir" = "x" ]; then
     setq source_dir "$conf_source_dir" "The Source directory"
 else
     if [ "X$new_file" != "X" ]; then
-	setq source_dir $(dirname "$new_file") "The Source directory"
+	setq source_dir "$(dirname $new_file)" "The Source directory"
     else
-	setq source_dir /tmp "The Source directory"
+	setq source_dir "/tmp" "The Source directory"
     fi
 
 fi
 
-if [ "X$PAGER" != "X" ] && which $PAGER >/dev/null 2>&1 ; then
-    my_pager=$(which $PAGER);
+if [ "X$PAGER" != "X" ] && which "$PAGER" >/dev/null 2>&1 ; then
+    my_pager="$(which $PAGER)";
 elif [ -s /usr/bin/pager ] &&
      [ "X$(readlink -e /usr/bin/pager || :)" != "X" ]; then
     my_pager=/usr/bin/pager
@@ -417,13 +469,6 @@ else
     my_pager=
 fi
 
-
-
-if [ "X$my_pager" = "X" ]; then
-    STOP=YES
-elif [ "X$my_pager" = "X/bin/more" ]; then
-    STOP=YES
-fi
 
 # Command line, env variable, config file, or default
 if [ ! "x$opt_state_dir" = "x" ]; then
@@ -475,8 +520,10 @@ elif [ ! "x$UCF_OLD_MDSUM_FILE" = "x" ]; then
     setq old_mdsum_file "$UCF_OLD_MDSUM_FILE" "The md5sum is found here"
 elif [ ! "x$conf_old_mdsum_file" = "x" ]; then
     setq old_mdsum_file "$conf_old_mdsum_file" "Replace the old file"
+elif [ ! "x${new_file}" = "x" ]; then
+    old_mdsum_file="$source_dir/$(basename ${new_file}).md5sum";
 else
-    old_mdsum_file="$source_dir/"$(basename "${new_file}")".md5sum";
+    old_mdsum_file="";
 fi
 
 
@@ -520,8 +567,13 @@ if [ -e "$statedir/hashfile" ]; then
                    awk '{print $1;}' )
 fi
 
-old_mdsum_dir="$source_dir/"$(basename "${new_file}")".md5sum.d";
-cached_file=$(echo $dest_file | tr / :)
+if [ ! "x${new_file}" = "x" ]; then
+    old_mdsum_dir="$source_dir/"$(basename "${new_file}")".md5sum.d";
+else
+    old_mdsum_dir="";
+fi
+
+cached_file="$(echo $dest_file | tr / :)"
 ######################################################################
 ########                                                     #########
 ########                  Debugging dump                     #########
@@ -529,7 +581,7 @@ cached_file=$(echo $dest_file | tr / :)
 ######################################################################
 
 if [ $DEBUG -gt 0 ]; then
-    cat <<EOF
+    cat >&2 <<EOF
 The new start file is      \`$new_file\'
 The destination is         \`$dest_file\' (\`$safe_dest_file\')
 The history is kept under  \'$source_dir\'
@@ -543,7 +595,7 @@ EOF
     fi
     if [ "X$lastsum" != "X" ]; then
 	echo "The old md5sum exists, and is:"
-	echo $lastsum
+	echo "$lastsum"
     else
 	echo "The old md5sum does not exist."
         if [ -d "$old_mdsum_dir" -o -f "$old_mdsum_file" ]; then
@@ -627,7 +679,7 @@ fi
 
 # Start up debconf or at least get the db_* commands available
 if [ -e /usr/share/debconf/confmodule ]; then
-    if test $(id -u) = 0; then
+    if test "$(id -u)" = 0; then
 	. /usr/share/debconf/confmodule
 
 	# Load our templates, just in case our template has
@@ -645,7 +697,7 @@ if [ -e /usr/share/debconf/confmodule ]; then
     if [ "$DEBCONF_ALREADY_RUNNING" = 'NO' ]; then
 	if ! db_settitle ucf/title 2>/dev/null; then
       	    # Older debconf that does not support that command.
-            if test $(id -u) = 0; then
+            if test "$(id -u)" = 0; then
 		db_title "Modified configuration file"
             else
                 echo >&2 "$progname: Not changing title, since we are not running as root."
@@ -698,7 +750,7 @@ if [ -e "$dest_file" ]; then
 	if [ -d "$old_mdsum_dir" -o -f "$old_mdsum_file" ]; then
 	    if [ -d "$old_mdsum_dir"  ]; then
 		for file in ${old_mdsum_dir}/*; do
-		    oldsum=$(cat "$file"  | awk '{print $1}');
+		    oldsum="$(awk '{print $1}' $file)";
 		    if [ "$oldsum" = "$destsum"  ]; then
 			if [ "X$force_conffold" = "X" ]; then
 #                           Bingo! replace, set the md5sum, and we are done
@@ -748,8 +800,7 @@ if [ -e "$dest_file" ]; then
 		    if [ "X$VERBOSE" != "X" ]; then
 			echo >&2 "However, a default entry exists, using it."
 		    fi
-		    lastsum=$(cat "${old_mdsum_dir}/default" | \
-			awk '{print $1;}')
+		    lastsum="$(awk '{print $1;}' ${old_mdsum_dir}/default)"
 		    do_replace_md5sum=1;
 		fi
 	    elif [ -f "$old_mdsum_file" ]; then
@@ -898,12 +949,12 @@ else
 				templ=$override_template
 			fi
 		fi
-		db_fset $templ seen false
-		db_reset $templ
-		db_subst $templ FILE "$dest_file"
-		db_subst $templ NEW  "$new_file"
-		db_subst $templ BASENAME $(basename "$dest_file")
-		db_input critical $templ || true
+		db_fset "$templ" seen false
+		db_reset "$templ"
+		db_subst "$templ" FILE "$dest_file"
+		db_subst "$templ" NEW  "$new_file"
+		db_subst "$templ" BASENAME "$(basename $dest_file)"
+		db_input critical "$templ" || true
 		if ! db_go; then
 			# The current ucf interface does not provide a way for it
 			# to tell its caller that the user chose to back up.
@@ -912,7 +963,7 @@ else
 			# to ignore requests to back up.
 			continue
 		fi
-		db_get $templ
+		db_get "$templ"
 		ANSWER="$RET"
 	else
             echo >&2 "Need debconf to interact"
@@ -960,19 +1011,11 @@ else
 		exit 0;
 		;;
 	    diff|D|d)
-		if [ -e "$dest_file" ]; then
-		    DIFF="$(diff -uBbw "$dest_file" "$new_file")" || true
-		else
-		    DIFF="$(diff -uBbw /dev/null "$new_file")" || true
-		fi
+		DIFF="$(run_diff diff -uBbw "$dest_file" "$new_file")"
 		show_diff "$DIFF"
 		;;
 	    sdiff|S|s)
-		if [ -e "$dest_file" ]; then
-		    DIFF="$( sdiff -BbW "$dest_file" "$new_file")"  || true
-		else
-		    DIFF="$(sdiff -BbW /dev/null "$new_file")"  || true
-		fi
+		DIFF="$(run_diff sdiff -BbW "$dest_file" "$new_file")"
 		show_diff "$DIFF"
 		;;
 	    diff_threeway|3|t|T)
@@ -989,11 +1032,7 @@ else
                     fi
 		    show_diff "$DIFF"
 		else
-		    if [ -e "$dest_file" ]; then
-			DIFF="$(diff -uBbw "$dest_file" "$new_file")"  || true
-		    else
-			DIFF="$(diff -uBbw /dev/null "$new_file")"  || true
-		    fi
+		    DIFF="$(run_diff diff -uBbw "$dest_file" "$new_file")"
 		    show_diff "$DIFF"
 		fi
 		;;
@@ -1004,7 +1043,7 @@ else
 		    ret=0
 		    diff3 -L Current -L Older -L New -m \
 			"$dest_file" "$statedir/cache/$cached_file" \
-			"$new_file" > $dest_file.${NEW_SUFFIX} || ret=$?
+			"$new_file" > "$dest_file.${NEW_SUFFIX}" || ret=$?
                     case "$ret" in
                         0)
 		            new_file="$dest_file.${NEW_SUFFIX}"
@@ -1014,7 +1053,7 @@ else
 			    exit 0
                             ;;
                         *)
-			    mv $dest_file.${NEW_SUFFIX} $dest_file.${ERR_SUFFIX}
+			    mv "$dest_file.${NEW_SUFFIX}" "$dest_file.${ERR_SUFFIX}"
 			    db_subst ucf/conflicts_found dest_file "$dest_file"
 			    db_subst ucf/conflicts_found ERR_SUFFIX "${ERR_SUFFIX}"
 			    db_input critical ucf/conflicts_found || true

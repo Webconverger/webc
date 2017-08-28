@@ -8,24 +8,12 @@ setup_unionfs ()
 	rootmnt="${2}"
 	addimage_directory="${3}"
 
-	case ${UNIONTYPE} in
-		aufs|unionfs|overlay)
-			modprobe -q -b ${UNIONTYPE}
+	modprobe -q -b ${UNIONTYPE}
 
-			if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$" && ! cut -f2 /proc/filesystems | grep -q "^overlay\$"
-			then
-				echo "${UNIONTYPE} not available, falling back to overlay."
-
-				UNIONTYPE="overlay"
-			fi
-			;;
-	esac
-
-	case "${UNIONTYPE}" in
-		unionfs-fuse)
-			modprobe fuse
-			;;
-	esac
+	if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$"
+	then
+		panic "${UNIONTYPE} not available."
+	fi
 
 	# run-init can't deal with images in a subdir, but we're going to
 	# move all of these away before it runs anyway.  No, we're not,
@@ -54,7 +42,7 @@ setup_unionfs ()
 			done
 		else
 			# ${MODULE}.module does not exist, create a list of images
-			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+			for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 			do
 				for IMAGE in "${image_directory}"/*."${FILESYSTEM}"
 				do
@@ -67,7 +55,7 @@ setup_unionfs ()
 
 			if [ -n "${addimage_directory}" ] && [ -d "${addimage_directory}" ]
 			then
-				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir git
+				for FILESYSTEM in squashfs ext2 ext3 ext4 xfs jffs2 dir
 				do
 					for IMAGE in "${addimage_directory}"/*."${FILESYSTEM}"
 					do
@@ -97,80 +85,7 @@ setup_unionfs ()
 			run_scripts /scripts/live-realpremount
 			log_end_msg
 
-
-			if [ "${image##*.}" = "git" ]
-			then
-				_log_msg git
-				if [ "${UNIONTYPE}" != "unionmount" ]
-				then
-					mpoint="${croot}/${imagename}"
-					_log_msg mpoint: $mpoint
-				else
-					mpoint="${rootmnt}"
-				fi
-				rootfslist="${mpoint} ${rootfslist}"
-
-				mkdir -p "${mpoint}"
-				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via git-fs"
-				# Replace /etc/mtab with a symlink to
-				# /proc/mounts. This prevents fuse from
-				# calling /bin/mount to update the mtab,
-				# using options that busybox mount does
-				# not understand...
-				ln -sf /proc/mounts /etc/mtab
-
-				# Make sure fuse keeps persistent inode
-				# numbers to not confuse git. This is
-				# needed in debug mode, when the files
-				# exposed by git-fs are the working
-				# copy for the git repository
-				# bindmounted into /.git. In this case,
-				# git gets confused and becomes slow
-				# when inode numbers change. Since we
-				# can't change this option after
-				# mounting when we decide we need /.git,
-				# we just set it always and accept the
-				# extra (small) memory overhead.
-				#
-				# https://github.com/Webconverger/webc/issues/115
-				gitfs_opt="$gitfs_opt,noforget"
-
-				if [ -n "$GIT_REVISION" ]; then
-					gitfs_opt="$gitfs_opt,rev=$GIT_REVISION"
-				fi
-
-				modprobe fuse
-				#ulimit -c unlimited # enable core dumps
-				# Note that when -d is specified, git-fs runs in the foreground,
-				# so we can't use openvt --wait. Instead, just sleep a bit waiting
-				# for the filesystem to be mounted
-				#openvt -c 2 -- sh -c "git-fs -d -o allow_other${gitfs_opt} \"${image}\" \"${mpoint}\" 2>&1 | tee /git-fs.log"
-				#sleep 2 # wait for git-fs to be mounted, since openvt returns immediately
-
-				# Use this command to capture errors when the
-				# kernel panics and you cannot scroll to see it.
-				# You'll need a serial port (which is easy
-				# virtualbox, just let it dump to a raw file).
-				#git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" &>/dev/ttyS0
-
-				# Don't add -d here, then git-fs will run in
-				# the foreground and block. Adding & to run in
-				# the background does not seem to be suffcient.
-				# Instead, use openvt like above.
-				#
-				# Also note that if "debug" is on the kernel commandline,
-				# /usr/share/initramfs-tools/init will redirect output to a file,
-				# hiding any errors
-				#
-				# We redirect stderr to fd 7, to bypass boot.log redirection
-				# set by 9990-main.sh (which seems to sometimes eat messages).
-				git-fs -o allow_other${gitfs_opt} "${image}" "${mpoint}" 2>&7
-
-				log_end_msg
-				#maybe_break gitfs
-				#openvt -c 3 -- /bin/sh
-
-			elif [ -d "${image}" ]
+			if [ -d "${image}" ]
 			then
 				# it is a plain directory: do nothing
 				rootfslist="${image} ${rootfslist}"
@@ -195,22 +110,15 @@ setup_unionfs ()
 						;;
 				esac
 
-				case "${UNIONTYPE}" in
-					unionmount)
-						mpoint="${rootmnt}"
-						rootfslist="${rootmnt} ${rootfslist}"
-						;;
-
-					*)
-						mpoint="${croot}/${imagename}"
-						rootfslist="${mpoint} ${rootfslist}"
-						;;
-				esac
+				mpoint="${croot}/${imagename}"
+				rootfslist="${mpoint} ${rootfslist}"
 
 				mkdir -p "${mpoint}"
 				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via \"${backdev}\""
 				mount -t "${fstype}" -o ro,noatime "${backdev}" "${mpoint}" || panic "Can not mount ${backdev} (${image}) on ${mpoint}"
 				log_end_msg
+			else
+				log_warning_msg "Could not find image '${image}'. Most likely it is listed in a .module file, perhaps by mistake."
 			fi
 		done
 	else
@@ -335,27 +243,24 @@ setup_unionfs ()
 		cow_mountopt="rw,noatime,mode=755"
 	fi
 
-	if [ "${UNIONTYPE}" != "unionmount" ]
+	if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
 	then
-		if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
-		then
-			mount -t tmpfs -o rw,noatime,mode=755 tmpfs "/live/overlay"
-			root_backing="/live/persistence/$(basename ${cowdevice})-root"
-			mkdir -p ${root_backing}
-		else
-			root_backing="/live/overlay"
-		fi
+		mount -t tmpfs -o rw,noatime,mode=755 tmpfs "/live/overlay"
+		root_backing="/live/persistence/$(basename ${cowdevice})-root"
+		mkdir -p ${root_backing}
+	else
+		root_backing="/live/overlay"
+	fi
 
-		if [ "${cow_fstype}" = "nfs" ]
-		then
-			log_begin_msg \
-				"Trying nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing}"
-			nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing} || \
-				panic "Can not mount ${cowdevice} (n: ${cow_fstype}) on ${root_backing}"
-		else
-			mount -t ${cow_fstype} -o ${cow_mountopt} ${cowdevice} ${root_backing} || \
-				panic "Can not mount ${cowdevice} (o: ${cow_fstype}) on ${root_backing}"
-		fi
+	if [ "${cow_fstype}" = "nfs" ]
+	then
+		log_begin_msg \
+			"Trying nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing}"
+		nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing} || \
+			panic "Can not mount ${cowdevice} (n: ${cow_fstype}) on ${root_backing}"
+	else
+		mount -t ${cow_fstype} -o ${cow_mountopt} ${cowdevice} ${root_backing} || \
+			panic "Can not mount ${cowdevice} (o: ${cow_fstype}) on ${root_backing}"
 	fi
 
 	rootfscount=$(echo ${rootfslist} |wc -w)
@@ -369,7 +274,7 @@ setup_unionfs ()
 			panic "only one RO file system supported with exposedroot: ${rootfslist}"
 		fi
 
-		mount --bind ${rootfs} ${rootmnt} || \
+		mount -o bind ${rootfs} ${rootmnt} || \
 			panic "bind mount of ${rootfs} failed"
 
 		if [ -z "${SKIP_UNION_MOUNTS}" ]
@@ -382,33 +287,22 @@ setup_unionfs ()
 		cow_dirs="/"
 	fi
 
-	if [ "${cow_fstype}" != "tmpfs" ] && [ "${cow_dirs}" != "/" ] && [ "${UNIONTYPE}" = "unionmount" ]
-	then
-		true # FIXME: Maybe it does, I don't really know.
-		#panic "unionmount does not support subunions (${cow_dirs})."
-	fi
-
 	for dir in ${cow_dirs}; do
 		unionmountpoint="${rootmnt}${dir}"
 		mkdir -p ${unionmountpoint}
-		if [ "${UNIONTYPE}" = "unionmount" ]
+		cow_dir="/live/overlay${dir}"
+		rootfs_dir="${rootfs}${dir}"
+		mkdir -p ${cow_dir}
+		if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
 		then
-			# FIXME: handle PERSISTENCE_READONLY
-			unionmountopts="-t ${cow_fstype} -o noatime,union,${cow_mountopt} ${cowdevice}"
-			# unionmount only works with util-linux mount
-			mount.util-linux $unionmountopts "${unionmountpoint}"
+			do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rootfs_dir}
 		else
-			cow_dir="/live/overlay${dir}"
-			rootfs_dir="${rootfs}${dir}"
-			mkdir -p ${cow_dir}
-			if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
-			then
-				do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rootfs_dir}
-			else
-				do_union ${unionmountpoint} ${cow_dir} ${rootfs_dir}
-			fi
+			do_union ${unionmountpoint} ${cow_dir} ${rootfs_dir}
 		fi || panic "mount ${UNIONTYPE} on ${unionmountpoint} failed with option ${unionmountopts}"
 	done
+
+	# Remove persistence depending on boot parameter
+	Remove_persistence
 
 	# Correct the permissions of /:
 	chmod 0755 "${rootmnt}"
@@ -430,15 +324,7 @@ setup_unionfs ()
 				# do nothing # mount -o bind "${d}" "${live_rootfs}"
 				;;
 			*)
-				case "${UNIONTYPE}" in
-					unionfs-fuse)
-						mount -o bind "${d}" "${live_rootfs}"
-						;;
-
-					*)
-						mount -o move "${d}" "${live_rootfs}"
-						;;
-				esac
+				mount -o move "${d}" "${live_rootfs}"
 				;;
 		esac
 	done
@@ -471,8 +357,8 @@ setup_unionfs ()
 		done
 	fi
 
-        # ensure that a potentially stray tmpfs gets removed
-        # otherways, initramfs-tools is unable to remove /live
-        # and fails to boot
-        umount /live/overlay > /dev/null 2>&1 || true
+	# ensure that a potentially stray tmpfs gets removed
+	# otherways, initramfs-tools is unable to remove /live
+	# and fails to boot
+	umount /live/overlay > /dev/null 2>&1 || true
 }

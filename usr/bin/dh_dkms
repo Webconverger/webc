@@ -116,8 +116,8 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	# now, parse our configuration file
 	open(IN, "< $name");
 	while (my $l = <IN>) {
-		$l =~ /PACKAGE_NAME=(["'])(.*)\1/ && ($is_snippet = 1 && $package_name = $2);
-		$l =~ /PACKAGE_VERSION=(["'])(.*)\1/ && ($package_version = $2);
+		$l =~ /PACKAGE_NAME=(["']?)(.*)\1/ && ($is_snippet = 1 && $package_name = $2);
+		$l =~ /PACKAGE_VERSION=(["']?)(.*)\1/ && ($package_version = $2);
 	}
 	close(IN);
 
@@ -146,6 +146,12 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 		doit("cp", "-a", $old_name, $name);
 		doit("sed", "-i", "s/#MODULE_VERSION#/$package_version/g", $name);
 	}
+
+        error "could not determine package name"
+          unless defined($package_name);
+
+        error "could not determine package version"
+          unless defined($package_version);
 
 	autoscript($package, "prerm", "prerm-dkms",
 	    "s/#MODULE_NAME#/$package_name/;s/#MODULE_VERSION#/$package_version/");

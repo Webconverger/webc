@@ -188,7 +188,6 @@ libasound.so.2 libasound2 #MINVER#
  snd_async_handler_get_pcm@ALSA_0.9 1.0.16
  snd_async_handler_get_signo@ALSA_0.9 1.0.16
  snd_async_handler_get_timer@ALSA_0.9 1.0.16
- snd_atomic_read_wait@ALSA_0.9 1.0.16
  snd_card_get_index@ALSA_0.9 1.0.16
  snd_card_get_longname@ALSA_0.9 1.0.16
  snd_card_get_name@ALSA_0.9 1.0.16
@@ -221,6 +220,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_config_imake_integer@ALSA_0.9 1.0.16
  snd_config_imake_pointer@ALSA_0.9 1.0.16
  snd_config_imake_real@ALSA_0.9 1.0.16
+ snd_config_imake_safe_string@ALSA_0.9 1.1.0
  snd_config_imake_string@ALSA_0.9 1.0.16
  snd_config_iterator_end@ALSA_0.9 1.0.16
  snd_config_iterator_entry@ALSA_0.9 1.0.16
@@ -235,6 +235,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_config_make_pointer@ALSA_0.9 1.0.16
  snd_config_make_real@ALSA_0.9 1.0.16
  snd_config_make_string@ALSA_0.9 1.0.16
+ snd_config_ref@ALSA_0.9 1.1.2
  snd_config_remove@ALSA_0.9 1.0.16
  snd_config_save@ALSA_0.9 1.0.16
  snd_config_search@ALSA_0.9 1.0.16
@@ -256,10 +257,17 @@ libasound.so.2 libasound2 #MINVER#
  snd_config_substitute@ALSA_0.9 1.0.16
  snd_config_test_id@ALSA_0.9 1.0.16
  snd_config_top@ALSA_0.9 1.0.16
+ snd_config_unref@ALSA_0.9 1.1.2
  snd_config_update@ALSA_0.9 1.0.16
  snd_config_update_free@ALSA_0.9 1.0.16
  snd_config_update_free_global@ALSA_0.9 1.0.16
  snd_config_update_r@ALSA_0.9 1.0.16
+ snd_config_update_ref@ALSA_0.9 1.1.2
+ snd_ctl_add_boolean_elem_set@ALSA_0.9 1.1.2
+ snd_ctl_add_bytes_elem_set@ALSA_0.9 1.1.2
+ snd_ctl_add_enumerated_elem_set@ALSA_0.9 1.1.2
+ snd_ctl_add_integer64_elem_set@ALSA_0.9 1.1.2
+ snd_ctl_add_integer_elem_set@ALSA_0.9 1.1.2
  snd_ctl_ascii_elem_id_get@ALSA_0.9 1.0.24.1
  snd_ctl_ascii_elem_id_parse@ALSA_0.9 1.0.24.1
  snd_ctl_ascii_value_parse@ALSA_0.9 1.0.24.1
@@ -340,6 +348,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_ctl_elem_info_is_writable@ALSA_0.9 1.0.16
  snd_ctl_elem_info_malloc@ALSA_0.9 1.0.16
  snd_ctl_elem_info_set_device@ALSA_0.9 1.0.16
+ snd_ctl_elem_info_set_dimension@ALSA_0.9 1.1.2
  snd_ctl_elem_info_set_id@ALSA_0.9 1.0.16
  snd_ctl_elem_info_set_index@ALSA_0.9 1.0.16
  snd_ctl_elem_info_set_interface@ALSA_0.9 1.0.16
@@ -609,7 +618,6 @@ libasound.so.2 libasound2 #MINVER#
  snd_instr_simple_convert_from_stream@ALSA_0.9 1.0.16
  snd_instr_simple_convert_to_stream@ALSA_0.9 1.0.16
  snd_instr_simple_free@ALSA_0.9 1.0.16
- snd_is_local@ALSA_0.9 1.0.16
  snd_lib_error@ALSA_0.9 1.0.16
  snd_lib_error_set_handler@ALSA_0.9 1.0.16
  snd_lib_error_set_local@ALSA_0.9 1.0.27
@@ -1041,6 +1049,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_hw_params_set_tick_time_near@ALSA_0.9 1.0.16
  snd_pcm_hw_params_set_tick_time_near@ALSA_0.9.0rc4 1.0.16
  snd_pcm_hw_params_sizeof@ALSA_0.9 1.0.16
+ snd_pcm_hw_params_supports_audio_ts_type@ALSA_0.9 1.1.0
  snd_pcm_hw_params_supports_audio_wallclock_ts@ALSA_0.9 1.0.27
  snd_pcm_hw_params_test_access@ALSA_0.9 1.0.16
  snd_pcm_hw_params_test_buffer_size@ALSA_0.9 1.0.16
@@ -1160,9 +1169,11 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_status_dump@ALSA_0.9 1.0.16
  snd_pcm_status_free@ALSA_0.9 1.0.16
  snd_pcm_status_get_audio_htstamp@ALSA_0.9 1.0.27
+ snd_pcm_status_get_audio_htstamp_report@ALSA_0.9 1.1.0
  snd_pcm_status_get_avail@ALSA_0.9 1.0.16
  snd_pcm_status_get_avail_max@ALSA_0.9 1.0.16
  snd_pcm_status_get_delay@ALSA_0.9 1.0.16
+ snd_pcm_status_get_driver_htstamp@ALSA_0.9 1.1.0
  snd_pcm_status_get_htstamp@ALSA_0.9.0rc8 1.0.16
  snd_pcm_status_get_overrange@ALSA_0.9 1.0.16
  snd_pcm_status_get_state@ALSA_0.9 1.0.16
@@ -1170,6 +1181,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_status_get_trigger_tstamp@ALSA_0.9 1.0.16
  snd_pcm_status_get_tstamp@ALSA_0.9 1.0.16
  snd_pcm_status_malloc@ALSA_0.9 1.0.16
+ snd_pcm_status_set_audio_htstamp_config@ALSA_0.9 1.1.0
  snd_pcm_status_sizeof@ALSA_0.9 1.0.16
  snd_pcm_stream@ALSA_0.9 1.0.16
  snd_pcm_stream_name@ALSA_0.9 1.0.16
@@ -1207,6 +1219,7 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_sw_params_get_stop_threshold@ALSA_0.9.0rc4 1.0.16
  snd_pcm_sw_params_get_tstamp_mode@ALSA_0.9 1.0.16
  snd_pcm_sw_params_get_tstamp_mode@ALSA_0.9.0rc4 1.0.16
+ snd_pcm_sw_params_get_tstamp_type@ALSA_0.9 1.0.29
  snd_pcm_sw_params_get_xfer_align@ALSA_0.9 1.0.16
  snd_pcm_sw_params_get_xfer_align@ALSA_0.9.0rc4 1.0.16
  snd_pcm_sw_params_get_xrun_mode@ALSA_0.9 1.0.16
@@ -1220,10 +1233,12 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_sw_params_set_start_threshold@ALSA_0.9 1.0.16
  snd_pcm_sw_params_set_stop_threshold@ALSA_0.9 1.0.16
  snd_pcm_sw_params_set_tstamp_mode@ALSA_0.9 1.0.16
+ snd_pcm_sw_params_set_tstamp_type@ALSA_0.9 1.0.29
  snd_pcm_sw_params_set_xfer_align@ALSA_0.9 1.0.16
  snd_pcm_sw_params_set_xrun_mode@ALSA_0.9 1.0.16
  snd_pcm_sw_params_sizeof@ALSA_0.9 1.0.16
  snd_pcm_tstamp_mode_name@ALSA_0.9 1.0.16
+ snd_pcm_tstamp_type_name@ALSA_0.9 1.0.29
  snd_pcm_type@ALSA_0.9 1.0.16
  snd_pcm_type_name@ALSA_0.9.0 1.0.16
  snd_pcm_unlink@ALSA_0.9 1.0.16
@@ -1232,7 +1247,6 @@ libasound.so.2 libasound2 #MINVER#
  snd_pcm_writen@ALSA_0.9 1.0.16
  snd_pcm_xrun_mode_name@ALSA_0.9 1.0.16
  snd_rawmidi_close@ALSA_0.9 1.0.16
- snd_rawmidi_conf_generic_id@ALSA_0.9 1.0.16
  snd_rawmidi_drain@ALSA_0.9 1.0.16
  snd_rawmidi_drop@ALSA_0.9 1.0.16
  snd_rawmidi_hw_open@ALSA_0.9 1.0.16
@@ -1303,12 +1317,14 @@ libasound.so.2 libasound2 #MINVER#
  snd_seq_client_info_event_filter_del@ALSA_0.9 1.0.17
  snd_seq_client_info_free@ALSA_0.9 1.0.16
  snd_seq_client_info_get_broadcast_filter@ALSA_0.9 1.0.16
+ snd_seq_client_info_get_card@ALSA_0.9 1.1.1
  snd_seq_client_info_get_client@ALSA_0.9 1.0.16
  snd_seq_client_info_get_error_bounce@ALSA_0.9 1.0.16
  snd_seq_client_info_get_event_filter@ALSA_0.9 1.0.16
  snd_seq_client_info_get_event_lost@ALSA_0.9 1.0.16
  snd_seq_client_info_get_name@ALSA_0.9 1.0.16
  snd_seq_client_info_get_num_ports@ALSA_0.9 1.0.16
+ snd_seq_client_info_get_pid@ALSA_0.9 1.1.1
  snd_seq_client_info_get_type@ALSA_0.9 1.0.16
  snd_seq_client_info_malloc@ALSA_0.9 1.0.16
  snd_seq_client_info_set_broadcast_filter@ALSA_0.9 1.0.16
@@ -1652,6 +1668,14 @@ libasound.so.2 libasound2 #MINVER#
  snd_tlv_convert_to_dB@ALSA_0.9 1.0.16
  snd_tlv_get_dB_range@ALSA_0.9 1.0.16
  snd_tlv_parse_dB_info@ALSA_0.9 1.0.16
+ snd_tplg_add_object@ALSA_0.9 1.1.0
+ snd_tplg_build@ALSA_0.9 1.1.0
+ snd_tplg_build_file@ALSA_0.9 1.1.0
+ snd_tplg_free@ALSA_0.9 1.1.0
+ snd_tplg_new@ALSA_0.9 1.1.0
+ snd_tplg_set_manifest_data@ALSA_0.9 1.1.0
+ snd_tplg_set_version@ALSA_0.9 1.1.0
+ snd_tplg_verbose@ALSA_0.9 1.1.0
  snd_use_case_free_list@ALSA_0.9 1.0.24.1
  snd_use_case_get@ALSA_0.9 1.0.24.1
  snd_use_case_get_list@ALSA_0.9 1.0.24.1

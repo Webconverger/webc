@@ -75,7 +75,7 @@ sub expand_val($) {
   my ($val) = @_;
 return undef unless $val;
 	die "Cannot handle PAM items\n" if /(?<!\\)\@/;
-  $val =~ s/(?<!\\)\${([^}]+)}/$ENV{$1}||""/eg;
+  $val =~ s/(?<!\\)\$\{([^}]+)\}/$ENV{$1}||""/eg;
   return $val;
 }
 

@@ -2,8 +2,8 @@
 
 if test $# -eq 0
 then
-	echo usage: $0 shellname '[shellname ...]' 1>&2
-	exit 1
+        echo usage: $0 shellname '[shellname ...]' 1>&2
+        exit 1
 fi
 
 file=/etc/shells
@@ -14,7 +14,7 @@ otmpfile=${file}.tmp2
 set -o noclobber
 
 trap "rm -f $tmpfile $otmpfile" EXIT
-        
+
 if ! cat $file > $tmpfile
 then
         cat 1>&2 <<EOF
@@ -27,8 +27,12 @@ fi
 # this is supposed to be reliable, not pretty
 for i
 do
-	grep -v "^${i}$" $tmpfile > $otmpfile || true
-	mv $otmpfile $tmpfile
+        REALDIR="$(dirname $(realpath -m $i))/$(basename $i)"
+        for j in "$i" "$REALDIR"
+        do
+                grep -v "^${j}$" $tmpfile > $otmpfile || true
+                mv $otmpfile $tmpfile
+        done
 done
 
 chmod --reference=$file $tmpfile

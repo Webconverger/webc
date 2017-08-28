@@ -151,7 +151,7 @@ do_netsetup ()
 				echo "search ${DNSDOMAIN}" >> /etc/resolv.conf
 			fi
 
-			for i in ${IPV4DNS0} ${IPV4DNS1} ${IPV4DNS1}
+			for i in ${IPV4DNS0} ${IPV4DNS1} ${IPV4DNS1} ${DNSSERVERS}
 			do
 				if [ -n "$i" ] && [ "$i" != 0.0.0.0 ]
 				then

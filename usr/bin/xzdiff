@@ -29,7 +29,7 @@ case ${0##*/} in
   *)     prog=xzdiff; cmp=${DIFF:-diff};;
 esac
 
-version="$prog (XZ Utils) 5.1.0alpha"
+version="$prog (XZ Utils) 5.2.2"
 
 usage="Usage: ${0##*/} [OPTION]... FILE1 [FILE2]
 Compare FILE1 to FILE2, using their uncompressed contents if they are
@@ -136,18 +136,38 @@ elif test $# -eq 2; then
             F=`expr "/$2" : '.*/\(.*\)[-.][ablmotxz2]*$'` || F=$prog
             tmp=
             trap '
-              test -n "$tmp" && rm -f "$tmp"
+              test -n "$tmp" && rm -rf "$tmp"
               (exit 2); exit 2
             ' HUP INT PIPE TERM 0
-            tmp=`mktemp -t -- "$F.XXXXXX"` || exit 2
-            $xz2 -cdfq -- "$2" > "$tmp" || exit 2
+            if type mktemp >/dev/null 2>&1; then
+              # Note that FreeBSD's mktemp isn't fully compatible with
+              # the implementations from mktemp.org and GNU coreutils.
+              # It is important that the -t argument is the last argument
+              # and that no "--" is used between -t and the template argument.
+              # This way this command works on all implementations.
+              tmp=`mktemp -d -t "$prog.XXXXXXXXXX"` || exit 2
+            else
+              # Fallback code if mktemp is missing. This isn't as
+              # robust as using mktemp since this doesn't try with
+              # different file names in case of a file name conflict.
+              #
+              # There's no need to save the original umask since
+              # we don't create any non-temp files. Note that using
+              # mkdir -m 0077 isn't secure since some mkdir implementations
+              # create the dir with the default umask and chmod the
+              # the dir afterwards.
+              umask 0077
+              mkdir -- "${TMPDIR-/tmp}/$prog.$$" || exit 2
+              tmp="${TMPDIR-/tmp}/$prog.$$"
+            fi
+            $xz2 -cdfq -- "$2" > "$tmp/$F" || exit 2
             xz_status=$(
               exec 4>&1
               ($xz1 -cdfq -- "$1" 4>&-; echo $? >&4) 3>&- |
-                eval "$cmp" - '"$tmp"' >&3
+                eval "$cmp" - '"$tmp/$F"' >&3
             )
             cmp_status=$?
-            rm -f "$tmp" || xz_status=$?
+            rm -rf "$tmp" || xz_status=$?
             trap - HUP INT PIPE TERM 0
             (exit $cmp_status)
           fi;;

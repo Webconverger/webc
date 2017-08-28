@@ -27,7 +27,7 @@ if [ "$1" = configure ]; then
     
         # Update the time zone
         echo $AREA/$ZONE > /etc/timezone
-	cp -f /usr/share/zoneinfo/$AREA/$ZONE /etc/localtime.dpkg-new && \
+	ln -nsf /usr/share/zoneinfo/$AREA/$ZONE /etc/localtime.dpkg-new && \
 	    mv -f /etc/localtime.dpkg-new /etc/localtime
 	which restorecon >/dev/null 2>&1 && restorecon /etc/localtime
     

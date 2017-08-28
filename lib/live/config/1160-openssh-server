@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## live-config(7) - System Configuration Components
-## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2006-2015 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -24,7 +24,7 @@ Init ()
 
 Config ()
 {
-	for _PROTOCOL in dsa rsa ecdsa
+	for _PROTOCOL in dsa rsa ecdsa ed25519
 	do
 		if [ ! -e /etc/ssh/ssh_host_${_PROTOCOL}_key ] &&
 		   grep -qs ssh_host_${_PROTOCOL}_key /etc/ssh/sshd_config

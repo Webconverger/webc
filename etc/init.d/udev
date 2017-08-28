@@ -1,11 +1,11 @@
 #!/bin/sh -e
 ### BEGIN INIT INFO
 # Provides:          udev
-# Required-Start:    mountkernfs 
-# Required-Stop:     
+# Required-Start:    mountkernfs
+# Required-Stop:
 # Default-Start:     S
 # Default-Stop:
-# Short-Description: Start udevd, populate /dev and load drivers.
+# Short-Description: Start systemd-udevd, populate /dev and load drivers.
 ### END INIT INFO
 
 # we need to unmount /dev/pts/ and remount it later over the devtmpfs
@@ -22,11 +22,11 @@ unmount_devpts() {
 # mount a devtmpfs over /dev, if somebody did not already do it
 mount_devtmpfs() {
   if grep -E -q "^[^[:space:]]+ /dev devtmpfs" /proc/mounts; then
-    mount -n -o remount,size=$tmpfs_size,mode=0755 -t devtmpfs devtmpfs /dev
+    mount -n -o remount,nosuid,size=$tmpfs_size,mode=0755 -t devtmpfs devtmpfs /dev
     return
   fi
 
-  if ! mount -n -o size=$tmpfs_size,mode=0755 -t devtmpfs devtmpfs /dev; then
+  if ! mount -n -o nosuid,size=$tmpfs_size,mode=0755 -t devtmpfs devtmpfs /dev; then
     log_failure_msg "udev requires devtmpfs support, not started"
     log_end_msg 1
   fi
@@ -40,17 +40,6 @@ create_dev_makedev() {
   else
     ln -sf /bin/true /dev/MAKEDEV
   fi
-}
-
-# If the initramfs does not have /run, the initramfs udev database must
-# be migrated from /dev/.udev/ to /run/udev/.
-move_udev_database() {
-  [ -e "/dev/.udev/" ] || return 0
-  [ ! -e /run/udev/ ] || return 0
-  [ -e /run/ ] || return 0
-  mountpoint -q /run/ || return 0
-
-  mv /dev/.udev/ /run/udev/ || true
 }
 
 supported_kernel() {
@@ -109,9 +98,12 @@ make_static_nodes() {
 
 ##############################################################################
 
-[ -x /sbin/udevd ] || exit 0
-
 PATH="/sbin:/bin"
+NAME="systemd-udevd"
+DAEMON="/lib/systemd/systemd-udevd"
+DESC="the hotplug events dispatcher"
+
+[ -x $DAEMON ] || exit 0
 
 # defaults
 tmpfs_size="10M"
@@ -163,13 +155,8 @@ case "$1" in
     if init_is_upstart 2>/dev/null; then
 	exit 1
     fi
-    if mountpoint -q /dev/; then
-	TMPFS_MOUNTED=1
-    elif [ -e "/dev/.udev/" ]; then
-	log_warning_msg ".udev/ already exists on the static /dev"
-    fi
 
-    if [ ! -e "/dev/.udev/" -a ! -e "/run/udev/" ]; then
+    if [ ! -e "/run/udev/" ]; then
 	warn_if_interactive
     fi
 
@@ -177,9 +164,7 @@ case "$1" in
 	echo > /sys/kernel/uevent_helper
     fi
 
-    move_udev_database
-
-    if [ -z "$TMPFS_MOUNTED" ]; then
+    if ! mountpoint -q /dev/; then
 	unmount_devpts
 	mount_devtmpfs
 	[ -d /proc/1 ] || mount -n /proc
@@ -193,8 +178,8 @@ case "$1" in
     # set the SELinux context for devices created in the initramfs
     [ -x /sbin/restorecon ] && /sbin/restorecon -R /dev
 
-    log_daemon_msg "Starting the hotplug events dispatcher" "udevd"
-    if udevd --daemon; then
+    log_daemon_msg "Starting $DESC" "$NAME"
+    if $DAEMON --daemon; then
 	log_end_msg $?
     else
 	log_warning_msg $?
@@ -211,7 +196,7 @@ case "$1" in
 
     create_dev_makedev
 
-    # wait for the udevd childs to finish
+    # wait for the systemd-udevd childs to finish
     log_action_begin_msg "Waiting for /dev to be fully populated"
     if udevadm settle; then
 	log_action_end_msg 0
@@ -221,8 +206,8 @@ case "$1" in
     ;;
 
     stop)
-    log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
-    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    if start-stop-daemon --stop --name $NAME --user root --quiet --oknodo --retry 5; then
 	log_end_msg $?
     else
 	log_end_msg $?
@@ -233,15 +218,15 @@ case "$1" in
     if init_is_upstart 2>/dev/null; then
 	exit 1
     fi
-    log_daemon_msg "Stopping the hotplug events dispatcher" "udevd"
-    if start-stop-daemon --stop --name udevd --user root --quiet --oknodo --retry 5; then
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    if start-stop-daemon --stop --name $NAME --user root --quiet --oknodo --retry 5; then
 	log_end_msg $?
     else
 	log_end_msg $? || true
     fi
 
-    log_daemon_msg "Starting the hotplug events dispatcher" "udevd"
-    if udevd --daemon; then
+    log_daemon_msg "Starting $DESC" "$NAME"
+    if $DAEMON --daemon; then
 	log_end_msg $?
     else
 	log_end_msg $?
@@ -253,7 +238,7 @@ case "$1" in
     ;;
 
     status)
-    status_of_proc /sbin/udevd udevd && exit 0 || exit $?
+    status_of_proc $DAEMON $NAME && exit 0 || exit $?
     ;;
 
     *)

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## live-config(7) - System Configuration Components
-## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2006-2015 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -19,15 +19,9 @@
 ## The complete text of the GNU General Public License
 ## can be found in /usr/share/common-licenses/GPL-3 file.
 
-
 #set -e
 
-# Defaults
-LIVE_HOSTNAME="debian"
-LIVE_USERNAME="user"
-LIVE_USER_FULLNAME="Debian Live user"
-LIVE_USER_DEFAULT_GROUPS="audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor"
-export LIVE_HOSTNAME LIVE_USERNAME LIVE_USER_FULLNAME LIVE_USER_DEFAULT_GROUPS
+. /lib/live/init-config.sh
 
 DEBIAN_FRONTEND="noninteractive"
 DEBIAN_PRIORITY="critical"
@@ -39,16 +33,6 @@ _PROC_OPTIONS="onodev,noexec,nosuid"
 export _IP_SEPARATOR _PROC_OPTIONS
 
 _COMPONENTS="$(ls /lib/live/config/*)"
-
-# Reading configuration files from filesystem and live-media
-for _FILE in /etc/live/config.conf /etc/live/config/* \
-	     /lib/live/mount/medium/live/config.conf /lib/live/mount/medium/live/config/*
-do
-	if [ -e "${_FILE}" ]
-	then
-		. "${_FILE}"
-	fi
-done
 
 Cmdline ()
 {
@@ -84,55 +68,12 @@ Cmdline ()
 				_COMPONENTS=""
 				;;
 
-			# Shortcuts
-			live-config.noroot|noroot)
-				# Disable root access, no matter what mechanism
-				LIVE_CONFIG_NOROOT="true"
-				;;
-
-			live-config.noautologin|noautologin)
-				# Disables both console and graphical autologin.
-				LIVE_CONFIG_NOAUTOLOGIN="true"
-				;;
-
-			live-config.nottyautologin|nottyautologin)
-				# Disables console autologin.
-				LIVE_CONFIG_NOTTYAUTOLOGIN="true"
-				;;
-
-			live-config.nox11autologin|nox11autologin)
-				# Disables graphical autologin, no matter what mechanism
-				LIVE_CONFIG_NOX11AUTOLOGIN="true"
-				;;
-
 			# Special options
 			live-config.debug|debug)
 				LIVE_CONFIG_DEBUG="true"
 				;;
 		esac
 	done
-
-	# Exclude shortcuts specific components
-	case "${LIVE_CONFIG_NOROOT}" in
-		true)
-			# Disable root access, no matter what mechanism
-			LIVE_CONFIG_NOCOMPONENTS="${LIVE_CONFIG_NOCOMPONENTS},sudo,policykit"
-			;;
-	esac
-
-	case "${LIVE_CONFIG_NOAUTOLOGIN}" in
-		true)
-			# Disables both console and graphical autologin.
-			LIVE_CONFIG_NOCOMPONENTS="${LIVE_CONFIG_NOCOMPONENTS},gdm,gdm3,lightdm,lxdm,nodm,slim,xinit"
-			;;
-	esac
-
-	case "${LIVE_CONFIG_NOX11AUTOLOGIN}" in
-		true)
-			# Disables graphical autologin, no matter what mechanism
-			LIVE_CONFIG_NOCOMPONENTS="${LIVE_CONFIG_NOCOMPONENTS},gdm,gdm3,lightdm,lxdm,nodm,slim,xinit"
-			;;
-	esac
 
 	# Include requested components
 	if [ -n "${LIVE_CONFIG_COMPONENTS}" ]

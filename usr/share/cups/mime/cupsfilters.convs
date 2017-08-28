@@ -1,16 +1,14 @@
 #
-# "$Id: $"
-#
 #   MIME conversions file for OpenPrinting CUPS Filters.
 #
 #   Copyright 2007-2011 by Apple Inc.
 #   Copyright 1997-2007 by Easy Software Products.
+#   Copyright 2012-2016 by Till Kamppeter.
 #
 #   These coded instructions, statements, and computer programs are the
 #   property of Apple Inc. and are protected by Federal copyright
-#   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
-#   which should have been included with this file.  If this file is
-#   file is missing or damaged, see the license at "http://www.cups.org/".
+#   law.  Distribution and use rights are outlined in the file "COPYING"
+#   which should have been included with this file.
 #
 
 ########################################################################
@@ -36,13 +34,13 @@
 
 # CUPS file conversion rules for PostScript input when we are working with
 # the PDF printing workflow. General PostScript input should be converted to
-# PDF, so that pdftopdf is doing the page management on PDF data and the
+# PDF (see cupsfilters-ghostscript.convs as this is done by Ghostscript), so
+# that pdftopdf is doing the page management on PDF data and the
 # renderer/driver part renders PDF. An exception is made for PostScript
 # coming from the Adobe Reader. As this PostScript cannot be converted to PDF
 # if it comes from an encrypted PDF file, we simply override pstopdf and the
 # PDF workflow.
 
-application/postscript	application/pdf				0	pstopdf
 application/vnd.adobe-reader-postscript	application/vnd.cups-postscript	66	pstops
 
 application/pdf		application/vnd.cups-pdf		66	pdftopdf
@@ -85,9 +83,6 @@ application/vnd.cups-pdf	application/vnd.cups-postscript	100	pdftops
 # Raster filters...
 #
 
-application/vnd.cups-pdf	application/vnd.cups-raster	99	gstoraster
-application/vnd.cups-postscript	application/vnd.cups-raster	175	gstoraster
-application/vnd.cups-pdf	application/vnd.cups-raster	100	pdftoraster
 image/gif			application/vnd.cups-raster	100	imagetoraster
 image/png			application/vnd.cups-raster	100	imagetoraster
 image/jpeg			application/vnd.cups-raster	100	imagetoraster
@@ -115,6 +110,3 @@ application/x-shell		text/plain			100	-
 text/html			text/plain			100	-
 text/css			text/plain			100	-
 
-#
-# End of "$Id: $".
-#

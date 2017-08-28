@@ -1,4 +1,5 @@
 libselinux.so.1 libselinux1 #MINVER#
+* Build-Depends-Package: libselinux1-dev
  avc_add_callback@Base 1.32
  avc_audit@Base 1.32
  avc_av_stats@Base 1.32
@@ -36,6 +37,7 @@ libselinux.so.1 libselinux1 #MINVER#
  context_type_set@Base 1.32
  context_user_get@Base 1.32
  context_user_set@Base 1.32
+ dir_xattr_list@Base 2.6
  fgetfilecon@Base 1.32
  fgetfilecon_raw@Base 1.32
  fini_selinuxmnt@Base 2.1.0
@@ -92,9 +94,7 @@ libselinux.so.1 libselinux1 #MINVER#
  matchpathcon_init@Base 1.32
  matchpathcon_init_prefix@Base 1.32
  mode_to_security_class@Base 2.1.13
- myprintf@Base 2.0.65
  myprintf_compat@Base 2.0.65
- obj_class_compat@Base 2.0.65
  print_access_vector@Base 1.32
  query_user_context@Base 1.32
  realpath_not_final@Base 2.1.9
@@ -136,9 +136,14 @@ libselinux.so.1 libselinux1 #MINVER#
  security_set_boolean_list@Base 1.32
  security_setenforce@Base 1.32
  selabel_close@Base 2.0.65
+ selabel_cmp@Base 2.5
+ selabel_digest@Base 2.5
  selabel_lookup@Base 2.0.65
+ selabel_lookup_best_match@Base 2.5
+ selabel_lookup_best_match_raw@Base 2.5
  selabel_lookup_raw@Base 2.0.65
  selabel_open@Base 2.0.65
+ selabel_partial_match@Base 2.5
  selabel_stats@Base 2.0.65
  selabel_subs_init@Base 2.1.9
  selinux_binary_policy_path@Base 1.32
@@ -173,17 +178,26 @@ libselinux.so.1 libselinux1 #MINVER#
  selinux_mkload_policy@Base 1.32
  selinux_mnt@Base 1.32
  selinux_netfilter_context_path@Base 1.32
+ selinux_openrc_contexts_path@Base 2.6
+ selinux_openssh_contexts_path@Base 2.5
  selinux_path@Base 1.32
  selinux_policy_root@Base 1.32
  selinux_raw_context_to_color@Base 2.0.82
  selinux_raw_to_trans_context@Base 1.32
  selinux_removable_context_path@Base 1.32
  selinux_reset_config@Base 2.0.88
+ selinux_restorecon@Base 2.5
+ selinux_restorecon_default_handle@Base 2.5
+ selinux_restorecon_set_alt_rootpath@Base 2.6
+ selinux_restorecon_set_exclude_list@Base 2.5
+ selinux_restorecon_set_sehandle@Base 2.5
+ selinux_restorecon_xattr@Base 2.6
  selinux_securetty_types_path@Base 2.0.15
  selinux_sepgsql_context_path@Base 2.0.94
  selinux_set_callback@Base 2.0.65
  selinux_set_mapping@Base 2.0.65
  selinux_set_policy_root@Base 2.2
+ selinux_snapperd_contexts_path@Base 2.6
  selinux_status_close@Base 2.1.0
  selinux_status_deny_unknown@Base 2.1.0
  selinux_status_getenforce@Base 2.1.0

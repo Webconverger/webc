@@ -6,11 +6,6 @@ if [ "$1" = purge ]; then
 	rm -f /var/backups/acpid-cruft.tar.gz
 fi
 
-# Automatically added by dh_systemd_start
-if [ -d /run/systemd/system ]; then
-	systemctl --system daemon-reload >/dev/null || true
-fi
-# End automatically added section
 # Automatically added by dh_installinit
 if [ "$1" = "purge" ] ; then
 	update-rc.d acpid remove >/dev/null

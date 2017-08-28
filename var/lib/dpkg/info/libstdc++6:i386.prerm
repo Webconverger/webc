@@ -3,7 +3,7 @@
 set -e
 
 case "$1" in
-    remove)
+    remove|upgrade)
 	files=$(dpkg -L libstdc++6:i386 | awk -F/ 'BEGIN {OFS="/"} /\.py$/ {$NF=sprintf("__pycache__/%s.*.py[co]", substr($NF,1,length($NF)-3)); print}')
 	rm -f $files
 	dirs=$(dpkg -L libstdc++6:i386 | awk -F/ 'BEGIN {OFS="/"} /\.py$/ {NF--; print}' | sort -u)

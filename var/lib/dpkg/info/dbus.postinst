@@ -12,11 +12,11 @@ LAUNCHER=/usr/lib/dbus-1.0/dbus-daemon-launch-helper
 # dependent on sysvinit vs. Upstart vs. etc.) if we do it directly.
 reload_dbus_config() {
     [ -S /var/run/dbus/system_bus_socket ] || return 0
+
     dbus-send --print-reply --system --type=method_call \
         --dest=org.freedesktop.DBus \
         / org.freedesktop.DBus.ReloadConfig > /dev/null || true
 }
-
 
 if [ "$1" = triggered ]; then
     reload_dbus_config
@@ -42,29 +42,74 @@ if [ "$1" = configure ]; then
     dbus-uuidgen --ensure
 fi
 
-# Remove stop symlinks for runlevel 1 as killprocs already does the job for us.
-if [ "$1" = configure ] && dpkg --compare-versions "$2" lt-nl 1.2.24-1; then
-    rm -f /etc/rc1.d/K??dbus
-fi
-
 if [ "$1" = configure ] && [ -n "$2" ]; then
     # On upgrades, we only reload config, and don't restart (restarting the
     # system bus is not supported by upstream). The code added by
     # dh_installinit -r creates a start action, below.
 
-    if [ -x "/etc/init.d/dbus" ] && /etc/init.d/dbus status > /dev/null; then
-        # trigger an update notification which recommends to reboot
+    # Recommend a reboot if there is a dbus-daemon running in the same root
+    # as us. Deliberately not using anything init-related here, to be
+    # init-agnostic: if we get a false positive (at least one dbus-daemon
+    # is running but it isn't the system bus) that isn't the end of the
+    # world, because it's probably a session bus, so the user needs to
+    # log out and back in anyway.
+    #
+    # Debian has /usr/bin/dbus-daemon, Ubuntu has /bin/dbus-daemon.
+    # Look for both.
+    if pidof -c /bin/dbus-daemon /usr/bin/dbus-daemon >/dev/null; then
+        echo "A reboot is required to replace the running dbus-daemon." >&2
+        echo "Please reboot the system when convenient." >&2
+
+        # trigger an update notification that recommends a reboot
+        # (used by unattended-upgrades etc.)
+        touch /var/run/reboot-required || true
+
+        # same thing for the older update-notifier interface
         [ -x /usr/share/update-notifier/notify-reboot-required ] && \
             /usr/share/update-notifier/notify-reboot-required || true
     fi
-fi
 
-reload_dbus_config
+    # Create a symlink from the old bus setup to the new locations, so that
+    # dbus-daemon (<< 1.9.18) can reload successfully even though dbus
+    # does not support re-exec'ing itself. These are deliberately not
+    # conffiles so that they won't interfere with us removing the old
+    # conffile or moving it out of the way.
+    #
+    # Keep this until upgrades from versions << 1.9.18 are no longer
+    # supported (it can be removed after Debian 9 is released). It is not
+    # conditional on the version in $2, because we could conceivably
+    # have upgraded 1.8.x -> 1.10.0-1 -> 1.10.0-4 without an intervening
+    # reboot.
+    ln -fns /usr/share/dbus-1/session.conf /etc/dbus-1/session.conf
+    ln -fns /usr/share/dbus-1/system.conf /etc/dbus-1/system.conf
+fi
 
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/dbus" ]; then
-	update-rc.d dbus defaults >/dev/null
-	invoke-rc.d dbus start || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	# In case this system is running systemd, we need to ensure that all
+	# necessary tmpfiles (if any) are created before starting.
+	if [ -d /run/systemd/system ] ; then
+		systemd-tmpfiles --create /usr/lib/tmpfiles.d/dbus.conf >/dev/null || true
+	fi
 fi
 # End automatically added section
+# Automatically added by dh_installinit
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/dbus" ]; then
+		update-rc.d dbus defaults >/dev/null
+		invoke-rc.d dbus start || exit $?
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/session.conf 1.10.0-4\~ dbus -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.conf 1.10.0-4\~ dbus -- "$@"
+# End automatically added section
 
+
+# Do this after the debhelper-generated bits so that dpkg-maintscript-helper
+# will have finished moving configuration files around. We only need to do
+# this for upgrades, not new installations.
+if [ "$1" = configure ] && [ -n "$2" ]; then
+    reload_dbus_config
+fi

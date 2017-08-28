@@ -16,7 +16,8 @@ set -e
 flavour=$1
 
 package=dictionaries-common
-files="debian-ispell.el ispell.el flyspell.el"
+files_base="debian-ispell.el"
+files="$files_base ispell.el flyspell.el"
 source=/usr/share/emacs/site-lisp/${package}
 destination=/usr/share/${flavour}/site-lisp/${package}
 
@@ -35,6 +36,10 @@ case "$flavour" in
 	;;
     emacs*)
 	flags="--no-site-file"
+	emacs_version=$($flavour -no-site-file --version | head -n 1 | sed 's/^.* Emacs //' )
+	if dpkg --compare-versions ${emacs_version} ge "24.5"; then
+	    files=${files_base}
+	fi
 	;;
     *)
 	echo install/${package}: Ignoring emacsen flavour [${flavour}]
@@ -68,4 +73,3 @@ EOF
 fi
 
 exit 0;
-

@@ -20,6 +20,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_bind_text64@Base 3.8.7
  sqlite3_bind_text@Base 3.5.9
  sqlite3_bind_value@Base 3.5.9
+ sqlite3_bind_zeroblob64@Base 3.8.11
  sqlite3_bind_zeroblob@Base 3.5.9
  sqlite3_blob_bytes@Base 3.5.9
  sqlite3_blob_close@Base 3.5.9
@@ -74,6 +75,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_create_module_v2@Base 3.5.9
  sqlite3_data_count@Base 3.5.9
  sqlite3_data_directory@Base 3.7.13
+ sqlite3_db_cacheflush@Base 3.10.0
  sqlite3_db_config@Base 3.6.1
  sqlite3_db_filename@Base 3.7.10
  sqlite3_db_handle@Base 3.5.9
@@ -89,6 +91,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_errmsg@Base 3.5.9
  sqlite3_errstr@Base 3.7.15
  sqlite3_exec@Base 3.5.9
+ sqlite3_expanded_sql@Base 3.14.0
  sqlite3_expired@Base 3.5.9
  sqlite3_extended_errcode@Base 3.6.5
  sqlite3_extended_result_codes@Base 3.5.9
@@ -96,6 +99,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_finalize@Base 3.5.9
  sqlite3_free@Base 3.5.9
  sqlite3_free_table@Base 3.5.9
+ sqlite3_fts5_may_be_corrupt@Base 3.11.0
  sqlite3_get_autocommit@Base 3.5.9
  sqlite3_get_auxdata@Base 3.5.9
  sqlite3_get_table@Base 3.5.9
@@ -131,6 +135,11 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_prepare16_v2@Base 3.5.9
  sqlite3_prepare@Base 3.5.9
  sqlite3_prepare_v2@Base 3.5.9
+ sqlite3_preupdate_count@Base 3.13.0
+ sqlite3_preupdate_depth@Base 3.13.0
+ sqlite3_preupdate_hook@Base 3.13.0
+ sqlite3_preupdate_new@Base 3.13.0
+ sqlite3_preupdate_old@Base 3.13.0
  sqlite3_profile@Base 3.5.9
  sqlite3_progress_handler@Base 3.5.9
  sqlite3_randomness@Base 3.5.9
@@ -150,12 +159,14 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_result_int64@Base 3.5.9
  sqlite3_result_int@Base 3.5.9
  sqlite3_result_null@Base 3.5.9
+ sqlite3_result_subtype@Base 3.9.1
  sqlite3_result_text16@Base 3.5.9
  sqlite3_result_text16be@Base 3.5.9
  sqlite3_result_text16le@Base 3.5.9
  sqlite3_result_text64@Base 3.8.7
  sqlite3_result_text@Base 3.5.9
  sqlite3_result_value@Base 3.5.9
+ sqlite3_result_zeroblob64@Base 3.8.11
  sqlite3_result_zeroblob@Base 3.5.9
  sqlite3_rollback_hook@Base 3.5.9
  sqlite3_rtree_geometry_callback@Base 3.6.0
@@ -169,6 +180,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_soft_heap_limit@Base 3.5.9
  sqlite3_sourceid@Base 3.6.18
  sqlite3_sql@Base 3.5.9
+ sqlite3_status64@Base 3.8.9
  sqlite3_status@Base 3.6.0
  sqlite3_step@Base 3.5.9
  sqlite3_stmt_busy@Base 3.7.10
@@ -176,7 +188,9 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_stmt_status@Base 3.6.4
  sqlite3_strglob@Base 3.7.17
  sqlite3_stricmp@Base 3.7.11
+ sqlite3_strlike@Base 3.10.0
  sqlite3_strnicmp@Base 3.6.17
+ sqlite3_system_errno@Base 3.12.0
  sqlite3_table_column_metadata@Base 3.5.9
  sqlite3_temp_directory@Base 3.5.9
  sqlite3_test_control@Base 3.5.9
@@ -184,6 +198,7 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_threadsafe@Base 3.5.9
  sqlite3_total_changes@Base 3.5.9
  sqlite3_trace@Base 3.5.9
+ sqlite3_trace_v2@Base 3.14.0
  sqlite3_transfer_bindings@Base 3.5.9
  sqlite3_unlock_notify@Base 3.6.12
  sqlite3_update_hook@Base 3.5.9
@@ -195,9 +210,12 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_value_bytes16@Base 3.5.9
  sqlite3_value_bytes@Base 3.5.9
  sqlite3_value_double@Base 3.5.9
+ sqlite3_value_dup@Base 3.8.11
+ sqlite3_value_free@Base 3.8.11
  sqlite3_value_int64@Base 3.5.9
  sqlite3_value_int@Base 3.5.9
  sqlite3_value_numeric_type@Base 3.5.9
+ sqlite3_value_subtype@Base 3.9.1
  sqlite3_value_text16@Base 3.5.9
  sqlite3_value_text16be@Base 3.5.9
  sqlite3_value_text16le@Base 3.5.9
@@ -215,3 +233,37 @@ libsqlite3.so.0 libsqlite3-0 #MINVER#
  sqlite3_wal_checkpoint@Base 3.7.0
  sqlite3_wal_checkpoint_v2@Base 3.7.6.1
  sqlite3_wal_hook@Base 3.7.0
+ sqlite3changegroup_add@Base 3.13.0
+ sqlite3changegroup_add_strm@Base 3.13.0
+ sqlite3changegroup_delete@Base 3.13.0
+ sqlite3changegroup_new@Base 3.13.0
+ sqlite3changegroup_output@Base 3.13.0
+ sqlite3changegroup_output_strm@Base 3.13.0
+ sqlite3changeset_apply@Base 3.13.0
+ sqlite3changeset_apply_strm@Base 3.13.0
+ sqlite3changeset_concat@Base 3.13.0
+ sqlite3changeset_concat_strm@Base 3.13.0
+ sqlite3changeset_conflict@Base 3.13.0
+ sqlite3changeset_finalize@Base 3.13.0
+ sqlite3changeset_fk_conflicts@Base 3.13.0
+ sqlite3changeset_invert@Base 3.13.0
+ sqlite3changeset_invert_strm@Base 3.13.0
+ sqlite3changeset_new@Base 3.13.0
+ sqlite3changeset_next@Base 3.13.0
+ sqlite3changeset_old@Base 3.13.0
+ sqlite3changeset_op@Base 3.13.0
+ sqlite3changeset_pk@Base 3.13.0
+ sqlite3changeset_start@Base 3.13.0
+ sqlite3changeset_start_strm@Base 3.13.0
+ sqlite3session_attach@Base 3.13.0
+ sqlite3session_changeset@Base 3.13.0
+ sqlite3session_changeset_strm@Base 3.13.0
+ sqlite3session_create@Base 3.13.0
+ sqlite3session_delete@Base 3.13.0
+ sqlite3session_diff@Base 3.13.0
+ sqlite3session_enable@Base 3.13.0
+ sqlite3session_indirect@Base 3.13.0
+ sqlite3session_isempty@Base 3.13.0
+ sqlite3session_patchset@Base 3.13.0
+ sqlite3session_patchset_strm@Base 3.13.0
+ sqlite3session_table_filter@Base 3.13.0

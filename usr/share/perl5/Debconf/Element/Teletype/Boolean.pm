@@ -25,13 +25,18 @@ sub show {
 		$default=$n;
 	}
 
+	my $description=$this->question->description;
+	if (Debconf::Config->terse eq 'false') {
+		$description.=" [$y/$n]";
+	}
+
 	my $value='';
 
 	while (1) {
 		$_=$this->frontend->prompt(
 			default => $default,
 			completions => [$y, $n],
-			prompt => $this->question->description,
+			prompt => $description,
 			question => $this->question,
 		);
 		return unless defined $_;

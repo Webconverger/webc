@@ -890,7 +890,6 @@ ifupdown_unlock () {
 #
 ifup () {
 	local INTERFACES_FILE
-	local IFSTATE_FILE
 	local IFUP_RETVAL
 	local WPA_LOGICAL_IFACE
 
@@ -901,16 +900,6 @@ ifup () {
 		return 1
 	fi
 
-	if [ -e /etc/network/run/ifstate ]; then
-		# debian's ifupdown
-		IFSTATE_FILE="/etc/network/run/ifstate"
-	elif [ -e /run/network/ifstate ]; then
-		# ubuntu's
-		IFSTATE_FILE="/run/network/ifstate"
-	else
-		unset IFSTATE_FILE
-	fi
-	
 	if [ -z "$IF_WPA_MAPPING_SCRIPT_PRIORITY" ] && [ -n "$WPA_ID_STR" ]; then
 		WPA_LOGICAL_IFACE="$WPA_ID_STR"
 	fi
@@ -953,7 +942,7 @@ ifup () {
 
 		ifupdown_lock
 
-		if [ -n "$IFSTATE_FILE" ] && grep -q "^$WPA_IFACE=$WPA_IFACE" "$IFSTATE_FILE"; then
+		if /sbin/ifquery "$WPA_IFACE" | grep -q '^wpa-roam: ' ; then
 			# Force settings over the unconfigured "master" IFACE
 			/sbin/ifup -v --force "$WPA_IFACE=$WPA_LOGICAL_IFACE"
 		else

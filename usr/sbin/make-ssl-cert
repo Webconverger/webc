@@ -32,8 +32,10 @@ ask_via_debconf() {
     db_input high make-ssl-cert/altname || true
     db_go
     db_get make-ssl-cert/altname
-    AltName="$RET"
+    AddAltName="$RET"
     db_fset make-ssl-cert/altname seen false
+    SubjectAltName="DNS:$HostName"
+    [ -z "$AddAltName" ] || SubjectAltName="$SubjectAltName,$AddAltName"
 }
 
 make_snakeoil() {
@@ -44,15 +46,14 @@ make_snakeoil() {
         echo make-ssl-cert: 'make-ssl-cert generate-default-snakeoil --force-overwrite'
         echo make-ssl-cert: again.
     fi
+    SubjectAltName="DNS:$HostName"
     if [ ${#HostName} -gt 64 ] ; then
-        AltName="DNS:$HostName"
         HostName="$(hostname)"
     fi
 }
 
 create_temporary_cnf() {
-    sed -e s#@HostName@#"$HostName"# $template > $TMPFILE
-    [ -z "$AltName" ] || echo "subjectAltName=$AltName" >> $TMPFILE
+    sed -e s#@HostName@#"$HostName"# -e s#@SubjectAltName@#"$SubjectAltName"# $template > $TMPFILE
 }
 
 # Takes two arguments, the base layout and the output cert.
@@ -98,6 +99,8 @@ trap "rm -f $TMPFILE $TMPOUT" EXIT
 create_temporary_cnf
 
 # create the certificate.
+
+umask 077
 
 if [ "$1" != "generate-default-snakeoil" ]; then
     if ! openssl req -config $TMPFILE -new -x509 -days 3650 -nodes -sha256 \

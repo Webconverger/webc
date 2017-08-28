@@ -15,10 +15,6 @@
 #                  the UTC setting in /etc/default/rcS.  Additionally
 #                  source /etc/default/hwclock to permit configuration.
 
-# WARNING:	Please read /usr/share/doc/util-linux/README.Debian.hwclock
-#		before changing this file. You risk serious clock
-#		misbehaviour otherwise.
-
 ### BEGIN INIT INFO
 # Provides:          hwclock
 # Required-Start:    mountdevsubfs
@@ -27,6 +23,7 @@
 # Default-Start:     S
 # X-Start-Before:    checkroot
 # Default-Stop:      0 6
+# Short-Description: Sync hardware and system clock time.
 ### END INIT INFO
 
 # These defaults are user-overridable in /etc/default/hwclock
@@ -70,7 +67,7 @@ hwclocksh()
 		log_action_msg "Setting the system clock"
 
 		# Just for reporting.
-		if head -n 3 /etc/adjtime | tail -n 1 | grep -q '^UTC$' ; then
+		if sed '3!d' /etc/adjtime | grep -q '^UTC$'; then
 		    UTC="--utc"
 		else
 		    UTC=

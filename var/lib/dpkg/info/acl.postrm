@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = 'remove' ]; then
+  for file in chacl getfacl setfacl; do
+    if [ -L /usr/bin/$file ]; then
+      rm /usr/bin/$file
+    fi
+  done
+fi
+
+

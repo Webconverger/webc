@@ -4,14 +4,14 @@
 #
 
 [Unit]
-Description=Restore Sound Card State
+Description=Save/Restore Sound Card State
+Documentation=man:alsactl(1)
 ConditionPathExists=!/etc/alsa/state-daemon.conf
-ConditionPathExists=/var/lib/alsa/asound.state
-DefaultDependencies=no
+ConditionPathExistsGlob=/dev/snd/control*
 After=alsa-state.service
-Before=shutdown.target
-Conflicts=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=-/usr/sbin/alsactl -E HOME=/var/run/alsa restore
+RemainAfterExit=true
+ExecStart=-/usr/sbin/alsactl -E HOME=/run/alsa restore
+ExecStop=-/usr/sbin/alsactl -E HOME=/run/alsa store

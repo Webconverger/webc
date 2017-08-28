@@ -101,6 +101,9 @@ case "$1" in
 	update-default-wordlist)
 	  update-default-wordlist --triggered
 	  ;;
+	/var/lib/dictionaries-common/hunspell)
+	  update-dictcommon-hunspell
+	  ;;
 	*)
 	  echo "Unsupported trigger \"$trigger\"" >&2
       esac
@@ -116,7 +119,7 @@ case "$1" in
 esac
 
 # Automatically added by dh_installemacsen
-if [ "$1" = "configure" ] && [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common ]
+if [ "$1" = "configure" ] && [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common -a -x /usr/lib/emacsen-common/emacs-package-install ]
 then
 	/usr/lib/emacsen-common/emacs-package-install --postinst dictionaries-common
 fi

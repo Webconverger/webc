@@ -11,11 +11,13 @@ Documentation=man:systemd-random-seed.service(8) man:random(4)
 DefaultDependencies=no
 RequiresMountsFor=/var/lib/systemd/random-seed
 Conflicts=shutdown.target
-After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service
+After=systemd-remount-fs.service
 Before=sysinit.target shutdown.target
+ConditionVirtualization=!container
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/lib/systemd/systemd-random-seed load
 ExecStop=/lib/systemd/systemd-random-seed save
+TimeoutSec=30s

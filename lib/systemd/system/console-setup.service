@@ -1,0 +1,14 @@
+[Unit]
+Description=Set console font and keymap
+DefaultDependencies=no
+After=console-screen.service kbd.service local-fs.target
+RequiresMountsFor=/usr
+ConditionPathExists=/bin/setupcon
+
+[Service]
+Type=oneshot
+ExecStart=/lib/console-setup/console-setup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

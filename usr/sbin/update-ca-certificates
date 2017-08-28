@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2003 Fumitoshi UKAI <ukai@debian.or.jp>
 # Copyright (c) 2009 Philipp Kern <pkern@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -23,6 +23,7 @@
 
 verbose=0
 fresh=0
+default=0
 CERTSCONF=/etc/ca-certificates.conf
 CERTSDIR=/usr/share/ca-certificates
 LOCALCERTSDIR=/usr/local/share/ca-certificates
@@ -36,6 +37,9 @@ do
     --verbose|-v)
       verbose=1;;
     --fresh|-f)
+      fresh=1;;
+    --default|-d)
+      default=1
       fresh=1;;
     --certsconf)
       shift
@@ -91,7 +95,7 @@ add() {
   if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
   then
     ln -sf "$CERT" "$PEM"
-    echo +$PEM >> "$ADDED"
+    echo "+$PEM" >> "$ADDED"
   fi
   # Add trailing newline to certificate, if it is missing (#635570)
   sed -e '$a\' "$CERT" >> "$TEMPBUNDLE"
@@ -103,36 +107,44 @@ remove() {
   if test -L "$PEM"
   then
     rm -f "$PEM"
-    echo -$PEM >> "$REMOVED"
+    echo "-$PEM" >> "$REMOVED"
   fi
 }
 
-cd $ETCCERTSDIR
+cd "$ETCCERTSDIR"
 if [ "$fresh" = 1 ]; then
-  echo -n "Clearing symlinks in $ETCCERTSDIR..."
+  echo "Clearing symlinks in $ETCCERTSDIR..."
   find . -type l -print | while read symlink
   do
-    case $(readlink $symlink) in
+    case $(readlink "$symlink") in
       $CERTSDIR*|$LOCALCERTSDIR*) rm -f $symlink;;
     esac
   done
   find . -type l -print | while read symlink
   do
-    test -f $symlink || rm -f $symlink
+    test -f "$symlink" || rm -f "$symlink"
   done
   echo "done."
 fi
 
-echo -n "Updating certificates in $ETCCERTSDIR... "
+echo "Updating certificates in $ETCCERTSDIR..."
+
+# Add default certificate authorities if requested
+if [ "$default" = 1 ]; then
+  find -L "$CERTSDIR" -type f -name '*.crt' | sort | while read crt
+  do
+    add "$crt"
+  done
+fi
 
 # Handle certificates that should be removed.  This is an explicit act
 # by prefixing lines in the configuration files with exclamation marks (!).
-sed -n -e '/^$/d' -e 's/^!//p' $CERTSCONF | while read crt
+sed -n -e '/^$/d' -e 's/^!//p' "$CERTSCONF" | while read crt
 do
   remove "$CERTSDIR/$crt"
 done
 
-sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
+sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read crt
 do
   if ! test -f "$CERTSDIR/$crt"
   then
@@ -178,17 +190,16 @@ echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
 if [ -d "$HOOKSDIR" ]
 then
 
-echo -n "Running hooks in $HOOKSDIR...."
-VERBOSE_ARG=
-[ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
-eval run-parts $VERBOSE_ARG --test -- $HOOKSDIR | while read hook
-do
-  ( cat $ADDED
-    cat $REMOVED ) | $hook || echo E: $hook exited with code $?.
-done
-echo "done."
+  echo "Running hooks in $HOOKSDIR..."
+  VERBOSE_ARG=
+  [ "$verbose" = 0 ] || VERBOSE_ARG="--verbose"
+  eval run-parts "$VERBOSE_ARG" --test -- "$HOOKSDIR" | while read hook
+  do
+    ( cat "$ADDED"
+      cat "$REMOVED" ) | "$hook" || echo "E: $hook exited with code $?."
+  done
+  echo "done."
 
 fi
 
 # vim:set et sw=2:
-

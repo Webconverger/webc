@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+dpkg-maintscript-helper rm_conffile /etc/init.d/keyboard-setup 1.138~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/console-setup 1.138~ -- "$@"
+if [ -x "/etc/init.d/keyboard-setup" ]; then
+    update-rc.d keyboard-setup remove >/dev/null
+fi
+if [ -x "/etc/init.d/console-setup" ]; then
+    update-rc.d console-setup remove >/dev/null
+fi
+
+

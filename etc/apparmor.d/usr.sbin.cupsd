@@ -4,7 +4,7 @@
 
 #include <tunables/global>
 
-/usr/sbin/cupsd {
+/usr/sbin/cupsd flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/bash>
   #include <abstractions/authentication>
@@ -42,9 +42,9 @@
   network econet dgram,
   network ash dgram,
 
-  /bin/bash ixr,
-  /bin/dash ixr,
-  /bin/hostname ixr,
+  /{usr/,}bin/bash ixr,
+  /{usr/,}bin/dash ixr,
+  /{usr/,}bin/hostname ixr,
   /dev/lp* rw,
   deny /dev/tty rw,  # silence noise
   /dev/ttyS* rw,
@@ -72,8 +72,8 @@
   /sys/** r,
   /usr/bin/* ixr,
   /usr/sbin/* ixr,
-  /bin/* ixr,
-  /sbin/* ixr,
+  /{usr/,}bin/* ixr,
+  /{usr/,}sbin/* ixr,
   /usr/lib/** rm,
 
   # backends which come with CUPS can be confined
@@ -141,7 +141,9 @@
   # silence noise
   deny /etc/udev/udev.conf r,
 
-  profile third_party {
+  signal peer=/usr/sbin/cupsd//third_party,
+  unix peer=(label=/usr/sbin/cupsd//third_party),
+  profile third_party flags=(attach_disconnected) {
     # third party backends, filters, and drivers get relatively no restrictions
     # as they often need high privileges, are unpredictable or otherwise beyond
     # our control
@@ -149,6 +151,10 @@
     capability,
     audit deny capability mac_admin,
     network,
+    dbus,
+    signal,
+    ptrace,
+    unix,
   }
 
   # Site-specific additions and overrides. See local/README for details.
@@ -174,9 +180,9 @@
 
   @{PROC}/*/auxv r,
 
-  /bin/dash ixr,
-  /bin/bash ixr,
-  /bin/cp ixr,
+  /{usr/,}bin/dash ixr,
+  /{usr/,}bin/bash ixr,
+  /{usr/,}bin/cp ixr,
   /etc/papersize r,
   /etc/cups/cups-pdf.conf r,
   @{HOME}/PDF/ rw,

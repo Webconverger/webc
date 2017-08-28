@@ -1,6 +1,6 @@
 _fsck_module()
 {
-	local cur prev OPTS DEVS
+	local cur prev OPTS
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
@@ -32,8 +32,7 @@ _fsck_module()
 			return 0
 			;;
 	esac
-	while read dev; do DEVS+="$dev " ; done < <(lsblk -pnro name)
-	COMPREPLY=( $(compgen -W "$DEVS" -- $cur) )
+	COMPREPLY=( $(compgen -W "$(find -L /dev/ -type b 2>/dev/null)" -- $cur) )
 	return 0
 }
 complete -F _fsck_module fsck

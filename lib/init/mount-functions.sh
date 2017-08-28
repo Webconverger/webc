@@ -174,6 +174,19 @@ domount () {
 	# Mount options from fstab
 	FSTAB_OPTS=
 
+	if [ "$MOUNTMODE" = remount ] ; then
+		case "$KERNEL" in
+			*FreeBSD)
+				case "$PRIFSTYPE" in
+					proc|tmpfs|sysfs)
+						# can't be remounted
+						return 0
+					;;
+				esac
+			;;
+		esac
+	fi
+
 	if [ "$PRIFSTYPE" = proc ]; then
 		case "$KERNEL" in
 			Linux)     FSTYPE=proc ;;
@@ -459,6 +472,16 @@ post_mountall ()
 mount_run ()
 {
 	MNTMODE="$1"
+	KERNEL="$(uname -s)"
+
+	if [ "$MNTMODE" = remount ] ; then
+		case "$KERNEL" in
+			*FreeBSD)
+				# tmpfs can't be remounted
+				return 0
+			;;
+		esac
+	fi
 
 	# Needed to determine if root is being mounted read-only.
 	read_fstab
@@ -489,6 +512,16 @@ mount_run ()
 mount_lock ()
 {
 	MNTMODE="$1"
+	KERNEL="$(uname -s)"
+
+	if [ "$MNTMODE" = remount ] ; then
+		case "$KERNEL" in
+			*FreeBSD)
+				# tmpfs can't be remounted
+				return 0
+			;;
+		esac
+	fi
 
 	# Make lock directory as the replacement for /var/lock
 	[ -d /run/lock ] || mkdir --mode=755 /run/lock
@@ -504,7 +537,6 @@ mount_lock ()
 	    fi
 	fi
 
-	KERNEL="$(uname -s)"
 	NODEV="nodev,"
 	case "$KERNEL" in
 		*FreeBSD|GNU)  NODEV="" ;;

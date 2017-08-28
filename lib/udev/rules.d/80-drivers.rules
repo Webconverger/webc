@@ -9,6 +9,5 @@ SUBSYSTEM=="memstick", RUN{builtin}+="kmod load ms_block mspro_block"
 SUBSYSTEM=="i2o", RUN{builtin}+="kmod load i2o_block"
 SUBSYSTEM=="module", KERNEL=="parport_pc", RUN{builtin}+="kmod load ppdev"
 KERNEL=="mtd*ro", ENV{MTD_FTL}=="smartmedia", RUN{builtin}+="kmod load sm_ftl"
-SUBSYSTEM=="scsi", ENV{DEVTYPE}=="scsi_device", TEST!="[module/sg]", RUN{builtin}+="kmod load sg"
 
 LABEL="drivers_end"

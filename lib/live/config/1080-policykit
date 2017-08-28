@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## live-config(7) - System Configuration Components
-## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2006-2015 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -16,6 +16,10 @@ Cmdline ()
 	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
+			live-config.noroot|noroot)
+				LIVE_CONFIG_NOROOT="true"
+				;;
+
 			live-config.username=*|username=*)
 				LIVE_USERNAME="${_PARAMETER#*username=}"
 				;;
@@ -25,6 +29,13 @@ Cmdline ()
 
 Init ()
 {
+	# Disable root access, no matter what mechanism
+	case "${LIVE_CONFIG_NOROOT}" in
+		true)
+			exit 0
+			;;
+	esac
+
 	# Checking if package is installed
 	if [ ! -e /var/lib/dpkg/info/policykit-1.list ] || \
 	   [ -e /var/lib/live/config/policykit ]

@@ -43,15 +43,15 @@ class Dependencies(object):
 
     def export_to(self, dh):
         """Fill in debhelper's substvars."""
-        for i in self.depends:
+        for i in sorted(self.depends):
             dh.addsubstvar(self.package, 'python:Depends', i)
-        for i in self.recommends:
+        for i in sorted(self.recommends):
             dh.addsubstvar(self.package, 'python:Recommends', i)
-        for i in self.suggests:
+        for i in sorted(self.suggests):
             dh.addsubstvar(self.package, 'python:Suggests', i)
-        for i in self.enhances:
+        for i in sorted(self.enhances):
             dh.addsubstvar(self.package, 'python:Enhances', i)
-        for i in self.breaks:
+        for i in sorted(self.breaks):
             dh.addsubstvar(self.package, 'python:Breaks', i)
         for i in self.rtscripts:
             dh.add_rtupdate(self.package, i)

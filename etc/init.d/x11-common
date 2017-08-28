@@ -6,6 +6,7 @@
 # Required-Stop:     $remote_fs
 # Default-Start:     S
 # Default-Stop:
+# Short-Description: set up the X server and ICE socket directories
 ### END INIT INFO
 
 set -e
@@ -74,6 +75,7 @@ set_up_dir () {
         ;;
     esac
   done
+  do_restorecon "$DIR"
 
   return 0
 }
