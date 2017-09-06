@@ -16,13 +16,13 @@ before_install:
 - sha1=($(sha1sum ${TRAVIS_COMMIT::7}.iso))
 - echo ISO SHA1 ${sha1}
 - export key="$(date --rfc-3339=date)/${isobuildersha256}-${TRAVIS_COMMIT::7}/${sha1}.iso"
-- aws s3 cp --storage-class REDUCED_REDUNDANCY --acl public-read --metadata "travis_build_id=${TRAVIS_BUILD_ID}" ${TRAVIS_COMMIT::7}.iso
-  s3://build.webconverger.com/$key
-- touch index.html
-- aws s3 cp --acl public-read --storage-class REDUCED_REDUNDANCY index.html s3://build.webconverger.com/latest.iso 
-  --website-redirect="https://build.webconverger.com/$key"
-- aws s3api list-objects --bucket build.webconverger.com --output json --prefix "20" | jq -r '.Contents | sort_by(.LastModified) | reverse | .[] | .Key + " " + ((.Size / 1000000000)|tostring)' | while read -r key size; do buildid=$(aws s3api head-object --bucket build.webconverger.com --key "$key" | jq -r .Metadata.travis_build_id);printf "<li><a href=https://travis-ci.org/Webconverger/webc/builds/%s>TravisCI</a> <a href=/%s>%s %.2f GB</a></li>\n" "$buildid" "$key" "$key" "$size"; done > index.html
-- aws s3 cp --acl public-read --storage-class REDUCED_REDUNDANCY index.html s3://build.webconverger.com/index.html
+- aws s3 cp --storage-class STANDARD_IA --acl public-read --metadata "travis_build_id=${TRAVIS_BUILD_ID}" ${TRAVIS_COMMIT::7}.iso s3://build.webconverger.com/$key
+- if [[ $TRAVIS_BRANCH = master ]]; then
+  touch index.html;
+  aws s3 cp --acl public-read --storage-class STANDARD_IA index.html s3://build.webconverger.com/latest.iso --website-redirect="https://build.webconverger.com/$key" ;
+  aws s3api list-objects --bucket build.webconverger.com --output json --prefix "20" | jq -r '.Contents | sort_by(.LastModified) | reverse | .[] | .Key + " " + ((.Size / 1000000000)|tostring)' | while read -r key size; do buildid=$(aws s3api head-object --bucket build.webconverger.com --key "$key" | jq -r .Metadata.travis_build_id);printf "<li><a href=https://travis-ci.org/Webconverger/webc/builds/%s>TravisCI</a> <a href=/%s>%s %.2f GB</a></li>\n" "$buildid" "$key" "$key" "$size"; done > index.html;
+  aws s3 cp --acl public-read --storage-class STANDARD_IA index.html s3://build.webconverger.com/index.html;
+  fi
 
 env:
   global:
