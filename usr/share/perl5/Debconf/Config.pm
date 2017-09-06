@@ -27,7 +27,7 @@ sub _hashify ($$) {
 	my $text=shift;
 	my $hash=shift;
 
-	$text =~ s/\${([^}]+)}/$ENV{$1}/eg;
+	$text =~ s/\$\{([^}]+)\}/$ENV{$1}/eg;
 	
 	my %ret;
 	my $i;

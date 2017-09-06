@@ -36,7 +36,7 @@ set -e
 
 case "$1" in
 	start|restart|force-reload|reload)
-		log_action_begin_msg "Setting kernel variables "
+		log_action_begin_msg "Setting kernel variables"
 		STATUS=0
 		$SYSCTL $QUIET_SYSCTL --system || STATUS=$?
 		log_action_end_msg $STATUS

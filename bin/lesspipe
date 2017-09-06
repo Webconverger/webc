@@ -98,7 +98,7 @@ if [ $# -eq 1 ] ; then
 				if [ -x "`which bunzip2`" ]; then bunzip2 -dc "$1"
 				else echo "No bunzip2 available"; fi ;;
 
-			*.deb|*.udeb|*.ddeb)
+			*.deb|*.udeb|*.ddebi|*.ipk)
 				echo "$1:"; dpkg --info "$1"
 				echo
 				echo '*** Contents:'; dpkg-deb --contents "$1"

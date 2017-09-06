@@ -1,19 +1,19 @@
 {#job_id=0?:
 <TABLE CLASS="list" SUMMARY="Job List">
 <THEAD>
-<TR><TH><A HREF="{THISURL}?QUERY={?QUERY}&amp;WHICH_JOBS={?WHICH_JOBS}&amp;FIRST={FIRST}&amp;ORDER={ORDER=dec?asc:dec}">{ORDER=dec?<SMALL>&#x25b2;</SMALL> ID <SMALL>&#x25b2;</SMALL>:<SMALL>&#x25bc;</SMALL> ID <SMALL>&#x25bc;</SMALL>}</A></TH><TH>Nome</TH><TH>Usuário</TH><TH>Tamanho</TH><TH>Páginas</TH><TH>Estado</TH><TH>Controle</TH></TR>
+<TR><TH>ID</TH><TH>Nome</TH><TH>Usu&Atilde;&Acirc;¡rio</TH><TH>Tamanho</TH><TH>P&Atilde;&Acirc;¡ginas</TH><TH>Estado</TH><TH>Controle</TH></TR>
 </THEAD>
 <TBODY>
 {[job_id]
 <TR VALIGN="TOP">
 <TD><A HREF="{job_printer_uri}">{job_printer_name}</A>-{job_id}{?phone? ({phone}):}&nbsp;</TD>
 <TD>{?job_name=?Desconhecido:{job_name}}&nbsp;</TD>
-<TD>{?job_originating_user_name=?Oculto:{job_originating_user_name}}&nbsp;</TD>
+<TD>{?job_originating_user_name=?Retido:{job_originating_user_name}}&nbsp;</TD>
 <TD>{job_k_octets}k&nbsp;</TD>
 <TD>{job_media_sheets_completed=0?Desconhecido:{?job_media_sheets_completed}}&nbsp;</TD>
-<TD>{job_state=3?pendente desde<BR>{time_at_creation}:{job_state=4?retido desde<BR>{time_at_creation}:
-{job_state=5?processando desde<BR>{time_at_processing}:{job_state=6?parado:
-{job_state=7?cancelado em<BR>{time_at_completed}:{job_state=8?abortado:completou em<BR>{time_at_completed}}}}}}}&nbsp;{job_printer_state_message?<BR>
+<TD>{job_state=3?Pendente desde<BR>{?time_at_creation=?Unknown:{time_at_creation}}:{job_state=4?Retido desde<BR>{?time_at_creation=?Unknown:{time_at_creation}}:
+{job_state=5?Processando desde<BR>{?time_at_processing=?Unknown:{time_at_processing}}:{job_state=6?parado:
+{job_state=7?Cancelado em<BR>{?time_at_completed=?Unknown:{time_at_completed}}:{job_state=8?Abortado:Conclu&iacute;do em<BR>{?time_at_completed=?Unknown:{time_at_completed}}}}}}}}&nbsp;{job_printer_state_message?<BR>
 <EM>"{job_printer_state_message}"</EM>:}</TD>
 <TD>
 {job_preserved>0?{job_state>5?

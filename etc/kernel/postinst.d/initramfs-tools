@@ -3,7 +3,7 @@
 version="$1"
 bootopt=""
 
-[ -x /usr/sbin/update-initramfs ] || exit 0
+command -v update-initramfs >/dev/null 2>&1 || exit 0
 
 # passing the kernel version is required
 if [ -z "${version}" ]; then

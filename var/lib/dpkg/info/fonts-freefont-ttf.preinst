@@ -25,7 +25,7 @@ install|upgrade)
       PKG="ttf-freefont"
       FILE="/etc/defoma/hints/${PKG}.hints"
       if [ -f $FILE ]; then
-          if [ -x /usr/bin/defoma-font ]; then
+          if [ -x `which defoma-font` ]; then
 	      defoma-font purge-all $FILE || true
 	  fi
       fi

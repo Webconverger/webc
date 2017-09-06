@@ -114,7 +114,7 @@ check_dev ()
 				ISO_DEVICE=$(dirname ${ISO_DEVICE})
 				[ -b "$ISO_DEVICE" ] && break
 				i=$(($i -1))
-		        done
+			done
 		fi
 
 		if [ "$ISO_DEVICE" = "/" ]
@@ -420,6 +420,12 @@ is_supported_fs ()
 		return 1
 	fi
 
+	# get_fstype might report "unknown" or "swap", ignore it as no such kernel module exists
+	if [ "${fstype}" = "unknown" ] || [ "${fstype}" = "swap" ]
+	then
+		return 1
+	fi
+
 	# Try to look if it is already supported by the kernel
 	if grep -q ${fstype} /proc/filesystems
 	then
@@ -449,7 +455,7 @@ is_supported_fs ()
 
 get_fstype ()
 {
-	/sbin/blkid -s TYPE -o value $1 2>/dev/null
+	blkid -s TYPE -o value $1 2>/dev/null
 }
 
 where_is_mounted ()
@@ -507,7 +513,7 @@ base_path ()
 {
 	testpath="${1}"
 	mounts="$(awk '{print $2}' /proc/mounts)"
-	testpath="$(busybox realpath ${testpath})"
+	testpath="$(realpath ${testpath})"
 
 	while true
 	do
@@ -625,7 +631,7 @@ setup_loop ()
 					echo "${passphrase}" > /tmp/passphrase
 					unset passphrase
 					exec 9</tmp/passphrase
-					/sbin/losetup ${options} -e "${encryption}" -p 9 "${dev}" "${fspath}"
+					losetup ${options} -e "${encryption}" -p 9 "${dev}" "${fspath}"
 					error=${?}
 					exec 9<&-
 					rm -f /tmp/passphrase
@@ -732,7 +738,7 @@ mount_persistence_media ()
 		fi
 	elif [ "${backing}" != "${old_backing}" ]
 	then
-		if ! mount --move ${old_backing} ${backing} >/dev/null
+		if ! mount -o move ${old_backing} ${backing} >/dev/null
 		then
 			[ -z "${probe}" ] && log_warning_msg "Failed to move persistence media ${device}"
 			rmdir "${backing}"
@@ -772,7 +778,7 @@ close_persistence_media ()
 
 	if is_active_luks_mapping ${device}
 	then
-		/sbin/cryptsetup luksClose ${device}
+		cryptsetup luksClose ${device}
 	fi
 }
 
@@ -786,7 +792,7 @@ open_luks_device ()
 		opts="${opts} --readonly"
 	fi
 
-	if /sbin/cryptsetup status "${name}" >/dev/null 2>&1
+	if cryptsetup status "${name}" >/dev/null 2>&1
 	then
 		re="^[[:space:]]*device:[[:space:]]*\([^[:space:]]*\)$"
 		opened_dev=$(cryptsetup status ${name} 2>/dev/null | grep "${re}" | sed "s|${re}|\1|")
@@ -827,7 +833,7 @@ open_luks_device ()
 	while true
 	do
 		$cryptkeyscript "$cryptkeyprompt" | \
-			/sbin/cryptsetup -T 1 luksOpen ${dev} ${name} ${opts}
+			cryptsetup -T 1 luksOpen ${dev} ${name} ${opts}
 
 		if [ 0 -eq ${?} ]
 		then
@@ -868,14 +874,14 @@ get_gpt_name ()
 {
     local dev
     dev="${1}"
-    /sbin/blkid -s PART_ENTRY_NAME -p -o value ${dev} 2>/dev/null
+    blkid -s PART_ENTRY_NAME -p -o value ${dev} 2>/dev/null
 }
 
 is_gpt_device ()
 {
     local dev
     dev="${1}"
-    [ "$(/sbin/blkid -s PART_ENTRY_SCHEME -p -o value ${dev} 2>/dev/null)" = "gpt" ]
+    [ "$(blkid -s PART_ENTRY_SCHEME -p -o value ${dev} 2>/dev/null)" = "gpt" ]
 }
 
 probe_for_gpt_name ()
@@ -915,7 +921,7 @@ probe_for_fs_label ()
 
 	for label in ${overlays}
 	do
-		if [ "$(/sbin/blkid -s LABEL -o value $dev 2>/dev/null)" = "${label}" ]
+		if [ "$(blkid -s LABEL -o value $dev 2>/dev/null)" = "${label}" ]
 		then
 			echo "${label}=${dev}"
 		fi
@@ -1074,18 +1080,18 @@ find_persistence_media ()
 			result=$(probe_for_file_name "${overlays}" ${dev})
 			if [ -n "${result}" ]
 			then
-			        local loopdevice
+				local loopdevice
 				loopdevice=${result##*=}
-			        if is_in_comma_sep_list luks ${PERSISTENCE_ENCRYPTION} && is_luks_partition ${loopdevice}
+				if is_in_comma_sep_list luks ${PERSISTENCE_ENCRYPTION} && is_luks_partition ${loopdevice}
 				then
-				        local luksfile
+					local luksfile
 					luksfile=""
 					if luksfile=$(open_luks_device "${loopdevice}")
 					then
-					        result=${result%%=*}
+						result=${result%%=*}
 						result="${result}=${luksfile}"
 					else
-					        losetup -d $loopdevice
+						losetup -d $loopdevice
 						result=""
 					fi
 				fi
@@ -1108,7 +1114,7 @@ find_persistence_media ()
 		# Close luks device if it isn't used
 		if [ -z "${result}" ] && [ -n "${luks_device}" ] && is_active_luks_mapping "${luks_device}"
 		then
-			/sbin/cryptsetup luksClose "${luks_device}"
+			cryptsetup luksClose "${luks_device}"
 		fi
 	done
 
@@ -1139,13 +1145,13 @@ get_mac ()
 is_luks_partition ()
 {
 	device="${1}"
-	/sbin/cryptsetup isLuks "${device}" 1>/dev/null 2>&1
+	cryptsetup isLuks "${device}" 1>/dev/null 2>&1
 }
 
 is_active_luks_mapping ()
 {
 	device="${1}"
-	/sbin/cryptsetup status "${device}" 1>/dev/null 2>&1
+	cryptsetup status "${device}" 1>/dev/null 2>&1
 }
 
 get_luks_backing_device ()
@@ -1163,6 +1169,10 @@ removable_dev ()
 
 	for sysblock in $(echo /sys/block/* | tr ' ' '\n' | grep -vE "/(loop|ram|dm-|fd)")
 	do
+		if [ ! -d "${sysblock}" ]; then
+			continue
+		fi
+
 		dev_ok=
 		if [ "$(cat ${sysblock}/removable)" = "1" ]
 		then
@@ -1208,6 +1218,10 @@ non_removable_dev ()
 
 	for sysblock in $(echo /sys/block/* | tr ' ' '\n' | grep -vE "/(loop|ram|dm-|fd)")
 	do
+		if [ ! -d "${sysblock}" ]; then
+			continue
+		fi
+
 		if [ "$(cat ${sysblock}/removable)" = "0" ]
 		then
 			case "${output_format}" in
@@ -1292,59 +1306,7 @@ do_union ()
 			rw_opt="rw"
 			ro_opt="rr+wh"
 			noxino_opt="noxino"
-			;;
 
-		unionfs-fuse)
-			rw_opt="RW"
-			ro_opt="RO"
-			;;
-
-		*)
-			rw_opt="rw"
-			ro_opt="ro"
-			;;
-	esac
-
-	case "${UNIONTYPE}" in
-		unionfs-fuse)
-			unionmountopts="-o cow -o noinitgroups -o default_permissions -o allow_other -o use_ino -o suid"
-			unionmountopts="${unionmountopts} ${unionrw}=${rw_opt}"
-			if [ -n "${unionro}" ]
-			then
-				for rofs in ${unionro}
-				do
-					unionmountopts="${unionmountopts}:${rofs}=${ro_opt}"
-				done
-			fi
-			( sysctl -w fs.file-max=391524 ; ulimit -HSn 16384
-			unionfs-fuse ${unionmountopts} "${unionmountpoint}" ) && \
-			( mkdir -p /run/sendsigs.omit.d
-			pidof unionfs-fuse >> /run/sendsigs.omit.d/unionfs-fuse || true )
-			;;
-
-		overlay)
-			# XXX: can multiple unionro be used? (overlayfs only handles two dirs, but perhaps they can be chained?)
-			# XXX: and can unionro be optional? i.e. can overlayfs skip lowerdir?
-			if echo ${unionro} | grep -q " "
-			then
-				panic "Multiple lower filesystems are currently not supported with overlayfs (unionro = ${unionro})."
-			elif [ -z "${unionro}"	]
-			then
-				panic "Overlayfs needs at least one lower filesystem (read-only branch)."
-			fi
-
-			# overlayfs requires:
-			# + a workdir to become mounted
-			# + workdir and upperdir to reside under the same mount
-			# + workdir and upperdir to be in separate directories
-			mkdir "${unionrw}/rw"
-			mkdir "${unionrw}/work"
-			unionmountopts="-o noatime,lowerdir=${unionro},upperdir=${unionrw}/rw,workdir=${unionrw}/work"
-
-			mount -t ${UNIONTYPE} ${unionmountopts} ${UNIONTYPE} "${unionmountpoint}"
-			;;
-
-		*)
 			unionmountopts="-o noatime,${noxino_opt},dirs=${unionrw}=${rw_opt}"
 			if [ -n "${unionro}" ]
 			then
@@ -1353,9 +1315,28 @@ do_union ()
 					unionmountopts="${unionmountopts}:${rofs}=${ro_opt}"
 				done
 			fi
-			mount -t ${UNIONTYPE} ${unionmountopts} ${UNIONTYPE} "${unionmountpoint}"
+			;;
+
+		overlay)
+			# XXX: can unionro be optional? i.e. can overlay skip lowerdir?
+			if [ -z "${unionro}" ]
+			then
+				panic "overlay needs at least one lower filesystem (read-only branch)."
+			fi
+			# Multiple lower layers can now be given using the the colon (":") as a
+			# separator character between the directory names.
+			unionro="$(echo ${unionro} | sed -e 's| |:|g')"
+			# overlayfs requires:
+			# + a workdir to become mounted
+			# + workdir and upperdir to reside under the same mount
+			# + workdir and upperdir to be in separate directories
+			mkdir "${unionrw}/rw"
+			mkdir "${unionrw}/work"
+			unionmountopts="-o noatime,lowerdir=${unionro},upperdir=${unionrw}/rw,workdir=${unionrw}/work"
 			;;
 	esac
+
+	mount -t ${UNIONTYPE} ${unionmountopts} ${UNIONTYPE} "${unionmountpoint}"
 }
 
 get_custom_mounts ()
@@ -1617,7 +1598,7 @@ activate_custom_mounts ()
 			do_union ${dest} ${source} ${rootfs_dest_backing}
 		elif [ -n "${opt_bind}" ] && [ -z "${PERSISTENCE_READONLY}" ]
 		then
-			mount --bind "${source}" "${dest}"
+			mount -o bind "${source}" "${dest}"
 		elif [ -n "${opt_bind}" -o -n "${opt_union}" ] && [ -n "${PERSISTENCE_READONLY}" ]
 		then
 			# bind-mount and union mount are handled the same

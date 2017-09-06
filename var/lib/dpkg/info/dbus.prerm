@@ -6,9 +6,44 @@ if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
 	# Before stopping dbus-daemon, ensure that it won't just be
 	# reactivated by dbus.socket. The "invoke-rc.d dbus stop"
 	# added by debhelper, below, will harmlessly not do anything.
-	systemctl stop dbus.socket dbus.service || exit $?
+	deb-systemd-invoke stop dbus.socket dbus.service || exit $?
 fi
 
+cleanup_symlinks=
+
+case "$1" in
+	(upgrade)
+		# Clean up compat symlinks on downgrade so that they
+		# don't end up as a circular inclusion. We do this even though
+		# downgrades are unsupported, because the failure mode is bad
+		# (dbus-daemon won't start).
+		if dpkg --compare-versions "$2" lt "1.10.2-1"; then
+			cleanup_symlinks=yes
+		fi
+		;;
+
+	(remove)
+		# Also clean up /etc/dbus-1/s*.conf compat symlinks on remove
+		cleanup_symlinks=yes
+		;;
+esac
+
+if [ -n "$cleanup_symlinks" ]; then
+	for bus in system session; do
+		conf="/etc/dbus-1/${bus}.conf"
+		exp_target="/usr/share/dbus-1/${bus}.conf"
+		target="$(readlink -f "${conf}")" || continue
+
+		if [ -h "${conf}" ] && [ "_${target}" = "_${exp_target}" ]; then
+			rm -f "${conf}"
+		fi
+	done
+fi
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/session.conf 1.10.0-4\~ dbus -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.conf 1.10.0-4\~ dbus -- "$@"
+# End automatically added section
 # Automatically added by dh_installinit
 if [ -x "/etc/init.d/dbus" ] && [ "$1" = remove ]; then
 	invoke-rc.d dbus stop || exit $?

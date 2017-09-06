@@ -41,7 +41,7 @@ is_ignored_file() {
 	return 1
 }
 
-VERSION="`basename $0` ver. 0.91-ubuntu1"
+VERSION="`basename $0` ver. 1.48"
 USAGE="Usage: `basename $0` < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 SERVICE=
@@ -184,9 +184,18 @@ update_openrc_started_symlinks() {
 if [ -n "$is_systemd" ]
 then
    UNIT="${SERVICE%.sh}.service"
+   # avoid deadlocks during bootup and shutdown from units/hooks
+   # which call "invoke-rc.d service reload" and similar, since
+   # the synchronous wait plus systemd's normal behaviour of
+   # transactionally processing all dependencies first easily
+   # causes dependency loops
+   if ! systemctl --quiet is-active multi-user.target; then
+       sctl_args="--job-mode=ignore-dependencies"
+   fi
+
    case "${ACTION}" in
-      restart|status)
-         exec systemctl ${ACTION} ${UNIT}
+      restart|status|try-restart)
+         exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       start|stop)
          # Follow the principle of least surprise for SysV people:
@@ -195,10 +204,10 @@ then
          # Users who need more control will use systemctl directly.
          for unit in $(systemctl list-unit-files --full --type=socket 2>/dev/null | sed -ne 's/\.socket\s*[a-z]*\s*$/.socket/p'); do
              if [ "$(systemctl -p Triggers show $unit)" = "Triggers=${UNIT}" ]; then
-                systemctl ${ACTION} $unit
+                systemctl $sctl_args ${ACTION} $unit
              fi
          done
-         exec systemctl ${ACTION} ${UNIT}
+         exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       reload)
          _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
@@ -208,7 +217,7 @@ then
             # specific service.
             run_via_sysvinit
          else
-            exec systemctl reload "${UNIT}"
+            exec systemctl $sctl_args reload "${UNIT}"
          fi
          ;;
       force-stop)
@@ -217,9 +226,9 @@ then
       force-reload)
          _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
          if [ "$_canreload" = "CanReload=no" ]; then
-            exec systemctl restart "${UNIT}"
+            exec systemctl $sctl_args restart "${UNIT}"
          else
-            exec systemctl reload "${UNIT}"
+            exec systemctl $sctl_args reload "${UNIT}"
          fi
          ;;
       *)

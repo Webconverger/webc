@@ -2,7 +2,7 @@
 #
 #  script for aspell hash autorebuild in Debian systems
 #
-# Copyright 2004-2014 Agustin Martin Domingo <agmartin@debian.org>
+# Copyright 2004-2016 Agustin Martin Domingo <agmartin@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -182,6 +182,7 @@ use Debian::DictionariesCommon qw(dico_checkroot dico_activate_trigger);
 use Debconf::Client::ConfModule q(:all);
 use Getopt::Long;
 
+# Options processing
 GetOptions ('debug'     => \$debug,
 	    'dry-run'   => \$dry_run,
 	    'force'     => \$force,
@@ -190,6 +191,11 @@ GetOptions ('debug'     => \$debug,
 
 # Check if we are root
 dico_checkroot() unless $dry_run;
+
+# Honour 'DICT_COMMON_DEBUG' environment variable.
+unless ( $debug ){
+  $debug++ if defined $ENV{'DICT_COMMON_DEBUG'};
+}
 
 my %old_remove_data = ();
 my $aspell_compat   = get_aspell_compat();
@@ -226,7 +232,7 @@ if ( system("which aspell > /dev/null 2>&1" ) == 0 ){
         if ( -e "$_" ){
           $old_remove_data{$_}++;
         } else {
-          print STDERR "$program: \"$_\" in $remove_file not found. Upgrading info.\n";
+          debugprint "$program: \"$_\" in $remove_file not found. Upgrading info.";
         }
       }
       close $REMOVE;
@@ -312,7 +318,7 @@ in F</var/lib/aspell> (I<$lang> stands for the lang basename with variant
 if any, e.g. I<$lang> is something like I<gl-minimos> or I<en>))
 containing aspell compatibility version for last successful build
 or "0" or en empty file if hash is to be rebuild, as is for dictionary
-instalation and upgrades.
+installation and upgrades.
 
 When upgrading B<aspell>, script will check if version in I<$lang.compat>
 is different from I<aspell.compat> and rebuild if so, updating

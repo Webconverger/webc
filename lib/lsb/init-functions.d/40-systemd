@@ -4,29 +4,30 @@
 _use_systemctl=0
 if [ -d /run/systemd/system ]; then
 
-    if [ -n "${DPKG_MAINTSCRIPT_PACKAGE:-}" ]; then
-    # If we are called by a maintainer script, chances are good that a
-    # new or updated sysv init script was installed.  Reload daemon to
-    # pick up any changes.
-        systemctl daemon-reload || true
-    fi
+    prog=${0##*/}
+    service="${prog%.sh}.service"
+
+    # Don't try to run masked services. systemctl <= 230 always succeeds here,
+    # but later systemctls fail on nonexisting units; be compatible with both
+    state=$(systemctl -p LoadState --value show $service 2>/dev/null) || state="not-found"
+    [ "$state" = "masked" ] && exit 0
 
     # Redirect SysV init scripts when executed by the user
-    if [ $PPID -ne 1 ] && [ -z "${init:-}" ] && [ -z "${_SYSTEMCTL_SKIP_REDIRECT:-}" ]; then
+    if [ $PPID -ne 1 ] && [ -z "${SYSTEMCTL_SKIP_REDIRECT:-}" ]; then
         case $(readlink -f "$0") in
             /etc/init.d/*)
+                # If the state is not-found, this might be a newly installed SysV init
+                # script where systemd-sysv-generator has not been run yet.
+                [ "$state" != "not-found" ] || [ "$(id -u)" != 0 ] || systemctl --no-ask-password daemon-reload
+
                 _use_systemctl=1
                 # Some services can't reload through the .service file,
                 # but can through the init script.
-                prog=${0##*/}
-                service="${prog%.sh}.service"
-                if [ "$(systemctl -p CanReload show $service 2>/dev/null)" = "CanReload=no" ] && [ "${1:-}" = "reload" ]; then
+                if [ "$(systemctl -p CanReload --value show $service 2>/dev/null)" = "no" ] && [ "${1:-}" = "reload" ]; then
                     _use_systemctl=0
                 fi
                 ;;
         esac
-    else
-        export _SYSTEMCTL_SKIP_REDIRECT="true"
     fi
 fi
 
@@ -46,6 +47,9 @@ systemctl_redirect () {
         reload|force-reload)
             s="Reloading $prog configuration (via systemctl)"
             ;;
+        try-restart)
+            s="Restarting $prog if running (via systemctl)"
+            ;;
         restart)
             s="Restarting $prog (via systemctl)"
             ;;
@@ -53,14 +57,17 @@ systemctl_redirect () {
 
     service="${prog%.sh}.service"
 
-    # Don't try to run masked services. Don't check for errors, if
-    # this errors, we'll just call systemctl and possibly explode
-    # there.
-    state=$(systemctl -p LoadState show $service 2>/dev/null)
-    [ "$state" = "LoadState=masked" ] && return 0
+    # avoid deadlocks during bootup and shutdown from units/hooks
+    # which call "invoke-rc.d service reload" and similar, since
+    # the synchronous wait plus systemd's normal behaviour of
+    # transactionally processing all dependencies first easily
+    # causes dependency loops
+    if ! OUT=$(systemctl is-system-running 2>/dev/null) && [ "$OUT" != "degraded" ]; then
+        sctl_args="--job-mode=ignore-dependencies"
+    fi
 
     [ "$command" = status ] || log_daemon_msg "$s" "$service"
-    /bin/systemctl $command "$service"
+    /bin/systemctl --no-pager $sctl_args $command "$service"
     rc=$?
     [ "$command" = status ] || log_end_msg $rc
 
@@ -78,6 +85,7 @@ if [ "$_use_systemctl" = "1" ]; then
         "x$1" = xrestart -o \
         "x$1" = xreload -o \
         "x$1" = xforce-reload -o \
+        "x$1" = xtry-restart -o \
         "x$1" = xstatus ] ; then
 
         systemctl_redirect $0 $1

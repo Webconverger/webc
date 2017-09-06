@@ -10,12 +10,12 @@ Description=File System Check on %f
 Documentation=man:systemd-fsck@.service(8)
 DefaultDependencies=no
 BindsTo=%i.device
-After=systemd-readahead-collect.service systemd-readahead-replay.service %i.device systemd-fsck-root.service
-Before=shutdown.target
+Wants=systemd-fsckd.socket
+After=%i.device systemd-fsck-root.service local-fs-pre.target systemd-fsckd.socket
+Before=systemd-quotacheck.service shutdown.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/lib/systemd/systemd-fsck %f
-StandardOutput=journal+console
 TimeoutSec=0

@@ -11,11 +11,26 @@
 set -e
 
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/apt/apt.conf.d/20changelog 1.0.3 -- "@" -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/apt/apt.conf.d/20changelog 1.2.4\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cron.daily/apt 1.2.10\~ -- "$@"
 # End automatically added section
-# Automatically added by dh_makeshlibs
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable
 if [ "$1" = "remove" ]; then
-	ldconfig
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask apt-daily-upgrade.timer apt-daily.timer >/dev/null
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge apt-daily-upgrade.timer apt-daily.timer >/dev/null
+		deb-systemd-helper unmask apt-daily-upgrade.timer apt-daily.timer >/dev/null
+	fi
 fi
 # End automatically added section
 

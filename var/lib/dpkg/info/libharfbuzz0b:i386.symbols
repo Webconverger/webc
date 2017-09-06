@@ -14,6 +14,7 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_blob_set_user_data@Base 0.6.0
  hb_buffer_add@Base 0.6.0
  hb_buffer_add_codepoints@Base 0.9.32
+ hb_buffer_add_latin1@Base 0.9.39
  hb_buffer_add_utf16@Base 0.6.0
  hb_buffer_add_utf32@Base 0.6.0
  hb_buffer_add_utf8@Base 0.6.0
@@ -22,6 +23,7 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_buffer_create@Base 0.6.0
  hb_buffer_deserialize_glyphs@Base 0.9.9
  hb_buffer_destroy@Base 0.6.0
+ hb_buffer_get_cluster_level@Base 0.9.42
  hb_buffer_get_content_type@Base 0.9.9
  hb_buffer_get_direction@Base 0.6.0
  hb_buffer_get_empty@Base 0.6.0
@@ -42,15 +44,18 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_buffer_reset@Base 0.6.0
  hb_buffer_reverse@Base 0.6.0
  hb_buffer_reverse_clusters@Base 0.6.0
+ hb_buffer_reverse_range@Base 0.9.41
  hb_buffer_serialize_format_from_string@Base 0.9.9
  hb_buffer_serialize_format_to_string@Base 0.9.9
  hb_buffer_serialize_glyphs@Base 0.9.9
  hb_buffer_serialize_list_formats@Base 0.9.9
+ hb_buffer_set_cluster_level@Base 0.9.42
  hb_buffer_set_content_type@Base 0.9.9
  hb_buffer_set_direction@Base 0.6.0
  hb_buffer_set_flags@Base 0.9.9
  hb_buffer_set_language@Base 0.6.0
  hb_buffer_set_length@Base 0.6.0
+ hb_buffer_set_message_func@Base 1.2.6
  hb_buffer_set_replacement_codepoint@Base 0.9.32
  hb_buffer_set_script@Base 0.6.0
  hb_buffer_set_segment_properties@Base 0.9.9
@@ -88,6 +93,8 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_font_funcs_is_immutable@Base 0.6.0
  hb_font_funcs_make_immutable@Base 0.6.0
  hb_font_funcs_reference@Base 0.6.0
+ hb_font_funcs_set_font_h_extents_func@Base 1.2.6
+ hb_font_funcs_set_font_v_extents_func@Base 1.2.6
  hb_font_funcs_set_glyph_contour_point_func@Base 0.6.0
  hb_font_funcs_set_glyph_extents_func@Base 0.6.0
  hb_font_funcs_set_glyph_from_name_func@Base 0.9.4
@@ -99,8 +106,11 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_font_funcs_set_glyph_v_advance_func@Base 0.6.0
  hb_font_funcs_set_glyph_v_kerning_func@Base 0.6.0
  hb_font_funcs_set_glyph_v_origin_func@Base 0.6.0
+ hb_font_funcs_set_nominal_glyph_func@Base 1.2.6
  hb_font_funcs_set_user_data@Base 0.6.0
+ hb_font_funcs_set_variation_glyph_func@Base 1.2.6
  hb_font_get_empty@Base 0.6.0
+ hb_font_get_extents_for_direction@Base 1.2.6
  hb_font_get_face@Base 0.6.0
  hb_font_get_glyph@Base 0.6.0
  hb_font_get_glyph_advance_for_direction@Base 0.6.0
@@ -118,10 +128,15 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_font_get_glyph_v_advance@Base 0.6.0
  hb_font_get_glyph_v_kerning@Base 0.6.0
  hb_font_get_glyph_v_origin@Base 0.6.0
+ hb_font_get_h_extents@Base 1.2.6
+ hb_font_get_nominal_glyph@Base 1.2.6
  hb_font_get_parent@Base 0.6.0
  hb_font_get_ppem@Base 0.6.0
  hb_font_get_scale@Base 0.6.0
  hb_font_get_user_data@Base 0.6.0
+ hb_font_get_v_extents@Base 1.2.6
+ hb_font_get_var_coords_normalized@Base 1.4.2
+ hb_font_get_variation_glyph@Base 1.2.6
  hb_font_glyph_from_string@Base 0.9.4
  hb_font_glyph_to_string@Base 0.9.4
  hb_font_is_immutable@Base 0.6.0
@@ -129,15 +144,24 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_font_reference@Base 0.6.0
  hb_font_set_funcs@Base 0.6.0
  hb_font_set_funcs_data@Base 0.9.4
+ hb_font_set_parent@Base 1.2.6
  hb_font_set_ppem@Base 0.6.0
  hb_font_set_scale@Base 0.6.0
  hb_font_set_user_data@Base 0.6.0
+ hb_font_set_var_coords_design@Base 1.4.2
+ hb_font_set_var_coords_normalized@Base 1.4.1
+ hb_font_set_variations@Base 1.4.2
  hb_font_subtract_glyph_origin_for_direction@Base 0.6.0
  hb_ft_face_create@Base 0.6.0
  hb_ft_face_create_cached@Base 0.6.0
+ hb_ft_face_create_referenced@Base 0.9.38
  hb_ft_font_create@Base 0.6.0
+ hb_ft_font_create_referenced@Base 0.9.38
  hb_ft_font_get_face@Base 0.9.4
+ hb_ft_font_get_load_flags@Base 1.2.6
  hb_ft_font_set_funcs@Base 0.9.4
+ hb_ft_font_set_load_flags@Base 1.2.6
+ hb_glib_blob_create@Base 0.9.38
  hb_glib_get_unicode_funcs@Base 0.6.0
  hb_glib_script_from_script@Base 0.6.0
  hb_glib_script_to_script@Base 0.6.0
@@ -149,6 +173,7 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_ot_font_set_funcs@Base 0.9.28
  hb_ot_layout_collect_lookups@Base 0.9.9
  hb_ot_layout_feature_get_lookups@Base 0.9.9
+ hb_ot_layout_feature_with_variations_get_lookups@Base 1.4.1
  hb_ot_layout_get_attach_points@Base 0.6.0
  hb_ot_layout_get_glyph_class@Base 0.9.9
  hb_ot_layout_get_glyphs_in_class@Base 0.9.9
@@ -168,16 +193,32 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_ot_layout_script_find_language@Base 0.6.0
  hb_ot_layout_script_get_language_tags@Base 0.6.0
  hb_ot_layout_table_choose_script@Base 0.6.0
+ hb_ot_layout_table_find_feature_variations@Base 1.4.1
  hb_ot_layout_table_find_script@Base 0.6.0
  hb_ot_layout_table_get_feature_tags@Base 0.6.0
  hb_ot_layout_table_get_lookup_count@Base 0.9.22
  hb_ot_layout_table_get_script_tags@Base 0.6.0
+ hb_ot_math_get_constant@Base 1.4.1
+ hb_ot_math_get_glyph_assembly@Base 1.4.1
+ hb_ot_math_get_glyph_italics_correction@Base 1.4.1
+ hb_ot_math_get_glyph_kerning@Base 1.4.1
+ hb_ot_math_get_glyph_top_accent_attachment@Base 1.4.1
+ hb_ot_math_get_glyph_variants@Base 1.4.1
+ hb_ot_math_get_min_connector_overlap@Base 1.4.1
+ hb_ot_math_has_data@Base 1.4.1
+ hb_ot_math_is_glyph_extended_shape@Base 1.4.1
  hb_ot_shape_glyphs_closure@Base 0.9.4
  hb_ot_shape_plan_collect_lookups@Base 0.9.9
  hb_ot_tag_from_language@Base 0.6.0
  hb_ot_tag_to_language@Base 0.6.0
  hb_ot_tag_to_script@Base 0.6.0
  hb_ot_tags_from_script@Base 0.6.0
+ hb_ot_var_find_axis@Base 1.4.2
+ hb_ot_var_get_axes@Base 1.4.2
+ hb_ot_var_get_axis_count@Base 1.4.2
+ hb_ot_var_has_data@Base 1.4.2
+ hb_ot_var_normalize_coords@Base 1.4.2
+ hb_ot_var_normalize_variations@Base 1.4.2
  hb_script_from_iso15924_tag@Base 0.6.0
  hb_script_from_string@Base 0.6.0
  hb_script_get_horizontal_direction@Base 0.6.0
@@ -213,7 +254,9 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_shape@Base 0.6.0
  hb_shape_full@Base 0.9.4
  hb_shape_list_shapers@Base 0.9.4
+ hb_shape_plan_create2@Base 1.4.1
  hb_shape_plan_create@Base 0.9.9
+ hb_shape_plan_create_cached2@Base 1.4.1
  hb_shape_plan_create_cached@Base 0.9.9
  hb_shape_plan_destroy@Base 0.9.9
  hb_shape_plan_execute@Base 0.9.9
@@ -250,6 +293,8 @@ libharfbuzz.so.0 libharfbuzz0b #MINVER#
  hb_unicode_general_category@Base 0.9.4
  hb_unicode_mirroring@Base 0.9.4
  hb_unicode_script@Base 0.9.4
+ hb_variation_from_string@Base 1.4.2
+ hb_variation_to_string@Base 1.4.2
  hb_version@Base 0.6.0
  hb_version_atleast@Base 0.9.30
  hb_version_check@Base 0.6.0

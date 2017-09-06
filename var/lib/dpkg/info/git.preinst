@@ -1,6 +1,20 @@
 #!/bin/sh
 set -e
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/git 1:1.8.0-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/emacs/site-start.d/50git-core.el 1:1.7.4.1-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper dir_to_symlink /usr/share/doc/git/contrib/hooks ../../../git-core/contrib/hooks 1:1.7.7-1 -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper dir_to_symlink /usr/share/doc/git/contrib/emacs ../../../git-core/emacs 1:1.7.4~rc1-0.1 -- "$@"
+# End automatically added section
+
+
 # /var/cache/git/ -> /var/lib/git/ transition
 if test "$1" = upgrade &&
    dpkg --compare-versions "$2" lt-nl '1:1.8.4~rc0-1'; then
@@ -30,39 +44,6 @@ if test "$1" = upgrade &&
 		rm -f '/var/lib/git/*'
 	fi
 fi
-
-# Snippet based on dpkg-maintscript-helper from dpkg 1.15.8.
-# Postinst explains why.
-rm_conffile () {
-	CONFFILE=$1; shift
-	test "$1" = install || test "$1" = upgrade || return 0
-	dpkg --compare-versions "$2" lt-nl "$3" || return 0
-	test -e "$CONFFILE" || return 0
-
-	md5sum=$(md5sum $CONFFILE | sed -e 's/ .*//')
-	old_md5sum=$(
-		dpkg-query -W -f='${Conffiles}' git |
-		sed -n -e "\' $CONFFILE ' { s/ obsolete\$//; s/.* //; p }"
-	)
-	if test "$md5sum" != "$old_md5sum"; then
-		echo "$CONFFILE has been modified by you."
-		echo "Saving as $CONFFILE.dpkg-bak ..."
-		mv -f "$CONFFILE" "$CONFFILE.dpkg-backup"
-	else
-		echo "Moving $CONFFILE out of the way..."
-		mv -f "$CONFFILE" "$CONFFILE.dpkg-remove"
-	fi
-}
-
-rm_conffile /etc/bash_completion.d/git "$1" "$2" '1:1.8.0-1~'
-
-# Now /etc/emacs/site-start.d/50git-core.el belongs to the
-# git-el package.  If we are upgrading from a pre- 1.7.4.1-2~
-# version then git-el is at most unpacked (so its version
-# is 50git-core.el.dpkg-new if present), and we can remove
-# an unchanged 50git-core.el file without danger.
-#
-rm_conffile /etc/emacs/site-start.d/50git-core.el "$1" "$2" '1:1.7.4.1-2~'
 
 # Git versions before 1.7.7-2 kept about 100 hard links to
 # /usr/lib/git-core/git at /usr/lib/git-core/git-* to avoid

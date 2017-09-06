@@ -7,8 +7,8 @@ export PATH='/usr/bin:/sbin:/bin'
 keep="n"
 CONFDIR="/etc/initramfs-tools"
 verbose="n"
-test -e /bin/busybox && BUSYBOXDIR=/bin
-test -e /usr/lib/initramfs-tools/bin/busybox && BUSYBOXDIR=/usr/lib/initramfs-tools/bin
+# Will be updated by busybox's conf hook, if present
+BUSYBOXDIR=
 export BUSYBOXDIR
 
 OPTIONS=`getopt -o c:d:ko:r:v -n "$0" -- "$@"`
@@ -90,6 +90,12 @@ for i in /usr/share/initramfs-tools/conf-hooks.d/*; do
 	fi
 done
 
+# Check busybox dependency
+if [ "${BUSYBOX}" = "y" ] && [ -z "${BUSYBOXDIR}" ]; then
+	echo >&2 "E: busybox or busybox-static, version 1:1.22.0-17~ or later, is required but not installed"
+	exit 1
+fi
+
 if [ -n "${UMASK:-}" ]; then
 	umask "${UMASK}"
 fi
@@ -163,10 +169,26 @@ if [ ! -e "${MODULESDIR}/modules.dep" ]; then
 	depmod ${version}
 fi
 
+# Prepare to clean up temporary files on exit
+DESTDIR=
+__TMPCPIOGZ=
+__TMPEARLYCPIO=
+clean_on_exit() {
+	if [ "${keep}" = "y" ]; then
+		echo "Working files in ${DESTDIR:-<not yet created>}, early initramfs in ${__TMPEARLYCPIO:-<not yet created>} and overlay in ${__TMPCPIOGZ:-<not yet created>}"
+	else
+		for path in "${DESTDIR}" "${__TMPCPIOGZ}" "${__TMPEARLYCPIO}"; do
+			test -z "${path}" || rm -rf "${path}"
+		done
+	fi
+}
+trap clean_on_exit EXIT
+trap "exit 1" INT TERM	# makes the EXIT trap effective even when killed
+
+# Create temporary directory and files for initramfs contents
 [ -n "${TMPDIR}" ] && [ ! -w "${TMPDIR}" ] && unset TMPDIR
 DESTDIR="$(mktemp -d ${TMPDIR:-/var/tmp}/mkinitramfs_XXXXXX)" || exit 1
 chmod 755 "${DESTDIR}"
-
 __TMPCPIOGZ="$(mktemp ${TMPDIR:-/var/tmp}/mkinitramfs-OL_XXXXXX)" || exit 1
 __TMPEARLYCPIO="$(mktemp ${TMPDIR:-/var/tmp}/mkinitramfs-FW_XXXXXX)" || exit 1
 
@@ -183,6 +205,7 @@ export verbose
 export KEYMAP
 export MODULES
 export BUSYBOX
+export RESUME
 
 # Private, used by 'catenate_cpiogz'.
 export __TMPCPIOGZ
@@ -244,8 +267,9 @@ for b in $(cd /usr/share/initramfs-tools/scripts/ && find . \
 	cp -p "/usr/share/initramfs-tools/scripts/${b}" \
 		"${DESTDIR}/scripts/$(dirname "${b}")/"
 done
-for b in $(cd "${CONFDIR}/scripts" && find . \
-	-regextype posix-extended -regex '.*/[[:alnum:]\._-]+$' -type f); do
+# Prune dot-files/directories and limit depth to exclude VCS files
+for b in $(cd "${CONFDIR}/scripts" && find . -maxdepth 2 -name '.?*' -prune -o \
+	-regextype posix-extended -regex '.*/[[:alnum:]\._-]+$' -type f -print); do
 	[ -d "${DESTDIR}/scripts/$(dirname "${b}")" ] \
 		|| mkdir -p "${DESTDIR}/scripts/$(dirname "${b}")"
 	cp -p "${CONFDIR}/scripts/${b}" "${DESTDIR}/scripts/$(dirname "${b}")/"
@@ -255,9 +279,10 @@ echo "DPKG_ARCH=${DPKG_ARCH}" > ${DESTDIR}/conf/arch.conf
 cp -p "${CONFDIR}/initramfs.conf" ${DESTDIR}/conf
 for i in ${EXTRA_CONF}; do
 	if [ -e "${CONFDIR}/conf.d/${i}" ]; then
-		copy_exec "${CONFDIR}/conf.d/${i}" /conf/conf.d
+		copy_file config "${CONFDIR}/conf.d/${i}" /conf/conf.d
 	elif [ -e "/usr/share/initramfs-tools/conf.d/${i}" ]; then
-		copy_exec "/usr/share/initramfs-tools/conf.d/${i}" /conf/conf.d
+		copy_file config "/usr/share/initramfs-tools/conf.d/${i}" \
+			/conf/conf.d
 	fi
 done
 
@@ -278,8 +303,12 @@ ln -s /proc/mounts "${DESTDIR}/etc/mtab"
 # module-init-tools
 copy_exec /sbin/modprobe /sbin
 copy_exec /sbin/rmmod /sbin
-mkdir -p "${DESTDIR}/etc/modprobe.d"
-cp -a /etc/modprobe.d/* "${DESTDIR}/etc/modprobe.d/"
+mkdir -p "${DESTDIR}/etc/modprobe.d" "${DESTDIR}/lib/modprobe.d"
+for file in /etc/modprobe.d/*.conf /lib/modprobe.d/*.conf ; do
+	if test -e "$file" || test -L "$file" ; then
+		copy_file config "$file"
+	fi
+done
 
 # workaround: libgcc always needed on old-abi arm
 if [ "$DPKG_ARCH" = arm ] || [ "$DPKG_ARCH" = armeb ]; then
@@ -288,6 +317,9 @@ fi
 
 run_scripts /usr/share/initramfs-tools/hooks
 run_scripts "${CONFDIR}"/hooks
+
+# Avoid double sleep when using older udev scripts
+sed -i 's/^\s*sleep \$ROOTDELAY$/:/' "${DESTDIR}/scripts/init-top/udev"
 
 # cache boot run order
 for b in $(cd "${DESTDIR}/scripts" && find . -mindepth 1 -type d); do
@@ -307,7 +339,7 @@ fi
 
 # Apply DSDT to initramfs
 if [ -e "${CONFDIR}/DSDT.aml" ]; then
-	copy_exec "${CONFDIR}/DSDT.aml" /
+	copy_file DSDT "${CONFDIR}/DSDT.aml"
 fi
 
 # Make sure there is a final sh in initramfs
@@ -370,14 +402,6 @@ fi
 
 if [ -s "${__TMPCPIOGZ}" ]; then
 	cat "${__TMPCPIOGZ}" >>"${outfile}" || exit 1
-fi
-
-if [ "${keep}" = "y" ]; then
-	echo "Working files in ${DESTDIR}, early initramfs in ${__TMPEARLYCPIO} and overlay in ${__TMPCPIOGZ}"
-else
-	rm -rf "${DESTDIR}"
-	rm -rf "${__TMPCPIOGZ}"
-	rm -rf "${__TMPEARLYCPIO}"
 fi
 
 exit 0

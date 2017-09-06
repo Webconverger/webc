@@ -1,6 +1,6 @@
 ;;; ispell.el --- interface to International Ispell Versions 3.1 and 3.2
 
-;; Copyright (C) 1994-1995, 1997-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1994-1995, 1997-2015 Free Software Foundation, Inc.
 
 ;; Author:           Ken Stevens <k.stevens@ieee.org>
 ;; Maintainer:       Ken Stevens <k.stevens@ieee.org>
@@ -2530,7 +2530,7 @@ Global `ispell-quit' set to start location to continue spell session."
 					    "  --  word-list: "
 					    (or ispell-complete-word-dict
 						ispell-alternate-dictionary))
-				    miss (lookup-words new-word)
+				    miss (ispell-lookup-words new-word)
 				    choices miss
 				    line ispell-choices-win-default-height)
 			      (while (and choices ; adjust choices window.
@@ -2736,8 +2736,14 @@ SPC:   Accept word this time.
 		(sit-for 5))
 	    (erase-buffer)))))))
 
+;; XEmacs `define-obsolete-function-alias' does not support optional
+;; version number
+(eval-when-compile
+  (if (featurep 'xemacs)
+      (define-obsolete-function-alias 'lookup-words 'ispell-lookup-words)
+    (define-obsolete-function-alias 'lookup-words 'ispell-lookup-words "24.4")))
 
-(defun lookup-words (word &optional lookup-dict)
+(defun ispell-lookup-words (word &optional lookup-dict)
   "Look up WORD in optional word-list dictionary LOOKUP-DICT.
 A `*' serves as a wild card.  If no wild cards, `look' is used if it exists.
 Otherwise the variable `ispell-grep-command' contains the command used to
@@ -2771,8 +2777,12 @@ if defined."
       (message "Starting \"%s\" process..." (file-name-nondirectory prog))
       (if look-p
           nil
+        (insert "^" word)
+        ;; When there are no wildcards, append one, for consistency
+        ;; with `look' behavior.
+        (unless wild-p (insert "*"))
+        (insert "$")
         ;; Convert * to .*
-        (insert "^" word "$")
         (while (search-backward "*" nil t) (insert "."))
         (setq word (buffer-string))
         (erase-buffer))
@@ -3143,7 +3153,7 @@ Keeps argument list for future Ispell invocations for no async support."
 	(setq ispell-filter nil ispell-filter-continue nil)
       ;; may need to restart to select new personal dictionary.
       (ispell-kill-ispell t)
-      (message "Starting new Ispell process [%s::%s] ..."
+      (message "Starting new Ispell process %s with %s dictionary..."
 	       ispell-program-name
 	       (or ispell-local-dictionary ispell-dictionary "default"))
       (sit-for 0)
@@ -3832,21 +3842,11 @@ Returns the sum SHIFT due to changes in word replacements."
 
 
 ;;;###autoload
-(defun ispell-comments-and-strings (only-current)
+(defun ispell-comments-and-strings ()
   "Check comments and strings in the current buffer for spelling errors."
-  (interactive (list nil))
-  (let (state done)
-    (if (not only-current)
+  (interactive)
   (goto-char (point-min))
-      (let* ((here (point))
-             (state (parse-partial-sexp (point-min) (point)))
-             (inside (or (nth 3 state) (nth 4 state)))
-             (start (when inside (nth 8 state))))
-        (if start
-            (goto-char start)
-          (setq done t)
-          (goto-char here)
-          (message "Not inside a string or comment"))))
+  (let (state done)
     (while (not done)
       (setq done t)
       (setq state (parse-partial-sexp (point) (point-max)
@@ -3858,14 +3858,8 @@ Returns the sum SHIFT due to changes in word replacements."
 	    (if (or (nth 3 state) (nth 4 state))
 		(error "Unterminated string or comment"))
 	    (save-excursion
-	      (setq done (not (ispell-region start (point)))))))
-      (when only-current (setq done t)))))
+	      (setq done (not (ispell-region start (point))))))))))
 
-;;;###autoload
-(defun ispell-comment-or-string ()
-  "Check comments or strings at point for spelling errors."
-  (interactive)
-  (ispell-comments-and-strings t))
 
 ;;;###autoload
 (defun ispell-buffer ()
@@ -3913,7 +3907,7 @@ Use APPEND to append the info to previous buffer if exists."
 
 ;;;###autoload
 (defun ispell-complete-word (&optional interior-frag)
-  "Try to complete the word before or under point (see `lookup-words').
+  "Try to complete the word before or under point.
 If optional INTERIOR-FRAG is non-nil then the word may be a character
 sequence inside of a word.
 
@@ -3929,11 +3923,11 @@ Standard ispell choices are then available."
 	  word (car word)
 	  possibilities
 	  (or (string= word "")		; Will give you every word
-	      (lookup-words (concat (and interior-frag "*") word
-				    (if (or interior-frag (null ispell-look-p))
-					"*"))
-			    (or ispell-complete-word-dict
-				ispell-alternate-dictionary))))
+	      (ispell-lookup-words
+	       (concat (and interior-frag "*") word
+		       (and interior-frag "*"))
+	       (or ispell-complete-word-dict
+		   ispell-alternate-dictionary))))
     (cond ((eq possibilities t)
 	   (message "No word to complete"))
 	  ((null possibilities)

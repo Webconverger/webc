@@ -6,7 +6,7 @@
 # Should-Stop:       halt reboot kexec
 # Default-Start:
 # Default-Stop:      0 6
-# Short-Description: Mount the root filesystem read-only.
+# Short-Description: Mount the root and /usr filesystems read-only.
 ### END INIT INFO
 
 PATH=/sbin:/bin
@@ -14,19 +14,26 @@ PATH=/sbin:/bin
 
 . /lib/lsb/init-functions
 
-do_stop () {
-	[ "$VERBOSE" = no ] || log_action_begin_msg "Mounting root filesystem read-only"
+remount_ro () {
+	[ "$VERBOSE" = no ] || log_action_begin_msg "Mounting $1 filesystem read-only"
 	MOUNT_FORCE_OPT=
 	[ "$(uname -s)" = "GNU/kFreeBSD" ] && MOUNT_FORCE_OPT=-f
 	# This:
 	#     mount -n -o remount,ro /
 	# will act on a bind mount of / if there is one.
 	# See #339023 and the comment in checkroot.sh
-	mount    $MOUNT_FORCE_OPT -n -o remount,ro -t dummytype dummydev / 2>/dev/null \
-	|| mount $MOUNT_FORCE_OPT -n -o remount,ro              dummydev / 2>/dev/null \
-	|| mount $MOUNT_FORCE_OPT -n -o remount,ro                       /
+	mount    $MOUNT_FORCE_OPT -n -o remount,ro -t dummytype dummydev $2 2>/dev/null \
+	|| mount $MOUNT_FORCE_OPT -n -o remount,ro              dummydev $2 2>/dev/null \
+	|| mount $MOUNT_FORCE_OPT -n -o remount,ro                       $2
 	ES=$?
 	[ "$VERBOSE" = no ] || log_action_end_msg $ES
+}
+
+do_stop () {
+	remount_ro root /
+	if mountpoint -q /usr; then
+		remount_ro /usr /usr
+	fi
 }
 
 case "$1" in

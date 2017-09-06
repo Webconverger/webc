@@ -2,9 +2,23 @@
 
 set -e
 
+pathfind() {
+    OLDIFS="$IFS"
+    IFS=:
+    for p in $PATH; do
+        if [ -x "$p/$*" ]; then
+            IFS="$OLDIFS"
+            return 0
+        fi
+    done
+    IFS="$OLDIFS"
+    return 1
+}
+
+
 case "$1" in
     remove|upgrade|deconfigure)
-        if [ -x /usr/sbin/update-gsfontmap ]; then
+        if `pathfind update-gsfontmap`; then
             update-gsfontmap
         fi
     ;;

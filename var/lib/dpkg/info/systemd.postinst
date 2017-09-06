@@ -21,18 +21,29 @@ if [ "$1" = "triggered" ]; then
                 _update_catalog
                 ;;
             /etc/init.d)
-                _systemctl daemon-reload
+                _systemctl daemon-reload || true
                 ;;
         esac
     done
     exit 0
 fi
 
-# Cleanup state files from the auto-enabler which we used in wheezy
-if dpkg --compare-versions "$2" lt "204-1"; then
-    rm -f /var/lib/systemd/enabled-units
-    rm -f /var/lib/systemd/run-debian-enable-units
-    rm -f /var/lib/systemd/*.symlinks
+# Enable getty and remote-fs.target by default on new installs, and on
+# upgrades from old systemd versions (where the symlinks included as deb
+# content, and will thus have been removed by dpkg during the upgrade).
+if dpkg --compare-versions "$2" lt "214-1"; then
+    systemctl enable getty@tty1.service || true
+    systemctl enable remote-fs.target || true
+fi
+
+# Enable timesyncd by default on new installs installs and upgrades
+if dpkg --compare-versions "$2" lt "218-11~"; then
+    systemctl enable systemd-timesyncd.service || true
+fi
+
+# Enable ondemand by default on new installs installs and upgrades
+if [ -e /lib/systemd/system/ondemand.service ] && dpkg --compare-versions "$2" lt "231-7~"; then
+    systemctl enable ondemand.service || true
 fi
 
 # Do a one-time migration of the local time setting
@@ -41,7 +52,7 @@ if dpkg --compare-versions "$2" lt "33-1"; then
         . /etc/default/rcS
     fi
     if [ "$UTC" = "no" ] && [ ! -e /etc/adjtime ]; then
-        printf "0.0 0 0.0\n0\nLOCAL" > /etc/adjtime
+        printf "0.0 0 0.0\n0\nLOCAL\n" > /etc/adjtime
     fi
 fi
 
@@ -80,16 +91,10 @@ if dpkg --compare-versions "$2" lt "204-8"; then
     fi
     if [ "$RAMTMP" = "yes" ]; then
         # systemctl enable will work even when systemd is not the active PID 1.
-        systemctl enable tmp.mount || true
-    fi
-fi
-
-if dpkg --compare-versions "$2" lt "40-1"; then
-    # /lib/init/rw has been replaced by /run, so try to remove it on upgrades
-    # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=643699
-    _systemctl stop lib-init-rw.automount lib-init-rw.mount || true
-    if [ -d /lib/init/rw ]; then
-        rmdir --ignore-fail-on-non-empty /lib/init/rw || true
+        if [ ! -e /etc/systemd/system/tmp.mount ]; then
+            cp /usr/share/systemd/tmp.mount /etc/systemd/system/tmp.mount
+            systemctl enable tmp.mount || true
+        fi
     fi
 fi
 
@@ -111,84 +116,68 @@ adduser --quiet --system --group --no-create-home --home /run/systemd \
 # Initial update of the Message Catalogs database
 _update_catalog
 
-# Make systemd-detect-virt utility usable for non-root users
-setcap cap_dac_override,cap_sys_ptrace=ep /usr/bin/systemd-detect-virt || true
-
-# We don’t ship /var/log/journal currently, so only run the following fix for
-# systems where the administrator has explicitly enabled persistent logging by
-# creating /var/log/journal.
-if [ -d /var/log/journal ]; then
-    # Grant read access to /var/log/journal for members of the adm group
-    # via a filesystem ACL. This makes them able to read the journal.
-    # Failure is ignored since there might be file systems mounted without
-    # ACL support.
-    setfacl -R -nm g:adm:rx,d:g:adm:rx /var/log/journal || true
+# Re-run systemctl enable for any service that was enabled when preinst was run.
+if dpkg --compare-versions "$2" ge "204" && [ -e /run/systemd/was-enabled ]; then
+    while read UNIT ; do
+        # 220-6 stopped shipping tmp.mount, transition it on machines which had
+        # it enabled
+        if [ "$UNIT" = tmp.mount ] && dpkg --compare-versions "$2" lt-nl "220-6~"; then
+            if [ ! -e /etc/systemd/system/tmp.mount ]; then
+                echo "moving enabled tmp.mount to /etc/systemd/system/..."
+                cp /usr/share/systemd/tmp.mount /etc/systemd/system/tmp.mount
+                # clean up the symlink, to have it re-created below
+                systemctl disable $UNIT
+            fi
+        fi
+        systemctl enable $UNIT || true
+    done </run/systemd/was-enabled || true
 fi
 
 if [ -n "$2" ]; then
     _systemctl daemon-reexec || true
-    _systemctl try-restart systemd-logind.service || true
+    # don't restart logind; this can be done again once this gets implemented:
+    # https://github.com/systemd/systemd/issues/1163
     _systemctl try-restart systemd-networkd.service || true
     _systemctl try-restart systemd-resolved.service || true
     _systemctl try-restart systemd-timesyncd.service || true
 fi
 
-# Enable getty and remote-fs.target by default on new installs, and on
-# upgrades from old systemd versions (where the symlinks included as deb
-# content, and will thus have been removed by dpkg during the upgrade).
-if dpkg --compare-versions "$2" lt "214-1"; then
-    systemctl enable getty@tty1.service || true
-    systemctl enable remote-fs.target || true
+# Cleanup hwclock-save.service, which was shipped in jessie.
+if dpkg --compare-versions "$2" lt-nl "228-5~"; then
+   for t in reboot halt poweroff ; do
+       rm -f /etc/systemd/system/${t}.target.wants/hwclock-save.service
+       rmdir --ignore-fail-on-non-empty /etc/systemd/system/${t}.target.wants 2> /dev/null || true
+   done
 fi
 
-if dpkg --compare-versions "$2" lt "215-13"; then
-    systemctl enable hwclock-save.service || true
+# Automatically added by dh_installinit
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	# In case this system is running systemd, we need to ensure that all
+	# necessary tmpfiles (if any) are created before starting.
+	if [ -d /run/systemd/system ] ; then
+		systemd-tmpfiles --create /usr/lib/tmpfiles.d/debian.conf /usr/lib/tmpfiles.d/home.conf /usr/lib/tmpfiles.d/journal-nocow.conf /usr/lib/tmpfiles.d/legacy.conf /usr/lib/tmpfiles.d/systemd-nologin.conf /usr/lib/tmpfiles.d/systemd.conf /usr/lib/tmpfiles.d/tmp.conf /usr/lib/tmpfiles.d/var.conf /usr/lib/tmpfiles.d/x11.conf >/dev/null || true
+	fi
 fi
-
-# Re-run systemctl enable for any service that was enabled when preinst was run.
-if dpkg --compare-versions "$2" ge "204"; then
-    while read UNIT ; do
-        systemctl enable $UNIT || true
-    done </run/systemd/was-enabled || true
-fi
-
-# The /dev/log socket and /dev/initctl FIFO have been moved to /run and
-# replaced by symlinks. Create the symlinks manually on upgrades as well.
-# (https://bugs.debian.org/761340). Note that this will break the current
-# journal as we cannot restart it properly (https://bugs.debian.org/771122) so
-# this is mostly an one-time upgrade path from wheezy.
-if dpkg --compare-versions "$2" lt-nl "215-3"; then
-    if [ -p /run/systemd/initctl/fifo ] && [ ! -L /dev/initctl ]; then
-         ln -sf /run/systemd/initctl/fifo /dev/initctl
-    fi
-    if [ -S /run/systemd/journal/dev-log ] && [ ! -L /dev/log ]; then
-         ln -sf /run/systemd/journal/dev-log /dev/log
-    fi
-    _systemctl try-restart systemd-journald.service || true
-fi
-
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/lsb-base-logging.sh 25-1~ systemd -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/legacy.conf 29-1~ systemd -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemctl-bash-completion.sh 204-1~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/systemd.conf 29-1~ systemd -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemd-bash-completion.sh 204-1~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/tmpfiles.d/x11.conf 29-1~ systemd -- "$@"
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-logind.conf /etc/systemd/logind.conf 204-1~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemctl-bash-completion.sh 204-1~ systemd -- "$@"
+dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-journald.conf /etc/systemd/journald.conf 204-1~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemd-bash-completion.sh 204-1~ systemd -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.machine1.conf 228-5~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-logind.conf /etc/systemd/logind.conf 204-1~ systemd -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/X11/xinit/xinitrc.d/50-systemd-user.sh 228-3~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-journald.conf /etc/systemd/journald.conf 204-1~ systemd -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/systemd/bootchart.conf 230-1~ -- "$@"
 # End automatically added section
 

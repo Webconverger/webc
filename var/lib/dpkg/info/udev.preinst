@@ -1,12 +1,5 @@
 #!/bin/sh -e
 
-# Hack to get the dpkg process' PID despite using debconf
-if [ -z "$PARENT_PID" ]; then
-  export PARENT_PID=$PPID
-fi
-
-. /usr/share/debconf/confmodule
-
 # adapted from postinst
 chrooted() {
   if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ];
@@ -16,123 +9,16 @@ chrooted() {
   return 0
 }
 
-supported_kernel() {
-  local version
-  if [ "$1" ]; then
-    version="$1"
-  else
-    version="$(uname -r)"
-  fi
-
-  case "$version" in
-    2.[012345].*|2.6.[0-9]|2.6.[0-9][!0-9]*) return 1 ;;
-    2.6.[12][0-9]|2.6.[12][0-9][!0-9]*) return 1 ;;
-    2.6.3[0-1]|2.6.3[0-1][!0-9]*) return 1 ;;
-  esac
-  return 0
-}
-
-check_installed_kernel() {
-  for ver in /lib/modules/*; do
-    ver=${ver##*/}
-    [ "$ver" = '*' ] && return 1
-    supported_kernel "$ver" && return 0
-  done
-  return 1
-}
-
-check_installing_kernel() {
-  for pkg in $(ps hp $PARENT_PID -o args); do
-    ver=$(echo $pkg | sed -nr "s/^.*linux-image-(2\.6\.[0-9]+)-([0-9]+|trunk)-.*_.*_.*\.deb$/\1/p")
-    [ "$ver" ] && supported_kernel "$ver" && return 0
-  done
-  return 1
-}
-
-check_kernel_version() {
-  # skip the check if udev is not already active
-  [ -d /dev/.udev/ -o -d /run/udev/ ] || return 0
-
-  supported_kernel && return
-
-  if [ -e /etc/udev/kernel-upgrade ]; then
-    echo "This version of udev requires a kernel >= 2.6.32, but the upgrade was forced."
-    # restart udevd which was killed by the old prerm
-    udevd -d || true
-    return 0
-  fi
-  
-  db_settitle udev/title/upgrade
-
-  if check_installed_kernel || check_installing_kernel; then
-    db_fset udev/reboot_needed seen false
-    db_input high udev/reboot_needed || true
-    db_go
-    db_stop
-    echo "A reboot is needed, but proceeding with the upgrade."
-    touch /etc/udev/kernel-upgrade
-    # restart udevd which was killed by the old prerm
-    udevd -d || true
-    return 0
-  fi
-
-  db_fset udev/new_kernel_needed seen false
-  db_reset udev/new_kernel_needed
-  db_input critical udev/new_kernel_needed || true
-  db_go
-  db_get udev/new_kernel_needed
-  if [ "$RET" = true ]; then
-    db_stop
-    echo "This version of udev requires a kernel >= 2.6.32, but the upgrade was forced."
-    touch /etc/udev/kernel-upgrade
-    # restart udevd which was killed by the old prerm
-    udevd -d || true
-    return 0
-  fi
-  db_stop
-  exit 1
-}
-
 check_kernel_features() {
   # skip the check if udev is not already active
-  [ -d /dev/.udev/ -o -d /run/udev/ ] || return 0
-
-  # skip the check if check_kernel_version() decided that a new kernel is
-  # being installed
-  [ -e /etc/udev/kernel-upgrade ] && return 0
-
-  local abort_install=0
+  [ -d /run/udev/ ] || return 0
 
   if [ -e /proc/kallsyms ]; then
 
   local needed_symbols='inotify_init signalfd accept4 open_by_handle_at timerfd_create epoll_create'
-  local missing_symbol=0
   for symbol in $needed_symbols; do
     if ! egrep -q "^[a-fA-F0-9]+ T \.?sys_${symbol}$" /proc/kallsyms; then
-      missing_symbol=1
-      abort_install=1
-      break
-    fi
-  done
-
-  fi
-
-  local missing_devtmpfs=0
-  if ! grep -q '[[:space:]]devtmpfs$' /proc/filesystems; then
-    missing_devtmpfs=1
-    abort_install=1
-  fi
-
-  local sysfs_deprecated=0
-  if [ -d /sys/class/mem/null -a ! -L /sys/class/mem/null ]; then
-    sysfs_deprecated=1
-  fi
-  if [ -e /sys/block -a ! -e /sys/class/block ]; then
-    sysfs_deprecated=1
-  fi
-
-  if [ "$missing_symbol" -eq 1 ]; then
-    cat <<END
+      cat <<END
 Since release 198, udev requires support for the following features in
 the running kernel:
 
@@ -143,125 +29,52 @@ the running kernel:
 - timerfd_create(2)     (CONFIG_TIMERFD)
 - epoll_create(2)       (CONFIG_EPOLL)
 END
+      exit 1
+    fi
+  done
+
   fi
 
-  if [ "$missing_devtmpfs" -eq 1 ]; then
+  if ! grep -q '[[:space:]]devtmpfs$' /proc/filesystems; then
     cat <<END
 Since release 176, udev requires support for the following features in
 the running kernel:
 
 - devtmpfs         (CONFIG_DEVTMPFS)
 END
+    exit 1
   fi
 
-  if [ "$sysfs_deprecated" -eq 1 ]; then
-    db_input critical udev/sysfs_deprecated_incompatibility || true
-  fi
-
-  if [ "$abort_install" -eq 0 ]; then
-    return 0
-  fi
-
-  cat <<END
-
-Please upgrade your kernel before or while upgrading udev.
-
-AT YOUR OWN RISK, you can force the installation of this version of udev
-WHICH DOES NOT WORK WITH YOUR RUNNING KERNEL AND WILL BREAK YOUR SYSTEM
-AT THE NEXT REBOOT by creating the /etc/udev/kernel-upgrade file.
-There is always a safer way to upgrade, do not try this unless you
-understand what you are doing!
-
-
+  if [ -d /sys/class/mem/null -a ! -L /sys/class/mem/null ] ||
+     [ -e /sys/block -a ! -e /sys/class/block ]; then
+    cat <<END
+The currently running kernel has the CONFIG_SYSFS_DEPRECATED option
+enabled, which is incompatible with udev.
 END
-
-  db_stop
-  exit 1
-}
-
-rm_conffile() {
-  mv_conffile "$1" "$1.dpkg-bak"
-}
-
-mv_conffile() {
-  local package='udev'
-  local name="$1"
-  local newname="$2"
-
-  [ -e "$name" ] || return 0
-
-  local md5="$(md5sum $name | sed -e 's/ .*//')"
-  oldmd5="$(dpkg-query -W -f='${Conffiles}' $package | \
-    sed -n -e "\' $name ' { s/ obsolete$//; s/.* //; p }")"
-
-  if [ "$md5" = "$oldmd5" ]; then
-    rm -f "$name"
-  else
-    mv "$name" "$newname"
-  fi
-}
-
-mask_systemd_service() {
-  if [ -x '/bin/systemctl' -a -d '/run/systemd/system/' ]; then
-    ln -sf /dev/null /run/systemd/system/systemd-udevd.service
-    ln -sf /dev/null /run/systemd/system/udev.service
-    systemctl daemon-reload || true
-  fi
-}
-
-stop_on_upstart_upgrade() {
-  if which initctl >/dev/null && initctl version | grep -q upstart
-  then
-    # We have to stop udev before we can restart it under upstart in the
-    # postinst.
-    invoke-rc.d udev stop
+    exit 1
   fi
 }
 
 check_version() {
   # $2 is non-empty when installing from the "config-files" state
-  [ "$2" ] || return 0
+  [ -n "$2" ] || return 0
 
   if dpkg --compare-versions $2 lt 204-4; then
     # these must be checked first to allow aborting before changing anything
     if chrooted; then
       echo 'Running in a chroot, skipping the kernel versions checks!'
     else
-      check_kernel_version
       check_kernel_features
-    fi
-  fi # 168-2
-
-  if dpkg --compare-versions $2 lt 175-1; then
-    rm_conffile /etc/modprobe.d/blacklist.conf
-  fi # 175-1
-
-  if dpkg --compare-versions $2 lt 175-7.1; then
-    stop_on_upstart_upgrade
-  fi # 175-7.1
-
-  if dpkg --compare-versions $2 lt 204-4; then
-    # suppress errors when the new rules files contain options not supported by
-    # the old daemon
-    if ! chrooted; then
+      # suppress errors when the new rules files contain options not supported by
+      # the old daemon
       udevadm control --log-priority=0 || true
     fi
   fi # 204-4
 }
 
 case "$1" in
-    install)
+    install|upgrade|abort-upgrade)
     check_version "$@"
-    ;;
-
-    upgrade|abort-upgrade)
-    check_version "$@"
-    mask_systemd_service
-    ;;
-
-    *)
-    echo "$0 called with unknown argument '$1'" >&2
-    exit 1
     ;;
 esac
 
@@ -271,5 +84,19 @@ dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
 # End automatically added section
-
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6~ -- "$@"
+# End automatically added section
 

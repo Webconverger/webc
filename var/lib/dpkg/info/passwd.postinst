@@ -39,6 +39,15 @@ esac
 # Run shadowconfig only on new installs
 [ -z "$2" ] && shadowconfig on
 
+# Automatically added by dh_installinit
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	# In case this system is running systemd, we need to ensure that all
+	# necessary tmpfiles (if any) are created before starting.
+	if [ -d /run/systemd/system ] ; then
+		systemd-tmpfiles --create /usr/lib/tmpfiles.d/passwd.conf >/dev/null || true
+	fi
+fi
+# End automatically added section
 
 
 exit 0

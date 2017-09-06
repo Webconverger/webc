@@ -6,6 +6,20 @@ if [ ! -x $IWCONFIG ]; then
 	exit 0
 fi
 
+# check if this is a 802.11 device we're supposed to be effecting
+case "${IF_WIRELESS:-enable}" in
+	wireless-tools|iwconfig)
+		# *we* and not some other 802.11 tool should be used
+	;;
+	true|yes|enable|1)
+		# 802.11 should be used on this device, check for extensions
+		$IWCONFIG $IFACE >/dev/null 2>&1 || exit 0
+	;;
+	*)
+		exit 0
+	;;
+esac
+
 apply_settings()
 {
 	if [ -n "$IF_WIRELESS_MODE" ]; then

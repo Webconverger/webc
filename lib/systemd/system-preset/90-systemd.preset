@@ -9,23 +9,26 @@
 # generally follow a default-off policy.
 
 enable remote-fs.target
+enable machines.target
+
 enable getty@.service
-enable systemd-readahead-*
 enable systemd-timesyncd.service
 enable systemd-networkd.service
 enable systemd-resolved.service
+enable systemd-networkd-wait-online.service
 
 disable console-getty.service
-disable console-shell.service
 disable debug-shell.service
 
 disable halt.target
 disable kexec.target
 disable poweroff.target
-disable reboot.target
+enable reboot.target
 disable rescue.target
+disable exit.target
 
 disable syslog.socket
 
 disable systemd-journal-gatewayd.*
-disable systemd-networkd-wait-online.service
+disable systemd-journal-remote.*
+disable systemd-journal-upload.*

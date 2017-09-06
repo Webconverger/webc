@@ -1,0 +1,47 @@
+#!/bin/sh
+
+set -e
+
+mvverbose=-v
+
+# from dpkg-maintscript-helper, modified
+ensure_package_owns_file() {
+	local PACKAGE="$1"
+	local FILE="$2"
+
+	dpkg-query -L "$PACKAGE" | grep -F -q -x "$FILE"
+}
+
+# from dpkg-maintscript-helper
+prepare_rm_conffile() {
+	local CONFFILE="$1"
+	local PACKAGE="$2"
+
+	[ -e "$CONFFILE" ] || return 0
+	ensure_package_owns_file "$PACKAGE" "$CONFFILE" || return 0
+
+	local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
+	local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PACKAGE | \
+		sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+	if [ "$md5sum" != "$old_md5sum" ]; then
+		mv $mvverbose -f "$CONFFILE" "$CONFFILE.dpkg-backup"
+	else
+		mv $mvverbose -f "$CONFFILE" "$CONFFILE.dpkg-remove"
+	fi
+}
+
+# When upgrading from <0.123, we need to move initramfs.conf away so
+# dpkg will stop remembering it as an 'obsolete' conffile for us.  The
+# postinst of either initramfs-tools or initramfs-tools-core will move
+# it back.
+if [ "$1" = upgrade ] && dpkg --compare-versions "$2" lt 0.123~; then
+	prepare_rm_conffile /etc/initramfs-tools/initramfs.conf initramfs-tools
+fi
+
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/initramfs-tools 0.126~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/kernel/signed_postinst.d/initramfs-tools 0.126~ -- "$@"
+# End automatically added section
+

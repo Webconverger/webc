@@ -15,41 +15,53 @@ prereqs)
 	;;
 esac
 
-# First check if a location is set and is a valid swap partition
-test -r /etc/initramfs-tools/conf.d/resume \
-	&& . /etc/initramfs-tools/conf.d/resume
-if [ -n "$RESUME" ] && command -v blkid >/dev/null 2>&1 \
-	&& blkid -p -n swap $RESUME >/dev/null 2>&1; then
-	# As mkinitramfs copies the config file nothing to do.
-	exit 0
-fi
+. /usr/share/initramfs-tools/scripts/functions
 
-# We need to be able to read the listed swap partitions
-if [ ! -r /proc/swaps ]; then
-	exit 0
-fi
-
-# This is borrowed from udev's postinst
-chrooted() {
-	if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ]; then
-		# the devicenumber/inode pair of / is the same as that of
-		# /sbin/init's root, so we're *not* in a chroot and hence
-		# return false.
-		return 1
+# First check if a location is set and is a valid swap partition.
+# If so, the config file will be copied in and there is nothing to do.
+if [ -n "$RESUME" ] && [ "$RESUME" != auto ]; then
+	if [ "$RESUME" = none ]; then
+		exit 0
 	fi
-	return 0
+	if resume_dev_node="$(resolve_device "$RESUME")" && \
+	   blkid -p -n swap "$resume_dev_node" >/dev/null 2>&1; then
+		exit 0
+	fi
+
+	echo >&2 "W: initramfs-tools configuration sets RESUME=$RESUME"
+	echo >&2 "W: but no matching swap device is available."
+fi
+
+# If we were not explicitly requested to select a device, report that we
+# are doing so
+report_auto()
+{
+	test "$RESUME" = auto || echo >&2 "I: $*"
 }
 
-# Try to autodetect the RESUME partition, using biggest swap?
-RESUME=$(grep ^/dev/ /proc/swaps | sort -rk3 | head -n 1 | cut -d " " -f 1)
-if [ -n "$RESUME" ] && command -v blkid >/dev/null 2>&1; then
-	UUID=$(blkid -s UUID -o value "$RESUME" || true)
-	if [ -n "$UUID" ]; then
-			RESUME="UUID=$UUID"
+# We need to be able to read the listed swap partitions
+if ischroot || [ ! -r /proc/swaps ]; then
+	resume_auto=
+else
+	# Try to autodetect the RESUME partition, using biggest swap?
+	resume_auto=$(grep ^/dev/ /proc/swaps | sort -rnk3 | head -n 1 | cut -d " " -f 1)
+	if [ -n "$resume_auto" ]; then
+		UUID=$(blkid -s UUID -o value "$resume_auto" || true)
+		report_auto "The initramfs will attempt to resume from $resume_auto"
+		if [ -n "$UUID" ]; then
+			report_auto "(UUID=$UUID)"
+			resume_auto="UUID=$UUID"
+		fi
+		report_auto "Set the RESUME variable to override this."
 	fi
 fi
 
-# Write detected resume to intramfs conf.d/resume if not in a chroot
-if [ -n "${RESUME}" ] && ! chrooted; then
-	echo "RESUME=${RESUME}" > ${DESTDIR}/conf/conf.d/resume
+# Write selected resume device to intramfs conf.d
+if [ "$RESUME" = auto ] || [ -n "$resume_auto" ]; then
+	# If we were explicitly requested to select a device, and we failed,
+	# report that
+	if [ -z "$resume_auto" ]; then
+		echo >&2 "W: initramfs-tools failed to select a resume device"
+	fi
+	echo "RESUME=${resume_auto}" > ${DESTDIR}/conf/conf.d/zz-resume-auto
 fi

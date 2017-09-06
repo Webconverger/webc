@@ -9,11 +9,13 @@ use Text::Iconv;
 # List all exported symbols here.
 our @EXPORT_OK = qw(parseinfo updatedb loaddb
 		    dico_checkroot
+		    dico_debug
 		    dico_debugprint
 		    dico_get_spellchecker_params
 		    getlibdir
                     dico_getsysdefault dico_setsysdefault
 		    getuserdefault setuserdefault
+		    dico_find_matching_choice
 		    build_emacsen_support
 		    build_jed_support
 		    build_squirrelmail_support
@@ -47,6 +49,15 @@ sub dico_checkroot {
 # ------------------------------------------------------------------
   return if ($> == 0 or ($^O eq 'interix' and $> == 197108));
   die "$0: You must run this as root.\n";
+}
+
+# -------------------------------------------------------------
+sub dico_debug {
+# -------------------------------------------------------------
+# Enable debug mode
+# -------------------------------------------------------------
+  $debug++;
+  $ENV{'DICT_COMMON_DEBUG'}++;
 }
 
 # -------------------------------------------------------------
@@ -366,6 +377,34 @@ It has been automatically generated.
 DO NOT EDIT!";
   $comment =~ s{^}{$commstr}mg;
   return "$comment\n";
+}
+
+# ------------------------------------------------------------------
+sub dico_find_matching_choice {
+# ------------------------------------------------------------------
+# Try a single regexp match from given class choices
+# ------------------------------------------------------------------
+  my $dictionaries = shift;
+  my $regexp       = shift;
+
+  my @found_matches = grep {/$regexp/} keys %$dictionaries;
+  unless (@found_matches ) {
+    dico_debugprint "Try harder with case-independent match";
+    @found_matches = grep {/$regexp/i} keys %$dictionaries;
+  }
+
+  if ( scalar @found_matches eq 1 ){
+    return $found_matches[0];
+  } else {
+    my $dict_list = join("\n",sort keys %$dictionaries);
+    if ( @found_matches ){
+      dico_debugprint "Multiple matches for \"$regexp\":\n"
+        . join("\n",sort  @found_matches);
+    } else {
+      dico_debugprint "No matches found for \"$regexp\". Available dicts:\n$dict_list";
+    }
+    return;
+  }
 }
 
 # ------------------------------------------------------------------

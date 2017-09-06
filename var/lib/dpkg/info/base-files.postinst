@@ -13,7 +13,7 @@ install_local_dir() {
 
 install_from_default() {
   if [ ! -f $2 ]; then
-    cp -p $1 $2
+    cp -p /usr/share/base-files/$1 $2
   fi
 }
 
@@ -33,12 +33,12 @@ migrate_directory() {
 }
 
 update_to_current_default() {
-  if [ -f /etc/$1 ]; then
-    md5=`md5sum /etc/$1 | cut -f 1 -d " "`
+  if [ -f $2 ]; then
+    md5=`md5sum $2 | cut -f 1 -d " "`
     if grep -q "$md5" /usr/share/base-files/$1.md5sums; then
-      if ! cmp -s /usr/share/base-files/$1 /etc/$1; then
-        cp -p /usr/share/base-files/$1 /etc/$1
-        echo Updating /etc/$1 to current default.
+      if ! cmp -s /usr/share/base-files/$1 $2; then
+        cp -p /usr/share/base-files/$1 $2
+        echo Updating $2 to current default.
       fi
     fi
   fi
@@ -51,13 +51,12 @@ if [ ! -e /etc/dpkg/origins/default ]; then
 fi
 
 if [ "$1" = "configure" ] && [ "$2" = "" ]; then
-  install_from_default /usr/share/base-files/staff-group-for-usr-local \
-    /etc/staff-group-for-usr-local
-  install_from_default /usr/share/base-files/nsswitch.conf /etc/nsswitch.conf
-  install_from_default /usr/share/base-files/dot.profile   /root/.profile
-  install_from_default /usr/share/base-files/dot.bashrc    /root/.bashrc
-  install_from_default /usr/share/base-files/profile       /etc/profile
-  install_from_default /usr/share/base-files/motd          /etc/motd
+  install_from_default staff-group-for-usr-local \
+                                     /etc/staff-group-for-usr-local
+  install_from_default dot.profile   /root/.profile
+  install_from_default dot.bashrc    /root/.bashrc
+  install_from_default profile       /etc/profile
+  install_from_default motd          /etc/motd
   install_directory mnt       755 root
   install_directory srv       755 root
   install_directory opt       755 root
@@ -112,19 +111,19 @@ if [ ! -f /var/lib/dpkg/status ]; then
 fi
 
 if [ ! -f /usr/info/dir ] && [ ! -f /usr/share/info/dir ]; then
-  install_from_default /usr/share/base-files/info.dir /usr/share/info/dir
+  install_from_default info.dir /usr/share/info/dir
   chmod 644 /usr/share/info/dir
 fi
 
 if [ "$1" = "configure" ] && [ "$2" != "" ]; then
-  update_to_current_default profile
-  update_to_current_default nsswitch.conf
+  update_to_current_default profile       /etc/profile
+  update_to_current_default dot.profile   /root/.profile
   if dpkg --compare-versions "$2" lt-nl "7.7"; then
     install_directory mnt 755 root
   fi
 fi
 
 if dpkg --compare-versions "$2" lt-nl "6.10"; then
-  install_from_default /usr/share/base-files/staff-group-for-usr-local \
+  install_from_default staff-group-for-usr-local \
     /etc/staff-group-for-usr-local
 fi

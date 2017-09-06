@@ -86,8 +86,7 @@ copy_live_to ()
 				echo " * Copying whole medium to RAM" 1>/dev/console
 				rsync -a --progress ${copyfrom}/* ${copyto} 1>/dev/console  # "cp -a" from busybox also copies hidden files
 			else
-				mkdir -p ${copyto}/${LIVE_MEDIA_PATH}
-				cp -a ${copyfrom}/${LIVE_MEDIA_PATH}/* ${copyto}/${LIVE_MEDIA_PATH}
+				cp -a ${copyfrom}/* ${copyto}/
 				if [ -e ${copyfrom}/${LIVE_MEDIA_PATH}/.disk ]
 				then
 					cp -a ${copyfrom}/${LIVE_MEDIA_PATH}/.disk ${copyto}

@@ -2,6 +2,9 @@
 
 : ${MERGE_TOOLS_DIR=$(git --exec-path)/mergetools}
 
+IFS='
+'
+
 mode_ok () {
 	if diff_mode
 	then
@@ -92,16 +95,16 @@ translate_merge_tool_path () {
 check_unchanged () {
 	if test "$MERGED" -nt "$BACKUP"
 	then
-		status=0
+		return 0
 	else
 		while true
 		do
 			echo "$MERGED seems unchanged."
-			printf "Was the merge successful? [y/n] "
+			printf "Was the merge successful [y/n]? "
 			read answer || return 1
 			case "$answer" in
-			y*|Y*) status=0; break ;;
-			n*|N*) status=1; break ;;
+			y*|Y*) return 0 ;;
+			n*|N*) return 1 ;;
 			esac
 		done
 	fi
@@ -119,8 +122,6 @@ setup_user_tool () {
 
 	diff_cmd () {
 		( eval $merge_tool_cmd )
-		status=$?
-		return $status
 	}
 
 	merge_cmd () {
@@ -130,13 +131,10 @@ setup_user_tool () {
 		then
 			touch "$BACKUP"
 			( eval $merge_tool_cmd )
-			status=$?
 			check_unchanged
 		else
 			( eval $merge_tool_cmd )
-			status=$?
 		fi
-		return $status
 	}
 }
 
@@ -153,13 +151,11 @@ setup_tool () {
 	}
 
 	diff_cmd () {
-		status=1
-		return $status
+		return 1
 	}
 
 	merge_cmd () {
-		status=1
-		return $status
+		return 1
 	}
 
 	translate_merge_tool_path () {
@@ -210,7 +206,6 @@ run_merge_tool () {
 
 	merge_tool_path=$(get_merge_tool_path "$1") || exit
 	base_present="$2"
-	status=0
 
 	# Bring tool-specific functions into scope
 	setup_tool "$1" || return 1
@@ -221,7 +216,6 @@ run_merge_tool () {
 	else
 		run_diff_cmd "$1"
 	fi
-	return $status
 }
 
 # Run a either a configured or built-in diff tool
@@ -250,7 +244,7 @@ list_merge_tool_candidates () {
 			tools="opendiff kdiff3 tkdiff xxdiff meld $tools"
 		fi
 		tools="$tools gvimdiff diffuse diffmerge ecmerge"
-		tools="$tools p4merge araxis bc3 codecompare"
+		tools="$tools p4merge araxis bc codecompare"
 	fi
 	case "${VISUAL:-$EDITOR}" in
 	*vim*)
@@ -311,6 +305,7 @@ guess_merge_tool () {
 	EOF
 
 	# Loop over each candidate and stop when a valid merge tool is found.
+	IFS=' '
 	for tool in $tools
 	do
 		is_available "$tool" && echo "$tool" && return 0
@@ -376,4 +371,29 @@ get_merge_tool () {
 		merge_tool=$(guess_merge_tool) || exit
 	fi
 	echo "$merge_tool"
+}
+
+mergetool_find_win32_cmd () {
+	executable=$1
+	sub_directory=$2
+
+	# Use $executable if it exists in $PATH
+	if type -p "$executable" >/dev/null 2>&1
+	then
+		printf '%s' "$executable"
+		return
+	fi
+
+	# Look for executable in the typical locations
+	for directory in $(env | grep -Ei '^PROGRAM(FILES(\(X86\))?|W6432)=' |
+		cut -d '=' -f 2- | sort -u)
+	do
+		if test -n "$directory" && test -x "$directory/$sub_directory/$executable"
+		then
+			printf '%s' "$directory/$sub_directory/$executable"
+			return
+		fi
+	done
+
+	printf '%s' "$executable"
 }

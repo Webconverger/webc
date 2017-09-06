@@ -3,7 +3,6 @@
 STATEDIR=/var/lib/initramfs-tools
 BOOTDIR=/boot
 CONF=/etc/initramfs-tools/update-initramfs.conf
-USETRIGGERS=true
 mode=""
 version=""
 update_initramfs=yes
@@ -23,8 +22,7 @@ linux-image-*)
 	fi
 	;;
 ?*)
-	if	   $USETRIGGERS						\
-		&& [ $# = 1 ]						\
+	if	   [ $# = 1 ]						\
 		&& [ x"$1" = x-u ]					\
 		&& dpkg-trigger --check-supported 2>/dev/null
 	then
@@ -56,19 +54,6 @@ Options:
 
 EOF
 	exit 1
-}
-
-# chroot check
-chrooted()
-{
-	# borrowed from udev's postinst
-	if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ]; then
-		# the devicenumber/inode pair of / is the same as that of
-		# /sbin/init's root, so we're *not* in a chroot and hence
-		# return false.
-		return 1
-	fi
-return 0
 }
 
 mild_panic()
@@ -215,7 +200,7 @@ delete_sha1()
 ro_boot_check()
 {
 	# check irrelevant inside of a chroot
-	if [ ! -r /proc/mounts ] || chrooted; then
+	if [ ! -r /proc/mounts ] || ischroot; then
 		return 0
 	fi
 
@@ -230,27 +215,7 @@ ro_boot_check()
 
 get_sorted_versions()
 {
-	version_list=""
-
-	for gsv_x in "${STATEDIR}"/*; do
-		gsv_x="$(basename "${gsv_x}")"
-		if [ "${gsv_x}" = '*' ]; then
-			return 0
-		fi
-		worklist=""
-		for gsv_i in $version_list; do
-			if dpkg --compare-versions "${gsv_x}" '>' "${gsv_i}" 2>/dev/null; then
-				worklist="${worklist} ${gsv_x} ${gsv_i}"
-				gsv_x=""
-			else
-				worklist="${worklist} ${gsv_i}"
-			fi
-		done
-		if [ "${gsv_x}" != "" ]; then
-			worklist="${worklist} ${gsv_x}"
-		fi
-		version_list="${worklist}"
-	done
+	version_list="$(ls -1 "${STATEDIR}" | linux-version sort --reverse)"
 
 	verbose "Available versions: ${version_list}"
 }

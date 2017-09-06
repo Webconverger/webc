@@ -12,6 +12,8 @@ Documentation=http://www.freedesktop.org/wiki/Software/systemd/APIFileSystems
 DefaultDependencies=no
 Before=sysinit.target
 ConditionPathExists=/sys/kernel/mm/hugepages
+ConditionCapability=CAP_SYS_ADMIN
+ConditionVirtualization=!private-users
 
 [Mount]
 What=hugetlbfs

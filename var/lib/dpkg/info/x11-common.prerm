@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/x11-common" ]; then
+if [ -x "/etc/init.d/x11-common" ] && [ "$1" = remove ]; then
 	invoke-rc.d x11-common stop || exit $?
 fi
 # End automatically added section

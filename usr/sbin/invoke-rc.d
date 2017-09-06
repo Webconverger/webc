@@ -38,6 +38,7 @@ RETURNFAILURE=
 RC=
 is_upstart=
 is_systemd=
+is_openrc=
 
 # Shell options
 set +e
@@ -56,7 +57,7 @@ Usage:
 
   basename - Initscript ID, as per update-rc.d(8)
   action   - Initscript action. Known actions are:
-                start, [force-]stop, restart,
+                start, [force-]stop, [try-]restart,
                 [force-]reload, status
   WARNING: not all initscripts implement all of the above actions.
 
@@ -123,7 +124,7 @@ querypolicy () {
 
 policyaction="${ACTION}"
 if test x${RC} = "x101" ; then
-    if test "${ACTION}" = "start" || test "${ACTION}" = "restart" ; then
+    if test "${ACTION}" = "start" || test "${ACTION}" = "restart" || test "${ACTION}" = "try-restart"; then
 	policyaction="(${ACTION})"
     fi
 fi
@@ -175,6 +176,15 @@ if test "x${POLICYHELPER}" != x && test -x "${POLICYHELPER}" ; then
 	 ;;
     esac
 else
+    if test ! -e "/sbin/init" ; then
+        if test x${FORCE} != x ; then
+            printerror "WARNING: No init system and policy-rc.d missing, but force specified so proceeding."
+        else
+            printerror "WARNING: No init system and policy-rc.d missing! Defaulting to block."
+            RC=101
+        fi
+    fi
+
     if test x${RC} = x ; then 
 	RC=104
     fi
@@ -256,17 +266,6 @@ fi
 #NOTE: It may not be obvious, but "$@" from this point on must expand
 #to the extra initscript parameters, except inside functions.
 
-## sanity checks and just-in-case warnings.
-case ${ACTION} in
-    start|stop|force-stop|restart|reload|force-reload|status)
-	;;
-    *)
-	if test "x${POLICYHELPER}" != x && test -x "${POLICYHELPER}" ; then
-	    printerror action ${ACTION} is unknown, but proceeding anyway.
-	fi
-	;;
-esac
-
 # Operate against system upstart, not session
 unset UPSTART_SESSION
 # If we're running on upstart and there's an upstart job of this name, do
@@ -278,22 +277,37 @@ then
 elif test -d /run/systemd/system ; then
     is_systemd=1
     UNIT="${INITSCRIPTID%.sh}.service"
+elif test -f /run/openrc/softlevel ; then
+    is_openrc=1
 elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
     ## Verifies if the given initscript ID is known
     ## For sysvinit, this error is critical
     printerror unknown initscript, ${INITDPREFIX}${INITSCRIPTID} not found.
-    exit 100
+    # If the init script doesn't exist, but the upstart job does, we
+    # defer the error exit; we might be running in a chroot and
+    # policy-rc.d might say not to start the job anyway, in which case
+    # we don't want to exit non-zero.
+    if [ ! -e "/etc/init/${INITSCRIPTID}.conf" ]; then
+	exit 100
+    fi
 fi
 
 ## Queries sysvinit for the current runlevel
-RL=`${RUNLEVELHELPER} | sed 's/.*\ //'`
-if test ! $? ; then
-    printerror "could not determine current runlevel"
-    if test x${RETRY} = x ; then
-	exit 102
+if [ ! -x ${RUNLEVELHELPER} ] || ! RL=`${RUNLEVELHELPER}`; then
+    if [ -n "$is_systemd" ] && systemctl is-active --quiet sysinit.target; then
+        # under systemd, the [2345] runlevels are only set upon reaching them;
+        # if we are past sysinit.target (roughly equivalent to rcS), consider
+        # this as runlevel 5 (this is only being used for validating rcN.d
+        # symlinks, so the precise value does not matter much)
+        RL=5
+    else
+        printerror "could not determine current runlevel"
+        # this usually fails in schroots etc., ignore failure (#823611)
+        RL=
     fi
-    RL=
 fi
+# strip off previous runlevel
+RL=${RL#* }
 
 ## Running ${RUNLEVELHELPER} to get current runlevel do not work in
 ## the boot runlevel (scripts in /etc/rcS.d/), as /var/run/utmp
@@ -344,16 +358,6 @@ verifyrclink () {
   return 0
 }
 
-# we do handle multiple links per runlevel
-# but we don't handle embedded blanks in link names :-(
-if test x${RL} != x ; then
-    SLINK=`ls -d -Q ${RCDPREFIX}${RL}.d/S[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
-    KLINK=`ls -d -Q ${RCDPREFIX}${RL}.d/K[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
-    SSLINK=`ls -d -Q ${RCDPREFIX}S.d/S[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
-
-    verifyrclink ${SLINK} ${KLINK} ${SSLINK}
-fi
-
 testexec () {
   #
   # returns true if any of the parameters is
@@ -371,33 +375,59 @@ testexec () {
 RC=
 
 ###
-### LOCAL INITSCRIPT POLICY: Enforce need of a start entry
-### in either runlevel S or current runlevel to allow start
-### or restart.
-###
-case ${ACTION} in
-  start|restart)
-    if testexec ${SLINK} ; then
-	RC=104
-    elif testexec ${KLINK} ; then
-	RC=101
-    elif testexec ${SSLINK} ; then
-	RC=104
+### LOCAL POLICY: Enforce that the script/unit is enabled. For SysV init
+### scripts, this needs a start entry in either runlevel S or current runlevel
+### to allow start or restart.
+if [ -n "$is_systemd" ]; then
+    case ${ACTION} in
+        start|restart|try-restart)
+            # Note that systemd 215 does not yet support is-enabled for SysV scripts,
+            # this works only with systemd >= 220-1 (systemd-sysv-install). Add a
+            # simple fallback check which can be dropped after releasing stretch.
+            if systemctl --quiet is-enabled "${UNIT}" 2>/dev/null || \
+               ls ${RCDPREFIX}[S2345].d/S[0-9][0-9]${INITSCRIPTID} >/dev/null 2>&1; then
+                RC=104
+            elif systemctl --quiet is-active "${UNIT}" 2>/dev/null; then
+                RC=104
+            else
+                RC=101
+            fi
+            ;;
+    esac
+else
+    # we do handle multiple links per runlevel
+    # but we don't handle embedded blanks in link names :-(
+    if test x${RL} != x ; then
+	SLINK=`ls -d -Q ${RCDPREFIX}${RL}.d/S[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
+	KLINK=`ls -d -Q ${RCDPREFIX}${RL}.d/K[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
+	SSLINK=`ls -d -Q ${RCDPREFIX}S.d/S[0-9][0-9]${INITSCRIPTID} 2>/dev/null | xargs`
+
+	verifyrclink ${SLINK} ${KLINK} ${SSLINK}
     fi
-  ;;
-esac
+
+    case ${ACTION} in
+      start|restart|try-restart)
+	if testexec ${SLINK} ; then
+	    RC=104
+	elif testexec ${KLINK} ; then
+	    RC=101
+	elif testexec ${SSLINK} ; then
+	    RC=104
+	else
+	    RC=101
+	fi
+      ;;
+    esac
+fi
 
 # test if /etc/init.d/initscript is actually executable
 _executable=
 if [ -n "$is_upstart" ]; then
     _executable=1
 elif [ -n "$is_systemd" ]; then
-    _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
-    if [ "$_state" != "LoadState=masked" ]; then
-        _executable=1
-    fi
+    _executable=1
 elif testexec "${INITDPREFIX}${INITSCRIPTID}"; then
-   _executable=1
+    _executable=1
 fi
 if [ "$_executable" = "1" ]; then
     if test x${RC} = x && test x${MODE} = xquery ; then
@@ -450,13 +480,10 @@ if [ -n "$is_upstart" ]; then
     RUNNING=
     DISABLED=
     if status "$INITSCRIPTID" 2>/dev/null | grep -q ' start/'; then
-	RUNNING=1
+        RUNNING=1
     fi
-    UPSTART_VERSION_RUNNING=$(initctl version|awk '{print $3}'|tr -d ')')
-
-    if dpkg --compare-versions "$UPSTART_VERSION_RUNNING" ge 0.9.7
-    then
-	initctl show-config -e "$INITSCRIPTID"|grep -q '^  start on' || DISABLED=1
+    if ! initctl show-config -e "$INITSCRIPTID" | grep -q '^  start on'; then
+        DISABLED=1
     fi
 fi
 
@@ -464,7 +491,7 @@ fi
 ## note that $ACTION is a space-separated list of actions
 ## to be attempted in order until one suceeds.
 if test x${FORCE} != x || test ${RC} -eq 104 ; then
-    if [ -n "$is_upstart" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+    if [ -n "$is_upstart" ] || [ -n "$is_systemd" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
 	RC=102
 	setechoactions ${ACTION}
 	while test ! -z "${ACTION}" ; do
@@ -519,27 +546,43 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
                     # pick up any changes.
                     systemctl daemon-reload
                 fi
+                _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
+
+                # avoid deadlocks during bootup and shutdown from units/hooks
+                # which call "invoke-rc.d service reload" and similar, since
+                # the synchronous wait plus systemd's normal behaviour of
+                # transactionally processing all dependencies first easily
+                # causes dependency loops
+                if ! systemctl --quiet is-active multi-user.target; then
+                    sctl_args="--job-mode=ignore-dependencies"
+                fi
                 case $saction in
-                    start|stop|restart|status)
-                        systemctl "${saction}" "${UNIT}" && exit 0
+                    start|restart|try-restart)
+                        [ "$_state" != "LoadState=masked" ] || exit 0
+                        systemctl $sctl_args "${saction}" "${UNIT}" && exit 0
+                        ;;
+                    stop|status)
+                        systemctl $sctl_args "${saction}" "${UNIT}" && exit 0
                         ;;
                     reload)
+                        [ "$_state" != "LoadState=masked" ] || exit 0
                         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
                         if [ "$_canreload" = "CanReload=no" ]; then
                             "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
                         else
-                            systemctl reload "${UNIT}" && exit 0
+                            systemctl $sctl_args reload "${UNIT}" && exit 0
                         fi
                         ;;
                     force-stop)
                         systemctl --signal=KILL kill "${UNIT}" && exit 0
                         ;;
                     force-reload)
+                        [ "$_state" != "LoadState=masked" ] || exit 0
                         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
                         if [ "$_canreload" = "CanReload=no" ]; then
-                           systemctl restart "${UNIT}" && exit 0
+                           systemctl $sctl_args restart "${UNIT}" && exit 0
                         else
-                           systemctl reload "${UNIT}" && exit 0
+                           systemctl $sctl_args reload "${UNIT}" && exit 0
                         fi
                         ;;
                     *)
@@ -548,6 +591,8 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
                         "${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
                         ;;
                 esac
+	    elif [ -n "$is_openrc" ]; then
+		rc-service "${INITSCRIPTID}" "${saction}" && exit 0
 	    else
 		"${INITDPREFIX}${INITSCRIPTID}" "${saction}" "$@" && exit 0
 	    fi
@@ -558,6 +603,9 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 	    fi
 	done
 	printerror initscript ${INITSCRIPTID}, action \"${saction}\" failed.
+	if [ -n "$is_systemd" ] && [ "$saction" = start -o "$saction" = restart -o "$saction" = "try-restart" ]; then
+	    systemctl status --no-pager "${UNIT}" || true
+	fi
 	exit ${RC}
     fi
     exit 102

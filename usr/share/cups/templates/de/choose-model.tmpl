@@ -1,5 +1,3 @@
-<DIV CLASS="indent">
-
 <H2 CLASS="title">{op=modify-printer?{printer_name} ändern:Drucker hinzufügen (Schritt 5/5)}</H2>
 
 <FORM METHOD="POST" ACTION="/admin" ENCTYPE="multipart/form-data">
@@ -30,16 +28,11 @@
 <TR>
 <TH CLASS="label">Freigabe:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_SHARED" VALUE="{?printer_is_shared}">
-Dieser Drucker ist {?printer_is_shared=?nicht:{?printer_is_shared=0?nicht:}} im Netz freigeben</TD>
+Drucker {?printer_is_shared=?nicht:{?printer_is_shared=0?nicht:}} im Netzwerk freigeben</TD>
 </TR>
 <TR>
-<TH CLASS="label">Farmbmanagement:</TH>
-<TD><INPUT TYPE="HIDDEN" NAME="PRINTER_IS_COLORMANAGED" VALUE="{?printer_is_colormanaged}">
-{?printer_is_colormanaged=?Eingeschaltet:{?printer_is_colormanaged=0?Ausgeschaltet:}} Eingeschaltet</TD>
-</TR>
-<TR>
-<TH CLASS="label">Marke:</TH>
-<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Andere(n) Marke/Hersteller auswählen"></TD>
+<TH CLASS="label">Hersteller:</TH>
+<TD>{PPD_MAKE} <INPUT TYPE="SUBMIT" NAME="SELECT_MAKE" VALUE="Anderen Hersteller/Marke wählen"></TD>
 </TR>
 <TR>
 <TH CLASS="label">Modell:</TH>
@@ -51,7 +44,7 @@ Dieser Drucker ist {?printer_is_shared=?nicht:{?printer_is_shared=0?nicht:}} im 
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Oder stellen Sie eine PPD Datei bereit:</TH>
+<TH CLASS="label">Oder PPD-Datei bereitstellen:</TH>
 <TD><INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="262144"><INPUT
 TYPE="FILE" NAME="PPD_FILE"></TD>
 </TR>
@@ -62,4 +55,3 @@ TYPE="FILE" NAME="PPD_FILE"></TD>
 </TABLE>
 
 </FORM>
-</DIV>

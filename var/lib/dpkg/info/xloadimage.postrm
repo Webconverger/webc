@@ -2,7 +2,20 @@
 
 set -e
 
-if [ -x /usr/sbin/update-mime ]; then
+pathfind() {
+    OLDIFS="$IFS"
+    IFS=:
+    for p in $PATH; do
+        if [ -x "$p/$*" ]; then
+            IFS="$OLDIFS"
+            return 0
+        fi
+    done
+    IFS="$OLDIFS"
+    return 1
+}
+
+if pathfind update-mime; then
     update-mime
 fi
 

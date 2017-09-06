@@ -1,5 +1,3 @@
-<DIV CLASS="indent">
-
 <H2 CLASS="title">{op=modify-printer?{printer_name} ändern:Drucker hinzufügen}</H2>
 
 <FORM METHOD="POST" ACTION="/admin">
@@ -13,7 +11,7 @@
 <TD><INPUT TYPE="HIDDEN" NAME="DEVICE_URI" VALUE="{device_uri}">{device_uri}</TD>
 </TR>
 <TR>
-<TH CLASS="label">Baud Rate:</TH>
+<TH CLASS="label">Baudrate:</TH>
 <TD><SELECT NAME="BAUDRATE">
 {[baudrates]<OPTION {?baudrate={baudrates}?SELECTED:}>{baudrates}}
 </SELECT></TD>
@@ -27,16 +25,16 @@
 </SELECT></TD>
 </TR>
 <TR>
-<TH CLASS="label">Daten Bits:</TH>
+<TH CLASS="label">Datenbits:</TH>
 <TD><SELECT NAME="BITS">
 <OPTION {?bits=8?SELECTED:}>8
 <OPTION {?bits=7?SELECTED:}>7
 </SELECT></TD>
 </TR>
 <TR>
-<TH CLASS="label">Flu&szlig;kontrolle:</TH>
+<TH CLASS="label">Flusskontrolle:</TH>
 <TD><SELECT NAME="FLOW">
-<OPTION VALUE="none" {?flow=none?SELECTED:}>None
+<OPTION VALUE="none" {?flow=none?SELECTED:}>Keine
 <OPTION VALUE="soft" {?flow=soft?SELECTED:}>XON/XOFF (Software)
 <OPTION VALUE="hard" {?flow=hard?SELECTED:}>RTS/CTS (Hardware)
 <OPTION VALUE="dtrdsr" {?flow=dtrdsr?SELECTED:}>DTR/DSR (Hardware)
@@ -49,4 +47,3 @@
 </TABLE>
 
 </FORM>
-</DIV>

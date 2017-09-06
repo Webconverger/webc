@@ -1,6 +1,4 @@
 #!/bin/sh -
-#	$OpenBSD: lorder.sh,v 1.14 2003/07/02 00:21:16 avsm Exp $
-#	$NetBSD: lorder.sh.gnm,v 1.3 1995/12/20 04:45:11 cgd Exp $
 #
 # Copyright (c) 1990, 1993
 #	The Regents of the University of California.  All rights reserved.
@@ -13,7 +11,7 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. Neither the name of the University nor the names of its contributors
+# 4. Neither the name of the University nor the names of its contributors
 #    may be used to endorse or promote products derived from this software
 #    without specific prior written permission.
 #
@@ -31,8 +29,10 @@
 #
 #	@(#)lorder.sh	8.1 (Berkeley) 6/6/93
 #
+# $FreeBSD: head/usr.bin/lorder/lorder.sh 302398 2016-07-07 20:50:59Z emaste $
+#
 
-# one argument can be optimized: put out the filename twice
+# only one argument is a special case, just output the name twice
 case $# in
 	0)
 		echo "usage: lorder file ...";
@@ -43,26 +43,26 @@ case $# in
 esac
 
 # temporary files
-R=`mktemp /tmp/_referenceXXXXXXXXXX` || exit 1
-S=`mktemp /tmp/_symbolXXXXXXXXXX` || {
-	rm -f ${R}
-	exit 1
-}
+R=$(mktemp -t _reference_)
+S=$(mktemp -t _symbol_)
+NM=${NM:-nm}
 
 # remove temporary files on HUP, INT, QUIT, PIPE, TERM
-trap "rm -f $R $S; exit 0" 0
-trap "rm -f $R $S; exit 1" HUP INT QUIT PIPE TERM
+trap "rm -f $R $S $T; exit 1" HUP INT QUIT PIPE TERM
 
-# make sure files depend on themselves
-for file in "$@"; do echo "$file $file" ; done
-# if the line has " T ", " D ", " G ", " R ",  it's a globally defined 
-# symbol, put it into the symbol file.
+# make sure all the files get into the output
+for i in $*; do
+	echo $i $i
+done
+
+# if the line has " [TDW] " it's a globally defined symbol, put it
+# into the symbol file.
 #
 # if the line has " U " it's a globally undefined symbol, put it into
 # the reference file.
-${NM:-nm} -go "$@" | sed "
-	/ [TDGR] / {
-		s/:.* [TDGR] / /
+${NM} ${NMFLAGS} -go $* | sed "
+	/ [TDW] / {
+		s/:.* [TDW] / /
 		w $S
 		d
 	}
@@ -73,9 +73,19 @@ ${NM:-nm} -go "$@" | sed "
 	d
 "
 
-# sort symbols and references on the first field (the symbol)
-# join on that field, and print out the file names (dependencies).
-sort -k 2 $R -o $R
-sort -k 2 $S -o $S
+export LC_ALL=C
+# eliminate references that can be resolved by the same library.
+if [ $(expr "$*" : '.*\.a[[:>:]]') -ne 0 ]; then
+	sort -u -o $S $S
+	sort -u -o $R $R
+	T=$(mktemp -t _temp_)
+	comm -23 $R $S >$T
+	mv $T $R
+fi
+
+# sort references and symbols on the second field (the symbol),
+# join on that field, and print out the file names.
+sort -k 2 -o $R $R
+sort -k 2 -o $S $S
 join -j 2 -o 1.1 2.1 $R $S
 rm -f $R $S

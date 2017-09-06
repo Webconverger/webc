@@ -1,21 +1,10 @@
 #!/bin/bash
 
 # Execute the right version of perf for the current kernel.
-# Remove flavour or custom suffix and fix number of version components:
-# - For 2.6.x, use 3 components
-# - For 3.0 or 3.0.x, use 3.0.0
-# - Otherwise, use 2 components
+# Remove flavour or custom suffix and fix number of version components to 2.
 version="$(uname -r)"
 version="${version%%-*}"
 case "$version" in
-    2.6.*.*)
-	version="${version%.*}"
-	;;
-    2.6.*)
-	;;
-    3.0 | 3.0.*)
-	version=3.0.0
-	;;
     *.*.*)
 	version="${version%.*}"
 	;;
@@ -25,7 +14,7 @@ exec "perf_$version" "$@"
 
 # Not found? Tell the user which package to install.
 case "$version" in
-    2.6.* | 3.* | 4.0 | 4.0.*)
+    3.* | 4.0 | 4.0.*)
 	package=linux-tools-$version
 	;;
     *)

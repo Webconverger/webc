@@ -22,7 +22,7 @@ done
 if $LPINFO_RUN; then
   # textonly can't print PDF
   # pdftoijs is currently buggy !?
-  DRIVERS_LIST=$(lpinfo -m | cut -f1 -d' ' | grep -v 'textonly' | grep -v 'pdftoijs' | grep -E $DRIVER_REGEXP)
+  DRIVERS_LIST=$(lpinfo -m | cut -f1 -d' ' | grep -v 'textonly' | grep -v 'pdftoijs' | grep -v 'everywhere' | grep -E $DRIVER_REGEXP)
 fi
 
 cleanup() {

@@ -124,9 +124,14 @@ EOF
     db_set console-setup/store_defaults_in_debconf_db true
 fi
 
+# The second setupcon may start background processes inheriting file
+# descriptors from debconf.
+db_stop
+
+# We redirect the output so that postinst does not block when ScrollLock is on
 # This works even if we are not on the console
-setupcon --save-only || true
+setupcon --save-only >/dev/null 2>/dev/null || true
 # This will protest if we are not on the console
-setupcon 2>/dev/null || true
+setupcon >/dev/null 2>/dev/null || true
 
 

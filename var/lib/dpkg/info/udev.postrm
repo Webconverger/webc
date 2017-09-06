@@ -10,58 +10,25 @@ case "$1" in
 esac
 
 # Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installinit
-if [ "$1" = "purge" ] ; then
-	update-rc.d udev-fallback-graphics remove >/dev/null
-fi
-
-
-# In case this system is running systemd, we make systemd reload the unit files
-# to pick up changes.
-if [ -d /run/systemd/system ] ; then
-	systemctl --system daemon-reload >/dev/null || true
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ "$1" = "purge" ] ; then
-	update-rc.d udevmonitor remove >/dev/null
-fi
-
-
-# In case this system is running systemd, we make systemd reload the unit files
-# to pick up changes.
-if [ -d /run/systemd/system ] ; then
-	systemctl --system daemon-reload >/dev/null || true
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ "$1" = "purge" ] ; then
-	update-rc.d udevtrigger remove >/dev/null
-fi
-
-
-# In case this system is running systemd, we make systemd reload the unit files
-# to pick up changes.
-if [ -d /run/systemd/system ] ; then
-	systemctl --system daemon-reload >/dev/null || true
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ "$1" = "purge" ] ; then
-	update-rc.d udev-finish remove >/dev/null
-fi
-
-
-# In case this system is running systemd, we make systemd reload the unit files
-# to pick up changes.
-if [ -d /run/systemd/system ] ; then
-	systemctl --system daemon-reload >/dev/null || true
-fi
 # End automatically added section
 # Automatically added by dh_installinit
 if [ "$1" = "purge" ] ; then
@@ -73,12 +40,6 @@ fi
 # to pick up changes.
 if [ -d /run/systemd/system ] ; then
 	systemctl --system daemon-reload >/dev/null || true
-fi
-# End automatically added section
-# Automatically added by dh_installdebconf
-if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
-	. /usr/share/debconf/confmodule
-	db_purge
 fi
 # End automatically added section
 

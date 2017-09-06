@@ -13,8 +13,7 @@ case "${1}" in
 			deb-systemd-helper purge plymouth-halt.service plymouth-kexec.service plymouth-poweroff.service plymouth-quit.service plymouth-quit-wait.service plymouth-read-write.service plymouth-reboot.service plymouth-start.service >/dev/null
 			deb-systemd-helper unmask plymouth-halt.service plymouth-kexec.service plymouth-poweroff.service plymouth-quit.service plymouth-quit-wait.service plymouth-read-write.service plymouth-reboot.service plymouth-start.service >/dev/null
 		fi
-		if [ -x /usr/sbin/update-initramfs ]
-		then
+		if which update-initramfs >/dev/null 2>&1; then
 			update-initramfs -u
 		fi
 		;;
@@ -30,18 +29,17 @@ case "${1}" in
 esac
 
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/plymouth" ]; then
-	update-rc.d plymouth start . 2 3 4 5 . stop . 0 6 . >/dev/null || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/plymouth" ]; then
+		update-rc.d plymouth start . 2 3 4 5 . stop . 0 6 . >/dev/null || exit $?
+	fi
 fi
 # End automatically added section
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/plymouth-log" ]; then
-	update-rc.d plymouth-log start . S . >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_makeshlibs
-if [ "$1" = "configure" ]; then
-	ldconfig
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/plymouth-log" ]; then
+		update-rc.d plymouth-log start . S . >/dev/null || exit $?
+	fi
 fi
 # End automatically added section
 

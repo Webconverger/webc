@@ -1,7 +1,5 @@
-<DIV CLASS="indent">
-
 <H2 CLASS="title"><A HREF="{printer_uri_supported}">{printer_name}</A>
-({printer_state=3?в ожидании:{printer_state=4?печать:приостановлен}},
+({printer_state=3?ожидает:{printer_state=4?печать:приостановлен}},
 {printer_is_accepting_jobs=0?не принимает задания:принимает задания},
 {server_is_sharing_printers=0?нет совместного доступа:{printer_is_shared=0?нет совместного доступа:разрешен совместный доступ}} {default_name={printer_name}?, По умолчанию:})</H2>
 
@@ -15,7 +13,7 @@
 {printer_state=5?<OPTION VALUE="start-printer">Восстановить печать</OPTION>:<OPTION VALUE="stop-printer">Приостановить принтер</OPTION>}
 {printer_is_accepting_jobs=0?<OPTION VALUE="accept-jobs">Принимать задания</OPTION>:<OPTION VALUE="reject-jobs">Не принимать задания</OPTION>}
 <OPTION VALUE="move-jobs">Переместить все задания</OPTION>
-<OPTION VALUE="purge-jobs">Закрыть все задания</OPTION>
+<OPTION VALUE="purge-jobs">Отменить все задания</OPTION>
 </SELECT>
 <NOSCRIPT><INPUT TYPE="SUBMIT" VALUE="Go"></NOSCRIPT>
 </FORM>
@@ -37,11 +35,9 @@
 <TABLE SUMMARY="{printer_name}">
 <TR><TH ALIGN="RIGHT" VALIGN="TOP">Описание:</TH><TD>{printer_info}</TD></TR>
 <TR><TH ALIGN="RIGHT" VALIGN="TOP">Расположение:</TH><TD>{printer_location}</TD></TR>
-<TR><TH ALIGN="RIGHT" VALIGN="TOP">Драйвер:</TH><TD>{printer_make_and_model} ({color_supported=1?цветной:черно-белый}{sides_supported?, дуплексная печать:})<BR>
+<TR><TH ALIGN="RIGHT" VALIGN="TOP">Драйвер:</TH><TD>{printer_make_and_model} ({color_supported=1?цветной:черно-белый}{sides_supported=one-sided?:, дуплексная печать})<BR>
 <TR><TH ALIGN="RIGHT" VALIGN="TOP">Подключение:</TH><TD>{device_uri}</TD></TR>
 <TR><TH ALIGN="RIGHT" VALIGN="TOP">По умолчанию:</TH><TD>job-sheets={job_sheets_default}
-media={media_default?{media_default}:неизвестный}
+media={media_default?{media_default}:unknown}
 {sides_default?sides={sides_default}:}</TD></TR>
 </TABLE>
-
-</DIV>

@@ -12,7 +12,7 @@ _rtcwake_module()
 			return 0
 			;;
 		'-m'|'--mode')
-			COMPREPLY=( $(compgen -W "standby mem disk off no on disable show" -- $cur) )
+			COMPREPLY=( $(compgen -W "$(rtcwake --list-modes)" -- $cur) )
 			return 0
 			;;
 		'-s'|'--seconds')
@@ -23,11 +23,16 @@ _rtcwake_module()
 			COMPREPLY=( $(compgen -W "time_t" -- $cur) )
 			return 0
 			;;
+		'--date')
+			COMPREPLY=( $(compgen -W "YYYYMMDDhhmmss" -- $cur) )
+			return 0
+			;;
 		'-h'|'--help'|'-V'|'--version')
 			return 0
 			;;
 	esac
-	OPTS="--device
+	OPTS="	--date
+		--device
 		--dry-run
 		--local
 		--mode

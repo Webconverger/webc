@@ -10,25 +10,37 @@ chrooted() {
 }
 
 kill_udevd() {
-    start-stop-daemon --stop --name udevd --user root --oknodo --quiet --retry 5
+  if [ -d /run/systemd/system ]; then
+    systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket
+    systemctl stop systemd-udevd.service
+  else
+    invoke-rc.d udev stop
+  fi
 }
 
 case "$1" in
-    remove|deconfigure|failed-upgrade)
+    remove)
     if ! chrooted; then
       kill_udevd
     fi
     ;;
-
-    upgrade|deconfigure)
-    ;;
-
-    *)
-    echo "$0 called with unknown argument '$1'" >&2
-    exit 1
-    ;;
 esac
 
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1~ -- "$@"
+# End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
 # End automatically added section
