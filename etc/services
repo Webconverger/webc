@@ -28,7 +28,6 @@ ftp-data	20/tcp
 ftp		21/tcp
 fsp		21/udp		fspd
 ssh		22/tcp				# SSH Remote Login Protocol
-ssh		22/udp
 telnet		23/tcp
 smtp		25/tcp		mail
 time		37/tcp		timserver
@@ -42,7 +41,6 @@ re-mail-ck	50/tcp				# Remote Mail Checking Protocol
 re-mail-ck	50/udp
 domain		53/tcp				# Domain Name Server
 domain		53/udp
-mtp		57/tcp				# deprecated
 tacacs-ds	65/tcp				# TACACS-Database Service
 tacacs-ds	65/udp
 bootps		67/tcp				# BOOTP server
@@ -51,11 +49,8 @@ bootpc		68/tcp				# BOOTP client
 bootpc		68/udp
 tftp		69/udp
 gopher		70/tcp				# Internet Gopher
-gopher		70/udp
-rje		77/tcp		netrjs
 finger		79/tcp
 http		80/tcp		www		# WorldWideWeb HTTP
-http		80/udp				# HyperText Transfer Protocol
 link		87/tcp		ttylink
 kerberos	88/tcp		kerberos5 krb5 kerberos-sec	# Kerberos v5
 kerberos	88/udp		kerberos5 krb5 kerberos-sec	# Kerberos v5
@@ -68,15 +63,11 @@ csnet-ns	105/tcp		cso-ns		# also used by CSO name server
 csnet-ns	105/udp		cso-ns
 rtelnet		107/tcp				# Remote Telnet
 rtelnet		107/udp
-pop2		109/tcp		postoffice pop-2 # POP version 2
-pop2		109/udp		pop-2
 pop3		110/tcp		pop-3		# POP version 3
-pop3		110/udp		pop-3
 sunrpc		111/tcp		portmapper	# RPC 4.0 portmapper
 sunrpc		111/udp		portmapper
 auth		113/tcp		authentication tap ident
 sftp		115/tcp
-uucp-path	117/tcp
 nntp		119/tcp		readnews untp	# USENET News Transfer Protocol
 ntp		123/tcp
 ntp		123/udp				# Network Time Protocol
@@ -91,7 +82,6 @@ netbios-dgm	138/udp
 netbios-ssn	139/tcp				# NETBIOS session service
 netbios-ssn	139/udp
 imap2		143/tcp		imap		# Interim Mail Access P 2 and 4
-imap2		143/udp		imap
 snmp		161/tcp				# Simple Net Mgmt Protocol
 snmp		161/udp
 snmp-trap	162/tcp		snmptrap	# Traps for SNMP
@@ -107,9 +97,6 @@ xdmcp		177/udp
 nextstep	178/tcp		NeXTStep NextStep	# NeXTStep window
 nextstep	178/udp		NeXTStep NextStep	#  server
 bgp		179/tcp				# Border Gateway Protocol
-bgp		179/udp
-prospero	191/tcp				# Cliff Neuman's Prospero
-prospero	191/udp
 irc		194/tcp				# Internet Relay Chat
 irc		194/udp
 smux		199/tcp				# SNMP Unix Multiplexer
@@ -128,8 +115,6 @@ z3950		210/tcp		wais		# NISO Z39.50 database
 z3950		210/udp		wais
 ipx		213/tcp				# IPX
 ipx		213/udp
-imap3		220/tcp				# Interactive Mail Access
-imap3		220/udp				# Protocol v3
 pawserv		345/tcp				# Perf Analysis Workbench
 pawserv		345/udp
 zserv		346/tcp				# Zebra server
@@ -151,7 +136,6 @@ imsp		406/udp
 svrloc		427/tcp				# Server Location
 svrloc		427/udp
 https		443/tcp				# http protocol over TLS/SSL
-https		443/udp
 snpp		444/tcp				# Simple Network Paging Protocol
 snpp		444/udp
 microsoft-ds	445/tcp				# Microsoft Naked CIFS
@@ -212,9 +196,7 @@ idfp		549/tcp
 idfp		549/udp
 remotefs	556/tcp		rfs_server rfs	# Brunhoff remote filesystem
 nntps		563/tcp		snntp		# NNTP over SSL
-nntps		563/udp		snntp
 submission	587/tcp				# Submission [RFC4409]
-submission	587/udp
 ldaps		636/tcp				# LDAP over SSL
 ldaps		636/udp
 tinc		655/tcp				# tinc control port
@@ -226,17 +208,11 @@ kerberos-adm	749/tcp				# Kerberos `kadmin' (v5)
 webster		765/tcp				# Network dictionary
 webster		765/udp
 rsync		873/tcp
-rsync		873/udp
 ftps-data	989/tcp				# FTP over SSL (data)
 ftps		990/tcp
 telnets		992/tcp				# Telnet over SSL
-telnets		992/udp
 imaps		993/tcp				# IMAP over SSL
-imaps		993/udp
-ircs		994/tcp				# IRC over SSL
-ircs		994/udp
 pop3s		995/tcp				# POP-3 over SSL
-pop3s		995/udp
 #
 # From ``Assigned Numbers'':
 #
@@ -274,8 +250,6 @@ ms-sql-m	1434/tcp			# Microsoft SQL Monitor
 ms-sql-m	1434/udp
 ingreslock	1524/tcp
 ingreslock	1524/udp
-prospero-np	1525/tcp			# Prospero non-privileged
-prospero-np	1525/udp
 datametrics	1645/tcp	old-radius
 datametrics	1645/udp	old-radius
 sa-msg-port	1646/tcp	old-radacct
@@ -333,6 +307,8 @@ gds-db		3050/tcp	gds_db		# InterBase server
 gds-db		3050/udp	gds_db
 icpv2		3130/tcp	icp		# Internet Cache Protocol
 icpv2		3130/udp	icp
+isns		3205/tcp			# iSNS Server Port
+isns		3205/udp			# iSNS Server Port
 iscsi-target	3260/tcp
 mysql		3306/tcp
 mysql		3306/udp
@@ -416,6 +392,8 @@ sge-execd	6445/tcp	sge_execd	# Grid Engine Execution Service
 sge-execd	6445/udp	sge_execd
 mysql-proxy	6446/tcp			# MySQL Proxy
 mysql-proxy	6446/udp
+babel		6696/udp			# Babel Routing Protocol
+ircs-u		6697/tcp		# Internet Relay Chat via TLS/SSL
 afs3-fileserver 7000/tcp	bbs		# file server itself
 afs3-fileserver 7000/udp	bbs
 afs3-callback	7001/tcp			# callbacks to cache managers
@@ -440,6 +418,7 @@ font-service	7100/tcp	xfs		# X Font Service
 font-service	7100/udp	xfs
 http-alt	8080/tcp	webcache	# WWW caching service
 http-alt	8080/udp
+puppet		8140/tcp			# The Puppet master service
 bacula-dir	9101/tcp			# Bacula Director
 bacula-dir	9101/udp
 bacula-fd	9102/tcp			# Bacula File Daemon

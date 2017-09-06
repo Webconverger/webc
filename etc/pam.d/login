@@ -35,12 +35,22 @@ auth [success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die]
 # (Replaces the `NOLOGINS_FILE' option from login.defs)
 auth       requisite  pam_nologin.so
 
-# SELinux needs to be the first session rule. This ensures that any 
-# lingering context has been cleared. Without out this it is possible 
+# SELinux needs to be the first session rule. This ensures that any
+# lingering context has been cleared. Without this it is possible
 # that a module could execute code in the wrong domain.
 # When the module is present, "required" would be sufficient (When SELinux
 # is disabled, this returns success.)
 session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
+
+# Sets the loginuid process attribute
+session    required     pam_loginuid.so
+
+# SELinux needs to intervene at login time to ensure that the process
+# starts in the proper default security context. Only sessions which are
+# intended to run in the user's context should be run after this.
+session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open
+# When the module is present, "required" would be sufficient (When SELinux
+# is disabled, this returns success.)
 
 # This module parses environment configuration file(s)
 # and also allows you to use an extended config
@@ -62,7 +72,7 @@ session       required   pam_env.so readenv=1 envfile=/etc/default/locale
 auth       optional   pam_group.so
 
 # Uncomment and edit /etc/security/time.conf if you need to set
-# time restrainst on logins.
+# time restraint on logins.
 # (Replaces the `PORTTIME_CHECKS_ENAB' option from login.defs
 # as well as /etc/porttime)
 # account    requisite  pam_time.so
@@ -76,16 +86,18 @@ auth       optional   pam_group.so
 # (Replaces the use of /etc/limits in old login)
 session    required   pam_limits.so
 
-# Prints the last login info upon succesful login
+# Prints the last login info upon successful login
 # (Replaces the `LASTLOG_ENAB' option from login.defs)
 session    optional   pam_lastlog.so
 
-# Prints the message of the day upon succesful login.
+# Prints the message of the day upon successful login.
 # (Replaces the `MOTD_FILE' option in login.defs)
-session    optional   pam_exec.so type=open_session stdout /bin/uname -snrvm
-session    optional   pam_motd.so
+# This includes a dynamically generated part from /run/motd.dynamic
+# and a static (admin-editable) part from /etc/motd.
+session    optional   pam_motd.so motd=/run/motd.dynamic
+session    optional   pam_motd.so noupdate
 
-# Prints the status of the user's mailbox upon succesful login
+# Prints the status of the user's mailbox upon successful login
 # (Replaces the `MAIL_CHECK_ENAB' option from login.defs). 
 #
 # This also defines the MAIL environment variable
@@ -95,17 +107,10 @@ session    optional   pam_motd.so
 # See comments in /etc/login.defs
 session    optional   pam_mail.so standard
 
-# Sets the loginuid process attribute
-session    required     pam_loginuid.so
+# Create a new session keyring.
+session    optional   pam_keyinit.so force revoke
 
 # Standard Un*x account and session
 @include common-account
 @include common-session
 @include common-password
-
-# SELinux needs to intervene at login time to ensure that the process
-# starts in the proper default security context. Only sessions which are
-# intended to run in the user's context should be run after this.
-session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open
-# When the module is present, "required" would be sufficient (When SELinux
-# is disabled, this returns success.)

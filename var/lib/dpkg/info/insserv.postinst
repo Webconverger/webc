@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+
+
+# When installing insserv (usually via sysvinit-core) on an existing system,
+# fix up the rc?.d priorities from the dumb update-rc.d fallback (which uses
+# priority 01 for everything).
+if [ "$1" = "configure" ] && [ -z "$2" ]; then
+    /sbin/insserv || true
+fi

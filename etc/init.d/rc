@@ -77,9 +77,11 @@ if test -e /etc/init.d/.legacy-bootordering ; then
 	CONCURRENCY="none"
 fi
 if ! test -e /proc/stat; then
+	# startpar requires /proc/stat
 	if [ "$(uname)" = "GNU/kFreeBSD" ] ; then
-		# startpar requires /proc/stat
 		mount -t linprocfs linprocfs /proc
+	elif [ "$(uname)" = "GNU" ] ; then
+		mount -t proc none /proc
 	fi
 fi
 if [ -x /lib/startpar/startpar ] ; then

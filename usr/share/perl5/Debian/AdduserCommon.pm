@@ -25,7 +25,7 @@ sub invalidate_nscd {
     # we couldn't connect to ypserv anyway. If this assumption is invalid,
     # please file a bug and suggest a better way.
     if(defined($nisconfig) && -f "/var/yp/Makefile" &&
-        -x "/usr/bin/rpcinfo" && grep(/ypserv/, qx{/usr/bin/rpcinfo -p 2>/dev/null})) {
+        -x "/usr/sbin/rpcinfo" && grep(/ypserv/, qx{/usr/sbin/rpcinfo -p 2>/dev/null})) {
 	open(NISCONFIG, "<$nisconfig");
 	if(grep(/^NISSERVER=master/, <NISCONFIG>)) {
             system("make", "-C", "/var/yp");
@@ -192,11 +192,11 @@ sub preseed_config {
   $configref->{"first_system_uid"} = 100;
   $configref->{"last_system_uid"} = 999;
   $configref->{"first_uid"} = 1000;
-  $configref->{"last_uid"} = 29999;
+  $configref->{"last_uid"} = 59999;
   $configref->{"first_system_gid"} = 100;
   $configref->{"last_system_gid"} = 999;
   $configref->{"first_gid"} = 1000;
-  $configref->{"last_gid"} = 29999;
+  $configref->{"last_gid"} = 59999;
   $configref->{"dhome"} = "/home";
   $configref->{"skel"} = "/etc/skel";
   $configref->{"usergroups"} = "yes";

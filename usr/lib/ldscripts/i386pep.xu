@@ -1,10 +1,10 @@
 /* Script for ld -Ur: link w/out relocation, do create constructors */
-/* Copyright (C) 2014 Free Software Foundation, Inc.
+/* Copyright (C) 2014-2017 Free Software Foundation, Inc.
    Copying and distribution of this script, with or without modification,
    are permitted in any medium without royalty provided the copyright
    notice and this notice are preserved.  */
 OUTPUT_FORMAT(pe-x86-64)
-SEARCH_DIR("=/usr/x86_64-pep/lib"); SEARCH_DIR("=/usr/local/lib/i386-linux-gnu"); SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib/i386-linux-gnu"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib/i386-linux-gnu"); SEARCH_DIR("=/usr/lib");
+SEARCH_DIR("=/usr/local/lib/i386-linux-gnu"); SEARCH_DIR("=/lib/i386-linux-gnu"); SEARCH_DIR("=/usr/lib/i386-linux-gnu"); SEARCH_DIR("=/usr/local/lib"); SEARCH_DIR("=/lib"); SEARCH_DIR("=/usr/lib"); SEARCH_DIR("=/usr/x86_64-pep/lib");
 SECTIONS
 {
   .text  :
@@ -14,9 +14,17 @@ SECTIONS
     *(.glue_7)
     . = ALIGN(8);
      ___CTOR_LIST__ = .; __CTOR_LIST__ = . ;
-			LONG (-1); LONG (-1);*(.ctors); *(.ctor); *(SORT(.ctors.*));  LONG (0); LONG (0);
+			LONG (-1); LONG (-1);
+			KEEP (*(.ctors));
+			KEEP (*(.ctor));
+			KEEP (*(SORT(.ctors.*)));
+			LONG (0); LONG (0);
      ___DTOR_LIST__ = .; __DTOR_LIST__ = . ;
-			LONG (-1); LONG (-1); *(.dtors); *(.dtor); *(SORT(.dtors.*));  LONG (0); LONG (0);
+			LONG (-1); LONG (-1);
+			KEEP (*(.dtors));
+			KEEP (*(.dtor));
+			KEEP (*(SORT(.dtors.*)));
+			LONG (0); LONG (0);
     /* ??? Why is .gcc_exc here?  */
   }
   /* The Cygwin32 library uses a section to avoid copying certain data
@@ -28,24 +36,24 @@ SECTIONS
   {
     *(.data)
     *(.data2)
-    *(.jcr)
+    KEEP(*(.jcr))
   }
   .rdata  :
   {
     *(.rdata)
-    *(.rdata_runtime_pseudo_reloc)
+    KEEP(*(.rdata_runtime_pseudo_reloc))
   }
   .eh_frame  :
   {
-    *(.eh_frame*)
+    KEEP (*(.eh_frame*))
   }
   .pdata  :
   {
-    *(.pdata*)
+    KEEP(*(.pdata*))
   }
   .xdata  :
   {
-    *(.xdata*)
+    KEEP(*(.xdata*))
   }
   .bss  :
   {

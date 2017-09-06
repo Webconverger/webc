@@ -65,9 +65,16 @@ groupadd -g $gid sudo
 echo ""
 
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/sudo" ]; then
-	update-rc.d sudo defaults >/dev/null
-	invoke-rc.d sudo start || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/sudo" ]; then
+		update-rc.d sudo defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d sudo $_dh_action || exit $?
+	fi
 fi
 # End automatically added section
 

@@ -5,15 +5,6 @@ export LC_ALL=C
 type=$1
 preversion=$2
 
-package_name()
-{
-    if dpkg --assert-multi-arch 2>/dev/null; then
-        echo libc6:${DPKG_MAINTSCRIPT_ARCH}
-    else
-        echo libc6
-    fi
-}
-
 # element() is a helper function for file-rc:
 element() {
     local element list IFS
@@ -73,8 +64,8 @@ then
     # We don't use a registry anymore, remove the old file
     rm -f /etc/ld.so.hwcappkgs
  
-    # /etc/ld.so.nohwcap code: NOHWCAP
-    # Handle upgrades when libc-opt package has been installed.
+    # /etc/ld.so.nohwcap code:
+        # Handle upgrades when libc-opt package has been installed.
     # When a /etc/ld.so.nohwcap file exists, ld.so only use libraries
     # from /lib, and ignore all optimised libraries. This file is
     # inconditionaly created in the preinst script of libc.
@@ -82,7 +73,7 @@ then
     # Get the list of optimized packages for a given architecture
     # Before removing a package from this list, make sure it appears
     # in the Conflicts: line of libc.
-    case $(dpkg --print-architecture) in
+    case ${DPKG_MAINTSCRIPT_ARCH} in
         alpha)
             hwcappkgs="libc6-alphaev67"
             ;;
@@ -91,12 +82,6 @@ then
             ;;
         kfreebsd-i386)
             hwcappkgs="libc0.1-i686"
-            ;;
-        mipsel)
-	    hwcappkgs="libc6-loongson2f"
-	    ;;
-        sparc)
-            hwcappkgs="libc6-sparcv9 libc6-sparcv9b"
             ;;
     esac
  
@@ -107,7 +92,7 @@ then
     if [ -n "$hwcappkgs" ]; then
         for pkg in $hwcappkgs ; do
             ver=$(dpkg-query -l $pkg 2>/dev/null | sed -e '/^[a-z][a-z]\s/!d;/^.[nc]/d;' -e "s/^..\s\+$pkg[0-9a-z:]*\s\+//;s/\s.*//g")
-            if [ -n "$ver" ] && [ "$ver" != "2.19-18+deb8u10" ]; then
+            if [ -n "$ver" ] && [ "$ver" != "2.24-11+deb9u1" ]; then
                 all_upgraded=no
             fi
         done
@@ -120,16 +105,14 @@ then
         rm -f /etc/ld.so.nohwcap
     fi
 
+
     # Load debconf module if available
     if [ -f /usr/share/debconf/confmodule ] ; then
 	. /usr/share/debconf/confmodule
     fi
 
-    if [ -n "$preversion" ]; then
-	if [ ! -d /var/mail ] && [ ! -L /var/mail ]; then
-	    ln -sf spool/mail /var/mail
-	fi
-	if dpkg --compare-versions "$preversion" lt 2.19; then
+    if [ -n "$preversion" ] && [ -x "$(which ischroot)" ] && ! ischroot; then
+	if dpkg --compare-versions "$preversion" lt 2.24; then
 	    check="apache2.2-common apache apache-ssl apache-perl autofs at"
 	    check="$check boa cucipop courier-authdaemon cron cups exim"
 	    check="$check exim4-base dovecot-common cucipop incron lprng lpr"
@@ -138,8 +121,8 @@ then
 	    check="$check sasl2-bin slapd smail sendmail snmpd ssh"
 	    check="$check spamassassin vsftpd wu-ftpd wu-ftpd-academ wwwoffle"
 	    check="$check webmin dropbear gdm"
-	    # NSS services check: NSS_CHECK
-	    echo -n "Checking for services that may need to be restarted..."
+	    # NSS services check: 
+	    	    echo -n "Checking for services that may need to be restarted..."
 	    # Only get the ones that are installed, and configured
 	    check=$(dpkg -s $check 2> /dev/null | egrep '^Package:|^Status:' | awk '{if ($1 ~ /^Package:/) { package=$2 } else if ($0 ~ /^Status: .* installed$/) { print package }}')
 	    # some init scripts don't match the package names
@@ -175,6 +158,7 @@ then
 	    	    fi
 	    	fi
 	    done
+
 	    if [ -n "$services" ]; then
 
 	        if [ -f /usr/share/debconf/confmodule ] ; then
@@ -276,7 +260,7 @@ then
 			    echo
 			    echo "You will need to start these manually by running \`/etc/init.d/<service> start'"
 			    echo "If the service still fails to start, you may need to file a bug on"
-			    echo "$(package_name) or the service involved."
+			    echo "${DPKG_MAINTSCRIPT_PACKAGE}:${DPKG_MAINTSCRIPT_ARCH} or the service involved."
 			    frontend=`echo "$DEBIAN_FRONTEND" | tr '[:upper:]' '[:lower:]'`
 			    if [ "$frontend" != noninteractive ]; then
 			    	echo
@@ -296,7 +280,7 @@ then
 	    else
 		echo "Nothing to restart."
 	    fi
-	fi # end upgrading and $preversion lt 2.19
+	fi # end upgrading and $preversion lt 2.24
     fi # Upgrading
 
     # Restart init.  Currently handles chroots, systemd and upstart, and
@@ -338,11 +322,6 @@ case ${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)} in
         ;;
 esac
 
-# Automatically added by dh_makeshlibs
-if [ "$1" = "configure" ]; then
-	ldconfig
-fi
-# End automatically added section
 
 
 exit 0

@@ -17,7 +17,12 @@ Cmdline_old ()
 			BOOTIF=*)
 				BOOTIF="${_PARAMETER#BOOTIF=}"
 				;;
-
+			dns=*)
+				DNS=${_PARAMETER#dns=}
+				DNSSERVERS=$(echo ${DNS} | sed 's/,/ /g')
+				export DNSSERVERS
+				unset DNS
+				;;
 			dhcp)
 				# Force dhcp even while netbooting
 				# Use for debugging in case somebody works on fixing dhclient
@@ -28,6 +33,8 @@ Cmdline_old ()
 			nodhcp)
 				DHCP=""
 				export DHCP
+				NODHCP="true"
+				export NODHCP
 				;;
 
 			ethdevice=*)
@@ -272,7 +279,7 @@ Cmdline_old ()
 
 	if [ -z "${UNIONTYPE}" ]
 	then
-		UNIONTYPE="aufs"
+		UNIONTYPE="overlay"
 		export UNIONTYPE
 	fi
 

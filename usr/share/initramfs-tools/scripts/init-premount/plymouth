@@ -14,7 +14,7 @@ case ${1} in
 		;;
 esac
 
-SPLASH="false"
+SPLASH="true"
 
 for ARGUMENT in $(cat /proc/cmdline)
 do
@@ -23,7 +23,7 @@ do
 			SPLASH="true"
 			;;
 
-		nosplash*)
+		nosplash*|plymouth.enable=0)
 			SPLASH="false"
 			;;
 	esac

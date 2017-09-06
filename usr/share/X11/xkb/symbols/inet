@@ -14,7 +14,7 @@
 // setxkbmap 'my_kb_layout' -variant 'my_kb_variant' -model 'my_eak_type'
 
 // Very common set of media keys.
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "media_common" {
     key <I01>   {       [ XF86AudioMedia        ] };
     key <I10>   {       [ XF86AudioPrev         ] };
@@ -29,7 +29,7 @@ xkb_symbols "media_common" {
 };
 
 // Popular web navigation keys.
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "nav_common" {
     key <I21>   {       [ XF86Calculator        ] };
     key <I32>   {       [ XF86WWW               ] };
@@ -45,7 +45,7 @@ xkb_symbols "nav_common" {
 };
 
 // ACPI Standard
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "acpi_common" {
     key <I5E>	{	[ XF86PowerOff		]	};
     key <I5F>	{	[ XF86Standby		]	};
@@ -56,26 +56,26 @@ xkb_symbols "acpi_common" {
 };
 
 // Combined sections, for simplicity.
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "media_nav_common" {
     include "inet(media_common)"
     include "inet(nav_common)"
 };
 
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "media_nav_acpi_common" {
     include "inet(media_common)"
     include "inet(nav_common)"
     include "inet(acpi_common)"
 };
 
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "nav_acpi_common" {
     include "inet(nav_common)"
     include "inet(acpi_common)"
 };
 
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "media_acpi_common" {
     include "inet(media_common)"
     include "inet(acpi_common)"
@@ -1001,7 +1001,7 @@ xkb_symbols "ibm_spacesaver" {
 // Logitech
 
 // Logitech common definitions
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "logitech_base" {
     include "inet(media_nav_acpi_common)"
     key <I02> { [ XF86HomePage ] };
@@ -1017,7 +1017,7 @@ xkb_symbols "logitech_base" {
 };
 
 // Logitech second set of common keys
-partial hidden alphanumeric_keys
+hidden partial alphanumeric_keys
 xkb_symbols "logitech_set3" {
     key <I17>	{	[ XF86AudioStop		]	};
     key <I1E>	{	[ XF86AudioRaiseVolume	]	};
@@ -1271,7 +1271,7 @@ xkb_symbols "mx2750" {
 
 // Microsoft
 
-// Microsoft Natural Wireless Ergonomic Keyboard 4000
+// Microsoft Natural Ergonomic Keyboard 4000
 partial alphanumeric_keys
 xkb_symbols "microsoft4000" {
     include "inet(media_nav_common)"
@@ -1874,4 +1874,36 @@ xkb_symbols "htcdream" {
 	key <RTSH> { [ Shift_R ] };
 
 	modifier_map Shift { <LFSH>, <RTSH> };
+};
+
+partial alphanumeric_keys
+xkb_symbols "chromebook" {
+	include "level3(ralt_switch)"
+        key <FK01> {    [ XF86Back ] };
+        key <FK02> {    [ XF86Forward ] };
+        key <FK03> {    [ XF86Reload ] };
+        key <FK04> {    [ F11 ] };
+//        key <FK05> {    [ F5, F5, F5, F5 ] }; // Overview key
+        key <FK06> {    [ XF86MonBrightnessDown ] };
+        key <FK07> {    [ XF86MonBrightnessUp ] };
+        key <FK08> {    [ XF86AudioMute ] };
+        key <FK09> {    [ XF86AudioLowerVolume ] };
+        key <FK10> {    [ XF86AudioRaiseVolume ] };
+        key <BKSP> {    [ BackSpace, BackSpace, Delete ] };
+        key <UP>   {    [ Up, Up, Prior, Up ] };
+        key <DOWN> {    [ Down, Down, Next, Down ] };
+        key <LEFT> {    [ Left, Left, Home, Left ] };
+        key <RGHT> {    [ Right, Right, End, Right ] };
+        key <LWIN> {    [ Super_L, Super_L, Caps_Lock, Super_L ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "teck227" {
+    include "inet(media_nav_common)"
+    key <HIRA> { [ Hiragana ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "teck229" {
+    include "inet(teck227)"
 };

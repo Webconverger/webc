@@ -2,7 +2,7 @@
 #
 #  script for ispell hash autorebuild in Debian systems
 #
-# Copyright 2003-2014 Agustin Martin Domingo <agmartin@debian.org>
+# Copyright 2003-2016 Agustin Martin Domingo <agmartin@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -239,7 +239,6 @@ sub get_ispell_compat {
 #                        The main program
 # ---------------------------------------------------------------------
 
-
 # Options processing
 GetOptions ('debug'     => \$debug,
 	    'dry-run'   => \$dry_run,
@@ -247,7 +246,13 @@ GetOptions ('debug'     => \$debug,
 	    'triggered' => \$triggered
   ) or usage();
 
+# Check if we are root
 dico_checkroot() unless $dry_run;
+
+# Honour 'DICT_COMMON_DEBUG' environment variable.
+unless ( $debug ){
+  $debug++ if defined $ENV{'DICT_COMMON_DEBUG'};
+}
 
 unless ( $triggered or $force ){
   exit if dico_activate_trigger("ispell-autobuildhash");
@@ -296,7 +301,7 @@ if ( my $ispell_compat = get_ispell_compat() ){
 	if ( -e "$_" ){
 	  $old_remove_data{$_}++;
 	} else {
-	  print STDERR "$program: \"$_\" in $remove_file not found. Upgrading info.\n";
+	  debugprint "$program: \"$_\" in $remove_file not found. Upgrading info.";
 	}
       }
       close $REMOVE;
@@ -380,7 +385,7 @@ To use this system, B<ispell-autobuildhash> expects a F<$dict.compat> file
 in F</var/lib/ispell> (I<$dict> stands for the hash or affix file basename)
 containing ispell major or compatibility version for last successful build
 or "0" or en empty file if hash is to be rebuild, as is for dictionary
-instalation and upgrades.
+installation and upgrades.
 
 When upgrading B<ispell>, script will check if version in I<$dict.compat>
 is different from I<ispell.compat> and rebuild if so, updating

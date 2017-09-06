@@ -2,6 +2,22 @@
 
 set -e
 
+is_unmodified() {
+    local PKGNAME="$1"
+    local CONFFILE="$2"
+
+    [ -e "$CONFFILE" ] || return 0
+
+    local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
+    local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PKGNAME | \
+            sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+    if [ "$md5sum" = "$old_md5sum" ]; then
+        return 0
+    fi
+
+    return 1
+}
+
 mv_conffile() {
     OLD="$1"
     NEW="$2"
@@ -24,6 +40,20 @@ case "$1" in
         if dpkg --compare-versions "$2" le '1.15-3'; then
             update-rc.d -f console-screen.kbd.sh remove
             mv_conffile /etc/init.d/console-screen.kbd.sh /etc/init.d/kbd
+        fi
+        # remove init script and config unless it seems to be used.
+        if dpkg --compare-versions "$2" le '2.0.3-2~'; then
+            if is_unmodified kbd /etc/kbd/config && \
+                    is_unmodified kbd /etc/kbd/remap; then
+                dpkg-maintscript-helper rm_conffile \
+                        /etc/kbd/config 2.0.3-2~ kbd -- "$@"
+                dpkg-maintscript-helper rm_conffile \
+                        /etc/kbd/remap 2.0.3-2~ kbd -- "$@"
+                dpkg-maintscript-helper rm_conffile \
+                        /etc/init.d/kbd 2.0.3-2~ kbd -- "$@"
+            else
+                echo "Warning: leaving unsupported /etc/init.d/kbd and /etc/kbd/* in the hands of the local admin as they seem used... Please manually remove if unwanted. See /usr/share/doc/kbd/NEWS.Debian.gz"
+            fi
         fi
 esac
 

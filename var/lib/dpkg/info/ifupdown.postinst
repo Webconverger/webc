@@ -11,96 +11,6 @@ if [ "$1" = configure ]; then
   addgroup --quiet --system netdev || true
 fi
 
-# Create /etc/network/run 
-if [ "$1" = configure -a ! -d /etc/network/run ]; then
-  if [ -e /etc/network/run -o -L /etc/network/run ]; then
-    echo "Removing non-directory /etc/network/run..."
-    rm -f /etc/network/run
-  fi
-
-  # The best choice is to use /run/network
-  # That must be supported everywhere
-
-  if [ ! -d /run/network ]; then
-    mkdir -p /run/network
-    chown root:netdev /run/network
-  fi
-  ln -s /run/network /etc/network/run
-fi
-
-[ -L /etc/network/run.dpkg-old ] && echo "Removing old symlink /etc/network/run.dpkg-old..." && rm -f /etc/network/run.dpkg-old
-
-# Move /etc/network/ifstate to /etc/network/run/ifstate
-if [ "$1" = configure -a "$2" != "" -a -e /etc/network/ifstate ] &&
-     dpkg --compare-versions "$2" lt "0.6.5"
-then
-  if [ ! -e /etc/network/run/ifstate ] || ! diff /etc/network/ifstate /etc/network/run/ifstate >/dev/null
-  then
-    echo "Moving /etc/network/ifstate to /etc/network/run/ifstate"
-    if [ ! -L /etc/network/ifstate ]; then
-      mv /etc/network/ifstate /etc/network/run/ifstate
-    else
-      cat /etc/network/ifstate >/etc/network/run/ifstate
-      mv /etc/network/ifstate /etc/network/ifstate.dpkg-old
-    fi
-  fi
-fi
-
-l=$(readlink /etc/network/run || echo /etc/network/run)
-
-# Migrate /etc/network/run to /run/network
-if [ "$1" = configure -a "$2" != "" -a -e /etc/network/run -a "$l" != "/run/network" ]
-then
-  echo "Migrating network state directory from $l to /run/network..."
-  [ -d /run/network ] || mkdir /run/network
-  if [ -e /etc/network/run/ifstate ]
-  then
-    echo "Moving /etc/network/run/ifstate to /run/network/ifstate"
-    if [ ! -L /etc/network/run/ifstate ]; then
-      mv -f /etc/network/run/ifstate /run/network/ifstate
-    else
-      # we do this thing with .dpkg-new just so we don't truncate the
-      # state file in the case of crazy symlinked or mount-bound setup
-      cat /etc/network/run/ifstate >/run/network/ifstate.dpkg-new
-      mv -f /etc/network/run/ifstate /run/network/ifstate.dpkg-old
-      mv -f /run/network/ifstate.dpkg-new /run/network/ifstate
-    fi
-  fi
-  mv -f /etc/network/run /etc/network/run.dpkg-old || true
-  ln -s /run/network /etc/network/run
-  [ -L /etc/network/run.dpkg-old ] && rm -f /etc/network/run.dpkg-old || true
-  [ -d /etc/network/run.dpkg-old ] && rmdir /etc/network/run.dpkg-old 2>/dev/null || report_warn "Not removing the old contents of /etc/network/run: directory not empty; renamed into /etc/network/run.dpkg-old."
-fi
-
-
-if [ "$1" = "configure" -a "$2" != "" ] &&
-     dpkg --compare-versions "$2" le "0.6.4-4.1" &&
-     [ -f /etc/network/run/ifstate -a -x /sbin/dhclient ]
-then
-  # for every active ifupdown-controlled dhclient interface, copy
-  # /var/run/dhclient.pid, so that the new ifdown is able to kill
-  # dhclient.
-  #
-  # the old version had a bug with more than one DHCP iface anyway,
-  # so we don't know which one the PID file actually belongs to.
-
-  sed -e 's/^.*=//' /etc/network/run/ifstate |
-    while read iface; do
-      # handle \<newline>-continued lines
-      if sed -e '/^[[:space:]]*#/b;:g /\\$/{N;s/\\\n//;bg;}' /etc/network/interfaces | grep -qe "^[[:space:]]*iface[[:space:]]*\\b${iface}\\b[[:space:]]*.*\\bdhcp\\b.*" &&
-          [ -f "/var/run/dhclient.pid" ] &&
-          [ ! -f "/var/run/dhclient.${iface}.pid" ]
-      then
-        # copy original file.  If dhclient was started
-        # manually, one can still use dhclient.pid, if started
-        # by ifupdown, the new ifupdown can take it down with 
-        # dhclient.${iface}.pid.  Obsolete files are removed during
-        # next boot (bootmisc.sh).
-        cp /var/run/dhclient.pid "/var/run/dhclient.${iface}.pid"
-      fi
-    done
-fi
-
 # Generic stuff done on all configurations
 if [ "$1" = "configure" ] ; then
   # We don't need loopback interface definition anymore as
@@ -117,14 +27,26 @@ if [ "$1" = "configure" ] ; then
   fi
 fi
 
-if dpkg --compare-versions "$2" lt "0.7" ; then
-    update-rc.d -f ifupdown remove >/dev/null || true
-    update-rc.d -f ifupdown-clean remove >/dev/null || true
-fi
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask networking.service >/dev/null || true
 
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled networking.service; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable networking.service >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state networking.service >/dev/null || true
+fi
+# End automatically added section
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/networking" ]; then
-	update-rc.d networking defaults >/dev/null || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/networking" ]; then
+		update-rc.d networking defaults >/dev/null || exit $?
+	fi
 fi
 # End automatically added section
 # Automatically added by dh_installdeb

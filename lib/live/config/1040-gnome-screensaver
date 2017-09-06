@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## live-config(7) - System Configuration Components
-## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2006-2015 Daniel Baumann <mail@daniel-baumann.ch>
 ##
 ## This program comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
@@ -38,7 +38,7 @@ Init ()
 Config ()
 {
 	# Disabling to lock the screen when the screensaver goes active.
-	sudo -u "${LIVE_USERNAME}" dbus-launch --exit-with-session gsettings set org.gnome.desktop.screensaver lock-enabled false
+	sudo -u "${LIVE_USERNAME}" dbus-run-session -- gsettings set org.gnome.desktop.screensaver lock-enabled false
 
 	# Creating state file
 	touch /var/lib/live/config/gnome-screensaver

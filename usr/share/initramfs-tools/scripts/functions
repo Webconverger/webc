@@ -33,6 +33,8 @@ log_end_msg()
 
 panic()
 {
+	local console rest
+
 	if command -v chvt >/dev/null 2>&1; then
 		chvt 1
 	fi
@@ -45,25 +47,49 @@ panic()
 		reboot
 		exit  # in case reboot fails, force kernel panic
 	fi
-	modprobe -v i8042 || true
-	modprobe -v atkbd || true
-	modprobe -v ehci-pci || true
-	modprobe -v ehci-orion || true
-	modprobe -v ehci-hcd || true
-	modprobe -v uhci-hcd || true
-	modprobe -v ohci-hcd || true
-	modprobe -v usbhid || true
 
 	run_scripts /scripts/panic
 
-	REASON="$@" PS1='(initramfs) ' /bin/sh -i </dev/console >/dev/console 2>&1
+	# Try to use setsid, which will enable job control in the shell
+	# and paging in more
+	if command -v setsid >/dev/null 2>&1; then
+		read console rest </proc/consoles
+		if [ "${console}" = "tty0" ]; then
+			# Need to choose a specific VT
+			console="tty1"
+		fi
+		# We don't have 'setsid -c' so we need to setsid, open
+		# the tty, and finally exec an interactive shell
+		REASON="$@" PS1='(initramfs) ' setsid sh -c "exec sh -i <>/dev/${console} 1>&0 2>&1"
+	else
+		REASON="$@" PS1='(initramfs) ' sh -i </dev/console >/dev/console 2>&1
+	fi
 }
 
 maybe_break()
 {
-	if [ "${break:-}" = "$1" ]; then
+	case ",$break," in
+	*,$1,*)
+		if [ "$1" = "top" ]; then
+			# udev is not yet running, so load keyboard drivers
+			if [ "${quiet}" = "y" ]; then
+				opts="-q"
+			else
+				opts="-v"
+			fi
+			modprobe ${opts} -a i8042 atkbd ehci-pci ehci-orion \
+				 ehci-hcd ohci-hcd ohci-pci uhci-hcd usbhid xhci \
+				 xhci-pci xhci-hcd
+			sleep 2
+			for modalias in /sys/bus/hid/devices/*/modalias; do
+				if [ -f "${modalias}" ]; then
+					modprobe ${opts} -b "$(cat ${modalias})"
+				fi
+			done
+		fi
 		panic "Spawning shell within the initramfs"
-	fi
+		;;
+	esac
 }
 
 render()
@@ -103,32 +129,30 @@ load_modules()
 # lilo compatibility
 parse_numeric() {
 	case $1 in
-	"")
+	*:*)
+		# Does it match /[0-9]*:[0-9]*/?
+		minor=${1#*:}
+		major=${1%:*}
+		case $major$minor in
+		*[!0-9]*)
+			# No.
+			return
+			;;
+		esac
+		;;
+	"" | *[!A-Fa-f0-9]*)
+		# "", "/*", etc.
 		return
-		;;
-	/*)
-		return
-		;;
-	[0-9]*:[0-9]*)
-		minor=$(( ${1#*:} ))
-		major=$(( ${1%:*} ))
-		;;
-	[A-Fa-f0-9]*)
-		value=$(( 0x${1} ))
-		minor=$(( ${value} % 256 ))
-		major=$(( ${value} / 256 ))
 		;;
 	*)
-		return
+		# [A-Fa-f0-9]*
+		value=$(( 0x${1} ))
+		minor=$(( (${value} & 0xff) | (${value} >> 12) & 0xfff00 ))
+		major=$(( (${value} >> 8) & 0xfff ))
 		;;
 	esac
 
-	if command -v udevd >/dev/null 2>&1; then
-		ROOT=/dev/block/${major}:${minor}
-	else
-		mknod -m 600 /dev/root b ${major} ${minor}
-		ROOT=/dev/root
-	fi
+	ROOT="/dev/block/${major}:${minor}"
 }
 
 # Parameter: device node to check
@@ -143,10 +167,8 @@ get_fstype ()
 	# but fstype is more robust
 	FSTYPE="unknown"
 	eval $(fstype "${FS}" 2> /dev/null)
-	if [ "$FSTYPE" = "unknown" ] &&  command -v blkid >/dev/null 2>&1 ; then
+	if [ "$FSTYPE" = "unknown" ]; then
 		FSTYPE=$(blkid -o value -s TYPE "${FS}")
-	elif [ "$FSTYPE" = "unknown" ] && [ -x /lib/udev/vol_id ]; then
-		FSTYPE=$(/lib/udev/vol_id -t "${FS}" 2> /dev/null)
 	fi
 	RET=$?
 
@@ -297,58 +319,38 @@ read_fstab_entry() {
 resolve_device() {
 	DEV="$1"
 
-	case $DEV in
-	LABEL=*)
-		DEV="${DEV#LABEL=}"
-
-		# support any / in LABEL= path (escape to \x2f)
-		case "${DEV}" in
-		*/*)
-		if command -v sed >/dev/null 2>&1; then
-			DEV="$(echo ${DEV} | sed 's,/,\\x2f,g')"
-		else
-			if [ "${DEV}" != "${DEV#/}" ]; then
-				DEV="\x2f${DEV#/}"
-			fi
-			if [ "${DEV}" != "${DEV%/}" ]; then
-				DEV="${DEV%/}\x2f"
-			fi
-			IFS='/'
-			newroot=
-			for s in $DEV; do
-				newroot="${newroot:+${newroot}\\x2f}${s}"
-			done
-			unset IFS
-			DEV="${newroot}"
-		fi
-		esac
-		DEV="/dev/disk/by-label/${DEV}"
-		;;
-	UUID=*)
-		DEV="/dev/disk/by-uuid/${DEV#UUID=}"
+	case "$DEV" in
+	LABEL=* | UUID=* | PARTLABEL=* | PARTUUID=*)
+		DEV="$(blkid -l -t "$DEV" -o device)" || return 1
 		;;
 	esac
-	# Only canonicalise if a valid file, in case $DEV isn't a filename
-	[ -e "$DEV" ] && DEV=$(readlink -f "$DEV")
-	echo "$DEV"
+	[ -e "$DEV" ] && echo "$DEV"
 }
 
 # Check a file system.
 # $1=device
 # $2=mountpoint (for diagnostics only)
+# $3=type (may be "auto")
 _checkfs_once()
 {
 	DEV="$1"
 	NAME="$2"
+	TYPE="$3"
 	if [ "$NAME" = "/" ] ; then
 		NAME="root"
 	fi
 	FSCK_LOGFILE=/run/initramfs/fsck.log
 	FSCK_STAMPFILE=/run/initramfs/fsck-${NAME#/}
 
-	TYPE=$(get_fstype "$1")
+	if [ "${TYPE}" = "auto" ]; then
+		TYPE="$(get_fstype "${DEV}")"
+	fi
 
 	FSCKCODE=0
+	if ! command -v fsck >/dev/null 2>&1; then
+		log_warning_msg "fsck not present, so skipping $NAME file system"
+		return
+	fi
 	if [ "$fastboot" = "y" ] ; then
 		log_warning_msg "Fast boot enabled, so skipping $NAME file system check."
 		return

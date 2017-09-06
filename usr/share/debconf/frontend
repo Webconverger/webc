@@ -69,12 +69,15 @@ debug developer => "frontend running, package name is $package";
 $frontend->default_title($package) if length $package and !$no_title;
 $frontend->info(undef);
 
-if ($ARGV[0] =~/^(.*[.\/])(?:postinst|preinst)$/) {
+if ($ARGV[0] =~/^(.*[.\/])(?:preinst|postinst|prerm|postrm)$/) {
 	my $base=$1;
-
 	my $templates=$base."templates";
 	Debconf::Template->load($templates, $package)
 		if -e $templates;
+}
+
+if ($ARGV[0] =~/^(.*[.\/])(?:postinst|preinst)$/) {
+	my $base=$1;
 
 	my $config=$base."config";
 	if (-e $config) {

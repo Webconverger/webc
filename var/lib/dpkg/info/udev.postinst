@@ -1,21 +1,5 @@
 #!/bin/sh -e
 
-supported_kernel() {
-  case "$(uname -r)" in
-    2.[012345].*|2.6.[0-9]|2.6.[0-9][!0-9]*) return 1 ;;
-    2.6.[12][0-9]|2.6.[12][0-9][!0-9]*) return 1 ;;
-    2.6.3[0-1]|2.6.3[0-1][!0-9]*) return 1 ;;
-  esac
-  return 0
-}
-
-tempdir() {
-  local dir=$(tempfile --prefix=udev.)
-  rm $dir
-  mkdir $dir
-  echo $dir
-}
-
 chrooted() {
   if [ "$(stat -c %d/%i /)" = "$(stat -Lc %d/%i /proc/1/root 2>/dev/null)" ];
   then
@@ -39,46 +23,16 @@ in_debootstrap() {
 } 
 
 can_start_udevd() {
-  if ! supported_kernel; then
-    echo "udev requires a kernel >= 2.6.32, not started."
-    return 1
-  fi
-
   if [ ! -d /sys/class/ ]; then
     echo "udev requires a mounted sysfs, not started."
     return 1
   fi
-
-  if ! ps --no-headers --format args ax | egrep -q '^\['; then
-    echo "udev does not support containers, not started."
-    return 1
-  fi
-
-  if ! grep -q '[[:space:]]devtmpfs$' /proc/filesystems; then
-    echo "udev requires devtmpfs support, not started."
-    return 1
-  fi
-
-  if [ -e /etc/udev/disabled ]; then
-    echo "/etc/udev/disabled has been detected, udev not started."
-    return 1
-  fi
-
   return 0
 }
 
 enable_udev() {
   can_start_udevd || return 0
-
   invoke-rc.d udev start
-
-  # restart some daemons because their /dev sockets might have been hidden by
-  # the devtmpfs
-  kill -s HUP 1
-  local sysloginits="inetutils-syslogd rsyslog socklog-run sysklogd syslog-ng"
-  for script in $sysloginits; do
-    [ -x /etc/init.d/$script ] && invoke-rc.d $script restart || true
-  done
 }
 
 update_initramfs() {
@@ -87,39 +41,59 @@ update_initramfs() {
   update-initramfs -u
 }
 
-write_interfaces_rules() {
-  local devpath
-  for devpath in /sys/class/net/*; do
-    [ -d "$devpath" ] || continue
-    udevadm test --action=add $devpath > /dev/null || true
-  done
-}
-
 upgrade_fixes() {
-  # 167-1 introduced /run/udev/ but does not move the old database on
-  # upgrades when it decides to switch to /run/.
-  if ! chrooted && [ -d /dev/.udev/ -a ! -d /run/udev/ ] \
-      && grep -E -q "^[^[:space:]]+ /run tmpfs " /proc/mounts; then
-    mv /dev/.udev/ /run/udev/
-  fi
-
-  if dpkg --compare-versions "$2" lt "171-3"; then
-    # in 171-2 this directory becomes a symlink to libudev0, so it must be
-    # manually deleted because dpkg cannot automatically deal with this
-    if [ -e /usr/share/doc/udev -a ! -L /usr/share/doc/udev ]; then
-      rm -rf /usr/share/doc/udev
-      ln -s libudev0 /usr/share/doc/udev
-    fi
-  fi
-
   if dpkg --compare-versions "$2" lt "204-1"; then
     # We dropped udev-mtab with udev 204.
     update-rc.d udev-mtab remove
   fi
+
+  if dpkg --compare-versions "$2" lt "226-1"; then
+    update-rc.d udev-finish remove
+  fi
+
+  # we enabled net.ifnames in 220-7 by default; don't change iface names in
+  # virtualized envs (where 75-persistent-net-generator.rules didn't work)
+  if dpkg --compare-versions "$2" lt-nl "220-7~" &&
+     [ ! -e /etc/udev/rules.d/70-persistent-net.rules ] &&
+     [ ! -e /etc/udev/rules.d/80-net-setup-link.rules ] &&
+     [ ! -e /etc/systemd/network/99-default.link ] &&
+     [ ! -L /etc/systemd/network/99-default.link ] &&
+     ! grep -q net.ifnames /proc/cmdline && ! chrooted; then
+    mkdir -p /etc/systemd/network
+    cat <<EOF > /etc/systemd/network/99-default.link
+# This machine is most likely a virtualized guest, where the old persistent
+# network interface mechanism (75-persistent-net-generator.rules) did not work.
+# This file disables /lib/systemd/network/99-default.link to avoid
+# changing network interface names on upgrade. Please read
+# /usr/share/doc/udev/README.Debian.gz about how to migrate to the currently
+# supported mechanism.
+EOF
+  fi
+
+  # 226 introduced predictable interface names for virtio
+  # (https://github.com/systemd/systemd/pull/1119); disable for upgrades
+  if dpkg --compare-versions "$2" lt-nl "226-2~" &&
+      [ ! -e /etc/systemd/network/50-virtio-kernel-names.link ] &&
+      ls -d /sys/bus/virtio/drivers/virtio_net/virt* >/dev/null 2>&1; then
+    echo "virtio network devices detected, disabling predictable interface names in /etc/systemd/network/50-virtio-kernel-names.link"
+    mkdir -p /etc/systemd/network/
+    cat <<EOF > /etc/systemd/network/50-virtio-kernel-names.link
+# udev 226 introduced predictable interface names for virtio;
+# disable this for upgrades. You can remove this file if you update your
+# network configuration to move to the ens* names instead.
+# See /usr/share/doc/udev/README.Debian.gz for details about predictable
+# network interface names.
+[Match]
+Driver=virtio_net
+
+[Link]
+NamePolicy=onboard kernel
+EOF
+  fi
 }
 
 update_hwdb() {
-  udevadm hwdb --update --usr || true
+  systemd-hwdb --usr update || true
 }
 
 # In udev-204, we ship systemd-udevd.service (upstream name), whereas previous
@@ -151,22 +125,15 @@ case "$1" in
 
     if [ -z "$2" ]; then # first install
       if ! chrooted && ! in_debootstrap; then
-	write_interfaces_rules
 	enable_udev
       fi
     else # upgrades
       upgrade_fixes "$@"
       if ! chrooted; then
-	if [ -e /etc/udev/kernel-upgrade ]; then
-	  echo "Kernel upgrade mode, udevd has not been restarted."
-	  echo "Please reboot the system as soon as possible."
-	  rm /etc/udev/kernel-upgrade
-	elif can_start_udevd; then
-          handle_service_rename
-	  rm -f /run/systemd/system/systemd-udevd.service
-	  rm -f /run/systemd/system/udev.service
-          # This is necessary for the handle_service_rename case, but does not
-          # hurt in general (invoke-rc.d does it, too).
+	if can_start_udevd; then
+	  handle_service_rename
+	  # This is necessary for the handle_service_rename case, but does not
+	  # hurt in general (invoke-rc.d does it, too).
 	  if [ -d /run/systemd/system ] ; then
 	    systemctl daemon-reload || true
 	  fi
@@ -178,47 +145,17 @@ case "$1" in
     update_initramfs
     ;;
 
-    abort-upgrade|abort-remove|abort-deconfigure)
-    ;;
-
     triggered)
     update_hwdb
     exit 0
     ;;
-
-    interfaces)
-    write_interfaces_rules
-    ;;
-
-    *)
-    echo "$0 called with unknown argument '$1'" >&2
-    exit 1
-    ;;
 esac
 
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/udev" ]; then
-	update-rc.d udev defaults >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/udev-finish" ]; then
-	update-rc.d udev-finish defaults >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/udevtrigger" ]; then
-	update-rc.d udevtrigger defaults >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/udevmonitor" ]; then
-	update-rc.d udevmonitor defaults >/dev/null || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/udev-fallback-graphics" ]; then
-	update-rc.d udev-fallback-graphics defaults >/dev/null || exit $?
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/udev" ]; then
+		update-rc.d udev defaults >/dev/null || exit $?
+	fi
 fi
 # End automatically added section
 # Automatically added by dh_installdeb
@@ -226,6 +163,21 @@ dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
 # End automatically added section
 # Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6~ -- "$@"
 # End automatically added section
 
 

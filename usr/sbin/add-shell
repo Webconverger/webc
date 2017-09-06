@@ -2,8 +2,8 @@
 
 if test $# -eq 0
 then
-	echo usage: $0 shellname [shellname ...]
-	exit 1
+        echo usage: $0 shellname [shellname ...]
+        exit 1
 fi
 
 file=/etc/shells
@@ -25,10 +25,14 @@ fi
 
 for i
 do
-        if ! grep -q "^${i}$" $tmpfile
-        then
-                echo $i >> $tmpfile
-        fi
+        REALDIR="$(dirname $(realpath -m $i))/$(basename $i)"
+        for j in "$i" "$REALDIR"
+        do
+                if ! grep -q "^${j}$" $tmpfile
+                then
+                        echo $j >> $tmpfile
+                fi
+        done
 done
 
 chmod --reference=$file $tmpfile

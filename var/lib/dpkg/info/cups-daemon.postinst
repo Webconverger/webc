@@ -15,6 +15,23 @@ if [ "$1" = configure ]; then
         fi
     done
 
+    # Enforce the ConfigFilePerm on ppd file if we upgrade to 2.1.x
+    if dpkg --compare-versions "$2" lt-nl "2.1.0-2~"; then
+        configfileperm=`egrep '^ConfigFilePerm ' /etc/cups/cupsd.conf | awk '{print $2}' | tail -n 1`
+        if [ -z "$configfileperm" ]; then
+            configfileperm=0640
+        fi
+	if [ -d /etc/cups/ppd ]; then
+            for i in /etc/cups/ppd/*
+            do
+		if [ -f $i ]; then
+                    chown root:lp $i
+                    chmod $configfileperm $i
+		fi
+            done
+	fi
+    fi
+
     # symlink snakeoil SSL certificate if present
     if [ -e /etc/ssl/certs/ssl-cert-snakeoil.pem -a \
 	  -e /etc/ssl/private/ssl-cert-snakeoil.key -a \
@@ -89,7 +106,7 @@ if [ "$1" = configure ]; then
         fi
     fi
 
-    if dpkg --compare-versions "$2" le "1.7.1-9~" && [ -x /usr/sbin/logrotate ]; then
+    if dpkg --compare-versions "$2" le "1.7.1-9~" && [ -x "`which logrotate 2>/dev/null`" ]; then
         rotatemax=$(grep '^\s*rotate' /etc/logrotate.d/cups-daemon | sed -e 's/^\s*rotate\s*\(\d*\)/\1/g')
         for logfiletype in access_log error_log cups-pdf_log error_log page_log; do
             for biggest_non_gzipped in $(seq $rotatemax -1 1); do
@@ -119,6 +136,19 @@ if [ "$1" = configure ]; then
 fi
 
 # Automatically added by dh_apparmor
+aa_is_enabled() {
+   if command aa-enabled >/dev/null 2>&1; then
+      # apparmor >= 2.10.95-2
+      aa-enabled --quiet 2>/dev/null
+   else
+      # apparmor << 2.10.95-2
+      # (This should be removed once Debian Stretch and Ubuntu 18.04 are out.)
+      rc=0
+      aa-status --enabled 2>/dev/null || rc=$?
+      [ "$rc" = 0 ] || [ "$rc" = 2 ]
+   fi
+}
+
 if [ "$1" = "configure" ]; then
     APP_PROFILE="/etc/apparmor.d/usr.sbin.cupsd"
     if [ -f "$APP_PROFILE" ]; then
@@ -137,25 +167,10 @@ EOM
         }
 
         # Reload the profile, including any abstraction updates
-        if aa-status --enabled 2>/dev/null; then
+        if aa_is_enabled; then
             apparmor_parser -r -T -W "$APP_PROFILE" || true
         fi
     fi
-fi
-# End automatically added section
-# Automatically added by dh_systemd_enable
-# This will only remove masks created by d-s-h on package removal.
-deb-systemd-helper unmask cups.service >/dev/null || true
-
-# was-enabled defaults to true, so new installations run enable.
-if deb-systemd-helper --quiet was-enabled cups.service; then
-	# Enables the unit on first installation, creates new
-	# symlinks on upgrades if the unit file has changed.
-	deb-systemd-helper enable cups.service >/dev/null || true
-else
-	# Update the statefile to add new symlinks (if any), which need to be
-	# cleaned up on purge. Also remove old symlinks.
-	deb-systemd-helper update-state cups.service >/dev/null || true
 fi
 # End automatically added section
 # Automatically added by dh_systemd_enable
@@ -175,6 +190,21 @@ fi
 # End automatically added section
 # Automatically added by dh_systemd_enable
 # This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask cups.service >/dev/null || true
+
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled cups.service; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-helper enable cups.service >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state cups.service >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable
+# This will only remove masks created by d-s-h on package removal.
 deb-systemd-helper unmask cups.socket >/dev/null || true
 
 # was-enabled defaults to true, so new installations run enable.
@@ -189,15 +219,11 @@ else
 fi
 # End automatically added section
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/cups" ]; then
-	update-rc.d cups defaults >/dev/null
-	invoke-rc.d cups start || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_systemd_start
-if [ -d /run/systemd/system ]; then
-	systemctl --system daemon-reload >/dev/null || true
-	deb-systemd-invoke start cups.path >/dev/null || true
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/cups" ]; then
+		update-rc.d cups defaults >/dev/null
+		invoke-rc.d cups start || exit $?
+	fi
 fi
 # End automatically added section
 # Automatically added by dh_installdeb

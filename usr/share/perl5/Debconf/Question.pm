@@ -69,7 +69,7 @@ sub _expand_vars {
 	my $variable;
 	my $varval;
 	my $escape;
-	while ($rest =~ m/^(.*?)(\\)?\${([^{}]+)}(.*)$/sg) {
+	while ($rest =~ m/^(.*?)(\\)?\$\{([^{}]+)\}(.*)$/sg) {
 		$result.=$1;  # copy anything before the variable
 		$escape=$2;
 		$variable=$3;

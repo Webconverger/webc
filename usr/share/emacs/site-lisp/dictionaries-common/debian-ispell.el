@@ -410,8 +410,14 @@ Emacs will rely on hunspell dicts auto-detection."
 
 (add-hook 'ispell-initialize-spellchecker-hook 'debian-ispell-initialize-dicts-alist)
 
-;;; --------------
-
+;; ---------------------------------------------------------------------------
+;; Set `ispell-dictionary' to Debian default dict for given
+;; spellchecker, unless it has already been customized or set in any
+;; other way.
+;; This function is added to `after-init-hook', so it is evaluated
+;; right after init files loading with actual `ispell-program-name',
+;; but before ispell.el.
+;; ---------------------------------------------------------------------------
 (defun debian-ispell-set-default-dictionary ()
   "Set ispell default to the debconf selected one if ispell-program-name is
 ispell or, when ispell-program-name is aspell, to the value guessed after
@@ -457,9 +463,7 @@ LANG if any."
 		 ispell-dictionary
 		 ispell-program-name))
     )) ;; let and defun ends
-
-;; (add-hook 'after-init-hook 'debian-ispell-set-default-dictionary)
-(eval-after-load "ispell" '(debian-ispell-set-default-dictionary))
+(add-hook 'after-init-hook 'debian-ispell-set-default-dictionary)
 
 ;; ---------------------------------------------------------------------------
 ;; Make sure patched ispell.el is first in the loadpath if not already there
@@ -495,4 +499,3 @@ LANG if any."
   :group 'ispell)
 
 ;;; -----------------------------------------------------------------------
-

@@ -671,7 +671,7 @@ sub parse_pam_profile
 	my %profile;
 	open(PROFILE, $profile) || die "could not read profile $profile: $!";
 	while (<PROFILE>) {
-		if (/^(\S+):\s+(.*)$/) {
+		if (/^(\S+):\s+(.*)\s*$/) {
 			$fieldname = $1;
 			# compatibility with the first implementation round;
 			# "Auth-Final" is now just called "Auth"
@@ -686,6 +686,7 @@ sub parse_pam_profile
 		} else {
 			chomp;
 			s/^\s+//;
+			s/\s+$//;
 			$profile{$fieldname} .= "\n$_" if ($_);
 			$profile{$fieldname} =~ s/^[\n\s]+//;
 		}

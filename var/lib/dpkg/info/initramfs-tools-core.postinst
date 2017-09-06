@@ -1,0 +1,43 @@
+#!/bin/sh
+
+set -e
+
+if [ ! -e /etc/initramfs-tools/modules ]; then
+	sed '/^###/d' /usr/share/initramfs-tools/modules \
+		> /etc/initramfs-tools/modules
+fi
+
+mvverbose=-v
+
+# from dpkg-maintscript-helper, modified
+ensure_package_owns_file() {
+	local PACKAGE="$1"
+	local FILE="$2"
+
+	dpkg-query -L "$PACKAGE" | grep -F -q -x "$FILE"
+}
+
+# from dpkg-maintscript-helper, modified
+finish_mv_conffile() {
+	local CONFFILE="$1"
+	local PACKAGE="$2"
+
+	rm $mvverbose -f "$CONFFILE.dpkg-remove"
+
+	[ -e "$CONFFILE.dpkg-backup" ] || return 0
+	ensure_package_owns_file "$PACKAGE" "$CONFFILE" || return 0
+
+	echo "Preserving user changes to $CONFFILE (now owned by $PACKAGE)..."
+	if [ -e "$CONFFILE" ]; then
+		mv $mvverbose -f "$CONFFILE" "$CONFFILE.dpkg-new"
+	fi
+	mv $mvverbose -f "$CONFFILE.dpkg-backup" "$CONFFILE"
+}
+
+# When installing as a new dependency of initramfs-tools, or upgrading
+# from <0.123, we need to move initramfs.conf back into place.
+if [ "$1" = configure ] && dpkg --compare-versions "$2" lt 0.123~; then
+	finish_mv_conffile /etc/initramfs-tools/initramfs.conf initramfs-tools-core
+fi
+
+

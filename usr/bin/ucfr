@@ -22,7 +22,7 @@ set -e
 
 # set the version and revision
 progname=$(basename "$0")
-
+pversion='Revision 3.00'
 ######################################################################
 ########                                                     #########
 ########              Utility functions                      #########
@@ -42,7 +42,7 @@ setq() {
 }
 
 withecho () {
-        echo " $@" >&2
+        echo "$@" >&2
         "$@"
 }
 
@@ -53,7 +53,7 @@ purge_from_registry () {
         exit 6;
     fi
 
-    if [ $count -eq 0 ]; then
+    if [ "$count" -eq 0 ]; then
         if [ "X$VERBOSE" != "X" ]; then
             echo >&2 "$progname: Association already purged. No changes.";
         fi
@@ -73,9 +73,9 @@ purge_from_registry () {
     for i in $(/usr/bin/seq 6 -1 0); do
 	if [ -e "${statedir}/registry.${i}" ]; then
 	    if [ "X$docmd" = "XYES" ]; then
-		cp -f "${statedir}/registry.${i}"  "${statedir}/registry.$(($i+1))"
+		cp -f "${statedir}/registry.${i}"  "${statedir}/registry.$(($i + 1))"
 	    else
-		echo cp -f "${statedir}/registry.${i}" "${statedir}/registry.$(($i+1))"
+		echo cp -f "${statedir}/registry.${i}" "${statedir}/registry.$(($i + 1))"
 	    fi
 	fi
     done
@@ -107,7 +107,7 @@ replace_in_registry () {
         echo >&2 "$progname: Internal error: $statedir/registry does not exist";
         exit 6;
     fi
-    if [ $count -eq 1 ]; then
+    if [ "$count" -eq 1 ]; then
         old_pkg=$(egrep "[[:space:]]${real_conf_file_re}$" "$statedir/registry" | \
             awk '{print $1;}' );
 
@@ -129,10 +129,10 @@ replace_in_registry () {
 	if [ -e "${statedir}/registry.${i}" ]; then
 	    if [ "X$docmd" = "XYES" ]; then
 		cp -f "${statedir}/registry.${i}" \
-		    "${statedir}/registry.$(($i+1))"
+		    "${statedir}/registry.$(($i + 1))"
 	    else
 		echo cp -f "${statedir}/registry.${i}" \
-		    "${statedir}/registry.$(($i+1))"
+		    "${statedir}/registry.$(($i + 1))"
 	    fi
 	fi
     done
@@ -205,9 +205,9 @@ THREEWAY=
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
 # We need TEMP as the `eval set --' would nuke the return value of getopt.
-TEMP=`getopt -a -o hd::D::fnvp -n "$progname" \
+TEMP=$(getopt -a -o hd::D::fnvp -n "$progname" \
       --long help,debug::,DEBUG::,force,no-action,purge,verbose,state-dir: \
-             -- "$@"`
+             -- "$@")
 
 if [ $? != 0 ] ; then
     echo "Error handling options.Terminating..." >&2 ;
@@ -238,7 +238,7 @@ while true ; do
     esac
 done
 # Need to run as root, or else the
-if test $(id -u) != 0; then
+if test "$(id -u)" != 0; then
     if [ "$docmd" = "YES" ]; then
         echo "$progname: Need to be run as root." >&2
         echo "$progname: Setting up no action mode." >&2
@@ -260,9 +260,9 @@ setq pkg  "$1" "The Package name";
 setq conf_file "$2" "The Configuration file";
 setq real_conf_file "$(readlink -q -m $conf_file)" "The (real) Configuration file";
 
-pkg_re=$(echo $pkg       | sed -e 's,+,\\+,')
-conf_file_re=$(echo $conf_file | sed -e 's,+,\\+,')
-real_conf_file_re=$(echo $real_conf_file | sed -e 's,+,\\+,')
+pkg_re="$(echo $pkg       | sed -e 's,+,\\+,')"
+conf_file_re="$(echo $conf_file | sed -e 's,+,\\+,')"
+real_conf_file_re="$(echo $real_conf_file | sed -e 's,+,\\+,')"
 
 case $conf_file_re in
     /*)
@@ -305,11 +305,11 @@ fi
 
 # test and see if this file exists in the database
 if [ ! -d "$statedir" ]; then
-    mkdir -p "$statedir"
+    $action mkdir -p "$statedir"
 fi
 
 if [ ! -f "$statedir/registry" ]; then
-    touch "$statedir/registry"
+    $action touch "$statedir/registry"
 fi
 
 
@@ -323,13 +323,13 @@ count=$(egrep --count "[[:space:]]${real_conf_file_re}$" "$statedir/registry") |
 if [ "$count" -ge 2 ]; then
     echo >&2 "$progname: Corrupt registry: Duplicate entries for ${conf_file}";
     egrep "[[:space:]]${real_conf_file_re}$" "$statedir/registry";
-    exit $count;
+    exit "$count";
 fi
 
 if [ "X$PURGE" != "X" ]; then
-    purge_from_registry
+    $action purge_from_registry
 else
-    replace_in_registry
+    $action replace_in_registry
 fi
 
 

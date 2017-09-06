@@ -39,6 +39,7 @@ _read_fstab_entry () {
 					echo "MNT_FSNAME=$MNT_FSNAME"
 					echo "MNT_DIR=$MNT_DIR"
 					echo "MNT_TYPE=$MNT_TYPE"
+					echo "MNT_PASS=$MNT_PASS"
 					break 2
 				fi
 				MNT_DIR=""
@@ -47,35 +48,29 @@ _read_fstab_entry () {
 	done
 }
 
-# Find a specific fstab entry and print its type (if found)
+# Find a specific fstab entry and print its type (if found, and pass != 0)
 # $1=mountpoint
-get_fstype_fstab () {
+get_fsck_type_fstab () {
 	eval "$(_read_fstab_entry "$1")"
 
 	# Not found by default.
-	if [ "$1" = "$MNT_DIR" ]; then
-		case "$MNT_TYPE" in
-			auto)
-				if command -v blkid >/dev/null 2>&1 ; then
-					MNT_FSNAME=$(resolve_device "$MNT_FSNAME")
-					MNT_TYPE=$(blkid -o value -s TYPE "${MNT_FSNAME}")
-				fi
-				if [ -z "${MNT_TYPE}" ]; then
-					MNT_TYPE="auto"
-				fi
-				echo "$MNT_TYPE"
-				;;
-			*)
-				echo "$MNT_TYPE"
-				;;
-		esac
-
+	if [ "$1" = "$MNT_DIR" ] && [ "$MNT_PASS" != 0 ]; then
+		# Ignore filesystem type for /, as it is not available and
+		# therefore never used at boot time
+		if [ "${MNT_DIR}" = "/" ] || [ "${MNT_TYPE}" = "auto" ]; then
+			MNT_FSNAME="$(resolve_device "${MNT_FSNAME}")"
+			alias fstype="/usr/lib/klibc/bin/fstype"
+			get_fstype "${MNT_FSNAME}"
+			unalias fstype
+		else
+			echo "${MNT_TYPE}"
+		fi
 	fi
 }
 
-get_fstypes() {
-	get_fstype_fstab /
-	get_fstype_fstab /usr
+get_fsck_types() {
+	get_fsck_type_fstab /
+	get_fsck_type_fstab /usr
 }
 
 case $1 in
@@ -92,32 +87,22 @@ fi
 . /usr/share/initramfs-tools/scripts/functions
 . /usr/share/initramfs-tools/hook-functions
 
+fsck_types="$(get_fsck_types | sort | uniq)"
+
+if [ -z "$fsck_types" ]; then
+	exit 0
+fi
 
 copy_exec /sbin/fsck
 copy_exec /sbin/logsave
-copy_exec /sbin/sulogin
 
-# e2fsck may fail or warn if the system time is not yet correct, which
-# will happen if the RTC driver is modular or the RTC is set to local
-# time.  Disable this behaviour.  (No other fsck does this, apparently.)
-mkdir -p "${DESTDIR}/etc"
-cat >"${DESTDIR}/etc/e2fsck.conf" <<EOF
-[options]
-broken_system_clock=1
-EOF
-
-for type in $(get_fstypes | sort | uniq); do
-	if [ "$type" = 'auto' ] ; then
+for type in $fsck_types; do
+	if [ "$type" = "unknown" ] ; then
 		echo "Warning: couldn't identify filesystem type for fsck hook, ignoring."
 		continue
 	fi
 
-	prog="/sbin/fsck.${type}"
-	if [ -h "$prog" ]; then
-		link=$(readlink -f "$prog")
-		copy_exec "$link"
-		ln -s "$link" "${DESTDIR}/$prog"
-	elif [ -x "$prog" ] ; then
+	if prog="$(command -v fsck.${type})"; then
 		copy_exec "$prog"
 	else
 		echo "Warning: /sbin/fsck.${type} doesn't exist, can't install to initramfs, ignoring."

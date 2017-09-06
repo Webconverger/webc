@@ -1,10 +1,9 @@
 [Unit]
-Description=CUPS Printing Service Sockets
+Description=CUPS Scheduler
+PartOf=cups.service
 
 [Socket]
 ListenStream=/var/run/cups/cups.sock
-BindIPv6Only=ipv6-only
-PassCredentials=true
 
 [Install]
 WantedBy=sockets.target

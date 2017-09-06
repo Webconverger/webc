@@ -166,6 +166,14 @@ Description-th.UTF-8: ฐานข้อมูล debconf อาจเสีย�
  ในกรณีนี้ การเรียกทำงาน "/usr/share/debconf/fix_db.pl" สามารถช่วยทำให้ฐานข้อมูล debconf อยู่ในสถานะที่ทำงานสอดคล้องกันได้
  .
  อาจมีการถามคำถามหลังจากข้อความนี้ เพื่อทำให้ระบบพจนานุกรมอยู่ในสถานะที่ทำงานได้ (ชั่วคราว)
+Description-tr.UTF-8: Olası debconf veritabanı hasarı
+ "${question}" sorusunun ayarı eksik, ama adayları sağlayan paketler kurulu durumda:"${class_packages}".
+ .
+ Bu durum debconf veritabanında meydana gelmiş bir hasardan kaynaklanıyor olabilir. Ayrıntılı bilgi için "/usr/share/doc/dictionaries-common/README.problems" dosyasındaki "Debconf database corruption" başlıklı kısmı okuyabilirsiniz.
+ .
+ Bu durumda, "/usr/share/debconf/fix_db.pl" komutunu çalıştırmak veritabanının tutarlı bir duruma dönmesini sağlayabilir.
+ .
+ Sözlükler sistemini (geçici olarak) çalışır duruma getirmek için bu iletiden sonra bazı sorular sorulabilir.
 
 Template: dictionaries-common/invalid_debconf_value
 Type: error
@@ -349,6 +357,14 @@ Description-th.UTF-8: ค่าพจนานุกรมปริยายไ�
  เพื่อแก้ปัญหานี้ กรุณาติดตั้ง (หรือติดตั้งซ้ำ) แพกเกจที่จัดเตรียม "${value}" จากนั้น ถ้าคุณไม่ต้องการใช้แพกเกจดังกล่าวในระบบนี้แล้ว ก็สามารถถอดถอนทิ้งได้ ซึ่งจะเป็นการลบค่าตั้งนี้ทิ้งไปด้วย จะมีเมนูตัวเลือกในขั้นต่อจากข้อความนี้ เพื่อทำให้ระบบอยู่ในสถานะที่ทำงานได้ จนกว่าคุณจะแก้ปัญหาดังกล่าว
  .
  ข้อความนี้ อาจเกิดขึ้นระหว่างเปลี่ยนชื่อพจนานุกรมหรือรายการคำของ ispell (เช่น wenglish -> wamerican) ก็ได้ ซึ่งในกรณีนี้ ไม่มีอะไรเสียหาย และทุกอย่างจะถูกแก้ไขเอง หลังจากที่คุณเลือกค่าปริยายที่ต้องการในเมนูที่แสดงถัดจากข้อความนี้ไป
+Description-tr.UTF-8: Öntanımlı sözlük yapılandırma değeri geçersiz
+ dictionaries-common yapılandırma ayarlarından birinde geçersiz bir değere rastlandı. "${value}" değeri sistemde kurulu hiçbir pakete karşılık gelmiyor.
+ .
+ Bu durum genellikle "${value}" değerini sağlayan paketin kurulum için seçilip de daha sonra başka paketlerdeki hatalardan dolayı kurulmamış olması gibi önceki sorunlar yüzünden ortaya çıkar.
+ .
+ Bu hatayı düzeltmek için, "${value}" değerini sağlayan paketi (tekrar) kurun. Daha sonra, bu paketi sisteminizde istemiyorsanız paketi kaldırın. Bu işlem paketin debconf kayıtlarını da silecektir. Siz sorunu düzeltinceye dek sistemi çalışır durumda tutmak adına bu iletiden sonra bir seçenek menüsü gösterilecektir.
+ .
+ Bu hata iletisi, ispell sözlüğü veya sözcük listesinde isim değişikliği (ör. wenglish->wamerican) yapılırken de çıkabilir. Bu durumda bu hata zararsızdır ve siz bu iletiden sonra gösterilecek menü(ler)de uygun gördüğünüz öntanımlı değerleri seçtikten sonra her şey düzelecektir.
 
 Template: dictionaries-common/default-ispell
 Type: select
@@ -396,7 +412,7 @@ Choices-sv.UTF-8: ${echoices}, Manuell inställning av symlänkar
 Choices-ta.UTF-8: ${echoices}, கைமுறை சிம்லிங்க் அமைப்பு
 Choices-th.UTF-8: ${echoices}, กำหนด symlink เอง
 Choices-tl.UTF-8: ${echoices}, Manwal na ayos ng symlinks
-Choices-tr.UTF-8: ${echoices}, Elle (Sembolik bağlarla) ayarla
+Choices-tr.UTF-8: ${echoices}, Elle sembolik bağ ayarı
 Choices-uk.UTF-8: ${echoices}, Створення символьних посилань вручну
 Choices-vi.UTF-8: ${echoices}, Thiết lập liên kết mềm bằng tay
 Choices-zh_CN.UTF-8: ${echoices}, 手动链接设定
@@ -591,6 +607,14 @@ Description-th.UTF-8: พจนานุกรม ispell ใดที่จะ�
  เลือก "กำหนด symlink เอง" ถ้าคุณต้องการจัดการ symlink เอง ซึ่งในกรณีนี้ ispell จะไม่มี ispell-wrapper หรือค่าปริยายสำหรับ Emacs
  .
  คุณสามารถเปลี่ยนพจนานุกรม ispell ปริยายได้เมื่อต้องการ โดยเรียก "select-default-ispell"
+Description-tr.UTF-8: Sistemin öntanımlı ispell sözlüğü:
+ Lütfen başka bir yazım denetimi sözlüğü belirtilmediği durumda ispell'in hangi sözlüğü sistem genelinde öntanımlı olarak kullanacağını belirtin.
+ .
+ Bu seçenek /usr/lib/ispell/default.aff ve /usr/lib/ispell/default.hash sembolik bağlarını, ispell'in genel ispell-wrapper sarmalayıcısını ve Emacs öntanımlı ayarlarını ayarlar.
+ .
+ Sembolik bağları kendiniz ayarlamak istiyorsanız "Elle sembolik bağ ayarı" seçeneğini seçin. Bu durumda ispell genel sarmalayıcısı ve Emacs öntanımlı ayarları ayarlanmayacaktır.
+ .
+ Öntanımlı ispell sözlüğünü "select-default-ispell" komutunu çalıştırarak istediğiniz zaman değiştirebilirsiniz.
 Description-zh_CN.UTF-8: 系统默认使用哪个 ispell 字典？
  当未指定其他的拼写检查字典，请指出系统默认的ispell字典
  .
@@ -646,7 +670,7 @@ Choices-sv.UTF-8: ${echoices}, Manuell inställning av symlänkar
 Choices-ta.UTF-8: ${echoices}, கைமுறை சிம்லிங்க் அமைப்பு
 Choices-th.UTF-8: ${echoices}, กำหนด symlink เอง
 Choices-tl.UTF-8: ${echoices}, Manwal na ayos ng symlinks
-Choices-tr.UTF-8: ${echoices}, Elle (Sembolik bağlarla) ayarla
+Choices-tr.UTF-8: ${echoices}, Elle sembolik bağ ayarı
 Choices-uk.UTF-8: ${echoices}, Створення символьних посилань вручну
 Choices-vi.UTF-8: ${echoices}, Thiết lập liên kết mềm bằng tay
 Choices-zh_CN.UTF-8: ${echoices}, 手动链接设定
@@ -747,6 +771,10 @@ Description-th.UTF-8: รายการคำใดที่จะใช้โ�
  กรุณาระบุรายการคำที่ symlink "/usr/share/dict/words" จะชี้ไป ซึ่งจะเป็นการจัดเตรียมรายการอย่างง่ายของคำในพจนานุกรมสำหรับตรวจตัวสะกดพื้นฐานและค้นหาคำ เลือก "กำหนด symlink เอง" ถ้าคุณต้องการจัดการ symlink นี้ด้วยตนเอง
  .
  คุณสามารถเปลี่ยนรายการคำปริยายได้เมื่อต้องการ โดยเรียก "select-default-wordlist"
+Description-tr.UTF-8: Sistemin öntanımlı sözcük listesi:
+ Lütfen "/usr/share/dict/words" sembolik bağının hangi sözcük listesine işaret edeceğini belirtin. Bu bağ temel yazım denetimi ve sözcük aramaları için basit bir sözcük listesi sağlar. Bu bağı kendiniz ayarlamak istiyorsanız "Elle sembolik bağ ayarı" seçeneğini seçin.
+ .
+ Öntanımlı sözcük listesini "select-default-wordlist" komutunu çalıştırarak istediğiniz zaman değiştirebilirsiniz.
 Description-zh_CN.UTF-8: 使用哪个 wordlist 作为系统默认值？
  请指出符号链接指向 "/usr/share/dict/words" 中的哪一个 wordlist。这将会提供一个简单的单词表以供基本的拼写检查和单词搜索。如果你想手动处理符号链接，请使用 "Manual symlink setting"
  .
@@ -842,6 +870,10 @@ Description-th.UTF-8: จะลบลิงก์ /etc/dictionary ที่เ�
  ระบบนี้มี symlink "/etc/dictionary" ที่เลิกใช้แล้ว ซึ่งไม่มีความจำเป็นอะไรและสมควรลบทิ้ง
  .
  คุณจะถูกถามให้เลือกรายการคำชุดปริยายระหว่างการติดตั้งแพกเกจรายการคำต่างๆ คุณสามารถเปลี่ยนตัวเลือกเมื่อใดก็ได้ โดยเรียก "select-default-wordlist"
+Description-tr.UTF-8: Eski /etc/dictionary bağı silinsin mi?
+ Sisteminizde eski bir "/etc/dictionary" bağı mevcut. Bu bağ artık kullanılmamaktadır ve kaldırılmalıdır.
+ .
+ Sözcük listesi paketlerinin kurulumu sırasında öntanımlı sözcük listesini seçmeniz sağlanacaktır. "select-default-wordlist" komutunu kullanarak seçiminizi istediğiniz zaman değiştirebilirsiniz.
 
 Template: dictionaries-common/ispell-autobuildhash-message
 Type: note
@@ -1016,6 +1048,14 @@ Description-th.UTF-8: เกิดปัญหาระหว่างสร้�
  ข้อผิดพลาดนี้เกิดจากแพกเกจที่จัดเตรียม "${hashfile}" แม้อาจจะเกิดจากกระบวนการติดตั้งของแพกเกจอื่น กรุณารายงานบั๊กไปยังผู้ดูแลแพกเกจที่จัดเตรียม "${hashfile}"
  .
  จนกว่าปัญหานี้จะได้รับการแก้ไข คุณจะไม่สามารถใช้ ${xxpell} โดยใช้ "${hashfile}" ได้
+Description-tr.UTF-8: ${xxpell} eşleştirme dosyası (${hashfile}) yeniden oluşturulurken sorun yaşandı
+ Aşağıdaki hata meydana geldi:
+ .
+ ${errormsg}
+ .
+ Başka bir paketin kurulumunda tetiklenmiş olma ihtimali olsa da bu hataya "${hashfile}" dosyasını sağlayan paket yol açmıştır. Lütfen "${hashfile}" dosyasını sağlayan paket için hata bildiriminde bulunun.
+ .
+ Bu sorun giderilinceye kadar ${xxpell} programı "${hashfile}" ile kullanılamayacak.
 
 Template: dictionaries-common/selecting_ispell_wordlist_default
 Type: note
@@ -1106,3 +1146,7 @@ Description-th.UTF-8: จะไม่มีการตั้งค่าปร�
  การเรียก "dpkg-reconfigure dictionaries-common" จะไม่กำหนดค่าปริยายสำหรับพจนานุกรม/รายการคำของ ispell และการเรียก "dpkg-reconfigure ispell" ก็ไม่กำหนดพจนานุกรมปริยายของ ispell เช่นกัน
  .
  คุณควรใช้คำสั่ง "select-default-ispell" หรือ "select-default-wordlist" ในการกำหนดดังกล่าวแทน
+Description-tr.UTF-8: ispell sözlüğü/sözcük listesi için öntanımlı değerler ayarlanmamış
+ "dpkg-reconfigure dictionaries-common" komutunu çalıştırmak ispell sözlüğü/sözcük listesi için öntanımlı değerleri ayarlamayacaktır. Benzer şekilde "dpkg-reconfigure ispell" komutunu çalıştırmak da öntanımlı ispell sözlüğünü ayarlamayacaktır.
+ .
+ Öntanımlı sözlük ve sözcük listesini ayarlamak için "select-default-ispell" veya "select-default-wordlist" komutlarını kullanmanız önerilir.

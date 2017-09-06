@@ -1,11 +1,10 @@
 [Unit]
-Description=CUPS Printing Service
-Documentation=man:cupsd(8) man:cupsd.conf(5)
-Requires=cups.socket
+Description=CUPS Scheduler
+Documentation=man:cupsd(8)
 
 [Service]
-ExecStart=/usr/sbin/cupsd -f
-PrivateTmp=true
+ExecStart=/usr/sbin/cupsd -l
+Type=simple
 
 [Install]
 Also=cups.socket cups.path

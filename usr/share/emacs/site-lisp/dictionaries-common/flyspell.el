@@ -1,9 +1,9 @@
 ;;; flyspell.el --- on-the-fly spell checker
 
-;; Copyright (C) 1998, 2000-2013 Free Software Foundation, Inc.
+;; Copyright (C) 1998, 2000-2015 Free Software Foundation, Inc.
 
 ;; Author: Manuel Serrano <Manuel.Serrano@sophia.inria.fr>
-;; Maintainer: FSF
+;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: convenience
 
 ;; This file is part of GNU Emacs.
@@ -121,7 +121,7 @@ This variable specifies how far to search to find such a duplicate.
 -1 means no limit (search the whole buffer).
 0 means do not search for duplicate unrecognized spellings."
   :group 'flyspell
-  :version "21.1"
+  :version "24.5"			; -1 -> 400000
   :type '(choice (const :tag "no limit" -1)
 		 number))
 
@@ -303,6 +303,7 @@ If this variable is nil, all regions are treated as small."
 (defcustom flyspell-auto-correct-binding
   [(control ?\;)]
   "The key binding for flyspell auto correction."
+  :type 'key-sequence
   :group 'flyspell)
 
 ;;*---------------------------------------------------------------------*/
@@ -1153,7 +1154,8 @@ misspelling and skips redundant spell-checking step."
 		   (let* ((bound
 			   (- start
 			      (- end start)
-			      (- (skip-chars-backward " \t\n\f"))))
+			      (- (save-excursion
+                                   (skip-chars-backward " \t\n\f")))))
 			  (p (when (>= bound (point-min))
 			       (flyspell-word-search-backward word bound t))))
 		     (and p (/= p start)))))

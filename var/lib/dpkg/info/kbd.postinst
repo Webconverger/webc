@@ -1,8 +1,30 @@
 #!/bin/sh
+
 set -e
-# Automatically added by dh_installinit
-if [ -x "/etc/init.d/kbd" ]; then
-	update-rc.d kbd defaults >/dev/null
-	invoke-rc.d kbd start || exit $?
+
+case "$1" in
+    configure)
+        # see #261801
+        for file in dumpkeys loadkeys; do
+            if [ ! -e /usr/bin/$file ]; then
+                ln -s /bin/$file /usr/bin/$file
+            fi
+        done
+        ;;
+esac
+
+# see kbd.preinst for why this is conditional.
+if [ ! -e /etc/kbd/config ] && [ ! -e /etc/kbd/remap ]; then
+    dpkg-maintscript-helper rm_conffile \
+            /etc/kbd/config 2.0.3-2~ kbd -- "$@"
+    dpkg-maintscript-helper rm_conffile \
+            /etc/kbd/remap 2.0.3-2~ kbd -- "$@"
+    dpkg-maintscript-helper rm_conffile \
+            /etc/init.d/kbd 2.0.3-2~ kbd -- "$@"
+    rmdir /etc/kbd 2>/dev/null || true
+    update-rc.d -f kbd remove
 fi
-# End automatically added section
+
+
+
+# vim:sw=4:sts=4:et:

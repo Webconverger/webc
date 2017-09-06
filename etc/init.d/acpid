@@ -49,15 +49,17 @@ load_modules() {
     log_end_msg $?
 }
 
+set +e
+
 case "$1" in
   start)
     load_modules || true
-    log_begin_msg "Starting ACPI services..."
+    log_daemon_msg "Starting ACPI services" "acpid"
     start-stop-daemon --start --quiet --oknodo --exec "$ACPID" -- $OPTIONS
     log_end_msg $?
     ;;
   stop)
-    log_begin_msg "Stopping ACPI services..."
+    log_daemon_msg "Stopping ACPI services" "acpid"
     start-stop-daemon --stop --quiet --oknodo --retry 2 --exec "$ACPID"
     log_end_msg $?
     ;;
@@ -67,7 +69,7 @@ case "$1" in
     $0 start
     ;;
   reload|force-reload) 
-    log_begin_msg "Reloading ACPI services..."
+    log_daemon_msg "Reloading ACPI services" "acpid"
     start-stop-daemon --stop --signal 1 --exec "$ACPID"
     log_end_msg $?
     ;;

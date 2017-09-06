@@ -15,6 +15,7 @@ Description-pt.UTF-8: Configuração PAM
 Description-ru.UTF-8: Настройка PAM
 Description-sk.UTF-8: Konfigurácia PAM
 Description-sv.UTF-8: PAM-inställningar
+Description-tr.UTF-8: PAM yapılandırması
 
 Template: libpam-runtime/profiles
 Type: multiselect
@@ -106,9 +107,13 @@ Description-sk.UTF-8: Zapnúř nasledovné profily PAM:
  .
  Niektoré balíky modulov PAM poskytujú profily, ktorými možno automaticky prisôpsobiť správanie všetkých aplikácií v systéme, ktoré používajú PAM. Prosím označte tie z nich, ktoré chcete zapnúť.
 Description-sv.UTF-8: Aktivera följande PAM-profiler:
- Pluggable Authentication Modules (PAM) hanterar hur autentisering, identifiering och byte av lösenord ska utföras på systemet. Dessutom hanteras särskilda åtgärder som ska vidtas vid uppstarta av användarsessioner.
+ Pluggable Authentication Modules (PAM) hanterar hur autentisering, identifiering och byte av lösenord ska utföras på systemet. Dessutom hanteras särskilda åtgärder som ska vidtas vid uppstart av användarsessioner.
  .
  Vissa paket med PAM-moduler tillhandahåller profiler som kan användas för att automatiskt justera hur applikationer som använder PAM fungerar på systemet. Ange vilka av dessa funktioner du önskar aktivera.
+Description-tr.UTF-8: Etkinleştirilecek PAM profilleri:
+ Takılabilir Doğrulama Modülleri (PAM), sistemdeki kimlik doğrulama, izin verme ve parola değiştirme işlemlerinin ne şekilde idare edileceğine karar veren ve ayrıca kullanıcı oturumları başlatılırken atılması gereken adımları yapılandırmaya yarayan bir sistemdir.
+ .
+ Bazı PAM modül paketleri, sistemde mevcut olan ve PAM kullanan tüm uygulamaların davranışlarını otomatik olarak ayarlamaya yarayan profiller sağlar.  Lütfen bu davranışlardan hangisini etkinleştirmek istediğinizi belirtin.
 Description-vi.UTF-8: Các hồ sơ PAM cần bật:
  Mô-đun Xác thực Dễ kết hợp (PAM) quyết định quá trình xác thực, cho phép và thay đổi mật khẩu được quản lý như thế nào trên hệ thống, cũng như cho phép cấu hình các hành vi bổ sung cần làm khi khởi chạy buổi hợp người dùng.
  .
@@ -242,6 +247,12 @@ Description-sv.UTF-8: Inkompatibla PAM-profiler valdes.
  ${conflicts}
  .
  Ange en annan uppsättning med moduler som ska aktiveras.
+Description-tr.UTF-8: Uyumsuz PAM profilleri seçildi
+ Şu PAM profilleri birarada kullanılamaz:
+ .
+ ${conflicts}
+ .
+ Lütfen farklı bir modül kümesi seçin.
 Description-vi.UTF-8: Bạn đã chọn một số hồ sơ PAM không tương thích với nhau.
  Không thể sử dụng với nhau những hồ sơ PAM theo đây:
  .
@@ -298,6 +309,8 @@ Description-sk.UTF-8: Prepísať lokálne zmeny v /etc/pam.d/common-*?
  Jeden alebo viac zo súborov /etc/pam.d/common-{auth,account,password,session} bolo na lokálnom systéme zmenených. Uveďte prosím, či sa majú tieto lokálne zmeny prepísať štandardnými konfiguračnými voľbami. Ak túto možnosť zamietnete, budete musieť spravovať nastavenia autentifikácie tohto systému ručne.
 Description-sv.UTF-8: Skriv över lokala förändringar i /etc/pam.d/common-*?
  En eller flera av filerna /etc/pam.d/common-{auth,account.password,session} har förändrats. Ange om dessa lokala förändringar ska skrivas över med standardinställningarna. Om du avböjer detta alternativ kommer du behöva hantera inställningarna för systemets autentisering manuellt.
+Description-tr.UTF-8: /etc/pam.d/common-* konumundaki yerel değişiklikler görmezden gelinsin mi?
+ /etc/pam.d/common-{auth,account,password,session} dosyalarından bir ya da daha fazlası yerel olarak değiştirilmiş.  Lütfen bu yerel değişikliklerin sistem tarafından sağlanan yapılandırma ile değiştirilmesine izin verip vermediğinizi belirtin.  Bu seçeneği kabul etmediğiniz takdirde sistemin kimlik doğrulama yapılandırmasını elinizle ayarlamanız gerekecektir.
 Description-vi.UTF-8: Có quyền cao hơn thay đổi cục bộ trong « /etc/pam.d/common-* » không?
  Một hay nhiều tập tin « /etc/pam.d/common-{auth,account,password,session} » đã bị sửa đổi cục bộ. Hãy ngụ ý có nên ghi đè lên các thay đổi cục bộ này dùng cấu hình được hệ thống cung cấp, hay không. Không bật tuỳ chọn này thì bạn cần phải tự quản lý cấu hình xác thực của hệ thống này.
 
@@ -343,5 +356,7 @@ Description-sk.UTF-8: Neboli vybrané žiadne profily PAM.
  Pre tento systém neboli vybrané žiadne profily PAM. To by udelilo všetkým používateľom prístup bez overovania a to nie je povolené. Prosím, vyberte aspoň jeden profil PAM zo zoznamu dostupných profilov.
 Description-sv.UTF-8: Inga PAM-profiler valdes.
  Inga PAM-profiler används på detta system. Detta skulle ge alla användare tillgång till systemet utan att behöva ange lösenord och det kan inte tillåtas. välj åtminstone en PAM-profil från listan med tillgängliga profiler.
+Description-tr.UTF-8: Hiçbir PAM profili seçilmedi.
+ Sistemde kullanılmak üzere hiçbir PAM modülü seçilmedi.  Bu durum tüm kullanıcılara hiçbir kimlik doğrulamaya maruz kalmaksızın erişim izni verilmesi anlamına gelir ve bu duruma izin verilmemektedir.  Lütfen mevcut profiller listesinden en az bir PAM profili seçin.
 Description-vi.UTF-8: Chưa chọn hồ sơ PAM.
  Chưa chọn hồ sơ PAM nào để sử dụng trên hệ thống này. Trường hợp này cho phép mọi người dùng truy cập đến hệ thống mà không xác thực: không tốt ! Xin hãy chọn ít nhất một hồ sơ PAM trong danh sách sẵn sàng.

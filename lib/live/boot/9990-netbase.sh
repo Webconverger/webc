@@ -80,7 +80,11 @@ EOF
 			fi
 		done
 	else
-		if [ -z "${NETBOOT}" ] || [ -n "${DHCP}" ]
+		if [ -n "${NODHCP}" ]
+		then
+			# force DHCP off
+			method="manual"
+		elif [ -z "${NETBOOT}" ] || [ -n "${DHCP}" ]
 		then
 			# default, dhcp assigned
 			method="dhcp"
@@ -93,7 +97,7 @@ EOF
 		# iterate the physical interfaces and add them to the interfaces list and also add when ethdevice= called on cmdline
 		if [ "${method}" != dhcp ] || ([ ! -x /root/usr/sbin/NetworkManager ] && [ ! -x /root/usr/sbin/wicd ]) || [ ! -z "${ETHDEVICE}" ]
 		then
-			for interface in /sys/class/net/eth* /sys/class/net/ath* /sys/class/net/wlan*
+			for interface in /sys/class/net/eth* /sys/class/net/ath* /sys/class/net/wlan* /sys/class/net/en*
 			do
 				[ -e ${interface} ] || continue
 				i="$(basename ${interface})"

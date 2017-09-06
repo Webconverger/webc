@@ -1,4 +1,13 @@
 // ========== Cameroon Keyboards ==========
+
+
+// ----------------------------------------------------------------------------
+// This comment was added by <fotang at mmuock dot org>, on 18-Jun-2016:
+//  
+// All comments below this one, were in the original cm file;they do not
+// apply to the Mmuock keyboard which is defined towards the end of this file.
+// ----------------------------------------------------------------------------
+
 // ****** For Instructions, see "Use of Cameroon Keyboards" section	below ******
 
 
@@ -323,4 +332,159 @@ xkb_symbols "semicolon_switch_dvorak" {
 	};
 modifier_map Mod5	{ ISO_Level3_Latch };
 };
+
+
+// ------- begin Mmuock alphabet layout ------------------------------------------
+//   This layout is used for the Mmuock alphabet as described in the book
+//   _The Sound of Mmuock: Orthography (2. ed.)_ [isbn: 978-9956-645-28-1].
+//   Mmuock is the language of the Mmuock (local: Muòk) people of Western
+//   Cameroon.  
+// 
+//      Author: Tano Fotang <fotang at mmuock dot org>
+//     Created: 2014-06-24
+//     Version: 1.2
+//
+// CHANGES v 1.0:
+//	2014-07-06 corrected shifted level3 of <AC11> to quotedbl
+// CHANGES v 1.1:
+//  2015-05-23 1- added dead_tilde to key <TILDE>; this is needed to produce
+//               the letter <ñ> which was totally missing from the keyboard
+//             2- added letter <dz> to <AB01>; the letter had been missing.
+//             3- if we're not re-defining particular symbols from the included
+//               latin layout, then maintain the original latin mappings.
+//               Previously, we had set them to NoSymbol. Now, we want to
+//               keep the original latin mappings except for those few that we
+//               want to overwrite for our own keyboard.
+//
+// CHANGES v 1.2:
+// 2016-06-17  1- added dead keys dead_macron, dead_acute, and dead_grave for
+//                tones 1, 3, and 4, for compatibility with the Keyman version.
+//             2- rearranged combining diacritics for tones 0 to 5 such that
+//                the diacritics are on consequetive keys (AC01 to AC05).
+//             3- moved tone 8 to level 3 of AE12.
+//             4- moved layout definition out of the EXTRAS section.
+//             5- for a cleaner keyboard,
+//                replaced ṭhe included latin layout with us(basic).
+//
+//
+// NOTES:
+// 0. This map is based on the Latin alphabet layout for the US keyboard.
+//
+// 1. We use combining diacritical marks to create tone markings. There are 13
+//    tones that need to be indicated, although the first 5 are usually enough
+//    to represent the rest in simplified orthography.
+//
+// 2. When composing Mmuock text, about every fourth symbol is for tone. To
+//    facilitate easy and fast input, the combining diacritics are placed on
+//    the home row (AC). To reduce the number of key strokes required, the
+//    unshifted third level is used. Only 5 of the combining diacritics are not
+//    on the AC row; they are in the top number row, AE.
+//
+// 3. Symbols that are used infrequently (`r', `h', `ɛ', `ǝ', etc.) are placed
+//    in level3. Additionally, the letter eng (`ŋ'), although commonly used, 
+//    is found in level3 because it can alternatively be represented by <ng>.
+//    (Indeed, the keyman version of keyboard actually replaces <ng> with `ŋ'.)
+//
+// 4. The unshifted AB10 key (normally assigned to the slash `/') is used as
+//    level 3 switch since the slash is not used in the ordinary course of
+//    typing Mmuock text. 
+//
+// 5. The 'Cameroon Multilingual' keyboards that are defined elsewhere, do not
+//    fit our needs because: (a) they are based on a different alphabet, (b) the
+//    vast majority of their symbols are not used in Mmuock, and (c) for the few
+//    symbols that are used in Mmuock, their placings are not egonomic for 
+//    typing Mmuock as the _PRIMARY_ language. The aim of this keyboard, is
+//    to give priority to symbols that are actually used in the Mmuock alphabet.
+//
+// 6. The following fonts have been found to produce the best results with this
+//    keyboard:
+//         Family                    Accuracy
+//      DejaVu (except Sans Mono)        9/10 
+//      Linux Libertine                  8/10
+//      Ubuntu (except light)            8/10
+//      Droid (except sans mono)         7/10
+//      Gentium, Gentium Alt           6.5/10
+//    In the terminal emulator, the following font variants have been tested:
+//      Ubuntu Mono                      9/10
+//      Unifont (Medium)                 9/10
+//      DejaVu Sans Mono               7.5/10
+//      Droid Sans Mono                6.5/10
+//   These fonts are all freely available.
+// 
+// ------the layout-----------
+//
+//   ┌─────┐
+//   │ 2 4 │   2 = Shift,  4 = Level3 + Shift
+//   │ 1 3 │   1 = Normal, 3 = Level3
+//   └─────┘
+//
+//   ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┲━━━━━━━━━┓
+//   │ ~ ~ │ !   │ @   │ #   │ $   │ %   │ ^   │ &   | *   │ (   │ )   │ _ – │ +   ̣┃ ⌫ Back- ┃
+// AE│ ` ` │ 1   │ 2   │ 3   │ 4   │ 5   │ 6   ̂│ 7   ̑│ 8   ̍│ 9   ̓│ 0   ̊│ ¯ - │ =   ̋┃  space  ┃
+//   ┢━━━━━┷━┱───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┴─┬───┺━┳━━━━━━━┫
+//   ┃       ┃ Q   │ W   │ E Ǝ │ Š R │ T   │ Y   │ U Ω │ I Ɛ │ O Φ │ P ∏ │ Ø { │ Σ } ┃ Enter ┃
+// AD┃Tab ↹  ┃ q   │ w   │ e ǝ │ š r │ t   │ y   │ u ω │ i ɛ │ o φ │ p π │ ø [ │ σ ] ┃   ⏎   ┃
+//   ┣━━━━━━━┻┱────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┴┬────┺┓      ┃
+//   ┃        ┃ A   │ S   │ D   │ F   │ G   │  ̇ H │ J   │ K   │ L   │ Œ : │ " ” │ Æ | ┃      ┃
+// AC┃Caps ⇬  ┃ a   ̃│ s   ̄| d   ́| f   ̀| g   ̌|  ̣ h │ j   ̆│ k   ̏│ l   ̈│ œ ; │ ' ’ │ æ \ ┃      ┃
+//   ┣━━━━━━━━┹────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┬┴────┲┷━━━━━┻━━━━━━┫
+//   ┃             │ Z ǲ │ X   │ C   │ V   │ B   │ N ŋ │ M   │ < « │ > » │ ?   ┃             ┃
+// AB┃Shift ⇧      │ z ǳ │ x   │ c   │ v   │ b   │ n Ŋ │ m   │ , ‹ │ . › │   / ┃Shift ⇧      ┃
+//   ┣━━━━━━━┳━━━━━┷━┳━━━┷━━━┱─┴─────┴─────┴─────┴─────┴─────┴───┲━┷━━━━━╈━━━━━┻━┳━━━━━━━┳━━━┛
+//   ┃       ┃       ┃       ┃                                   ┃       ┃       ┃       ┃
+// AA┃Ctrl   ┃Meta   ┃Alt    ┃             Space                 ┃AltGr ⇮┃Menu   ┃Ctrl   ┃
+//   ┗━━━━━━━┻━━━━━━━┻━━━━━━━┹───────────────────────────────────┺━━━━━━━┻━━━━━━━┻━━━━━━━┛
+//
+
+partial alphanumeric_keys
+xkb_symbols "mmuock" {
+
+   include "us(basic)"
+   include "level3(ralt_switch)"
+
+   name[Group1]= "Mmuock";
+   key <AE06> { [          6, asciicircum,          U0302                ] }; // tone 10
+   key <AE07> { [          7,   ampersand,          U0311                ] }; // tone 12
+   key <AE08> { [          8,    asterisk,          U030D                ] }; // tone 13
+   key <AE09> { [          9,   parenleft,          U0307                ] }; // tone 7
+   key <AE10> { [          0,  parenright,          U030A                ] }; // tone 6
+   key <AE11> { [dead_macron,  underscore,          minus,        endash ] };
+   key <AE12> { [      equal,        plus,          U030B, dead_belowdot ] }; // U030B = tone 8
+   key <AD03> { [          e,           E,          U01DD,         U018E ] }; // U01DD = reversed E
+   key <AD04> { [     scaron,      Scaron,              r,             R ] };
+   key <AD07> { [          u,           U,    Greek_omega,   Greek_OMEGA ] };
+   key <AD08> { [          i,           I,          U025B,         U0190 ] }; // U025B = open E
+   key <AD09> { [          o,           O,      Greek_phi,     Greek_PHI ] };
+   key <AD10> { [          p,           P,       Greek_pi,      Greek_PI ] };
+   key <AD11> { [     oslash,    Ooblique,    bracketleft,     braceleft ] };
+   key <AD12> { [Greek_sigma, Greek_SIGMA,   bracketright,    braceright ] }; 
+   key <AC01> { [          a,           A,          U0303                ] }; // tone 0
+   key <AC02> { [          s,           S,          U0304                ] }; // tone 1
+   key <AC03> { [          d,           D,          U0301                ] }; // tone 3
+   key <AC04> { [          f,           F,          U0300                ] }; // tone 4
+   key <AC05> { [          g,           G,          U030C                ] }; // tone 5
+   key <AC06> { [      U0323,       U0307,              h,             H ] }; // COMBINING DOT BELOW, ABOVE
+   key <AC07> { [          j,           J,          U0306                ] }; // tone 9
+   key <AC08> { [          k,           K,          U030F                ] }; // tone 11
+   key <AC09> { [          l,           L,          U0308                ] }; // tone 14
+   key <AC10> { [         oe,          OE,      semicolon,         colon ] };
+   key <AC11> { [ dead_acute,    quotedbl,     apostrophe                ] };
+   key <TLDE> { [ dead_grave,  dead_tilde,          grave,    asciitilde ] };
+   key <AB01> { [          z,           Z,          U01F3,         U01F2 ] }; // U01F3 = letter dz
+   key <AB06> { [          n,           N,            eng,           ENG ] };
+   key <AB08> { [      comma,        less,  guillemotleft,         U2039 ] };
+   key <AB09> { [     period,     greater, guillemotright,         U203A ] };
+   key <BKSL> { [         ae,          AE,      backslash,           bar ] };
+
+   include "cm(solidus_switch)"
+};
+// use slash as special key for switching to level3
+partial modifier_keys
+xkb_symbols "solidus_switch" {
+   key <AB10> {
+     symbols[Group1] = [ ISO_Level3_Latch, question, slash, dead_abovedot ]
+   };
+   modifier_map Mod5	{ ISO_Level3_Latch };
+};
+// ------- end of Mmuock keyboard map --------------------------------------------
 

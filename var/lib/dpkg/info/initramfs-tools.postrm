@@ -2,10 +2,43 @@
 
 set -e
 
-if [ "x${1}" = "xpurge" ]; then
-	rm -f /etc/initramfs-tools/conf.d/resume
-	rm -f /etc/initramfs-tools/modules
+mvverbose=-v
+
+# from dpkg-maintscript-helper, modified
+ensure_package_owns_file() {
+	local PACKAGE="$1"
+	local FILE="$2"
+
+	dpkg-query -L "$PACKAGE" | grep -F -q -x "$FILE"
+}
+
+# from dpkg-maintscript-helper
+abort_rm_conffile() {
+	local CONFFILE="$1"
+	local PACKAGE="$2"
+
+	ensure_package_owns_file "$PACKAGE" "$CONFFILE" || return 0
+
+	if [ -e "$CONFFILE.dpkg-remove" ]; then
+		echo "Reinstalling $CONFFILE that was moved away"
+		mv $mvverbose "$CONFFILE.dpkg-remove" "$CONFFILE"
+	fi
+	if [ -e "$CONFFILE.dpkg-backup" ]; then
+		echo "Reinstalling $CONFFILE that was backupped"
+		mv $mvverbose "$CONFFILE.dpkg-backup" "$CONFFILE"
+	fi
+}
+
+# If aborting an upgrade from <0.123, we need to move initramfs.conf back
+# into place.
+if [ "$1" = abort-upgrade ] && dpkg --compare-versions "$2" lt 0.123~; then
+	abort_rm_conffile /etc/initramfs-tools/initramfs.conf initramfs-tools
 fi
 
-
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/kernel/signed_postinst.d/initramfs-tools 0.126~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installdeb
+dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/initramfs-tools 0.126~ -- "$@"
+# End automatically added section
 

@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+if [ "$1" = remove ] || [ "$1" = abort-install ] || [ "$1" = disappear ] || \
+   { { [ "$1" = abort-upgrade ] || [ "$1" = upgrade ]; } && \
+     dpkg --compare-versions "$2" lt 2.0.4-8~; }; then
+    # Restore the klibc hook installed by older versions of initramfs-tools
+    dpkg-divert --package klibc-utils --remove --rename \
+		--divert /usr/share/initramfs-tools/hooks/klibc^i-t \
+		/usr/share/initramfs-tools/hooks/klibc
+fi
+
+

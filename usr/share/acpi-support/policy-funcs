@@ -38,7 +38,7 @@ DBusSend() {
 		serverpid=$(pgrep -n -u "$XUSER" "$PROC_NAME")
 		if test "$serverpid" != ""; then
 			DBUS_SESS=$(su - "$XUSER" -c "grep -a -z DBUS_SESSION_BUS_ADDRESS /proc/$serverpid/environ || :")
-			if test "$DBUS_SESS" != "" && su - "$XUSER" -s /bin/sh -c "export \"$DBUS_SESS\"; dbus-send --print-reply --dest='$DEST' '$DBUS_PATH' '$METHOD'"; then
+			if test "$DBUS_SESS" != "" && su - "$XUSER" -s /bin/sh -c "export \"$DBUS_SESS\"; dbus-send --print-reply --dest='$DEST' '$DBUS_PATH' '$METHOD' >/dev/null 2>&1"; then
 				return 0
 			fi
 		fi
@@ -49,6 +49,7 @@ DBusSend() {
 # interface provided by systemd running as PID 1 or by systemd-shim
 HasLogindAndSystemd1Manager() {
   pidof -x "/lib/systemd/systemd-logind" > /dev/null &&
+  test -x /usr/bin/dbus-send &&
   # shutdown.target used as a representative of power management calls class
   dbus-send --print-reply --system --type=method_call \
     --dest=org.freedesktop.systemd1 \

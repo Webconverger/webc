@@ -9,9 +9,9 @@
 Description=File System Check on Root Device
 Documentation=man:systemd-fsck-root.service(8)
 DefaultDependencies=no
-After=systemd-readahead-collect.service systemd-readahead-replay.service
+Wants=systemd-fsckd.socket
 Before=local-fs.target shutdown.target
-
+After=systemd-fsckd.socket
 ConditionPathIsReadWrite=!/
 ConditionPathExists=!/run/initramfs/fsck-root
 
@@ -19,5 +19,4 @@ ConditionPathExists=!/run/initramfs/fsck-root
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/lib/systemd/systemd-fsck
-StandardOutput=journal+console
 TimeoutSec=0

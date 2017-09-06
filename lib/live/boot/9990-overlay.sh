@@ -8,24 +8,12 @@ setup_unionfs ()
 	rootmnt="${2}"
 	addimage_directory="${3}"
 
-	case ${UNIONTYPE} in
-		aufs|unionfs|overlay)
-			modprobe -q -b ${UNIONTYPE}
+	modprobe -q -b ${UNIONTYPE}
 
-			if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$" && ! cut -f2 /proc/filesystems | grep -q "^overlay\$"
-			then
-				echo "${UNIONTYPE} not available, falling back to overlay."
-
-				UNIONTYPE="overlay"
-			fi
-			;;
-	esac
-
-	case "${UNIONTYPE}" in
-		unionfs-fuse)
-			modprobe fuse
-			;;
-	esac
+	if ! cut -f2 /proc/filesystems | grep -q "^${UNIONTYPE}\$"
+	then
+		panic "${UNIONTYPE} not available."
+	fi
 
 	# run-init can't deal with images in a subdir, but we're going to
 	# move all of these away before it runs anyway.  No, we're not,
@@ -195,22 +183,15 @@ setup_unionfs ()
 						;;
 				esac
 
-				case "${UNIONTYPE}" in
-					unionmount)
-						mpoint="${rootmnt}"
-						rootfslist="${rootmnt} ${rootfslist}"
-						;;
-
-					*)
-						mpoint="${croot}/${imagename}"
-						rootfslist="${mpoint} ${rootfslist}"
-						;;
-				esac
+				mpoint="${croot}/${imagename}"
+				rootfslist="${mpoint} ${rootfslist}"
 
 				mkdir -p "${mpoint}"
 				log_begin_msg "Mounting \"${image}\" on \"${mpoint}\" via \"${backdev}\""
 				mount -t "${fstype}" -o ro,noatime "${backdev}" "${mpoint}" || panic "Can not mount ${backdev} (${image}) on ${mpoint}"
 				log_end_msg
+			else
+				log_warning_msg "Could not find image '${image}'. Most likely it is listed in a .module file, perhaps by mistake."
 			fi
 		done
 	else
@@ -335,27 +316,24 @@ setup_unionfs ()
 		cow_mountopt="rw,noatime,mode=755"
 	fi
 
-	if [ "${UNIONTYPE}" != "unionmount" ]
+	if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
 	then
-		if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
-		then
-			mount -t tmpfs -o rw,noatime,mode=755 tmpfs "/live/overlay"
-			root_backing="/live/persistence/$(basename ${cowdevice})-root"
-			mkdir -p ${root_backing}
-		else
-			root_backing="/live/overlay"
-		fi
+		mount -t tmpfs -o rw,noatime,mode=755 tmpfs "/live/overlay"
+		root_backing="/live/persistence/$(basename ${cowdevice})-root"
+		mkdir -p ${root_backing}
+	else
+		root_backing="/live/overlay"
+	fi
 
-		if [ "${cow_fstype}" = "nfs" ]
-		then
-			log_begin_msg \
-				"Trying nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing}"
-			nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing} || \
-				panic "Can not mount ${cowdevice} (n: ${cow_fstype}) on ${root_backing}"
-		else
-			mount -t ${cow_fstype} -o ${cow_mountopt} ${cowdevice} ${root_backing} || \
-				panic "Can not mount ${cowdevice} (o: ${cow_fstype}) on ${root_backing}"
-		fi
+	if [ "${cow_fstype}" = "nfs" ]
+	then
+		log_begin_msg \
+			"Trying nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing}"
+		nfsmount ${nfs_cow_opts} ${cowdevice} ${root_backing} || \
+			panic "Can not mount ${cowdevice} (n: ${cow_fstype}) on ${root_backing}"
+	else
+		mount -t ${cow_fstype} -o ${cow_mountopt} ${cowdevice} ${root_backing} || \
+			panic "Can not mount ${cowdevice} (o: ${cow_fstype}) on ${root_backing}"
 	fi
 
 	rootfscount=$(echo ${rootfslist} |wc -w)
@@ -369,7 +347,7 @@ setup_unionfs ()
 			panic "only one RO file system supported with exposedroot: ${rootfslist}"
 		fi
 
-		mount --bind ${rootfs} ${rootmnt} || \
+		mount -o bind ${rootfs} ${rootmnt} || \
 			panic "bind mount of ${rootfs} failed"
 
 		if [ -z "${SKIP_UNION_MOUNTS}" ]
@@ -382,33 +360,22 @@ setup_unionfs ()
 		cow_dirs="/"
 	fi
 
-	if [ "${cow_fstype}" != "tmpfs" ] && [ "${cow_dirs}" != "/" ] && [ "${UNIONTYPE}" = "unionmount" ]
-	then
-		true # FIXME: Maybe it does, I don't really know.
-		#panic "unionmount does not support subunions (${cow_dirs})."
-	fi
-
 	for dir in ${cow_dirs}; do
 		unionmountpoint="${rootmnt}${dir}"
 		mkdir -p ${unionmountpoint}
-		if [ "${UNIONTYPE}" = "unionmount" ]
+		cow_dir="/live/overlay${dir}"
+		rootfs_dir="${rootfs}${dir}"
+		mkdir -p ${cow_dir}
+		if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
 		then
-			# FIXME: handle PERSISTENCE_READONLY
-			unionmountopts="-t ${cow_fstype} -o noatime,union,${cow_mountopt} ${cowdevice}"
-			# unionmount only works with util-linux mount
-			mount.util-linux $unionmountopts "${unionmountpoint}"
+			do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rootfs_dir}
 		else
-			cow_dir="/live/overlay${dir}"
-			rootfs_dir="${rootfs}${dir}"
-			mkdir -p ${cow_dir}
-			if [ -n "${PERSISTENCE_READONLY}" ] && [ "${cowdevice}" != "tmpfs" ]
-			then
-				do_union ${unionmountpoint} ${cow_dir} ${root_backing} ${rootfs_dir}
-			else
-				do_union ${unionmountpoint} ${cow_dir} ${rootfs_dir}
-			fi
+			do_union ${unionmountpoint} ${cow_dir} ${rootfs_dir}
 		fi || panic "mount ${UNIONTYPE} on ${unionmountpoint} failed with option ${unionmountopts}"
 	done
+
+	# Remove persistence depending on boot parameter
+	Remove_persistence
 
 	# Correct the permissions of /:
 	chmod 0755 "${rootmnt}"
@@ -430,15 +397,7 @@ setup_unionfs ()
 				# do nothing # mount -o bind "${d}" "${live_rootfs}"
 				;;
 			*)
-				case "${UNIONTYPE}" in
-					unionfs-fuse)
-						mount -o bind "${d}" "${live_rootfs}"
-						;;
-
-					*)
-						mount -o move "${d}" "${live_rootfs}"
-						;;
-				esac
+				mount -o move "${d}" "${live_rootfs}"
 				;;
 		esac
 	done
@@ -471,8 +430,8 @@ setup_unionfs ()
 		done
 	fi
 
-        # ensure that a potentially stray tmpfs gets removed
-        # otherways, initramfs-tools is unable to remove /live
-        # and fails to boot
-        umount /live/overlay > /dev/null 2>&1 || true
+	# ensure that a potentially stray tmpfs gets removed
+	# otherways, initramfs-tools is unable to remove /live
+	# and fails to boot
+	umount /live/overlay > /dev/null 2>&1 || true
 }

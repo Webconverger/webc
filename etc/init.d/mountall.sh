@@ -28,8 +28,13 @@ do_start() {
 	# Mount local file systems in /etc/fstab.
 	#
 	mount_all_local() {
-	    mount -a -t nonfs,nfs4,smbfs,cifs,ncp,ncpfs,coda,ocfs2,gfs,gfs2,ceph \
-		-O no_netdev
+		if mountpoint -q /usr; then
+			# May have been mounted read-only by initramfs.
+			# Remount with unmodified options from /etc/fstab.
+			mount -o remount /usr
+		fi
+		mount -a -t nonfs,nfs4,smbfs,cifs,ncp,ncpfs,coda,ocfs2,gfs,gfs2,ceph \
+			-O no_netdev
 	}
 	pre_mountall
 	if [ "$VERBOSE" = no ]

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use lib (split(/:/, $ENV{GITPERLLIB} || "/usr/share/perl/5.20.2"));
+use lib (split(/:/, $ENV{GITPERLLIB} || "/usr/share/perl/5.24.1"));
 
 use 5.008;
 use strict;
@@ -46,6 +46,9 @@ my ($diff_new_color) =
 my $normal_color = $repo->get_color("", "reset");
 
 my $diff_algorithm = $repo->config('diff.algorithm');
+my $diff_indent_heuristic = $repo->config_bool('diff.indentheuristic');
+my $diff_compaction_heuristic = $repo->config_bool('diff.compactionheuristic');
+my $diff_filter = $repo->config('interactive.difffilter');
 
 my $use_readkey = 0;
 my $use_termcap = 0;
@@ -516,6 +519,9 @@ sub error_msg {
 sub list_and_choose {
 	my ($opts, @stuff) = @_;
 	my (@chosen, @return);
+	if (!@stuff) {
+	    return @return;
+	}
 	my $i;
 	my @prefixes = find_unique_prefixes(@stuff) unless $opts->{LIST_ONLY};
 
@@ -726,6 +732,8 @@ sub add_untracked_cmd {
 	if (@add) {
 		system(qw(git update-index --add --), @add);
 		say_n_paths('added', @add);
+	} else {
+		print "No untracked files.\n";
 	}
 	print "\n";
 }
@@ -744,13 +752,25 @@ sub parse_diff {
 	if (defined $diff_algorithm) {
 		splice @diff_cmd, 1, 0, "--diff-algorithm=${diff_algorithm}";
 	}
+	if ($diff_indent_heuristic) {
+		splice @diff_cmd, 1, 0, "--indent-heuristic";
+	} elsif ($diff_compaction_heuristic) {
+		splice @diff_cmd, 1, 0, "--compaction-heuristic";
+	}
 	if (defined $patch_mode_revision) {
 		push @diff_cmd, get_diff_reference($patch_mode_revision);
 	}
 	my @diff = run_cmd_pipe("git", @diff_cmd, "--", $path);
 	my @colored = ();
 	if ($diff_use_color) {
-		@colored = run_cmd_pipe("git", @diff_cmd, qw(--color --), $path);
+		my @display_cmd = ("git", @diff_cmd, qw(--color --), $path);
+		if (defined $diff_filter) {
+			# quotemeta is overkill, but sufficient for shell-quoting
+			my $diff = join(' ', map { quotemeta } @display_cmd);
+			@display_cmd = ("$diff | $diff_filter");
+		}
+
+		@colored = run_cmd_pipe(@display_cmd);
 	}
 	my (@hunk) = { TEXT => [], DISPLAY => [], TYPE => 'header' };
 
@@ -761,7 +781,7 @@ sub parse_diff {
 		}
 		push @{$hunk[-1]{TEXT}}, $diff[$i];
 		push @{$hunk[-1]{DISPLAY}},
-			($diff_use_color ? $colored[$i] : $diff[$i]);
+			(@colored ? $colored[$i] : $diff[$i]);
 	}
 	return @hunk;
 }
@@ -1357,6 +1377,7 @@ sub patch_update_file {
 		  $patch_mode_flavour{TARGET},
 		  " [y,n,q,a,d,/$other,?]? ";
 		my $line = prompt_single_character;
+		last unless defined $line;
 		if ($line) {
 			if ($line =~ /^y/i) {
 				$hunk[$ix]{USE} = 1;

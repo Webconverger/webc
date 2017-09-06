@@ -1,9 +1,0 @@
-#!/bin/sh -e
-
-# Copy any rules generated while the root filesystem was read-only
-for file in /run/udev/tmp-rules--*; do
-  [ -e "$file" ] || continue
-  cat "$file" >> "/etc/udev/rules.d/${file##*tmp-rules--}"
-  rm -f "$file"
-done
-

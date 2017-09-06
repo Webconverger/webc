@@ -24,6 +24,10 @@ Select_eth_device ()
 	# we want to do some basic IP
 	modprobe -q af_packet
 
+	# Ensure all our net modules get loaded so we can actually compare MAC addresses...
+	udevadm trigger
+	udevadm settle
+
 	# Available Ethernet interfaces ?
 	l_interfaces=""
 
@@ -35,7 +39,7 @@ Select_eth_device ()
 		echo "Waiting for ethernet card(s) up... If this fails, maybe the ethernet card is not supported by the kernel `uname -r`?"
 		while [ -z "$l_interfaces" ]
 		do
-			l_interfaces="$(cd /sys/class/net/ && ls -d eth* 2>/dev/null)"
+			l_interfaces="$(cd /sys/class/net/ && ls -d * 2>/dev/null | grep -v "lo")"
 		done
 
 		if [ $(echo $l_interfaces | wc -w) -lt 2 ]

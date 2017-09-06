@@ -66,15 +66,11 @@ else
 fi
 # End automatically added section
 # Automatically added by dh_installinit
-if [ -x "/etc/init.d/acpid" ]; then
-	update-rc.d acpid defaults >/dev/null
-	invoke-rc.d acpid start || exit $?
-fi
-# End automatically added section
-# Automatically added by dh_systemd_start
-if [ -d /run/systemd/system ]; then
-	systemctl --system daemon-reload >/dev/null || true
-	deb-systemd-invoke start acpid.path >/dev/null || true
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/acpid" ]; then
+		update-rc.d acpid defaults >/dev/null
+		invoke-rc.d acpid start || exit $?
+	fi
 fi
 # End automatically added section
 

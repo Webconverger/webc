@@ -3,7 +3,7 @@
 #
 # Basic rules are:
 #  - keep volumes at minimal level, but sound should be hearable
-#  - enable just main speakers for playback and main microphone for recording
+#  - enable standard outputs for playback and main microphone for recording
 #
 
 # **************************************************************************
@@ -40,6 +40,16 @@ CTL{reset}="mixer"
 CTL{name}="Master Digital Playback Volume",CTL{do_search}=="1", \
   CTL{write}!="$env{pvolume}",CTL{values}="$env{ppercent}"
 CTL{name}="Master Digital Playback Switch",CTL{do_search}=="1", \
+  CTL{values}="on"
+
+CTL{reset}="mixer"
+CTL{name}="Line Out Playback Volume",PROGRAM!="__ctl_search",GOTO=""
+# if master volume control is present, turn line out volume to max
+ENV{has_pmaster_vol}=="true",CTL{write}=="0dB",GOTO=""
+ENV{has_pmaster_vol}=="true",CTL{write}=="100%",GOTO=""
+CTL{write}!="$env{pvolume}",CTL{values}="$env{ppercent}"
+LABEL=""
+CTL{name}="Line Out Playback Switch",CTL{do_search}=="1", \
   CTL{values}="on"
 
 CTL{reset}="mixer"

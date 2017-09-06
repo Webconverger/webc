@@ -4,7 +4,12 @@ libcups.so.2 libcups2 #MINVER#
  _cupsBufferGet@Base 1.6.2
  _cupsBufferRelease@Base 1.6.2
  _cupsCharmapFlush@Base 1.6.2
+ _cupsCondBroadcast@Base 1.6.2
+ _cupsCondInit@Base 1.6.2
+ _cupsCondWait@Base 1.6.2
  _cupsConnect@Base 1.6.2
+ _cupsConvertOptions@Base 1.6.2
+ _cupsCreateDest@Base 1.6.2
  _cupsEncodingName@Base 1.6.2
  _cupsFileCheck@Base 1.6.2
  _cupsFileCheckFilter@Base 1.6.2
@@ -61,30 +66,36 @@ libcups.so.2 libcups2 #MINVER#
  _cupsStrRetain@Base 1.6.2
  _cupsStrScand@Base 1.6.2
  _cupsStrStatistics@Base 1.6.2
+ _cupsThreadCancel@Base 1.6.2
  _cupsThreadCreate@Base 1.6.2
+ _cupsThreadWait@Base 1.6.2
  _cupsUserDefault@Base 1.6.2
  _cups_debug_fd@Base 1.6.2
  _cups_debug_level@Base 1.6.2
+ _cups_safe_vsnprintf@Base 1.6.2
  _cups_strcasecmp@Base 1.6.2
  _cups_strcpy@Base 1.6.2
  _cups_strlcat@Base 1.6.2
  _cups_strlcpy@Base 1.6.2
  _cups_strncasecmp@Base 1.6.2
- _httpAddrPort@Base 1.6.2
  _httpAddrSetPort@Base 1.6.2
- _httpAssembleUUID@Base 1.6.2
- _httpCreate@Base 1.6.2
  _httpCreateCredentials@Base 1.6.2
  _httpDecodeURI@Base 1.6.2
  _httpDisconnect@Base 1.6.2
  _httpEncodeURI@Base 1.6.2
  _httpFreeCredentials@Base 1.6.2
- _httpPeek@Base 1.6.2
- _httpReadGNUTLS@Base 1.4.4-3~
  _httpResolveURI@Base 1.6.2
+ _httpStatus@Base 1.6.2
+ _httpTLSInitialize@Base 1.6.2
+ _httpTLSPending@Base 1.6.2
+ _httpTLSRead@Base 1.6.2
+ _httpTLSSetCredentials@Base 1.6.2
+ _httpTLSSetOptions@Base 1.6.2
+ _httpTLSStart@Base 1.6.2
+ _httpTLSStop@Base 1.6.2
+ _httpTLSWrite@Base 1.6.2
  _httpUpdate@Base 1.6.2
  _httpWait@Base 1.6.2
- _httpWriteGNUTLS@Base 1.4.4-3~
  _ippFindOption@Base 1.6.2
  _ppdCacheCreateWithFile@Base 1.6.2
  _ppdCacheCreateWithPPD@Base 1.6.2
@@ -100,9 +111,11 @@ libcups.so.2 libcups2 #MINVER#
  _ppdCacheGetSource@Base 1.6.2
  _ppdCacheGetType@Base 1.6.2
  _ppdCacheWriteFile@Base 1.6.2
+ _ppdCreateFromIPP@Base 1.6.2
  _ppdFreeLanguages@Base 1.6.2
  _ppdGetEncoding@Base 1.6.2
  _ppdGetLanguages@Base 1.6.2
+ _ppdGlobals@Base 1.6.2
  _ppdHashName@Base 1.6.2
  _ppdLocalizedAttr@Base 1.6.2
  _ppdNormalizeMakeAndModel@Base 1.6.2
@@ -112,10 +125,7 @@ libcups.so.2 libcups2 #MINVER#
  _pwgGenerateSize@Base 1.6.2
  _pwgInitSize@Base 1.6.2
  _pwgInputSlotForSource@Base 1.6.2
- _pwgMediaForLegacy@Base 1.6.2
- _pwgMediaForPPD@Base 1.6.2
- _pwgMediaForPWG@Base 1.6.2
- _pwgMediaForSize@Base 1.6.2
+ _pwgMediaNearSize@Base 1.6.2
  _pwgMediaTable@Base 1.6.2
  _pwgMediaTypeForType@Base 1.6.2
  _pwgPageSizeForMedia@Base 1.6.2
@@ -221,6 +231,7 @@ libcups.so.2 libcups2 #MINVER#
  cupsGetDestMediaBySize@Base 1.6.0
  cupsGetDestMediaCount@Base 1.7.0
  cupsGetDestMediaDefault@Base 1.7.0
+ cupsGetDestWithURI@Base 2.0.2
  cupsGetDests2@Base 1.4.0
  cupsGetDests@Base 1.4.0
  cupsGetDevices@Base 1.4.0
@@ -238,6 +249,7 @@ libcups.so.2 libcups2 #MINVER#
  cupsGetPrinters@Base 1.4.0
  cupsGetResponse@Base 1.4.0
  cupsGetServerPPD@Base 1.4.0
+ cupsHashData@Base 2.2~b2
  cupsLangDefault@Base 1.4.0
  cupsLangEncoding@Base 1.4.0
  cupsLangFlush@Base 1.4.0
@@ -245,8 +257,10 @@ libcups.so.2 libcups2 #MINVER#
  cupsLangGet@Base 1.4.0
  cupsLastError@Base 1.4.0
  cupsLastErrorString@Base 1.4.0
+ cupsLocalizeDestMedia@Base 2.0.2
  cupsLocalizeDestOption@Base 1.6.0
  cupsLocalizeDestValue@Base 1.6.0
+ cupsMakeServerCredentials@Base 2.0.2
  cupsMarkOptions@Base 1.4.0
  cupsNotifySubject@Base 1.4.0
  cupsNotifyText@Base 1.4.0
@@ -273,6 +287,7 @@ libcups.so.2 libcups2 #MINVER#
  cupsSetPasswordCB@Base 1.4.0
  cupsSetServer@Base 1.4.0
  cupsSetServerCertCB@Base 1.5.0
+ cupsSetServerCredentials@Base 2.0.2
  cupsSetUser@Base 1.4.0
  cupsSetUserAgent@Base 1.7.0
  cupsSideChannelDoRequest@Base 1.4.0
@@ -294,10 +309,12 @@ libcups.so.2 libcups2 #MINVER#
  httpAcceptConnection@Base 1.7.0
  httpAddCredential@Base 1.5.0
  httpAddrAny@Base 1.4.0
+ httpAddrClose@Base 2.0.2
  httpAddrConnect2@Base 1.6.0
  httpAddrConnect@Base 1.4.0
  httpAddrCopyList@Base 1.7.0
  httpAddrEqual@Base 1.4.0
+ httpAddrFamily@Base 2.0.2
  httpAddrFreeList@Base 1.4.0
  httpAddrGetList@Base 1.4.0
  httpAddrLength@Base 1.4.0
@@ -314,10 +331,15 @@ libcups.so.2 libcups2 #MINVER#
  httpClearCookie@Base 1.4.0
  httpClearFields@Base 1.4.0
  httpClose@Base 1.4.0
+ httpCompareCredentials@Base 2.0.2
  httpConnect2@Base 1.7.0
  httpConnect@Base 1.4.0
  httpConnectEncrypt@Base 1.4.0
  httpCopyCredentials@Base 1.5.0
+ httpCredentialsAreValidForName@Base 2.0.2
+ httpCredentialsGetExpiration@Base 2.0.2
+ httpCredentialsGetTrust@Base 2.0.2
+ httpCredentialsString@Base 2.0.2
  httpDecode64@Base 1.4.0
  httpDecode64_2@Base 1.4.0
  httpDelete@Base 1.4.0
@@ -325,10 +347,13 @@ libcups.so.2 libcups2 #MINVER#
  httpEncode64_2@Base 1.4.0
  httpEncryption@Base 1.4.0
  httpError@Base 1.4.0
+ httpFieldValue@Base 2.0.2
  httpFlush@Base 1.4.0
  httpFlushWrite@Base 1.4.0
  httpFreeCredentials@Base 1.5.0
  httpGet@Base 1.4.0
+ httpGetActivity@Base 2.0.2
+ httpGetAddress@Base 2.0.2
  httpGetAuthString@Base 1.4.0
  httpGetBlocking@Base 1.4.0
  httpGetContentEncoding@Base 1.7.0
@@ -336,13 +361,18 @@ libcups.so.2 libcups2 #MINVER#
  httpGetDateString2@Base 1.4.0
  httpGetDateString@Base 1.4.0
  httpGetDateTime@Base 1.4.0
+ httpGetEncryption@Base 2.0.2
  httpGetExpect@Base 1.7.0
  httpGetFd@Base 1.4.0
  httpGetField@Base 1.4.0
  httpGetHostByName@Base 1.4.0
  httpGetHostname@Base 1.4.0
+ httpGetKeepAlive@Base 2.0.2
  httpGetLength2@Base 1.4.0
  httpGetLength@Base 1.4.0
+ httpGetPending@Base 2.0.2
+ httpGetReady@Base 2.0.2
+ httpGetRemaining@Base 2.0.2
  httpGetState@Base 1.6.0
  httpGetStatus@Base 1.4.0
  httpGetSubField2@Base 1.4.0
@@ -351,6 +381,9 @@ libcups.so.2 libcups2 #MINVER#
  httpGets@Base 1.4.0
  httpHead@Base 1.4.0
  httpInitialize@Base 1.4.0
+ httpIsChunked@Base 2.0.2
+ httpIsEncrypted@Base 2.0.2
+ httpLoadCredentials@Base 2.0.2
  httpMD5@Base 1.4.0
  httpMD5Final@Base 1.4.0
  httpMD5String@Base 1.4.0
@@ -364,6 +397,8 @@ libcups.so.2 libcups2 #MINVER#
  httpReadRequest@Base 1.7.0
  httpReconnect2@Base 1.6.0
  httpReconnect@Base 1.4.0
+ httpResolveHostname@Base 2.0.2
+ httpSaveCredentials@Base 2.0.2
  httpSeparate2@Base 1.4.0
  httpSeparate@Base 1.4.0
  httpSeparateURI@Base 1.4.0
@@ -373,10 +408,14 @@ libcups.so.2 libcups2 #MINVER#
  httpSetDefaultField@Base 1.7.0
  httpSetExpect@Base 1.4.0
  httpSetField@Base 1.4.0
+ httpSetKeepAlive@Base 2.0.2
  httpSetLength@Base 1.4.0
  httpSetTimeout@Base 1.5.0
+ httpShutdown@Base 2.0.2
+ httpStateString@Base 2.0.2
  httpStatus@Base 1.4.0
  httpTrace@Base 1.4.0
+ httpURIStatusString@Base 2.0.2
  httpUpdate@Base 1.4.0
  httpWait@Base 1.4.0
  httpWrite2@Base 1.4.0
@@ -465,6 +504,7 @@ libcups.so.2 libcups2 #MINVER#
  ippSetStringfv@Base 1.7.0
  ippSetValueTag@Base 1.6.0
  ippSetVersion@Base 1.6.0
+ ippStateString@Base 2.0.2
  ippTagString@Base 1.4.0
  ippTagValue@Base 1.4.0
  ippTimeToDate@Base 1.4.0

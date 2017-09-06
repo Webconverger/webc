@@ -19,16 +19,6 @@ esac
 
 umask 022
 
-# If an alternative update-rc.d and invoke-rc.d implementation is
-# unpacked before this postrm script is executed, we do not want to
-# replace their programs with the symlink.
-if [ ! -e /usr/sbin/update-rc.d ] ; then
-    ln -sf /usr/share/sysvinit/update-rc.d /usr/sbin/update-rc.d
-fi
-if [ ! -e /usr/sbin/invoke-rc.d ] ; then
-    ln -sf /usr/share/sysvinit/update-rc.d /usr/sbin/invoke-rc.d
-fi
-
 # Automatically added by dh_installdebconf
 if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
 	. /usr/share/debconf/confmodule
@@ -36,8 +26,5 @@ if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
 fi
 # End automatically added section
 
-
-# Remove the recorded update-rc.d
-rm -f /var/lib/update-rc.d/*
 
 exit 0

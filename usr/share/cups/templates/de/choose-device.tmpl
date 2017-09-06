@@ -1,5 +1,3 @@
-<DIV CLASS="indent">
-
 <H2 CLASS="title">{op=modify-printer?{printer_name} ändern:Drucker hinzufügen (Schritt 1/5)}</H2>
 
 {CUPS_GET_DEVICES_DONE?<FORM METHOD="POST" ACTION="/admin">
@@ -17,17 +15,17 @@
 <TH CLASS="label">Lokale Drucker\:</TH>
 <TD>
 {[device_uri]{device_class!network?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
-VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}">
-{device_info} {?device_make_and_model!Unbekannt?({device_make_and_model}):}<BR>
+VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
+{device_info} {?device_make_and_model!Unknown?({device_make_and_model}):}<BR>
 :}}
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Entdeckte Netzwerkdrucker\:</TH>
+<TH CLASS="label">Gefundene Netzwerkdrucker\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
-VALUE="{device_uri}{?device_make_and_model!Unbekannt?|{device_make_and_model}:}">
-{device_info} {?device_make_and_model!Unbekannt?({device_make_and_model}):}<BR>
+VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
+{device_info} {?device_make_and_model!Unknown?({device_make_and_model}):}<BR>
 :}:}}
 </TD>
 </TR>
@@ -48,6 +46,4 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TABLE>
 
 </FORM>:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
-ALT="Busy Indicator"> Suche nach Druckern...</P>}
-</DIV>
-
+ALT="Beschäftigungsanzeige"> Suche nach Druckern…</P>}

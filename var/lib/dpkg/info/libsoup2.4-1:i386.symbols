@@ -21,6 +21,8 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  _SOUP_URI_SCHEME_HTTP@Base 2.4.0
  _SOUP_URI_SCHEME_HTTPS@Base 2.4.0
  _SOUP_URI_SCHEME_RESOURCE@Base 2.41.90
+ _SOUP_URI_SCHEME_WS@Base 2.49.91.1
+ _SOUP_URI_SCHEME_WSS@Base 2.49.91.1
  soup_add_completion@Base 2.24.3
  soup_add_idle@Base 2.4.0
  soup_add_io_watch@Base 2.4.0
@@ -44,6 +46,7 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_address_resolve_sync@Base 2.4.0
  soup_auth_authenticate@Base 2.4.0
  soup_auth_basic_get_type@Base 2.4.0
+ soup_auth_can_authenticate@Base 2.53.92
  soup_auth_digest_get_type@Base 2.4.0
  soup_auth_domain_accepts@Base 2.4.0
  soup_auth_domain_add_path@Base 2.4.0
@@ -79,6 +82,8 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_auth_is_ready@Base 2.41.90
  soup_auth_manager_get_type@Base 2.24.3
  soup_auth_manager_use_auth@Base 2.41.90
+ soup_auth_negotiate_get_type@Base 2.53.92
+ soup_auth_negotiate_supported@Base 2.53.92
  soup_auth_new@Base 2.4.0
  soup_auth_ntlm_get_type@Base 2.4.0
  soup_auth_save_password@Base 2.28.0
@@ -116,6 +121,7 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_client_context_get_remote_address@Base 2.47.4
  soup_client_context_get_socket@Base 2.4.0
  soup_client_context_get_type@Base 2.4.0
+ soup_client_context_steal_connection@Base 2.49.91.1
  soup_connection_state_get_type@Base 2.30.0
  soup_content_decoder_get_type@Base 2.30.0
  soup_content_sniffer_get_buffer_size@Base 2.39.2
@@ -278,10 +284,13 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_message_headers_get_content_type@Base 2.26.1
  soup_message_headers_get_encoding@Base 2.4.0
  soup_message_headers_get_expectations@Base 2.4.0
+ soup_message_headers_get_headers_type@Base 2.49.91.1
  soup_message_headers_get_list@Base 2.26.1
  soup_message_headers_get_one@Base 2.26.1
  soup_message_headers_get_ranges@Base 2.26.1
  soup_message_headers_get_type@Base 2.4.0
+ soup_message_headers_header_contains@Base 2.49.91.1
+ soup_message_headers_header_equals@Base 2.49.91.1
  soup_message_headers_iter_init@Base 2.4.0
  soup_message_headers_iter_next@Base 2.4.0
  soup_message_headers_new@Base 2.4.0
@@ -313,6 +322,7 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_message_set_status@Base 2.4.0
  soup_message_set_status_full@Base 2.4.0
  soup_message_set_uri@Base 2.4.0
+ soup_message_starting@Base 2.49.91.1
  soup_message_wrote_body@Base 2.4.0
  soup_message_wrote_body_data@Base 2.4.1
  soup_message_wrote_chunk@Base 2.4.0
@@ -365,8 +375,11 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_requester_new@Base 2.33.92
  soup_requester_request@Base 2.33.92
  soup_requester_request_uri@Base 2.33.92
+ soup_server_accept_iostream@Base 2.49.91.1
  soup_server_add_auth_domain@Base 2.4.0
+ soup_server_add_early_handler@Base 2.49.91.1
  soup_server_add_handler@Base 2.4.0
+ soup_server_add_websocket_handler@Base 2.49.91.1
  soup_server_disconnect@Base 2.33.92
  soup_server_get_async_context@Base 2.4.0
  soup_server_get_listener@Base 2.4.0
@@ -388,6 +401,7 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_server_remove_handler@Base 2.4.0
  soup_server_run@Base 2.4.0
  soup_server_run_async@Base 2.4.0
+ soup_server_set_ssl_cert_file@Base 2.49.1
  soup_server_unpause_message@Base 2.4.0
  soup_session_abort@Base 2.4.0
  soup_session_add_feature@Base 2.24.3
@@ -426,10 +440,13 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_session_send_async@Base 2.41.90
  soup_session_send_finish@Base 2.41.90
  soup_session_send_message@Base 2.4.0
+ soup_session_steal_connection@Base 2.49.91.1
  soup_session_sync_get_type@Base 2.4.0
  soup_session_sync_new@Base 2.4.0
  soup_session_sync_new_with_options@Base 2.4.0
  soup_session_unpause_message@Base 2.4.0
+ soup_session_websocket_connect_async@Base 2.49.91.1
+ soup_session_websocket_connect_finish@Base 2.49.91.1
  soup_session_would_redirect@Base 2.37.90
  soup_socket_connect_async@Base 2.4.0
  soup_socket_connect_sync@Base 2.4.0
@@ -505,17 +522,53 @@ libsoup-2.4.so.1 libsoup2.4-1 #MINVER#
  soup_value_hash_lookup_vals@Base 2.4.0
  soup_value_hash_new@Base 2.4.0
  soup_value_hash_new_with_vals@Base 2.4.0
+ soup_websocket_client_prepare_handshake@Base 2.49.91.1
+ soup_websocket_client_verify_handshake@Base 2.49.91.1
+ soup_websocket_close_code_get_type@Base 2.49.91.1
+ soup_websocket_connection_close@Base 2.49.91.1
+ soup_websocket_connection_get_close_code@Base 2.49.91.1
+ soup_websocket_connection_get_close_data@Base 2.49.91.1
+ soup_websocket_connection_get_connection_type@Base 2.49.91.1
+ soup_websocket_connection_get_io_stream@Base 2.49.91.1
+ soup_websocket_connection_get_max_incoming_payload_size@Base 2.56.0
+ soup_websocket_connection_get_origin@Base 2.49.91.1
+ soup_websocket_connection_get_protocol@Base 2.49.91.1
+ soup_websocket_connection_get_state@Base 2.49.91.1
+ soup_websocket_connection_get_type@Base 2.49.91.1
+ soup_websocket_connection_get_uri@Base 2.49.91.1
+ soup_websocket_connection_new@Base 2.49.91.1
+ soup_websocket_connection_send_binary@Base 2.49.91.1
+ soup_websocket_connection_send_text@Base 2.49.91.1
+ soup_websocket_connection_set_max_incoming_payload_size@Base 2.56.0
+ soup_websocket_connection_type_get_type@Base 2.49.91.1
+ soup_websocket_data_type_get_type@Base 2.49.91.1
+ soup_websocket_error_get_quark@Base 2.49.91.1
+ soup_websocket_error_get_type@Base 2.49.91.1
+ soup_websocket_server_check_handshake@Base 2.49.91.1
+ soup_websocket_server_process_handshake@Base 2.49.91.1
+ soup_websocket_state_get_type@Base 2.49.91.1
  soup_xmlrpc_build_fault@Base 2.4.0
  soup_xmlrpc_build_method_call@Base 2.4.0
  soup_xmlrpc_build_method_response@Base 2.4.0
+ soup_xmlrpc_build_request@Base 2.52.0
+ soup_xmlrpc_build_response@Base 2.52.0
  soup_xmlrpc_error_get_type@Base 2.4.0
  soup_xmlrpc_error_quark@Base 2.4.0
  soup_xmlrpc_extract_method_call@Base 2.4.0
  soup_xmlrpc_extract_method_response@Base 2.4.0
  soup_xmlrpc_fault_get_type@Base 2.4.0
  soup_xmlrpc_fault_quark@Base 2.4.0
+ soup_xmlrpc_message_new@Base 2.52.0
+ soup_xmlrpc_message_set_fault@Base 2.52.0
+ soup_xmlrpc_message_set_response@Base 2.52.0
+ soup_xmlrpc_params_free@Base 2.52.0
+ soup_xmlrpc_params_parse@Base 2.52.0
  soup_xmlrpc_parse_method_call@Base 2.4.0
  soup_xmlrpc_parse_method_response@Base 2.4.0
+ soup_xmlrpc_parse_request@Base 2.52.0
+ soup_xmlrpc_parse_response@Base 2.52.0
  soup_xmlrpc_request_new@Base 2.4.0
  soup_xmlrpc_set_fault@Base 2.4.0
  soup_xmlrpc_set_response@Base 2.4.0
+ soup_xmlrpc_variant_get_datetime@Base 2.52.0
+ soup_xmlrpc_variant_new_datetime@Base 2.52.0

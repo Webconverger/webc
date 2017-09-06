@@ -10,20 +10,21 @@ BEGIN {
     if ($ARGV[0]) {
 	$file = $ARGV[0];
     } else {
-	$file = 'KeyboardNames.pl';
+	$file = './KeyboardNames.pl';
     }
     do "$file";
 }
 
-for my $model (keys %KeyboardNames::models) {
+
+for my $model (sort keys %KeyboardNames::models) {
     my $name = $KeyboardNames::models{$model};
     print "C*model*$name*$model\n"
 }
-for my $layout (keys %KeyboardNames::layouts) {
+for my $layout (sort keys %KeyboardNames::layouts) {
     my $name = $KeyboardNames::layouts{$layout};
     print "C*layout*$name*$layout\n";
     print "C*variant*$name**$layout\n";
-    for my $variant (keys %{$KeyboardNames::variants{$name}}) {
+    for my $variant (sort keys %{$KeyboardNames::variants{$name}}) {
 	my $variantname = $KeyboardNames::variants{$name}{$variant};
 	print "C*variant*$name*$variantname*$layout - $variant\n";
     }
@@ -44,16 +45,16 @@ for my $mo (</usr/share/locale/*/LC_MESSAGES/xkeyboard-config.mo>) {
 
     my $d = Locale::gettext->domain("xkeyboard-config");
 
-    for my $model (keys %KeyboardNames::models) {
+    for my $model (sort keys %KeyboardNames::models) {
 	my $name = $KeyboardNames::models{$model};
 	print "$lang*model*$name*".($d->get($model))."\n"
     }
-    for my $layout (keys %KeyboardNames::layouts) {
+    for my $layout (sort keys %KeyboardNames::layouts) {
 	my $name = $KeyboardNames::layouts{$layout};
 	my $local_layout = $d->get($layout);
 	print "$lang*layout*$name*$local_layout\n";
 	print "$lang*variant*$name**$local_layout\n";
-	for my $variant (keys %{$KeyboardNames::variants{$name}}) {
+	for my $variant (sort keys %{$KeyboardNames::variants{$name}}) {
 	    my $variantname = $KeyboardNames::variants{$name}{$variant};
 	    print "$lang*variant*$name*$variantname*$local_layout - ".($d->get($variant))."\n";
 	}

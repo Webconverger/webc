@@ -18,6 +18,7 @@ sub usage {
 	print STDERR "update-rc.d: error: @_\n" if ($#_ >= 0);
 	print STDERR <<EOF;
 usage: update-rc.d [-n] [-f] <basename> remove
+       update-rc.d [-n] [-f] <basename> defaults
        update-rc.d [-n] <basename> disable|enable [S|2|3|4|5]
 		-n: not really
 		-f: force
@@ -63,9 +64,70 @@ sub make_path {
     map { push @dirs, $_; mkdir join('/', @dirs), 0755; } @path;
 }
 
+# Given a script name, return any runlevels except 0 or 6 in which the
+# script is enabled.  If that gives nothing and the script is not
+# explicitly disabled, return 6 if the script is disabled in runlevel
+# 0 or 6.
+sub script_runlevels {
+    my ($scriptname) = @_;
+    my @links=<"/etc/rc[S12345].d/S[0-9][0-9]$scriptname">;
+    if (@links) {
+        return map(substr($_, 7, 1), @links);
+    } elsif (! <"/etc/rc[S12345].d/K[0-9][0-9]$scriptname">) {
+        @links=<"/etc/rc[06].d/K[0-9][0-9]$scriptname">;
+        return ("6") if (@links);
+    } else {
+	return ;
+    }
+}
+
+# Map the sysvinit runlevel to that of openrc.
+sub openrc_rlconv {
+    my %rl_table = (
+        "S" => "sysinit",
+        "1" => "recovery",
+        "2" => "default",
+        "3" => "default",
+        "4" => "default",
+        "5" => "default",
+        "6" => "off" );
+
+    my %seen; # return unique runlevels
+    return grep !$seen{$_}++, map($rl_table{$_}, @_);
+}
+
 sub systemd_reload {
     if (-d "/run/systemd/system") {
         system("systemctl", "daemon-reload");
+    }
+}
+
+# Creates the necessary links to enable/disable a SysV init script (fallback if
+# no insserv/rc-update exists)
+sub make_sysv_links {
+    my ($scriptname, $action) = @_;
+
+    # for "remove" we cannot rely on the init script still being present, as
+    # this gets called in postrm for purging. Just remove all symlinks.
+    if ("remove" eq $action) { unlink($_) for
+        glob("/etc/rc?.d/[SK][0-9][0-9]$scriptname"); return; }
+
+    # if the service already has any links, do not touch them
+    # numbers we don't care about, but enabled/disabled state we do
+    return if glob("/etc/rc?.d/[SK][0-9][0-9]$scriptname");
+
+    # for "defaults", parse Default-{Start,Stop} and create these links
+    my ($lsb_start_ref, $lsb_stop_ref) = parse_def_start_stop("/etc/init.d/$scriptname");
+    foreach my $lvl (@$lsb_start_ref) {
+        make_path("/etc/rc$lvl.d");
+        my $l = "/etc/rc$lvl.d/S01$scriptname";
+        symlink("../init.d/$scriptname", $l);
+    }
+
+    foreach my $lvl (@$lsb_stop_ref) {
+        make_path("/etc/rc$lvl.d");
+        my $l = "/etc/rc$lvl.d/K01$scriptname";
+        symlink("../init.d/$scriptname", $l);
     }
 }
 
@@ -162,11 +224,15 @@ sub insserv_updatercd {
         shift @args;
         if (/^-n$/) { push(@opts, $_); $notreally++; next }
         if (/^-f$/) { push(@opts, $_); next }
-        if (/^-h|--help$/) { &usage; }
+        if (/^-h|--help$/) { usage(); }
         usage("unknown option");
     }
 
     usage("not enough arguments") if ($#args < 1);
+
+    # Add force flag if initscripts is not installed
+    # This enables inistcripts-less systems to not fail when a facility is missing
+    unshift(@opts, '-f') unless is_initscripts_installed();
 
     $scriptname = shift @args;
     $action = shift @args;
@@ -174,6 +240,13 @@ sub insserv_updatercd {
     # Fallback for older insserv package versions [2014-04-16]
     $insserv = "/sbin/insserv" if ( -x "/sbin/insserv");
     if ("remove" eq $action) {
+        system("rc-update", "-qqa", "delete", $scriptname) if ( -x "/sbin/openrc" );
+        if ( ! -x $insserv) {
+            # We are either under systemd or in a chroot where the link priorities don't matter
+            make_sysv_links($scriptname, "remove");
+            systemd_reload;
+            exit 0;
+        }
         if ( -f "/etc/init.d/$scriptname" ) {
             my $rc = system($insserv, @opts, "-r", $scriptname) >> 8;
             if (0 == $rc && !$notreally) {
@@ -202,6 +275,13 @@ sub insserv_updatercd {
             cmp_args_with_defaults($scriptname, $action, @args);
         }
 
+        if ( ! -x $insserv) {
+            # We are either under systemd or in a chroot where the link priorities don't matter
+            make_sysv_links($scriptname, "defaults");
+            systemd_reload;
+            exit 0;
+        }
+
         if ( -f "/etc/init.d/$scriptname" ) {
             my $rc = system($insserv, @opts, $scriptname) >> 8;
             if (0 == $rc && !$notreally) {
@@ -209,6 +289,17 @@ sub insserv_updatercd {
             }
             error_code($rc, "insserv rejected the script header") if $rc;
             systemd_reload;
+
+	    # OpenRC does not distinguish halt and reboot.  They are handled
+	    # by /etc/init.d/transit instead.
+            if ( -x "/sbin/openrc" && "halt" ne $scriptname
+                 && "reboot" ne $scriptname ) {
+                # no need to consider default disabled runlevels
+                # because everything is disabled by openrc by default
+		my @rls=script_runlevels($scriptname);
+                system("rc-update", "add", $scriptname, openrc_rlconv(@rls))
+		    if ( @rls );
+            }
             exit $rc;
         } else {
             error("initscript does not exist: /etc/init.d/$scriptname");
@@ -218,7 +309,14 @@ sub insserv_updatercd {
 
         upstart_toggle($scriptname, $action);
 
-        insserv_toggle($notreally, $action, $scriptname, @args);
+        sysv_toggle($notreally, $action, $scriptname, @args);
+
+        if ( ! -x $insserv) {
+            # We are either under systemd or in a chroot where the link priorities don't matter
+            systemd_reload;
+            exit 0;
+        }
+
         # Call insserv to resequence modified links
         my $rc = system($insserv, @opts, $scriptname) >> 8;
         if (0 == $rc && !$notreally) {
@@ -239,10 +337,10 @@ sub parse_def_start_stop {
     open my $fh, '<', $script or error("unable to read $script");
     while (<$fh>) {
         chomp;
-        if (m/^### BEGIN INIT INFO$/) {
+        if (m/^### BEGIN INIT INFO\s*$/) {
             $lsb{'begin'}++;
         }
-        elsif (m/^### END INIT INFO$/) {
+        elsif (m/^### END INIT INFO\s*$/) {
             $lsb{'end'}++;
             last;
         }
@@ -326,7 +424,7 @@ sub cmp_args_with_defaults {
     }
 }
 
-sub insserv_toggle {
+sub sysv_toggle {
     my ($dryrun, $act, $name) = (shift, shift, shift);
     my (@toggle_lvls, $start_lvls, $stop_lvls, @symlinks);
     my $lsb_header = lsb_header_for_script($name);
@@ -341,6 +439,12 @@ sub insserv_toggle {
         if ($#toggle_lvls < 0) {
             error("$name Default-Start contains no runlevels, aborting.");
         }
+    }
+
+    if ( -x "/sbin/openrc" ) {
+        my %openrc_act = ( "disable" => "del", "enable" => "add" );
+        system("rc-update", $openrc_act{$act}, $name,
+               openrc_rlconv(@toggle_lvls))
     }
 
     # Find symlinks in rc.d directories. Refuse to modify links in runlevels
@@ -379,4 +483,12 @@ sub insserv_toggle {
 
         rename($cur_lnk, join('', @new_lnk)) or error($!);
     }
+}
+
+# Try to determine if initscripts is installed
+sub is_initscripts_installed {
+    # Check if mountkernfs is available. We cannot make inferences
+    # using the running init system because we may be running in a
+    # chroot
+    return  glob('/etc/rcS.d/S??mountkernfs.sh');
 }

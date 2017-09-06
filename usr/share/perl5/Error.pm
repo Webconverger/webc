@@ -12,10 +12,12 @@
 package Error;
 
 use strict;
+use warnings;
+
 use vars qw($VERSION);
 use 5.004;
 
-$VERSION = "0.17010"; 
+$VERSION = "0.17024";
 
 use overload (
 	'""'	   =>	'stringify',
@@ -49,8 +51,8 @@ sub import {
     shift;
     my @tags = @_;
     local $Exporter::ExportLevel = $Exporter::ExportLevel + 1;
-    
-    @tags = grep { 
+
+    @tags = grep {
        if( $_ eq ':warndie' ) {
           Error::WarnDie->import();
           0;
@@ -91,17 +93,17 @@ sub prior {
 
 sub flush {
     shift; #ignore
-    
+
     unless (@_) {
        $LAST = undef;
        return;
     }
-    
+
     my $pkg = shift;
     return unless ref($pkg);
-   
-    undef $ERROR{$pkg} if defined $ERROR{$pkg}; 
-} 
+
+    undef $ERROR{$pkg} if defined $ERROR{$pkg};
+}
 
 # Return as much information as possible about where the error
 # happened. The -stacktrace element only exists if $Error::DEBUG
@@ -180,7 +182,7 @@ sub throw {
 
     # if we are not rethrow-ing then create the object to throw
     $self = $self->new(@_) unless ref($self);
-    
+
     die $Error::THROWN = $self;
 }
 
@@ -257,6 +259,10 @@ sub value {
 
 package Error::Simple;
 
+use vars qw($VERSION);
+
+$VERSION = "0.17024";
+
 @Error::Simple::ISA = qw(Error);
 
 sub new {
@@ -302,7 +308,6 @@ use vars qw(@EXPORT_OK @ISA %EXPORT_TAGS);
 sub run_clauses ($$$\@) {
     my($clauses,$err,$wantarray,$result) = @_;
     my $code = undef;
-    local $Error::THROWN = undef;
 
     $err = $Error::ObjectifyCallback->({'text' =>$err}) unless ref($err);
 
@@ -318,7 +323,7 @@ sub run_clauses ($$$\@) {
 		my $pkg = $catch->[$i];
 		unless(defined $pkg) {
 		    #except
-		    splice(@$catch,$i,2,$catch->[$i+1]->());
+		    splice(@$catch,$i,2,$catch->[$i+1]->($err));
 		    $i -= 2;
 		    next CATCHLOOP;
 		}
@@ -382,7 +387,7 @@ sub run_clauses ($$$\@) {
 	    else {
 		$err = $@ || $Error::THROWN;
 
-		$err = $Error::ObjectifyCallback->({'text' =>$err}) 
+		$err = $Error::ObjectifyCallback->({'text' =>$err})
 			unless ref($err);
 	    }
 	}
@@ -476,7 +481,7 @@ sub except (&;$) {
     my $code = shift;
     my $clauses = shift || {};
     my $catch = $clauses->{'catch'} ||= [];
-    
+
     my $sub = sub {
 	my $ref;
 	my(@array) = $code->($_[0]);
@@ -614,6 +619,13 @@ __END__
 
 Error - Error/exception handling in an OO-ish way
 
+=head1 WARNING
+
+Using the "Error" module is B<no longer recommended> due to the black-magical
+nature of its syntactic sugar, which often tends to break. Its maintainers
+have stopped actively writing code that uses it, and discourage people
+from doing so. See the "SEE ALSO" section below for better recommendations.
+
 =head1 SYNOPSIS
 
     use Error qw(:try);
@@ -625,7 +637,7 @@ Error - Error/exception handling in an OO-ish way
 	record Error::Simple("A simple error")
 	    and return;
     }
- 
+
     unlink($file) or throw Error::Simple("$file: $!",$!);
 
     try {
@@ -635,11 +647,11 @@ Error - Error/exception handling in an OO-ish way
     }
     catch Error::IO with {
 	my $E = shift;
-	print STDERR "File ", $E->{'\-file'}, " had a problem\n";
+	print STDERR "File ", $E->{'-file'}, " had a problem\n";
     }
     except {
 	my $E = shift;
-	my $general_handler=sub {send_message $E->{\-description}};
+	my $general_handler=sub {send_message $E->{-description}};
 	return {
 	    UserException1 => $general_handler,
 	    UserException2 => $general_handler
@@ -727,6 +739,19 @@ Only one finally block may be specified per try block
 
 =back
 
+=head1 COMPATIBILITY
+
+L<Moose> exports a keyword called C<with> which clashes with Error's. This
+example returns a prototype mismatch error:
+
+    package MyTest;
+
+    use warnings;
+    use Moose;
+    use Error qw(:try);
+
+(Thanks to C<maik.hentsche@amd.com> for the report.).
+
 =head1 CLASS INTERFACE
 
 =head2 CONSTRUCTORS
@@ -736,11 +761,11 @@ with the arguments that are passed to it's constructor. The elements
 that are used by, or are retrievable by the C<Error> class are listed
 below, other classes may add to these.
 
-	\-file
-	\-line
-	\-text
-	\-value
-	\-object
+	-file
+	-line
+	-text
+	-value
+	-object
 
 If C<-file> or C<-line> are not specified in the constructor arguments
 then these will be initialized with the file name and line number where
@@ -880,7 +905,7 @@ is a numeric value. These values are what will be returned by the
 overload methods.
 
 If the text value ends with C<at file line 1> as $@ strings do, then
-this infomation will be used to set the C<-file> and C<-line> arguments
+this information will be used to set the C<-file> and C<-line> arguments
 of the error object.
 
 This class is used internally if an eval'd block die's with an error
@@ -891,9 +916,9 @@ that is a plain string. (Unless C<$Error::ObjectifyCallback> is modified)
 
 This variable holds a reference to a subroutine that converts errors that
 are plain strings to objects. It is used by Error.pm to convert textual
-errors to objects, and can be overrided by the user.
+errors to objects, and can be overridden by the user.
 
-It accepts a single argument which is a hash reference to named parameters. 
+It accepts a single argument which is a hash reference to named parameters.
 Currently the only named parameter passed is C<'text'> which is the text
 of the error, but others may be available in the future.
 
@@ -970,6 +995,20 @@ into
 
 =cut
 
+=head1 SEE ALSO
+
+See L<Exception::Class> for a different module providing Object-Oriented
+exception handling, along with a convenient syntax for declaring hierarchies
+for them. It doesn't provide Error's syntactic sugar of C<try { ... }>,
+C<catch { ... }>, etc. which may be a good thing or a bad thing based
+on what you want. (Because Error's syntactic sugar tends to break.)
+
+L<Error::Exception> aims to combine L<Error> and L<Exception::Class>
+"with correct stringification".
+
+L<TryCatch> and L<Try::Tiny> are similar in concept to Error.pm only providing
+a syntax that hopefully breaks less.
+
 =head1 KNOWN BUGS
 
 None, but that does not mean there are not any.
@@ -986,7 +1025,7 @@ C<:warndie> handlers added by Paul Evans <leonerd@leonerd.org.uk>
 
 =head1 MAINTAINER
 
-Shlomi Fish <shlomif@iglu.org.il>
+Shlomi Fish, L<http://www.shlomifish.org/> .
 
 =head1 PAST MAINTAINERS
 

@@ -33,6 +33,16 @@ cp -a /bin/live-boot /lib/live/boot "${DESTDIR}/bin"
 mkdir -p "${DESTDIR}/lib/live"
 cp -a /lib/live/boot "${DESTDIR}/lib/live"
 
+mkdir -p "${DESTDIR}/etc/live"
+if [ -e /etc/live/boot.conf ]
+then
+	cp -a /etc/live/boot.conf "${DESTDIR}/etc/live"
+fi
+if [ -e /etc/live/boot ]
+then
+	cp -a /etc/live/boot "${DESTDIR}/etc/live"
+fi
+
 # klibc dependencies
 for FILE in /lib/libacl* /lib/libblkid* /lib/libuuid* /lib/libdevmapper* /lib/libattr*
 do
@@ -105,21 +115,15 @@ manual_add_modules squashfs
 manual_add_modules sqlzma
 manual_add_modules unlzma
 
-# Filesystem: aufs/overlay/unionfs
+# Filesystem: aufs/overlay
 manual_add_modules aufs
 manual_add_modules overlay
-manual_add_modules unionfs
-
-# Filesystem: unionfs-fuse
-if [ -x /usr/bin/unionfs-fuse ]
-then
-	copy_exec /usr/bin/unionfs-fuse /bin
-fi
 
 # Filesystem: vfat
 manual_add_modules nls_cp437
 manual_add_modules nls_iso8859-1
 manual_add_modules nls_utf8
+manual_add_modules nls_ascii
 manual_add_modules vfat
 
 # Filesystem: ntfs
@@ -222,23 +226,19 @@ fi
 
 # Some experimental stuff
 
-case "${LIVE_DNS}" in
-	true)
-		[ "${QUIET}" ] || echo -n " dns"
+[ "${QUIET}" ] || echo -n " dns"
 
-		# /lib/libnss_dns.so.*:a   DNS
-		# /lib/libnss_files.so.*:  /etc/hosts and /etc/passwd
-		# /lib/libnss_compat.so.*: /etc/passwd
+# /lib/libnss_dns.so.*:a   DNS
+# /lib/libnss_files.so.*:  /etc/hosts and /etc/passwd
+# /lib/libnss_compat.so.*: /etc/passwd
 
-		for _SHLIB in $(find /lib -name 'libnss_dns.so.*')
-		do
-			copy_exec "${_SHLIB}"
-		done
+for _SHLIB in $(find /lib -name 'libnss_dns.so.*')
+do
+	copy_exec "${_SHLIB}"
+done
 
-		# might be needed if /etc/hosts is used
-		#mkdir -p "${DESTDIR}/etc"
-		#cp -p /etc/nsswitch.conf "${DESTDIR}/etc"
-		;;
-esac
+# might be needed if /etc/hosts is used
+#mkdir -p "${DESTDIR}/etc"
+#cp -p /etc/nsswitch.conf "${DESTDIR}/etc"
 
 [ "${QUIET}" ] || echo .

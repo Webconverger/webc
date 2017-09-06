@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = 'configure' ]; then
+  for file in chacl getfacl setfacl; do
+    if [ ! -e /usr/bin/$file ]; then
+      ln -s /bin/$file /usr/bin/$file
+    fi
+  done
+fi
+
+

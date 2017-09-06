@@ -77,7 +77,13 @@ if [ -f "$config" ] ; then
   updatever config "$config"
 fi
 
-run-parts --verbose --exit-on-error --arg="$ver" --arg="$dir/$img_dest-$ver" \
-  /etc/kernel/postinst.d
+# If installing in the usual directory, run the same scripts that hook
+# into kernel package installation.  Also make sure the PATH includes
+# /usr/sbin and /sbin, just as dpkg would.
+if [ "$dir" = "/boot" ]; then
+  PATH="$PATH:/usr/sbin:/sbin" \
+    run-parts --verbose --exit-on-error --arg="$ver" --arg="$dir/$img_dest-$ver" \
+    /etc/kernel/postinst.d
+fi
  
 exit 0

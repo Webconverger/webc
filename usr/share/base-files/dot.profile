@@ -6,4 +6,4 @@ if [ "$BASH" ]; then
   fi
 fi
 
-mesg n
+mesg n || true

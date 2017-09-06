@@ -19,7 +19,6 @@
 
 use warnings 'all';
 use strict;
-use locale;
 
 my $debug_flag = 1;
 sub debug {
@@ -4012,6 +4011,8 @@ sub flatten {
 		    } else {
 			$coord = ($group << 4) + $level + 11;
 		    }
+		} elsif (/^PC_FN_LEVEL2$/) {
+			$coord = ($group << 4) + ($level << 1);
 		} else {
 		    warning "Unknown key type $types_table{$key}\n";
 		    $coord = ($group << 4) + $level;

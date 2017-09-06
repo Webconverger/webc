@@ -23,12 +23,7 @@ if getent passwd libuuid >/dev/null && ! getent passwd uuidd >/dev/null ; then
 
 	# attemp cleanup of old home directory.
 	[ -d /var/lib/libuuid ] && \
-		rmdir --ignore-fail-on-non-empty /var/lib/libuuid
+		rmdir --ignore-fail-on-non-empty /var/lib/libuuid || true
 fi
 
-# Automatically added by dh_makeshlibs
-if [ "$1" = "configure" ]; then
-	ldconfig
-fi
-# End automatically added section
 

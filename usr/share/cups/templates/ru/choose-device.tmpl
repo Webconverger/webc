@@ -1,5 +1,3 @@
-<DIV CLASS="indent">
-
 <H2 CLASS="title">{op=modify-printer?Изменение {printer_name}:Добавление принтера}</H2>
 
 {CUPS_GET_DEVICES_DONE?<FORM METHOD="POST" ACTION="/admin">
@@ -9,12 +7,12 @@
 
 <TABLE>
 {op=add-printer?:<TR>
-<TH CLASS="label">Текущее подключение\:</TH>
+<TH CLASS="label">Сейчас подключен\:</TH>
 <TD><INPUT TYPE="RADIO" NAME="DEVICE_URI" VALUE="{current_device_uri}" CHECKED>
 {current_device_uri}</TD>
 </TR>}
 <TR>
-<TH CLASS="label">Локальные принтеры\:</TH>
+<TH CLASS="label">Установленные принтеры\:</TH>
 <TD>
 {[device_uri]{device_class!network?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
@@ -23,7 +21,7 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TD>
 </TR>
 <TR>
-<TH CLASS="label">Обнаруженные сетевые принтеры\:</TH>
+<TH CLASS="label">Найденные сетевые принтеры\:</TH>
 <TD>
 {[device_uri]{device_class=network?{device_uri~[a-z]+://?<INPUT TYPE="RADIO" NAME="DEVICE_URI"
 VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
@@ -48,6 +46,4 @@ VALUE="{device_uri}{?device_make_and_model!Unknown?|{device_make_and_model}:}">
 </TABLE>
 
 </FORM>:<P><IMG SRC="/images/wait.gif" WIDTH="16" HEIGHT="16" ALIGN="ABSMIDDLE"
-ALT="Busy Indicator"> Поиск принтеров...</P>}
-
-</DIV>
+ALT="Ожидание"> Поиск принтеров...</P>}

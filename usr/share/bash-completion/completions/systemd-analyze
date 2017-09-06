@@ -35,8 +35,8 @@ _systemd_analyze() {
         local cur=${COMP_WORDS[COMP_CWORD]} prev=${COMP_WORDS[COMP_CWORD-1]}
 
         local -A OPTS=(
-               [STANDALONE]='--help --version --system --user --from-pattern --to-pattern --order --require --no-pager'
-                      [ARG]='-H --host -M --machine'
+               [STANDALONE]='--help --version --system --user --order --require --no-pager --man'
+                      [ARG]='-H --host -M --machine --fuzz --from-pattern --to-pattern '
         )
 
         local -A VERBS=(
@@ -44,6 +44,7 @@ _systemd_analyze() {
                 [CRITICAL_CHAIN]='critical-chain'
                 [DOT]='dot'
                 [LOG_LEVEL]='set-log-level'
+                [VERIFY]='verify'
         )
 
         _init_completion || return
@@ -97,6 +98,14 @@ _systemd_analyze() {
                         comps='--help --version --system --user'
                 else
                         comps='debug info notice warning err crit alert emerg'
+                fi
+
+        elif __contains_word "$verb" ${VERBS[VERIFY]}; then
+                if [[ $cur = -* ]]; then
+                        comps='--help --version --system --user --man'
+                else
+                        comps=$( compgen -A file -- "$cur" )
+                        compopt -o filenames
                 fi
 
         fi
