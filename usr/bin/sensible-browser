@@ -3,27 +3,11 @@
 URL="$1"
 
 if test -n "$BROWSER"; then
-    OLDIFS="$IFS"
-    IFS=:
-    for i in $BROWSER; do
-	case "$i" in
-	    (*sensible-browser*)
-	    printf 'Using sensible-browser in $BROWSER makes no sense.\n' >&2
-	    exit 1
-	    ;;
-	    (*%s*)
-	    :
-	    ;;
-	    (*)
-	    i="$i %s"
-	    ;;
-	esac
-        IFS="$OLDIFS"
-        cmd=$(printf "$i\n" "$URL")
-        $cmd && exit 0
-    done
-    printf 'None of the browsers in $BROWSER worked!\n' >&2
-    exit 1
+    ${BROWSER} "$1"
+    ret="$?"
+    if [ "$ret" -ne 126 ] && [ "$ret" -ne 127 ]; then
+       exit "$ret"
+    fi
 fi
 
 if test -n "$DISPLAY"; then
