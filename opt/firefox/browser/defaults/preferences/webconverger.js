@@ -96,3 +96,6 @@ pref("xpinstall.signatures.required", false);
 
 // http://kb.mozillazine.org/Browser.search.suggest.enabled
 pref("browser.search.suggest.enabled",           false);
+
+// A notification to tell you are behind a captive portal might trigger falsely, hence disabled
+pref("network.captive-portal-service.enabled", false);
