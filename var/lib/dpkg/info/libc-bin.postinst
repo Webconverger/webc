@@ -32,8 +32,10 @@ update_to_current_default() {
         return
         ;;
     esac
-    echo "Updating $2 to current default."
-    cp -p $1 $2
+    if ! cmp -s $1 $2; then
+      echo "Updating $2 to current default."
+      cp -p $1 $2
+    fi
   fi
 }
 

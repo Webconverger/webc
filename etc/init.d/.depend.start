@@ -1,8 +1,8 @@
-TARGETS = killprocs console-setup.sh networking cups motd acpid dbus dnsmasq bootlogs cron plymouth single rmnologin rc.local
+TARGETS = killprocs console-setup.sh networking motd cups dbus acpid dnsmasq bootlogs cron plymouth single rmnologin rc.local
 INTERACTIVE = console-setup.sh
 dnsmasq: networking
 cron: dnsmasq
-plymouth: dnsmasq networking cups bootlogs motd console-setup.sh acpid dbus cron
+plymouth: dnsmasq networking bootlogs motd cups dbus acpid console-setup.sh cron
 single: killprocs bootlogs motd
-rmnologin: dnsmasq networking bootlogs motd console-setup.sh acpid dbus
-rc.local: dnsmasq networking cups bootlogs motd console-setup.sh acpid dbus cron
+rmnologin: dnsmasq networking bootlogs motd dbus acpid console-setup.sh
+rc.local: dnsmasq networking bootlogs motd cups dbus acpid console-setup.sh cron
