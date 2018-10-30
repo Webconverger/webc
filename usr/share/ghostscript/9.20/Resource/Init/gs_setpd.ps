@@ -95,27 +95,40 @@ level2dict begin
  {	% Since setpagedevice doesn't create new device objects,
         % we must (carefully) reinstall the old parameters in
         % the same device.
-   .currentpagedevice pop //null currentdevice //null .trysetparams
+   .currentpagedevice pop //null currentdevice //null
+   { .trysetparams } .internalstopped
+   {
+     //null
+   } if
    dup type /booleantype eq
     { pop pop }
-    {		% This should never happen!
+    {
       SETPDDEBUG { (Error in .trysetparams!) = pstack flush } if
-      cleartomark pop pop pop
+      {cleartomark pop pop pop} .internalstopped pop
+      % if resetting the entire device state failed, at least put back the se
+      currentdevice //null //false mark /.LockSafetyParams
+      currentpagedevice /.LockSafetyParams .knownget not
+      {systemdict /SAFER .knownget not {//false} } if
+      .putdeviceparamsonly
       /.installpagedevice cvx /rangecheck signalerror
     }
    ifelse pop pop
         % A careful reading of the Red Book reveals that an erasepage
         % should occur, but *not* an initgraphics.
    erasepage .beginpage
- } bind def
+ } bind executeonly def
 
 /.uninstallpagedevice
- { 2 .endpage { .currentnumcopies //false .outputpage } if
+ {
+   {2 .endpage { .currentnumcopies //false .outputpage } if} .internalstopped pop
    nulldevice
  } bind def
 
 (%grestorepagedevice) cvn
- { .uninstallpagedevice grestore .installpagedevice
+ {
+ .uninstallpagedevice
+ grestore
+ .installpagedevice
  } bind def
 
 (%grestoreallpagedevice) cvn
@@ -204,8 +217,8 @@ level2dict begin
     mark
     % First put the device's default page size in slot 0
     % This satifies those that have devices built with a4 as the default
-    0 mark /PageSize currentdevice /PageSize gsgetdeviceprop .dicttomark
-
+    0 mark /PageSize /GetDeviceParam .special_op
+    not {/setpagedevice .systemvar /configurationerror signalerror} if .dicttomark
     % Only populate the other entries if we aren't FIXEDMEDIA
     FIXEDMEDIA not {
       statusdict /.pagetypenames get {

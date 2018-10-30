@@ -47,8 +47,8 @@ case "$1" in
         # Handle upgrades and allow local admin to override:
         # e.g. dpkg-statoverride --add root staff 2775 /usr/local/share/ca-certificates
         elif ! dpkg-statoverride --list /usr/local/share/ca-certificates >/dev/null; then
-            chmod $(stat -c %a /usr/local) /usr/local/share/ca-certificates
-            chown $(stat -c %u /usr/local):$(stat -c %g /usr/local) /usr/local/share/ca-certificates
+            chmod $(stat -c %a /usr/local) /usr/local/share/ca-certificates || true
+            chown $(stat -c %u /usr/local):$(stat -c %g /usr/local) /usr/local/share/ca-certificates || true
         fi
 
         . /usr/share/debconf/confmodule

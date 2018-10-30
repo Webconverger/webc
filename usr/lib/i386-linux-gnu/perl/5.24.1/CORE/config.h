@@ -9,7 +9,7 @@
 
 /* Package name      : perl5
  * Source directory  : .
- * Configuration time: Tue Sep 12 16:37:26 UTC 2017
+ * Configuration time: Sun Jun 10 17:37:28 UTC 2018
  * Configured by     : Debian Project
  * Target system     : linux localhost 3.16.0 #1 smp debian 3.16.0 i686 gnulinux 
  */
@@ -5238,5 +5238,5 @@
  */
 #define Uid_t uid_t		/* UID type */
 
-#define PERL_BUILD_DATE "Sep 12 2017 16:37:26"
+#define PERL_BUILD_DATE "Jun 10 2018 17:37:28"
 #endif

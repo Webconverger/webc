@@ -46,9 +46,15 @@ if [ -z "${IUCODE_TOOL}" ] && [ -x /usr/sbin/iucode_tool ] ; then
 fi
 
 IUCODE_FW_DIR=/lib/firmware/intel-ucode
-IUCODE_TOOL_INITRAMFS=auto
+if [ "$MODULES" = "most" ]; then
+	IUCODE_TOOL_INITRAMFS=early
+	IUCODE_TOOL_SCANCPUS=no
+else
+	IUCODE_TOOL_INITRAMFS=auto
+	IUCODE_TOOL_SCANCPUS=yes
+fi
 IUCODE_TOOL_EXTRA_OPTIONS=
-IUCODE_TOOL_SCANCPUS=yes
+
 [ -r ${IUCODE_CONFIG} ] && . ${IUCODE_CONFIG}
 
 [ -z "${IUCODE_TOOL_INITRAMFS}" ] && IUCODE_TOOL_INITRAMFS=no
