@@ -2358,6 +2358,36 @@ Description: GNU grep, egrep and fgrep
  will run more slowly, however.)
 Homepage: http://www.gnu.org/software/grep/
 
+Package: broadcom-sta-dkms
+Status: install ok installed
+Priority: optional
+Section: non-free/kernel
+Installed-Size: 14140
+Maintainer: Eduard Bloch <blade@debian.org>
+Architecture: all
+Source: broadcom-sta
+Version: 6.30.223.271-5
+Provides: broadcom-sta-modules
+Depends: dkms (>= 2.1.0.0)
+Recommends: wireless-tools
+Conflicts: broadcom-sta-modules
+Conffiles:
+ /etc/modprobe.d/broadcom-sta-dkms.conf c5d2490e6167f876e7aae7b4f08e16e6
+Description: dkms source for the Broadcom STA Wireless driver
+ Broadcom STA is a binary-only device driver to support the following IEEE
+ 802.11a/b/g/n wireless network cards: BCM4311-, BCM4312-, BCM4313-,
+ BCM4321-, BCM4322-, BCM43142-, BCM43224-, BCM43225-, BCM43227-, BCM43228-,
+ BCM4331-, BCM4360-, and BCM4352-based hardware.
+ .
+ This package provides the source code for the wl kernel modules and makes use
+ of the DKMS build utility to install them for the running kernel. The
+ alternative package broadcom-sta-source can be used instead in case of build
+ problems.
+ .
+ The wireless-tools package is also required in order to make use of these
+ modules. Kernel source or headers are required to compile these modules.
+Homepage: http://www.broadcom.com/support/802.11/linux_sta.php
+
 Package: libx264-148
 Status: install ok installed
 Priority: optional
@@ -4642,7 +4672,7 @@ Homepage: https://www.cups.org/
 Package: tzdata
 Status: install ok installed
 Priority: required
-Section: localization
+Section: libs
 Installed-Size: 3014
 Maintainer: GNU Libc Maintainers <debian-glibc@lists.debian.org>
 Architecture: all
@@ -4719,7 +4749,7 @@ Homepage: https://git.kernel.org/cgit/libs/klibc/klibc.git
 
 Package: systemd-sysv
 Status: install ok installed
-Priority: important
+Priority: extra
 Section: admin
 Installed-Size: 107
 Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
@@ -5702,7 +5732,7 @@ Homepage: http://www.pango.org/
 
 Package: gnupg
 Status: install ok installed
-Priority: optional
+Priority: important
 Section: utils
 Installed-Size: 2278
 Maintainer: Debian GnuPG Maintainers <pkg-gnupg-maint@lists.alioth.debian.org>
@@ -12321,7 +12351,7 @@ Homepage: http://userspace.selinuxproject.org/
 
 Package: systemd
 Status: install ok installed
-Priority: important
+Priority: optional
 Section: admin
 Installed-Size: 8995
 Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
@@ -14912,7 +14942,7 @@ Homepage: http://e2fsprogs.sourceforge.net
 Package: firmware-linux-nonfree
 Status: install ok installed
 Priority: optional
-Section: non-free/metapackages
+Section: non-free/kernel
 Installed-Size: 20
 Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
 Architecture: all

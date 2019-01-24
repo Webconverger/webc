@@ -1,0 +1,33 @@
+DKMS make.log for broadcom-sta-6.30.223.271 for kernel 4.9.0-8-686-pae (x86_64)
+Thu Jan 24 07:18:19 UTC 2019
+/bin/sh: 1: [: Illegal number: 
+/bin/sh: 1: [: Illegal number: 
+Wireless Extension is the only possible API for this kernel version
+Using Wireless Extension API
+KBUILD_NOPEDANTIC=1 make -C /lib/modules/4.9.0-8-686-pae/build M=`pwd`
+make[1]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+make[1]: Entering directory '/usr/src/linux-headers-4.9.0-8-686-pae'
+CFG80211 API is prefered for this kernel version
+Using CFG80211 API
+Kernel architecture is X86_32
+  LD      /var/lib/dkms/broadcom-sta/6.30.223.271/build/built-in.o
+  CC [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/src/shared/linux_osl.o
+  CC [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_linux.o
+/var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_linux.c: In function 'wl_pci_probe':
+/var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_linux.c:774:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  if ((val & 0x0000ff00) != 0)
+  ^~
+/var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_linux.c:776:3: note: ...this statement, but the latter is misleadingly indented as if it is guarded by the 'if'
+   bar1_size = pci_resource_len(pdev, 2);
+   ^~~~~~~~~
+  CC [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_iw.o
+  CC [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/src/wl/sys/wl_cfg80211_hybrid.o
+  LD [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/wl.o
+  Building modules, stage 2.
+CFG80211 API is prefered for this kernel version
+Using CFG80211 API
+Kernel architecture is X86_32
+  MODPOST 1 modules
+  CC      /var/lib/dkms/broadcom-sta/6.30.223.271/build/wl.mod.o
+  LD [M]  /var/lib/dkms/broadcom-sta/6.30.223.271/build/wl.ko
+make[1]: Leaving directory '/usr/src/linux-headers-4.9.0-8-686-pae'
