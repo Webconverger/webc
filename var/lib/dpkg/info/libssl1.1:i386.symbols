@@ -872,6 +872,7 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  CRYPTO_realloc@OPENSSL_1_1_0 1.1.0
  CRYPTO_secure_actual_size@OPENSSL_1_1_0 1.1.0
  CRYPTO_secure_allocated@OPENSSL_1_1_0 1.1.0
+ CRYPTO_secure_clear_free@OPENSSL_1_1_0g 1.1.0g
  CRYPTO_secure_free@OPENSSL_1_1_0 1.1.0
  CRYPTO_secure_malloc@OPENSSL_1_1_0 1.1.0
  CRYPTO_secure_malloc_done@OPENSSL_1_1_0 1.1.0
@@ -1733,6 +1734,7 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  EVP_PKEY_set1_DSA@OPENSSL_1_1_0 1.1.0
  EVP_PKEY_set1_EC_KEY@OPENSSL_1_1_0 1.1.0
  EVP_PKEY_set1_RSA@OPENSSL_1_1_0 1.1.0
+ EVP_PKEY_set1_engine@OPENSSL_1_1_0g 1.1.0g
  EVP_PKEY_set1_tls_encodedpoint@OPENSSL_1_1_0 1.1.0
  EVP_PKEY_set_type@OPENSSL_1_1_0 1.1.0
  EVP_PKEY_set_type_str@OPENSSL_1_1_0 1.1.0
@@ -2140,7 +2142,10 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  OCSP_resp_get0_certs@OPENSSL_1_1_0 1.1.0
  OCSP_resp_get0_id@OPENSSL_1_1_0 1.1.0
  OCSP_resp_get0_produced_at@OPENSSL_1_1_0 1.1.0
+ OCSP_resp_get0_respdata@OPENSSL_1_1_0j 1.1.0j
  OCSP_resp_get0_signature@OPENSSL_1_1_0 1.1.0
+ OCSP_resp_get0_signer@OPENSSL_1_1_0h 1.1.0h
+ OCSP_resp_get0_tbs_sigalg@OPENSSL_1_1_0j 1.1.0j
  OCSP_response_create@OPENSSL_1_1_0 1.1.0
  OCSP_response_get1_basic@OPENSSL_1_1_0 1.1.0
  OCSP_response_status@OPENSSL_1_1_0 1.1.0
@@ -2156,6 +2161,10 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  OPENSSL_1_1_0c@OPENSSL_1_1_0c 1.1.0c
  OPENSSL_1_1_0d@OPENSSL_1_1_0d 1.1.0d
  OPENSSL_1_1_0f@OPENSSL_1_1_0f 1.1.0f
+ OPENSSL_1_1_0g@OPENSSL_1_1_0g 1.1.0g
+ OPENSSL_1_1_0h@OPENSSL_1_1_0h 1.1.0h
+ OPENSSL_1_1_0i@OPENSSL_1_1_0i 1.1.0i
+ OPENSSL_1_1_0j@OPENSSL_1_1_0j 1.1.0j
  OPENSSL_DIR_end@OPENSSL_1_1_0 1.1.0
  OPENSSL_DIR_read@OPENSSL_1_1_0 1.1.0
  OPENSSL_INIT_free@OPENSSL_1_1_0 1.1.0
@@ -3150,9 +3159,32 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  X509_LOOKUP_ctrl@OPENSSL_1_1_0 1.1.0
  X509_LOOKUP_file@OPENSSL_1_1_0 1.1.0
  X509_LOOKUP_free@OPENSSL_1_1_0 1.1.0
+ X509_LOOKUP_get_method_data@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_get_store@OPENSSL_1_1_0i 1.1.0i
  X509_LOOKUP_hash_dir@OPENSSL_1_1_0 1.1.0
  X509_LOOKUP_init@OPENSSL_1_1_0 1.1.0
+ X509_LOOKUP_meth_free@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_ctrl@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_free@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_get_by_alias@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_get_by_fingerprint@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_get_by_issuer_serial@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_get_by_subject@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_init@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_new_item@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_get_shutdown@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_new@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_ctrl@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_free@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_get_by_alias@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_get_by_fingerprint@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_get_by_issuer_serial@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_get_by_subject@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_init@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_new_item@OPENSSL_1_1_0i 1.1.0i
+ X509_LOOKUP_meth_set_shutdown@OPENSSL_1_1_0i 1.1.0i
  X509_LOOKUP_new@OPENSSL_1_1_0 1.1.0
+ X509_LOOKUP_set_method_data@OPENSSL_1_1_0i 1.1.0i
  X509_LOOKUP_shutdown@OPENSSL_1_1_0 1.1.0
  X509_NAME_ENTRY_create_by_NID@OPENSSL_1_1_0 1.1.0
  X509_NAME_ENTRY_create_by_OBJ@OPENSSL_1_1_0 1.1.0
@@ -3199,6 +3231,8 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  X509_OBJECT_new@OPENSSL_1_1_0 1.1.0
  X509_OBJECT_retrieve_by_subject@OPENSSL_1_1_0 1.1.0
  X509_OBJECT_retrieve_match@OPENSSL_1_1_0 1.1.0
+ X509_OBJECT_set1_X509@OPENSSL_1_1_0i 1.1.0i
+ X509_OBJECT_set1_X509_CRL@OPENSSL_1_1_0i 1.1.0i
  X509_OBJECT_up_ref_count@OPENSSL_1_1_0 1.1.0
  X509_PKEY_free@OPENSSL_1_1_0 1.1.0
  X509_PKEY_new@OPENSSL_1_1_0 1.1.0
@@ -3412,6 +3446,7 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  X509_VERIFY_PARAM_get_count@OPENSSL_1_1_0 1.1.0
  X509_VERIFY_PARAM_get_depth@OPENSSL_1_1_0 1.1.0
  X509_VERIFY_PARAM_get_flags@OPENSSL_1_1_0 1.1.0
+ X509_VERIFY_PARAM_get_hostflags@OPENSSL_1_1_0i 1.1.0i
  X509_VERIFY_PARAM_get_inh_flags@OPENSSL_1_1_0d 1.1.0d
  X509_VERIFY_PARAM_get_time@OPENSSL_1_1_0d 1.1.0d
  X509_VERIFY_PARAM_inherit@OPENSSL_1_1_0 1.1.0
@@ -3464,6 +3499,7 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  X509_find_by_issuer_and_serial@OPENSSL_1_1_0 1.1.0
  X509_find_by_subject@OPENSSL_1_1_0 1.1.0
  X509_free@OPENSSL_1_1_0 1.1.0
+ X509_get0_authority_key_id@OPENSSL_1_1_0h 1.1.0h
  X509_get0_extensions@OPENSSL_1_1_0 1.1.0
  X509_get0_notAfter@OPENSSL_1_1_0 1.1.0
  X509_get0_notBefore@OPENSSL_1_1_0 1.1.0
@@ -3620,6 +3656,9 @@ libcrypto.so.1.1 libssl1.1 #MINVER#
  b2i_PrivateKey_bio@OPENSSL_1_1_0 1.1.0
  b2i_PublicKey@OPENSSL_1_1_0 1.1.0
  b2i_PublicKey_bio@OPENSSL_1_1_0 1.1.0
+ conf_ssl_get@OPENSSL_1_1_0i 1.1.0i
+ conf_ssl_get_cmd@OPENSSL_1_1_0i 1.1.0i
+ conf_ssl_name_find@OPENSSL_1_1_0i 1.1.0i
  d2i_ACCESS_DESCRIPTION@OPENSSL_1_1_0 1.1.0
  d2i_ASIdOrRange@OPENSSL_1_1_0 1.1.0
  d2i_ASIdentifierChoice@OPENSSL_1_1_0 1.1.0
