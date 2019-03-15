@@ -76,7 +76,7 @@ then
     all_upgraded=yes
     for pkg in libc6.1-alphaev67 libc6-i686 libc6-xen libc0.1-i686 ; do
         ver=$(dpkg-query -l $pkg 2>/dev/null | sed -e '/^[a-z][a-z]\s/!d;/^.[nc]/d;' -e "s/^..\s\+$pkg[0-9a-z:]*\s\+//;s/\s.*//g")
-        if [ -n "$ver" ] && [ "$ver" != "2.24-11+deb9u3" ]; then
+        if [ -n "$ver" ] && [ "$ver" != "2.24-11+deb9u4" ]; then
             all_upgraded=no
         fi
     done
@@ -100,8 +100,8 @@ then
 	    check="$check boa cucipop courier-authdaemon cron cups exim"
 	    check="$check exim4-base dovecot-common cucipop incron lprng lpr"
 	    check="$check lpr-ppd mysql-server nis openbsd-inetd"
-	    check="$check openldapd proftpd postfix postfix-tls rsync samba"
-	    check="$check sasl2-bin slapd smail sendmail snmpd ssh"
+	    check="$check openldapd postgresql-common proftpd postfix postfix-tls"
+	    check="$check rsync samba sasl2-bin slapd smail sendmail snmpd ssh"
 	    check="$check spamassassin vsftpd wu-ftpd wu-ftpd-academ wwwoffle"
 	    check="$check webmin dropbear gdm"
 	    # NSS services check: 
@@ -118,6 +118,7 @@ then
 	    	    	-e's/\blpr-ppd\b/lpd-ppd/g' \
 	    	    	-e's/\bmysql-server\b/mysql/g' \
 	    	    	-e's/\bsasl2-bin\b/saslauthd/g' \
+	    	    	-e's/\bpostgresql-common\b/postgresql/g' \
 	    )
 	    echo
 	    echo "Checking init scripts..."
