@@ -425,7 +425,7 @@ status {
                         % so we have to use .forcedef here.
                   /.Instances 1 index .forcedef	% Category dict is read-only
                 } executeonly if
-              }
+              } executeonly
               { .LocalInstances dup //.emptydict eq
                  { pop 3 dict localinstancedict Category 2 index put
                  }
@@ -437,7 +437,7 @@ status {
                         % Now make the resource value read-only.
              0 2 copy get { readonly } .internalstopped pop
              dup 4 1 roll put exch pop exch pop
-           }
+           } executeonly
            { /defineresource cvx /typecheck signaloperror
            }
         ifelse
