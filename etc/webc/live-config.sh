@@ -251,7 +251,7 @@ EOC
 	homepage=*)
 		mac=$( mac_address )
 		homepage="$( echo ${x#homepage=} | sed 's,%20, ,g' | sed "s,MACID,$mac,g" )"
-		echo "browser.startup.homepage=$(echo $homepage | awk '{print $1}')" >> /opt/openkiosk/openkiosk.cfg
+		echo "pref(\"browser.startup.homepage\", \"$(echo $homepage | awk '{print $1}')\")" >> /opt/openkiosk/openkiosk.cfg
 		;;
 	esac
 done
