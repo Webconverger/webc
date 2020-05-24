@@ -124,12 +124,10 @@ for x in $( cmdline ); do
 
 	chrome=*)
 		chrome=${x#chrome=}
-		dir="/etc/webc/extensions/${chrome}"
-		test -d $dir && {
-			test -e "$link" && rm -f "$link"
-			logs "switching chrome to ${chrome}"
-			ln -s "$dir" "$link"
-		}
+		if test $chrome == "webcnoaddressbar"
+		then
+		    echo "pref(\"openkiosk.ui.urlbar.enabled\", false)" >> /opt/openkiosk/openkiosk.cfg
+		fi
 		;;
 
 	printer=*)
