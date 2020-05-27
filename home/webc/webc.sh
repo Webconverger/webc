@@ -58,10 +58,6 @@ for x in $(cmdline)
 do
 	case $x in
 
-		kioskresetstation=*) # For killing the browser after a number of minutes of idleness
-			exec /usr/bin/kioskresetstation ${x#kioskresetstation=} &
-			;;
-
 		debug)
 			wm="/usr/bin/dwm.default" # dwm.default is the dwm default, not webc
 			;;

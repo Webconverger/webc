@@ -130,6 +130,16 @@ for x in $( cmdline ); do
 		fi
 		;;
 
+	kioskresetstation=*) # For killing the browser after a number of minutes of idleness
+		kioskresetstation=${x#kioskresetstation=}
+		if test $kioskresetstation -gt 0
+		then
+			echo "pref(\"openkiosk.session.inactiveTerminal.minutes\", $kioskresetstation)" >> /opt/openkiosk/openkiosk.cfg
+		else
+			echo "pref(\"openkiosk.session.inactiveTerminal.enabled\", false)" >> /opt/openkiosk/openkiosk.cfg
+		fi
+		;;
+
 	printer=*)
 		systemctl unmask cups.service
 		/etc/init.d/cups start
