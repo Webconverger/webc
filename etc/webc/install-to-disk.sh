@@ -65,7 +65,7 @@ find_disk() {
 	while true; do
 		local disk
 		local choices=() # Use an array so we can have spaces in the titles
-		for dev in /dev/[sh]d?; do
+		for dev in /dev/[sh]d? /dev/nvme[0-9]n[0-9]; do
 			# TODO: Filter out the device we're currently booting from
 			if test -e $dev; then
 				choices+=($dev "$(describe_disk "${dev}")")
