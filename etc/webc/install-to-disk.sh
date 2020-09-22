@@ -14,6 +14,7 @@ install_log="/root/install.log"
 exec >>"$install_log" 2>&1 3>&1 4>/dev/console
 
 set -e
+shopt -s extglob
 
 # If the shell exists, we assume the install failed. If the install succeeds,
 # the EXIT trap is removed just before exiting the script, so this handler
@@ -91,7 +92,7 @@ EOF
 verify_partition() {
 	local disk="$1"
 	_logs "verifying partitions on ${disk}"
-	test -e ${disk}1
+	test -e ${disk}?(p)1
 	# /sbin/sfdisk -V -q $disk  # never times out when 0 partitions exist
 }	
 md5() { md5sum | awk '{ print $1 }'; }
@@ -150,7 +151,7 @@ trap failed_install EXIT
 
 clear_screen
 disk=$( find_disk )
-root_partition=${disk}1
+root_partition=${disk}?(p)1
 root_mount=/mnt/root
 partition_disk $disk
 verify_partition $disk
