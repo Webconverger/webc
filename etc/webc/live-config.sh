@@ -201,7 +201,13 @@ for x in $( cmdline ); do
 
 	whitelist=*)
 		whitelist="$( /bin/busybox httpd -d ${x#whitelist=} )"
-		echo 'pref("extensions.webconverger.whitelist", "'$whitelist'");' >> "$prefs"
+		filterfile=/opt/openkiosk/filters.txt
+		for i in ${whitelist//,/ }
+		do
+			echo "filter[https://*.$i, ALL];" >> $filterfile
+		done
+		echo "pref(\"openkiosk.filters.file\", \"$filterfile\")" >> /opt/openkiosk/openkiosk.cfg
+		echo "pref(\"openkiosk.filters.enabled\", true)" >> /opt/openkiosk/openkiosk.cfg
 		logs "Set whitelist: $whitelist"
 		;;
 
