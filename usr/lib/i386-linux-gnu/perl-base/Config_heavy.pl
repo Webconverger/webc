@@ -78,7 +78,7 @@ sub header_files {
 #
 ## Package name      : perl5
 ## Source directory  : .
-## Configuration time: Thu Nov 29 11:11:57 UTC 2018
+## Configuration time: Sat Jun 20 17:33:46 UTC 2020
 ## Configured by     : Debian Project
 ## Target system     : linux localhost 3.16.0 #1 smp debian 3.16.0 i686 gnulinux 
 #
@@ -203,7 +203,7 @@ ccsymbols=''
 ccversion=''
 cf_by='Debian Project'
 cf_email='perl@packages.debian.org'
-cf_time='Thu Nov 29 11:11:57 UTC 2018'
+cf_time='Sat Jun 20 17:33:46 UTC 2020'
 charbits='8'
 charsize='1'
 chgrp=''
@@ -249,12 +249,12 @@ config_arg3='-Dcc=i686-linux-gnu-gcc'
 config_arg40='-Dotherlibdirs=/usr/lib/i386-linux-gnu/perl-base'
 config_arg4='-Dcpp=i686-linux-gnu-cpp'
 config_arg5='-Dld=i686-linux-gnu-gcc'
-config_arg6='-Dccflags=-DDEBIAN -Wdate-time -D_FORTIFY_SOURCE=2 -g -O2 -fdebug-prefix-map=/build/perl-s7MFkn/perl-5.24.1=. -fstack-protector-strong -Wformat -Werror=format-security'
+config_arg6='-Dccflags=-DDEBIAN -Wdate-time -D_FORTIFY_SOURCE=2 -g -O2 -fdebug-prefix-map=/build/perl-Hnaf97/perl-5.24.1=. -fstack-protector-strong -Wformat -Werror=format-security'
 config_arg7='-Dldflags= -Wl,-z,relro'
 config_arg8='-Dlddlflags=-shared -Wl,-z,relro'
 config_arg9='-Dcccdlflags=-fPIC'
 config_argc='40'
-config_args='-Dusethreads -Duselargefiles -Dcc=i686-linux-gnu-gcc -Dcpp=i686-linux-gnu-cpp -Dld=i686-linux-gnu-gcc -Dccflags=-DDEBIAN -Wdate-time -D_FORTIFY_SOURCE=2 -g -O2 -fdebug-prefix-map=/build/perl-s7MFkn/perl-5.24.1=. -fstack-protector-strong -Wformat -Werror=format-security -Dldflags= -Wl,-z,relro -Dlddlflags=-shared -Wl,-z,relro -Dcccdlflags=-fPIC -Darchname=i686-linux-gnu -Dprefix=/usr -Dprivlib=/usr/share/perl/5.24 -Darchlib=/usr/lib/i386-linux-gnu/perl/5.24 -Dvendorprefix=/usr -Dvendorlib=/usr/share/perl5 -Dvendorarch=/usr/lib/i386-linux-gnu/perl5/5.24 -Dsiteprefix=/usr/local -Dsitelib=/usr/local/share/perl/5.24.1 -Dsitearch=/usr/local/lib/i386-linux-gnu/perl/5.24.1 -Dman1dir=/usr/share/man/man1 -Dman3dir=/usr/share/man/man3 -Dsiteman1dir=/usr/local/man/man1 -Dsiteman3dir=/usr/local/man/man3 -Dusesitecustomize -Duse64bitint -Dman1ext=1 -Dman3ext=3perl -Dpager=/usr/bin/sensible-pager -Uafs -Ud_csh -Ud_ualarm -Uusesfio -Uusenm -Ui_libutil -Uversiononly -DDEBUGGING=-g -Doptimize=-O2 -dEs -Uuseshrplib -Dotherlibdirs=/usr/lib/i386-linux-gnu/perl-base'
+config_args='-Dusethreads -Duselargefiles -Dcc=i686-linux-gnu-gcc -Dcpp=i686-linux-gnu-cpp -Dld=i686-linux-gnu-gcc -Dccflags=-DDEBIAN -Wdate-time -D_FORTIFY_SOURCE=2 -g -O2 -fdebug-prefix-map=/build/perl-Hnaf97/perl-5.24.1=. -fstack-protector-strong -Wformat -Werror=format-security -Dldflags= -Wl,-z,relro -Dlddlflags=-shared -Wl,-z,relro -Dcccdlflags=-fPIC -Darchname=i686-linux-gnu -Dprefix=/usr -Dprivlib=/usr/share/perl/5.24 -Darchlib=/usr/lib/i386-linux-gnu/perl/5.24 -Dvendorprefix=/usr -Dvendorlib=/usr/share/perl5 -Dvendorarch=/usr/lib/i386-linux-gnu/perl5/5.24 -Dsiteprefix=/usr/local -Dsitelib=/usr/local/share/perl/5.24.1 -Dsitearch=/usr/local/lib/i386-linux-gnu/perl/5.24.1 -Dman1dir=/usr/share/man/man1 -Dman3dir=/usr/share/man/man3 -Dsiteman1dir=/usr/local/man/man1 -Dsiteman3dir=/usr/local/man/man3 -Dusesitecustomize -Duse64bitint -Dman1ext=1 -Dman3ext=3perl -Dpager=/usr/bin/sensible-pager -Uafs -Ud_csh -Ud_ualarm -Uusesfio -Uusenm -Ui_libutil -Uversiononly -DDEBUGGING=-g -Doptimize=-O2 -dEs -Uuseshrplib -Dotherlibdirs=/usr/lib/i386-linux-gnu/perl-base'
 contains='grep'
 cp='cp'
 cpio=''

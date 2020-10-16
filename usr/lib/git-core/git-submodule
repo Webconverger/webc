@@ -37,6 +37,7 @@ reference=
 cached=
 recursive=
 init=
+require_init=
 files=
 remote=
 nofetch=
@@ -241,6 +242,11 @@ Use -f if you really want to add it." >&2
 		fi
 
 	else
+		sm_gitdir=".git/modules/$sm_name"
+		if ! git submodule--helper validate-git-dir "$sm_gitdir" "$sm_name"
+		then
+			die "$(eval_gettextln "refusing to create/use '\$sm_gitdir' in another submodule's git dir")"
+		fi
 		if test -d ".git/modules/$sm_name"
 		then
 			if test -z "$force"
@@ -510,6 +516,10 @@ cmd_update()
 		-i|--init)
 			init=1
 			;;
+		--require-init)
+			init=1
+			require_init=1
+			;;
 		--remote)
 			remote=1
 			;;
@@ -588,6 +598,7 @@ cmd_update()
 		${update:+--update "$update"} \
 		${reference:+"$reference"} \
 		${depth:+--depth "$depth"} \
+		${require_init:+--require-init} \
 		${recommend_shallow:+"$recommend_shallow"} \
 		${jobs:+$jobs} \
 		"$@" || echo "#unmatched" $?
