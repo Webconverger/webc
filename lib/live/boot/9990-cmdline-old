@@ -161,6 +161,11 @@ Cmdline_old ()
 				ramdisk_size="${_PARAMETER#ramdisk-size=}"
 				;;
 
+			overlay-size=*)
+				OVERLAY_SIZE="${_PARAMETER#overlay-size=}"
+				export OVERLAY_SIZE
+				;;
+
 			persistence)
 				PERSISTENCE="true"
 				export PERSISTENCE
@@ -248,12 +253,6 @@ Cmdline_old ()
 				UNIONTYPE="${_PARAMETER#union=}"
 				export UNIONTYPE
 				;;
-
-			git-revision=*)
-				GIT_REVISION="${_PARAMETER#git-revision=}"
-				export GIT_REVISION
-				;;
-
 		esac
 	done
 

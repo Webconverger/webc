@@ -2,7 +2,7 @@
 
 # deluser -- a utility to remove users from the system
 # delgroup -- a utilty to remove groups from the system
-my $version = "3.115";
+my $version = "3.118";
 
 # Copyright (C) 2000 Roland Bauerschmidt <rb@debian.org>
 # Based on 'adduser' as pattern by
@@ -168,8 +168,8 @@ foreach(keys(%pconfig)) {
 
 if (($config{remove_home} || $config{remove_all_files} || $config{backup}) && ($install_more_packages)) {
     fail (8, gtx("In order to use the --remove-home, --remove-all-files, and --backup features,
-you need to install the `perl-modules' package. To accomplish that, run
-apt-get install perl-modules.\n"));
+you need to install the `perl' package. To accomplish that, run
+apt-get install perl.\n"));
 }
 
  

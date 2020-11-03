@@ -1,26 +1,10 @@
-#  This file is part of systemd.
-#
-#  Copyright 2012 Lennart Poettering
-#  Copyright 2014-2016 Piotr Drąg
-#
-#  systemd is free software; you can redistribute it and/or modify it
-#  under the terms of the GNU Lesser General Public License as published by
-#  the Free Software Foundation; either version 2.1 of the License, or
-#  (at your option) any later version.
-#
-#  systemd is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#  Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with systemd; If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: LGPL-2.1+
 
 # Message catalog for systemd's own messages
 # Polish translation
 
 # The catalog format is documented on
-# http://www.freedesktop.org/wiki/Software/systemd/catalog
+# https://www.freedesktop.org/wiki/Software/systemd/catalog
 
 # For an explanation why we do all this, see https://xkcd.com/1024/
 
@@ -47,7 +31,7 @@ Support: https://www.debian.org/support
 
 @JOURNAL_NAME@ (@JOURNAL_PATH@) obecnie używa @CURRENT_USE_PRETTY@.
 Maksymalnie może używać @MAX_USE_PRETTY@.
-Zostawianie co najmniej @DISK_KEEP_FREE_PRETTY@ wolnego (z obecnie dostępnego @DISK_AVAILABLE_PRETTY@ miejsca na dysku).
+Zostawianie co najmniej @DISK_KEEP_FREE_PRETTY@ wolnego (z obecnie dostępnego @DISK_AVAILABLE_PRETTY@ miejsca na dysku).
 Wymuszone ograniczenie użycia wynosi więc @LIMIT_PRETTY@, z czego @AVAILABLE_PRETTY@ jest nadal dostępne.
 
 Ograniczenia kontrolujące ilość miejsca na dysku używanego przez dziennik
@@ -70,7 +54,9 @@ Nie ma to wpływu na komunikaty innych usług.
 
 Ograniczenia kontrolujące pomijanie komunikatów mogą być konfigurowane
 za pomocą opcji RateLimitIntervalSec= i RateLimitBurst= w pliku
-/etc/systemd/journald.conf. Strona journald.conf(5) zawiera więcej informacji.
+/etc/systemd/journald.conf lub LogRateLimitIntervalSec= i LogRateLimitBurst=
+w pliku jednostki. Strony journald.conf(5) i systemd.exec(5) zawierają więcej
+informacji.
 
 -- e9bf28e6e834481bb6f48f548ad13606
 Subject: Utracono komunikaty dziennika
@@ -92,13 +78,13 @@ Zwykle wskazuje to na błąd programistyczny w danym programie i powinno zosta
 zgłoszone jego producentowi jako błąd.
 
 -- 5aadd8e954dc4b1a8c954d63fd9e1137
-Subject: Plik core został skrócony do @SIZE_LIMIT@ B.
+Subject: Plik core został skrócony do @SIZE_LIMIT@ B.
 Defined-By: systemd
 Support: https://www.debian.org/support
 Documentation: man:coredump.conf(5)
 
 Proces miał więcej zmapowanej pamięci niż maksimum dla przetwarzania i miejsca
-skonfigurowane przez systemd-coredump(8). Tylko pierwsze @SIZE_LIMIT@ B
+skonfigurowane przez systemd-coredump(8). Tylko pierwsze @SIZE_LIMIT@ B
 zostało zapisanych. Ten plik core może nadal być używalny, ale narzędzia typu
 gdb(1) będą ostrzegały o skróceniu pliku.
 
@@ -106,7 +92,7 @@ gdb(1) będą ostrzegały o skróceniu pliku.
 Subject: Utworzono nową sesję @SESSION_ID@ dla użytkownika @USER_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Nowa sesja o identyfikatorze @SESSION_ID@ została utworzona dla użytkownika
 @USER_ID@.
@@ -117,7 +103,7 @@ Proces prowadzący sesji: @LEADER@.
 Subject: Zakończono sesję @SESSION_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Sesja o identyfikatorze @SESSION_ID@ została zakończona.
 
@@ -125,7 +111,7 @@ Sesja o identyfikatorze @SESSION_ID@ została zakończona.
 Subject: Dostępne jest nowe stanowisko @SEAT_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Nowe stanowisko @SEAT_ID@ zostało skonfigurowane i jest teraz dostępne.
 
@@ -133,7 +119,7 @@ Nowe stanowisko @SEAT_ID@ zostało skonfigurowane i jest teraz dostępne.
 Subject: Usunięto stanowisko @SEAT_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Stanowisko @SEAT_ID@ zostało usunięte i nie jest już dostępne.
 
@@ -142,7 +128,7 @@ Subject: Zmiana czasu
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Zegar systemowy został zmieniony na @REALTIME@ μs po 1 stycznia 1970.
+Zegar systemowy został zmieniony na @REALTIME@ μs po 1 stycznia 1970.
 
 -- 45f82f4aef7a4bbf942ce861d1f20990
 Subject: Zmiana strefy czasowej na @TIMEZONE@
@@ -157,15 +143,27 @@ Defined-By: systemd
 Support: https://www.debian.org/support
 
 Wszystkie usługi systemowe obowiązkowo zakolejkowane do włączenia podczas
-uruchamiania systemu zostały pomyślnie uruchomione. Proszę zauważyć, że nie
-oznacza to, że komputer jest bezczynny, jako że usługi mogą wciąż kończyć
-proces uruchamiania.
+uruchamiania systemu zostały uruchomione. Proszę zauważyć, że nie oznacza
+to, że komputer jest bezczynny, jako że usługi mogą wciąż kończyć proces
+uruchamiania.
 
-Uruchamianie jądra zajęło @KERNEL_USEC@ μs.
+Uruchamianie jądra zajęło @KERNEL_USEC@ μs.
 
-Uruchamianie początkowego dysku RAM zajęło @INITRD_USEC@ μs.
+Uruchamianie początkowego dysku RAM zajęło @INITRD_USEC@ μs.
 
-Uruchamianie przestrzeni użytkownika zajęło @USERSPACE_USEC@ μs.
+Uruchamianie przestrzeni użytkownika zajęło @USERSPACE_USEC@ μs.
+
+-- eed00a68ffd84e31882105fd973abdd1
+Subject: Ukończono uruchamianie menedżera użytkownika
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Wystąpienie menedżera dla użytkownika @_UID@ zostało uruchomione.
+Wszystkie usługi zakolejkowane do włączenia zostały uruchomione.
+Proszę zauważyć, że inne usługi mogą być nadal uruchamiane
+lub zostać uruchomione później.
+
+Uruchamianie menedżera zajęło @USERSPACE_USEC@ μs.
 
 -- 6bbd95ee977941e497c48be27c254128
 Subject: Przejście do stanu uśpienia @SLEEP@
@@ -186,63 +184,71 @@ Subject: Zainicjowano wyłączenie systemu
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Zainicjowano wyłączenie systemd. Wyłączenie zostało rozpoczęte i wszystkie
+Zainicjowano wyłączenie systemu. Wyłączenie zostało rozpoczęte i wszystkie
 usługi systemowe zostały zakończone, a wszystkie systemy plików odmontowane.
 
 -- 7d4958e842da4a758f6c1cdc7b36dcc5
-Subject: Rozpoczęto uruchamianie jednostki @UNIT@
+Subject: Rozpoczęto wykonywanie zadania uruchamiania dla jednostki @UNIT@
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Jednostka @UNIT@ rozpoczęła uruchamianie.
+Rozpoczęto wykonywanie zadania uruchamiania dla jednostki @UNIT@.
+
+Identyfikator zadania: @JOB_ID@.
 
 -- 39f53479d3a045ac8e11786248231fbf
-Subject: Ukończono uruchamianie jednostki @UNIT@
+Subject: Pomyślnie ukończono zadanie uruchamiania dla jednostki @UNIT@
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Jednostka @UNIT@ ukończyła uruchamianie.
+Pomyślnie ukończono zadanie uruchamiania dla jednostki @UNIT@.
 
-Wynik uruchamiania: @RESULT@.
-
--- de5b426a63be47a7b6ac3eaac82e2f6f
-Subject: Rozpoczęto wyłączanie jednostki @UNIT@
-Defined-By: systemd
-Support: https://www.debian.org/support
-
-Jednostka @UNIT@ rozpoczęła wyłączanie.
-
--- 9d1aaa27d60140bd96365438aad20286
-Subject: Ukończono wyłączanie jednostki @UNIT@
-Defined-By: systemd
-Support: https://www.debian.org/support
-
-Jednostka @UNIT@ ukończyła wyłączanie.
+Identyfikator zadania: @JOB_ID@.
 
 -- be02cf6855d2428ba40df7e9d022f03d
-Subject: Jednostka @UNIT@ się nie powiodła
+Subject: Zadanie uruchamiania dla jednostki @UNIT@ się nie powiodło
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Jednostka @UNIT@ się nie powiodła.
+Zadanie uruchamiania dla jednostki @UNIT@ zostało ukończone z niepowodzeniem.
 
-Wynik: @RESULT@.
+Identyfikator zadania: @JOB_ID@, wynik zadania: @JOB_RESULT@.
+
+-- de5b426a63be47a7b6ac3eaac82e2f6f
+Subject: Rozpoczęto wykonywanie zadania zatrzymania dla jednostki @UNIT@
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Rozpoczęto wykonywanie zadania zatrzymania dla jednostki @UNIT@.
+
+Identyfikator zadania: @JOB_ID@.
+
+-- 9d1aaa27d60140bd96365438aad20286
+Subject: Ukończono zadanie zatrzymania dla jednostki @UNIT@
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Ukończono zadanie zatrzymania dla jednostki @UNIT@.
+
+Identyfikator zadania: @JOB_ID@, wynik zadania: @JOB_RESULT@.
 
 -- d34d037fff1847e6ae669a370e694725
-Subject: Rozpoczęto ponowne wczytywanie konfiguracji jednostki @UNIT@
+Subject: Rozpoczęto wykonywanie zadania ponownego wczytania dla jednostki @UNIT@
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Jednostka @UNIT@ rozpoczęła ponowne wczytywanie swojej konfiguracji.
+Rozpoczęto wykonywanie zadania ponownego wczytania dla jednostki @UNIT@.
+
+Identyfikator zadania: @JOB_ID@.
 
 -- 7b05ebc668384222baa8881179cfda54
-Subject: Ukończono ponowne wczytywanie konfiguracji jednostki @UNIT@
+Subject: Ukończono zadanie ponownego wczytania dla jednostki @UNIT@
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Jednostka @UNIT@ ukończyła ponowne wczytywanie swojej konfiguracji.
+Ukończono zadanie ponownego wczytania dla jednostki @UNIT@.
 
-Wynik: @RESULT@.
+Identyfikator zadania: @JOB_ID@, wynik zadania: @JOB_RESULT@.
 
 -- 641257651c1b4ec9a8624d7a40a9e1e7
 Subject: Nie można wykonać procesu @EXECUTABLE@
@@ -324,3 +330,61 @@ Documentation: man:systemd-resolved.service(8)
 Kotwica zaufania DNSSEC została unieważniona. Należy skonfigurować nową, albo
 system operacyjny musi zostać zaktualizowany, aby dostarczyć zaktualizowaną
 kotwicę zaufania DNSSEC.
+
+-- 5eb03494b6584870a536b337290809b3
+Subject: Zaplanowano automatyczne ponowne uruchamianie jednostki
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+W wyniki skonfigurowania ustawienia Restart= zaplanowano automatyczne ponowne
+uruchamianie jednostki @UNIT@.
+
+-- ae8f7b866b0347b9af31fe1c80b127c0
+Subject: Zasoby zużyte przez uruchomienie jednostki
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Jednostka @UNIT@ została ukończona, zużywając wskazane zasoby.
+
+-- 7ad2d189f7e94e70a38c781354912448
+Subject: Jednostka się powiodła
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Jednostka @UNIT@ pomyślnie przeszła do stanu „dead” (martwego).
+
+-- d9b373ed55a64feb8242e02dbe79a49c
+Subject: Jednostka się nie powiodła
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Jednostka @UNIT@ przeszła do stanu „failed” (niepowodzenia)
+z wynikiem „@UNIT_RESULT@”.
+
+-- 98e322203f7a4ed290d09fe03c09fe15
+Subject: Proces jednostki zakończył działanie
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Proces @COMMAND@= należący do jednostki @UNIT@ zakończył działanie.
+
+Kod wyjścia procesu: „@EXIT_CODE@”, jego stan wyjścia: @EXIT_STATUS@.
+
+-- 50876a9db00f4c40bde1a2ad381c3a1b
+Subject: System jest skonfigurowany w sposób, który może powodować problemy
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Możliwe są następujące „etykiety”:
+• „split-usr” — /usr jest oddzielnym systemem plików, który nie był
+  zamontowany w czasie uruchomienia systemd,
+• „cgroups-missing” — jądro zostało skompilowane bez obsługi cgroups
+  lub dostęp do oczekiwanych plików interfejsu jest ograniczony,
+• „var-run-bad” — /var/run nie jest dowiązaniem symbolicznym do /run,
+• „overflowuid-not-65534” — identyfikator użytkownika dla „nieznanych”
+  użytkowników (przy wykorzystaniu przestrzeni nazw użytkowników lub NFS)
+  nie wynosi 65534,
+• „overflowgid-not-65534” — identyfikator grupy dla „nieznanych”
+  użytkowników (przy wykorzystaniu przestrzeni nazw użytkowników lub NFS)
+  nie wynosi 65534.
+Obecny system ma etykietę „@TAINT@”.

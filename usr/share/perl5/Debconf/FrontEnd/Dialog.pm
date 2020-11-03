@@ -101,6 +101,21 @@ sub sizetext {
 }
 
 
+sub ellipsize {
+	my $this=shift;
+	my $text=shift;
+
+	return $text if $this->program ne 'whiptail';
+
+	$columns = $this->screenwidth - $this->borderwidth - $this->columnspacer - $this->selectspacer;
+	if (width($text) > $columns) {
+		$columns -= 3;
+		$text = (split(/\n/, wrap('', '', $text), 2))[0] . '...';
+	}
+	return $text;
+}
+
+
 sub hide_escape {
 	my $line = $_;
 

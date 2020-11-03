@@ -6,6 +6,7 @@ package Debconf::Element::Dialog::Select;
 use strict;
 use base qw(Debconf::Element::Select);
 use Debconf::Encoding qw(width);
+use Debconf::Log qw(debug);
 
 
 sub show {
@@ -27,11 +28,22 @@ sub show {
 	$lines=$lines + $menu_height + $this->frontend->spacer;
 	my $c=1;
 	my $selectspacer = $this->frontend->selectspacer;
+	my %unellipsized;
 	foreach (@choices) {
-		push @params, $_, '';
+		my $choice = $this->frontend->ellipsize($_);
+
+		if (exists $unellipsized{$choice}) {
+			debug 'developer' => sprintf
+				'Ambiguous ellipsized choice "%s": "%s" or "%s".  Overflow.',
+				$choice, $unellipsized{$choice}, $_;
+			$choice = $_;
+		}
+		$unellipsized{$choice} = $_;
+
+		push @params, $choice, '';
 		
-		if ($columns < width($_) + $selectspacer) {
-			$columns = width($_) + $selectspacer;
+		if ($columns < width($choice) + $selectspacer) {
+			$columns = width($choice) + $selectspacer;
 		}
 	}
 	
@@ -44,7 +56,7 @@ sub show {
 
 	my $value=$this->frontend->showdialog($this->question, @params);
 	if (defined $value) {
-		$this->value($this->translate_to_C($value)) if defined $value;
+		$this->value($this->translate_to_C($unellipsized{$value}));
 	}
 	else {
 		my $default='';

@@ -1,7 +1,8 @@
 ## Here is an example for Ruby.
 
-syntax "ruby" "\.rb$"
-header "^#!.*ruby[-0-9._]*"
+syntax ruby "\.rb$"
+header "^#!.*ruby"
+magic "Ruby script"
 linter ruby -w -c
 comment "#"
 
@@ -27,8 +28,8 @@ color brightgreen "#\{[^}]*\}"
 # Strings, single-quoted.
 color green "'([^']|(\\'))*'" "%[qw]\{[^}]*\}" "%[qw]\([^)]*\)" "%[qw]<[^>]*>" "%[qw]\[[^]]*\]" "%[qw]\$[^$]*\$" "%[qw]\^[^^]*\^" "%[qw]![^!]*!"
 # Comments.
-color cyan "#[^{].*$" "#$"
-color brightcyan "##[^{].*$" "##$"
+color cyan "#[^{].*" "#$"
+color brightcyan "##[^{].*" "##$"
 # "Here" docs.
 color green start="<<-?'?EOT'?" end="^EOT"
 # Some common markers.

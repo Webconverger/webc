@@ -18,7 +18,7 @@
 # To add local entries, create a new file
 #   /etc/udev/hwdb.d/71-touchpad-local.hwdb
 # and add your rules there. To load the new rules execute (as root):
-#   udevadm hwdb --update
+#   systemd-hwdb update
 #   udevadm trigger /dev/input/eventXX
 # where /dev/input/eventXX is the touchpad in question. If in
 # doubt, simply use /dev/input/event* to reload all input rules.
@@ -36,14 +36,15 @@
 
 touchpad:i8042:*
 touchpad:rmi:*
+touchpad:usb:*
  ID_INPUT_TOUCHPAD_INTEGRATION=internal
 
 touchpad:bluetooth:*
-touchpad:usb:*
  ID_INPUT_TOUCHPAD_INTEGRATION=external
 
 ###########################################################
-# Apple
+# Wacom
 ###########################################################
-touchpad:usb:v05ac*
- ID_INPUT_TOUCHPAD_INTEGRATION=internal
+touchpad:usb:v056a*
+ ID_INPUT_TOUCHPAD_INTEGRATION=external
+

@@ -9,39 +9,6 @@ if [ "$action" != configure ]; then
 fi
 
 
-# LEGACY: This hasn't been relevant to Debian cron since the last Millenium,
-# but we keep it here to preserve the upgrade path... 
-# Copy existing allow/deny files
-pausemessage="F"
-for fname in allow deny ; do
-    if [ -f $crondir/$fname ] ; then
-	if [ ! -f $/etc/cron.$fname ] ; then
-	    mv $crondir/$fname /etc/cron.$fname
-	    echo " "
-	    echo "Moving $crondir/$fname to /etc/cron.$fname to comply with Debian policy"
-	    pausemessage="T"
-	else
-	    echo " "
-	    echo "Warning:"
-	    echo "Both $crondir/$fname and /etc/cron.$fname exist -- cron will"
-	    echo "use /etc/cron.$fname"
-	    pausemessage="T"
-	fi
-    fi
-done
-
-# Conffiles that are now obsolete
-dpkg-maintscript-helper rm_conffile /etc/cron.monthly/standard "3.0pl1-113" -- "$@"
-dpkg-maintscript-helper rm_conffile /etc/cron.daily/standard "3.0pl1-124" -- "$@"
-# If dpkg-maintscript-helper renames it instead of removing it because it has
-# local modifications, we must rename it back to a valid name, or crond
-# will not accept it. Thanks to Raphaël Hertzog for the tip.
-if [ -e /etc/cron.monthly/standard.dpkg-bak ]; then
-    mv /etc/cron.monthly/standard.dpkg-bak \
-        /etc/cron.monthly/standard-obsolete-please-verify-and-remove
-fi
-
-
 # Add group for crontabs
 getent group crontab > /dev/null 2>&1 || addgroup --system crontab
 
@@ -60,32 +27,76 @@ if [ -d $crondir/crontabs ] ; then
     # It has been disabled to suit cron alternative such as bcron. 
     cd $crondir/crontabs
     set +e
-    ls -1 | xargs -r -n 1 --replace=xxx  chown 'xxx:crontab' 'xxx'
-    ls -1 | xargs -r -n 1 chmod 600
+
+    # Iterate over each entry in the spool directory, perform some sanity
+    # checks (see CVE-2017-9525), and chown/chgroup the crontabs
+    for tab_name in *
+    do
+        [ "$tab_name" = "*" ] && continue
+        tab_links=`stat -c '%h' "$tab_name"`
+        tab_owner=`stat -c '%U' "$tab_name"`
+
+        if [ ! -f "$tab_name" ]
+        then
+            echo "Warning: $tab_name is not a regular file!"
+            continue
+        elif [ "$tab_links" -ne 1 ]
+        then
+            echo "Warning: $tab_name has more than one hard link!"
+            continue
+        elif [ "$tab_owner" != "$tab_name" ]
+        then
+            echo "Warning: $tab_name name differs from owner $tab_owner!"
+            continue
+        fi
+
+		chown "$tab_owner:crontab" "$tab_name"
+		chmod 600 "$tab_name"
+    done
     set -e
 fi
 
 
-# Automatically added by dh_systemd_enable
-# This will only remove masks created by d-s-h on package removal.
-deb-systemd-helper unmask cron.service >/dev/null || true
-
-# was-enabled defaults to true, so new installations run enable.
-if deb-systemd-helper --quiet was-enabled cron.service; then
-	# Enables the unit on first installation, creates new
-	# symlinks on upgrades if the unit file has changed.
-	deb-systemd-helper enable cron.service >/dev/null || true
-else
-	# Update the statefile to add new symlinks (if any), which need to be
-	# cleaned up on purge. Also remove old symlinks.
-	deb-systemd-helper update-state cron.service >/dev/null || true
+# Automatically added by dh_installinit/12.1.1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -x "/etc/init.d/cron" ]; then
+		update-rc.d cron defaults >/dev/null
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		invoke-rc.d --skip-systemd-native cron $_dh_action || exit 1
+	fi
 fi
 # End automatically added section
-# Automatically added by dh_installinit
-if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
-	if [ -x "/etc/init.d/cron" ]; then
-		update-rc.d cron start 89 2 3 4 5 . >/dev/null
-		invoke-rc.d cron start || exit $?
+# Automatically added by dh_installsystemd/12.1.1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	# This will only remove masks created by d-s-h on package removal.
+	deb-systemd-helper unmask 'cron.service' >/dev/null || true
+
+	# was-enabled defaults to true, so new installations run enable.
+	if deb-systemd-helper --quiet was-enabled 'cron.service'; then
+		# Enables the unit on first installation, creates new
+		# symlinks on upgrades if the unit file has changed.
+		deb-systemd-helper enable 'cron.service' >/dev/null || true
+	else
+		# Update the statefile to add new symlinks (if any), which need to be
+		# cleaned up on purge. Also remove old symlinks.
+		deb-systemd-helper update-state 'cron.service' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installsystemd/12.1.1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'cron.service' >/dev/null || true
 	fi
 fi
 # End automatically added section

@@ -20,7 +20,7 @@ in_debootstrap() {
     return 0
   fi
   return 1
-} 
+}
 
 can_start_udevd() {
   if [ ! -d /sys/class/ ]; then
@@ -42,11 +42,6 @@ update_initramfs() {
 }
 
 upgrade_fixes() {
-  if dpkg --compare-versions "$2" lt "204-1"; then
-    # We dropped udev-mtab with udev 204.
-    update-rc.d udev-mtab remove
-  fi
-
   if dpkg --compare-versions "$2" lt "226-1"; then
     update-rc.d udev-finish remove
   fi
@@ -90,29 +85,15 @@ Driver=virtio_net
 NamePolicy=onboard kernel
 EOF
   fi
+
+  # new Default-Stop (see #791944)
+  if dpkg --compare-versions "$2" lt-nl "239-8"; then
+    update-rc.d -f udev remove
+  fi
 }
 
 update_hwdb() {
   systemd-hwdb --usr update || true
-}
-
-# In udev-204, we ship systemd-udevd.service (upstream name), whereas previous
-# versions used udev.service. We replace udev.service with a symlink to
-# systemd-udevd.service, but systemd (both 44 and 204) exposes weird behavior:
-# After a daemon-reload, it forgets about the /sbin/udevd process in the
-# udev.service cgroup, so a restart will lead to having two udevd processes
-# running — one in the udev.service cgroup and one in the systemd-udevd.service
-# cgroup.
-#
-# To fix this, we explicitly stop udev.service and the corresponding sockets,
-# then issue the daemon-reload, then restart the new systemd-udevd.service (via
-# invoke-rc.d).
-handle_service_rename() {
-  if dpkg --compare-versions "$2" lt "204-1"; then
-    if [ -d /run/systemd/system ]; then
-      systemctl stop udev.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || true
-    fi
-  fi
 }
 
 case "$1" in
@@ -121,7 +102,13 @@ case "$1" in
     update_hwdb
 
     # Add new system group used by udev rules
-    addgroup --system input
+    addgroup --quiet --system input
+
+    # Make /dev/kvm accessible to kvm group
+    addgroup --quiet --system kvm
+
+    # Make /dev/dri/renderD* accessible to render group
+    addgroup --quiet --system render
 
     if [ -z "$2" ]; then # first install
       if ! chrooted && ! in_debootstrap; then
@@ -131,9 +118,6 @@ case "$1" in
       upgrade_fixes "$@"
       if ! chrooted; then
 	if can_start_udevd; then
-	  handle_service_rename
-	  # This is necessary for the handle_service_rename case, but does not
-	  # hurt in general (invoke-rc.d does it, too).
 	  if [ -d /run/systemd/system ] ; then
 	    systemctl daemon-reload || true
 	  fi
@@ -151,33 +135,22 @@ case "$1" in
     ;;
 esac
 
-# Automatically added by dh_installinit
-if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+# Automatically added by dh_installdeb/12.1.1
+dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1\~ -- "$@"
+dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init/udev.conf 233-1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init/udevmonitor.conf 233-1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init/udevtrigger.conf 233-1\~ -- "$@"
+# End automatically added section
+# Automatically added by dh_installinit/12.1.1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
 	if [ -x "/etc/init.d/udev" ]; then
-		update-rc.d udev defaults >/dev/null || exit $?
+		update-rc.d udev defaults >/dev/null || exit 1
 	fi
 fi
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init.d/udev-mtab 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/udev/links.conf 204-9~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init.d/udev-finish 226-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init/udev-finish.conf 226-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init/udev-fallback-graphics.conf 226-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper symlink_to_dir /usr/share/doc/udev libudev1 221-2~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/modprobe.d/fbdev-blacklist.conf 229-6~ -- "$@"
 # End automatically added section
 
 

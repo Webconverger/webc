@@ -51,7 +51,7 @@ do_stop () {
 			;;
 		esac
 		case "$FSTYPE" in
-		  nfs|nfs4|smbfs|ncp|ncpfs|cifs|coda|ocfs2|gfs|ceph)
+		  nfs|nfs4|smbfs|ncp|ncpfs|cifs|coda|ceph)
 			DIRS="$MTPT $DIRS"
 			;;
 		  proc|procfs|linprocfs|devpts|usbfs|usbdevfs|sysfs)
@@ -60,7 +60,13 @@ do_stop () {
 		esac
 		case "$OPTS" in
 		  _netdev|*,_netdev|_netdev,*|*,_netdev,*)
-			DIRS="$MTPT $DIRS"
+			case "$FSTYPE" in
+			  ocfs2|gfs)
+				;;
+			  *)
+				DIRS="$MTPT $DIRS"
+				;;
+			esac
 			;;
 		esac
 	done < /etc/mtab

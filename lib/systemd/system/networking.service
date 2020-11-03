@@ -2,8 +2,9 @@
 Description=Raise network interfaces
 Documentation=man:interfaces(5)
 DefaultDependencies=no
+Requires=ifupdown-pre.service
 Wants=network.target
-After=local-fs.target network-pre.target apparmor.service systemd-sysctl.service systemd-modules-load.service
+After=local-fs.target network-pre.target apparmor.service systemd-sysctl.service systemd-modules-load.service ifupdown-pre.service
 Before=network.target shutdown.target network-online.target
 Conflicts=shutdown.target
 
@@ -14,7 +15,6 @@ WantedBy=network-online.target
 [Service]
 Type=oneshot
 EnvironmentFile=-/etc/default/networking
-ExecStartPre=-/bin/sh -c '[ "$CONFIGURE_INTERFACES" != "no" ] && [ -n "$(ifquery --read-environment --list --exclude=lo)" ] && udevadm settle'
 ExecStart=/sbin/ifup -a --read-environment
 ExecStop=/sbin/ifdown -a --read-environment --exclude=lo
 RemainAfterExit=true

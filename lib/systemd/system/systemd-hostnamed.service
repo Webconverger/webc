@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -8,21 +10,29 @@
 [Unit]
 Description=Hostname Service
 Documentation=man:systemd-hostnamed.service(8) man:hostname(5) man:machine-info(5)
-Documentation=http://www.freedesktop.org/wiki/Software/systemd/hostnamed
+Documentation=https://www.freedesktop.org/wiki/Software/systemd/hostnamed
 
 [Service]
-ExecStart=/lib/systemd/systemd-hostnamed
 BusName=org.freedesktop.hostname1
-WatchdogSec=3min
 CapabilityBoundingSet=CAP_SYS_ADMIN
-PrivateTmp=yes
+ExecStart=/lib/systemd/systemd-hostnamed
+IPAddressDeny=any
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
 PrivateDevices=yes
 PrivateNetwork=yes
-ProtectSystem=yes
-ProtectHome=yes
+PrivateTmp=yes
 ProtectControlGroups=yes
+ProtectHome=yes
+ProtectKernelModules=yes
 ProtectKernelTunables=yes
-MemoryDenyWriteExecute=yes
-RestrictRealtime=yes
+ProtectSystem=strict
+ReadWritePaths=/etc
 RestrictAddressFamilies=AF_UNIX
-SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io
+RestrictNamespaces=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service sethostname
+WatchdogSec=3min

@@ -1,26 +1,12 @@
-#  This file is part of systemd.
+# SPDX-License-Identifier: LGPL-2.1+
 #
-#  Copyright 2012 Lennart Poettering
-#  Copyright 2013-2015 Sylvain Plantefève
-#
-#  systemd is free software; you can redistribute it and/or modify it
-#  under the terms of the GNU Lesser General Public License as published by
-#  the Free Software Foundation; either version 2.1 of the License, or
-#  (at your option) any later version.
-#
-#  systemd is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#  Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with systemd; If not, see <http://www.gnu.org/licenses/>.
+#  Copyright © 2013-2016 Sylvain Plantefève
 
 # Message catalog for systemd's own messages
 # French translation
 
 # Le format du catalogue de messages est décrit (en anglais) içi :
-# http://www.freedesktop.org/wiki/Software/systemd/catalog
+# https://www.freedesktop.org/wiki/Software/systemd/catalog
 
 -- f77379a8490b408bbe5f6940505a777b
 Subject: Le journal a été démarré
@@ -96,7 +82,7 @@ incriminé, et cela devrait être notifié à son concepteur comme un défaut (b
 Subject: Une nouvelle session @SESSION_ID@ a été créée pour l'utilisateur @USER_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Une nouvelle session a été créée pour l'utilisateur @USER_ID@ avec
 l'identifiant (ID) @SESSION_ID@.
@@ -107,7 +93,7 @@ Le processus maître de la session est @LEADER@.
 Subject: La session @SESSION_ID@ s'est terminée
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 La session d'identifiant (ID) @SESSION_ID@ s'est terminée.
 
@@ -115,7 +101,7 @@ La session d'identifiant (ID) @SESSION_ID@ s'est terminée.
 Subject: Un nouveau poste (seat) @SEAT_ID@ est disponible
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Un nouveau poste (seat) @SEAT_ID@ a été configuré et est maintenant
 disponible.
@@ -124,7 +110,7 @@ disponible.
 Subject: Le poste (seat) @SEAT_ID@ a été retiré
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Le poste (seat) @SEAT_ID@ a été retiré et n'est plus disponible.
 
@@ -148,16 +134,27 @@ Subject: Le démarrage du système est terminé
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Tous les services nécessaires au démarrage du système ont été lancés avec
-succès. Notez que cela ne signifie pas que le système est maintenant au
-repos, car des services peuvent encore être en train de terminer leur
-démarrage.
+Tous les services nécessaires au démarrage du système ont été lancés.
+Notez que cela ne signifie pas que le système est maintenant au repos,
+car des services peuvent encore être en train de terminer leur démarrage.
 
 Le chargement du noyau a nécessité @KERNEL_USEC@ microsecondes.
 
 Le chargement du « RAM disk » initial a nécessité @INITRD_USEC@ microsecondes.
 
 Le chargement de l'espace utilisateur a nécessité @USERSPACE_USEC@ microsecondes.
+
+-- eed00a68ffd84e31882105fd973abdd1
+Subject: Le démarrage du gestionnaire utilisateur est terminé
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+L'instance du gestionnaire d'utilisateurs pour l'utilisateur @_UID@ a été démarrée.
+Tous les services en file d'attente pour démarrer ont été lancés.
+Notez que des services peuvent être encore en train de démarrer,
+ou d'autres être lancés à tout moment ultérieur.
+
+Le démarrage du gestionnaire a nécéssité @USERSPACE_USEC@ microsecondes.
 
 -- 6bbd95ee977941e497c48be27c254128
 Subject: Le système entre dans l'état de repos (sleep state) @SLEEP@
@@ -194,7 +191,7 @@ Subject: L'unité (unit) @UNIT@ a terminé son démarrage
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-L'unité (unit) @UNIT@ a terminé son démarrage, avec le résultat @RESULT@.
+L'unité (unit) @UNIT@ a terminé son démarrage, avec le résultat @JOB_RESULT@.
 
 -- de5b426a63be47a7b6ac3eaac82e2f6f
 Subject: L'unité (unit) @UNIT@ a commencé à s'arrêter
@@ -215,7 +212,7 @@ Subject: L'unité (unit) @UNIT@ a échoué
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-L'unité (unit) @UNIT@ a échoué, avec le résultat @RESULT@.
+L'unité (unit) @UNIT@ a échoué, avec le résultat @JOB_RESULT@.
 
 -- d34d037fff1847e6ae669a370e694725
 Subject: L'unité (unit) @UNIT@ a commencé à recharger sa configuration
@@ -230,7 +227,7 @@ Defined-By: systemd
 Support: https://www.debian.org/support
 
 L'unité (unit) @UNIT@ a terminé de recharger configuration,
-avec le résultat @RESULT@.
+avec le résultat @JOB_RESULT@.
 
 -- 641257651c1b4ec9a8624d7a40a9e1e7
 Subject: Le processus @EXECUTABLE@ n'a pas pu être exécuté
@@ -318,3 +315,36 @@ Documentation: man:systemd-resolved.service(8)
 Une ancre de confiance DNSSEC a été révoquée. Une nouvelle ancre de
 confiance doit être configurée, ou le système d'exploitation a besoin
 d'être mis à jour, pour fournir une version à jour de l'ancre de confiance.
+
+-- 5eb03494b6584870a536b337290809b3
+Subject: Le redémarrage automatique d'une unité (unit) a été planifié
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Le redémarrage automatique de l'unité (unit) @UNIT@ a été planifié, en
+raison de sa configuration avec le paramètre Restart=.
+
+-- ae8f7b866b0347b9af31fe1c80b127c0
+Subject: Ressources consommées durant l'éxécution de l'unité (unit)
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+L'unité (unit) @UNIT@ s'est arrêtée et a consommé les ressources indiquées.
+
+-- 50876a9db00f4c40bde1a2ad381c3a1b
+Subject: Le système est configuré d'une manière qui pourrait causer des problèmes
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Les étiquettes suivantes sont possibles :
+- "split-usr" — /usr est un système de fichiers séparé et nétait pas
+  monté quand systemd a été démarré
+- "cgroups-missing" — le noyau a été compilé sans le support des groupes
+  de contrôle (cgroups) ou l'accès aux fichiers d'interface est restreint
+- "var-run-bad" — /var/run n'est pas un lien symbolique vers /run
+- "overflowuid-not-65534" — l'ID utilisé par le noyau pour l'utilisateur
+  "unknown" (avec NFS ou l'espace de noms utilisateurs) n'est pas 65534
+- "overflowgid-not-65534" — l'ID utilisé par le noyau pour le groupe
+  "unknown" (avec NFS ou l'espace de noms utilisateurs) n'est pas 65534
+
+Le présent système est étiqueté @TAINT@.

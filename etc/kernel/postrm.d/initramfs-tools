@@ -32,4 +32,5 @@ if [ -n "$DEB_MAINT_PARAMS" ]; then
 fi
 
 # delete initramfs
-INITRAMFS_TOOLS_KERNEL_HOOK=1 update-initramfs -d -t -k "${version}" ${bootopt} >&2
+# shellcheck disable=SC2086
+INITRAMFS_TOOLS_KERNEL_HOOK=1 update-initramfs -d -k "${version}" ${bootopt} >&2

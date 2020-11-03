@@ -1,11 +1,6 @@
-#! /bin/sh -e
+#! /bin/sh
 
-# remove the doc dir, if it's still a directory and replace with a symlink
-pkg=`basename $0 .postinst`
-if [ ! -L  /usr/share/doc/$pkg ]; then
-    rm -rf /usr/share/doc/$pkg
-    ln -s cpp /usr/share/doc/$pkg
-fi
+set -e
 
 update-alternatives --quiet \
     --install /usr/bin/cc cc /usr/bin/gcc 20 \

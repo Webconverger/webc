@@ -20,7 +20,11 @@ nlx=/usr/bin/numlockx
             ;;
         *)
             NUMLOCK=on
-            ltd=/usr/sbin/laptop-detect
+            if [ -x /usr/sbin/laptop-detect ];then
+                ltd=/usr/sbin/laptop-detect
+            else
+                ltd=/usr/bin/laptop-detect
+            fi
             [ ! -x $ltd ] || ! $ltd || NUMLOCK=off
             # Enable numlock for USB keyboard on laptop
             if [ -f /bin/udevadm ] ; then

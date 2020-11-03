@@ -69,6 +69,7 @@ installed_services() {
 	    -e's/\bhylafax-server\b/hylafax/g' \
 	    -e's/\bpartimage-server\b/partimaged/g' \
 	    -e's/\bpostgresql-common\b/postgresql/g' \
+	    -e's/\bsamba\b/smbd samba-ad-dc/g' \
 	    -e's/\bsasl2-bin\b/saslauthd/g' \
     )
 
@@ -86,7 +87,7 @@ installed_services() {
 if [ "$1" = "configure" ]
 then
     if [ ! -z "$2" ]; then
-	if dpkg --compare-versions "$2" lt 1.1.3-2; then
+	if dpkg --compare-versions "$2" lt 1.3.1-2; then
 	    db_version 2.0
 
 	    echo -n "Checking for services that may need to be restarted..."
@@ -105,7 +106,9 @@ then
 	    check="$check sfs-server solid-pop3d squid squid3 tac-plus"
 	    check="$check vsftpd wu-ftpd wzdftpd xrdp yardradius yaws"
 
-	    if ! who | awk '{print $2}'|grep -q ':[0-9]'; then
+	    if [ -z "$(who | awk '$2 ~ /console/ && $NF ~ /:[0-9]/ { print $NF }
+                                  $2 ~ /:[0-9]/ { print $2 }')" ]
+	    then
 		check="$check wdm xdm"
 	    fi
 
@@ -174,7 +177,9 @@ then
 		echo "Nothing to restart."
 	    fi
 
-	    if who | awk '{print $2}' | grep -q ':[0-9]'; then
+	    if [ -n "$(who | awk '$2 ~ /console/ && $NF ~ /:[0-9]/ { print $NF }
+                                  $2 ~ /:[0-9]/ { print $2 }')" ]
+	    then
 		dms=""
 		for service in wdm xdm; do
 		    case "$services" in
@@ -192,7 +197,7 @@ then
 	    # Shut down the frontend, to make sure none of the
 	    # restarted services keep a connection open to it
 	    db_stop
-	fi # end upgrading and $2 lt 1.1.3-2
+	fi # end upgrading and $2 lt 1.3.1-2
     fi # Upgrading
 fi
 

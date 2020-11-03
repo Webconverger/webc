@@ -59,18 +59,13 @@ net_ifup() {
     check_program /sbin/ifup
 
     # exit if the interface is not configured as allow-hotplug
-    if ! ifquery --allow hotplug -l | grep -q "^${INTERFACE}\$"; then
+    TARGET_IFACE=$(/sbin/ifquery --allow hotplug -l "$INTERFACE" || true)
+    if [ -z "$TARGET_IFACE" ]; then
         exit 0
     fi
 
     if [ -d /run/systemd/system ]; then
-        exec systemctl --no-block start $(systemd-escape --template ifup@.service $INTERFACE)
-    fi
-
-    local out=$(ps -C ifup ho args)
-    if [ "${out%$INTERFACE*}" != "$out" ]; then
-        mesg "Already ifup-ing interface $INTERFACE"
-        exit 0
+        exec systemctl --no-block start $(systemd-escape --template ifup@.service $TARGET_IFACE)
     fi
 
     wait_for_interface lo
@@ -85,12 +80,6 @@ net_ifdown() {
     # removal by binding the instanced service to the network device
     if [ -d /run/systemd/system ]; then
         exit 0
-    fi
-
-    local out=$(ps -C ifdown ho args)
-    if [ "${out%$INTERFACE*}" != "$out" ]; then
-	mesg "Already ifdown-ing interface $INTERFACE"
-	exit 0
     fi
 
     exec ifdown --allow=hotplug $INTERFACE
@@ -133,7 +122,7 @@ esac
 if [ -d /run/systemd/system ]; then
     do_everything
 else
-    # under sysvinit/upstart we need to fork as we start the long-running
+    # under sysvinit we need to fork as we start the long-running
     # "ifup". but there, forked processes won't get killed.
     # When udev_log="debug" stdout and stderr are pipes connected to udevd.
     # They need to be closed or udevd will wait for this process which will

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2015-2016 Samuel Thibault <samuel.thibault@ens-lyon.org>
+# Copyright (c) 2015-2018 Samuel Thibault <samuel.thibault@ens-lyon.org>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -57,10 +57,38 @@ then
   else
     cat "$FILE"
   fi | (
-    while read LINE
+    IFS=$'\n' read -r LINE
+    EOF=$?
+    while [ "$EOF" = 0 -o -n "$LINE" ]
     do
       # Strip CRs
       LINE=${LINE//$'\015'}
+      # Ignore SUBs
+      LINE=${LINE//$'\032'}
+      # Turn non-breakable spaces into spaces
+      LINE=${LINE//$'\302'$'\240'/ }
+      LINE=${LINE//$'\240'/ }
+
+      # Interpret FFs
+      while [ -n "$LINE" -a -z "${LINE/#$'\014'*}" ]
+      do
+        printf "\\f"
+	LINE=${LINE#$'\014'}
+      done
+
+      # Make sure there is nothing else we don't process
+      if [ -n "$LINE" ]
+      then
+	if [ -z "${LINE/*[$'\000'-$'\037'$'\177']*}" ]
+	then
+	  echo "ERROR: unsupported control character in BRF file" >&2
+	fi
+	if [ -z "${LINE/*[$'\200'-$'\377']*}" ]
+	then
+	  echo "ERROR: unsupported non-ASCII character in BRF file" >&2
+	fi
+      fi
+
       CHARS=$(printf %s "$LINE" | wc -c)
       if [ "$CHARS" -gt 127 ]
       then
@@ -74,12 +102,32 @@ then
       then
 	# Enter transparent mode for $CHARS characters
 	printf "\\033\\\\\\x$(printf %02x $CHARS)\\x00"
-	# Echo those $CHARS characters
-	printf %s "$LINE" | tr " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_{}|~\`abcdefghijklmnopqrstuvwxyz" "\\0V tSQW"$'\004'"gvAT@DP"$'\024'"d"$'\002\006'"\"bB&fF\$a\`Cw4q"$'\020\001\003\021'"1!"$'\023'"3#"$'\022'"2"$'\005\007\025'"5%"$'\027'"7'"$'\026'"6EGrUueRcs0pRsc0"$'\020\001\003\021'"1!"$'\023'"3#"$'\022'"2"$'\005\007\025'"5%"$'\027'"7'"$'\026'"6EGrUue"
+	# Echo those $CHARS characters.
+	# First normalize BRF characters (`a-z{|}~ are non-standard).
+	# Drop unicode patterns with dots 7 or 8 in case the liblouis table happened to erroneously emit one
+	# Drop remaining erroneous multibyte characters
+	# Drop remaining erroneous 1-byte characters
+	# Then turn it into Index 6dots sequences.
+	printf %s "$LINE" | \
+	  tr "\`a-z{|}~" "@A-Z\\[\\\\]_" | \
+	  sed -e 's/[⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿]/ /g' | \
+	  sed -e "s/[^] \!\"#$%&'()*+,.\\/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\\\^_[-]/ /g" | \
+	  tr "\000-\037\177\200-\377" " " | \
+	  tr " \!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[\\\\\\]^_" "\\0V tSQW"$'\004'"gvAT@DP"$'\024'"d"$'\002\006'"\"bB&fF\$a\`Cw4q"$'\020\001\003\021'"1!"$'\023'"3#"$'\022'"2"$'\005\007\025'"5%"$'\027'"7'"$'\026'"6EGrUueRcs0p"
       fi
-      printf "\\r\\n"
+      if [ "$EOF" = 0 ]
+      then
+	printf "\\r\\n"
+      fi
+      IFS=$'\n' read -r LINE
+      EOF=$?
     done
   )
+  if [ $? != 0 ]
+  then
+    printf '\032'
+    exit 1
+  fi
 else
   # not software-translated, send to printer as such
   echo "INFO: Writing text to Index embosser" >&2

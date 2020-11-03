@@ -62,10 +62,20 @@ Config ()
 	# autologin
 	if [ -n "${LIVE_USERNAME}" ]
 	then
+		LIVE_X_SESSION_MANAGER=$(realpath /usr/bin/x-session-manager)
+		case "${LIVE_X_SESSION_MANAGER}" in
+			/usr/bin/startkde)
+				LIVE_SESSION="plasma.desktop"
+				;;
+
+			/usr/bin/startlxqt)
+				LIVE_SESSION="lxqt.desktop"
+				;;
+		esac
 		cat > /etc/sddm.conf << EOF
 [Autologin]
 User=${LIVE_USERNAME}
-Session=plasma.desktop
+Session=${LIVE_SESSION}
 EOF
 	fi
 

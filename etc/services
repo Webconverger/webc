@@ -4,8 +4,8 @@
 # port number for both TCP and UDP; hence, officially ports have two entries
 # even if the protocol doesn't support UDP operations.
 #
-# Updated from http://www.iana.org/assignments/port-numbers and other
-# sources like http://www.freebsd.org/cgi/cvsweb.cgi/src/etc/services .
+# Updated from https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml .
+#
 # New ports will be added on request if they have been officially assigned
 # by IANA and used in the real-world or are needed by a debian package.
 # If you need a huge list of used numbers please install the nmap package.
@@ -37,15 +37,9 @@ nameserver	42/tcp		name		# IEN 116
 whois		43/tcp		nicname
 tacacs		49/tcp				# Login Host Protocol (TACACS)
 tacacs		49/udp
-re-mail-ck	50/tcp				# Remote Mail Checking Protocol
-re-mail-ck	50/udp
 domain		53/tcp				# Domain Name Server
 domain		53/udp
-tacacs-ds	65/tcp				# TACACS-Database Service
-tacacs-ds	65/udp
-bootps		67/tcp				# BOOTP server
 bootps		67/udp
-bootpc		68/tcp				# BOOTP client
 bootpc		68/udp
 tftp		69/udp
 gopher		70/tcp				# Internet Gopher
@@ -54,27 +48,17 @@ http		80/tcp		www		# WorldWideWeb HTTP
 link		87/tcp		ttylink
 kerberos	88/tcp		kerberos5 krb5 kerberos-sec	# Kerberos v5
 kerberos	88/udp		kerberos5 krb5 kerberos-sec	# Kerberos v5
-supdup		95/tcp
-hostnames	101/tcp		hostname	# usually from sri-nic
 iso-tsap	102/tcp		tsap		# part of ISODE
 acr-nema	104/tcp		dicom		# Digital Imag. & Comm. 300
-acr-nema	104/udp		dicom
-csnet-ns	105/tcp		cso-ns		# also used by CSO name server
-csnet-ns	105/udp		cso-ns
-rtelnet		107/tcp				# Remote Telnet
-rtelnet		107/udp
 pop3		110/tcp		pop-3		# POP version 3
 sunrpc		111/tcp		portmapper	# RPC 4.0 portmapper
 sunrpc		111/udp		portmapper
 auth		113/tcp		authentication tap ident
 sftp		115/tcp
 nntp		119/tcp		readnews untp	# USENET News Transfer Protocol
-ntp		123/tcp
 ntp		123/udp				# Network Time Protocol
-pwdgen		129/tcp				# PWDGEN service
-pwdgen		129/udp
-loc-srv		135/tcp		epmap		# Location Service
-loc-srv		135/udp		epmap
+epmap		135/tcp		loc-srv		# DCE endpoint resolution
+epmap		135/udp		loc-srv
 netbios-ns	137/tcp				# NETBIOS Name Service
 netbios-ns	137/udp
 netbios-dgm	138/tcp				# NETBIOS Datagram Service
@@ -115,6 +99,8 @@ z3950		210/tcp		wais		# NISO Z39.50 database
 z3950		210/udp		wais
 ipx		213/tcp				# IPX
 ipx		213/udp
+ptp-event	319/udp
+ptp-general	320/udp
 pawserv		345/tcp				# Perf Analysis Workbench
 pawserv		345/udp
 zserv		346/tcp				# Zebra server
@@ -142,7 +128,7 @@ microsoft-ds	445/tcp				# Microsoft Naked CIFS
 microsoft-ds	445/udp
 kpasswd		464/tcp
 kpasswd		464/udp
-urd		465/tcp		ssmtp smtps  # URL Rendesvous Directory for SSM
+submissions	465/tcp		ssmtp smtps urd # Submission over TLS [RFC8314]
 saft		487/tcp			# Simple Asynchronous File Transfer
 saft		487/udp
 isakmp		500/tcp			# IPsec - Internet Security Association
@@ -207,6 +193,8 @@ kerberos-adm	749/tcp				# Kerberos `kadmin' (v5)
 #
 webster		765/tcp				# Network dictionary
 webster		765/udp
+domain-s	853/tcp				# DNS over TLS [RFC7858]
+domain-s	853/udp				# DNS over DTLS [RFC8094]
 rsync		873/tcp
 ftps-data	989/tcp				# FTP over SSL (data)
 ftps		990/tcp
@@ -498,7 +486,6 @@ supfiledbg	1127/tcp			# SUP debugging
 #
 # Services added for the Debian GNU/Linux distribution
 #
-linuxconf	98/tcp				# LinuxConf
 poppassd	106/tcp				# Eudora
 poppassd	106/udp
 moira-db	775/tcp		moira_db	# Moira database

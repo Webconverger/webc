@@ -58,8 +58,10 @@ BEGIN {
     }
 }
 
-# Are we in a container?  Check for $container in pid 1's environment.
+# Are we in a container?  Check for /run/systemd/container or
+# $container variable in pid 1's environment.
 sub in_container {
+    return 1 if -e "/run/systemd/container";
     my $res = 0;
     if (my $fh = new FileHandle('/proc/1/environ', 'r')) {
 	local $/ = "\0";
@@ -98,6 +100,15 @@ sub check {
 	# from a maintainer script.  Also, the automatic title says we are
 	# 'configuring' a package but we're not.
 	($ret) = subst($title, 'package', $ENV{DPKG_MAINTSCRIPT_PACKAGE});
+	if ($ret == 10) {
+	    # debconf only repopulates the template cache during
+	    # package installation and dpkg-reconfigure (and then
+	    # only for the package being configured).  If the
+	    # cache is removed then we won't be able to use our
+	    # template (#908001).  Treat this as non-fatal.
+	    print STDERR "W: debconf template $title is uncached\n";
+	    goto proceed;
+	}
 	if ($ret) {
 	    die "Failed to substitute package name in title: $ret";
 	}
@@ -106,6 +117,10 @@ sub check {
 	    die "Failed to set title: $ret";
 	}
 	($ret) = fset($question, 'seen', 'false');
+	if ($ret == 10) {
+	    print STDERR "W: debconf template $question is uncached\n";
+	    goto proceed;
+	}
 	if ($ret) {
 	    die "Failed to reset seen flag for $question: $ret";
 	}
@@ -136,6 +151,7 @@ sub check {
 	}
     }
 
+  proceed:
     print STDERR "W: Removing the running kernel\n";
     exit 0;
 }

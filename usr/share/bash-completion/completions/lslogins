@@ -35,7 +35,7 @@ _lslogins_module()
 			prefix="${cur%$realcur}"
 			for WORD in $LSLOGINS_COLS_ALL; do
 				if ! [[ $prefix == *"$WORD"* ]]; then
-					LSLOGINS_COLS="$WORD $LSLOGINS_COLS"
+					LSLOGINS_COLS="$WORD ${LSLOGINS_COLS:-""}"
 				fi
 			done
 			compopt -o nospace
@@ -59,6 +59,7 @@ _lslogins_module()
 			--noheadings
 			--notruncate
 			--output
+			--output-all
 			--pwd
 			--raw
 			--system-accs

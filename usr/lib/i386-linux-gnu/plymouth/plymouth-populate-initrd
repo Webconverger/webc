@@ -168,7 +168,7 @@ rev_lib_symlinks() {
 # It handles making symlinks according to how the original library
 # is referenced.
 inst_library() {
-    local _src="$1" _dest=${2:-$1} _lib _reallib _symlink
+    local _src="$1" _dest=${2:-$1} _reallib _symlink
     strstr "$1" "/" || return 1
     [[ -e $initdir/$_dest ]] && return 0
     if [[ -L $_src ]]; then
@@ -336,11 +336,24 @@ inst_any() {
     return 1
 }
 
+inst_recur() {
+    for x in "${1%/}"/* ; do
+        if [[ -d "$x" ]]; then
+            inst_dir "$x"
+            inst_recur "$x"
+        elif [[ -f "$x" ]]; then
+            inst "$x"
+        else
+            break
+        fi
+    done
+}
+
 function usage() {
-    local output="/dev/stdout"
+    local output="/proc/self/fd/1"
     local rc=0
     if [ "$1" == "error" ]; then
-        output=">&2"
+        output="/proc/self/fd/2"
         rc=1
     fi
 
@@ -392,6 +405,9 @@ fi
 if [ $THEME_OVERRIDE ]; then
     conf=$INITRDDIR/${PLYMOUTH_CONFDIR}/plymouthd.conf
     echo "modifying plymouthd.conf: Theme=$PLYMOUTH_THEME_NAME" >&2
+    # make sure the section and key exist so we can modify them
+    grep -q "^ *\[Daemon\]" $conf || echo "[Daemon]" >> $conf
+    grep -q "^ *Theme *=" $conf || echo "Theme=fade-in" >> $conf
     sed -i "s/^ *Theme *=.*/# theme modified by plymouth-populate-initrd\nTheme=$PLYMOUTH_THEME_NAME/" $conf
 fi
 
@@ -408,10 +424,7 @@ inst ${PLYMOUTH_PLUGIN_PATH}/${PLYMOUTH_MODULE_NAME}.so $INITRDDIR
 inst ${PLYMOUTH_PLUGIN_PATH}/renderers/frame-buffer.so $INITRDDIR
 
 if [ -d ${PLYMOUTH_DATADIR}/plymouth/themes/${PLYMOUTH_THEME_NAME} ]; then
-    for x in ${PLYMOUTH_DATADIR}/plymouth/themes/${PLYMOUTH_THEME_NAME}/* ; do
-        [ ! -f "$x" ] && continue
-        inst $x $INITRDDIR
-    done
+     inst_recur "${PLYMOUTH_DATADIR}/plymouth/themes/${PLYMOUTH_THEME_NAME}"
 fi
 
 if [ -L ${PLYMOUTH_DATADIR}/plymouth/themes/default.plymouth ]; then

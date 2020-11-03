@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -11,7 +13,4 @@ Documentation=man:systemd.special(7)
 DefaultDependencies=no
 Requires=shutdown.target
 After=shutdown.target
-
-[Service]
-Type=oneshot
-ExecStart=/bin/kill -s 58 $MANAGERPID
+SuccessAction=exit-force

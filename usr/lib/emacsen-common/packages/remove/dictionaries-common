@@ -13,15 +13,12 @@ set -e
 # Canadian spelling ;-)
 flavour=$1
 
-# Do nothing for dummy 'emacs' flavour
-if [ ${flavour} = emacs ]; then exit 0; fi
-
 package=dictionaries-common
 destination=/usr/share/${flavour}/site-lisp/${package}
 
 if [ -d $destination ]; then
     echo remove/${package}: Purging byte-compiled files for flavour ${flavour}
-    rm -f ${destination}/*.elc ${destination}/*.el ${destination}/done
+    rm -f ${destination}/*.elc ${destination}/*.el ${destination}/done ${destination}/.nosearch
     rmdir --ignore-fail-on-non-empty ${destination}
 fi
 

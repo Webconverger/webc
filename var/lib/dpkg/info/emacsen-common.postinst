@@ -12,29 +12,10 @@ then
   rm -f /var/lib/emacsen-common/installed-flavors
 fi
 
-# Put debhelper section before emacs-package-install to avoid emacs
-# complaints about missing /usr/local/share/emacs/site-lisp.
+/usr/lib/emacsen-common/emacs-package-install --postinst emacsen-common
 
-# Automatically added by dh_usrlocal
-if [ "$1" = configure ]; then
-(
-	while read line; do
-		set -- $line
-		dir="$1"; mode="$2"; user="$3"; group="$4"
-		if [ ! -e "$dir" ]; then
-			if mkdir "$dir" 2>/dev/null; then
-				chown "$user":"$group" "$dir"
-				chmod "$mode" "$dir"
-			fi
-		fi
-	done
-) << DATA
-/usr/local/share 2775 root staff
-/usr/local/share/emacs 2775 root staff
-/usr/local/share/emacs/site-lisp 2775 root staff
-DATA
-fi
+# Automatically added by dh_installdeb/11.4
+dpkg-maintscript-helper rm_conffile /etc/emacs/site-start.d/00debian-vars.el 3.0.3\~ emacsen-common -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/emacs/site-start.el 3.0.3\~ emacsen-common -- "$@"
 # End automatically added section
 
-
-/usr/lib/emacsen-common/emacs-package-install --postinst emacsen-common

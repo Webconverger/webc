@@ -35,14 +35,14 @@ xkb_symbols "Sundeadkeys" {
 partial alphanumeric_keys
 xkb_symbols "sundeadkeys" {
     include "pt(Sundeadkeys)"
-    name[Group1]="Portuguese (Sun dead keys)";
+    name[Group1]="Portuguese (with Sun dead keys)";
 };
 
 partial alphanumeric_keys
 xkb_symbols "nodeadkeys" {
 
     include "pt(basic)"
-    name[Group1]="Portuguese (eliminate dead keys)";
+    name[Group1]="Portuguese (no dead keys)";
 
     key <AE12> { [ guillemotleft,  guillemotright,        cedilla,           ogonek ] };
     key <AD11> { [          plus,        asterisk,       quotedbl,         quotedbl ] };
@@ -74,7 +74,7 @@ partial alphanumeric_keys
 xkb_symbols "mac_sundeadkeys" {
 
     include "pt(mac)"
-    name[Group1]= "Portuguese (Macintosh, Sun dead keys)";
+    name[Group1]= "Portuguese (Macintosh, with Sun dead keys)";
 
     key <AE12> { [          plus,        asterisk, dead_diaeresis,   dead_diaeresis ] };
     key <AD12> { [    dead_acute,      dead_grave                                   ] };
@@ -85,7 +85,7 @@ partial alphanumeric_keys
 xkb_symbols "mac_nodeadkeys" {
 
     include "pt(mac)"
-    name[Group1]= "Portuguese (Macintosh, eliminate dead keys)";
+    name[Group1]= "Portuguese (Macintosh, no dead keys)";
 
     key <AE12> { [          plus,       asterisk,         quotedbl,        quotedbl ] };
     key <AD12> { [         acute,          grave                                    ] };
@@ -141,7 +141,7 @@ xkb_symbols "nativo" {
     key <AC05> { [            u,               U,               oslash,         Ooblique ] };
     key <AC06> { [            m,               M,                   mu,               mu ] };
     key <AC07> { [            d,               D,                  eth,              ETH ] };
-    key <AC08> { [            s,               S,               ssharp,           ssharp ] };
+    key <AC08> { [            s,               S,               ssharp,       0x01001E9E ] };
     key <AC09> { [            r,               R,           registered,       registered ] };
     key <AC10> { [            n,               N,                  eng,              ENG ] };
     key <AC11> { [   dead_acute,      dead_grave,          dead_macron,       dead_breve ] };
@@ -210,4 +210,46 @@ xkb_symbols "nativo-epo" {
 partial alphanumeric_keys
 	xkb_symbols "sun_type6" {
 	include "sun_vndr/pt(sun_type6)"
+};
+
+//
+// Portuguese Colemak layout.
+//
+partial alphanumeric_keys
+xkb_symbols "colemak" {
+    include "pt(basic)"
+
+    name[Group1]="Portuguese (Colemak)";
+
+    key <AD01>  { [         q,          Q,           at,   Greek_OMEGA ] };
+    key <AD02>  { [         w,          W,      lstroke,       Lstroke ] };
+    key <AD03>  { [         f,          F,      dstroke,   ordfeminine ] };
+    key <AD04>  { [         p,          P,        thorn,         THORN ] };
+    key <AD05>  { [         g,          G,          eng,           ENG ] };
+    key <AD06>  { [         j,          J,    dead_hook,     dead_horn ] };
+    key <AD07>  { [         l,          L,      lstroke,       Lstroke ] };
+    key <AD08>  { [         u,          U,    downarrow,       uparrow ] };
+    key <AD09>  { [         y,          Y,    leftarrow,           yen ] };
+    key <AD10>  { [  ccedilla,   Ccedilla,   dead_acute, dead_doubleacute ] };
+
+    key <AC01>  { [         a,          A,           ae,           AE ] };
+    key <AC02>  { [         r,          R,    paragraph,   registered ] };
+    key <AC03>  { [         s,          S,       ssharp,      section ] };
+    key <AC04>  { [         t,          T,       tslash,       Tslash ] };
+    key <AC05>  { [         d,          D,          eth,          ETH ] };
+    key <AC06>  { [         h,          H,      hstroke,      Hstroke ] };
+    key <AC07>  { [         n,          N,            n,            N ] };
+    key <AC08>  { [         e,          E,     EuroSign,         cent ] };
+    key <AC09>  { [         i,          I,   rightarrow,     idotless ] };
+    key <AC10>  { [         o,          O,       oslash,     Ooblique ] };
+
+    key <AB01>  { [         z,          Z, guillemotleft,        less ] };
+    key <AB02>  { [         x,          X, guillemotright,    greater ] };
+    key <AB03>  { [         c,          C,         cent,    copyright ] };
+    key <AB04>  { [         v,          V, leftdoublequotemark, leftsinglequotemark ]   };
+    key <AB05>  { [         b,          B, rightdoublequotemark, rightsinglequotemark ] };
+    key <AB08>  { [         k,          K,          kra,    ampersand ] };
+    key <AB07>  { [         m,          M,           mu,    masculine ] };
+
+    key <CAPS> { [    BackSpace,    BackSpace,       BackSpace,        BackSpace ] };
 };

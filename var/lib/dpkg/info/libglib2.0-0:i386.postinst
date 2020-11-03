@@ -1,8 +1,12 @@
 #!/bin/sh
 set -e
 
-if [ "$1" = triggered ]; then
-    for trigger in $2; do
+
+handle_triggers () {
+    local trigger
+    local dirs
+
+    for trigger in "$@"; do
         if ! [ -d $trigger ]; then
             continue
         fi
@@ -10,10 +14,10 @@ if [ "$1" = triggered ]; then
           /usr/share/glib-2.0/schemas)
             # This is triggered everytime an application installs a
             # GSettings schema
-            /usr/lib/i386-linux-gnu/glib-2.0/glib-compile-schemas /usr/share/glib-2.0/schemas || true
+            "/usr/lib/i386-linux-gnu/glib-2.0/glib-compile-schemas" /usr/share/glib-2.0/schemas || true
             ;;
 
-          /usr/lib/i386-linux-gnu/gio/modules|/usr/lib/gio/modules)
+          "/usr/lib/i386-linux-gnu/gio/modules"|/usr/lib/gio/modules)
             # This is triggered everytime an application installs a GIO
             # module into /usr/lib/i386-linux-gnu/gio/modules or the
             # backwards-compatible /usr/lib/gio/modules directory
@@ -21,14 +25,18 @@ if [ "$1" = triggered ]; then
             # The /usr/lib/gio/modules directory is no longer shipped by
             # libglib2.0 itself so we need to check to avoid a warning from
             # gio-querymodules
-            dirs=/usr/lib/i386-linux-gnu/gio/modules
-            if [ -d /usr/lib/gio/modules ] && [ $(dpkg --print-architecture) = i386 ]; then
+            dirs="/usr/lib/i386-linux-gnu/gio/modules"
+            if [ -d /usr/lib/gio/modules ] && [ $(dpkg --print-architecture) = "i386" ]; then
                 dirs="$dirs /usr/lib/gio/modules"
             fi
-            /usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules $dirs || true
+            "/usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules" $dirs || true
             ;;
         esac
     done
+}
+
+if [ "$1" = triggered ]; then
+    handle_triggers $2
     exit 0
 fi
 
@@ -36,11 +44,13 @@ fi
 
 # Also handle the initial installation
 if [ -d /usr/share/glib-2.0/schemas ]; then
-    /usr/lib/i386-linux-gnu/glib-2.0/glib-compile-schemas /usr/share/glib-2.0/schemas || true
+    "/usr/lib/i386-linux-gnu/glib-2.0/glib-compile-schemas" /usr/share/glib-2.0/schemas || true
 fi
-if [ -d /usr/lib/i386-linux-gnu/gio/modules ]; then
-    /usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules /usr/lib/i386-linux-gnu/gio/modules || true
+if [ -d "/usr/lib/i386-linux-gnu/gio/modules" ]; then
+    "/usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules" "/usr/lib/i386-linux-gnu/gio/modules" || true
 fi
-if [ -d /usr/lib/gio/modules ] && [ $(dpkg --print-architecture) = i386 ]; then
-    /usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules /usr/lib/gio/modules || true
+if [ -d /usr/lib/gio/modules ] && [ $(dpkg --print-architecture) = "i386" ]; then
+    "/usr/lib/i386-linux-gnu/glib-2.0/gio-querymodules" /usr/lib/gio/modules || true
 fi
+
+# vim:set sw=4 sts=4 et:

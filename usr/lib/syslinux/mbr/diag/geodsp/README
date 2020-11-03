@@ -1,0 +1,53 @@
+GeoDsp: Images to display the geometry as the BIOS has choosen to
+interpret it.  Both images are intended to be written to the first ~8MiB
+of a raw device (ie /dev/hda, /dev/sda) and be over one large cylinder
+of 255*63 512-byte sectors in size.
+
+To save the existing data for restore later:
+
+	dd bs=1M iflag=fullblock count=8 if=/dev/sda of=sda.img
+
+GeoDsp1S is a one-sector variant containing all code in one sector that
+is intended to test behavior with a typical MBR/partition table layout. 
+A partition table should be written after writting an image.
+
+GeoDspMS is a multi sector variant intended to look like Syslinux
+installed on a file system on the raw device (as opposed to a file
+system within a partition).
+
+GeoDspMS can also be used to attempt to make the boot sector look like a
+normal file system's boot sector (ie FAT12/FAT16/FAT32).  In order to do
+this, you must first save a portion the existing boot sector (the
+majority of the BIOS parameter block).
+
+	dd bs=1 skip=3 count=87 if=/dev/sda1 of=sda1.bpb
+	dd conv=notrunc if=geodspms.img of=/dev/sda1
+	dd conv=notrunc bs=1 seek=3 count=87 if=sda1.bpb of=/dev/sda1
+
+	dd bs=1 skip=3 count=87 if=/dev/fd0 of=fd0.bpb
+	dd conv=notrunc if=geodspms.img of=/dev/fd0
+	dd conv=notrunc bs=1 seek=3 count=87 if=fd0.bpb of=/dev/fd0
+
+
+Sample output:
+
+	CHS 0081,FE,3F
+	@CHS 0000,01,01:0000003F
+	@CHS 0001,00,01:00003EC1
+	@EDD 0000003F:0000003E
+	@EDD 00003EC1:00003EC1
+	D=EDD
+	end
+
+The first line is the interpreted geometry per INT 13h AH=08h,DI=00h (in
+hex).  The second line is the data value at the sector CHS 0,1,1
+(indicating effective sectors per track).  The third line is the data
+value at CHS 1,0,1 (indicating effective heads per head count).  The
+fourth line indicates the value read at LBA 63.  The fifth line
+indicates the value read at LBA 16065.  The sixth line indicates the
+final expected mode.
+
+Images created by the Perl variant up to and including 6.03 are off by
+one and shifted by one byte.  In the above, the second line might read
+"00003E00" instead of "0000003F".
+

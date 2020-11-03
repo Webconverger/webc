@@ -1,24 +1,9 @@
-#  This file is part of systemd.
-#
-#  Copyright 2012 Lennart Poettering
-#
-#  systemd is free software; you can redistribute it and/or modify it
-#  under the terms of the GNU Lesser General Public License as published by
-#  the Free Software Foundation; either version 2.1 of the License, or
-#  (at your option) any later version.
-#
-#  systemd is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#  Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with systemd; If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: LGPL-2.1+
 
 # Message catalog for systemd's own messages
 
 # The catalog format is documented on
-# http://www.freedesktop.org/wiki/Software/systemd/catalog
+# https://www.freedesktop.org/wiki/Software/systemd/catalog
 
 # For an explanation why we do all this, see https://xkcd.com/1024/
 
@@ -67,7 +52,8 @@ dropped, other services' messages are unaffected.
 
 The limits controlling when messages are dropped may be configured
 with RateLimitIntervalSec= and RateLimitBurst= in
-/etc/systemd/journald.conf. See journald.conf(5) for details.
+/etc/systemd/journald.conf or LogRateLimitIntervalSec= and LogRateLimitBurst=
+in the unit file. See journald.conf(5) and systemd.exec(5) for details.
 
 -- e9bf28e6e834481bb6f48f548ad13606
 Subject: Journal messages have been missed
@@ -99,23 +85,11 @@ and storage by systemd-coredump(8). Only the first @SIZE_LIMIT@ bytes were
 saved. This core might still be usable, but various tools like gdb(1) will warn
 about the file being truncated.
 
--- fc2e22bc6ee647b6b90729ab34a250b1 de
-Subject: Speicherabbild für Prozess @COREDUMP_PID@ (@COREDUMP_COMM) generiert
-Defined-By: systemd
-Support: https://www.debian.org/support
-Documentation: man:core(5)
-
-Prozess @COREDUMP_PID@ (@COREDUMP_COMM@) ist abgebrochen worden und
-ein Speicherabbild wurde generiert.
-
-Üblicherweise ist dies ein Hinweis auf einen Programmfehler und sollte
-als Fehler dem jeweiligen Hersteller gemeldet werden.
-
 -- 8d45620c1a4348dbb17410da57c60c66
 Subject: A new session @SESSION_ID@ has been created for user @USER_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 A new session with the ID @SESSION_ID@ has been created for the user @USER_ID@.
 
@@ -125,7 +99,7 @@ The leading process of the session is @LEADER@.
 Subject: Session @SESSION_ID@ has been terminated
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 A session with the ID @SESSION_ID@ has been terminated.
 
@@ -133,7 +107,7 @@ A session with the ID @SESSION_ID@ has been terminated.
 Subject: A new seat @SEAT_ID@ is now available
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 A new seat @SEAT_ID@ has been configured and is now available.
 
@@ -141,7 +115,7 @@ A new seat @SEAT_ID@ has been configured and is now available.
 Subject: Seat @SEAT_ID@ has now been removed
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 A seat @SEAT_ID@ has been removed and is no longer available.
 
@@ -172,14 +146,25 @@ Defined-By: systemd
 Support: https://www.debian.org/support
 
 All system services necessary queued for starting at boot have been
-successfully started. Note that this does not mean that the machine is
-now idle as services might still be busy with completing start-up.
+started. Note that this does not mean that the machine is now idle as services
+might still be busy with completing start-up.
 
 Kernel start-up required @KERNEL_USEC@ microseconds.
 
 Initial RAM disk start-up required @INITRD_USEC@ microseconds.
 
 Userspace start-up required @USERSPACE_USEC@ microseconds.
+
+-- eed00a68ffd84e31882105fd973abdd1
+Subject: User manager start-up is now complete
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+The user manager instance for user @_UID@ has been started. All services queued
+for starting have been started. Note that other services might still be starting
+up or be started at any later time.
+
+Startup of the manager took @USERSPACE_USEC@ microseconds.
 
 -- 6bbd95ee977941e497c48be27c254128
 Subject: System sleep state @SLEEP@ entered
@@ -200,63 +185,71 @@ Subject: System shutdown initiated
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Systemd shutdown has been initiated. The shutdown has now begun and
+System shutdown has been initiated. The shutdown has now begun and
 all system services are terminated and all file systems unmounted.
 
 -- 7d4958e842da4a758f6c1cdc7b36dcc5
-Subject: Unit @UNIT@ has begun start-up
+Subject: A start job for unit @UNIT@ has begun execution
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Unit @UNIT@ has begun starting up.
+A start job for unit @UNIT@ has begun execution.
+
+The job identifier is @JOB_ID@.
 
 -- 39f53479d3a045ac8e11786248231fbf
-Subject: Unit @UNIT@ has finished start-up
+Subject: A start job for unit @UNIT@ has finished successfully
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Unit @UNIT@ has finished starting up.
+A start job for unit @UNIT@ has finished successfully.
 
-The start-up result is @RESULT@.
-
--- de5b426a63be47a7b6ac3eaac82e2f6f
-Subject: Unit @UNIT@ has begun shutting down
-Defined-By: systemd
-Support: https://www.debian.org/support
-
-Unit @UNIT@ has begun shutting down.
-
--- 9d1aaa27d60140bd96365438aad20286
-Subject: Unit @UNIT@ has finished shutting down
-Defined-By: systemd
-Support: https://www.debian.org/support
-
-Unit @UNIT@ has finished shutting down.
+The job identifier is @JOB_ID@.
 
 -- be02cf6855d2428ba40df7e9d022f03d
-Subject: Unit @UNIT@ has failed
+Subject: A start job for unit @UNIT@ has failed
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Unit @UNIT@ has failed.
+A start job for unit @UNIT@ has finished with a failure.
 
-The result is @RESULT@.
+The job identifier is @JOB_ID@ and the job result is @JOB_RESULT@.
+
+-- de5b426a63be47a7b6ac3eaac82e2f6f
+Subject: A stop job for unit @UNIT@ has begun execution
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+A stop job for unit @UNIT@ has begun execution.
+
+The job identifier is @JOB_ID@.
+
+-- 9d1aaa27d60140bd96365438aad20286
+Subject: A stop job for unit @UNIT@ has finished
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+A stop job for unit @UNIT@ has finished.
+
+The job identifier is @JOB_ID@ and the job result is @JOB_RESULT@.
 
 -- d34d037fff1847e6ae669a370e694725
-Subject: Unit @UNIT@ has begun reloading its configuration
+Subject: A reload job for unit @UNIT@ has begun execution
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Unit @UNIT@ has begun reloading its configuration
+A reload job for unit @UNIT@ has begun execution.
+
+The job identifier is @JOB_ID@.
 
 -- 7b05ebc668384222baa8881179cfda54
-Subject: Unit @UNIT@ has finished reloading its configuration
+Subject: A reload job for unit @UNIT@ has finished
 Defined-By: systemd
 Support: https://www.debian.org/support
 
-Unit @UNIT@ has finished reloading its configuration
+A reload job for unit @UNIT@ has finished.
 
-The result is @RESULT@.
+The job identifier is @JOB_ID@ and the job result is @JOB_RESULT@.
 
 -- 641257651c1b4ec9a8624d7a40a9e1e7
 Subject: Process @EXECUTABLE@ could not be executed
@@ -343,3 +336,58 @@ Documentation: man:systemd-resolved.service(8)
 A DNSSEC trust anchor has been revoked. A new trust anchor has to be
 configured, or the operating system needs to be updated, to provide an updated
 DNSSEC trust anchor.
+
+-- 5eb03494b6584870a536b337290809b3
+Subject: Automatic restarting of a unit has been scheduled
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Automatic restarting of the unit @UNIT@ has been scheduled, as the result for
+the configured Restart= setting for the unit.
+
+-- ae8f7b866b0347b9af31fe1c80b127c0
+Subject: Resources consumed by unit runtime
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+The unit @UNIT@ completed and consumed the indicated resources.
+
+-- 7ad2d189f7e94e70a38c781354912448
+Subject: Unit succeeded
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+The unit @UNIT@ has successfully entered the 'dead' state.
+
+-- d9b373ed55a64feb8242e02dbe79a49c
+Subject: Unit failed
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+The unit @UNIT@ has entered the 'failed' state with result '@UNIT_RESULT@'.
+
+-- 98e322203f7a4ed290d09fe03c09fe15
+Subject: Unit process exited
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+An @COMMAND@= process belonging to unit @UNIT@ has exited.
+
+The process' exit code is '@EXIT_CODE@' and its exit status is @EXIT_STATUS@.
+
+-- 50876a9db00f4c40bde1a2ad381c3a1b
+Subject: The system is configured in a way that might cause problems
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+The following "tags" are possible:
+- "split-usr" — /usr is a separate file system and was not mounted when systemd
+  was booted
+- "cgroups-missing" — the kernel was compiled without cgroup support or access
+  to expected interface files is resticted
+- "var-run-bad" — /var/run is not a symlink to /run
+- "overflowuid-not-65534" — the kernel user ID used for "unknown" users (with
+  NFS or user namespaces) is not 65534
+- "overflowgid-not-65534" — the kernel group ID used for "unknown" users (with
+  NFS or user namespaces) is not 65534
+Current system is tagged as @TAINT@.

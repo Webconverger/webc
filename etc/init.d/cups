@@ -19,7 +19,7 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/sbin/cupsd
 NAME=cupsd
-PIDFILE=/var/run/cups/$NAME.pid
+PIDFILE=/run/cups/$NAME.pid
 DESC="Common Unix Printing System"
 SCRIPTNAME=/etc/init.d/cups
 
@@ -28,8 +28,8 @@ unset TMPDIR
 # Exit if the package is not installed
 test -x $DAEMON || exit 0
 
-mkdir -p /var/run/cups/certs
-[ -x /sbin/restorecon ] && /sbin/restorecon -R /var/run/cups
+mkdir -p /run/cups/certs
+[ -x /sbin/restorecon ] && /sbin/restorecon -R /run/cups
 
 # Define LSB log_* functions.
 # Depend on lsb-base (>= 3.2-14) to ensure that this file is present

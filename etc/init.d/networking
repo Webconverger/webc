@@ -119,9 +119,6 @@ ifup_hotplug () {
 
 case "$1" in
 start)
-	if init_is_upstart; then
-		exit 1
-	fi
 	process_options
 	check_ifstate
 
@@ -133,9 +130,9 @@ start)
 	set -f
 	exclusions=$(process_exclusions)
 	log_action_begin_msg "Configuring network interfaces"
-	if [ -x /sbin/udevadm ]; then
+	if [ -x /bin/udevadm ]; then
 		if [ -n "$(ifquery --list --exclude=lo)" ] || [ -n "$(ifquery --list --allow=hotplug)" ]; then
-			udevadm settle || true
+			/bin/udevadm settle || true
 		fi
 	fi
 	if ifup -a $exclusions $verbose && ifup_hotplug $exclusions $verbose
@@ -147,9 +144,6 @@ start)
 	;;
 
 stop)
-	if init_is_upstart; then
-		exit 0
-	fi
 	check_network_file_systems
 	check_network_swap
 
@@ -162,9 +156,6 @@ stop)
 	;;
 
 reload)
-	if init_is_upstart; then
-		exit 1
-	fi
 	process_options
 
 	log_action_begin_msg "Reloading network interfaces configuration"
@@ -178,9 +169,6 @@ reload)
 	;;
 
 force-reload|restart)
-	if init_is_upstart; then
-		exit 1
-	fi
 	process_options
 
 	log_warning_msg "Running $0 $1 is deprecated because it may not re-enable some interfaces"

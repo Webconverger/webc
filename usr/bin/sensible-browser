@@ -1,32 +1,34 @@
 #!/bin/sh
 
-URL="$1"
+# Prevent recursive loops, where these values are set to this script
+p="$(which sensible-browser)"
+[ "$(which $BROWSER || true)" = "$p" ] && BROWSER=
 
 if test -n "$BROWSER"; then
-    ${BROWSER} "$1"
+    ${BROWSER} "$@"
     ret="$?"
     if [ "$ret" -ne 126 ] && [ "$ret" -ne 127 ]; then
-       exit "$ret"
+	exit "$ret"
     fi
 fi
 
 if test -n "$DISPLAY"; then
     if test -n "$GNOME_DESKTOP_SESSION_ID"; then
         if test -x /usr/bin/gnome-www-browser; then
-            exec /usr/bin/gnome-www-browser ${URL:+"$URL"}
+            exec /usr/bin/gnome-www-browser "$@"
         elif test -x /usr/bin/x-www-browser; then
-            exec /usr/bin/x-www-browser ${URL:+"$URL"}
+            exec /usr/bin/x-www-browser "$@"
         elif test -x /usr/bin/gnome-terminal && test -x /usr/bin/www-browser; then
-            exec /usr/bin/gnome-terminal -e "/usr/bin/www-browser ${URL:+\"$URL\"}"
+            exec /usr/bin/gnome-terminal -x /usr/bin/www-browser "$@"
         fi
     fi
     if test -x /usr/bin/x-www-browser; then
-        exec /usr/bin/x-www-browser ${URL:+"$URL"}
+        exec /usr/bin/x-www-browser "$@"
     elif test -x /usr/bin/x-terminal-emulator && test -x /usr/bin/www-browser; then
-        exec /usr/bin/x-terminal-emulator -e /usr/bin/www-browser ${URL:+"$URL"}
+        exec /usr/bin/x-terminal-emulator -x /usr/bin/www-browser "$@"
     fi
 elif test -x /usr/bin/www-browser; then
-    exec /usr/bin/www-browser ${URL:+"$URL"}
+    exec /usr/bin/www-browser "$@"
 fi
 
 printf "Couldn't find a suitable web browser!\n" >&2

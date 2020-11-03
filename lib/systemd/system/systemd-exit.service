@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -6,12 +8,9 @@
 #  (at your option) any later version.
 
 [Unit]
-Description=Exit the Session
+Description=Exit the Container
 Documentation=man:systemd.special(7)
 DefaultDependencies=no
-Requires=shutdown.target
-After=shutdown.target
-
-[Service]
-Type=oneshot
-ExecStart=/bin/systemctl --force exit
+Requires=shutdown.target umount.target final.target
+After=shutdown.target umount.target final.target
+SuccessAction=exit-force

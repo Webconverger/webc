@@ -4,6 +4,11 @@
 
 set -e
 
+if [ -d /run/systemd/system ]; then
+    # Skip in favour of systemd timer.
+    exit 0
+fi
+
 iosched_idle=
 # Don't try to change I/O priority in a vserver or OpenVZ.
 if ! egrep -q '(envID|VxID):.*[1-9]' /proc/self/status && \

@@ -44,6 +44,7 @@ libnss3.so libnss3 #MINVER#
  CERT_CheckNameSpace@NSS_3.12 2:3.13.4-2~
  CERT_CheckOCSPStatus@NSS_3.14 2:3.14
  CERT_ClearOCSPCache@NSS_3.11.7 2:3.13.4-2~
+ CERT_CompareAVA@NSS_3.30 2:3.30
  CERT_CompareCerts@NSS_3.12.3 2:3.13.4-2~
  CERT_CompareName@NSS_3.2 2:3.13.4-2~
  CERT_CompareValidityTimes@NSS_3.11 2:3.13.4-2~
@@ -129,10 +130,13 @@ libnss3.so libnss3 #MINVER#
  CERT_FindCRLNumberExten@NSS_3.12 2:3.13.4-2~
  CERT_FindCertByDERCert@NSS_3.2 2:3.13.4-2~
  CERT_FindCertByIssuerAndSN@NSS_3.2 2:3.13.4-2~
+ CERT_FindCertByIssuerAndSNCX@NSS_3.33 2:3.33
  CERT_FindCertByName@NSS_3.2 2:3.13.4-2~
  CERT_FindCertByNickname@NSS_3.2 2:3.13.4-2~
  CERT_FindCertByNicknameOrEmailAddr@NSS_3.2 2:3.13.4-2~
+ CERT_FindCertByNicknameOrEmailAddrCX@NSS_3.33 2:3.33
  CERT_FindCertByNicknameOrEmailAddrForUsage@NSS_3.12.9 2:3.13.4-2~
+ CERT_FindCertByNicknameOrEmailAddrForUsageCX@NSS_3.33 2:3.33
  CERT_FindCertBySubjectKeyID@NSS_3.7 2:3.13.4-2~
  CERT_FindCertExtension@NSS_3.4 2:3.13.4-2~
  CERT_FindCertIssuer@NSS_3.3 2:3.13.4-2~
@@ -152,7 +156,10 @@ libnss3.so libnss3 #MINVER#
  CERT_GetAVATag@NSS_3.2 2:3.13.4-2~
  CERT_GetCertChainFromCert@NSS_3.4 2:3.13.4-2~
  CERT_GetCertEmailAddress@NSS_3.2 2:3.13.4-2~
+ CERT_GetCertIsPerm@NSS_3.31 2:3.31
+ CERT_GetCertIsTemp@NSS_3.31 2:3.31
  CERT_GetCertIssuerAndSN@NSS_3.2 2:3.13.4-2~
+ CERT_GetCertKeyType@NSS_3.39 2:3.39
  CERT_GetCertNicknames@NSS_3.2 2:3.13.4-2~
  CERT_GetCertTimes@NSS_3.3 2:3.13.4-2~
  CERT_GetCertTrust@NSS_3.2 2:3.13.4-2~
@@ -326,6 +333,11 @@ libnss3.so libnss3 #MINVER#
  NSS_3.22@NSS_3.22 2:3.22
  NSS_3.2@NSS_3.2 2:3.13.4-2~
  NSS_3.3.1@NSS_3.3.1 2:3.13.4-2~
+ NSS_3.30@NSS_3.30 2:3.30
+ NSS_3.31@NSS_3.31 2:3.31
+ NSS_3.33@NSS_3.33 2:3.33
+ NSS_3.34@NSS_3.34 2:3.34
+ NSS_3.39@NSS_3.39 2:3.39
  NSS_3.3@NSS_3.3 2:3.13.4-2~
  NSS_3.4@NSS_3.4 2:3.13.4-2~
  NSS_3.5@NSS_3.5 2:3.13.4-2~
@@ -409,6 +421,7 @@ libnss3.so libnss3 #MINVER#
  PK11_CreateContextBySymKey@NSS_3.2 2:3.13.4-2~
  PK11_CreateDigestContext@NSS_3.2 2:3.13.4-2~
  PK11_CreateGenericObject@NSS_3.12 2:3.13.4-2~
+ PK11_CreateManagedGenericObject@NSS_3.34 2:3.34
  PK11_CreateMergeLog@NSS_3.12 2:3.13.4-2~
  PK11_CreatePBEAlgorithmID@NSS_3.2 2:3.13.4-2~
  PK11_CreatePBEParams@NSS_3.3.1 2:3.13.4-2~
@@ -450,9 +463,11 @@ libnss3.so libnss3 #MINVER#
  PK11_FindCertFromDERCert@NSS_3.2 2:3.13.4-2~
  PK11_FindCertFromDERCertItem@NSS_3.12.1 2:3.13.4-2~
  PK11_FindCertFromNickname@NSS_3.2 2:3.13.4-2~
+ PK11_FindCertFromURI@NSS_3.31 2:3.31
  PK11_FindCertInSlot@NSS_3.2 2:3.13.4-2~
  PK11_FindCertsFromEmailAddress@NSS_3.12.9 2:3.13.4-2~
  PK11_FindCertsFromNickname@NSS_3.3 2:3.13.4-2~
+ PK11_FindCertsFromURI@NSS_3.31 2:3.31
  PK11_FindFixedKey@NSS_3.2 2:3.13.4-2~
  PK11_FindGenericObjects@NSS_3.9.2 2:3.13.4-2~
  PK11_FindKeyByAnyCert@NSS_3.2 2:3.13.4-2~
@@ -504,6 +519,7 @@ libnss3.so libnss3 #MINVER#
  PK11_GetModInfo@NSS_3.6 2:3.13.4-2~
  PK11_GetModule@NSS_3.3 2:3.13.4-2~
  PK11_GetModuleID@NSS_3.2 2:3.13.4-2~
+ PK11_GetModuleURI@NSS_3.31 2:3.31
  PK11_GetNextGenericObject@NSS_3.9.2 2:3.13.4-2~
  PK11_GetNextSafe@NSS_3.4 2:3.13.4-2~
  PK11_GetNextSymKey@NSS_3.4 2:3.13.4-2~
@@ -528,8 +544,10 @@ libnss3.so libnss3 #MINVER#
  PK11_GetSymKeyUserData@NSS_3.11 2:3.13.4-2~
  PK11_GetTokenInfo@NSS_3.2 2:3.13.4-2~
  PK11_GetTokenName@NSS_3.2 2:3.13.4-2~
+ PK11_GetTokenURI@NSS_3.31 2:3.31
  PK11_GetWindow@NSS_3.2 2:3.13.4-2~
  PK11_GetWrapKey@NSS_3.2 2:3.13.4-2~
+ PK11_HasAttributeSet@NSS_3.30 2:3.30
  PK11_HasRootCerts@NSS_3.4 2:3.13.4-2~
  PK11_HashBuf@NSS_3.2 2:3.13.4-2~
  PK11_IVFromParam@NSS_3.2 2:3.13.4-2~
@@ -818,9 +836,11 @@ libnss3.so libnss3 #MINVER#
  SEC_BooleanTemplate@NSS_3.4 2:3.13.4-2~
  SEC_CertNicknameConflict@NSS_3.3 2:3.13.4-2~
  SEC_CheckCrlTimes@NSS_3.18 2:3.18
+ SEC_CreateSignatureAlgorithmParameters@NSS_3.34 2:3.34
  SEC_DeletePermCRL@NSS_3.2 2:3.13.4-2~
  SEC_DeletePermCertificate@NSS_3.2 2:3.13.4-2~
  SEC_DerSignData@NSS_3.2 2:3.13.4-2~
+ SEC_DerSignDataWithAlgorithmID@NSS_3.34 2:3.34
  SEC_DestroyCrl@NSS_3.2 2:3.13.4-2~
  SEC_DupCrl@NSS_3.9 2:3.13.4-2~
  SEC_FindCrlByDERCert@NSS_3.2 2:3.13.4-2~
@@ -848,6 +868,7 @@ libnss3.so libnss3 #MINVER#
  SEC_RegisterDefaultHttpClient@NSS_3.11.1 2:3.13.4-2~
  SEC_SetOfAnyTemplate@NSS_3.2 2:3.13.4-2~
  SEC_SignData@NSS_3.2 2:3.13.4-2~
+ SEC_SignDataWithAlgorithmID@NSS_3.34 2:3.34
  SEC_SignedCertificateTemplate@NSS_3.4 2:3.13.4-2~
  SEC_UTCTimeTemplate@NSS_3.2 2:3.13.4-2~
  SEC_UTF8StringTemplate@NSS_3.4 2:3.13.4-2~
@@ -860,6 +881,7 @@ libnss3.so libnss3 #MINVER#
  SGN_Digest@NSS_3.2 2:3.13.4-2~
  SGN_End@NSS_3.2 2:3.13.4-2~
  SGN_NewContext@NSS_3.2 2:3.13.4-2~
+ SGN_NewContextWithAlgorithmID@NSS_3.34 2:3.34
  SGN_Update@NSS_3.2 2:3.13.4-2~
  VFY_Begin@NSS_3.2 2:3.13.4-2~
  VFY_CreateContext@NSS_3.2 2:3.13.4-2~
@@ -952,6 +974,12 @@ libnssutil3.so libnss3 #MINVER#
  NSSUTIL_3.17.1@NSSUTIL_3.17.1 2:3.17.1
  NSSUTIL_3.21@NSSUTIL_3.21 2:3.21
  NSSUTIL_3.24@NSSUTIL_3.24 2:3.24
+ NSSUTIL_3.25@NSSUTIL_3.25 2:3.29
+ NSSUTIL_3.31@NSSUTIL_3.31 2:3.31
+ NSSUTIL_3.33@NSSUTIL_3.33 2:3.33
+ NSSUTIL_3.38@NSSUTIL_3.38 2:3.38
+ NSSUTIL_3.39@NSSUTIL_3.39 2:3.39
+ NSSUTIL_AddNSSFlagToModuleSpec@NSSUTIL_3.39 2:3.39
  NSSUTIL_ArgDecodeNumber@NSSUTIL_3.14 2:3.14
  NSSUTIL_ArgFetchValue@NSSUTIL_3.14 2:3.14
  NSSUTIL_ArgGetLabel@NSSUTIL_3.14 2:3.14
@@ -1006,7 +1034,14 @@ libnssutil3.so libnss3 #MINVER#
  NSS_InitializePRErrorTable@NSSUTIL_3.13 2:3.13.4-2~
  NSS_PutEnv_Util@NSSUTIL_3.12 2:3.13.4-2~
  NSS_SecureMemcmp@NSSUTIL_3.12.5 2:3.13.4-2~
+ NSS_SecureMemcmpZero@NSSUTIL_3.33 2:3.33
  NSS_SetAlgorithmPolicy@NSSUTIL_3.12.3 2:3.13.4-2~
+ PK11URI_CreateURI@NSSUTIL_3.31 2:3.31
+ PK11URI_DestroyURI@NSSUTIL_3.31 2:3.31
+ PK11URI_FormatURI@NSSUTIL_3.31 2:3.31
+ PK11URI_GetPathAttribute@NSSUTIL_3.31 2:3.31
+ PK11URI_GetQueryAttribute@NSSUTIL_3.31 2:3.31
+ PK11URI_ParseURI@NSSUTIL_3.31 2:3.31
  PORT_Alloc_Util@NSSUTIL_3.12 2:3.13.4-2~
  PORT_ArenaAlloc_Util@NSSUTIL_3.12 2:3.13.4-2~
  PORT_ArenaGrow_Util@NSSUTIL_3.12 2:3.13.4-2~
@@ -1035,6 +1070,8 @@ libnssutil3.so libnss3 #MINVER#
  PORT_UCS2_ASCIIConversion_Util@NSSUTIL_3.12 2:3.13.4-2~
  PORT_UCS2_UTF8Conversion_Util@NSSUTIL_3.12 2:3.13.4-2~
  PORT_UCS4_UTF8Conversion@NSSUTIL_3.12 2:3.13.4-2~
+ PORT_ZAllocAlignedOffset_Util@NSSUTIL_3.33 2:3.33
+ PORT_ZAllocAligned_Util@NSSUTIL_3.33 2:3.33
  PORT_ZAlloc_Util@NSSUTIL_3.12 2:3.13.4-2~
  PORT_ZFree_Util@NSSUTIL_3.12 2:3.13.4-2~
  SECITEM_AllocArray@NSSUTIL_3.15 2:3.15
@@ -1049,6 +1086,7 @@ libnssutil3.so libnss3 #MINVER#
  SECITEM_Hash@NSSUTIL_3.12 2:3.13.4-2~
  SECITEM_HashCompare@NSSUTIL_3.12 2:3.13.4-2~
  SECITEM_ItemsAreEqual_Util@NSSUTIL_3.12 2:3.13.4-2~
+ SECITEM_MakeItem@NSSUTIL_3.38 2:3.38
  SECITEM_ReallocItem@NSSUTIL_3.12.3 2:3.13.4-2~
  SECITEM_ReallocItemV2@NSSUTIL_3.15 2:3.15
  SECITEM_ZfreeArray@NSSUTIL_3.15 2:3.15
@@ -1076,6 +1114,7 @@ libnssutil3.so libnss3 #MINVER#
  SEC_ASN1DecoderClearNotifyProc_Util@NSSUTIL_3.12 2:3.13.4-2~
  SEC_ASN1DecoderFinish_Util@NSSUTIL_3.12 2:3.13.4-2~
  SEC_ASN1DecoderSetFilterProc_Util@NSSUTIL_3.12 2:3.13.4-2~
+ SEC_ASN1DecoderSetMaximumElementSize@NSSUTIL_3.25 2:3.29
  SEC_ASN1DecoderSetNotifyProc_Util@NSSUTIL_3.12 2:3.13.4-2~
  SEC_ASN1DecoderStart_Util@NSSUTIL_3.12 2:3.13.4-2~
  SEC_ASN1DecoderUpdate_Util@NSSUTIL_3.12 2:3.13.4-2~
@@ -1343,7 +1382,12 @@ libssl3.so libnss3 #MINVER#
  NSS_3.22@NSS_3.22 2:3.22
  NSS_3.23@NSS_3.23 2:3.23
  NSS_3.24@NSS_3.24 2:3.24
+ NSS_3.27@NSS_3.27 2:3.27
+ NSS_3.28@NSS_3.28 2:3.28
  NSS_3.2@NSS_3.2 2:3.13.4-2~
+ NSS_3.30.0.1@NSS_3.30.0.1 2:3.30
+ NSS_3.30@NSS_3.30 2:3.30
+ NSS_3.33@NSS_3.33 2:3.33
  NSS_3.4@NSS_3.4 2:3.13.4-2~
  NSS_3.7.4@NSS_3.7.4 2:3.13.4-2~
  NSS_CmpCertChainWCANames@NSS_3.2 2:3.13.4-2~
@@ -1352,6 +1396,8 @@ libssl3.so libnss3 #MINVER#
  NSS_SetDomesticPolicy@NSS_3.2 2:3.13.4-2~
  NSS_SetExportPolicy@NSS_3.2 2:3.13.4-2~
  NSS_SetFrancePolicy@NSS_3.2 2:3.13.4-2~
+ SSL_AlertReceivedCallback@NSS_3.30.0.1 2:3.30
+ SSL_AlertSentCallback@NSS_3.30.0.1 2:3.30
  SSL_AuthCertificate@NSS_3.2 2:3.13.4-2~
  SSL_AuthCertificateComplete@NSS_3.13.2 2:3.13.4-2~
  SSL_AuthCertificateHook@NSS_3.2 2:3.13.4-2~
@@ -1374,12 +1420,14 @@ libssl3.so libnss3 #MINVER#
  SSL_DHEGroupPrefSet@NSS_3.20 2:3.20
  SSL_DataPending@NSS_3.2 2:3.13.4-2~
  SSL_EnableWeakDHEPrimeGroup@NSS_3.20 2:3.20
+ SSL_ExportEarlyKeyingMaterial@NSS_3.28 2:3.28
  SSL_ExportKeyingMaterial@NSS_3.14 2:3.14
  SSL_ForceHandshake@NSS_3.2 2:3.13.4-2~
  SSL_ForceHandshakeWithTimeout@NSS_3.11.4 2:3.13.4-2~
  SSL_GetChannelInfo@NSS_3.4 2:3.26
  SSL_GetCipherSuiteInfo@NSS_3.4 2:3.24
  SSL_GetClientAuthDataHook@NSS_3.2 2:3.13.4-2~
+ SSL_GetExperimentalAPI@NSS_3.33 2:3.33
  SSL_GetImplementedCiphers@NSS_3.12.6 2:3.13.4-2~
  SSL_GetMaxServerCacheLocks@NSS_3.4 2:3.13.4-2~
  SSL_GetNegotiatedHostInfo@NSS_3.12.6 2:3.13.4-2~
@@ -1396,6 +1444,7 @@ libssl3.so libnss3 #MINVER#
  SSL_InheritMPServerSIDCache@NSS_3.2 2:3.13.4-2~
  SSL_InvalidateSession@NSS_3.2 2:3.13.4-2~
  SSL_LocalCertificate@NSS_3.4 2:3.13.4-2~
+ SSL_NamedGroupConfig@NSS_3.27 2:3.27
  SSL_NumImplementedCiphers@NSS_3.2 2:3.13.4-2~
  SSL_OptionGet@NSS_3.2 2:3.13.4-2~
  SSL_OptionGetDefault@NSS_3.2 2:3.13.4-2~
@@ -1419,6 +1468,7 @@ libssl3.so libnss3 #MINVER#
  SSL_RevealURL@NSS_3.2 2:3.13.4-2~
  SSL_SNISocketConfigHook@NSS_3.12.6 2:3.13.4-2~
  SSL_SecurityStatus@NSS_3.2 2:3.13.4-2~
+ SSL_SendAdditionalKeyShares@NSS_3.28 2:3.28
  SSL_SetCanFalseStartCallback@NSS_3.15.4 2:3.15.4
  SSL_SetDowngradeCheckVersion@NSS_3.23 2:3.23
  SSL_SetMaxServerCacheLocks@NSS_3.4 2:3.13.4-2~
@@ -1426,6 +1476,7 @@ libssl3.so libnss3 #MINVER#
  SSL_SetNextProtoNego@NSS_3.13.2 2:3.13.4-2~
  SSL_SetPKCS11PinArg@NSS_3.2 2:3.13.4-2~
  SSL_SetSRTPCiphers@NSS_3.14 2:3.14
+ SSL_SetSessionTicketKeyPair@NSS_3.30 2:3.30
  SSL_SetSignedCertTimestamps@NSS_3.22 2:3.22
  SSL_SetSockPeerID@NSS_3.2 2:3.13.4-2~
  SSL_SetStapledOCSPResponses@NSS_3.15 2:3.15
@@ -1435,6 +1486,8 @@ libssl3.so libnss3 #MINVER#
  SSL_SignatureMaxCount@NSS_3.21 2:3.21
  SSL_SignaturePrefGet@NSS_3.21 2:3.21
  SSL_SignaturePrefSet@NSS_3.21 2:3.21
+ SSL_SignatureSchemePrefGet@NSS_3.28 2:3.28
+ SSL_SignatureSchemePrefSet@NSS_3.28 2:3.28
  SSL_VersionRangeGet@NSS_3.14 2:3.14
  SSL_VersionRangeGetDefault@NSS_3.14 2:3.14
  SSL_VersionRangeGetSupported@NSS_3.14 2:3.14

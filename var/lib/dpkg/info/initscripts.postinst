@@ -81,86 +81,25 @@ if dpkg --compare-versions "$PREV_VER" lt-nl "2.88dsf-23" ; then
     fi
 fi
 
-#
-# Links in runlevel S
-#
-if [ -x /etc/init.d/mountkernfs.sh ]; then
-update-rc.d mountkernfs.sh         defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/hostname.sh ]; then
-update-rc.d hostname.sh            defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/mountdevsubfs.sh ]; then
-update-rc.d mountdevsubfs.sh       defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/checkroot.sh ]; then
-update-rc.d checkroot.sh           defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/checkroot-bootclean.sh ]; then
-update-rc.d checkroot-bootclean.sh defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/checkfs.sh ]; then
-update-rc.d checkfs.sh             defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/mountall.sh ]; then
-update-rc.d mountall.sh            defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/mountall-bootclean.sh ]; then
-update-rc.d mountall-bootclean.sh  defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/mountnfs.sh ]; then
-update-rc.d mountnfs.sh            defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/mountnfs-bootclean.sh ]; then
-update-rc.d mountnfs-bootclean.sh  defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/bootmisc.sh ]; then
-update-rc.d bootmisc.sh            defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/urandom ]; then
-update-rc.d urandom                defaults >/dev/null || exit $?
-fi
+INITSCRIPTS="mountkernfs.sh brightness hostname.sh mountdevsubfs.sh checkroot.sh \
+	checkroot-bootclean.sh checkfs.sh mountall.sh mountall-bootclean.sh \
+	mountnfs.sh mountnfs-bootclean.sh bootmisc.sh urandom halt reboot \
+	umountroot umountfs umountnfs.sh sendsigs killprocs single motd \
+	bootlogs rc.local rmnologin"
 
-#
-# Links in runlevels other than S
-#
-if [ -x /etc/init.d/halt ]; then
-update-rc.d halt                   defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/reboot ]; then
-update-rc.d reboot                 defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/umountroot ]; then
-update-rc.d umountroot             defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/umountfs ]; then
-update-rc.d umountfs               defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/umountnfs.sh ]; then
-update-rc.d umountnfs.sh           defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/sendsigs ]; then
-update-rc.d sendsigs               defaults >/dev/null || exit $?
-fi
+for F in $INITSCRIPTS; do
+	if [ -x /etc/init.d/$F ]; then
+		update-rc.d $F defaults >/dev/null || exit $?
+	fi
+done
 
-if [ -x /etc/init.d/killprocs ]; then
-update-rc.d killprocs              defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/single ]; then
-update-rc.d single                 defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/motd ]; then
-update-rc.d motd                   defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/bootlogs ]; then
-update-rc.d bootlogs               defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/rc.local ]; then
-update-rc.d rc.local               defaults >/dev/null || exit $?
-fi
-if [ -x /etc/init.d/rmnologin ]; then
-update-rc.d rmnologin              defaults >/dev/null || exit $?
-fi
+mkdir -p /etc/systemd/system
+for F in $INITSCRIPTS; do
+	SERVICE="$(basename $F .sh).service"
+	if [ -x /etc/init.d/$F ] && [ ! -e /etc/systemd/system/$SERVICE ]; then
+		ln -s /dev/null /etc/systemd/system/$SERVICE
+	fi
+done
 
 #
 # Remove scripts that were left behind by older glibc (<< 2.3.2.ds1-12)
@@ -237,6 +176,7 @@ then
 		--install /etc/hurd/runsystem runsystem \
 		/etc/hurd/runsystem.sysv 10 \
 		--slave /sbin/halt halt /sbin/halt-sysv \
+		--slave /sbin/poweroff poweroff /sbin/poweroff-sysv \
 		--slave /sbin/reboot reboot /sbin/reboot-sysv
 	new="$(get_runsystem)"
 
@@ -283,6 +223,8 @@ then
 #
 # By default this script does nothing.
 
+[ -d /etc/boot.d ] && run-parts /etc/boot.d
+
 exit 0
 EOF
 		# make sure it's enabled by default.
@@ -290,14 +232,11 @@ EOF
 	fi
 fi
 
-# Automatically added by dh_installdeb
+# Automatically added by dh_installdeb/12.1
 dpkg-maintscript-helper rm_conffile /etc/init.d/bootlogd 2.88dsf-42 initscripts -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
 dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd 2.88dsf-42 initscripts -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/motd 2.93-3\~ initscripts -- "$@"
 # End automatically added section
 
 

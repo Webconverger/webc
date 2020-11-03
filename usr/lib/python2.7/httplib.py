@@ -247,10 +247,6 @@ _MAXHEADERS = 100
 _is_legal_header_name = re.compile(r'\A[^:\s][^:\r\n]*\Z').match
 _is_illegal_header_value = re.compile(r'\n(?![ \t])|\r(?![ \t\n])').search
 
-# We always set the Content-Length header for these methods because some
-# servers will otherwise respond with a 411
-_METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
-
 # These characters are not allowed within HTTP URL paths.
 #  See https://tools.ietf.org/html/rfc3986#section-3.3 and the
 #  https://tools.ietf.org/html/rfc3986#appendix-A pchar definition.
@@ -260,6 +256,10 @@ _contains_disallowed_url_pchar_re = re.compile('[\x00-\x20\x7f-\xff]')
 # Arguably only these _should_ allowed:
 #  _is_allowed_url_pchars_re = re.compile(r"^[/!$&'()*+,;=:@%a-zA-Z0-9._~-]+$")
 # We are more lenient for assumed real world compatibility purposes.
+
+# We always set the Content-Length header for these methods because some
+# servers will otherwise respond with a 411
+_METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
 
 
 class HTTPMessage(mimetools.Message):
@@ -409,7 +409,7 @@ class HTTPResponse:
         if not line:
             # Presumably, the server closed the connection before
             # sending a valid response.
-            raise BadStatusLine(line)
+            raise BadStatusLine("No status line received - the server has closed the connection")
         try:
             [version, status, reason] = line.split(None, 2)
         except ValueError:

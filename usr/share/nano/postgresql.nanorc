@@ -1,7 +1,6 @@
 ## Here is an example for PostgreSQL.
 
-syntax "sql" "\.sql[2345s~]?$"
-magic "PostgreSQL script text"
+syntax sql "\.sql[2345s~]?$"
 comment "-- "
 
 # Functions.
@@ -60,9 +59,8 @@ color green "'([^']|(\\'))*'" "%[qw]\{[^}]*\}" "%[qw]\([^)]*\)" "%[qw]<[^>]*>"
 color green "%[qw]\[[^]]*\]" "%[qw]\$[^$]*\$" "%[qw]\^[^^]*\^" "%[qw]![^!]*!"
 
 # Comments.
-color red "#[^{].*$" "#$"
-color red "--[^{].*$" "#$"
-color red "##[^{].*$" "##$"
+color red "##?[^{].*" "##?$"
+color red "--[^{].*" "--$"
 color brightblue "//.*"
 color brightblue start="/\*" end="\*/"
 

@@ -5,6 +5,7 @@ Before=systemd-halt.service
 DefaultDependencies=no
 ConditionKernelCommandLine=!plymouth.enable=0
 ConditionKernelCommandLine=!nosplash
+ConditionVirtualization=!container
 
 [Service]
 ExecStart=/sbin/plymouthd --mode=shutdown --attach-to-session

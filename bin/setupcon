@@ -228,7 +228,7 @@ run () {
 # Example: findfile share/consolefonts Uni3-*.psf.gz
 # Result: /usr/share/consolefonts/Uni3-Fixed13.psf.gz
 findfile () {
-    local x
+    local f
     case "$2" in
         /*)
             if [ -f "$2" ]; then
@@ -237,16 +237,20 @@ findfile () {
             fi
             ;;
     esac
-    x=`(ls "$installdir"/$1/$2 \
-           /usr/local/$1/$2 \
-	   /usr/$1/$2 \
-           /etc/console-setup/cached_$2 \
-           /etc/console-setup/$2 \
-           "$installdir"/etc/console-setup/cached_$2 \
-           "$installdir"/etc/console-setup/$2) 2>/dev/null`
-    x=`echo $x`
-    [ "${x%% *}" ] || report Unable to find "$2".
-    echo "${x%% *}"
+    for f in "$installdir"/$1/$2 \
+                          /usr/local/$1/$2 \
+                          /usr/$1/$2 \
+                          /etc/console-setup/cached_$2 \
+                          /etc/console-setup/$2 \
+                          "$installdir"/etc/console-setup/cached_$2 \
+                          "$installdir"/etc/console-setup/$2
+    do
+        if [ -f "$f" ]; then
+            echo "$f"
+            return 0
+        fi
+    done
+    report Unable to find "$2".
 }
 
 # Return code 0: we are on the console; 1: we are not on the console

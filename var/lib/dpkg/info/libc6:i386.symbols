@@ -1,5 +1,5 @@
 ld-linux.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.3@GLIBC_2.3 2.3
@@ -8,20 +8,26 @@ ld-linux.so.2 libc6 #MINVER#
  ___tls_get_addr@GLIBC_2.3 2.3
  __get_cpu_features@GLIBC_PRIVATE 0 1
  __libc_enable_secure@GLIBC_PRIVATE 0 1
- __libc_memalign@GLIBC_2.0 2.0
  __libc_stack_end@GLIBC_2.1 2.1
  __tls_get_addr@GLIBC_2.3 2.3.6-6~
+ __tunable_get_val@GLIBC_PRIVATE 0 1
  _dl_allocate_tls@GLIBC_PRIVATE 0 1
  _dl_allocate_tls_init@GLIBC_PRIVATE 0 1
  _dl_argv@GLIBC_PRIVATE 0 1
+ _dl_catch_error@GLIBC_PRIVATE 0 1
+ _dl_catch_exception@GLIBC_PRIVATE 0 1
  _dl_deallocate_tls@GLIBC_PRIVATE 0 1
  _dl_debug_state@GLIBC_PRIVATE 0 1
+ _dl_exception_create@GLIBC_PRIVATE 0 1
+ _dl_exception_create_format@GLIBC_PRIVATE 0 1
+ _dl_exception_free@GLIBC_PRIVATE 0 1
  _dl_find_dso_for_object@GLIBC_PRIVATE 0 1
  _dl_get_tls_static_info@GLIBC_PRIVATE 0 1
  _dl_make_stack_executable@GLIBC_PRIVATE 0 1
  _dl_mcount@GLIBC_2.1 2.1
  _dl_rtld_di_serinfo@GLIBC_PRIVATE 0 1
- _dl_tls_setup@GLIBC_PRIVATE 0 1
+ _dl_signal_error@GLIBC_PRIVATE 0 1
+ _dl_signal_exception@GLIBC_PRIVATE 0 1
  _r_debug@GLIBC_2.0 2.0
  _rtld_global@GLIBC_PRIVATE 0 1
  _rtld_global_ro@GLIBC_PRIVATE 0 1
@@ -30,20 +36,20 @@ ld-linux.so.2 libc6 #MINVER#
  malloc@GLIBC_2.0 2.0
  realloc@GLIBC_2.0 2.0
 libBrokenLocale.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  __ctype_get_mb_cur_max@GLIBC_2.0 2.0
 libSegFault.so libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
 libanl.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.2.3@GLIBC_2.2.3 2.2.3
  gai_cancel@GLIBC_2.2.3 2.2.3
  gai_error@GLIBC_2.2.3 2.2.3
  gai_suspend@GLIBC_2.2.3 2.2.3
  getaddrinfo_a@GLIBC_2.2.3 2.2.3
 libc.so.6 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GCC_3.0@GCC_3.0 2.3.6
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.1.1@GLIBC_2.1.1 2.1.1
@@ -67,6 +73,10 @@ libc.so.6 libc6 #MINVER#
  GLIBC_2.22@GLIBC_2.22 2.22
  GLIBC_2.23@GLIBC_2.23 2.23
  GLIBC_2.24@GLIBC_2.24 2.24
+ GLIBC_2.25@GLIBC_2.25 2.25
+ GLIBC_2.26@GLIBC_2.26 2.26
+ GLIBC_2.27@GLIBC_2.27 2.27
+ GLIBC_2.28@GLIBC_2.28 2.28
  GLIBC_2.2@GLIBC_2.2 2.2
  GLIBC_2.3.2@GLIBC_2.3.2 2.3.2
  GLIBC_2.3.3@GLIBC_2.3.3 2.3.3
@@ -94,6 +104,7 @@ libc.so.6 libc6 #MINVER#
  _IO_do_write@GLIBC_2.0 2.0
  _IO_do_write@GLIBC_2.1 2.1
  _IO_doallocbuf@GLIBC_2.0 2.0
+ _IO_enable_locks@GLIBC_PRIVATE 0 1
  _IO_fclose@GLIBC_2.0 2.0
  _IO_fclose@GLIBC_2.1 2.1
  _IO_fdopen@GLIBC_2.0 2.0
@@ -263,7 +274,7 @@ libc.so.6 libc6 #MINVER#
  __clock_settime@GLIBC_PRIVATE 0 1
  __clone@GLIBC_2.0 2.0
  __close@GLIBC_2.0 2.0
- __cmpdi2@GLIBC_2.0 2.0
+ __close_nocancel@GLIBC_PRIVATE 0 1
  __cmsg_nxthdr@GLIBC_2.0 2.0
  __confstr_chk@GLIBC_2.4 2.4
  __connect@GLIBC_2.0 2.0
@@ -300,6 +311,7 @@ libc.so.6 libc6 #MINVER#
  __endmntent@GLIBC_2.2 2.2
  __environ@GLIBC_2.0 2.0
  __errno_location@GLIBC_2.0 2.0
+ __explicit_bzero_chk@GLIBC_2.25 2.25
  __fbufsize@GLIBC_2.2 2.2
  __fcntl@GLIBC_2.0 2.0
  __fdelt_chk@GLIBC_2.15 2.15
@@ -313,10 +325,7 @@ libc.so.6 libc6 #MINVER#
  __finite@GLIBC_2.0 2.0
  __finitef@GLIBC_2.0 2.0
  __finitel@GLIBC_2.0 2.0
- __fixunsdfdi@GLIBC_2.0 2.0
- __fixunsxfdi@GLIBC_2.0 2.0
  __flbf@GLIBC_2.2 2.2
- __floatdidf@GLIBC_2.0 2.0
  __fork@GLIBC_2.0 2.0
  __fortify_fail@GLIBC_PRIVATE 0 1
  __fpending@GLIBC_2.2 2.2
@@ -330,7 +339,9 @@ libc.so.6 libc6 #MINVER#
  __freading@GLIBC_2.2 2.2
  __free_hook@GLIBC_2.0 2.0
  __freelocale@GLIBC_2.1 2.1
+ __fseeko64@GLIBC_PRIVATE 0 1
  __fsetlocking@GLIBC_2.2 2.2
+ __ftello64@GLIBC_PRIVATE 0 1
  __fwprintf_chk@GLIBC_2.4 2.4
  __fwritable@GLIBC_2.2 2.2
  __fwriting@GLIBC_2.2 2.2
@@ -362,6 +373,11 @@ libc.so.6 libc6 #MINVER#
  __gmtime_r@GLIBC_2.0 2.0
  __h_errno@GLIBC_PRIVATE 0 1
  __h_errno_location@GLIBC_2.0 2.0
+ __idna_from_dns_encoding@GLIBC_PRIVATE 0 1
+ __idna_to_dns_encoding@GLIBC_PRIVATE 0 1
+ __inet6_scopeid_pton@GLIBC_PRIVATE 0 1
+ __inet_aton_exact@GLIBC_PRIVATE 0 1
+ __inet_pton_length@GLIBC_PRIVATE 0 1
  __internal_endnetgrent@GLIBC_PRIVATE 0 1
  __internal_getnetgrent_r@GLIBC_PRIVATE 0 1
  __internal_setnetgrent@GLIBC_PRIVATE 0 1
@@ -415,7 +431,13 @@ libc.so.6 libc6 #MINVER#
  __key_decryptsession_pk_LOCAL@GLIBC_2.1 2.1
  __key_encryptsession_pk_LOCAL@GLIBC_2.1 2.1
  __key_gendes_LOCAL@GLIBC_2.1 2.1
+ __libc_alloc_buffer_alloc_array@GLIBC_PRIVATE 0 1
+ __libc_alloc_buffer_allocate@GLIBC_PRIVATE 0 1
+ __libc_alloc_buffer_copy_bytes@GLIBC_PRIVATE 0 1
+ __libc_alloc_buffer_copy_string@GLIBC_PRIVATE 0 1
+ __libc_alloc_buffer_create_failure@GLIBC_PRIVATE 0 1
  __libc_alloca_cutoff@GLIBC_PRIVATE 0 1
+ __libc_allocate_once_slow@GLIBC_PRIVATE 0 1
  __libc_allocate_rtsig@GLIBC_2.1 2.1
  __libc_allocate_rtsig_private@GLIBC_PRIVATE 0 1
  __libc_calloc@GLIBC_2.0 2.0
@@ -424,11 +446,17 @@ libc.so.6 libc6 #MINVER#
  __libc_current_sigrtmax_private@GLIBC_PRIVATE 0 1
  __libc_current_sigrtmin@GLIBC_2.1 2.1
  __libc_current_sigrtmin_private@GLIBC_PRIVATE 0 1
- __libc_dl_error_tsd@GLIBC_PRIVATE 0 1
  __libc_dlclose@GLIBC_PRIVATE 0 1
  __libc_dlopen_mode@GLIBC_PRIVATE 0 1
  __libc_dlsym@GLIBC_PRIVATE 0 1
+ __libc_dlvsym@GLIBC_PRIVATE 0 1
+ __libc_dynarray_at_failure@GLIBC_PRIVATE 0 1
+ __libc_dynarray_emplace_enlarge@GLIBC_PRIVATE 0 1
+ __libc_dynarray_finalize@GLIBC_PRIVATE 0 1
+ __libc_dynarray_resize@GLIBC_PRIVATE 0 1
+ __libc_dynarray_resize_clear@GLIBC_PRIVATE 0 1
  __libc_fatal@GLIBC_PRIVATE 0 1
+ __libc_fcntl64@GLIBC_PRIVATE 0 1
  __libc_fork@GLIBC_PRIVATE 0 1
  __libc_free@GLIBC_2.0 2.0
  __libc_freeres@GLIBC_2.1 2.1
@@ -445,7 +473,9 @@ libc.so.6 libc6 #MINVER#
  __libc_pthread_init@GLIBC_PRIVATE 0 1
  __libc_pvalloc@GLIBC_2.0 2.0
  __libc_pwrite@GLIBC_PRIVATE 0 1
+ __libc_readline_unlocked@GLIBC_PRIVATE 0 1
  __libc_realloc@GLIBC_2.0 2.0
+ __libc_reallocarray@GLIBC_PRIVATE 0 1
  __libc_rpc_getport@GLIBC_PRIVATE 0 1
  __libc_sa_len@GLIBC_2.1 2.1
  __libc_scratch_buffer_grow@GLIBC_PRIVATE 0 1
@@ -494,11 +524,15 @@ libc.so.6 libc6 #MINVER#
  __memset_gg@GLIBC_2.1.1 2.1.1
  __merge_grp@GLIBC_PRIVATE 0 1
  __mktemp@GLIBC_PRIVATE 0 1
+ __mmap@GLIBC_PRIVATE 0 1
  __moddi3@GLIBC_2.0 2.0
  __modify_ldt@GLIBC_PRIVATE 0 1
  __monstartup@GLIBC_2.0 2.0
  __morecore@GLIBC_2.0 2.0
+ __mprotect@GLIBC_PRIVATE 0 1
+ __munmap@GLIBC_PRIVATE 0 1
  __nanosleep@GLIBC_2.2.6 2.2.6
+ __nanosleep_nocancel@GLIBC_PRIVATE 0 1
  __netlink_assert_response@GLIBC_PRIVATE 0 1
  __newlocale@GLIBC_2.1 2.1
  __nl_langinfo_l@GLIBC_2.2 2.2
@@ -507,6 +541,7 @@ libc.so.6 libc6 #MINVER#
  __nss_disable_nscd@GLIBC_PRIVATE 0 1
  __nss_group_lookup2@GLIBC_PRIVATE 0 1
  __nss_group_lookup@GLIBC_2.0 2.0
+ __nss_hash@GLIBC_PRIVATE 0 1
  __nss_hostname_digits_dots@GLIBC_2.2.2 2.2.2
  __nss_hosts_lookup2@GLIBC_PRIVATE 0 1
  __nss_hosts_lookup@GLIBC_2.0 2.0
@@ -521,12 +556,15 @@ libc.so.6 libc6 #MINVER#
  __obstack_vprintf_chk@GLIBC_2.8 2.8
  __open64@GLIBC_2.2 2.2
  __open64_2@GLIBC_2.7 2.7
+ __open64_nocancel@GLIBC_PRIVATE 0 1
  __open@GLIBC_2.0 2.0
  __open_2@GLIBC_2.7 2.7
  __open_catalog@GLIBC_PRIVATE 0 1
+ __open_nocancel@GLIBC_PRIVATE 0 1
  __openat64_2@GLIBC_2.7 2.7
  __openat_2@GLIBC_2.7 2.7
  __overflow@GLIBC_2.0 2.0
+ __pause_nocancel@GLIBC_PRIVATE 0 1
  __pipe@GLIBC_2.0 2.0
  __poll@GLIBC_2.1 2.1
  __poll_chk@GLIBC_2.16 2.16
@@ -546,6 +584,7 @@ libc.so.6 libc6 #MINVER#
  __rcmd_errstr@GLIBC_2.0 2.0
  __read@GLIBC_2.0 2.0
  __read_chk@GLIBC_2.4 2.4
+ __read_nocancel@GLIBC_PRIVATE 0 1
  __readlink_chk@GLIBC_2.4 2.4
  __readlinkat_chk@GLIBC_2.5 2.5
  __realloc_hook@GLIBC_2.0 2.0
@@ -562,11 +601,14 @@ libc.so.6 libc6 #MINVER#
  __register_frame_table@GLIBC_2.0 2.0
  __res_iclose@GLIBC_PRIVATE 0 1
  __res_init@GLIBC_2.2 2.2
- __res_maybe_init@GLIBC_PRIVATE 0 1
  __res_nclose@GLIBC_2.2 2.2
  __res_ninit@GLIBC_2.2 2.2
  __res_randomid@GLIBC_2.0 2.0
  __res_state@GLIBC_2.2 2.2
+ __resolv_context_get@GLIBC_PRIVATE 0 1
+ __resolv_context_get_override@GLIBC_PRIVATE 0 1
+ __resolv_context_get_preinit@GLIBC_PRIVATE 0 1
+ __resolv_context_put@GLIBC_PRIVATE 0 1
  __resp@GLIBC_PRIVATE 0 1
  __rpc_thread_createerr@GLIBC_2.2.3 2.2.3
  __rpc_thread_svc_fdset@GLIBC_2.2.3 2.2.3
@@ -598,6 +640,8 @@ libc.so.6 libc6 #MINVER#
  __sigpause@GLIBC_2.0 2.0
  __sigsetjmp@GLIBC_2.0 2.0
  __sigsuspend@GLIBC_2.1.3 2.1.3
+ __sigtimedwait@GLIBC_PRIVATE 0 1
+ __snprintf@GLIBC_PRIVATE 0 1
  __snprintf_chk@GLIBC_2.3.4 2.3.4
  __socket@GLIBC_PRIVATE 0 1
  __sprintf_chk@GLIBC_2.3.4 2.3.4
@@ -664,6 +708,8 @@ libc.so.6 libc6 #MINVER#
  __strtod_internal@GLIBC_2.0 2.0
  __strtod_l@GLIBC_2.1 2.1
  __strtod_nan@GLIBC_PRIVATE 0 1
+ __strtof128_internal@GLIBC_2.26 2.26
+ __strtof128_nan@GLIBC_PRIVATE 0 1
  __strtof_internal@GLIBC_2.0 2.0
  __strtof_l@GLIBC_2.1 2.1
  __strtof_nan@GLIBC_PRIVATE 0 1
@@ -703,10 +749,10 @@ libc.so.6 libc6 #MINVER#
  __ttyname_r_chk@GLIBC_2.4 2.4
  __twalk@GLIBC_PRIVATE 0 1
  __tzname@GLIBC_2.0 2.0
- __ucmpdi2@GLIBC_2.0 2.0
  __udivdi3@GLIBC_2.0 2.0
  __uflow@GLIBC_2.0 2.0
  __umoddi3@GLIBC_2.0 2.0
+ __uname@GLIBC_PRIVATE 0 1
  __underflow@GLIBC_2.0 2.0
  __uselocale@GLIBC_2.3 2.3
  __vasprintf_chk@GLIBC_2.8 2.8
@@ -740,6 +786,7 @@ libc.so.6 libc6 #MINVER#
  __wcsrtombs_chk@GLIBC_2.4 2.4
  __wcstod_internal@GLIBC_2.0 2.0
  __wcstod_l@GLIBC_2.1 2.1
+ __wcstof128_internal@GLIBC_2.26 2.26
  __wcstof_internal@GLIBC_2.0 2.0
  __wcstof_l@GLIBC_2.1 2.1
  __wcstol_internal@GLIBC_2.0 2.0
@@ -764,6 +811,7 @@ libc.so.6 libc6 #MINVER#
  __woverflow@GLIBC_2.2 2.2
  __wprintf_chk@GLIBC_2.4 2.4
  __write@GLIBC_2.0 2.0
+ __write_nocancel@GLIBC_PRIVATE 0 1
  __wuflow@GLIBC_2.2 2.2
  __wunderflow@GLIBC_2.2 2.2
  __xmknod@GLIBC_2.0 2.0
@@ -776,9 +824,14 @@ libc.so.6 libc6 #MINVER#
  __xstat@GLIBC_2.0 2.0
  _authenticate@GLIBC_2.1 2.1
  _dl_addr@GLIBC_PRIVATE 0 1
+ _dl_catch_error@GLIBC_PRIVATE 0 1
+ _dl_catch_exception@GLIBC_PRIVATE 0 1
  _dl_mcount_wrapper@GLIBC_2.1 2.1
  _dl_mcount_wrapper_check@GLIBC_2.1 2.1
+ _dl_open_hook2@GLIBC_PRIVATE 0 1
  _dl_open_hook@GLIBC_PRIVATE 0 1
+ _dl_signal_error@GLIBC_PRIVATE 0 1
+ _dl_signal_exception@GLIBC_PRIVATE 0 1
  _dl_sym@GLIBC_PRIVATE 0 1
  _dl_vsym@GLIBC_PRIVATE 0 1
  _environ@GLIBC_2.0 2.0
@@ -946,6 +999,7 @@ libc.so.6 libc6 #MINVER#
  closelog@GLIBC_2.0 2.0
  confstr@GLIBC_2.0 2.0
  connect@GLIBC_2.0 2.0
+ copy_file_range@GLIBC_2.27 2.27
  copysign@GLIBC_2.0 2.0
  copysignf@GLIBC_2.0 2.0
  copysignl@GLIBC_2.0 2.0
@@ -1039,6 +1093,7 @@ libc.so.6 libc6 #MINVER#
  execvp@GLIBC_2.0 2.0
  execvpe@GLIBC_2.11 2.11
  exit@GLIBC_2.0 2.0
+ explicit_bzero@GLIBC_2.25 2.25
  faccessat@GLIBC_2.4 2.4
  fallocate64@GLIBC_2.11 2.11
  fallocate@GLIBC_2.10 2.10
@@ -1054,7 +1109,9 @@ libc.so.6 libc6 #MINVER#
  fclose@GLIBC_2.0 2.0
  fclose@GLIBC_2.1 2.1
  fcloseall@GLIBC_2.0 2.0
+ fcntl64@GLIBC_2.28 2.28
  fcntl@GLIBC_2.0 2.0
+ fcntl@GLIBC_2.28 2.28
  fcvt@GLIBC_2.0 2.0
  fcvt_r@GLIBC_2.0 2.0
  fdatasync@GLIBC_2.0 2.0
@@ -1209,6 +1266,7 @@ libc.so.6 libc6 #MINVER#
  getdomainname@GLIBC_2.0 2.0
  getdtablesize@GLIBC_2.0 2.0
  getegid@GLIBC_2.0 2.0
+ getentropy@GLIBC_2.25 2.25
  getenv@GLIBC_2.0 2.0
  geteuid@GLIBC_2.0 2.0
  getfsent@GLIBC_2.0 2.0
@@ -1296,6 +1354,7 @@ libc.so.6 libc6 #MINVER#
  getpwuid@GLIBC_2.0 2.0
  getpwuid_r@GLIBC_2.0 2.0
  getpwuid_r@GLIBC_2.1.2 2.1.2
+ getrandom@GLIBC_2.25 2.25
  getresgid@GLIBC_2.0 2.0
  getresuid@GLIBC_2.0 2.0
  getrlimit64@GLIBC_2.1 2.1
@@ -1365,7 +1424,9 @@ libc.so.6 libc6 #MINVER#
  getxattr@GLIBC_2.3 2.3
  glob64@GLIBC_2.1 2.1
  glob64@GLIBC_2.2 2.2
+ glob64@GLIBC_2.27 2.27
  glob@GLIBC_2.0 2.0
+ glob@GLIBC_2.27 2.27
  glob_pattern_p@GLIBC_2.0 2.0
  globfree64@GLIBC_2.1 2.1
  globfree@GLIBC_2.0 2.0
@@ -1596,6 +1657,7 @@ libc.so.6 libc6 #MINVER#
  memchr@GLIBC_2.0 2.0
  memcmp@GLIBC_2.0 2.0
  memcpy@GLIBC_2.0 2.0
+ memfd_create@GLIBC_2.27 2.27
  memfrob@GLIBC_2.0 2.0
  memmem@GLIBC_2.0 2.0
  memmove@GLIBC_2.0 2.0
@@ -1618,6 +1680,7 @@ libc.so.6 libc6 #MINVER#
  mkstemps@GLIBC_2.11 2.11
  mktemp@GLIBC_2.0 2.0
  mktime@GLIBC_2.0 2.0
+ mlock2@GLIBC_2.27 2.27
  mlock@GLIBC_2.0 2.0
  mlockall@GLIBC_2.0 2.0
  mmap64@GLIBC_2.1 2.1
@@ -1696,6 +1759,11 @@ libc.so.6 libc6 #MINVER#
  pipe2@GLIBC_2.9 2.9
  pipe@GLIBC_2.0 2.0
  pivot_root@GLIBC_2.2.1 2.2.1
+ pkey_alloc@GLIBC_2.27 2.27
+ pkey_free@GLIBC_2.27 2.27
+ pkey_get@GLIBC_2.27 2.27
+ pkey_mprotect@GLIBC_2.27 2.27
+ pkey_set@GLIBC_2.27 2.27
  pmap_getmaps@GLIBC_2.0 2.0
  pmap_getport@GLIBC_2.0 2.0
  pmap_rmtcall@GLIBC_2.0 2.0
@@ -1740,7 +1808,9 @@ libc.so.6 libc6 #MINVER#
  prctl@GLIBC_2.0 2.0
  pread64@GLIBC_2.1 2.1
  pread@GLIBC_2.1 2.1
+ preadv2@GLIBC_2.26 2.26
  preadv64@GLIBC_2.10 2.10
+ preadv64v2@GLIBC_2.26 2.26
  preadv@GLIBC_2.10 2.10
  printf@GLIBC_2.0 2.0
  printf_size@GLIBC_2.1 2.1
@@ -1818,7 +1888,9 @@ libc.so.6 libc6 #MINVER#
  pvalloc@GLIBC_2.0 2.0
  pwrite64@GLIBC_2.1 2.1
  pwrite@GLIBC_2.1 2.1
+ pwritev2@GLIBC_2.26 2.26
  pwritev64@GLIBC_2.10 2.10
+ pwritev64v2@GLIBC_2.26 2.26
  pwritev@GLIBC_2.10 2.10
  qecvt@GLIBC_2.0 2.0
  qecvt_r@GLIBC_2.0 2.0
@@ -1863,6 +1935,7 @@ libc.so.6 libc6 #MINVER#
  readlinkat@GLIBC_2.4 2.4
  readv@GLIBC_2.0 2.0
  realloc@GLIBC_2.0 2.0
+ reallocarray@GLIBC_2.26 2.26
  realpath@GLIBC_2.0 2.0
  realpath@GLIBC_2.3 2.3
  reboot@GLIBC_2.0 2.0
@@ -1885,6 +1958,7 @@ libc.so.6 libc6 #MINVER#
  removexattr@GLIBC_2.3 2.3
  remque@GLIBC_2.0 2.0
  rename@GLIBC_2.0 2.0
+ renameat2@GLIBC_2.28 2.28
  renameat@GLIBC_2.4 2.4
  res_init@GLIBC_2.0 2.0
  revoke@GLIBC_2.0 2.0
@@ -2064,6 +2138,7 @@ libc.so.6 libc6 #MINVER#
  statfs@GLIBC_2.0 2.0
  statvfs64@GLIBC_2.1 2.1
  statvfs@GLIBC_2.1 2.1
+ statx@GLIBC_2.28 2.28
  stderr@GLIBC_2.0 2.0
  stdin@GLIBC_2.0 2.0
  stdout@GLIBC_2.0 2.0
@@ -2088,6 +2163,14 @@ libc.so.6 libc6 #MINVER#
  strerror_r@GLIBC_2.0 2.0
  strfmon@GLIBC_2.0 2.0
  strfmon_l@GLIBC_2.3 2.3
+ strfromd@GLIBC_2.25 2.25
+ strfromf128@GLIBC_2.26 2.26
+ strfromf32@GLIBC_2.27 2.27
+ strfromf32x@GLIBC_2.27 2.27
+ strfromf64@GLIBC_2.27 2.27
+ strfromf64x@GLIBC_2.27 2.27
+ strfromf@GLIBC_2.25 2.25
+ strfroml@GLIBC_2.25 2.25
  strfry@GLIBC_2.0 2.0
  strftime@GLIBC_2.0 2.0
  strftime_l@GLIBC_2.3 2.3
@@ -2109,6 +2192,16 @@ libc.so.6 libc6 #MINVER#
  strstr@GLIBC_2.0 2.0
  strtod@GLIBC_2.0 2.0
  strtod_l@GLIBC_2.3 2.3
+ strtof128@GLIBC_2.26 2.26
+ strtof128_l@GLIBC_2.26 2.26
+ strtof32@GLIBC_2.27 2.27
+ strtof32_l@GLIBC_2.27 2.27
+ strtof32x@GLIBC_2.27 2.27
+ strtof32x_l@GLIBC_2.27 2.27
+ strtof64@GLIBC_2.27 2.27
+ strtof64_l@GLIBC_2.27 2.27
+ strtof64x@GLIBC_2.27 2.27
+ strtof64x_l@GLIBC_2.27 2.27
  strtof@GLIBC_2.0 2.0
  strtof_l@GLIBC_2.3 2.3
  strtoimax@GLIBC_2.1 2.1
@@ -2209,6 +2302,10 @@ libc.so.6 libc6 #MINVER#
  tempnam@GLIBC_2.0 2.0
  textdomain@GLIBC_2.0 2.0
  tfind@GLIBC_2.0 2.0
+ thrd_current@GLIBC_2.28 2.28
+ thrd_equal@GLIBC_2.28 2.28
+ thrd_sleep@GLIBC_2.28 2.28
+ thrd_yield@GLIBC_2.28 2.28
  time@GLIBC_2.0 2.0
  timegm@GLIBC_2.0 2.0
  timelocal@GLIBC_2.0 2.0
@@ -2339,6 +2436,16 @@ libc.so.6 libc6 #MINVER#
  wcsstr@GLIBC_2.0 2.0
  wcstod@GLIBC_2.0 2.0
  wcstod_l@GLIBC_2.3 2.3
+ wcstof128@GLIBC_2.26 2.26
+ wcstof128_l@GLIBC_2.26 2.26
+ wcstof32@GLIBC_2.27 2.27
+ wcstof32_l@GLIBC_2.27 2.27
+ wcstof32x@GLIBC_2.27 2.27
+ wcstof32x_l@GLIBC_2.27 2.27
+ wcstof64@GLIBC_2.27 2.27
+ wcstof64_l@GLIBC_2.27 2.27
+ wcstof64x@GLIBC_2.27 2.27
+ wcstof64x_l@GLIBC_2.27 2.27
  wcstof@GLIBC_2.0 2.0
  wcstof_l@GLIBC_2.3 2.3
  wcstoimax@GLIBC_2.1 2.1
@@ -2453,13 +2560,8 @@ libc.so.6 libc6 #MINVER#
  xencrypt@GLIBC_2.0 2.0
  xprt_register@GLIBC_2.0 2.0
  xprt_unregister@GLIBC_2.0 2.0
-libcidn.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
- GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
- idna_to_ascii_lz@GLIBC_PRIVATE 0 1
- idna_to_unicode_lzlz@GLIBC_PRIVATE 0 1
 libcrypt.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  crypt@GLIBC_2.0 2.0
  crypt_r@GLIBC_2.0 2.0
@@ -2469,12 +2571,13 @@ libcrypt.so.1 libc6 #MINVER#
  setkey@GLIBC_2.0 2.0
  setkey_r@GLIBC_2.0 2.0
 libdl.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.3.3@GLIBC_2.3.3 2.3.3
  GLIBC_2.3.4@GLIBC_2.3.4 2.3.4
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
+ __libdl_freeres@GLIBC_PRIVATE 0 1
  _dlfcn_hook@GLIBC_PRIVATE 0 1
  dladdr1@GLIBC_2.3.3 2.3.3
  dladdr@GLIBC_2.0 2.0
@@ -2487,247 +2590,561 @@ libdl.so.2 libc6 #MINVER#
  dlsym@GLIBC_2.0 2.0
  dlvsym@GLIBC_2.1 2.1
 libm.so.6 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.15@GLIBC_2.15 2.15
  GLIBC_2.18@GLIBC_2.18 2.18
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.23@GLIBC_2.23 2.23
  GLIBC_2.24@GLIBC_2.24 2.24
+ GLIBC_2.25@GLIBC_2.25 2.25
+ GLIBC_2.26@GLIBC_2.26 2.26
+ GLIBC_2.27@GLIBC_2.27 2.27
+ GLIBC_2.28@GLIBC_2.28 2.28
  GLIBC_2.2@GLIBC_2.2 2.2
  GLIBC_2.4@GLIBC_2.4 2.4
  _LIB_VERSION@GLIBC_2.0 2.0
  __acos_finite@GLIBC_2.15 2.15
+ __acosf128_finite@GLIBC_2.26 2.26
  __acosf_finite@GLIBC_2.15 2.15
  __acosh_finite@GLIBC_2.15 2.15
+ __acoshf128_finite@GLIBC_2.26 2.26
  __acoshf_finite@GLIBC_2.15 2.15
  __acoshl_finite@GLIBC_2.15 2.15
  __acosl_finite@GLIBC_2.15 2.15
  __asin_finite@GLIBC_2.15 2.15
+ __asinf128_finite@GLIBC_2.26 2.26
  __asinf_finite@GLIBC_2.15 2.15
  __asinl_finite@GLIBC_2.15 2.15
  __atan2_finite@GLIBC_2.15 2.15
+ __atan2f128_finite@GLIBC_2.26 2.26
  __atan2f_finite@GLIBC_2.15 2.15
  __atan2l_finite@GLIBC_2.15 2.15
  __atanh_finite@GLIBC_2.15 2.15
+ __atanhf128_finite@GLIBC_2.26 2.26
  __atanhf_finite@GLIBC_2.15 2.15
  __atanhl_finite@GLIBC_2.15 2.15
  __clog10@GLIBC_2.1 2.1
  __clog10f@GLIBC_2.1 2.1
  __clog10l@GLIBC_2.1 2.1
  __cosh_finite@GLIBC_2.15 2.15
+ __coshf128_finite@GLIBC_2.26 2.26
  __coshf_finite@GLIBC_2.15 2.15
  __coshl_finite@GLIBC_2.15 2.15
  __exp10_finite@GLIBC_2.15 2.15
+ __exp10f128_finite@GLIBC_2.26 2.26
  __exp10f_finite@GLIBC_2.15 2.15
  __exp10l_finite@GLIBC_2.15 2.15
  __exp2_finite@GLIBC_2.15 2.15
+ __exp2f128_finite@GLIBC_2.26 2.26
  __exp2f_finite@GLIBC_2.15 2.15
  __exp2l_finite@GLIBC_2.15 2.15
  __exp_finite@GLIBC_2.15 2.15
+ __expf128_finite@GLIBC_2.26 2.26
  __expf_finite@GLIBC_2.15 2.15
  __expl@GLIBC_2.2 2.2
  __expl_finite@GLIBC_2.15 2.15
  __expm1l@GLIBC_2.2 2.2
  __finite@GLIBC_2.1 2.1
+ __finitef128@GLIBC_2.26 2.26
  __finitef@GLIBC_2.1 2.1
  __finitel@GLIBC_2.1 2.1
  __fmod_finite@GLIBC_2.15 2.15
+ __fmodf128_finite@GLIBC_2.26 2.26
  __fmodf_finite@GLIBC_2.15 2.15
  __fmodl_finite@GLIBC_2.15 2.15
  __fpclassify@GLIBC_2.1 2.1
+ __fpclassifyf128@GLIBC_2.26 2.26
  __fpclassifyf@GLIBC_2.1 2.1
  __fpclassifyl@GLIBC_2.1 2.1
  __gamma_r_finite@GLIBC_2.15 2.15
+ __gammaf128_r_finite@GLIBC_2.26 2.26
  __gammaf_r_finite@GLIBC_2.15 2.15
  __gammal_r_finite@GLIBC_2.15 2.15
  __hypot_finite@GLIBC_2.15 2.15
+ __hypotf128_finite@GLIBC_2.26 2.26
  __hypotf_finite@GLIBC_2.15 2.15
  __hypotl_finite@GLIBC_2.15 2.15
+ __iscanonicall@GLIBC_2.25 2.25
+ __iseqsig@GLIBC_2.25 2.25
+ __iseqsigf128@GLIBC_2.26 2.26
+ __iseqsigf@GLIBC_2.25 2.25
+ __iseqsigl@GLIBC_2.25 2.25
+ __isinff128@GLIBC_2.26 2.26
+ __isnanf128@GLIBC_2.26 2.26
  __issignaling@GLIBC_2.18 2.18
+ __issignalingf128@GLIBC_2.26 2.26
  __issignalingf@GLIBC_2.18 2.18
  __issignalingl@GLIBC_2.18 2.18
  __j0_finite@GLIBC_2.15 2.15
+ __j0f128_finite@GLIBC_2.26 2.26
  __j0f_finite@GLIBC_2.15 2.15
  __j0l_finite@GLIBC_2.15 2.15
  __j1_finite@GLIBC_2.15 2.15
+ __j1f128_finite@GLIBC_2.26 2.26
  __j1f_finite@GLIBC_2.15 2.15
  __j1l_finite@GLIBC_2.15 2.15
  __jn_finite@GLIBC_2.15 2.15
+ __jnf128_finite@GLIBC_2.26 2.26
  __jnf_finite@GLIBC_2.15 2.15
  __jnl_finite@GLIBC_2.15 2.15
  __lgamma_r_finite@GLIBC_2.15 2.15
+ __lgammaf128_r_finite@GLIBC_2.26 2.26
  __lgammaf_r_finite@GLIBC_2.15 2.15
  __lgammal_r_finite@GLIBC_2.15 2.15
  __log10_finite@GLIBC_2.15 2.15
+ __log10f128_finite@GLIBC_2.26 2.26
  __log10f_finite@GLIBC_2.15 2.15
  __log10l_finite@GLIBC_2.15 2.15
  __log2_finite@GLIBC_2.15 2.15
+ __log2f128_finite@GLIBC_2.26 2.26
  __log2f_finite@GLIBC_2.15 2.15
  __log2l_finite@GLIBC_2.15 2.15
  __log_finite@GLIBC_2.15 2.15
+ __logf128_finite@GLIBC_2.26 2.26
  __logf_finite@GLIBC_2.15 2.15
  __logl_finite@GLIBC_2.15 2.15
  __pow_finite@GLIBC_2.15 2.15
+ __powf128_finite@GLIBC_2.26 2.26
  __powf_finite@GLIBC_2.15 2.15
  __powl_finite@GLIBC_2.15 2.15
  __remainder_finite@GLIBC_2.15 2.15
+ __remainderf128_finite@GLIBC_2.26 2.26
  __remainderf_finite@GLIBC_2.15 2.15
  __remainderl_finite@GLIBC_2.15 2.15
  __scalb_finite@GLIBC_2.15 2.15
  __scalbf_finite@GLIBC_2.15 2.15
  __scalbl_finite@GLIBC_2.15 2.15
  __signbit@GLIBC_2.1 2.1
+ __signbitf128@GLIBC_2.26 2.26
  __signbitf@GLIBC_2.1 2.1
  __signbitl@GLIBC_2.1 2.1
  __signgam@GLIBC_2.23 2.23
  __sinh_finite@GLIBC_2.15 2.15
+ __sinhf128_finite@GLIBC_2.26 2.26
  __sinhf_finite@GLIBC_2.15 2.15
  __sinhl_finite@GLIBC_2.15 2.15
  __sqrt_finite@GLIBC_2.15 2.15
+ __sqrtf128_finite@GLIBC_2.26 2.26
  __sqrtf_finite@GLIBC_2.15 2.15
  __sqrtl_finite@GLIBC_2.15 2.15
  __y0_finite@GLIBC_2.15 2.15
+ __y0f128_finite@GLIBC_2.26 2.26
  __y0f_finite@GLIBC_2.15 2.15
  __y0l_finite@GLIBC_2.15 2.15
  __y1_finite@GLIBC_2.15 2.15
+ __y1f128_finite@GLIBC_2.26 2.26
  __y1f_finite@GLIBC_2.15 2.15
  __y1l_finite@GLIBC_2.15 2.15
  __yn_finite@GLIBC_2.15 2.15
+ __ynf128_finite@GLIBC_2.26 2.26
  __ynf_finite@GLIBC_2.15 2.15
  __ynl_finite@GLIBC_2.15 2.15
  acos@GLIBC_2.0 2.0
+ acosf128@GLIBC_2.26 2.26
+ acosf32@GLIBC_2.27 2.27
+ acosf32x@GLIBC_2.27 2.27
+ acosf64@GLIBC_2.27 2.27
+ acosf64x@GLIBC_2.27 2.27
  acosf@GLIBC_2.0 2.0
  acosh@GLIBC_2.0 2.0
+ acoshf128@GLIBC_2.26 2.26
+ acoshf32@GLIBC_2.27 2.27
+ acoshf32x@GLIBC_2.27 2.27
+ acoshf64@GLIBC_2.27 2.27
+ acoshf64x@GLIBC_2.27 2.27
  acoshf@GLIBC_2.0 2.0
  acoshl@GLIBC_2.0 2.0
  acosl@GLIBC_2.0 2.0
  asin@GLIBC_2.0 2.0
+ asinf128@GLIBC_2.26 2.26
+ asinf32@GLIBC_2.27 2.27
+ asinf32x@GLIBC_2.27 2.27
+ asinf64@GLIBC_2.27 2.27
+ asinf64x@GLIBC_2.27 2.27
  asinf@GLIBC_2.0 2.0
  asinh@GLIBC_2.0 2.0
+ asinhf128@GLIBC_2.26 2.26
+ asinhf32@GLIBC_2.27 2.27
+ asinhf32x@GLIBC_2.27 2.27
+ asinhf64@GLIBC_2.27 2.27
+ asinhf64x@GLIBC_2.27 2.27
  asinhf@GLIBC_2.0 2.0
  asinhl@GLIBC_2.0 2.0
  asinl@GLIBC_2.0 2.0
  atan2@GLIBC_2.0 2.0
+ atan2f128@GLIBC_2.26 2.26
+ atan2f32@GLIBC_2.27 2.27
+ atan2f32x@GLIBC_2.27 2.27
+ atan2f64@GLIBC_2.27 2.27
+ atan2f64x@GLIBC_2.27 2.27
  atan2f@GLIBC_2.0 2.0
  atan2l@GLIBC_2.0 2.0
  atan@GLIBC_2.0 2.0
+ atanf128@GLIBC_2.26 2.26
+ atanf32@GLIBC_2.27 2.27
+ atanf32x@GLIBC_2.27 2.27
+ atanf64@GLIBC_2.27 2.27
+ atanf64x@GLIBC_2.27 2.27
  atanf@GLIBC_2.0 2.0
  atanh@GLIBC_2.0 2.0
+ atanhf128@GLIBC_2.26 2.26
+ atanhf32@GLIBC_2.27 2.27
+ atanhf32x@GLIBC_2.27 2.27
+ atanhf64@GLIBC_2.27 2.27
+ atanhf64x@GLIBC_2.27 2.27
  atanhf@GLIBC_2.0 2.0
  atanhl@GLIBC_2.0 2.0
  atanl@GLIBC_2.0 2.0
  cabs@GLIBC_2.1 2.1
+ cabsf128@GLIBC_2.26 2.26
+ cabsf32@GLIBC_2.27 2.27
+ cabsf32x@GLIBC_2.27 2.27
+ cabsf64@GLIBC_2.27 2.27
+ cabsf64x@GLIBC_2.27 2.27
  cabsf@GLIBC_2.1 2.1
  cabsl@GLIBC_2.1 2.1
  cacos@GLIBC_2.1 2.1
+ cacosf128@GLIBC_2.26 2.26
+ cacosf32@GLIBC_2.27 2.27
+ cacosf32x@GLIBC_2.27 2.27
+ cacosf64@GLIBC_2.27 2.27
+ cacosf64x@GLIBC_2.27 2.27
  cacosf@GLIBC_2.1 2.1
  cacosh@GLIBC_2.1 2.1
+ cacoshf128@GLIBC_2.26 2.26
+ cacoshf32@GLIBC_2.27 2.27
+ cacoshf32x@GLIBC_2.27 2.27
+ cacoshf64@GLIBC_2.27 2.27
+ cacoshf64x@GLIBC_2.27 2.27
  cacoshf@GLIBC_2.1 2.1
  cacoshl@GLIBC_2.1 2.1
  cacosl@GLIBC_2.1 2.1
+ canonicalize@GLIBC_2.25 2.25
+ canonicalizef128@GLIBC_2.26 2.26
+ canonicalizef32@GLIBC_2.27 2.27
+ canonicalizef32x@GLIBC_2.27 2.27
+ canonicalizef64@GLIBC_2.27 2.27
+ canonicalizef64x@GLIBC_2.27 2.27
+ canonicalizef@GLIBC_2.25 2.25
+ canonicalizel@GLIBC_2.25 2.25
  carg@GLIBC_2.1 2.1
+ cargf128@GLIBC_2.26 2.26
+ cargf32@GLIBC_2.27 2.27
+ cargf32x@GLIBC_2.27 2.27
+ cargf64@GLIBC_2.27 2.27
+ cargf64x@GLIBC_2.27 2.27
  cargf@GLIBC_2.1 2.1
  cargl@GLIBC_2.1 2.1
  casin@GLIBC_2.1 2.1
+ casinf128@GLIBC_2.26 2.26
+ casinf32@GLIBC_2.27 2.27
+ casinf32x@GLIBC_2.27 2.27
+ casinf64@GLIBC_2.27 2.27
+ casinf64x@GLIBC_2.27 2.27
  casinf@GLIBC_2.1 2.1
  casinh@GLIBC_2.1 2.1
+ casinhf128@GLIBC_2.26 2.26
+ casinhf32@GLIBC_2.27 2.27
+ casinhf32x@GLIBC_2.27 2.27
+ casinhf64@GLIBC_2.27 2.27
+ casinhf64x@GLIBC_2.27 2.27
  casinhf@GLIBC_2.1 2.1
  casinhl@GLIBC_2.1 2.1
  casinl@GLIBC_2.1 2.1
  catan@GLIBC_2.1 2.1
+ catanf128@GLIBC_2.26 2.26
+ catanf32@GLIBC_2.27 2.27
+ catanf32x@GLIBC_2.27 2.27
+ catanf64@GLIBC_2.27 2.27
+ catanf64x@GLIBC_2.27 2.27
  catanf@GLIBC_2.1 2.1
  catanh@GLIBC_2.1 2.1
+ catanhf128@GLIBC_2.26 2.26
+ catanhf32@GLIBC_2.27 2.27
+ catanhf32x@GLIBC_2.27 2.27
+ catanhf64@GLIBC_2.27 2.27
+ catanhf64x@GLIBC_2.27 2.27
  catanhf@GLIBC_2.1 2.1
  catanhl@GLIBC_2.1 2.1
  catanl@GLIBC_2.1 2.1
  cbrt@GLIBC_2.0 2.0
+ cbrtf128@GLIBC_2.26 2.26
+ cbrtf32@GLIBC_2.27 2.27
+ cbrtf32x@GLIBC_2.27 2.27
+ cbrtf64@GLIBC_2.27 2.27
+ cbrtf64x@GLIBC_2.27 2.27
  cbrtf@GLIBC_2.0 2.0
  cbrtl@GLIBC_2.0 2.0
  ccos@GLIBC_2.1 2.1
+ ccosf128@GLIBC_2.26 2.26
+ ccosf32@GLIBC_2.27 2.27
+ ccosf32x@GLIBC_2.27 2.27
+ ccosf64@GLIBC_2.27 2.27
+ ccosf64x@GLIBC_2.27 2.27
  ccosf@GLIBC_2.1 2.1
  ccosh@GLIBC_2.1 2.1
+ ccoshf128@GLIBC_2.26 2.26
+ ccoshf32@GLIBC_2.27 2.27
+ ccoshf32x@GLIBC_2.27 2.27
+ ccoshf64@GLIBC_2.27 2.27
+ ccoshf64x@GLIBC_2.27 2.27
  ccoshf@GLIBC_2.1 2.1
  ccoshl@GLIBC_2.1 2.1
  ccosl@GLIBC_2.1 2.1
  ceil@GLIBC_2.0 2.0
+ ceilf128@GLIBC_2.26 2.26
+ ceilf32@GLIBC_2.27 2.27
+ ceilf32x@GLIBC_2.27 2.27
+ ceilf64@GLIBC_2.27 2.27
+ ceilf64x@GLIBC_2.27 2.27
  ceilf@GLIBC_2.0 2.0
  ceill@GLIBC_2.0 2.0
  cexp@GLIBC_2.1 2.1
+ cexpf128@GLIBC_2.26 2.26
+ cexpf32@GLIBC_2.27 2.27
+ cexpf32x@GLIBC_2.27 2.27
+ cexpf64@GLIBC_2.27 2.27
+ cexpf64x@GLIBC_2.27 2.27
  cexpf@GLIBC_2.1 2.1
  cexpl@GLIBC_2.1 2.1
  cimag@GLIBC_2.1 2.1
+ cimagf128@GLIBC_2.26 2.26
+ cimagf32@GLIBC_2.27 2.27
+ cimagf32x@GLIBC_2.27 2.27
+ cimagf64@GLIBC_2.27 2.27
+ cimagf64x@GLIBC_2.27 2.27
  cimagf@GLIBC_2.1 2.1
  cimagl@GLIBC_2.1 2.1
  clog10@GLIBC_2.1 2.1
+ clog10f128@GLIBC_2.26 2.26
+ clog10f32@GLIBC_2.27 2.27
+ clog10f32x@GLIBC_2.27 2.27
+ clog10f64@GLIBC_2.27 2.27
+ clog10f64x@GLIBC_2.27 2.27
  clog10f@GLIBC_2.1 2.1
  clog10l@GLIBC_2.1 2.1
  clog@GLIBC_2.1 2.1
+ clogf128@GLIBC_2.26 2.26
+ clogf32@GLIBC_2.27 2.27
+ clogf32x@GLIBC_2.27 2.27
+ clogf64@GLIBC_2.27 2.27
+ clogf64x@GLIBC_2.27 2.27
  clogf@GLIBC_2.1 2.1
  clogl@GLIBC_2.1 2.1
  conj@GLIBC_2.1 2.1
+ conjf128@GLIBC_2.26 2.26
+ conjf32@GLIBC_2.27 2.27
+ conjf32x@GLIBC_2.27 2.27
+ conjf64@GLIBC_2.27 2.27
+ conjf64x@GLIBC_2.27 2.27
  conjf@GLIBC_2.1 2.1
  conjl@GLIBC_2.1 2.1
  copysign@GLIBC_2.0 2.0
+ copysignf128@GLIBC_2.26 2.26
+ copysignf32@GLIBC_2.27 2.27
+ copysignf32x@GLIBC_2.27 2.27
+ copysignf64@GLIBC_2.27 2.27
+ copysignf64x@GLIBC_2.27 2.27
  copysignf@GLIBC_2.0 2.0
  copysignl@GLIBC_2.0 2.0
  cos@GLIBC_2.0 2.0
+ cosf128@GLIBC_2.26 2.26
+ cosf32@GLIBC_2.27 2.27
+ cosf32x@GLIBC_2.27 2.27
+ cosf64@GLIBC_2.27 2.27
+ cosf64x@GLIBC_2.27 2.27
  cosf@GLIBC_2.0 2.0
  cosh@GLIBC_2.0 2.0
+ coshf128@GLIBC_2.26 2.26
+ coshf32@GLIBC_2.27 2.27
+ coshf32x@GLIBC_2.27 2.27
+ coshf64@GLIBC_2.27 2.27
+ coshf64x@GLIBC_2.27 2.27
  coshf@GLIBC_2.0 2.0
  coshl@GLIBC_2.0 2.0
  cosl@GLIBC_2.0 2.0
  cpow@GLIBC_2.1 2.1
+ cpowf128@GLIBC_2.26 2.26
+ cpowf32@GLIBC_2.27 2.27
+ cpowf32x@GLIBC_2.27 2.27
+ cpowf64@GLIBC_2.27 2.27
+ cpowf64x@GLIBC_2.27 2.27
  cpowf@GLIBC_2.1 2.1
  cpowl@GLIBC_2.1 2.1
  cproj@GLIBC_2.1 2.1
+ cprojf128@GLIBC_2.26 2.26
+ cprojf32@GLIBC_2.27 2.27
+ cprojf32x@GLIBC_2.27 2.27
+ cprojf64@GLIBC_2.27 2.27
+ cprojf64x@GLIBC_2.27 2.27
  cprojf@GLIBC_2.1 2.1
  cprojl@GLIBC_2.1 2.1
  creal@GLIBC_2.1 2.1
+ crealf128@GLIBC_2.26 2.26
+ crealf32@GLIBC_2.27 2.27
+ crealf32x@GLIBC_2.27 2.27
+ crealf64@GLIBC_2.27 2.27
+ crealf64x@GLIBC_2.27 2.27
  crealf@GLIBC_2.1 2.1
  creall@GLIBC_2.1 2.1
  csin@GLIBC_2.1 2.1
+ csinf128@GLIBC_2.26 2.26
+ csinf32@GLIBC_2.27 2.27
+ csinf32x@GLIBC_2.27 2.27
+ csinf64@GLIBC_2.27 2.27
+ csinf64x@GLIBC_2.27 2.27
  csinf@GLIBC_2.1 2.1
  csinh@GLIBC_2.1 2.1
+ csinhf128@GLIBC_2.26 2.26
+ csinhf32@GLIBC_2.27 2.27
+ csinhf32x@GLIBC_2.27 2.27
+ csinhf64@GLIBC_2.27 2.27
+ csinhf64x@GLIBC_2.27 2.27
  csinhf@GLIBC_2.1 2.1
  csinhl@GLIBC_2.1 2.1
  csinl@GLIBC_2.1 2.1
  csqrt@GLIBC_2.1 2.1
+ csqrtf128@GLIBC_2.26 2.26
+ csqrtf32@GLIBC_2.27 2.27
+ csqrtf32x@GLIBC_2.27 2.27
+ csqrtf64@GLIBC_2.27 2.27
+ csqrtf64x@GLIBC_2.27 2.27
  csqrtf@GLIBC_2.1 2.1
  csqrtl@GLIBC_2.1 2.1
  ctan@GLIBC_2.1 2.1
+ ctanf128@GLIBC_2.26 2.26
+ ctanf32@GLIBC_2.27 2.27
+ ctanf32x@GLIBC_2.27 2.27
+ ctanf64@GLIBC_2.27 2.27
+ ctanf64x@GLIBC_2.27 2.27
  ctanf@GLIBC_2.1 2.1
  ctanh@GLIBC_2.1 2.1
+ ctanhf128@GLIBC_2.26 2.26
+ ctanhf32@GLIBC_2.27 2.27
+ ctanhf32x@GLIBC_2.27 2.27
+ ctanhf64@GLIBC_2.27 2.27
+ ctanhf64x@GLIBC_2.27 2.27
  ctanhf@GLIBC_2.1 2.1
  ctanhl@GLIBC_2.1 2.1
  ctanl@GLIBC_2.1 2.1
+ daddl@GLIBC_2.28 2.28
+ ddivl@GLIBC_2.28 2.28
+ dmull@GLIBC_2.28 2.28
  drem@GLIBC_2.0 2.0
  dremf@GLIBC_2.0 2.0
  dreml@GLIBC_2.0 2.0
+ dsubl@GLIBC_2.28 2.28
  erf@GLIBC_2.0 2.0
  erfc@GLIBC_2.0 2.0
+ erfcf128@GLIBC_2.26 2.26
+ erfcf32@GLIBC_2.27 2.27
+ erfcf32x@GLIBC_2.27 2.27
+ erfcf64@GLIBC_2.27 2.27
+ erfcf64x@GLIBC_2.27 2.27
  erfcf@GLIBC_2.0 2.0
  erfcl@GLIBC_2.0 2.0
+ erff128@GLIBC_2.26 2.26
+ erff32@GLIBC_2.27 2.27
+ erff32x@GLIBC_2.27 2.27
+ erff64@GLIBC_2.27 2.27
+ erff64x@GLIBC_2.27 2.27
  erff@GLIBC_2.0 2.0
  erfl@GLIBC_2.0 2.0
  exp10@GLIBC_2.1 2.1
+ exp10f128@GLIBC_2.26 2.26
+ exp10f32@GLIBC_2.27 2.27
+ exp10f32x@GLIBC_2.27 2.27
+ exp10f64@GLIBC_2.27 2.27
+ exp10f64x@GLIBC_2.27 2.27
  exp10f@GLIBC_2.1 2.1
  exp10l@GLIBC_2.1 2.1
  exp2@GLIBC_2.1 2.1
+ exp2f128@GLIBC_2.26 2.26
+ exp2f32@GLIBC_2.27 2.27
+ exp2f32x@GLIBC_2.27 2.27
+ exp2f64@GLIBC_2.27 2.27
+ exp2f64x@GLIBC_2.27 2.27
  exp2f@GLIBC_2.1 2.1
+ exp2f@GLIBC_2.27 2.27
  exp2l@GLIBC_2.1 2.1
  exp@GLIBC_2.0 2.0
+ expf128@GLIBC_2.26 2.26
+ expf32@GLIBC_2.27 2.27
+ expf32x@GLIBC_2.27 2.27
+ expf64@GLIBC_2.27 2.27
+ expf64x@GLIBC_2.27 2.27
  expf@GLIBC_2.0 2.0
+ expf@GLIBC_2.27 2.27
  expl@GLIBC_2.0 2.0
  expm1@GLIBC_2.0 2.0
+ expm1f128@GLIBC_2.26 2.26
+ expm1f32@GLIBC_2.27 2.27
+ expm1f32x@GLIBC_2.27 2.27
+ expm1f64@GLIBC_2.27 2.27
+ expm1f64x@GLIBC_2.27 2.27
  expm1f@GLIBC_2.0 2.0
  expm1l@GLIBC_2.0 2.0
+ f32addf128@GLIBC_2.28 2.28
+ f32addf32x@GLIBC_2.28 2.28
+ f32addf64@GLIBC_2.28 2.28
+ f32addf64x@GLIBC_2.28 2.28
+ f32divf128@GLIBC_2.28 2.28
+ f32divf32x@GLIBC_2.28 2.28
+ f32divf64@GLIBC_2.28 2.28
+ f32divf64x@GLIBC_2.28 2.28
+ f32mulf128@GLIBC_2.28 2.28
+ f32mulf32x@GLIBC_2.28 2.28
+ f32mulf64@GLIBC_2.28 2.28
+ f32mulf64x@GLIBC_2.28 2.28
+ f32subf128@GLIBC_2.28 2.28
+ f32subf32x@GLIBC_2.28 2.28
+ f32subf64@GLIBC_2.28 2.28
+ f32subf64x@GLIBC_2.28 2.28
+ f32xaddf128@GLIBC_2.28 2.28
+ f32xaddf64@GLIBC_2.28 2.28
+ f32xaddf64x@GLIBC_2.28 2.28
+ f32xdivf128@GLIBC_2.28 2.28
+ f32xdivf64@GLIBC_2.28 2.28
+ f32xdivf64x@GLIBC_2.28 2.28
+ f32xmulf128@GLIBC_2.28 2.28
+ f32xmulf64@GLIBC_2.28 2.28
+ f32xmulf64x@GLIBC_2.28 2.28
+ f32xsubf128@GLIBC_2.28 2.28
+ f32xsubf64@GLIBC_2.28 2.28
+ f32xsubf64x@GLIBC_2.28 2.28
+ f64addf128@GLIBC_2.28 2.28
+ f64addf64x@GLIBC_2.28 2.28
+ f64divf128@GLIBC_2.28 2.28
+ f64divf64x@GLIBC_2.28 2.28
+ f64mulf128@GLIBC_2.28 2.28
+ f64mulf64x@GLIBC_2.28 2.28
+ f64subf128@GLIBC_2.28 2.28
+ f64subf64x@GLIBC_2.28 2.28
+ f64xaddf128@GLIBC_2.28 2.28
+ f64xdivf128@GLIBC_2.28 2.28
+ f64xmulf128@GLIBC_2.28 2.28
+ f64xsubf128@GLIBC_2.28 2.28
  fabs@GLIBC_2.0 2.0
+ fabsf128@GLIBC_2.26 2.26
+ fabsf32@GLIBC_2.27 2.27
+ fabsf32x@GLIBC_2.27 2.27
+ fabsf64@GLIBC_2.27 2.27
+ fabsf64x@GLIBC_2.27 2.27
  fabsf@GLIBC_2.0 2.0
  fabsl@GLIBC_2.0 2.0
+ fadd@GLIBC_2.28 2.28
+ faddl@GLIBC_2.28 2.28
  fdim@GLIBC_2.1 2.1
+ fdimf128@GLIBC_2.26 2.26
+ fdimf32@GLIBC_2.27 2.27
+ fdimf32x@GLIBC_2.27 2.27
+ fdimf64@GLIBC_2.27 2.27
+ fdimf64x@GLIBC_2.27 2.27
  fdimf@GLIBC_2.1 2.1
  fdiml@GLIBC_2.1 2.1
+ fdiv@GLIBC_2.28 2.28
+ fdivl@GLIBC_2.28 2.28
  feclearexcept@GLIBC_2.1 2.1
  feclearexcept@GLIBC_2.2 2.2
  fedisableexcept@GLIBC_2.2 2.2
@@ -2737,184 +3154,534 @@ libm.so.6 libc6 #MINVER#
  fegetexcept@GLIBC_2.2 2.2
  fegetexceptflag@GLIBC_2.1 2.1
  fegetexceptflag@GLIBC_2.2 2.2
+ fegetmode@GLIBC_2.25 2.25
  fegetround@GLIBC_2.1 2.1
  feholdexcept@GLIBC_2.1 2.1
  feraiseexcept@GLIBC_2.1 2.1
  feraiseexcept@GLIBC_2.2 2.2
  fesetenv@GLIBC_2.1 2.1
  fesetenv@GLIBC_2.2 2.2
+ fesetexcept@GLIBC_2.25 2.25
  fesetexceptflag@GLIBC_2.1 2.1
  fesetexceptflag@GLIBC_2.2 2.2
+ fesetmode@GLIBC_2.25 2.25
  fesetround@GLIBC_2.1 2.1
  fetestexcept@GLIBC_2.1 2.1
+ fetestexceptflag@GLIBC_2.25 2.25
  feupdateenv@GLIBC_2.1 2.1
  feupdateenv@GLIBC_2.2 2.2
  finite@GLIBC_2.0 2.0
  finitef@GLIBC_2.0 2.0
  finitel@GLIBC_2.0 2.0
  floor@GLIBC_2.0 2.0
+ floorf128@GLIBC_2.26 2.26
+ floorf32@GLIBC_2.27 2.27
+ floorf32x@GLIBC_2.27 2.27
+ floorf64@GLIBC_2.27 2.27
+ floorf64x@GLIBC_2.27 2.27
  floorf@GLIBC_2.0 2.0
  floorl@GLIBC_2.0 2.0
  fma@GLIBC_2.1 2.1
+ fmaf128@GLIBC_2.26 2.26
+ fmaf32@GLIBC_2.27 2.27
+ fmaf32x@GLIBC_2.27 2.27
+ fmaf64@GLIBC_2.27 2.27
+ fmaf64x@GLIBC_2.27 2.27
  fmaf@GLIBC_2.1 2.1
  fmal@GLIBC_2.1 2.1
  fmax@GLIBC_2.1 2.1
+ fmaxf128@GLIBC_2.26 2.26
+ fmaxf32@GLIBC_2.27 2.27
+ fmaxf32x@GLIBC_2.27 2.27
+ fmaxf64@GLIBC_2.27 2.27
+ fmaxf64x@GLIBC_2.27 2.27
  fmaxf@GLIBC_2.1 2.1
  fmaxl@GLIBC_2.1 2.1
+ fmaxmag@GLIBC_2.25 2.25
+ fmaxmagf128@GLIBC_2.26 2.26
+ fmaxmagf32@GLIBC_2.27 2.27
+ fmaxmagf32x@GLIBC_2.27 2.27
+ fmaxmagf64@GLIBC_2.27 2.27
+ fmaxmagf64x@GLIBC_2.27 2.27
+ fmaxmagf@GLIBC_2.25 2.25
+ fmaxmagl@GLIBC_2.25 2.25
  fmin@GLIBC_2.1 2.1
+ fminf128@GLIBC_2.26 2.26
+ fminf32@GLIBC_2.27 2.27
+ fminf32x@GLIBC_2.27 2.27
+ fminf64@GLIBC_2.27 2.27
+ fminf64x@GLIBC_2.27 2.27
  fminf@GLIBC_2.1 2.1
  fminl@GLIBC_2.1 2.1
+ fminmag@GLIBC_2.25 2.25
+ fminmagf128@GLIBC_2.26 2.26
+ fminmagf32@GLIBC_2.27 2.27
+ fminmagf32x@GLIBC_2.27 2.27
+ fminmagf64@GLIBC_2.27 2.27
+ fminmagf64x@GLIBC_2.27 2.27
+ fminmagf@GLIBC_2.25 2.25
+ fminmagl@GLIBC_2.25 2.25
  fmod@GLIBC_2.0 2.0
+ fmodf128@GLIBC_2.26 2.26
+ fmodf32@GLIBC_2.27 2.27
+ fmodf32x@GLIBC_2.27 2.27
+ fmodf64@GLIBC_2.27 2.27
+ fmodf64x@GLIBC_2.27 2.27
  fmodf@GLIBC_2.0 2.0
  fmodl@GLIBC_2.0 2.0
+ fmul@GLIBC_2.28 2.28
+ fmull@GLIBC_2.28 2.28
  frexp@GLIBC_2.0 2.0
+ frexpf128@GLIBC_2.26 2.26
+ frexpf32@GLIBC_2.27 2.27
+ frexpf32x@GLIBC_2.27 2.27
+ frexpf64@GLIBC_2.27 2.27
+ frexpf64x@GLIBC_2.27 2.27
  frexpf@GLIBC_2.0 2.0
  frexpl@GLIBC_2.0 2.0
+ fromfp@GLIBC_2.25 2.25
+ fromfpf128@GLIBC_2.26 2.26
+ fromfpf32@GLIBC_2.27 2.27
+ fromfpf32x@GLIBC_2.27 2.27
+ fromfpf64@GLIBC_2.27 2.27
+ fromfpf64x@GLIBC_2.27 2.27
+ fromfpf@GLIBC_2.25 2.25
+ fromfpl@GLIBC_2.25 2.25
+ fromfpx@GLIBC_2.25 2.25
+ fromfpxf128@GLIBC_2.26 2.26
+ fromfpxf32@GLIBC_2.27 2.27
+ fromfpxf32x@GLIBC_2.27 2.27
+ fromfpxf64@GLIBC_2.27 2.27
+ fromfpxf64x@GLIBC_2.27 2.27
+ fromfpxf@GLIBC_2.25 2.25
+ fromfpxl@GLIBC_2.25 2.25
+ fsub@GLIBC_2.28 2.28
+ fsubl@GLIBC_2.28 2.28
  gamma@GLIBC_2.0 2.0
  gammaf@GLIBC_2.0 2.0
  gammal@GLIBC_2.0 2.0
+ getpayload@GLIBC_2.25 2.25
+ getpayloadf128@GLIBC_2.26 2.26
+ getpayloadf32@GLIBC_2.27 2.27
+ getpayloadf32x@GLIBC_2.27 2.27
+ getpayloadf64@GLIBC_2.27 2.27
+ getpayloadf64x@GLIBC_2.27 2.27
+ getpayloadf@GLIBC_2.25 2.25
+ getpayloadl@GLIBC_2.25 2.25
  hypot@GLIBC_2.0 2.0
+ hypotf128@GLIBC_2.26 2.26
+ hypotf32@GLIBC_2.27 2.27
+ hypotf32x@GLIBC_2.27 2.27
+ hypotf64@GLIBC_2.27 2.27
+ hypotf64x@GLIBC_2.27 2.27
  hypotf@GLIBC_2.0 2.0
  hypotl@GLIBC_2.0 2.0
  ilogb@GLIBC_2.0 2.0
+ ilogbf128@GLIBC_2.26 2.26
+ ilogbf32@GLIBC_2.27 2.27
+ ilogbf32x@GLIBC_2.27 2.27
+ ilogbf64@GLIBC_2.27 2.27
+ ilogbf64x@GLIBC_2.27 2.27
  ilogbf@GLIBC_2.0 2.0
  ilogbl@GLIBC_2.0 2.0
  j0@GLIBC_2.0 2.0
+ j0f128@GLIBC_2.26 2.26
+ j0f32@GLIBC_2.27 2.27
+ j0f32x@GLIBC_2.27 2.27
+ j0f64@GLIBC_2.27 2.27
+ j0f64x@GLIBC_2.27 2.27
  j0f@GLIBC_2.0 2.0
  j0l@GLIBC_2.0 2.0
  j1@GLIBC_2.0 2.0
+ j1f128@GLIBC_2.26 2.26
+ j1f32@GLIBC_2.27 2.27
+ j1f32x@GLIBC_2.27 2.27
+ j1f64@GLIBC_2.27 2.27
+ j1f64x@GLIBC_2.27 2.27
  j1f@GLIBC_2.0 2.0
  j1l@GLIBC_2.0 2.0
  jn@GLIBC_2.0 2.0
+ jnf128@GLIBC_2.26 2.26
+ jnf32@GLIBC_2.27 2.27
+ jnf32x@GLIBC_2.27 2.27
+ jnf64@GLIBC_2.27 2.27
+ jnf64x@GLIBC_2.27 2.27
  jnf@GLIBC_2.0 2.0
  jnl@GLIBC_2.0 2.0
  ldexp@GLIBC_2.0 2.0
+ ldexpf128@GLIBC_2.26 2.26
+ ldexpf32@GLIBC_2.27 2.27
+ ldexpf32x@GLIBC_2.27 2.27
+ ldexpf64@GLIBC_2.27 2.27
+ ldexpf64x@GLIBC_2.27 2.27
  ldexpf@GLIBC_2.0 2.0
  ldexpl@GLIBC_2.0 2.0
  lgamma@GLIBC_2.0 2.0
  lgamma@GLIBC_2.23 2.23
  lgamma_r@GLIBC_2.0 2.0
+ lgammaf128@GLIBC_2.26 2.26
+ lgammaf128_r@GLIBC_2.26 2.26
+ lgammaf32@GLIBC_2.27 2.27
+ lgammaf32_r@GLIBC_2.27 2.27
+ lgammaf32x@GLIBC_2.27 2.27
+ lgammaf32x_r@GLIBC_2.27 2.27
+ lgammaf64@GLIBC_2.27 2.27
+ lgammaf64_r@GLIBC_2.27 2.27
+ lgammaf64x@GLIBC_2.27 2.27
+ lgammaf64x_r@GLIBC_2.27 2.27
  lgammaf@GLIBC_2.0 2.0
  lgammaf@GLIBC_2.23 2.23
  lgammaf_r@GLIBC_2.0 2.0
  lgammal@GLIBC_2.0 2.0
  lgammal@GLIBC_2.23 2.23
  lgammal_r@GLIBC_2.0 2.0
+ llogb@GLIBC_2.25 2.25
+ llogbf128@GLIBC_2.26 2.26
+ llogbf32@GLIBC_2.27 2.27
+ llogbf32x@GLIBC_2.27 2.27
+ llogbf64@GLIBC_2.27 2.27
+ llogbf64x@GLIBC_2.27 2.27
+ llogbf@GLIBC_2.25 2.25
+ llogbl@GLIBC_2.25 2.25
  llrint@GLIBC_2.1 2.1
+ llrintf128@GLIBC_2.26 2.26
+ llrintf32@GLIBC_2.27 2.27
+ llrintf32x@GLIBC_2.27 2.27
+ llrintf64@GLIBC_2.27 2.27
+ llrintf64x@GLIBC_2.27 2.27
  llrintf@GLIBC_2.1 2.1
  llrintl@GLIBC_2.1 2.1
  llround@GLIBC_2.1 2.1
+ llroundf128@GLIBC_2.26 2.26
+ llroundf32@GLIBC_2.27 2.27
+ llroundf32x@GLIBC_2.27 2.27
+ llroundf64@GLIBC_2.27 2.27
+ llroundf64x@GLIBC_2.27 2.27
  llroundf@GLIBC_2.1 2.1
  llroundl@GLIBC_2.1 2.1
  log10@GLIBC_2.0 2.0
+ log10f128@GLIBC_2.26 2.26
+ log10f32@GLIBC_2.27 2.27
+ log10f32x@GLIBC_2.27 2.27
+ log10f64@GLIBC_2.27 2.27
+ log10f64x@GLIBC_2.27 2.27
  log10f@GLIBC_2.0 2.0
  log10l@GLIBC_2.0 2.0
  log1p@GLIBC_2.0 2.0
+ log1pf128@GLIBC_2.26 2.26
+ log1pf32@GLIBC_2.27 2.27
+ log1pf32x@GLIBC_2.27 2.27
+ log1pf64@GLIBC_2.27 2.27
+ log1pf64x@GLIBC_2.27 2.27
  log1pf@GLIBC_2.0 2.0
  log1pl@GLIBC_2.0 2.0
  log2@GLIBC_2.1 2.1
+ log2f128@GLIBC_2.26 2.26
+ log2f32@GLIBC_2.27 2.27
+ log2f32x@GLIBC_2.27 2.27
+ log2f64@GLIBC_2.27 2.27
+ log2f64x@GLIBC_2.27 2.27
  log2f@GLIBC_2.1 2.1
+ log2f@GLIBC_2.27 2.27
  log2l@GLIBC_2.1 2.1
  log@GLIBC_2.0 2.0
  logb@GLIBC_2.0 2.0
+ logbf128@GLIBC_2.26 2.26
+ logbf32@GLIBC_2.27 2.27
+ logbf32x@GLIBC_2.27 2.27
+ logbf64@GLIBC_2.27 2.27
+ logbf64x@GLIBC_2.27 2.27
  logbf@GLIBC_2.0 2.0
  logbl@GLIBC_2.0 2.0
+ logf128@GLIBC_2.26 2.26
+ logf32@GLIBC_2.27 2.27
+ logf32x@GLIBC_2.27 2.27
+ logf64@GLIBC_2.27 2.27
+ logf64x@GLIBC_2.27 2.27
  logf@GLIBC_2.0 2.0
+ logf@GLIBC_2.27 2.27
  logl@GLIBC_2.0 2.0
  lrint@GLIBC_2.1 2.1
+ lrintf128@GLIBC_2.26 2.26
+ lrintf32@GLIBC_2.27 2.27
+ lrintf32x@GLIBC_2.27 2.27
+ lrintf64@GLIBC_2.27 2.27
+ lrintf64x@GLIBC_2.27 2.27
  lrintf@GLIBC_2.1 2.1
  lrintl@GLIBC_2.1 2.1
  lround@GLIBC_2.1 2.1
+ lroundf128@GLIBC_2.26 2.26
+ lroundf32@GLIBC_2.27 2.27
+ lroundf32x@GLIBC_2.27 2.27
+ lroundf64@GLIBC_2.27 2.27
+ lroundf64x@GLIBC_2.27 2.27
  lroundf@GLIBC_2.1 2.1
  lroundl@GLIBC_2.1 2.1
  matherr@GLIBC_2.0 2.0
  modf@GLIBC_2.0 2.0
+ modff128@GLIBC_2.26 2.26
+ modff32@GLIBC_2.27 2.27
+ modff32x@GLIBC_2.27 2.27
+ modff64@GLIBC_2.27 2.27
+ modff64x@GLIBC_2.27 2.27
  modff@GLIBC_2.0 2.0
  modfl@GLIBC_2.0 2.0
  nan@GLIBC_2.1 2.1
+ nanf128@GLIBC_2.26 2.26
+ nanf32@GLIBC_2.27 2.27
+ nanf32x@GLIBC_2.27 2.27
+ nanf64@GLIBC_2.27 2.27
+ nanf64x@GLIBC_2.27 2.27
  nanf@GLIBC_2.1 2.1
  nanl@GLIBC_2.1 2.1
  nearbyint@GLIBC_2.1 2.1
+ nearbyintf128@GLIBC_2.26 2.26
+ nearbyintf32@GLIBC_2.27 2.27
+ nearbyintf32x@GLIBC_2.27 2.27
+ nearbyintf64@GLIBC_2.27 2.27
+ nearbyintf64x@GLIBC_2.27 2.27
  nearbyintf@GLIBC_2.1 2.1
  nearbyintl@GLIBC_2.1 2.1
  nextafter@GLIBC_2.0 2.0
+ nextafterf128@GLIBC_2.26 2.26
+ nextafterf32@GLIBC_2.27 2.27
+ nextafterf32x@GLIBC_2.27 2.27
+ nextafterf64@GLIBC_2.27 2.27
+ nextafterf64x@GLIBC_2.27 2.27
  nextafterf@GLIBC_2.0 2.0
  nextafterl@GLIBC_2.0 2.0
  nextdown@GLIBC_2.24 2.24
+ nextdownf128@GLIBC_2.26 2.26
+ nextdownf32@GLIBC_2.27 2.27
+ nextdownf32x@GLIBC_2.27 2.27
+ nextdownf64@GLIBC_2.27 2.27
+ nextdownf64x@GLIBC_2.27 2.27
  nextdownf@GLIBC_2.24 2.24
  nextdownl@GLIBC_2.24 2.24
  nexttoward@GLIBC_2.1 2.1
  nexttowardf@GLIBC_2.1 2.1
  nexttowardl@GLIBC_2.1 2.1
  nextup@GLIBC_2.24 2.24
+ nextupf128@GLIBC_2.26 2.26
+ nextupf32@GLIBC_2.27 2.27
+ nextupf32x@GLIBC_2.27 2.27
+ nextupf64@GLIBC_2.27 2.27
+ nextupf64x@GLIBC_2.27 2.27
  nextupf@GLIBC_2.24 2.24
  nextupl@GLIBC_2.24 2.24
  pow10@GLIBC_2.1 2.1
  pow10f@GLIBC_2.1 2.1
  pow10l@GLIBC_2.1 2.1
  pow@GLIBC_2.0 2.0
+ powf128@GLIBC_2.26 2.26
+ powf32@GLIBC_2.27 2.27
+ powf32x@GLIBC_2.27 2.27
+ powf64@GLIBC_2.27 2.27
+ powf64x@GLIBC_2.27 2.27
  powf@GLIBC_2.0 2.0
+ powf@GLIBC_2.27 2.27
  powl@GLIBC_2.0 2.0
  remainder@GLIBC_2.0 2.0
+ remainderf128@GLIBC_2.26 2.26
+ remainderf32@GLIBC_2.27 2.27
+ remainderf32x@GLIBC_2.27 2.27
+ remainderf64@GLIBC_2.27 2.27
+ remainderf64x@GLIBC_2.27 2.27
  remainderf@GLIBC_2.0 2.0
  remainderl@GLIBC_2.0 2.0
  remquo@GLIBC_2.1 2.1
+ remquof128@GLIBC_2.26 2.26
+ remquof32@GLIBC_2.27 2.27
+ remquof32x@GLIBC_2.27 2.27
+ remquof64@GLIBC_2.27 2.27
+ remquof64x@GLIBC_2.27 2.27
  remquof@GLIBC_2.1 2.1
  remquol@GLIBC_2.1 2.1
  rint@GLIBC_2.0 2.0
+ rintf128@GLIBC_2.26 2.26
+ rintf32@GLIBC_2.27 2.27
+ rintf32x@GLIBC_2.27 2.27
+ rintf64@GLIBC_2.27 2.27
+ rintf64x@GLIBC_2.27 2.27
  rintf@GLIBC_2.0 2.0
  rintl@GLIBC_2.0 2.0
  round@GLIBC_2.1 2.1
+ roundeven@GLIBC_2.25 2.25
+ roundevenf128@GLIBC_2.26 2.26
+ roundevenf32@GLIBC_2.27 2.27
+ roundevenf32x@GLIBC_2.27 2.27
+ roundevenf64@GLIBC_2.27 2.27
+ roundevenf64x@GLIBC_2.27 2.27
+ roundevenf@GLIBC_2.25 2.25
+ roundevenl@GLIBC_2.25 2.25
+ roundf128@GLIBC_2.26 2.26
+ roundf32@GLIBC_2.27 2.27
+ roundf32x@GLIBC_2.27 2.27
+ roundf64@GLIBC_2.27 2.27
+ roundf64x@GLIBC_2.27 2.27
  roundf@GLIBC_2.1 2.1
  roundl@GLIBC_2.1 2.1
  scalb@GLIBC_2.0 2.0
  scalbf@GLIBC_2.0 2.0
  scalbl@GLIBC_2.0 2.0
  scalbln@GLIBC_2.1 2.1
+ scalblnf128@GLIBC_2.26 2.26
+ scalblnf32@GLIBC_2.27 2.27
+ scalblnf32x@GLIBC_2.27 2.27
+ scalblnf64@GLIBC_2.27 2.27
+ scalblnf64x@GLIBC_2.27 2.27
  scalblnf@GLIBC_2.1 2.1
  scalblnl@GLIBC_2.1 2.1
  scalbn@GLIBC_2.0 2.0
+ scalbnf128@GLIBC_2.26 2.26
+ scalbnf32@GLIBC_2.27 2.27
+ scalbnf32x@GLIBC_2.27 2.27
+ scalbnf64@GLIBC_2.27 2.27
+ scalbnf64x@GLIBC_2.27 2.27
  scalbnf@GLIBC_2.0 2.0
  scalbnl@GLIBC_2.0 2.0
+ setpayload@GLIBC_2.25 2.25
+ setpayloadf128@GLIBC_2.26 2.26
+ setpayloadf32@GLIBC_2.27 2.27
+ setpayloadf32x@GLIBC_2.27 2.27
+ setpayloadf64@GLIBC_2.27 2.27
+ setpayloadf64x@GLIBC_2.27 2.27
+ setpayloadf@GLIBC_2.25 2.25
+ setpayloadl@GLIBC_2.25 2.25
+ setpayloadsig@GLIBC_2.25 2.25
+ setpayloadsigf128@GLIBC_2.26 2.26
+ setpayloadsigf32@GLIBC_2.27 2.27
+ setpayloadsigf32x@GLIBC_2.27 2.27
+ setpayloadsigf64@GLIBC_2.27 2.27
+ setpayloadsigf64x@GLIBC_2.27 2.27
+ setpayloadsigf@GLIBC_2.25 2.25
+ setpayloadsigl@GLIBC_2.25 2.25
  signgam@GLIBC_2.0 2.0
  significand@GLIBC_2.0 2.0
  significandf@GLIBC_2.0 2.0
  significandl@GLIBC_2.0 2.0
  sin@GLIBC_2.0 2.0
  sincos@GLIBC_2.1 2.1
+ sincosf128@GLIBC_2.26 2.26
+ sincosf32@GLIBC_2.27 2.27
+ sincosf32x@GLIBC_2.27 2.27
+ sincosf64@GLIBC_2.27 2.27
+ sincosf64x@GLIBC_2.27 2.27
  sincosf@GLIBC_2.1 2.1
  sincosl@GLIBC_2.1 2.1
+ sinf128@GLIBC_2.26 2.26
+ sinf32@GLIBC_2.27 2.27
+ sinf32x@GLIBC_2.27 2.27
+ sinf64@GLIBC_2.27 2.27
+ sinf64x@GLIBC_2.27 2.27
  sinf@GLIBC_2.0 2.0
  sinh@GLIBC_2.0 2.0
+ sinhf128@GLIBC_2.26 2.26
+ sinhf32@GLIBC_2.27 2.27
+ sinhf32x@GLIBC_2.27 2.27
+ sinhf64@GLIBC_2.27 2.27
+ sinhf64x@GLIBC_2.27 2.27
  sinhf@GLIBC_2.0 2.0
  sinhl@GLIBC_2.0 2.0
  sinl@GLIBC_2.0 2.0
  sqrt@GLIBC_2.0 2.0
+ sqrtf128@GLIBC_2.26 2.26
+ sqrtf32@GLIBC_2.27 2.27
+ sqrtf32x@GLIBC_2.27 2.27
+ sqrtf64@GLIBC_2.27 2.27
+ sqrtf64x@GLIBC_2.27 2.27
  sqrtf@GLIBC_2.0 2.0
  sqrtl@GLIBC_2.0 2.0
  tan@GLIBC_2.0 2.0
+ tanf128@GLIBC_2.26 2.26
+ tanf32@GLIBC_2.27 2.27
+ tanf32x@GLIBC_2.27 2.27
+ tanf64@GLIBC_2.27 2.27
+ tanf64x@GLIBC_2.27 2.27
  tanf@GLIBC_2.0 2.0
  tanh@GLIBC_2.0 2.0
+ tanhf128@GLIBC_2.26 2.26
+ tanhf32@GLIBC_2.27 2.27
+ tanhf32x@GLIBC_2.27 2.27
+ tanhf64@GLIBC_2.27 2.27
+ tanhf64x@GLIBC_2.27 2.27
  tanhf@GLIBC_2.0 2.0
  tanhl@GLIBC_2.0 2.0
  tanl@GLIBC_2.0 2.0
  tgamma@GLIBC_2.1 2.1
+ tgammaf128@GLIBC_2.26 2.26
+ tgammaf32@GLIBC_2.27 2.27
+ tgammaf32x@GLIBC_2.27 2.27
+ tgammaf64@GLIBC_2.27 2.27
+ tgammaf64x@GLIBC_2.27 2.27
  tgammaf@GLIBC_2.1 2.1
  tgammal@GLIBC_2.1 2.1
+ totalorder@GLIBC_2.25 2.25
+ totalorderf128@GLIBC_2.26 2.26
+ totalorderf32@GLIBC_2.27 2.27
+ totalorderf32x@GLIBC_2.27 2.27
+ totalorderf64@GLIBC_2.27 2.27
+ totalorderf64x@GLIBC_2.27 2.27
+ totalorderf@GLIBC_2.25 2.25
+ totalorderl@GLIBC_2.25 2.25
+ totalordermag@GLIBC_2.25 2.25
+ totalordermagf128@GLIBC_2.26 2.26
+ totalordermagf32@GLIBC_2.27 2.27
+ totalordermagf32x@GLIBC_2.27 2.27
+ totalordermagf64@GLIBC_2.27 2.27
+ totalordermagf64x@GLIBC_2.27 2.27
+ totalordermagf@GLIBC_2.25 2.25
+ totalordermagl@GLIBC_2.25 2.25
  trunc@GLIBC_2.1 2.1
+ truncf128@GLIBC_2.26 2.26
+ truncf32@GLIBC_2.27 2.27
+ truncf32x@GLIBC_2.27 2.27
+ truncf64@GLIBC_2.27 2.27
+ truncf64x@GLIBC_2.27 2.27
  truncf@GLIBC_2.1 2.1
  truncl@GLIBC_2.1 2.1
+ ufromfp@GLIBC_2.25 2.25
+ ufromfpf128@GLIBC_2.26 2.26
+ ufromfpf32@GLIBC_2.27 2.27
+ ufromfpf32x@GLIBC_2.27 2.27
+ ufromfpf64@GLIBC_2.27 2.27
+ ufromfpf64x@GLIBC_2.27 2.27
+ ufromfpf@GLIBC_2.25 2.25
+ ufromfpl@GLIBC_2.25 2.25
+ ufromfpx@GLIBC_2.25 2.25
+ ufromfpxf128@GLIBC_2.26 2.26
+ ufromfpxf32@GLIBC_2.27 2.27
+ ufromfpxf32x@GLIBC_2.27 2.27
+ ufromfpxf64@GLIBC_2.27 2.27
+ ufromfpxf64x@GLIBC_2.27 2.27
+ ufromfpxf@GLIBC_2.25 2.25
+ ufromfpxl@GLIBC_2.25 2.25
  y0@GLIBC_2.0 2.0
+ y0f128@GLIBC_2.26 2.26
+ y0f32@GLIBC_2.27 2.27
+ y0f32x@GLIBC_2.27 2.27
+ y0f64@GLIBC_2.27 2.27
+ y0f64x@GLIBC_2.27 2.27
  y0f@GLIBC_2.0 2.0
  y0l@GLIBC_2.0 2.0
  y1@GLIBC_2.0 2.0
+ y1f128@GLIBC_2.26 2.26
+ y1f32@GLIBC_2.27 2.27
+ y1f32x@GLIBC_2.27 2.27
+ y1f64@GLIBC_2.27 2.27
+ y1f64x@GLIBC_2.27 2.27
  y1f@GLIBC_2.0 2.0
  y1l@GLIBC_2.0 2.0
  yn@GLIBC_2.0 2.0
+ ynf128@GLIBC_2.26 2.26
+ ynf32@GLIBC_2.27 2.27
+ ynf32x@GLIBC_2.27 2.27
+ ynf64@GLIBC_2.27 2.27
+ ynf64x@GLIBC_2.27 2.27
  ynf@GLIBC_2.0 2.0
  ynl@GLIBC_2.0 2.0
 libmemusage.so libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  calloc@Base 2.3.6
  free@Base 2.3.6
  malloc@Base 2.3.6
@@ -2924,7 +3691,7 @@ libmemusage.so libc6 #MINVER#
  munmap@Base 2.3.6
  realloc@Base 2.3.6
 libnsl.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.2@GLIBC_2.2 2.2
@@ -3058,7 +3825,7 @@ libnsl.so.1 libc6 #MINVER#
  yperr_string@GLIBC_2.0 2.0
  ypprot_err@GLIBC_2.0 2.0
 libnss_compat.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_compat_endgrent@GLIBC_PRIVATE 0 1
  _nss_compat_endpwent@GLIBC_PRIVATE 0 1
@@ -3076,7 +3843,7 @@ libnss_compat.so.2 libc6 #MINVER#
  _nss_compat_setpwent@GLIBC_PRIVATE 0 1
  _nss_compat_setspent@GLIBC_PRIVATE 0 1
 libnss_dns.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_dns_getcanonname_r@GLIBC_PRIVATE 0 1
  _nss_dns_gethostbyaddr2_r@GLIBC_PRIVATE 0 1
@@ -3088,7 +3855,7 @@ libnss_dns.so.2 libc6 #MINVER#
  _nss_dns_getnetbyaddr_r@GLIBC_PRIVATE 0 1
  _nss_dns_getnetbyname_r@GLIBC_PRIVATE 0 1
 libnss_files.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_files_endaliasent@GLIBC_PRIVATE 0 1
  _nss_files_endetherent@GLIBC_PRIVATE 0 1
@@ -3159,7 +3926,7 @@ libnss_files.so.2 libc6 #MINVER#
  _nss_files_setspent@GLIBC_PRIVATE 0 1
  _nss_netgroup_parseline@GLIBC_PRIVATE 0 1
 libnss_hesiod.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_hesiod_endgrent@GLIBC_PRIVATE 0 1
  _nss_hesiod_endprotoent@GLIBC_PRIVATE 0 1
@@ -3179,7 +3946,7 @@ libnss_hesiod.so.2 libc6 #MINVER#
  _nss_hesiod_setpwent@GLIBC_PRIVATE 0 1
  _nss_hesiod_setservent@GLIBC_PRIVATE 0 1
 libnss_nis.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_nis_endaliasent@GLIBC_PRIVATE 0 1
  _nss_nis_endetherent@GLIBC_PRIVATE 0 1
@@ -3239,7 +4006,7 @@ libnss_nis.so.2 libc6 #MINVER#
  _nss_nis_setservent@GLIBC_PRIVATE 0 1
  _nss_nis_setspent@GLIBC_PRIVATE 0 1
 libnss_nisplus.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_PRIVATE@GLIBC_PRIVATE 0 1
  _nss_nisplus_endaliasent@GLIBC_PRIVATE 0 1
  _nss_nisplus_endetherent@GLIBC_PRIVATE 0 1
@@ -3298,11 +4065,11 @@ libnss_nisplus.so.2 libc6 #MINVER#
  _nss_nisplus_setservent@GLIBC_PRIVATE 0 1
  _nss_nisplus_setspent@GLIBC_PRIVATE 0 1
 libpcprofile.so libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  __cyg_profile_func_enter@Base 2.3.6
  __cyg_profile_func_exit@Base 2.3.6
 libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.1.1@GLIBC_2.1.1 2.1.1
  GLIBC_2.1.2@GLIBC_2.1.2 2.1.2
@@ -3312,6 +4079,7 @@ libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.2.3@GLIBC_2.2.3 2.2.3
  GLIBC_2.2.6@GLIBC_2.2.6 2.2.6
+ GLIBC_2.28@GLIBC_2.28 2.28
  GLIBC_2.2@GLIBC_2.2 2.2
  GLIBC_2.3.2@GLIBC_2.3.2 2.3.2
  GLIBC_2.3.3@GLIBC_2.3.3 2.3.3
@@ -3330,6 +4098,7 @@ libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
  __libc_allocate_rtsig@GLIBC_2.1 2.1
  __libc_current_sigrtmax@GLIBC_2.1 2.1
  __libc_current_sigrtmin@GLIBC_2.1 2.1
+ __libpthread_freeres@GLIBC_PRIVATE 0 1
  __lseek@GLIBC_2.0 2.0
  __nanosleep@GLIBC_2.2.6 2.2.6
  __open64@GLIBC_2.2 2.2
@@ -3381,7 +4150,14 @@ libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
  _pthread_cleanup_push@GLIBC_2.0 2.0
  _pthread_cleanup_push_defer@GLIBC_2.0 2.0
  accept@GLIBC_2.0 2.0
+ call_once@GLIBC_2.28 2.28
  close@GLIBC_2.0 2.0
+ cnd_broadcast@GLIBC_2.28 2.28
+ cnd_destroy@GLIBC_2.28 2.28
+ cnd_init@GLIBC_2.28 2.28
+ cnd_signal@GLIBC_2.28 2.28
+ cnd_timedwait@GLIBC_2.28 2.28
+ cnd_wait@GLIBC_2.28 2.28
  connect@GLIBC_2.0 2.0
  fcntl@GLIBC_2.0 2.0
  flockfile@GLIBC_2.0 2.0
@@ -3393,6 +4169,12 @@ libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
  lseek64@GLIBC_2.2 2.2
  lseek@GLIBC_2.0 2.0
  msync@GLIBC_2.0 2.0
+ mtx_destroy@GLIBC_2.28 2.28
+ mtx_init@GLIBC_2.28 2.28
+ mtx_lock@GLIBC_2.28 2.28
+ mtx_timedlock@GLIBC_2.28 2.28
+ mtx_trylock@GLIBC_2.28 2.28
+ mtx_unlock@GLIBC_2.28 2.28
  nanosleep@GLIBC_2.0 2.0
  open64@GLIBC_2.2 2.2
  open@GLIBC_2.0 2.0
@@ -3565,12 +4347,20 @@ libpthread.so.0 libc6 (>= 2.3.6-6~), libc6 #MINVER#
  sigwait@GLIBC_2.0 2.0
  system@GLIBC_2.0 2.0
  tcdrain@GLIBC_2.0 2.0
+ thrd_create@GLIBC_2.28 2.28
+ thrd_detach@GLIBC_2.28 2.28
+ thrd_exit@GLIBC_2.28 2.28
+ thrd_join@GLIBC_2.28 2.28
+ tss_create@GLIBC_2.28 2.28
+ tss_delete@GLIBC_2.28 2.28
+ tss_get@GLIBC_2.28 2.28
+ tss_set@GLIBC_2.28 2.28
  vfork@GLIBC_2.0 2.0
  wait@GLIBC_2.0 2.0
  waitpid@GLIBC_2.0 2.0
  write@GLIBC_2.0 2.0
 libresolv.so.2 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  GLIBC_2.2@GLIBC_2.2 2.2
  GLIBC_2.3.2@GLIBC_2.3.2 2.3.2
@@ -3586,8 +4376,6 @@ libresolv.so.2 libc6 #MINVER#
  __fp_query@GLIBC_2.0 2.0
  __fp_resstat@GLIBC_2.0 2.0
  __hostalias@GLIBC_2.0 2.0
- __libc_res_nquery@GLIBC_PRIVATE 0 1
- __libc_res_nsearch@GLIBC_PRIVATE 0 1
  __loc_aton@GLIBC_2.0 2.0
  __loc_ntoa@GLIBC_2.0 2.0
  __ns_get16@GLIBC_PRIVATE 0 1
@@ -3610,6 +4398,9 @@ libresolv.so.2 libc6 #MINVER#
  __putlong@GLIBC_2.0 2.0
  __putshort@GLIBC_2.0 2.0
  __res_close@GLIBC_2.0 2.0
+ __res_context_hostalias@GLIBC_PRIVATE 0 1
+ __res_context_query@GLIBC_PRIVATE 0 1
+ __res_context_search@GLIBC_PRIVATE 0 1
  __res_dnok@GLIBC_2.0 2.0
  __res_hnok@GLIBC_2.0 2.0
  __res_hostalias@GLIBC_2.2 2.2
@@ -3679,7 +4470,7 @@ libresolv.so.2 libc6 #MINVER#
  res_send_setqhook@GLIBC_2.0 2.0
  res_send_setrhook@GLIBC_2.0 2.0
 librt.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.1@GLIBC_2.1 2.1
  GLIBC_2.2@GLIBC_2.2 2.2
  GLIBC_2.3.4@GLIBC_2.3.4 2.3.4
@@ -3728,7 +4519,7 @@ librt.so.1 libc6 #MINVER#
  timer_gettime@GLIBC_2.2 2.2
  timer_settime@GLIBC_2.2 2.2
 libthread_db.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.1.3@GLIBC_2.1.3 2.1.3
  GLIBC_2.2.3@GLIBC_2.2.3 2.2.3
  GLIBC_2.3.3@GLIBC_2.3.3 2.3.3
@@ -3774,7 +4565,7 @@ libthread_db.so.1 libc6 #MINVER#
  td_thr_tsd@GLIBC_2.1.3 2.1.3
  td_thr_validate@GLIBC_2.1.3 2.1.3
 libutil.so.1 libc6 #MINVER#
-| libc6 (>> 2.24), libc6 (<< 2.25)
+| libc6 (>> 2.28), libc6 (<< 2.29)
  GLIBC_2.0@GLIBC_2.0 2.0
  forkpty@GLIBC_2.0 2.0
  login@GLIBC_2.0 2.0

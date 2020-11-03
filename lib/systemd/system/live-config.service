@@ -9,8 +9,8 @@
 [Unit]
 Description=live-config contains the components that configure a live system during the boot process (late userspace).
 Documentation=man:live-config
-Before=basic.target udev.service
-After=local-fs.target
+Before=basic.target
+After=local-fs.target systemd-tmpfiles-setup.service
 DefaultDependencies=no
 ConditionPathExists=/bin/live-config
 ConditionKernelCommandLine=boot=live

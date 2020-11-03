@@ -18,14 +18,10 @@ flavour=$1
 package=dictionaries-common
 files_base="debian-ispell.el"
 files="$files_base ispell.el flyspell.el"
-source=/usr/share/emacs/site-lisp/${package}
+source=/usr/share/dictionaries-common/site-elisp
 destination=/usr/share/${flavour}/site-lisp/${package}
 
 case "$flavour" in
-    emacs)
-	# Dummy emacs flavour. Do nothing and exit
-	exit 0
-	;;
     xemacs*)
 	flags="-no-site-file"
 	;;
@@ -63,6 +59,7 @@ EOF
     flags="${flags} -q -batch -l path.el -f batch-byte-compile"
     ( # Go to the .elc dir, set sources symlinks, byte compile files and remove temp .el files from the .elc dir
 	cd ${destination}
+	touch .nosearch
 	for i in $files; do
 	    ln -sf $source/$i
 	done

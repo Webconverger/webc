@@ -9,4 +9,12 @@ if [ ! -L /usr/share/doc/klibc-utils ] && \
 	ln -sf libklibc /usr/share/doc/klibc-utils
 fi
 
+# Remove diversion which was used during upgrades to stretch.
+# This command can be removed after the buster release.
+if dpkg --compare-versions "$2" lt 2.0.4-12~; then
+    dpkg-divert --package klibc-utils --remove --rename \
+		--divert /usr/share/initramfs-tools/hooks/klibc^i-t \
+		/usr/share/initramfs-tools/hooks/klibc
+fi
+
 

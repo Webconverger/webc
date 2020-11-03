@@ -4,7 +4,4 @@ set -e
 
 if [ "$1" = remove ]; then
     update-alternatives --remove mt /bin/mt-gnu
-    if test -L /sbin/rmt && test /sbin/rmt -ef /usr/sbin/rmt; then
-	rm -f /sbin/rmt
-    fi
 fi

@@ -51,7 +51,7 @@ _read_fstab () {
 			while read DEV MTPT FSTYPE OPTS DUMP PASS JUNK; do
 				case "$DEV" in
 				  ""|\#*)
-					continue;
+					continue
 					;;
 				  /dev/mapper/*)
 					[ "$FSTYPE" = "swap" ] && echo swap_on_lv=yes
@@ -436,7 +436,7 @@ post_mountall ()
 	# directory.  The migration logic will then take care of the
 	# rest.  Note that it will take a second boot to fully
 	# migrate; it should only ever be needed on broken systems.
-	RAMSHM_ON_DEV_SHM="no"
+	RAMSHM_ON_DEV_SHM="yes"
 	if read_fstab_entry "/dev/shm"; then
 	    RAMSHM_ON_DEV_SHM="yes"
 	fi
@@ -559,8 +559,8 @@ mount_shm ()
 {
 	MNTMODE="$1"
 
-	RAMSHM_ON_DEV_SHM="no"
-	SHMDIR="/run/shm"
+	RAMSHM_ON_DEV_SHM="yes"
+	SHMDIR="/dev/shm"
 	if read_fstab_entry "/dev/shm"; then
 		if [ "$MNTMODE" = "mount_noupdate" ]; then
 			log_warning_msg "Warning: fstab entry for /dev/shm; should probably be for /run/shm unless working around a bug in the Oracle database"
@@ -634,7 +634,7 @@ mount_tmp ()
 	# Disable RAMTMP if there's 64MiB RAM or less.  May be
 	# re-enabled by overflow or read only root, below.
 	RAM_SIZE="$(ram_size)"
-	if [ -n "$RAM_SIZE" ] && [ "$((RAM_SIZE <= 65536))" = "1" ]; then
+	if [ -n "$RAM_SIZE" ] && [ "$RAM_SIZE" -le 65536 ]; then
 		RAMTMP=no
 	fi
 
@@ -705,4 +705,14 @@ is_fastboot_active() {
 	    esac
 	done
 	return 1
+}
+
+# This function does not actually belong here; it is duct-tape solution
+# for #901289.
+logsave_best_effort () {
+	if [ -x /sbin/logsave ] ; then
+		logsave -s "${FSCK_LOGFILE}" "$@"
+	else
+		"$@"
+	fi
 }

@@ -12,9 +12,16 @@ use base qw(Exporter);
 our @EXPORT_OK = qw(make_frontend make_confmodule);
 our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
+BEGIN {
+	eval {
+		require Glib::Object::Introspection;
+	};
+}
+
 
 my %fallback=(
-	'Kde'			=>	['Dialog', 'Readline', 'Teletype'],
+	'Kde'			=>	['Qt', 'Dialog', 'Readline', 'Teletype'],
+	'Qt'			=>	['Dialog', 'Readline', 'Teletype'],
 	'Gnome'			=>	['Dialog', 'Readline', 'Teletype'],
 	'Web'			=>	['Dialog', 'Readline', 'Teletype'],
 	'Dialog'		=>	['Readline', 'Teletype'],

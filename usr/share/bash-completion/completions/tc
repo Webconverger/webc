@@ -2,6 +2,12 @@
 # Copyright 2016 6WIND S.A.
 # Copyright 2016 Quentin Monnet <quentin.monnet@6wind.com>
 
+QDISC_KIND=' choke codel bfifo pfifo pfifo_head_drop fq fq_codel gred hhf \
+            mqprio multiq netem pfifo_fast pie red rr sfb sfq tbf atm cbq drr \
+            dsmark hfsc htb prio qfq '
+FILTER_KIND=' basic bpf cgroup flow flower fw route rsvp tcindex u32 matchall '
+ACTION_KIND=' gact mirred bpf sample '
+
 # Takes a list of words in argument; each one of them is added to COMPREPLY if
 # it is not already present on the command line. Returns no value.
 _tc_once_attr()
@@ -20,6 +26,26 @@ _tc_once_attr()
     done
 }
 
+# Takes a list of words in argument; each one of them is added to COMPREPLY if
+# it is not already present on the command line from the provided index. Returns
+# no value.
+_tc_once_attr_from()
+{
+    local w subcword found from=$1
+    shift
+    for w in $*; do
+        found=0
+        for (( subcword=$from; subcword < ${#words[@]}-1; subcword++ )); do
+            if [[ $w == ${words[subcword]} ]]; then
+                found=1
+                break
+            fi
+        done
+        [[ $found -eq 0 ]] && \
+            COMPREPLY+=( $( compgen -W "$w" -- "$cur" ) )
+    done
+}
+
 # Takes a list of words in argument; adds them all to COMPREPLY if none of them
 # is already present on the command line. Returns no value.
 _tc_one_of_list()
@@ -27,6 +53,21 @@ _tc_one_of_list()
     local w subcword
     for w in $*; do
         for (( subcword=3; subcword < ${#words[@]}-1; subcword++ )); do
+            [[ $w == ${words[subcword]} ]] && return 1
+        done
+    done
+    COMPREPLY+=( $( compgen -W "$*" -- "$cur" ) )
+}
+
+# Takes a list of words in argument; adds them all to COMPREPLY if none of them
+# is already present on the command line from the provided index. Returns no
+# value.
+_tc_one_of_list_from()
+{
+    local w subcword from=$1
+    shift
+    for w in $*; do
+        for (( subcword=$from; subcword < ${#words[@]}-1; subcword++ )); do
             [[ $w == ${words[subcword]} ]] && return 1
         done
     done
@@ -345,11 +386,44 @@ _tc_bpf_options()
     return 0
 }
 
+# Complete with options names for filter actions.
+# This function is recursive, thus allowing multiple actions statement to be
+# parsed.
+# Returns 0 is completion should stop after running this function, 1 otherwise.
+_tc_filter_action_options()
+{
+    for ((acwd=$1; acwd < ${#words[@]}-1; acwd++));
+    do
+        if [[ action == ${words[acwd]} ]]; then
+            _tc_filter_action_options $((acwd+1)) && return 0
+        fi
+    done
+
+    local action acwd
+    for ((acwd=$1; acwd < ${#words[@]}-1; acwd++)); do
+        if [[ $ACTION_KIND =~ ' '${words[acwd]}' ' ]]; then
+            _tc_one_of_list_from $acwd action
+            _tc_action_options $acwd && return 0
+        fi
+    done
+    _tc_one_of_list_from $acwd $ACTION_KIND
+    return 0
+}
+
 # Complete with options names for filters.
 # Returns 0 is completion should stop after running this function, 1 otherwise.
 _tc_filter_options()
 {
-    case $1 in
+
+    for ((acwd=$1; acwd < ${#words[@]}-1; acwd++));
+    do
+        if [[ action == ${words[acwd]} ]]; then
+            _tc_filter_action_options $((acwd+1)) && return 0
+        fi
+    done
+
+    filter=${words[$1]}
+    case $filter in
         basic)
             _tc_once_attr 'match action classid'
             return 0
@@ -373,6 +447,10 @@ _tc_filter_options()
                 fi
             done
             _tc_once_attr 'map hash divisor baseclass match action'
+            return 0
+            ;;
+        matchall)
+            _tc_once_attr 'action classid skip_sw skip_hw'
             return 0
             ;;
         flower)
@@ -419,20 +497,28 @@ _tc_filter_options()
 # Returns 0 is completion should stop after running this function, 1 otherwise.
 _tc_action_options()
 {
-    case $1 in
+    local from=$1
+    local action=${words[from]}
+    case $action in
         bpf)
             _tc_bpf_options
             return 0
             ;;
         mirred)
-            _tc_one_of_list 'ingress egress'
-            _tc_one_of_list 'mirror redirect'
-            _tc_once_attr 'index dev'
+            _tc_one_of_list_from $from 'ingress egress'
+            _tc_one_of_list_from $from 'mirror redirect'
+            _tc_once_attr_from $from 'index dev'
+            return 0
+            ;;
+        sample)
+            _tc_once_attr_from $from 'rate'
+            _tc_once_attr_from $from 'trunc'
+            _tc_once_attr_from $from 'group'
             return 0
             ;;
         gact)
-            _tc_one_of_list 'reclassify drop continue pass'
-            _tc_once_attr 'random'
+            _tc_one_of_list_from $from 'reclassify drop continue pass'
+            _tc_once_attr_from $from 'random'
             return 0
             ;;
     esac
@@ -562,10 +648,7 @@ _tc()
                         COMPREPLY=( $( compgen -W 'dev' -- "$cur" ) )
                         return 0
                     fi
-                    local qdisc qdwd QDISC_KIND=' choke codel bfifo pfifo \
-                        pfifo_head_drop fq fq_codel gred hhf mqprio multiq \
-                        netem pfifo_fast pie red rr sfb sfq tbf atm cbq drr \
-                        dsmark hfsc htb prio qfq '
+                    local qdisc qdwd
                     for ((qdwd=$subcword; qdwd < ${#words[@]}-1; qdwd++)); do
                         if [[ $QDISC_KIND =~ ' '${words[qdwd]}' ' ]]; then
                             qdisc=${words[qdwd]}
@@ -600,10 +683,7 @@ _tc()
                         COMPREPLY=( $( compgen -W 'dev' -- "$cur" ) )
                         return 0
                     fi
-                    local qdisc qdwd QDISC_KIND=' choke codel bfifo pfifo \
-                        pfifo_head_drop fq fq_codel gred hhf mqprio multiq \
-                        netem pfifo_fast pie red rr sfb sfq tbf atm cbq drr \
-                        dsmark hfsc htb prio qfq '
+                    local qdisc qdwd
                     for ((qdwd=$subcword; qdwd < ${#words[@]}-1; qdwd++)); do
                         if [[ $QDISC_KIND =~ ' '${words[qdwd]}' ' ]]; then
                             qdisc=${words[qdwd]}
@@ -638,13 +718,11 @@ _tc()
                         COMPREPLY=( $( compgen -W 'dev' -- "$cur" ) )
                         return 0
                     fi
-                    local filter fltwd FILTER_KIND=' basic bpf cgroup flow \
-                        flower fw route rsvp tcindex u32 '
+                    local filter fltwd
                     for ((fltwd=$subcword; fltwd < ${#words[@]}-1; fltwd++));
                     do
                         if [[ $FILTER_KIND =~ ' '${words[fltwd]}' ' ]]; then
-                            filter=${words[fltwd]}
-                            _tc_filter_options $filter && return 0
+                            _tc_filter_options $fltwd && return 0
                         fi
                     done
                     _tc_one_of_list $FILTER_KIND
@@ -671,11 +749,10 @@ _tc()
         action)
             case $subcmd in
                 add|change|replace)
-                    local action acwd ACTION_KIND=' gact mirred bpf '
+                    local action acwd
                     for ((acwd=$subcword; acwd < ${#words[@]}-1; acwd++)); do
                         if [[ $ACTION_KIND =~ ' '${words[acwd]}' ' ]]; then
-                            action=${words[acwd]}
-                            _tc_action_options $action && return 0
+                            _tc_action_options $acwd && return 0
                         fi
                     done
                     _tc_one_of_list $ACTION_KIND

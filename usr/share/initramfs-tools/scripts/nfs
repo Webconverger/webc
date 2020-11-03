@@ -5,7 +5,7 @@
 nfs_top()
 {
 	if [ "${nfs_top_used}" != "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-top"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/nfs-top"
 		run_scripts /scripts/nfs-top
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -15,7 +15,7 @@ nfs_top()
 nfs_premount()
 {
 	if [ "${nfs_premount_used}" != "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-premount"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/nfs-premount"
 		run_scripts /scripts/nfs-premount
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -25,7 +25,7 @@ nfs_premount()
 nfs_bottom()
 {
 	if [ "${nfs_premount_used}" = "yes" ] || [ "${nfs_top_used}" = "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
 		run_scripts /scripts/nfs-bottom
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -65,13 +65,14 @@ nfs_mount_root_impl()
 
 	nfs_premount
 
-	if [ ${readonly} = y ]; then
+	if [ "${readonly?}" = y ]; then
 		roflag="-o ro"
 	else
 		roflag="-o rw"
 	fi
 
-	nfsmount -o nolock ${roflag} ${NFSOPTS} ${NFSROOT} ${rootmnt}
+	# shellcheck disable=SC2086
+	nfsmount -o nolock ${roflag} ${NFSOPTS} "${NFSROOT}" "${rootmnt?}"
 }
 
 # NFS root mounting
@@ -79,7 +80,6 @@ nfs_mount_root()
 {
 	nfs_top
 
-	modprobe nfs
 	# For DHCP
 	modprobe af_packet
 
@@ -92,13 +92,13 @@ nfs_mount_root()
 	nfs_mount_root_impl
 	ret=$?
 	nfs_retry_count=0
-	while [ ${nfs_retry_count} -lt ${delay} ] \
+	while [ ${nfs_retry_count} -lt "${delay}" ] \
 		&& [ $ret -ne 0 ] ; do
 		[ "$quiet" != "y" ] && log_begin_msg "Retrying nfs mount"
-		/bin/sleep 1
+		sleep 1
 		nfs_mount_root_impl
 		ret=$?
-		nfs_retry_count=$(( ${nfs_retry_count} + 1 ))
+		nfs_retry_count=$(( nfs_retry_count + 1 ))
 		[ "$quiet" != "y" ] && log_end_msg
 	done
 }
@@ -113,7 +113,7 @@ nfs_mount_fs_impl()
 
 	nfs_premount
 
-	if [ ${readonly} = y ]; then
+	if [ "${readonly}" = y ]; then
 		roflag="-o ro"
 	else
 		roflag="-o rw"
@@ -121,6 +121,7 @@ nfs_mount_fs_impl()
 
 	read_fstab_entry "$1"
 
+	# shellcheck disable=SC2086
 	nfsmount ${roflag} ${NFSOPTS} -o "${MNT_OPTS}" "$MNT_FSNAME" "${rootmnt}${MNT_DIR}"
 }
 
@@ -128,7 +129,6 @@ nfs_mount_fs()
 {
 	nfs_top
 
-	modprobe nfs
 	# For DHCP
 	modprobe af_packet
 

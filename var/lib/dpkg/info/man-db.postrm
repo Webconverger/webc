@@ -30,10 +30,39 @@ case $1 in
 	;;
 esac
 
-# Automatically added by dh_installdebconf
+# Automatically added by dh_systemd_start/12
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable/12
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'man-db.timer' >/dev/null || true
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'man-db.timer' >/dev/null || true
+		deb-systemd-helper unmask 'man-db.timer' >/dev/null || true
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_installdebconf/12
 if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
 	. /usr/share/debconf/confmodule
 	db_purge
+fi
+# End automatically added section
+# Automatically added by dh_apparmor/2.13.2-7
+if [ "$1" = "purge" ] && ! [ -e "/etc/apparmor.d/usr.bin.man" ] ; then
+    rm -f "/etc/apparmor.d/disable/usr.bin.man" || true
+    rm -f "/etc/apparmor.d/force-complain/usr.bin.man" || true
+    rm -f "/etc/apparmor.d/local/usr.bin.man" || true
+    rmdir /etc/apparmor.d/disable 2>/dev/null || true
+    rmdir /etc/apparmor.d/local   2>/dev/null || true
+    rmdir /etc/apparmor.d         2>/dev/null || true
 fi
 # End automatically added section
 

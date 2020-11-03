@@ -2,32 +2,17 @@
 
 set -e
 
-FLAVOR=$1
-# Make sure these options are appropriate for the given package.
-compile_options="--no-init-file --no-site-file -batch -f batch-byte-compile"
+flavor="$1"
 
-echo emacsen-common: Handling install of emacsen flavor ${FLAVOR}
+echo "emacsen-common: Handling install of emacsen flavor $flavor"
 
-# Normal add-on packages should usually *not* scatter their files
-# directly in site-lisp, but should use a package subdir.  This
-# package/file is an exception.
-
-# Remove potentially stale versions.
 rm -f \
-  /etc/${FLAVOR}/site-start.d/00debian-vars.el \
-  /etc/${FLAVOR}/site-start.d/00debian-vars.elc \
-  /usr/share/${FLAVOR}/site-lisp/debian-startup.el \
-  /usr/share/${FLAVOR}/site-lisp/debian-startup.elc
+   "/usr/share/$flavor/site-lisp/debian-startup.el" \
+   "/usr/share/$flavor/site-lisp/debian-startup.elc"
 
 # Create symlinks to the .el files (see section 5E in debian-emacs polcy).
-(cd /etc/${FLAVOR}/site-start.d
-  ln -s ../../emacs/site-start.d/00debian-vars.el .)
-(cd /usr/share/${FLAVOR}/site-lisp
-  ln -s ../../emacs/site-lisp/debian-startup.el .)
+(cd "/usr/share/$flavor/site-lisp"
+ ln -s ../../emacsen-common/debian-startup.el .)
 
-# byte compile everything.
-${FLAVOR} ${compile_options} \
-  /etc/${FLAVOR}/site-start.d/00debian-vars.el \
-  /usr/share/${FLAVOR}/site-lisp/debian-startup.el
-
-exit 0;
+"$flavor" --no-init-file --no-site-file -batch -f batch-byte-compile \
+          "/usr/share/$flavor/site-lisp/debian-startup.el"

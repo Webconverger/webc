@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -16,26 +18,38 @@ Before=network.target multi-user.target shutdown.target
 Conflicts=shutdown.target
 Wants=network.target
 
-# On kdbus systems we pull in the busname explicitly, because it
-# carries policy that allows the daemon to acquire its name.
-Wants=org.freedesktop.network1.busname
-After=org.freedesktop.network1.busname
-
 [Service]
-Type=notify
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW
+ExecStart=!!/lib/systemd/systemd-networkd
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectKernelModules=yes
+ProtectSystem=strict
 Restart=on-failure
 RestartSec=0
-ExecStart=/lib/systemd/systemd-networkd
-WatchdogSec=3min
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW CAP_SETUID CAP_SETGID CAP_SETPCAP CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
-ProtectSystem=full
-ProtectHome=yes
-ProtectControlGroups=yes
-MemoryDenyWriteExecute=yes
-RestrictRealtime=yes
 RestrictAddressFamilies=AF_UNIX AF_NETLINK AF_INET AF_INET6 AF_PACKET
-SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RuntimeDirectory=systemd/netif
+RuntimeDirectoryPreserve=yes
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service
+Type=notify
+User=systemd-network
+WatchdogSec=3min
 
 [Install]
 WantedBy=multi-user.target
 Also=systemd-networkd.socket
+Alias=dbus-org.freedesktop.network1.service
+
+# We want to enable systemd-networkd-wait-online.service whenever this service
+# is enabled. systemd-networkd-wait-online.service has
+# WantedBy=network-online.target, so enabling it only has an effect if
+# network-online.target itself is enabled or pulled in by some other unit.
+Also=systemd-networkd-wait-online.service

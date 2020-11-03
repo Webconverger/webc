@@ -16,16 +16,9 @@ if [ -d /usr/lib/gio/modules ]; then
     fi
 fi
 
-if [ "$1" = purge ] && [ -d /usr/share/glib-2.0/schemas ]; then
-    # Purge the compiled schemas
+if [ "$1" = purge ] && [ -d /usr/share/glib-2.0/schemas ] && [ "$DPKG_MAINTSCRIPT_PACKAGE_REFCOUNT" = 1 ]; then
+    # This is the last multiarch variant to be removed, so drop the
+    # architecture-independent compiled schemas
     rm -f /usr/share/glib-2.0/schemas/gschemas.compiled
     rmdir -p --ignore-fail-on-non-empty /usr/share/glib-2.0/schemas
-
-    # With multiarch enabled we can't be certain that the cache file
-    # isn't needed for other architectures since it is not reference
-    # counted. The best we can do is to fire a file trigger which will
-    # regenerate the cache file if required.
-    if [ -d /usr/share/glib-2.0/schemas ]; then
-        dpkg-trigger /usr/share/glib-2.0/schemas
-    fi
 fi

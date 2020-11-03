@@ -1,8 +1,8 @@
 # systemd-detect-virt(1) completion             -*- shell-script -*-
+# SPDX-License-Identifier: LGPL-2.1+
 #
 # This file is part of systemd.
 #
-# Copyright 2014 Thomas H.P. Andersen
 #
 # systemd is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by
@@ -29,7 +29,8 @@ _systemd_detect_virt() {
         local i verb comps
 
         local -A OPTS=(
-               [STANDALONE]='-h --help --version -c --container -v --vm -q --quiet'
+               [STANDALONE]='-h --help --version -c --container -v --vm -q --quiet
+                             --private-users'
         )
 
         _init_completion || return

@@ -54,12 +54,6 @@ do_httpmount ()
 							FUSE_MOUNT="httpfs"
 						fi
 
-						if [ -n "${FUSE_MOUNT}" ] && [ -x /bin/mount.util-linux ]
-						then
-							# fuse does not work with klibc mount
-							ln -f /bin/mount.util-linux /bin/mount
-						fi
-
 						modprobe fuse
 						$FUSE_MOUNT "${url}" "${dest}"
 						ROOT_PID="$(minips h -C "$FUSE_MOUNT" | { read x y ; echo "$x" ; } )"

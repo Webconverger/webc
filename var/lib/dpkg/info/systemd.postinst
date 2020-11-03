@@ -28,10 +28,8 @@ if [ "$1" = "triggered" ]; then
     exit 0
 fi
 
-# Enable getty and remote-fs.target by default on new installs, and on
-# upgrades from old systemd versions (where the symlinks included as deb
-# content, and will thus have been removed by dpkg during the upgrade).
-if dpkg --compare-versions "$2" lt "214-1"; then
+# Enable getty and remote-fs.target by default on new installs
+if [ -z "$2" ]; then
     systemctl enable getty@tty1.service || true
     systemctl enable remote-fs.target || true
 fi
@@ -47,7 +45,7 @@ if [ -e /lib/systemd/system/ondemand.service ] && dpkg --compare-versions "$2" l
 fi
 
 # Do a one-time migration of the local time setting
-if dpkg --compare-versions "$2" lt "33-1"; then
+if [ -z "$2" ]; then
     if [ -f /etc/default/rcS ]; then
         . /etc/default/rcS
     fi
@@ -57,13 +55,7 @@ if dpkg --compare-versions "$2" lt "33-1"; then
 fi
 
 # Do a one-time migration of the TMPTIME setting
-if dpkg --compare-versions "$2" lt "204-9"; then
-    # Fix up potentially broken tmp.conf, see Debian#738862
-    if [ -e /etc/tmpfiles.d/tmp.conf ]; then
-        sed -i '/^# Clear \/var\/tmp/d' /etc/tmpfiles.d/tmp.conf
-        sed -i 's,^\(d /var/tmp\),#\1,g' /etc/tmpfiles.d/tmp.conf
-    fi
-
+if [ -z "$2" ]; then
     if [ -f /etc/default/rcS ]; then
         . /etc/default/rcS
     fi
@@ -82,7 +74,7 @@ EOF
 fi
 
 # Do a one-time migration of the RAMTMP setting
-if dpkg --compare-versions "$2" lt "204-8"; then
+if [ -z "$2" ]; then
     if [ -f /etc/default/rcS ]; then
         . /etc/default/rcS
     fi
@@ -102,36 +94,36 @@ fi
 systemd-machine-id-setup
 
 # Setup system users and groups
-addgroup --system systemd-journal
+addgroup --quiet --system systemd-journal
+
+# We need to stop running services before we call adduser
+RESTART=""
+if dpkg --compare-versions "$2" lt-nl "239-6"; then
+    for s in systemd-networkd systemd-timesyncd systemd-resolved ; do
+        if _systemctl -q is-active $s; then
+            _systemctl stop $s
+            RESTART="$s $RESTART"
+        fi
+    done
+fi
 
 adduser --quiet --system --group --no-create-home --home /run/systemd \
     --gecos "systemd Time Synchronization" systemd-timesync
-adduser --quiet --system --group --no-create-home --home /run/systemd/netif \
-    --gecos "systemd Network Management" systemd-network
-adduser --quiet --system --group --no-create-home --home /run/systemd/resolve \
-    --gecos "systemd Resolver" systemd-resolve
 adduser --quiet --system --group --no-create-home --home /run/systemd \
-    --gecos "systemd Bus Proxy" systemd-bus-proxy
+    --gecos "systemd Network Management" systemd-network
+adduser --quiet --system --group --no-create-home --home /run/systemd \
+    --gecos "systemd Resolver" systemd-resolve
+
+# Remove old state directory of systemd-timesyncd
+if dpkg --compare-versions "$2" lt-nl "240-3~"; then
+    if [ -L /var/lib/systemd/timesync ] ; then
+        rm /var/lib/systemd/timesync
+        rm -rf /var/lib/private/systemd/timesync
+    fi
+fi
 
 # Initial update of the Message Catalogs database
 _update_catalog
-
-# Re-run systemctl enable for any service that was enabled when preinst was run.
-if dpkg --compare-versions "$2" ge "204" && [ -e /run/systemd/was-enabled ]; then
-    while read UNIT ; do
-        # 220-6 stopped shipping tmp.mount, transition it on machines which had
-        # it enabled
-        if [ "$UNIT" = tmp.mount ] && dpkg --compare-versions "$2" lt-nl "220-6~"; then
-            if [ ! -e /etc/systemd/system/tmp.mount ]; then
-                echo "moving enabled tmp.mount to /etc/systemd/system/..."
-                cp /usr/share/systemd/tmp.mount /etc/systemd/system/tmp.mount
-                # clean up the symlink, to have it re-created below
-                systemctl disable $UNIT
-            fi
-        fi
-        systemctl enable $UNIT || true
-    done </run/systemd/was-enabled || true
-fi
 
 if [ -n "$2" ]; then
     _systemctl daemon-reexec || true
@@ -140,6 +132,15 @@ if [ -n "$2" ]; then
     _systemctl try-restart systemd-networkd.service || true
     _systemctl try-restart systemd-resolved.service || true
     _systemctl try-restart systemd-timesyncd.service || true
+    _systemctl try-restart systemd-journald.service || true
+fi
+
+# Restart services which we stopped earlier
+# This needs to run after daemon-rexec
+if dpkg --compare-versions "$2" lt-nl "239-6"; then
+    for s in $RESTART ; do
+        _systemctl start $s
+    done
 fi
 
 # Cleanup hwclock-save.service, which was shipped in jessie.
@@ -150,34 +151,45 @@ if dpkg --compare-versions "$2" lt-nl "228-5~"; then
    done
 fi
 
-# Automatically added by dh_installinit
-if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+if dpkg --compare-versions "$2" lt-nl "235-3~"; then
+    # systemd-bus-proxyd got dropped before stretch, and never created any file
+    deluser --system systemd-bus-proxy || true
+fi
+
+if dpkg --compare-versions "$2" lt-nl "236-1~"; then
+    # Clean up old /var/lib/systemd/clock on upgrade.
+    # The clock file used by systemd-timesyncd is now stored in
+    # StateDirectory=systemd/timesync.
+    rm -f /var/lib/systemd/clock
+fi
+
+if dpkg --compare-versions "$2" lt-nl "239-12~"; then
+    # clean up bogus "nobody" group from #912525; ensure that it's a system group
+    if getent group nobody >/dev/null; then
+        delgroup --system nobody || true
+    fi
+fi
+
+# Automatically added by dh_installinit/12.1.1
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
 	# In case this system is running systemd, we need to ensure that all
 	# necessary tmpfiles (if any) are created before starting.
 	if [ -d /run/systemd/system ] ; then
-		systemd-tmpfiles --create /usr/lib/tmpfiles.d/debian.conf /usr/lib/tmpfiles.d/home.conf /usr/lib/tmpfiles.d/journal-nocow.conf /usr/lib/tmpfiles.d/legacy.conf /usr/lib/tmpfiles.d/systemd-nologin.conf /usr/lib/tmpfiles.d/systemd.conf /usr/lib/tmpfiles.d/tmp.conf /usr/lib/tmpfiles.d/var.conf /usr/lib/tmpfiles.d/x11.conf >/dev/null || true
+		systemd-tmpfiles --create debian.conf home.conf journal-nocow.conf legacy.conf systemd-nologin.conf systemd.conf tmp.conf var.conf x11.conf >/dev/null || true
 	fi
 fi
 # End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemctl-bash-completion.sh 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/systemd-bash-completion.sh 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-logind.conf /etc/systemd/logind.conf 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/systemd/systemd-journald.conf /etc/systemd/journald.conf 204-1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.machine1.conf 228-5~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/X11/xinit/xinitrc.d/50-systemd-user.sh 228-3~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/systemd/bootchart.conf 230-1~ -- "$@"
+# Automatically added by dh_installdeb/12.1.1
+dpkg-maintscript-helper rm_conffile /etc/X11/xinit/xinitrc.d/50-systemd-user.sh 228-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/systemd/bootchart.conf 230-1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.hostname1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.locale1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.login1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.machine1.conf 228-5\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.network1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.resolve1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.systemd1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.timedate1.conf 233-3\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/dbus-1/system.d/org.freedesktop.systemd-shim.conf 239-15\~ systemd-shim -- "$@"
 # End automatically added section
 

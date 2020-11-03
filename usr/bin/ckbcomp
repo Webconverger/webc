@@ -2581,7 +2581,7 @@ if ($freebsd) {
          'any' => 'NoSymbol', # Is this recognised by X ?
          'VoidSymbol' => 'VoidSymbol',
          'voidsymbol' => 'VoidSymbol', # Is this recognised by X ?
-         'ISO_Left_Tab' => 'Tab',
+         'ISO_Left_Tab' => 'Meta_Tab',
          'Clear' => 'VoidSymbol',
          'Pause' => 'Pause',
          'Scroll_Lock' => 'Scroll_Lock',
@@ -4012,7 +4012,9 @@ sub flatten {
 			$coord = ($group << 4) + $level + 11;
 		    }
 		} elsif (/^PC_FN_LEVEL2$/) {
-			$coord = ($group << 4) + ($level << 1);
+		    # Level0: plain
+		    # Level1: altgr
+                    $coord = ($group << 4) + ($level << 1);
 		} else {
 		    warning "Unknown key type $types_table{$key}\n";
 		    $coord = ($group << 4) + $level;

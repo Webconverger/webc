@@ -4,7 +4,7 @@
 
 package Debconf::Element::Gnome::Password;
 use strict;
-use Gtk2;
+use Gtk3;
 use utf8;
 use base qw(Debconf::Element::Gnome);
 
@@ -16,7 +16,7 @@ sub init {
 	$this->SUPER::init(@_);
 	$this->adddescription;
 
-	$this->widget(Gtk2::Entry->new);
+	$this->widget(Gtk3::Entry->new);
 	$this->widget->show;
 	$this->widget->set_visibility(0);
 	$this->addwidget($this->widget);

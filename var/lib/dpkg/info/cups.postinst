@@ -53,16 +53,6 @@ EOF
     # We remove the scsi backend from the output as it got removed in CUPS 1.5.0
     # We also remove the IPP backends as they are statically in cups-daemon now
     list=`echo $SELECTED | sed -e 's/, /,/g' | sed -e 's/scsi,*\b//g' | sed -e 's/ipp,*\b//g' | sed -e 's/ipps,*\b//g' | sed -e 's/ipp14,*\b//g' | sed -e 's/parallel,*\b//g' | sed -e 's/serial,*\b//g'`
-     if dpkg --compare-versions "$2" lt-nl "1.5.3-2.1"; then
-        # Make sure the above dropped backends are effectively away
- 	for i in scsi parallel serial; do
-		# Drop the file if it doesn't belong to any package.
-		dpkg -S /usr/lib/cups/backend/$i 2>/dev/null 1>&2 || rm -f /usr/lib/cups/backend/$i 
-	done
-	if ! echo $list | grep -q "\bipp14\b"; then
-	    list=`echo $list | sed -e 's/\bipp\b/ipp,ipp14/g'`
-	fi
-    fi
     save_IFS=$IFS
     IFS=,
     (cd /usr/lib/cups/backend && rm -f lpd socket usb snmp dnssd mdns)
@@ -80,41 +70,19 @@ EOF
     # Resync Debconf database with real state
     list=`( cd /usr/lib/cups/backend && for f in lpd socket usb snmp dnssd; do [ -e $f ] && echo -n "$f, "; done ) | sed -e 's/, $//'`
     db_set cupsys/backend $list;
-
-    if dpkg --compare-versions "$2" lt "1.5.3-2.1"; then
-        modprobe -b usblp >/dev/null 2>&1 || :
-    fi
 fi
 
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/pstopdf.convs 2.1.0-4~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/oopstops.convs 2.1.0-4~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/oopstops.types 2.1.0-4~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/mime.convs 2.0.3-9~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/mime.types 2.0.3-9~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/acroread.conf 1.6.2-9~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/cups/pdftops.conf 1.6.2-9~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.3-2.1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper mv_conffile /etc/logrotate.d/cups /etc/logrotate.d/cups-daemon 1.6.1~ -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/logrotate.d/cups 1.6.2-3~ -- "$@"
+# Automatically added by dh_installdeb/12.1.1
+dpkg-maintscript-helper rm_conffile /etc/cups/pstopdf.convs 2.1.0-4\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/oopstops.convs 2.1.0-4\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/oopstops.types 2.1.0-4\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/mime.convs 2.0.3-9\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/mime.types 2.0.3-9\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/acroread.conf 1.6.2-9\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/cups/pdftops.conf 1.6.2-9\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/modprobe.d/blacklist-cups-usblp.conf 1.5.3-2.1\~ -- "$@"
+dpkg-maintscript-helper mv_conffile /etc/logrotate.d/cups /etc/logrotate.d/cups-daemon 1.6.1\~ -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/logrotate.d/cups 1.6.2-3\~ -- "$@"
 # End automatically added section
 
 
@@ -133,7 +101,7 @@ ppd_updater () {
 	for ppd in *.ppd; do
 	    [ -r "$ppd" ] || continue
 	    queue=${ppd%.ppd}
-	    lpstat -h /var/run/cups/cups.sock -p "$queue" >/dev/null 2>&1 || continue
+	    lpstat -h /run/cups/cups.sock -p "$queue" >/dev/null 2>&1 || continue
 	    nickname=`grep '\*NickName:' "$ppd" | cut -d '"' -f 2 | perl -p -e 's/\n$//' | perl -p -e "$gennicknameregexp" | perl -p -e 's/(\W)/\\\\$1/g'`
 	    lang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
 	    ppdfound="0"
@@ -142,12 +110,12 @@ ppd_updater () {
 	    tempfiles="$tempfiles $tmpfile2"
 	    cat $tmpfile1 | perl -p -e "$gennicknameregexp; s/\n*$/\n/s" | grep -E '^\S+\s+.*'"$nickname"'$' | cut -d ' ' -f 1 > $tmpfile2
 	    while read newppduri; do
-		[ "$ppdfound" = "0" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $newppduri 2>/dev/null || continue
+		[ "$ppdfound" = "0" ] && lpadmin -h /run/cups/cups.sock -p "$queue" -m $newppduri 2>/dev/null || continue
 		newlang=`grep '\*LanguageVersion:' "$ppd" | cut -d ' ' -f 2 | perl -e 'print lc(<>)' | perl -p -e 's/[\r\n]//gs'`
 		[ "$newlang" = "$lang" ] && ppdfound="1"
 		[ "$newlang" = "english" ] && englishppduri="$newppduri"
 	    done < $tmpfile2
-	    [ "$ppdfound" = "0" ] && [ ! -z "$englishppduri" ] && lpadmin -h /var/run/cups/cups.sock -p "$queue" -m $englishppduri 2>/dev/null && ppdfound="1"
+	    [ "$ppdfound" = "0" ] && [ ! -z "$englishppduri" ] && lpadmin -h /run/cups/cups.sock -p "$queue" -m $englishppduri 2>/dev/null && ppdfound="1"
 	    [ "$ppdfound" = "1" ] && echo PPD for printer $queue updated >&2
 	done
 	return 0
@@ -158,14 +126,14 @@ ppd_updater () {
 if which lpstat > /dev/null 2>&1 && \
 	which lpinfo > /dev/null 2>&1 && \
 	which lpadmin > /dev/null 2>&1 && \
-	LC_ALL=C lpstat -h /var/run/cups/cups.sock -r | grep -v not > /dev/null 2>&1; then
+	LC_ALL=C lpstat -h /run/cups/cups.sock -r | grep -v not > /dev/null 2>&1; then
 
 	tempfiles=
 	trap 'rm -f $tempfiles; exit 0' 0 HUP INT QUIT ILL ABRT PIPE TERM
 	tmpfile0=`mktemp -t updateppds.XXXXXX`
 	tempfiles="$tempfiles $tmpfile0"
 
-	lpinfo -h /var/run/cups/cups.sock -m > $tmpfile0
+	lpinfo -h /run/cups/cups.sock -m > $tmpfile0
 
 	if [ "$1" = configure ] ; then
 		# Update CUPS included drivers' queues

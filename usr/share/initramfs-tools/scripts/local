@@ -3,7 +3,7 @@
 local_top()
 {
 	if [ "${local_top_used}" != "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/local-top"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/local-top"
 		run_scripts /scripts/local-top
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -20,7 +20,7 @@ local_top()
 
 local_block()
 {
-	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/local-block"
+	[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/local-block"
 	run_scripts /scripts/local-block "$@"
 	[ "$quiet" != "y" ] && log_end_msg
 }
@@ -28,7 +28,7 @@ local_block()
 local_premount()
 {
 	if [ "${local_premount_used}" != "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/local-premount"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/local-premount"
 		run_scripts /scripts/local-premount
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -38,7 +38,7 @@ local_premount()
 local_bottom()
 {
 	if [ "${local_premount_used}" = "yes" ] || [ "${local_top_used}" = "yes" ]; then
-		[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/local-bottom"
+		[ "${quiet?}" != "y" ] && log_begin_msg "Running /scripts/local-bottom"
 		run_scripts /scripts/local-bottom
 		[ "$quiet" != "y" ] && log_end_msg
 	fi
@@ -65,7 +65,7 @@ local_device_setup()
 	# Load ubi with the correct MTD partition and return since fstype
 	# doesn't work with a char device like ubi.
 	if [ -n "$UBIMTD" ]; then
-		modprobe ubi mtd=$UBIMTD
+		modprobe ubi "mtd=$UBIMTD"
 		DEV="${dev_id}"
 		return
 	fi
@@ -88,7 +88,7 @@ local_device_setup()
 
 		# Timeout is max(30, rootdelay) seconds (approximately)
 		slumber=30
-		if [ ${ROOTDELAY:-0} -gt $slumber ]; then
+		if [ "${ROOTDELAY:-0}" -gt $slumber ]; then
 			slumber=$ROOTDELAY
 		fi
 
@@ -125,7 +125,7 @@ local_device_setup()
 				log_end_msg 0
 				break
 			fi
-			if [ ${time_elapsed} -ge ${slumber} ]; then
+			if [ ${time_elapsed} -ge "${slumber}" ]; then
 				log_end_msg 1 || true
 				break
 			fi
@@ -155,11 +155,14 @@ local_device_setup()
 local_mount_root()
 {
 	local_top
+	if [ -z "${ROOT}" ]; then
+		panic "No root device specified. Boot arguments must include a root= parameter."
+	fi
 	local_device_setup "${ROOT}" "root file system"
 	ROOT="${DEV}"
 
 	# Get the root filesystem type if not set
-	if [ -z "${ROOTFSTYPE}" ]; then
+	if [ -z "${ROOTFSTYPE}" ] || [ "${ROOTFSTYPE}" = auto ]; then
 		FSTYPE=$(get_fstype "${ROOT}")
 	else
 		FSTYPE=${ROOTFSTYPE}
@@ -167,23 +170,18 @@ local_mount_root()
 
 	local_premount
 
-	if [ "${readonly}" = "y" ]; then
+	if [ "${readonly?}" = "y" ]; then
 		roflag=-r
 	else
 		roflag=-w
 	fi
 
-	# FIXME This has no error checking
-	modprobe ${FSTYPE}
+	checkfs "${ROOT}" root "${FSTYPE}"
 
-	checkfs ${ROOT} root "${FSTYPE}"
-
-	# FIXME This has no error checking
 	# Mount root
-	if [ "${FSTYPE}" != "unknown" ]; then
-		mount ${roflag} -t ${FSTYPE} ${ROOTFLAGS} ${ROOT} ${rootmnt}
-	else
-		mount ${roflag} ${ROOTFLAGS} ${ROOT} ${rootmnt}
+	# shellcheck disable=SC2086
+	if ! mount ${roflag} ${FSTYPE:+-t "${FSTYPE}"} ${ROOTFLAGS} "${ROOT}" "${rootmnt?}"; then
+		panic "Failed to mount ${ROOT} as root file system."
 	fi
 }
 
@@ -202,16 +200,14 @@ local_mount_fs()
 		roflag=-w
 	fi
 
-	# FIXME This has no error checking
-	modprobe "${MNT_TYPE}"
-
 	if [ "$MNT_PASS" != 0 ]; then
 		checkfs "$MNT_FSNAME" "$MNT_DIR" "${MNT_TYPE}"
 	fi
 
-	# FIXME This has no error checking
 	# Mount filesystem
-	mount ${roflag} -t "${MNT_TYPE}" -o "${MNT_OPTS}" "$MNT_FSNAME" "${rootmnt}${MNT_DIR}"
+	if ! mount ${roflag} -t "${MNT_TYPE}" -o "${MNT_OPTS}" "$MNT_FSNAME" "${rootmnt}${MNT_DIR}"; then
+		panic "Failed to mount ${MNT_FSNAME} as $MNT_DIR file system."
+	fi
 }
 
 mountroot()

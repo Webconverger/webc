@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 # vim:ts=4:sw=4:expandtab
 # © 2013-2014 Michael Stapelberg <stapelberg@debian.org>
 #
@@ -43,7 +43,7 @@ B<deb-systemd-helper> is a Debian-specific helper script which re-implements
 the enable, disable, is-enabled and reenable commands from systemctl.
 
 The "enable" action will only be performed once (when first installing the
-package). On the first "enable", an state file is created which will be deleted
+package). On the first "enable", a state file is created which will be deleted
 upon "purge".
 
 The "mask" action will keep state on whether the service was enabled/disabled
@@ -90,9 +90,17 @@ use Getopt::Long; # in core since Perl 5
 # only have perl-base, not perl).
 eval { require Data::Dumper; } or *Data::Dumper::Dumper = sub { "no Data::Dumper" };
 
+use constant {
+     SYSTEM_INSTANCE_ENABLED_STATE_DIR => '/var/lib/systemd/deb-systemd-helper-enabled',
+     USER_INSTANCE_ENABLED_STATE_DIR   => '/var/lib/systemd/deb-systemd-user-helper-enabled',
+     SYSTEM_INSTANCE_MASKED_STATE_DIR  => '/var/lib/systemd/deb-systemd-helper-masked',
+     USER_INSTANCE_MASKED_STATE_DIR    => '/var/lib/systemd/deb-systemd-user-helper-masked',
+};
+
 my $quiet = 0;
-my $enabled_state_dir = '/var/lib/systemd/deb-systemd-helper-enabled';
-my $masked_state_dir = '/var/lib/systemd/deb-systemd-helper-masked';
+my $instance = 'system';
+my $enabled_state_dir = SYSTEM_INSTANCE_ENABLED_STATE_DIR;
+my $masked_state_dir = SYSTEM_INSTANCE_MASKED_STATE_DIR;
 
 # Globals are bad, but in this specific case, it really makes things much
 # easier to write and understand.
@@ -118,11 +126,15 @@ sub find_unit {
     my ($scriptname) = @_;
 
     my $service_path = $scriptname;
-    if (-f "/etc/systemd/system/$scriptname") {
-        $service_path = "/etc/systemd/system/$scriptname";
-    } elsif (-f "/lib/systemd/system/$scriptname") {
-        $service_path = "/lib/systemd/system/$scriptname";
+
+    if (-f "/etc/systemd/$instance/$scriptname") {
+        $service_path = "/etc/systemd/$instance/$scriptname";
+    } elsif (-f "/lib/systemd/$instance/$scriptname") {
+        $service_path = "/lib/systemd/$instance/$scriptname";
+    } elsif (-f "/usr/lib/systemd/$instance/$scriptname") {
+        $service_path = "/usr/lib/systemd/$instance/$scriptname";
     }
+
     return $service_path;
 }
 
@@ -195,7 +207,7 @@ sub get_link_closure {
         if ($line =~ /^\s*(WantedBy|RequiredBy)=(.+)$/i) {
             for my $value (split(/\s+/, $2)) {
                 $value =~ s/^(["'])(.*)\g1$/$2/;
-                my $wants_dir = "/etc/systemd/system/$value";
+                my $wants_dir = "/etc/systemd/$instance/$value";
                 $wants_dir .= '.wants' if $1 eq 'WantedBy';
                 $wants_dir .= '.requires' if $1 eq 'RequiredBy';
                 push @links, { dest => $service_path, src => "$wants_dir/$scriptname" };
@@ -215,7 +227,7 @@ sub get_link_closure {
             for my $value (split(/\s+/, $1)) {
                 $value =~ s/^(["'])(.*)\g1$/$2/;
                 if ($value ne $unit_name) {
-                    push @links, { dest => $service_path, src => "/etc/systemd/system/$1" };
+                    push @links, { dest => $service_path, src => "/etc/systemd/$instance/$1" };
                 }
             }
         }
@@ -246,17 +258,21 @@ sub no_link_installed {
 sub enable {
     my ($scriptname, $service_path) = @_;
     if ($has_systemctl) {
-        # We use systemctl preset on the initial installation only
-        # On upgrade, we manually add the missing symlinks only if
-        # the service already has some links installed.
+        # We use 'systemctl preset' on the initial installation only.
+        # On upgrade, we manually add the missing symlinks only if the
+        # service already has some links installed. Using 'systemctl
+        # preset' allows administrators and downstreams to alter the
+        # enable policy using systemd-native tools.
         my $create_links = 0;
         if (debian_installed($scriptname)) {
             $create_links = 1 unless no_link_installed($scriptname, $service_path);
         } else {
             debug "Using systemctl preset to enable $scriptname";
-            system("/bin/systemctl", "--preset-mode=enable-only",
-                "preset", $scriptname) == 0 or
-                error("systemctl preset failed on $scriptname: $!");
+            system("/bin/systemctl",
+                   $instance eq "user" ? "--global" : "--system",
+                   "--preset-mode=enable-only",
+                   "preset", $scriptname) == 0
+                or error("systemctl preset failed on $scriptname: $!");
         }
         make_systemd_links($scriptname, $service_path, create_links => $create_links);
     } else {
@@ -279,7 +295,7 @@ sub make_systemd_links {
         record_in_statefile($dsh_state, $service_link);
 
         my $statefile = $service_link;
-        $statefile =~ s,^/etc/systemd/system/,$enabled_state_dir/,;
+        $statefile =~ s,^/etc/systemd/$instance/,$enabled_state_dir/,;
         next if -e $statefile;
 
         if ($opts{'create_links'} && ! -l $service_link) {
@@ -378,7 +394,7 @@ sub remove_links {
         #   but not re-created when re-installing the package.
         if (is_purge() || -l $link) {
             my $link_state = $link;
-            $link_state =~ s,^/etc/systemd/system/,$enabled_state_dir/,;
+            $link_state =~ s,^/etc/systemd/$instance/,$enabled_state_dir/,;
             unlink($link_state);
         }
 
@@ -425,7 +441,7 @@ sub rmdir_if_empty {
 sub mask_service {
     my ($scriptname, $service_path) = @_;
 
-    my $mask_link = '/etc/systemd/system/' . basename($service_path);
+    my $mask_link = "/etc/systemd/$instance/" . basename($service_path);
 
     if (-e $mask_link) {
         # If the link already exists, don’t do anything.
@@ -447,7 +463,7 @@ sub mask_service {
     $changed_sth = 1;
 
     my $statefile = $mask_link;
-    $statefile =~ s,^/etc/systemd/system/,$masked_state_dir/,;
+    $statefile =~ s,^/etc/systemd/$instance/,$masked_state_dir/,;
 
     # Store the fact that we masked this service, so that we can unmask it on
     # installation time. We cannot unconditionally unmask because that would
@@ -460,7 +476,7 @@ sub mask_service {
 sub unmask_service {
     my ($scriptname, $service_path) = @_;
 
-    my $mask_link = '/etc/systemd/system/' . basename($service_path);
+    my $mask_link = "/etc/systemd/$instance/" . basename($service_path);
 
     # Not masked? Nothing to do.
     return unless -e $mask_link;
@@ -471,7 +487,7 @@ sub unmask_service {
     }
 
     my $statefile = $mask_link;
-    $statefile =~ s,^/etc/systemd/system/,$masked_state_dir/,;
+    $statefile =~ s,^/etc/systemd/$instance/,$masked_state_dir/,;
 
     if (! -e $statefile) {
         debug "Not unmasking $mask_link because the state file $statefile does not exist";
@@ -486,7 +502,15 @@ sub unmask_service {
 
 my $result = GetOptions(
     "quiet" => \$quiet,
+    "user" => sub { $instance = 'user'; },
+    "system" => sub { $instance = 'system'; }, # default
 );
+
+if ($instance eq 'user') {
+    debug "is user unit = yes";
+    $enabled_state_dir = USER_INSTANCE_ENABLED_STATE_DIR;
+    $masked_state_dir = USER_INSTANCE_MASKED_STATE_DIR;
+}
 
 my $action = shift;
 if (!defined($action)) {
@@ -557,12 +581,14 @@ for my $scriptname (@ARGV) {
         remove_links($service_path);
         # Clean up the state dir if it’s empty, or at least clean up all empty
         # subdirectories. Necessary to cleanly pass a piuparts run.
-        rmdir_if_empty('/var/lib/systemd/deb-systemd-helper-enabled');
+        rmdir_if_empty(SYSTEM_INSTANCE_ENABLED_STATE_DIR);
+        rmdir_if_empty(USER_INSTANCE_ENABLED_STATE_DIR);
 
         # Same with directories below /etc/systemd, where we create symlinks.
         # If systemd is not installed (and no other package shipping service
         # files), this would make piuparts fail, too.
         rmdir_if_empty($_) for (grep { -d } </etc/systemd/system/*>);
+        rmdir_if_empty($_) for (grep { -d } </etc/systemd/user/*>);
     }
 
     if ($action eq 'enable') {
@@ -584,7 +610,7 @@ for my $scriptname (@ARGV) {
 # If we changed anything and this machine is running systemd, tell
 # systemd to reload so that it will immediately pick up our
 # changes.
-if ($changed_sth && -d "/run/systemd/system") {
+if ($changed_sth && $instance eq 'system' && -d "/run/systemd/system") {
     system("systemctl", "daemon-reload");
 }
 

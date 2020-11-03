@@ -440,7 +440,7 @@ sub build_emacsen_support {
       my $extendedcharactermode = exists $lang->{"extended-character-mode"} ?
 	  ('"' . $lang->{"extended-character-mode"} . '"') : "nil";
       my $codingsystem  = exists $lang->{"coding-system"} ?
-	  $lang->{"coding-system"} : "nil";
+	  lc($lang->{"coding-system"}) : "nil";
       my $emacsen_name  = defined $lang->{"emacsen-name"} ?
 	  $lang->{"emacsen-name"} : $hashname;
       my $emacsen_names = defined $lang->{"emacsen-names"} ?

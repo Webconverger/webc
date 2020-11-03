@@ -24,7 +24,11 @@ FILES=
 for ARG
 do
     case "$ARG" in
-    -*)	OPTIONS="$OPTIONS $ARG";;
+    -*)	if test -z "$OPTIONS"; then
+	    OPTIONS="$ARG"
+        else
+            OPTIONS="$OPTIONS $ARG"
+        fi ;;
      *)	if test -f "$ARG"; then
             FILES="$FILES $ARG"
         else
@@ -54,7 +58,7 @@ elif test $# -eq 2; then
 			      exit 1
 			}
                         bzip2 -cdfq "$2" > "$tmp"
-                        bzip2 -cdfq "$1" | $comp $OPTIONS - "$tmp"
+                        bzip2 -cdfq "$1" | $comp "$OPTIONS" - "$tmp"
                         STAT="$?"
 			/bin/rm -f "$tmp";;
 

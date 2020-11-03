@@ -15,6 +15,74 @@ eval "$(apt-config shell ARCHIVE_KEYRING_URI APT::Key::ArchiveKeyringURI)"
 
 aptkey_echo() { echo "$@"; }
 
+find_gpgv_status_fd() {
+   while [ -n "$1" ]; do
+	if [ "$1" = '--status-fd' ]; then
+		shift
+		echo "$1"
+		break
+	fi
+	shift
+   done
+}
+GPGSTATUSFD="$(find_gpgv_status_fd "$@")"
+
+apt_warn() {
+    if [ -z "$GPGHOMEDIR" ]; then
+	echo >&2 'W:' "$@"
+    else
+	echo 'W:' "$@" > "${GPGHOMEDIR}/aptwarnings.log"
+    fi
+    if [ -n "$GPGSTATUSFD" ]; then
+	echo >&${GPGSTATUSFD} '[APTKEY:] WARNING' "$@"
+    fi
+}
+apt_error() {
+    if [ -z "$GPGHOMEDIR" ]; then
+	echo >&2 'E:' "$@"
+    else
+	echo 'E:' "$@" > "${GPGHOMEDIR}/aptwarnings.log"
+    fi
+    if [ -n "$GPGSTATUSFD" ]; then
+	echo >&${GPGSTATUSFD} '[APTKEY:] ERROR' "$@"
+    fi
+}
+
+cleanup_gpg_home() {
+    if [ -z "$GPGHOMEDIR" ]; then return; fi
+    if [ -s "$GPGHOMEDIR/aptwarnings.log" ]; then
+	cat >&2 "$GPGHOMEDIR/aptwarnings.log"
+    fi
+    if command_available 'gpgconf'; then
+	GNUPGHOME="${GPGHOMEDIR}" gpgconf --kill all >/dev/null 2>&1 || true
+    fi
+    rm -rf "$GPGHOMEDIR"
+}
+
+# gpg needs (in different versions more or less) files to function correctly,
+# so we give it its own homedir and generate some valid content for it later on
+create_gpg_home() {
+    # for cases in which we want to cache a homedir due to expensive setup
+    if [ -n "$GPGHOMEDIR" ]; then
+	return
+    fi
+    if [ -n "$TMPDIR" ]; then
+	# tmpdir is a directory and current user has rwx access to it
+	# same tests as in apt-pkg/contrib/fileutl.cc GetTempDir()
+	if [ ! -d "$TMPDIR" ] || [ ! -r "$TMPDIR" ] || [ ! -w "$TMPDIR" ] || [ ! -x "$TMPDIR" ]; then
+	    unset TMPDIR
+	fi
+    fi
+    GPGHOMEDIR="$(mktemp --directory --tmpdir 'apt-key-gpghome.XXXXXXXXXX')"
+    CURRENTTRAP="${CURRENTTRAP} cleanup_gpg_home;"
+    trap "${CURRENTTRAP}" 0 HUP INT QUIT ILL ABRT FPE SEGV PIPE TERM
+    if [ -z "$GPGHOMEDIR" ]; then
+	apt_error "Could not create temporary gpg home directory in $TMPDIR (wrong permissions?)"
+	exit 28
+    fi
+    chmod 700 "$GPGHOMEDIR"
+}
+
 requires_root() {
 	if [ "$(id -u)" -ne 0 ]; then
 		apt_error "This command can only be used by root."
@@ -131,7 +199,7 @@ net_update() {
 	exit 1
     fi
     # in theory we would need to depend on wget for this, but this feature
-    # isn't useable in debian anyway as we have no keyring uri nor a master key
+    # isn't usable in debian anyway as we have no keyring uri nor a master key
     if ! command_available 'wget'; then
 	apt_error 'wget is required for a network-based update, but it is not installed'
 	exit 1
@@ -249,15 +317,43 @@ accessible_file_exists() {
    return 1
 }
 
+is_supported_keyring() {
+    # empty files are always supported
+    if ! test -s "$1"; then
+	return 0
+    fi
+    local FILEEXT="${1##*.}"
+    if [ "$FILEEXT" = 'gpg' ]; then
+	# 0x98, 0x99 and 0xC6 via octal as hex isn't supported by dashs printf
+	if printf '\231' | cmp --silent --bytes=1 - "$1"; then
+	    true
+	elif printf '\230' | cmp --silent --bytes=1 - "$1"; then
+	    true
+	elif printf '\306' | cmp --silent --bytes=1 - "$1"; then
+	    true
+	else
+	    apt_warn "The key(s) in the keyring $1 are ignored as the file has an unsupported filetype."
+	    return 1
+	fi
+    elif [ "$FILEEXT" = 'asc' ]; then
+	true #dearmor_filename will deal with them
+    else
+	# most callers ignore unsupported extensions silently
+	apt_warn "The key(s) in the keyring $1 are ignored as the file has an unsupported filename extension."
+	return 1
+    fi
+    return 0
+}
+
 foreach_keyring_do() {
    local ACTION="$1"
    shift
    # if a --keyring was given, just work on this one
    if [ -n "$FORCED_KEYRING" ]; then
-	$ACTION "$TRUSTEDFILE" "$@"
+	$ACTION "$FORCED_KEYRING" "$@"
    else
 	# otherwise all known keyrings are up for inspection
-	if accessible_file_exists "$TRUSTEDFILE"; then
+	if accessible_file_exists "$TRUSTEDFILE" && is_supported_keyring "$TRUSTEDFILE"; then
 	    $ACTION "$TRUSTEDFILE" "$@"
 	fi
 	local TRUSTEDPARTS="/etc/apt/trusted.gpg.d"
@@ -266,7 +362,7 @@ foreach_keyring_do() {
 	    TRUSTEDPARTS="$(readlink -f "$TRUSTEDPARTS")"
 	    local TRUSTEDPARTSLIST="$(cd /; find "$TRUSTEDPARTS" -mindepth 1 -maxdepth 1 \( -name '*.gpg' -o -name '*.asc' \))"
 	    for trusted in $(echo "$TRUSTEDPARTSLIST" | sort); do
-		if accessible_file_exists "$trusted"; then
+		if accessible_file_exists "$trusted" && is_supported_keyring "$trusted"; then
 		    $ACTION "$trusted" "$@"
 		fi
 	    done
@@ -497,11 +593,26 @@ while [ -n "$1" ]; do
    case "$1" in
       --keyring)
 	 shift
-	 TRUSTEDFILE="$1"
-	 FORCED_KEYRING="$1"
+	 if [ -z "$FORCED_KEYRING" -o "$FORCED_KEYRING" = '/dev/null' ]; then
+	     TRUSTEDFILE="$1"
+	     FORCED_KEYRING="$1"
+	 elif [ "$TRUSTEDFILE" = "$FORCED_KEYRING" ]; then
+	     create_gpg_home
+	     FORCED_KEYRING="${GPGHOMEDIR}/mergedkeyrings.gpg"
+	     echo -n '' > "$FORCED_KEYRING"
+	     chmod 0644 -- "$FORCED_KEYRING"
+	     catfile "$TRUSTEDFILE" "$FORCED_KEYRING"
+	     catfile "$1" "$FORCED_KEYRING"
+	 else
+	     catfile "$1" "$FORCED_KEYRING"
+	 fi
 	 ;;
       --keyid)
 	 shift
+	 if [ -n "$FORCED_KEYID" ]; then
+	     apt_error 'Specifying --keyid multiple times is not supported'
+	     exit 1
+	 fi
 	 FORCED_KEYID="$1"
 	 ;;
       --secret-keyring)
@@ -553,74 +664,6 @@ if [ -z "$command" ]; then
     exit 1
 fi
 shift
-
-find_gpgv_status_fd() {
-   while [ -n "$1" ]; do
-	if [ "$1" = '--status-fd' ]; then
-		shift
-		echo "$1"
-		break
-	fi
-	shift
-   done
-}
-GPGSTATUSFD="$(find_gpgv_status_fd "$@")"
-
-apt_warn() {
-    if [ -z "$GPGHOMEDIR" ]; then
-	echo >&2 'W:' "$@"
-    else
-	echo 'W:' "$@" > "${GPGHOMEDIR}/aptwarnings.log"
-    fi
-    if [ -n "$GPGSTATUSFD" ]; then
-	echo >&${GPGSTATUSFD} '[APTKEY:] WARNING' "$@"
-    fi
-}
-apt_error() {
-    if [ -z "$GPGHOMEDIR" ]; then
-	echo >&2 'E:' "$@"
-    else
-	echo 'E:' "$@" > "${GPGHOMEDIR}/aptwarnings.log"
-    fi
-    if [ -n "$GPGSTATUSFD" ]; then
-	echo >&${GPGSTATUSFD} '[APTKEY:] ERROR' "$@"
-    fi
-}
-
-cleanup_gpg_home() {
-    if [ -z "$GPGHOMEDIR" ]; then return; fi
-    if [ -s "$GPGHOMEDIR/aptwarnings.log" ]; then
-	cat >&2 "$GPGHOMEDIR/aptwarnings.log"
-    fi
-    if command_available 'gpgconf'; then
-	GNUPGHOME="${GPGHOMEDIR}" gpgconf --kill gpg-agent >/dev/null 2>&1 || true
-    fi
-    rm -rf "$GPGHOMEDIR"
-}
-
-# gpg needs (in different versions more or less) files to function correctly,
-# so we give it its own homedir and generate some valid content for it later on
-create_gpg_home() {
-    # for cases in which we want to cache a homedir due to expensive setup
-    if [ -n "$GPGHOMEDIR" ]; then
-	return
-    fi
-    if [ -n "$TMPDIR" ]; then
-	# tmpdir is a directory and current user has rwx access to it
-	# same tests as in apt-pkg/contrib/fileutl.cc GetTempDir()
-	if [ ! -d "$TMPDIR" ] || [ ! -r "$TMPDIR" ] || [ ! -w "$TMPDIR" ] || [ ! -x "$TMPDIR" ]; then
-	    unset TMPDIR
-	fi
-    fi
-    GPGHOMEDIR="$(mktemp --directory --tmpdir 'apt-key-gpghome.XXXXXXXXXX')"
-    CURRENTTRAP="${CURRENTTRAP} cleanup_gpg_home;"
-    trap "${CURRENTTRAP}" 0 HUP INT QUIT ILL ABRT FPE SEGV PIPE TERM
-    if [ -z "$GPGHOMEDIR" ]; then
-	apt_error "Could not create temporary gpg home directory in $TMPDIR (wrong permissions?)"
-	exit 28
-    fi
-    chmod 700 "$GPGHOMEDIR"
-}
 
 prepare_gpg_home() {
     # crude detection if we are called from a maintainerscript where the

@@ -1053,7 +1053,7 @@ xkb_symbols "ori" {
 // INSCRIPT
 partial alphanumeric_keys
 xkb_symbols "tam" {
-      name[Group1]= "Tamil";
+      name[Group1]= "Tamil (Inscript)";
 
       key <TLDE> { [      U0BCA, U0B92	]	};
 
@@ -1118,7 +1118,7 @@ xkb_symbols "tam" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "tam_unicode" {
+xkb_symbols "tam_tamilnet" {
 
 // Description: A keymap based on the TamilNet'99 typewriter keyboard 
 // Encoding: Unicode (http://www.unicode.org)
@@ -1128,7 +1128,7 @@ xkb_symbols "tam_unicode" {
 // Date  : Fri Sep 4 11:32:00 CST 2009
 // Mapping:
 
-    name[Group1]= "Tamil (Unicode)";
+    name[Group1]= "Tamil (TamilNet '99)";
 
     // granthas
     key <TLDE> {  [ apostrophe, asciitilde ] };
@@ -1184,7 +1184,7 @@ xkb_symbols "tam_unicode" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "tam_keyboard_with_numerals" {
+xkb_symbols "tam_tamilnet_with_tam_nums" {
 
 // Description: A keymap based on the TamilNet'99 typewriter keyboard 
 // Encoding: Unicode (http://www.unicode.org)
@@ -1193,7 +1193,7 @@ xkb_symbols "tam_keyboard_with_numerals" {
 // Date  : Fri Sep 4 11:33:00 CST 2009
 // Mapping:
 
-      name[Group1]= "Tamil (keyboard with numerals)";
+      name[Group1]= "Tamil (TamilNet '99 with Tamil numerals)";
 
       // Mainly numbers.
       key <TLDE> { [ apostrophe, asciitilde ] };
@@ -1249,7 +1249,7 @@ xkb_symbols "tam_keyboard_with_numerals" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "tam_TSCII" {
+xkb_symbols "tam_tamilnet_TSCII" {
 
 // Description	: A Tamil typewrite-style keymap 
 //		  loosely based on TamilNet'99 reommendations 
@@ -1257,7 +1257,7 @@ xkb_symbols "tam_TSCII" {
 // Author	: Thuraiappah Vaseeharan <vasee@ieee.org>
 // Last Modified: Sat Jan  5 17:11:26 CST 2002
 
-    name[Group1]= "Tamil (TSCII typewriter)";
+    name[Group1]= "Tamil (TamilNet '99, TSCII encoding)";
 
     key <AE01> {  [ 0x10000b7, 0x10000a4 ] }; // aytham
     key <AE02> {  [ 0x1000082, 0x10000a5 ] }; // shri
@@ -1305,14 +1305,14 @@ xkb_symbols "tam_TSCII" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "tam_TAB" {
+xkb_symbols "tam_tamilnet_TAB" {
 
 // Description: A keymap based on the TamilNet'99 typewriter keyboard 
 // Encoding: TAB (http://www.tamilnet99.org)
 // Author: Thuraiappah Vaseeharan <t_vasee@yahoo.com>
 // Date  : Sun Aug 12 02:23:00 CDT 2001
 
-    name[Group1]= "Tamil (TAB typewriter)";
+    name[Group1]= "Tamil (TamilNet '99, TAB encoding)";
 
     // numeral row
     key <AE01> {  [ 0x10000e7, 0x10000a7 ] } ;
@@ -1429,7 +1429,80 @@ xkb_symbols "tel" {
     include "level3(ralt_switch)"
 };
 
+//Name                  :       Sarala
+//Description           :       This is an adaptation of the Sarala keyboard (http://www.medhajananam.org/sarala/) developed 
+//                              by Krishna Dhullipalla. Because of the way keyboard shortcuts are laid out in KDE, the keyboard
+//                              modifiers had to be changed. The layout does not take any part of the original Sarala keyboard 
+//                              code however. It has been developed from scratch, so the experience may differ.
+//			        
+//                              There is a ibus-m17n version of Sarala layout developed by Satya Pothamsetti <potham@gmail.com> on 
+//                              http://www.medhajananam.org/.
+//Standard		:	Supports Unicode 9.0.	 
+//Help			:	This layout differs slightly from the layout on Medhajenanam. The layout has been depicted in the 
+//				pdf file attached to this post on Sarala google group.
+//				(https://groups.google.com/forum/#!topic/sarala-keyboard/-gsa90dUFcs).
+//
+//Layout Developed by   :       Krishna Dhullipalla <krishnadvr@yahoo.com> (http://www.medhajananam.org/)
+//Author                :       Venkat R Akkineni <venkatram.akkineni@india.com>
+//Date			:	Apr 28 2017
 partial alphanumeric_keys
+xkb_symbols "tel-sarala"
+{
+    name[Group1] = "Telugu (Sarala)";
+    key.type="FOUR_LEVEL";
+    // sequence 									  base, shift, alt, alt + shift
+    key <AB01> { [          U0C4A,          U0C12                                 ] }; // ొ ఒ
+    key <AB02> { [          U0C42,          U0C0A                                 ] }; // ూ ఊ
+    key <AB03> { [          U0C21,          U0C22                                 ] }; // డ ఢ
+    key <AB04> { [          U0C35,          U0C39                                 ] }; // వ హ
+    key <AB05> { [          U0C2C,          U0C2D                                 ] }; // బ భ
+    key <AB06> { [          U0C28,          U0C23                                 ] }; // న ణ
+    key <AB07> { [          U0C2E,          U0C01                                 ] }; // మ ఁ
+    key <AB08> { [         U002C,          U0C1E,      leftcaret 	    	  ] }; // , ఞ <
+    key <AB09> { [         U002E,          U0C19,     rightcaret              	  ] }; // . ఙ >
+    key <AB10> { [          U0C36,       question,      KP_Divide                 ] }; // శ ? /
+    key <AC01> { [          U0C2F,          U0C3D           			  ] }; // య ఽ
+    key <AC02> { [          U0C02,          U0C03                                 ] }; // ం ః
+    key <AC03> { [          U0C26,          U0C27                                 ] }; // ద ధ
+    key <AC04> { [          U0C4D,          U0C05                                 ] }; // ్ అ
+    key <AC05> { [          U0C17,          U0C18                                 ] }; // గ ఘ
+    key <AC06> { [          U0C1A,          U0C1B,          U0C58,          U0C59 ] }; // చ ఛ ౘ ౙ
+    key <AC07> { [          U0C3E,          U0C06                                 ] }; // ా ఆ
+    key <AC08> { [          U0C15,          U0C16,          U0C62,          U0C63 ] }; // క ఖ ౢ ౣ
+    key <AC09> { [          U0C32,          U0C33,          U0C0C,          U0C61 ] }; // ల ళ ఌ ౡ
+    key <AC10> { [          U0C1F,          U0C20,      semicolon,          colon ] }; // ట ఠ ; :
+    key <AC11> { [     quoteright,       quotedbl	    	    		  ] }; // ' " 
+    key <AD01> { [          U0C46,          U0C0E,          U0C44,          U0C34 ] }; // ె ఎ ౄ ఴ
+    key <AD02> { [          U0C38,          U0C37,          U0C44                 ] }; // స ష ౄ
+    key <AD03> { [          U0C47,          U0C0F,          U0C44                 ] }; // ే ఏ ౄ
+    key <AD04> { [          U0C30,          U0C31,          U0C44,          U0C60 ] }; // ర ఱ ౄ ౠ
+    key <AD05> { [          U0C24,          U0C25                                 ] }; // త థ
+    key <AD06> { [          U0C40,          U0C08                                 ] }; // ీ ఈ
+    key <AD07> { [          U0C41,          U0C09                                 ] }; // ు ఉ
+    key <AD08> { [          U0C3F,          U0C07                                 ] }; // ి ఇ
+    key <AD09> { [          U0C4B,          U0C13                                 ] }; // ో ఓ
+    key <AD10> { [          U0C2A,          U0C2B                                 ] }; // ప ఫ
+    key <AD11> { [          U0C1C,          U0C1D,    bracketleft,      braceleft ] }; // జ ఝ [ {
+    key <AD12> { [          U0C48,          U0C10,   bracketright,     braceright ] }; // ై ఐ ] }
+    key <AE01> { [           KP_1,         exclam,          U0C67,          U0C78 ] }; // 1 ! ౦ ౸
+    key <AE02> { [           KP_2,             at,          U0C68,          U0C79 ] }; // 2 @ ౨ ౹
+    key <AE03> { [           KP_3,     numbersign,          U0C69,          U0C7A ] }; // 3 # ౩ ౺
+    key <AE04> { [           KP_4,         dollar,          U0C6A,          U0C7B ] }; // 4 $ ౪ ౻
+    key <AE05> { [           KP_5,        percent,          U0C6B,          U0C7C ] }; // 5 % ౫ ౼
+    key <AE06> { [           KP_6,    asciicircum,          U0C6C,          U0C7D ] }; // 6 ^ ౬ ౽
+    key <AE07> { [           KP_7,      ampersand,          U0C6D,          U0C7E ] }; // 7 & ౭ ౾
+    key <AE08> { [           KP_8,    KP_Multiply,          U0C6E,          U0C7F ] }; // 8 * ౮ ౿
+    key <AE09> { [           KP_9,         U0028,           U0C6F,          U20B9 ] }; // 9 ( ౯ ₹
+    key <AE10> { [           KP_0,         U0029,           U0C66,          U0C55 ] }; // 0 ) ౦ ౕ
+    key <AE11> { [    KP_Subtract,       underbar,       NoSymbol,          U0C56 ] }; // - _  ౖ
+    key <AE12> { [       KP_Equal,         KP_Add                                 ] }; // = +
+    key <BKSL> { [          U0C4C,          U0C14,          U0964,          U0965 ] }; // ౌ ఔ । ॥
+    key <TLDE> { [          U0C43,          U0C0B,      quoteleft,     asciitilde ] }; // ృ ఋ ` ~
+    
+    include "level3(ralt_switch)" 
+};
+
+partial alphanumeric_keys 
 xkb_symbols "urd-phonetic" {
     include "pk(urd-phonetic)"
     name[Group1]= "Urdu (phonetic)";
@@ -1438,13 +1511,13 @@ xkb_symbols "urd-phonetic" {
 partial alphanumeric_keys
 xkb_symbols "urd-phonetic3" {
     include "pk(urd-crulp)"
-    name[Group1]= "Urdu (alternative phonetic)";
+    name[Group1]= "Urdu (alt. phonetic)";
 };
 
 partial alphanumeric_keys
 xkb_symbols "urd-winkeys" {
     include "pk(urd-nla)"
-    name[Group1]= "Urdu (WinKeys)";
+    name[Group1]= "Urdu (Win keys)";
 };
 
 // based on a keyboard map from an 'xkb/symbols/gur' file
@@ -1726,7 +1799,7 @@ partial alphanumeric_keys
 xkb_symbols "eng" {
 
     include "us(basic)"
-    name[Group1]= "English (India, with rupee sign)";
+    name[Group1]= "English (India, with rupee)";
 
     include "rupeesign(4)"
     include "level3(ralt_switch)"
@@ -1744,7 +1817,7 @@ xkb_symbols "eng" {
 partial alphanumeric_keys
 xkb_symbols "mal_enhanced" {
 
-    name[Group1] = "Malayalam (enhanced Inscript, with rupee sign)";
+    name[Group1] = "Malayalam (enhanced Inscript, with rupee)";
 
    //From grave to backslash (\)
 

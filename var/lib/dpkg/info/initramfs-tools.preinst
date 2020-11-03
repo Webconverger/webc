@@ -20,9 +20,10 @@ prepare_rm_conffile() {
 	[ -e "$CONFFILE" ] || return 0
 	ensure_package_owns_file "$PACKAGE" "$CONFFILE" || return 0
 
-	local md5sum="$(md5sum $CONFFILE | sed -e 's/ .*//')"
-	local old_md5sum="$(dpkg-query -W -f='${Conffiles}' $PACKAGE | \
-		sed -n -e "\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
+	local md5sum old_md5sum
+	md5sum="$(md5sum "$CONFFILE" | sed -e 's/ .*//')"
+	old_md5sum="$(dpkg-query -W -f='${Conffiles}' "$PACKAGE" | \
+		sed -n -e "\\' $CONFFILE ' { s/ obsolete$//; s/.* //; p }")"
 	if [ "$md5sum" != "$old_md5sum" ]; then
 		mv $mvverbose -f "$CONFFILE" "$CONFFILE.dpkg-backup"
 	else
@@ -38,10 +39,10 @@ if [ "$1" = upgrade ] && dpkg --compare-versions "$2" lt 0.123~; then
 	prepare_rm_conffile /etc/initramfs-tools/initramfs.conf initramfs-tools
 fi
 
-# Automatically added by dh_installdeb
+# Automatically added by dh_installdeb/12.1.1
 dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/initramfs-tools 0.126~ -- "$@"
 # End automatically added section
-# Automatically added by dh_installdeb
+# Automatically added by dh_installdeb/12.1.1
 dpkg-maintscript-helper rm_conffile /etc/kernel/signed_postinst.d/initramfs-tools 0.126~ -- "$@"
 # End automatically added section
 

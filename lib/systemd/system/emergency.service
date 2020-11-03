@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -11,15 +13,14 @@ Documentation=man:sulogin(8)
 DefaultDependencies=no
 Conflicts=shutdown.target
 Conflicts=rescue.service
-Conflicts=syslog.socket
 Before=shutdown.target
+Before=rescue.service
 
 [Service]
 Environment=HOME=/root
 WorkingDirectory=-/root
-ExecStartPre=-/bin/sh -c "[ -x /bin/plymouth ] && /bin/plymouth --wait quit"
-ExecStartPre=-/bin/echo -e 'You are in emergency mode. After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\ntry again to boot into default mode.'
-ExecStart=-/bin/sh -c "/sbin/sulogin; /bin/systemctl --job-mode=fail --no-block default"
+ExecStartPre=-/bin/plymouth --wait quit
+ExecStart=-/lib/systemd/systemd-sulogin-shell emergency
 Type=idle
 StandardInput=tty-force
 StandardOutput=inherit

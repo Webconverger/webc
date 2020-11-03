@@ -1,12 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype html>
 <html>
 <!-- SECTION: Specifications -->
-<head>
-	<title>CUPS PPD Extensions	</title>
-	<meta name="keywords" content="Specifications">
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-	<meta name="creator" content="Mini-XML v2.8">
-<style type="text/css"><!--
+  <head>
+    <title>CUPS PPD Extensions</title>
+    <meta name="keywords" content="Specifications">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="creator" content="Mini-XML v2.11">
+    <meta name="author" content="Unknown">
+    <meta name="copyright" content="Unknown">
+    <meta name="version" content="0.0">
+    <style type="text/css"><!--
 BODY {
   font-family: lucida grande, geneva, helvetica, arial, sans-serif;
 }
@@ -349,9 +352,8 @@ div.contents ul.subcontents li {
   text-indent: -1em;
 }
 --></style>
-</head>
-<body>
-<div class='body'>
+  </head>
+  <body>
 <!--
   PPD extension documentation for CUPS.
 
@@ -382,78 +384,81 @@ div.contents ul.subcontents li {
 </tr>
 </tbody>
 </table></div>
-<h2 class="title">Contents</h2>
-<ul class="contents">
-<li><a href="#SYNTAX">PPD File Syntax</a></li>
-<li><a href="#AUTOCONFIG">Auto-Configuration</a><ul class="subcontents">
-	<li><a href="#APAutoSetupTool">APAutoSetupTool</a></li>
-	<li><a href="#QUERYKEYWORD">?MainKeyword</a></li>
-	<li><a href="#OID">OIDMainKeyword</a></li>
-</ul></li>
-<li><a href="#PROFILES">Color Profiles</a><ul class="subcontents">
-	<li><a href="#cupsColorProfile">cupsColorProfile</a></li>
-	<li><a href="#cupsICCProfile">cupsICCProfile</a></li>
-	<li><a href="#APCustom">Custom Color Matching Support</a></li>
-</ul></li>
-<li><a href="#CONSTRAINTS">Constraints</a><ul class="subcontents">
-	<li><a href="#cupsUIConstraints">cupsUIConstraints</a></li>
-	<li><a href="#cupsUIResolver">cupsUIResolver</a></li>
-</ul></li>
-<li><a href="#I18N">Globalized PPD Support</a></li>
-<li><a href="#OPTIONS">CUPS 1.3/macOS 10.6Custom Options</a></li>
-<li><a href="#RASTERPS">Writing PostScript Option Commands for Raster Drivers</a></li>
-<li><a href="#MEDIA">Media Keywords</a><ul class="subcontents">
-	<li><a href="#cupsMediaQualifier2">cupsMediaQualifier2</a></li>
-	<li><a href="#cupsMediaQualifier3">cupsMediaQualifier3</a></li>
-	<li><a href="#cupsMinSize">cupsMinSize</a></li>
-	<li><a href="#cupsMaxSize">cupsMaxSize</a></li>
-	<li><a href="#cupsPageSizeCategory">cupsPageSizeCategory</a></li>
-</ul></li>
-<li><a href="#ATTRIBUTES">General Attributes</a><ul class="subcontents">
-	<li><a href="#cupsBackSide">cupsBackSide</a></li>
-	<li><a href="#cupsCommands">cupsCommands</a></li>
-	<li><a href="#cupsEvenDuplex">cupsEvenDuplex</a></li>
-	<li><a href="#cupsFax">cupsFax</a></li>
-	<li><a href="#cupsFilter">cupsFilter</a></li>
-	<li><a href="#cupsFilter2">cupsFilter2</a></li>
-	<li><a href="#cupsFlipDuplex">cupsFlipDuplex</a></li>
-	<li><a href="#cupsIPPFinishings">cupsIPPFinishings</a></li>
-	<li><a href="#cupsIPPReason">cupsIPPReason</a></li>
-	<li><a href="#cupsIPPSupplies">cupsIPPSupplies</a></li>
-	<li><a href="#cupsJobAccountId">cupsJobAccountId</a></li>
-	<li><a href="#cupsJobAccountingUserId">cupsJobAccountingUserId</a></li>
-	<li><a href="#cupsJobPassword">cupsJobPassword</a></li>
-	<li><a href="#cupsLanguages">cupsLanguages</a></li>
-	<li><a href="#cupsMandatory">cupsMandatory</a></li>
-	<li><a href="#cupsManualCopies">cupsManualCopies</a></li>
-	<li><a href="#cupsMarkerName">cupsMarkerName</a></li>
-	<li><a href="#cupsMarkerNotice">cupsMarkerNotice</a></li>
-	<li><a href="#cupsMaxCopies">cupsMaxCopies</a></li>
-	<li><a href="#cupsModelNumber">cupsModelNumber</a></li>
-	<li><a href="#cupsPJLCharset">cupsPJLCharset</a></li>
-	<li><a href="#cupsPJLDisplay">cupsPJLDisplay</a></li>
-	<li><a href="#cupsPortMonitor">cupsPortMonitor</a></li>
-	<li><a href="#cupsPreFilter">cupsPreFilter</a></li>
-	<li><a href="#cupsPrintQuality">cupsPrintQuality</a></li>
-	<li><a href="#cupsSingleFile">cupsSingleFile</a></li>
-	<li><a href="#cupsSNMPSupplies">cupsSNMPSupplies</a></li>
-	<li><a href="#cupsVersion">cupsVersion</a></li>
-	<li><a href="#JCLToPDFInterpreter">JCLToPDFInterpreter</a></li>
-</ul></li>
-<li><a href="#MACOSX">macOS Attributes</a><ul class="subcontents">
-	<li><a href="#APDialogExtension">APDialogExtension</a></li>
-	<li><a href="#APDuplexRequiresFlippedMargin">APDuplexRequiresFlippedMargin</a></li>
-	<li><a href="#APHelpBook">APHelpBook</a></li>
-	<li><a href="#APICADriver">APICADriver</a></li>
-	<li><a href="#APPrinterIconPath">APPrinterIconPath</a></li>
-	<li><a href="#APPrinterLowInkTool">APPrinterLowInkTool</a></li>
-	<li><a href="#APPrinterPreset">APPrinterPreset</a></li>
-	<li><a href="#APPrinterUtilityPath">APPrinterUtilityPath</a></li>
-	<li><a href="#APScannerOnly">APScannerOnly</a></li>
-	<li><a href="#APScanAppBundleID">APScanAppBundleID</a></li>
-</ul></li>
-<li><a href="#HISTORY">Change History</a></li>
-</ul>
+    <div class="contents">
+      <h2 class="title">Contents</h2>
+      <ul class="contents">
+        <li><a href="#SYNTAX">PPD File Syntax</a></li>
+        <li><a href="#AUTOCONFIG">Auto-Configuration</a><ul class="subcontents">
+          <li><a href="#APAutoSetupTool">APAutoSetupTool</a></li>
+          <li><a href="#QUERYKEYWORD">?MainKeyword</a></li>
+          <li><a href="#OID">OIDMainKeyword</a></li>
+        </ul></li>
+        <li><a href="#PROFILES">Color Profiles</a><ul class="subcontents">
+          <li><a href="#cupsColorProfile">cupsColorProfile</a></li>
+          <li><a href="#cupsICCProfile">cupsICCProfile</a></li>
+          <li><a href="#APCustom">Custom Color Matching Support</a></li>
+        </ul></li>
+        <li><a href="#CONSTRAINTS">Constraints</a><ul class="subcontents">
+          <li><a href="#cupsUIConstraints">cupsUIConstraints</a></li>
+          <li><a href="#cupsUIResolver">cupsUIResolver</a></li>
+        </ul></li>
+        <li><a href="#I18N">Globalized PPD Support</a></li>
+        <li><a href="#OPTIONS">&lt;span class=&quot;info&quot;&gt;CUPS 1.3/macOS 10.6&lt;/span&gt;Custom Options</a></li>
+        <li><a href="#RASTERPS">Writing PostScript Option Commands for Raster Drivers</a></li>
+        <li><a href="#MEDIA">Media Keywords</a><ul class="subcontents">
+          <li><a href="#cupsMediaQualifier2">cupsMediaQualifier2</a></li>
+          <li><a href="#cupsMediaQualifier3">cupsMediaQualifier3</a></li>
+          <li><a href="#cupsMinSize">cupsMinSize</a></li>
+          <li><a href="#cupsMaxSize">cupsMaxSize</a></li>
+          <li><a href="#cupsPageSizeCategory">cupsPageSizeCategory</a></li>
+        </ul></li>
+        <li><a href="#ATTRIBUTES">General Attributes</a><ul class="subcontents">
+          <li><a href="#cupsBackSide">cupsBackSide</a></li>
+          <li><a href="#cupsCommands">cupsCommands</a></li>
+          <li><a href="#cupsEvenDuplex">cupsEvenDuplex</a></li>
+          <li><a href="#cupsFax">cupsFax</a></li>
+          <li><a href="#cupsFilter">cupsFilter</a></li>
+          <li><a href="#cupsFilter2">cupsFilter2</a></li>
+          <li><a href="#cupsFlipDuplex">cupsFlipDuplex</a></li>
+          <li><a href="#cupsIPPFinishings">cupsIPPFinishings</a></li>
+          <li><a href="#cupsIPPReason">cupsIPPReason</a></li>
+          <li><a href="#cupsIPPSupplies">cupsIPPSupplies</a></li>
+          <li><a href="#cupsJobAccountId">cupsJobAccountId</a></li>
+          <li><a href="#cupsJobAccountingUserId">cupsJobAccountingUserId</a></li>
+          <li><a href="#cupsJobPassword">cupsJobPassword</a></li>
+          <li><a href="#cupsLanguages">cupsLanguages</a></li>
+          <li><a href="#cupsMandatory">cupsMandatory</a></li>
+          <li><a href="#cupsManualCopies">cupsManualCopies</a></li>
+          <li><a href="#cupsMarkerName">cupsMarkerName</a></li>
+          <li><a href="#cupsMarkerNotice">cupsMarkerNotice</a></li>
+          <li><a href="#cupsMaxCopies">cupsMaxCopies</a></li>
+          <li><a href="#cupsModelNumber">cupsModelNumber</a></li>
+          <li><a href="#cupsPJLCharset">cupsPJLCharset</a></li>
+          <li><a href="#cupsPJLDisplay">cupsPJLDisplay</a></li>
+          <li><a href="#cupsPortMonitor">cupsPortMonitor</a></li>
+          <li><a href="#cupsPreFilter">cupsPreFilter</a></li>
+          <li><a href="#cupsPrintQuality">cupsPrintQuality</a></li>
+          <li><a href="#cupsSingleFile">cupsSingleFile</a></li>
+          <li><a href="#cupsSNMPSupplies">cupsSNMPSupplies</a></li>
+          <li><a href="#cupsVersion">cupsVersion</a></li>
+          <li><a href="#JCLToPDFInterpreter">JCLToPDFInterpreter</a></li>
+        </ul></li>
+        <li><a href="#MACOSX">macOS Attributes</a><ul class="subcontents">
+          <li><a href="#APDialogExtension">APDialogExtension</a></li>
+          <li><a href="#APDuplexRequiresFlippedMargin">APDuplexRequiresFlippedMargin</a></li>
+          <li><a href="#APHelpBook">APHelpBook</a></li>
+          <li><a href="#APICADriver">APICADriver</a></li>
+          <li><a href="#APPrinterIconPath">APPrinterIconPath</a></li>
+          <li><a href="#APPrinterLowInkTool">APPrinterLowInkTool</a></li>
+          <li><a href="#APPrinterPreset">APPrinterPreset</a></li>
+          <li><a href="#APPrinterUtilityPath">APPrinterUtilityPath</a></li>
+          <li><a href="#APScannerOnly">APScannerOnly</a></li>
+          <li><a href="#APScanAppBundleID">APScanAppBundleID</a></li>
+        </ul></li>
+        <li><a href="#HISTORY">Change History</a></li>
+      </ul>
+    </div>
+    <div class="body">
 <h2 class='title'><a name='SYNTAX'>PPD File Syntax</a></h2>
 
 <p>The PPD format is text-based and uses lines of up to 255 characters terminated by a carriage return, linefeed, or combination of carriage return and line feed. The following ABNF definition [<a href="http://tools.ietf.org/html/rfc5234" target="_blank">RFC5234</a>] defines the general format of lines in a PPD file:</p>
@@ -1753,7 +1758,20 @@ http://www.vendor.com/help"
 
 <p class='summary'>*cupsJobPassword: "format"</p>
 
-<p>This keyword defines the format of the job-password IPP attribute, if supported by the printer. Currently the only supported format is "1111" indicating a 4-digit PIN code.</p>
+<p>This keyword defines the format of the "job-password" IPP attribute, if supported by the printer. The following format characters are supported:</p>
+
+<ul>
+	<li><code>1</code>: US ASCII digits.</li>
+	<li><code>A</code>: US ASCII letters.</li>
+	<li><code>C</code>: US ASCII letters, numbers, and punctuation.</li>
+	<li><code>.</code>: Any US ASCII printable character (0x20 to 0x7e).</li>
+	<li><code>N</code>: Any Unicode digit character.</li>
+	<li><code>U</code>: Any Unicode letter character.</li>
+	<li><code>*</code>: Any Unicode (utf-8) character.</li>
+</ul>
+
+<p>The format characters are repeated to indicate the length of the
+password string.  For example, "1111" indicated a 4-digit US ASCII PIN code.</p>
 
 <p>Example:</p>
 
@@ -2037,7 +2055,7 @@ PPD file extensions was used. Currently it must be the string
 
 <h2 class='title'><a name='MACOSX'>macOS Attributes</a></h2>
 
-<h3><span class='info'>macOS 10.3</span><a name='APDialogExtension'>APDialogExtension</a></h3>
+<h3><span class='info'>Deprecated</span><a name='APDialogExtension'>APDialogExtension</a></h3>
 
 <p class='summary'>*APDialogExtension: "/Library/Printers/vendor/filename.plugin"</p>
 
@@ -2049,9 +2067,13 @@ plug-ins.</p>
 
 <blockquote><b>Note:</b>
 
-<p>Starting with macOS 10.5, each plug-in must be compiled "4-way fat"
-(32-bit and 64-bit for both PowerPC and Intel) with garbage collection enabled
-in order to be usable with all applications.</p>
+<p>Since 2010, AirPrint has enabled the printing of full quality photos and
+documents from the Mac without requiring driver software. Starting with macOS
+10.12, system level security features prevent print dialog plug-ins from being
+loaded into applications that have enabled the library validation security
+feature. As of macOS 10.14 the <code>APDialogExtension</code> attribute used to
+create macOS print drivers is deprecated. All new printer models should support
+AirPrint moving forward.</p>
 
 </blockquote>
 
@@ -2480,6 +2502,6 @@ the device.</p>
 	<li>Added <tt>cupsProtocol</tt> keyword</li>
 
 </ul>
-</div>
-</body>
+    </div>
+  </body>
 </html>

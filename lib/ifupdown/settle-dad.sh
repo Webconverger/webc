@@ -10,7 +10,7 @@ echo -n "Waiting for DAD... "
 for attempt in $(seq 1 $attempts); do
 	tentative=$(ip -o -6 address list dev "$IFACE" to "${IF_ADDRESS}/${IF_NETMASK}" tentative | wc -l)
 	if [ $tentative -eq 0 ]; then
-		attempt=0 # This might have been our last attempt, but succesful
+		attempt=0 # This might have been our last attempt, but successful
 		break
 	fi
 	sleep $delay

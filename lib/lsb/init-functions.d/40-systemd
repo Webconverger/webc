@@ -4,7 +4,19 @@
 _use_systemctl=0
 if [ -d /run/systemd/system ]; then
 
-    prog=${0##*/}
+    if [ -n "${__init_d_script_name:-}" ]; then # scripts run with new init-d-script
+        executable="$__init_d_script_name"
+        argument="$1"
+    elif [ "${0##*/}" = "init-d-script" ] ||
+         [ "${0##*/}" = "${1:-}" ]; then # scripts run with old init-d-script
+        executable="$1"
+        argument="$2"
+    else # plain old scripts
+        executable="$0"
+        argument="${1:-}"
+    fi
+
+    prog=${executable##*/}
     service="${prog%.sh}.service"
 
     # Don't try to run masked services. systemctl <= 230 always succeeds here,
@@ -14,7 +26,7 @@ if [ -d /run/systemd/system ]; then
 
     # Redirect SysV init scripts when executed by the user
     if [ $PPID -ne 1 ] && [ -z "${SYSTEMCTL_SKIP_REDIRECT:-}" ]; then
-        case $(readlink -f "$0") in
+        case $(readlink -f "$executable") in
             /etc/init.d/*)
                 # If the state is not-found, this might be a newly installed SysV init
                 # script where systemd-sysv-generator has not been run yet.
@@ -23,7 +35,7 @@ if [ -d /run/systemd/system ]; then
                 _use_systemctl=1
                 # Some services can't reload through the .service file,
                 # but can through the init script.
-                if [ "$(systemctl -p CanReload --value show $service 2>/dev/null)" = "no" ] && [ "${1:-}" = "reload" ]; then
+                if [ "$(systemctl -p CanReload --value show $service 2>/dev/null)" = "no" ] && [ "${argument:-}" = "reload" ]; then
                     _use_systemctl=0
                 fi
                 ;;
@@ -80,15 +92,10 @@ if [ "$_use_systemctl" = "1" ]; then
     set +e
     set +u
 
-    if  [ "x$1" = xstart -o \
-        "x$1" = xstop -o \
-        "x$1" = xrestart -o \
-        "x$1" = xreload -o \
-        "x$1" = xforce-reload -o \
-        "x$1" = xtry-restart -o \
-        "x$1" = xstatus ] ; then
-
-        systemctl_redirect $0 $1
-        exit $?
-    fi
+    case "$argument" in
+        start|stop|restart|reload|force-reload|try-restart|status)
+            systemctl_redirect $executable $argument
+            exit $?
+            ;;
+    esac
 fi

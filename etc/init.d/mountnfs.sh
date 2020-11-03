@@ -37,7 +37,7 @@ do_wait_async_mount() {
 					;;
 				esac
 				case "$FSTYPE" in
-				  nfs|nfs4|smbfs|cifs|coda|ncp|ncpfs|ocfs2|gfs|ceph)
+				  nfs|nfs4|smbfs|cifs|coda|ncp|ncpfs|ceph)
 					;;
 				  *)
 					continue

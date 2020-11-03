@@ -20,9 +20,9 @@ while getopts 'n:r:p:l:h' flag; do
 done
 
 if $LPINFO_RUN; then
-  # textonly can't print PDF
+  # textonly, gen-brf, gen-ubrl and indexv[3,4] can't print PDF
   # pdftoijs is currently buggy !?
-  DRIVERS_LIST=$(lpinfo -m | cut -f1 -d' ' | grep -v 'textonly' | grep -v 'pdftoijs' | grep -v 'everywhere' | grep -E $DRIVER_REGEXP)
+  DRIVERS_LIST=$(lpinfo -m | cut -f1 -d' ' | grep -Ev 'brf|everywhere|gen-ubrl|indexv[3,4]|pdftoijs|raw|textonly' | grep -E $DRIVER_REGEXP)
 fi
 
 cleanup() {

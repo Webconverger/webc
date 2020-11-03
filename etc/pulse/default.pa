@@ -85,14 +85,15 @@ load-module module-native-protocol-unix
 #load-module module-null-sink sink_name=rtp format=s16be channels=2 rate=44100 sink_properties="device.description='RTP Multicast Sink'"
 #load-module module-rtp-send source=rtp.monitor
 
-### Load additional modules from GConf settings. This can be configured with the paprefs tool.
+### Load additional modules from GSettings. This can be configured with the paprefs tool.
 ### Please keep in mind that the modules configured by paprefs might conflict with manually
 ### loaded modules.
-.ifexists module-gconf.so
+.ifexists module-gsettings.so
 .nofail
-load-module module-gconf
+load-module module-gsettings
 .fail
 .endif
+
 
 ### Automatically restore the default sink/source when changed by the user
 ### during runtime

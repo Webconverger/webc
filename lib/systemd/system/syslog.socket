@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -8,12 +10,17 @@
 [Unit]
 Description=Syslog Socket
 Documentation=man:systemd.special(7)
-Documentation=http://www.freedesktop.org/wiki/Software/systemd/syslog
+Documentation=https://www.freedesktop.org/wiki/Software/systemd/syslog
 DefaultDependencies=no
-Before=sockets.target shutdown.target
+Before=sockets.target
 
 # Don't allow logging until the very end
 Conflicts=shutdown.target
+Before=shutdown.target
+
+# Don't try to activate syslog.service if sysinit.target has failed.
+Conflicts=emergency.service
+Before=emergency.service
 
 [Socket]
 ListenDatagram=/run/systemd/journal/syslog
@@ -37,4 +44,4 @@ ReceiveBuffer=8M
 # [Install]
 # Alias=syslog.service
 #
-# See http://www.freedesktop.org/wiki/Software/systemd/syslog for details.
+# See https://www.freedesktop.org/wiki/Software/systemd/syslog for details.

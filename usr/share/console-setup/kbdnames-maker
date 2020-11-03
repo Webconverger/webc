@@ -39,6 +39,8 @@ for my $mo (</usr/share/locale/*/LC_MESSAGES/xkeyboard-config.mo>) {
     $lang =~ s:/usr/share/locale/(.*)/LC_MESSAGES/xkeyboard-config.mo:$1:;
     $ENV{'LANGUAGE'} = $lang;
     setlocale(LC_ALL,"");
+    bindtextdomain("xkeyboard-config", "/usr/share/locale");
+    textdomain("xkeyboard-config");
 
     $lang =~ s:\@:__:;
     $lang =~ s:__Latn:__latin:; # special fixup for sr

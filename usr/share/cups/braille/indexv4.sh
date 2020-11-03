@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Samuel Thibault <samuel.thibault@ens-lyon.org>
+# Copyright (c) 2015-2018 Samuel Thibault <samuel.thibault@ens-lyon.org>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,14 +29,15 @@ then
   # Firmware 10.30 and above support temporary parameters
   INIT=$'\033'D
 
-  # Disable margins
+  # Margins are implemented in software
   INIT+=TM0,BI0
 
   # Common options
-  INIT+="$(setCommonOptions)"
+  INIT+="$(commonOptions)"
+  [ $? = 0 ] || exit 1
 
   # Paper size
-  INIT+=,CH$TEXTWIDTH,LP$TEXTHEIGHT
+  INIT+=,CH$PRINTABLETEXTWIDTH,LP$PRINTABLETEXTHEIGHT
 
   case $LINESPACING in
     500)  INIT+=,LS50 ;;

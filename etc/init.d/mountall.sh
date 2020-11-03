@@ -15,7 +15,6 @@ PATH=/sbin:/bin
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
-. /lib/init/swap-functions.sh
 
 # for ntfs-3g to get correct file name encoding
 if [ -r /etc/default/locale ]; then
@@ -66,7 +65,24 @@ do_start() {
 
 	# Execute swapon command again, in case we want to swap to
 	# a file on a now mounted filesystem.
-	swaponagain 'swapfile'
+	#
+	# Ignore 255 status due to swap already being enabled
+	#
+	if [ "$NOSWAP" = yes ]
+	then
+		[ "$VERBOSE" = no ] || log_warning_msg "Not activating swap as requested via bootoption noswap."
+	else
+		if [ "$VERBOSE" = no ]
+		then
+			log_action_begin_msg "Activating swapfile swap"
+			swapon -a -e 2>/dev/null || :  # Stifle "Device or resource busy"
+			log_action_end_msg 0
+		else
+			log_daemon_msg "Will now activate swapfile swap"
+			swapon -a -e -v
+			log_action_end_msg $?
+		fi
+	fi
 
 	# Remount tmpfs filesystems; with increased VM after swapon,
 	# the size limits may be adjusted.

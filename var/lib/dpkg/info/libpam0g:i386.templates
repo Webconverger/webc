@@ -35,8 +35,8 @@ Description-pl.UTF-8: Usługi które mają być zrestartowane, w związku z aktu
  Większość usług używających PAM musi być zrestartowana, aby używać modułów zbudowanych do tej nowej wersji libpam. Proszę przeglądnąć poniższą listę skryptów init.d (oddzieloną spacjami), pod kątem usług które mają być teraz zrestartowane, i poprawić ją jeśli zachodzi taka potrzeba.
 Description-pt.UTF-8: Serviços a reiniciar para a actualização da biblioteca PAM:
  A maioria dos serviços que usam PAM necessitam ser reiniciados para usarem os módulos construídos para esta nova versão do libpam. Por favor, reveja a seguinte lista de scripts init.d de serviços, separados por espaços, para serem reiniciados agora e corrija-a se for necessário.
-Description-pt_BR.UTF-8: Serviços a serem reiniciados para a atualização de bibliotecas PAM:
- A maioria dos serviços que utilizam PAM precisam ser reiniciados para usar os módulos construídos para esta nova versão da libpam. Por favor, revise a seguinte lista separada por espaços de seus scripts init.d para os serviços a serem reiniciados agora, e a corrija se necessário.
+Description-pt_BR.UTF-8: Serviços a serem reiniciados para atualização da biblioteca PAM:
+ A maioria dos serviços que utilizam PAM precisam ser reiniciados para usar os módulos construídos para esta nova versão da libpam. Por favor, revise a seguinte lista separada por espaços de scripts init.d de serviços que serão reiniciados agora, e a corrija, se necessário.
 Description-ro.UTF-8: Serviciile repornite la actualizarea bibliotecii PAM:
  Majoritatea serviciilor ce folosesc PAM trebuie repornite pentru a folosi modulele pentru noua versiune de libpam. Următoarea listă folosește ca separator spațiul și conține script-uri init.d care urmează să fie repornite acum; verificați-o și corectați-o, dacă este necesar.
 Description-ru.UTF-8: Службы, которые будут перезапущены после обновления библиотеки PAM:
@@ -85,8 +85,8 @@ Description-pl.UTF-8: Menedżer logowania musi być zrestartowany ręcznie
  Menedżery logowania wdm i xdm wymagają restartu z powodu nowej wersji libpam, ale występują aktywne sesje logowania X, które mogą być przerwane przez ten restart. Będzie istniała potrzeba ręcznego restartu tych usług, aby kolejne logowania X stały się możliwe.
 Description-pt.UTF-8: O gestor de sessão gráfica deverá ser reiniciado manualmente
  Os gestores de sessão gráfica wdm e xdm necessitam de reiniciar para a nova versão de libpam, mas existem sessões de login X activas no seu sistema que seriam terminadas por esta operação. Deverá reiniciar estes serviços manualmente para permitir novos logins X.
-Description-pt_BR.UTF-8: Gerenciadores de display devem ser reiniciados manualmente
- Os gerenciadores de display wdm e xdm precisam ser reiniciados para a nova versão da libpam, mas existem sessões de login X ativas em seu sistema que podem ser terminadas por este reinicio. Você consequentemente necessitará reiniciar estes serviços manualmente antes que logins X adicionais sejam possíveis.
+Description-pt_BR.UTF-8: Gerenciador de display deve ser reiniciado manualmente
+ Os gerenciadores de display wdm e xdm precisam ser reiniciados para a nova versão da libpam, mas existem sessões de login X ativas em seu sistema que serão terminadas por este reinício. Você consequentemente necessitará reiniciar estes serviços manualmente antes que logins X adicionais sejam possíveis.
 Description-ro.UTF-8: Administratorul de ecran trebuie repornit manual
  Administratorii de ecran wdm și xdm trebuie reporniți pentru ca să folosească noua versiune de libpam, dar sunt sesiuni active de X pe sistemul dumneavoastră care ar fi oprite odată cu această repornire. Drept urmare, trebuie să reporniți manual aceste servicii înainte ca autentificările X ulterioare să fie posibile.
 Description-ru.UTF-8: Программу входа в систему нужно перезапустить вручную
@@ -197,12 +197,12 @@ Description-pt.UTF-8: Falha ao reiniciar alguns serviços para a actualização 
  ${services}
  .
  Você precisa iniciar manualmente estes serviços fazendo '/etc/init.d/<serviço> start'.
-Description-pt_BR.UTF-8: Falha ao reiniciar alguns serviços para a atualização da PAM
+Description-pt_BR.UTF-8: Falha ao reiniciar alguns serviços para atualização do PAM
  Os seguintes serviços não puderam ser reiniciados para a atualização da biblioteca PAM:
  .
  ${services}
  .
- Você deverá iniciá-los manualmente executando '/etc/init.d/<serviço> start'.
+ Você deverá iniciá-los manualmente executando "/etc/init.d/<serviço> start".
 Description-ro.UTF-8: Eșec la repornirea unor servicii la actualizarea PAM
  Următoarele servicii nu au putut fi repornite la actualizarea bibliotecii PAM:
  .
@@ -279,6 +279,8 @@ Description-pl.UTF-8: Zrestartować usługi podczas aktualizacji pakietu bez pyt
  Niektóre z zainstalowanych usług wymagają restartu, gdy są aktualizowane określone biblioteki (np. libpam, libc i libss1). Ponieważ restarty mogą spowodować przerwanie tych usług, użytkownik jest zwykle pytany podczas każdej aktualizacji o listę usług, które chce zrestartować. Można wybrać tę opcję, aby zapobiec takim pytaniom; wtedy wszystkie potrzebne restarty odbędą się automatycznie, a użytkownik uniknie pytania przy każdej aktualizacji biblioteki.
 Description-pt.UTF-8: Reiniciar os serviços durante actualizações do pacote sem perguntar?
  Há serviços instalados no seu sistema que necessitam de ser reiniciados quando certas bibliotecas, tais como libpam, libc e libssl, são actualizadas. Uma vez que estes reinícios podem causar interrupções de serviço do sistema, será normalmente questionado em cada actualização sobre a lista de serviços que deseja reiniciar. Pode escolher esta opção para evitar as questões; neste caso, todos os reinicios serão efectuados automaticamente e não será questionado em cada actualização das bibliotecas.
+Description-pt_BR.UTF-8: Reiniciar serviços durante a atualização de pacotes sem perguntar?
+ Existem serviços instalados no seu sistema que precisam ser reiniciados quando determinadas bibliotecas, tais como libpam, libc e libssl são atualizadas. Uma vez que essas reinicializações podem causar interrupções de serviços para o sistema, normalmente você terá que responder a cada atualização qual será a lista de serviços que quiser reiniciar. Você pode escolher esta opção para evitar novas solicitações; ao invés disso, todas as reinicializações necessárias serão realizadas automaticamente para evitar que você responda a cada atualização de biblioteca.
 Description-ru.UTF-8: Перезапускать службы при обновлении пакета не задавая вопрос?
  В системе установлены службы, которые требуют перезапуска после обновления определённых библиотек (например, libpam, libc и libssl). Так как это может вызвать перерыв в работе службы, обычно, при каждом обновлении выдаётся список служб, которые нужно перезапустить. Чтобы этот вопрос не задавался, вы можете ответить утвердительно; в этом случае все необходимые службы будут перезапущены автоматически.
 Description-sk.UTF-8: Reštartovať služby počas aktualizácií balíka bez pýtania?

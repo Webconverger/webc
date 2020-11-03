@@ -1,4 +1,5 @@
 #!/bin/sh  
+# vim: ft=sh
 #
 # invoke-rc.d.sysvinit - Executes initscript actions
 #
@@ -36,9 +37,9 @@ FORCE=
 RETRY=
 RETURNFAILURE=
 RC=
-is_upstart=
 is_systemd=
 is_openrc=
+SKIP_SYSTEMD_NATIVE=
 
 # Shell options
 set +e
@@ -83,6 +84,11 @@ Options:
      Ignores any fallback action requests by the policy layer.
      Warning: this is usually a very *bad* idea for any actions
      other than "start".
+  --skip-systemd-native
+    Exits before doing anything if a systemd environment is detected
+    and the requested service is a native systemd unit.
+    This is useful for maintainer scripts that want to defer systemd
+    actions to deb-systemd-invoke
   --help
      Outputs help message to stdout
 
@@ -240,6 +246,8 @@ while test $# -gt 0 && test ${state} != III ; do
 		;;
       --no-fallback)
 		NOFALLBACK=yes
+        ;;
+      --skip-systemd-native) SKIP_SYSTEMD_NATIVE=yes
 		;;
       --*)	printerror syntax error: unknown option \"$1\"
 		exit 103
@@ -266,15 +274,7 @@ fi
 #NOTE: It may not be obvious, but "$@" from this point on must expand
 #to the extra initscript parameters, except inside functions.
 
-# Operate against system upstart, not session
-unset UPSTART_SESSION
-# If we're running on upstart and there's an upstart job of this name, do
-# the rest with upstart instead of calling the init script.
-if which initctl >/dev/null && initctl version 2>/dev/null | grep -q upstart \
-   && initctl status ${INITSCRIPTID} 1>/dev/null 2>/dev/null
-then
-    is_upstart=1
-elif test -d /run/systemd/system ; then
+if test -d /run/systemd/system ; then
     is_systemd=1
     UNIT="${INITSCRIPTID%.sh}.service"
 elif test -f /run/openrc/softlevel ; then
@@ -283,13 +283,6 @@ elif test ! -f "${INITDPREFIX}${INITSCRIPTID}" ; then
     ## Verifies if the given initscript ID is known
     ## For sysvinit, this error is critical
     printerror unknown initscript, ${INITDPREFIX}${INITSCRIPTID} not found.
-    # If the init script doesn't exist, but the upstart job does, we
-    # defer the error exit; we might be running in a chroot and
-    # policy-rc.d might say not to start the job anyway, in which case
-    # we don't want to exit non-zero.
-    if [ ! -e "/etc/init/${INITSCRIPTID}.conf" ]; then
-	exit 100
-    fi
 fi
 
 ## Queries sysvinit for the current runlevel
@@ -381,9 +374,12 @@ RC=
 if [ -n "$is_systemd" ]; then
     case ${ACTION} in
         start|restart|try-restart)
-            # Note that systemd 215 does not yet support is-enabled for SysV scripts,
-            # this works only with systemd >= 220-1 (systemd-sysv-install). Add a
-            # simple fallback check which can be dropped after releasing stretch.
+            # If a package ships both init script and systemd service file, the
+            # systemd unit will not be enabled by the time invoke-rc.d is called
+            # (with current debhelper sequence). This would make systemctl is-enabled
+            # report the wrong status, and then the service would not be started.
+            # This check cannot be removed as long as we support not passing --skip-systemd-native
+
             if systemctl --quiet is-enabled "${UNIT}" 2>/dev/null || \
                ls ${RCDPREFIX}[S2345].d/S[0-9][0-9]${INITSCRIPTID} >/dev/null 2>&1; then
                 RC=104
@@ -422,9 +418,7 @@ fi
 
 # test if /etc/init.d/initscript is actually executable
 _executable=
-if [ -n "$is_upstart" ]; then
-    _executable=1
-elif [ -n "$is_systemd" ]; then
+if [ -n "$is_systemd" ]; then
     _executable=1
 elif testexec "${INITDPREFIX}${INITSCRIPTID}"; then
     _executable=1
@@ -476,22 +470,11 @@ getnextaction () {
     ACTION="$@"
 }
 
-if [ -n "$is_upstart" ]; then
-    RUNNING=
-    DISABLED=
-    if status "$INITSCRIPTID" 2>/dev/null | grep -q ' start/'; then
-        RUNNING=1
-    fi
-    if ! initctl show-config -e "$INITSCRIPTID" | grep -q '^  start on'; then
-        DISABLED=1
-    fi
-fi
-
 ## Executes initscript
 ## note that $ACTION is a space-separated list of actions
 ## to be attempted in order until one suceeds.
 if test x${FORCE} != x || test ${RC} -eq 104 ; then
-    if [ -n "$is_upstart" ] || [ -n "$is_systemd" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
+    if [ -n "$is_systemd" ] || testexec "${INITDPREFIX}${INITSCRIPTID}" ; then
 	RC=102
 	setechoactions ${ACTION}
 	while test ! -z "${ACTION}" ; do
@@ -500,51 +483,24 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 		printerror executing initscript action \"${saction}\"...
 	    fi
 
-	    if [ -n "$is_upstart" ]; then
-		case $saction in
-		    status)
-			"$saction" "$INITSCRIPTID" && exit 0
-			;;
-		    start|stop)
-			if [ -z "$RUNNING" ] && [ "$saction" = "stop" ]; then
-			    exit 0
-			elif [ -n "$RUNNING" ] && [ "$saction" = "start" ]; then
-			    exit 0
-			elif [ -n "$DISABLED" ] && [ "$saction" = "start" ]; then
-			    exit 0
-			fi
-			$saction "$INITSCRIPTID" && exit 0
-			;;
-		    restart)
-			if [ -n "$RUNNING" ] ; then
-			    stop "$INITSCRIPTID"
-			fi
-
-			# If the job is disabled and is not currently
-			# running, the job is not restarted. However, if
-			# the job is disabled but has been forced into
-			# the running state, we *do* stop and restart it
-			# since this is expected behaviour
-			# for the admin who forced the start.
-			if [ -n "$DISABLED" ] && [ -z "$RUNNING" ]; then
-			    exit 0
-			fi
-			start "$INITSCRIPTID" && exit 0
-			;;
-		    reload|force-reload)
-			reload "$INITSCRIPTID" && exit 0
-			;;
-		    *)
-			# This will almost certainly fail, but give it a try
-			initctl "$saction" "$INITSCRIPTID" && exit 0
-			;;
-		esac
-            elif [ -n "$is_systemd" ]; then
+            if [ -n "$is_systemd" ]; then
                 if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
                     # If we are called by a maintainer script, chances are good that a
                     # new or updated sysv init script was installed.  Reload daemon to
                     # pick up any changes.
                     systemctl daemon-reload
+                fi
+                if [ "$SKIP_SYSTEMD_NATIVE" = yes ] ; then
+                    case $(systemctl show --value --property SourcePath "${UNIT}") in
+                    /etc/init.d/*)
+                        ;;
+                    *)
+                        # We were asked to skip native systemd units, and this one was not generated by the sysv generator
+                        # exit cleanly
+                        exit 0
+                        ;;
+                    esac
+
                 fi
                 _state=$(systemctl -p LoadState show "${UNIT}" 2>/dev/null)
 
@@ -604,7 +560,7 @@ if test x${FORCE} != x || test ${RC} -eq 104 ; then
 	done
 	printerror initscript ${INITSCRIPTID}, action \"${saction}\" failed.
 	if [ -n "$is_systemd" ] && [ "$saction" = start -o "$saction" = restart -o "$saction" = "try-restart" ]; then
-	    systemctl status --no-pager "${UNIT}" || true
+	    systemctl status --full --no-pager "${UNIT}" || true
 	fi
 	exit ${RC}
     fi

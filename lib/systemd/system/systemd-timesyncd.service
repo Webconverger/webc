@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -11,29 +13,39 @@ Documentation=man:systemd-timesyncd.service(8)
 ConditionCapability=CAP_SYS_TIME
 ConditionVirtualization=!container
 DefaultDependencies=no
-RequiresMountsFor=/var/lib/systemd/clock
-After=systemd-remount-fs.service systemd-tmpfiles-setup.service systemd-sysusers.service
+After=systemd-remount-fs.service systemd-sysusers.service
 Before=time-sync.target sysinit.target shutdown.target
 Conflicts=shutdown.target
 Wants=time-sync.target
 
 [Service]
-Type=notify
+AmbientCapabilities=CAP_SYS_TIME
+CapabilityBoundingSet=CAP_SYS_TIME
+ExecStart=!!/lib/systemd/systemd-timesyncd
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectSystem=strict
 Restart=always
 RestartSec=0
-ExecStart=/lib/systemd/systemd-timesyncd
-WatchdogSec=3min
-CapabilityBoundingSet=CAP_SYS_TIME CAP_SETUID CAP_SETGID CAP_SETPCAP CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
-PrivateTmp=yes
-PrivateDevices=yes
-ProtectSystem=full
-ProtectHome=yes
-ProtectControlGroups=yes
-ProtectKernelTunables=yes
-MemoryDenyWriteExecute=yes
-RestrictRealtime=yes
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
-SystemCallFilter=~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RuntimeDirectory=systemd/timesync
+StateDirectory=systemd/timesync
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service @clock
+Type=notify
+User=systemd-timesync
+WatchdogSec=3min
 
 [Install]
 WantedBy=sysinit.target
+Alias=dbus-org.freedesktop.timesync1.service

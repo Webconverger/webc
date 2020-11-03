@@ -138,6 +138,6 @@ apply_settings 2>/dev/null
 
 if [ -n "$FAIL" ]; then
 	FAIL=
-	ifconfig "$IFACE" up
+	/sbin/ip link set dev "$IFACE" up
 	apply_settings
 fi

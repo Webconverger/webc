@@ -118,10 +118,11 @@ case "$1" in
     ;;
 esac
 
-# Automatically added by dh_installemacsen
-if [ "$1" = "configure" ] && [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common -a -x /usr/lib/emacsen-common/emacs-package-install ]
-then
-	/usr/lib/emacsen-common/emacs-package-install --postinst dictionaries-common
+# Automatically added by dh_installemacsen/11.5.3
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	if [ -e /var/lib/emacsen-common/state/package/installed/emacsen-common -a -x /usr/lib/emacsen-common/emacs-package-install ] ; then
+		/usr/lib/emacsen-common/emacs-package-install --postinst dictionaries-common
+	fi
 fi
 # End automatically added section
 

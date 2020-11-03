@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -14,23 +16,26 @@ After=systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-a
 Before=sysinit.target
 
 [Service]
-Type=notify
-Sockets=systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-audit.socket
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SYS_PTRACE CAP_SYSLOG CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_CHOWN CAP_DAC_READ_SEARCH CAP_FOWNER CAP_SETUID CAP_SETGID CAP_MAC_OVERRIDE
 ExecStart=/lib/systemd/systemd-journald
+FileDescriptorStoreMax=4224
+IPAddressDeny=any
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
 Restart=always
 RestartSec=0
-NotifyAccess=all
-StandardOutput=null
-WatchdogSec=3min
-FileDescriptorStoreMax=1024
-CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SYS_PTRACE CAP_SYSLOG CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_CHOWN CAP_DAC_READ_SEARCH CAP_FOWNER CAP_SETUID CAP_SETGID CAP_MAC_OVERRIDE
-MemoryDenyWriteExecute=yes
-RestrictRealtime=yes
 RestrictAddressFamilies=AF_UNIX AF_NETLINK
-SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io
+RestrictNamespaces=yes
+RestrictRealtime=yes
+Sockets=systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-audit.socket
+StandardOutput=null
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service
+Type=notify
+WatchdogSec=3min
 
-# Increase the default a bit in order to allow many simultaneous
-# services being run since we keep one fd open per service. Also, when
-# flushing journal files to disk, we might need a lot of fds when many
-# journal files are combined.
-LimitNOFILE=16384
+# If there are many split up journal files we need a lot of fds to access them
+# all in parallel.
+LimitNOFILE=524288

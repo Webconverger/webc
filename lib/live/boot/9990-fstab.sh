@@ -4,10 +4,6 @@
 
 Fstab ()
 {
-	# FIXME: stop hardcoding overloading of initramfs-tools functions
-	. /scripts/functions
-	. /lib/live/boot/9990-initramfs-tools.sh
-
 	if [ -n "${NOFSTAB}" ]
 	then
 		return

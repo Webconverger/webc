@@ -5,20 +5,10 @@ set -e
 
 # Remove log file when dpkg is purged
 remove_logfile() {
-    rm -f /var/log/dpkg.log /var/log/dpkg.log.* 2>/dev/null
-}
+    logdir=$DPKG_ROOT/var/log
 
-# Cleanup multiarch infodb leftovers
-cleanup_multiarch_infodb()
-{
-    admindir=${DPKG_ADMINDIR:-/var/lib/dpkg}
-    pkgadmindir=$admindir/info
-
-    echo "Cleaning up the multiarch dpkg control files database ..."
-    ls $pkgadmindir | grep : | while read oldfile; do
-        rm "$pkgadmindir/$oldfile"
-    done
-    rm -f $pkgadmindir/format
+    rm -f "$logdir"/dpkg.log "$logdir"/dpkg.log.* 2>/dev/null
+    rm -f "$logdir"/alternatives.log "$logdir"/alternatives.log.* 2>/dev/null
 }
 
 case "$1" in
@@ -30,10 +20,6 @@ case "$1" in
 	;;
 
     upgrade)
-	# Downgrade the multiarch db to a “monoarch” db layout
-	if dpkg --compare-versions "$2" lt 1.16.2; then
-	    cleanup_multiarch_infodb
-	fi
 	;;
 
     failed-upgrade|disappear|abort-install|abort-upgrade)

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 set -e
 
 # $1: dfile, $2: link target, $3: distrib
@@ -7,104 +7,101 @@ replace_with_link() {
 	temp=$dfile.tmp
 	# Safely create a symlink to $ltarget at $dfile, first
 	# making a backup of $dfile (the file being diverted)
-	# in $distrib.
+	# in $distrib (if specified).
 	#
 	# The cp / ln -s / mv dance avoids having to live without
 	# $dfile (think: /bin/sh) for even a moment, so applications
 	# running in parallel can continue without trouble.
 	# See dash.preinst for details.
-	if [ -e "$dfile" ]; then
+	if [ -n "$distrib" ] && [ -e "$dfile" ]; then
 		cp -dp "$dfile" "$distrib"
 	fi
 	ln -sf "$ltarget" "$temp"
 	mv -f "$temp" "$dfile"
 }
 
-# $1: case, $2: dfile, $3: ltarget [, $4: distrib]
-check_divert() {
-	dfile=$2; ltarget=$3
-	distrib=${4:-$dfile.distrib}
+claim_binsh() {
+	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib}
 	diverter=$(dpkg-divert --listpackage $dfile)
 	truename=$(dpkg-divert --truename $dfile)
-	case "$1" in
-	true)
-		if [ "$diverter" != dash ]; then
-			# Let dpkg-divert error out; we are not taking
-			# over the diversion, unless we added it
-			# ourselves on behalf of bash.
-			if [ "$diverter" = bash ]; then
-				dpkg-divert --package bash --remove $dfile
-			else
-				dpkg-divert --package dash --remove $dfile
-				# Make sure we die:
-				echo "This should never be reached"
-				exit 1
-			fi
 
-			dpkg-divert --package dash --divert $distrib --add $dfile
-			# remove the old equivalent of $distrib, if it existed:
-			# or $dfile if there was no previous diversion! -- should never happen, unless preinst failed
-			if [ -n "$truename" ]; then
-			       rm -f "$truename"
-			fi
-			replace_with_link $dfile $ltarget $distrib
+	if [ "$diverter" = dash ]; then
+		# good.
+		return
+	fi
+
+	if [ "$diverter" = LOCAL ]; then
+		# The sysadmin wants it this way.  Who am I to argue?
+		return
+	fi
+
+	if [ -n "$diverter" ] && [ "$diverter" != bash ]; then
+		# Let dpkg-divert error out; we are not taking
+		# over the diversion, unless we added it
+		# ourselves on behalf of bash.
+		dpkg-divert --package dash --no-rename --remove $dfile
+		echo "This should never be reached"
+		exit 1
+	fi
+
+	dpkg-divert --package bash --no-rename --remove $dfile
+	dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
+	# remove the old equivalent of $distrib, if it existed.
+	if [ -n "$truename" ]; then
+	       rm -f "$truename"
+	fi
+	replace_with_link $dfile $ltarget $distrib
+}
+
+unclaim_binsh() {
+	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib}
+	diverter=$(dpkg-divert --listpackage $dfile)
+	truename=$(dpkg-divert --truename $dfile)
+
+	if [ "$diverter" != dash ]; then
+		# good.
+		return
+	fi
+
+	# Donate the diversion and sh symlink to the bash package.
+	ltarget=$(echo $ltarget | sed s/dash/bash/)
+	dpkg-divert --package dash --no-rename --remove $dfile
+	dpkg-divert --package bash --no-rename --divert $distrib --add $dfile
+	if [ -n "$truename" ]; then
+		rm -f "$truename"
+	fi
+	replace_with_link $dfile $ltarget $distrib
+}
+
+initial_binsh_setup() {
+	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib} ashfile=$4
+	diverter=$(dpkg-divert --listpackage $dfile)
+	truename=$(dpkg-divert --truename $dfile)
+
+	if [ -z "$diverter" ]; then
+		# good.
+		return
+	fi
+
+	if [ "$diverter" = ash ]; then
+		dpkg-divert --package ash --no-rename --remove $dfile
+		dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
+
+		if [ "$truename" != "$distrib" ] && [ -e "$truename" ]; then
+			mv "$truename" "$distrib"
 		fi
-		;;
-	false)
-		if [ "$diverter" = dash ]; then
-			# Simple hack. We also divert sh(1), remember?
-			bash=$(echo "$ltarget"|sed 's/dash/bash/')
-			dpkg-divert --package dash --remove $dfile
-			# The diversion is added as if we were bash, leaving
-			# no diversion would lead to a file conflict later
-			# when re-checked by dpkg
-			dpkg-divert --package bash --divert $distrib --add $dfile
-			# ugh? $truename should always be set (to $distrib)
-			if [ -n "$truename" ]; then
-				rm -f "$truename"
-			fi
-			# Point everything back to bash
-			replace_with_link $dfile $bash $distrib
-		fi
-		;;
-	ash)
-		# Code not modified by the NMU:
-		div=$(dpkg-divert --list $2)
-		case $div in
-		'')
-			;;
-		*by\ ash)
-			dst=${div% by ash}
-			dst=${dst##* to }
+		replace_with_link $dfile $ltarget
+		return
+	fi
 
-			# Work around dpkg-divert bug.
-			if [ -e "$dst" ]; then
-				mv "$dst" "$dst.dash-tmp"
-			fi
-			dpkg-divert --package ash --remove $2
-			if [ -e "$dst.dash-tmp" ]; then
-				mv "$dst.dash-tmp" "$dst"
-			fi
-
-			dpkg-divert --package dash --divert $distrib --add $2
-			if [ "$dst" != $distrib ] && [ -e "$dst" ]; then
-				mv "$dst" $distrib
-			fi
-			ln -sf $3 $2.tmp
-			mv -f $2.tmp $2
-			;;
-		*)
-			d=${2%/*}
-			if
-				[ -h $2 ] && [ -f $2 ] && [ -f $d/$5 ] &&
-				cmp $2 $d/$5
-			then
-				ln -sf $3 $2.tmp
-				mv -f $2.tmp $2
-			fi
-			;;
-		esac
-	esac
+	if
+		[ -h $dfile ] &&
+		[ -f $dfile ] &&
+		[ -f $ashfile ] &&
+		cmp $dfile $ashfile
+	then
+		replace_with_link $dfile $ltarget
+	fi
 }
 
 add_shell() {
@@ -122,9 +119,10 @@ if [ -f /usr/share/debconf/confmodule ]; then
 fi
 
 if [ "$1" = configure ] && [ -z "$2" ]; then
-	check_divert ash /bin/sh dash '' ash
-	check_divert ash /usr/share/man/man1/sh.1.gz dash.1.gz \
-		/usr/share/man/man1/sh.distrib.1.gz ash.1.gz
+	initial_binsh_setup /bin/sh dash '' /bin/ash
+	initial_binsh_setup /usr/share/man/man1/sh.1.gz dash.1.gz \
+		/usr/share/man/man1/sh.distrib.1.gz \
+		/usr/share/man/man1/ash.1.gz
 	add_shell
 elif [ "$1" = configure ] && dpkg --compare-versions "$2" lt 0.4.18; then
 	add_shell
@@ -132,12 +130,20 @@ fi
 
 if [ $debconf ]; then
 	db_get dash/sh
-	check_divert "$RET" /bin/sh dash
-	check_divert "$RET" /usr/share/man/man1/sh.1.gz dash.1.gz \
-		/usr/share/man/man1/sh.distrib.1.gz
+	if [ "$RET" = true ]; then
+		claim_binsh /bin/sh dash
+		claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
+			/usr/share/man/man1/sh.distrib.1.gz
+	else
+		unclaim_binsh /bin/sh dash
+		unclaim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
+			/usr/share/man/man1/sh.distrib.1.gz
+	fi
 fi
 
-test "$1" = 'configure' || exit 0
-test -x /usr/bin/update-menus || exit 0
-test -z "$2" || dpkg --compare-versions "$2" lt 0.5.2-3 || exit 0
-exec update-menus
+# Automatically added by dh_installmenu/12
+if [ "$1" = "configure" ] && [ -x "`which update-menus 2>/dev/null`" ]; then
+	update-menus
+fi
+# End automatically added section
+

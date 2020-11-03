@@ -28,11 +28,11 @@ libply-boot-client.so.4 libplymouth4 #MINVER#
  ply_boot_client_tell_daemon_to_show_splash@Base 0.9.2
  ply_boot_client_update_daemon@Base 0.9.2
 libply-splash-core.so.4 libplymouth4 #MINVER#
+ ply_boot_splash_add_pixel_display@Base 0.9.3
+ ply_boot_splash_add_text_display@Base 0.9.3
  ply_boot_splash_attach_progress@Base 0.9.2
  ply_boot_splash_attach_to_event_loop@Base 0.9.2
- ply_boot_splash_attach_to_seat@Base 0.9.2
  ply_boot_splash_become_idle@Base 0.9.2
- ply_boot_splash_detach_from_seat@Base 0.9.2
  ply_boot_splash_display_message@Base 0.9.2
  ply_boot_splash_display_normal@Base 0.9.2
  ply_boot_splash_display_password@Base 0.9.2
@@ -43,27 +43,38 @@ libply-splash-core.so.4 libplymouth4 #MINVER#
  ply_boot_splash_load@Base 0.9.2
  ply_boot_splash_load_built_in@Base 0.9.2
  ply_boot_splash_new@Base 0.9.2
+ ply_boot_splash_remove_pixel_display@Base 0.9.3
+ ply_boot_splash_remove_text_display@Base 0.9.3
  ply_boot_splash_root_mounted@Base 0.9.2
+ ply_boot_splash_set_keyboard@Base 0.9.3
  ply_boot_splash_show@Base 0.9.2
  ply_boot_splash_system_update@Base 0.9.2
  ply_boot_splash_unload@Base 0.9.2
+ ply_boot_splash_unset_keyboard@Base 0.9.3
  ply_boot_splash_update_output@Base 0.9.2
  ply_boot_splash_update_status@Base 0.9.2
+ ply_boot_splash_uses_pixel_displays@Base 0.9.4
  ply_device_manager_activate_keyboards@Base 0.9.2
  ply_device_manager_activate_renderers@Base 0.9.2
  ply_device_manager_deactivate_keyboards@Base 0.9.2
  ply_device_manager_deactivate_renderers@Base 0.9.2
  ply_device_manager_free@Base 0.9.2
  ply_device_manager_get_default_terminal@Base 0.9.2
- ply_device_manager_get_seats@Base 0.9.2
- ply_device_manager_has_open_seats@Base 0.9.2
+ ply_device_manager_get_keyboards@Base 0.9.3
+ ply_device_manager_get_pixel_displays@Base 0.9.3
+ ply_device_manager_get_text_displays@Base 0.9.3
+ ply_device_manager_has_displays@Base 0.9.3
+ ply_device_manager_has_serial_consoles@Base 0.9.3
  ply_device_manager_new@Base 0.9.2
- ply_device_manager_watch_seats@Base 0.9.2
+ ply_device_manager_pause@Base 0.9.4
+ ply_device_manager_unpause@Base 0.9.4
+ ply_device_manager_watch_devices@Base 0.9.3
  ply_keyboard_add_backspace_handler@Base 0.9.2
  ply_keyboard_add_enter_handler@Base 0.9.2
  ply_keyboard_add_escape_handler@Base 0.9.2
  ply_keyboard_add_input_handler@Base 0.9.2
  ply_keyboard_free@Base 0.9.2
+ ply_keyboard_is_active@Base 0.9.3
  ply_keyboard_new_for_renderer@Base 0.9.2
  ply_keyboard_new_for_terminal@Base 0.9.2
  ply_keyboard_remove_backspace_handler@Base 0.9.2
@@ -75,6 +86,7 @@ libply-splash-core.so.4 libplymouth4 #MINVER#
  ply_pixel_buffer_fill_with_argb32_data@Base 0.9.2
  ply_pixel_buffer_fill_with_argb32_data_at_opacity@Base 0.9.2
  ply_pixel_buffer_fill_with_argb32_data_at_opacity_with_clip@Base 0.9.2
+ ply_pixel_buffer_fill_with_argb32_data_at_opacity_with_clip_and_scale@Base 0.9.3
  ply_pixel_buffer_fill_with_argb32_data_with_clip@Base 0.9.2
  ply_pixel_buffer_fill_with_buffer@Base 0.9.2
  ply_pixel_buffer_fill_with_buffer_at_opacity@Base 0.9.2
@@ -86,19 +98,26 @@ libply-splash-core.so.4 libplymouth4 #MINVER#
  ply_pixel_buffer_fill_with_hex_color_at_opacity@Base 0.9.2
  ply_pixel_buffer_free@Base 0.9.2
  ply_pixel_buffer_get_argb32_data@Base 0.9.2
+ ply_pixel_buffer_get_device_scale@Base 0.9.3
  ply_pixel_buffer_get_height@Base 0.9.2
  ply_pixel_buffer_get_size@Base 0.9.2
  ply_pixel_buffer_get_updated_areas@Base 0.9.2
  ply_pixel_buffer_get_width@Base 0.9.2
+ ply_pixel_buffer_is_opaque@Base 0.9.3
  ply_pixel_buffer_new@Base 0.9.2
+ ply_pixel_buffer_new_with_device_rotation@Base 0.9.4
  ply_pixel_buffer_pop_clip_area@Base 0.9.2
  ply_pixel_buffer_push_clip_area@Base 0.9.2
  ply_pixel_buffer_resize@Base 0.9.2
  ply_pixel_buffer_rotate@Base 0.9.2
+ ply_pixel_buffer_set_device_scale@Base 0.9.3
+ ply_pixel_buffer_set_opaque@Base 0.9.3
  ply_pixel_buffer_tile@Base 0.9.2
  ply_pixel_display_draw_area@Base 0.9.2
  ply_pixel_display_free@Base 0.9.2
  ply_pixel_display_get_height@Base 0.9.2
+ ply_pixel_display_get_renderer@Base 0.9.3
+ ply_pixel_display_get_renderer_head@Base 0.9.3
  ply_pixel_display_get_width@Base 0.9.2
  ply_pixel_display_new@Base 0.9.2
  ply_pixel_display_pause_updates@Base 0.9.2
@@ -114,25 +133,11 @@ libply-splash-core.so.4 libplymouth4 #MINVER#
  ply_renderer_get_device_name@Base 0.9.2
  ply_renderer_get_heads@Base 0.9.2
  ply_renderer_get_input_source@Base 0.9.2
+ ply_renderer_is_active@Base 0.9.3
  ply_renderer_new@Base 0.9.2
  ply_renderer_open@Base 0.9.2
  ply_renderer_open_input_source@Base 0.9.2
  ply_renderer_set_handler_for_input_source@Base 0.9.2
- ply_seat_activate_keyboard@Base 0.9.2
- ply_seat_activate_renderer@Base 0.9.2
- ply_seat_close@Base 0.9.2
- ply_seat_deactivate_keyboard@Base 0.9.2
- ply_seat_deactivate_renderer@Base 0.9.2
- ply_seat_free@Base 0.9.2
- ply_seat_get_keyboard@Base 0.9.2
- ply_seat_get_pixel_displays@Base 0.9.2
- ply_seat_get_renderer@Base 0.9.2
- ply_seat_get_text_displays@Base 0.9.2
- ply_seat_is_open@Base 0.9.2
- ply_seat_new@Base 0.9.2
- ply_seat_open@Base 0.9.2
- ply_seat_refresh_displays@Base 0.9.2
- ply_seat_set_splash@Base 0.9.2
  ply_terminal_activate_vt@Base 0.9.2
  ply_terminal_close@Base 0.9.2
  ply_terminal_deactivate_vt@Base 0.9.2
@@ -149,6 +154,7 @@ libply-splash-core.so.4 libplymouth4 #MINVER#
  ply_terminal_is_vt@Base 0.9.2
  ply_terminal_new@Base 0.9.2
  ply_terminal_open@Base 0.9.2
+ ply_terminal_refresh_geometry@Base 0.9.3
  ply_terminal_reset_colors@Base 0.9.2
  ply_terminal_set_buffered_input@Base 0.9.2
  ply_terminal_set_color_hex_value@Base 0.9.2
@@ -350,6 +356,7 @@ libply.so.4 libplymouth4 #MINVER#
  ply_file_exists@Base 0.9.2
  ply_free_string_array@Base 0.9.2
  ply_get_credentials_from_fd@Base 0.9.2
+ ply_get_device_scale@Base 0.9.3
  ply_get_process_command_line@Base 0.9.2
  ply_get_process_parent_pid@Base 0.9.2
  ply_get_timestamp@Base 0.9.2
@@ -366,6 +373,9 @@ libply.so.4 libplymouth4 #MINVER#
  ply_hashtable_resize@Base 0.9.2
  ply_hashtable_string_compare@Base 0.9.2
  ply_hashtable_string_hash@Base 0.9.2
+ ply_kernel_command_line_get_string_after_prefix@Base 0.9.4
+ ply_kernel_command_line_has_argument@Base 0.9.4
+ ply_kernel_command_line_override@Base 0.9.4
  ply_key_file_foreach_entry@Base 0.9.2
  ply_key_file_free@Base 0.9.2
  ply_key_file_get_value@Base 0.9.2
@@ -436,6 +446,8 @@ libply.so.4 libplymouth4 #MINVER#
  ply_region_new@Base 0.9.2
  ply_restore_errno@Base 0.9.2
  ply_save_errno@Base 0.9.2
+ ply_set_device_scale@Base 0.9.3
+ ply_set_fd_as_blocking@Base 0.9.3
  ply_show_new_kernel_messages@Base 0.9.2
  ply_string_has_prefix@Base 0.9.2
  ply_terminal_session_attach@Base 0.9.2

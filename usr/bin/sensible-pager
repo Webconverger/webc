@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Prevent recursive loops, where these values are set to this script
+p="$(which sensible-pager)"
+[ "$(which $PAGER || true)" = "$p" ] && PAGER=
+
 ${PAGER:-pager} "$@"
 ret="$?"
 if [ "$ret" -eq 126 ] || [ "$ret" -eq 127 ]; then

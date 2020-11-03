@@ -52,6 +52,12 @@ checkflagfile()
 	}
 
 clean_tmp() {
+	if test -h /tmp; then
+		# will be created by mount_tmp if it does not exist
+		test -d /tmp || return 0
+		# but we'll clean it if it does
+	fi
+
 	# Does not exist
 	[ -d /tmp ] || return 1
 	# tmpfs does not require cleaning
@@ -117,6 +123,7 @@ clean_tmp() {
 		! ( -path ./quota.group -uid 0 )
 		! ( -path ./aquota.group -uid 0 )
 		! ( -path ./.journal -uid 0 )
+		! ( -path ./.sujournal -uid 0 )
 		! ( -path ./.clean -uid 0 )
 		! ( -path './...security*' -uid 0 )'
 

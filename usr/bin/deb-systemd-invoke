@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 # vim:ts=4:sw=4:expandtab
 # © 2013 Michael Stapelberg <stapelberg@debian.org>
 #
@@ -83,6 +83,7 @@ if (-x $policyhelper) {
 # We don't autostart static units either.
 if ($action eq "start" || $action eq "restart") {
     my $global_exit_code = 0;
+    my @start_units = ();
     for my $unit (@units) {
         my $unit_installed = 0;
         my $enabled_output = `/bin/systemctl is-enabled -- '$unit'`;
@@ -98,15 +99,13 @@ if ($action eq "start" || $action eq "restart") {
             print STDERR "$unit is a disabled or a static unit not running, not starting it.\n";
         }
         else {
-            system('/bin/systemctl', "$action", "$unit");
-            my $exit_code = $?>>8;
-            if ($exit_code != 0) {
-                print STDERR "$unit couldn't $action.\n";
-                $global_exit_code = $exit_code;
-            }
+            push @start_units, $unit;
         }
     }
-    exit($global_exit_code);
+    if (@start_units) {
+        exec('/bin/systemctl', $action, @start_units) or die("Could not execute systemctl: $!");
+    }
+    exit(0);
 } else {
     exec '/bin/systemctl', @ARGV;
 }

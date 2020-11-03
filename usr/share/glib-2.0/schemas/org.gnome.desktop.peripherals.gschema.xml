@@ -1,5 +1,6 @@
-<schemalist>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals" path="/org/gnome/desktop/peripherals/">
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gsettings-desktop-schemas">
+  <schema id="org.gnome.desktop.peripherals" path="/org/gnome/desktop/peripherals/">
     <child name="touchpad" schema="org.gnome.desktop.peripherals.touchpad"/>
     <child name="keyboard" schema="org.gnome.desktop.peripherals.keyboard"/>
     <child name="mouse" schema="org.gnome.desktop.peripherals.mouse"/>
@@ -7,7 +8,7 @@
     <child name="tablet" schema="org.gnome.desktop.peripherals.tablet"/>
     <child name="touchscreen" schema="org.gnome.desktop.peripherals.touchscreen"/>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.touchpad" path="/org/gnome/desktop/peripherals/touchpad/">
+  <schema id="org.gnome.desktop.peripherals.touchpad" path="/org/gnome/desktop/peripherals/touchpad/">
     <key name="edge-scrolling-enabled" type="b">
       <default>false</default>
       <summary>Whether edge scrolling is enabled</summary>
@@ -18,10 +19,20 @@
       <summary>Whether edge scrolling is enabled</summary>
       <description>When enabled, touchpads that support two-finger scrolling will have that feature enabled.</description>
     </key>
+    <key name="disable-while-typing" type="b">
+      <default>true</default>
+      <summary>Whether to disable the touchpad while typing</summary>
+      <description>When enabled, touchpads will be disabled while typing on the keyboard.</description>
+    </key>
     <key name="tap-to-click" type="b">
       <default>false</default>
       <summary>Enable mouse clicks with touchpad</summary>
       <description>Set this to TRUE to be able to send mouse clicks by tapping on the touchpad.</description>
+    </key>
+    <key name="tap-and-drag" type="b">
+      <default>true</default>
+      <summary>Enable tap-and-drag with touchpad</summary>
+      <description>Set this to TRUE to be able to start a drag by tapping and immediately moving the finger that’s now pressed on the touchpad.</description>
     </key>
     <key name="send-events" enum="org.gnome.desktop.GDesktopDeviceSendEvents">
       <default>'enabled'</default>
@@ -31,12 +42,12 @@
     <key name="left-handed" enum="org.gnome.desktop.GDesktopTouchpadHandedness">
       <default>'mouse'</default>
       <summary>Touchpad button orientation</summary>
-      <description>Swap left and right mouse buttons for left-handed mice with 'left', 'right' for right-handed, 'mouse' to follow the mouse setting.</description>
+      <description>Swap left and right mouse buttons for left-handed mice with “left”, “right” for right-handed, “mouse” to follow the mouse setting.</description>
     </key>
     <key name="speed" type="d">
       <default>0</default>
       <summary>Pointer speed</summary>
-      <description>Pointer speed for the touchpad. Accepted values are in the [-1..1] range (from "unaccelerated" to "fast"). A value of 0 is the system default.</description>
+      <description>Pointer speed for the touchpad. Accepted values are in the [-1..1] range (from “unaccelerated” to “fast”). A value of 0 is the system default.</description>
       <range min="-1" max="1"/>
     </key>
     <key name="natural-scroll" type="b">
@@ -45,12 +56,12 @@
       <description>Set this to TRUE to enable natural (reverse) scrolling for touchpads.</description>
     </key>
     <key name="click-method" enum="org.gnome.desktop.GDesktopTouchpadClickMethod">
-      <default>'default'</default>
+      <default>'fingers'</default>
       <summary>Click method</summary>
-      <description>How to generate software-emulated buttons, either disabled ('none'), through specific areas ('areas'), number of fingers ('fingers') or left as hardware default ('default').</description>
+      <description>How to generate software-emulated buttons, either disabled (“none”), through specific areas (“areas”), number of fingers (“fingers”) or left as hardware default (“default”).</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.keyboard" path="/org/gnome/desktop/peripherals/keyboard/">
+  <schema id="org.gnome.desktop.peripherals.keyboard" path="/org/gnome/desktop/peripherals/keyboard/">
     <key name="repeat" type="b">
       <default>true</default>
       <summary>Keyboard repeat</summary>
@@ -67,7 +78,7 @@
       <description>Initial key repeat delay in milliseconds.</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.mouse" path="/org/gnome/desktop/peripherals/mouse/">
+  <schema id="org.gnome.desktop.peripherals.mouse" path="/org/gnome/desktop/peripherals/mouse/">
     <key name="left-handed" type="b">
       <default>false</default>
       <summary>Mouse button orientation</summary>
@@ -76,7 +87,7 @@
     <key name="speed" type="d">
       <default>0</default>
       <summary>Pointer speed</summary>
-      <description>Pointer speed for mice. Accepted values are in the [-1..1] range (from "unaccelerated" to "fast"). A value of 0 is the system default.</description>
+      <description>Pointer speed for mice. Accepted values are in the [-1..1] range (from “unaccelerated” to “fast”). A value of 0 is the system default.</description>
       <range min="-1" max="1"/>
     </key>
     <key name="natural-scroll" type="b">
@@ -87,10 +98,10 @@
     <key name="accel-profile" enum="org.gnome.desktop.GDesktopPointerAccelProfile">
       <default>'default'</default>
       <summary>Acceleration profile</summary>
-      <description>Acceleration profile used for connected mice. The acceleration profile can be set to either default ('default') which uses the default acceleration profile for each device, flat ('flat'), which accelerates by a device specific constant factor derived from the configured pointer speed, or adaptive ('adaptive') which adapts the acceleration depending on the mouse movement. If a mouse doesn't support the configured profile, 'default' will be used.</description>
+      <description>Acceleration profile used for connected mice. The acceleration profile can be set to either default (“default”) which uses the default acceleration profile for each device, flat (“flat”), which accelerates by a device specific constant factor derived from the configured pointer speed, or adaptive (“adaptive”) which adapts the acceleration depending on the mouse movement. If a mouse doesn’t support the configured profile, “default” will be used.</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.tablet">
+  <schema id="org.gnome.desktop.peripherals.tablet">
     <key name="display" type="as">
       <default>["", "", ""]</default>
       <summary>Drawing tablet mapping</summary>
@@ -117,7 +128,7 @@
       <description>Enable this to allow physically rotating the tablet for left-handed setups</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.tablet.stylus">
+  <schema id="org.gnome.desktop.peripherals.tablet.stylus">
     <key name="pressure-curve" type="ai">
       <default>[0, 0, 100, 100]</default>
       <summary>Stylus pressure curve</summary>
@@ -138,8 +149,13 @@
       <summary>Secondary button action</summary>
       <description>Secondary stylus button action, this button is located along the pen handle on some styli like the Grip Pen. Other styli like the Airbrush Pen or the Inking Pen only have one button, this setting is ineffective on those.</description>
     </key>
+    <key name="tertiary-button-action" enum="org.gnome.desktop.GDesktopStylusButtonAction">
+      <default>'default'</default>
+      <summary>Tertiary button action</summary>
+      <description>Tertiary stylus button action, this button is located along the pen handle on some styli like the 3D Pen. Other styli like the Grip Pen only have two buttons, this setting is ineffective on those.</description>
+    </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.tablet.pad-button">
+  <schema id="org.gnome.desktop.peripherals.tablet.pad-button">
     <key name="action" enum="org.gnome.desktop.GDesktopPadButtonAction">
       <default>'none'</default>
       <summary>Pad button action type</summary>
@@ -151,14 +167,14 @@
       <description>The keyboard shortcut generated when the button is pressed for custom actions.</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.touchscreen">
+  <schema id="org.gnome.desktop.peripherals.touchscreen">
     <key name="display" type="as">
       <default>["", "", ""]</default>
       <summary>Touchscreen display mapping</summary>
       <description>EDID information of the monitor the touchscreen is mapped to. Must be in the format [vendor, product, serial]. ["","",""] disables mapping.</description>
     </key>
   </schema>
-  <schema gettext-domain="gsettings-desktop-schemas" id="org.gnome.desktop.peripherals.trackball" path="/org/gnome/desktop/peripherals/trackball/">
+  <schema id="org.gnome.desktop.peripherals.trackball" path="/org/gnome/desktop/peripherals/trackball/">
     <key name="scroll-wheel-emulation-button" type="i">
       <default>0</default>
       <range min="0" max="24"/>
@@ -167,7 +183,7 @@
     <key name="accel-profile" enum="org.gnome.desktop.GDesktopPointerAccelProfile">
       <default>'default'</default>
       <summary>Acceleration profile</summary>
-      <description>Acceleration profile used for the trackball. The acceleration profile can be set to either default ('default') which uses the default acceleration profile, flat ('flat'), which accelerates by a device specific constant factor derived from the configured speed, or adaptive ('adaptive') which adapts the acceleration depending on the movement. If the trackball doesn't support the configured profile, 'default' will be used.</description>
+      <description>Acceleration profile used for the trackball. The acceleration profile can be set to either default (“default”) which uses the default acceleration profile, flat (“flat”), which accelerates by a device specific constant factor derived from the configured speed, or adaptive (“adaptive”) which adapts the acceleration depending on the movement. If the trackball doesn’t support the configured profile, “default” will be used.</description>
     </key>
   </schema>
 </schemalist>

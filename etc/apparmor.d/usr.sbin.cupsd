@@ -22,12 +22,17 @@
   capability setgid,
   capability setuid,
   capability audit_write,
+  capability wake_alarm,
   deny capability block_suspend,
+
+  # noisy
+  deny signal (send) set=("term") peer=unconfined,
 
   # nasty, but we limit file access pretty tightly, and cups chowns a
   # lot of files to 'lp' which it cannot read/write afterwards any
   # more
   capability dac_override,
+  capability dac_read_search,
 
   # the bluetooth backend needs this
   network bluetooth,
@@ -88,9 +93,14 @@
   /usr/lib/cups/backend/snmp ixr,
   /usr/lib/cups/backend/socket ixr,
   /usr/lib/cups/backend/usb ixr,
+
   # we treat cups-pdf specially, since it needs to write into /home
   # and thus needs extra paranoia
   /usr/lib/cups/backend/cups-pdf Px,
+
+  # allow communicating with cups-pdf via Unix sockets
+  unix peer=(label=/usr/lib/cups/backend/cups-pdf),
+
   # third party backends get no restrictions as they often need high
   # privileges and this is beyond our control
   /usr/lib/cups/backend/* Cx -> third_party,
@@ -179,6 +189,9 @@
   capability dac_override,
   capability dac_read_search,
 
+  # allow communicating with cupsd via Unix sockets
+  unix peer=(label=/usr/sbin/cupsd),
+
   @{PROC}/*/auxv r,
 
   /{usr/,}bin/dash ixr,
@@ -186,13 +199,14 @@
   /{usr/,}bin/cp ixr,
   /etc/papersize r,
   /etc/cups/cups-pdf.conf r,
+  /etc/cups/ppd/*.ppd r,
   @{HOME}/PDF/ rw,
   @{HOME}/PDF/* rw,
   /usr/bin/gs ixr,
   /usr/lib/cups/backend/cups-pdf mr,
   /usr/lib/ghostscript/** mr,
   /usr/share/** r,
-  /var/log/cups/cups-pdf_log w,
+  /var/log/cups/cups-pdf*_log w,
   /var/spool/cups/** r,
   /var/spool/cups-pdf/** rw,
 }

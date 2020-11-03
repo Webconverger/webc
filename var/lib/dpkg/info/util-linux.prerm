@@ -4,7 +4,6 @@ set -e
 case "$1" in
 	remove)
 		update-alternatives --remove pager /bin/more
-		update-alternatives --remove pager /usr/bin/pg
 		;;
 
 	upgrade|failed-upgrade|deconfigure)
@@ -12,4 +11,9 @@ case "$1" in
 
 esac
 
+# Automatically added by dh_installsystemd/12
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	deb-systemd-invoke stop 'fstrim.service' 'fstrim.timer' >/dev/null || true
+fi
+# End automatically added section
 

@@ -1,8 +1,8 @@
 #! /bin/sh
-# /etc/init.d/procps: Set kernel variables from /etc/sysctl.conf
-#
-# written by Elrond <Elrond@Wunder-Nett.org>
-
+# kFreeBSD do not accept scripts as interpreters, using #!/bin/sh and sourcing.
+if [ true != "$INIT_D_SCRIPT_SOURCED" ] ; then
+    set "$0" "$@"; INIT_D_SCRIPT_SOURCED=true . /lib/init/init-d-script
+fi
 ### BEGIN INIT INFO
 # Provides:          procps
 # Required-Start:    mountkernfs $local_fs
@@ -14,41 +14,21 @@
 # Short-Description: Configure kernel parameters at boottime
 # Description:  Loads kernel parameters that are specified in /etc/sysctl.conf
 ### END INIT INFO
+#
+# written by Elrond <Elrond@Wunder-Nett.org>
 
-PATH=/sbin:/bin
-
-SYSCTL=/sbin/sysctl
-
-test -x $SYSCTL || exit 0
-
-. /lib/lsb/init-functions
+DESC="Setting kernel variables"
+DAEMON=/sbin/sysctl
+PIDFILE=none
 
 # Comment this out for sysctl to print every item changed
 QUIET_SYSCTL="-q"
 
-# Check for existance of the default file and exit if not there,
-# Closes #52839 for the boot-floppy people
-if [ -f /etc/default/rcS ] ; then
-  . /etc/default/rcS
-fi
+do_start_cmd() {
+	STATUS=0
+	$DAEMON $QUIET_SYSCTL --system || STATUS=$?
+	return $STATUS
+}
 
-set -e
-
-case "$1" in
-	start|restart|force-reload|reload)
-		log_action_begin_msg "Setting kernel variables"
-		STATUS=0
-		$SYSCTL $QUIET_SYSCTL --system || STATUS=$?
-		log_action_end_msg $STATUS
-		;;
-	stop)
-		;;
-    status)
-        ;;
-	*)
-		echo "Usage: /etc/init.d/procps {start|stop|restart|reload|force-reload|status}" >&2
-		exit 3
-		;;
-esac
-
-exit 0
+do_stop() { return 0; }
+do_status() { return 0; }

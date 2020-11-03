@@ -1,9 +1,10 @@
-#! /bin/sh -e
+#! /bin/sh
 
+set -e
 
 # dpkg triggers support for update-mime
 if [ "$1" = "triggered" ]; then
-    test -x /usr/sbin/update-mime && /usr/sbin/update-mime --triggered
+    if which update-mime > /dev/null; then update-mime --triggered; fi
     exit 0
 fi
 
@@ -13,13 +14,5 @@ rm -fr /var/lib/mime
 rm -f  /usr/sbin/install-mime
 
 
-# Remove the "see" as alternative for "view"
-# Closes: #623384
-# This command can be removed after the Jessie release
-update-alternatives --remove view /usr/bin/see
-
-
 # Run the update program
-if [ -x /usr/sbin/update-mime ]; then
-    /usr/sbin/update-mime --triggered
-fi
+if which update-mime > /dev/null; then update-mime --triggered; fi

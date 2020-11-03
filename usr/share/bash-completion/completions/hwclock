@@ -11,8 +11,8 @@ _hwclock_module()
 			COMPREPLY=( $(compgen -f -- $cur) )
 			return 0
 			;;
-		'--date')
-			COMPREPLY=( $(compgen -W "date" -- $cur) )
+		'--date'|'--delay')
+			COMPREPLY=( $(compgen -W "time" -- $cur) )
 			return 0
 			;;
 		'--epoch')
@@ -27,12 +27,12 @@ _hwclock_module()
 		-*)
 			OPTS="--help
 				--show
+				--get
 				--set
 				--hctosys
 				--systohc
 				--systz
 				--adjust
-				--compare
 				--getepoch
 				--setepoch
 				--predict
@@ -41,9 +41,10 @@ _hwclock_module()
 				--localtime
 				--rtc
 				--directisa
-				--badyear
 				--date
+				--delay
 				--epoch
+				--update-drift
 				--noadjfile
 				--adjfile
 				--test

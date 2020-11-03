@@ -4,7 +4,7 @@
 
 package Debconf::Element::Gnome::Progress;
 use strict;
-use Gtk2;
+use Gtk3;
 use utf8;
 use Debconf::Encoding qw(to_Unicode);
 use base qw(Debconf::Element::Gnome);
@@ -27,7 +27,7 @@ sub start {
 
 	$frontend->title($description);
 
-	$this->widget(Gtk2::ProgressBar->new());
+	$this->widget(Gtk3::ProgressBar->new());
 	$this->widget->show;
 	$this->widget->set_text(' ');
 	$this->addwidget($this->widget);

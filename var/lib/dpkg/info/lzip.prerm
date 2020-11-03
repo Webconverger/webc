@@ -4,7 +4,14 @@ set -e
 
 case "${1}" in
 	remove|upgrade|deconfigure)
+		# lzip-alternative
 		update-alternatives --quiet --remove lzip /usr/bin/lzip.lzip
+
+		# lzip-compressor
+		update-alternatives --quiet --remove lzip-compressor /usr/bin/lzip.lzip
+
+		# lzip-decompressor
+		update-alternatives --quiet --remove lzip-decompressor /usr/bin/lzip.lzip
 		;;
 
 	failed-upgrade)

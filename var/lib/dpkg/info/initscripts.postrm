@@ -4,7 +4,13 @@
 #
 
 set -e
- 
+
+INITSCRIPTS="mountkernfs.sh brightness hostname.sh mountdevsubfs.sh checkroot.sh \
+	checkroot-bootclean.sh checkfs.sh mountall.sh mountall-bootclean.sh \
+	mountnfs.sh mountnfs-bootclean.sh bootmisc.sh urandom halt reboot \
+	umountroot umountfs umountnfs.sh sendsigs killprocs single motd \
+	bootlogs rc.local rmnologin"
+
 case "$1" in
   purge)
 	#
@@ -28,6 +34,7 @@ case "$1" in
 	#
 	# Remove state files
 	#
+	rm -f /var/lib/initscripts/brightness*
 	rm -f /var/lib/initscripts/nologin
 
 	#
@@ -46,43 +53,29 @@ case "$1" in
 
 	# Remove rc symlinks in the reverse dependency order they were
 	# inserted
-	update-rc.d rmnologin              remove >/dev/null || exit $?
-	update-rc.d rc.local               remove >/dev/null || exit $?
-	update-rc.d motd                   remove >/dev/null || exit $?
-	update-rc.d bootlogs               remove >/dev/null || exit $?
-	update-rc.d single                 remove >/dev/null || exit $?
-	update-rc.d killprocs              remove >/dev/null || exit $?
-	update-rc.d sendsigs               remove >/dev/null || exit $?
-	update-rc.d umountnfs.sh           remove >/dev/null || exit $?
-	update-rc.d umountfs               remove >/dev/null || exit $?
-	update-rc.d umountroot             remove >/dev/null || exit $?
-	update-rc.d reboot                 remove >/dev/null || exit $?
-	update-rc.d halt                   remove >/dev/null || exit $?
-	update-rc.d urandom                remove >/dev/null || exit $?
-	update-rc.d bootmisc.sh            remove >/dev/null || exit $?
-	update-rc.d mountnfs-bootclean.sh  remove >/dev/null || exit $?
-	update-rc.d mountnfs.sh            remove >/dev/null || exit $?
-	update-rc.d mountall-bootclean.sh  remove >/dev/null || exit $?
-	update-rc.d mountall.sh            remove >/dev/null || exit $?
-	update-rc.d checkfs.sh             remove >/dev/null || exit $?
-	update-rc.d checkroot-bootclean.sh remove >/dev/null || exit $?
-	update-rc.d checkroot.sh           remove >/dev/null || exit $?
-	update-rc.d mountdevsubfs.sh       remove >/dev/null || exit $?
-	update-rc.d hostname.sh            remove >/dev/null || exit $?
-	update-rc.d mountkernfs.sh         remove >/dev/null || exit $?
+	for F in $INITSCRIPTS; do
+		REVERSE="$F $REVERSE"
+	done
+	for F in $REVERSE; do
+		update-rc.d $F remove >/dev/null || exit $?
+	done
+
+	for F in $INITSCRIPTS; do
+		SERVICE="$(basename $F .sh).service"
+		if [ -L /etc/systemd/system/$SERVICE ]; then
+			rm /etc/systemd/system/$SERVICE
+		fi
+	done
 
 	# Remove /dev/pts and /dev/shm ?
 	;;
 esac
 
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd 2.88dsf-42 initscripts -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
-dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
-# End automatically added section
-# Automatically added by dh_installdeb
+# Automatically added by dh_installdeb/12.1
 dpkg-maintscript-helper rm_conffile /etc/init.d/bootlogd 2.88dsf-42 initscripts -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd 2.88dsf-42 initscripts -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/stop-bootlogd-single 2.88dsf-42 initscripts -- "$@"
+dpkg-maintscript-helper rm_conffile /etc/init.d/motd 2.93-3\~ initscripts -- "$@"
 # End automatically added section
 
 

@@ -2,11 +2,19 @@
 ### BEGIN INIT INFO
 # Provides:          udev
 # Required-Start:    mountkernfs
-# Required-Stop:
+# Required-Stop:     umountroot
 # Default-Start:     S
-# Default-Stop:
+# Default-Stop:      0 6
 # Short-Description: Start systemd-udevd, populate /dev and load drivers.
 ### END INIT INFO
+
+PATH="/sbin:/bin"
+NAME="systemd-udevd"
+DAEMON="/lib/systemd/systemd-udevd"
+DESC="hotplug events dispatcher"
+PIDFILE="/run/udev.pid"
+CTRLFILE="/run/udev/control"
+OMITDIR="/run/sendsigs.omit.d"
 
 # we need to unmount /dev/pts/ and remount it later over the devtmpfs
 unmount_devpts() {
@@ -40,15 +48,6 @@ create_dev_makedev() {
   else
     ln -sf /bin/true /dev/MAKEDEV
   fi
-}
-
-supported_kernel() {
-  case "$(uname -r)" in
-    2.[012345].*|2.6.[0-9]|2.6.[0-9][!0-9]*) return 1 ;;
-    2.6.[12][0-9]|2.6.[12][0-9][!0-9]*) return 1 ;;
-    2.6.3[0-1]|2.6.3[0-1][!0-9]*) return 1 ;;
-  esac
-  return 0
 }
 
 # shell version of /usr/bin/tty
@@ -98,10 +97,6 @@ make_static_nodes() {
 
 ##############################################################################
 
-PATH="/sbin:/bin"
-NAME="systemd-udevd"
-DAEMON="/lib/systemd/systemd-udevd"
-DESC="the hotplug events dispatcher"
 
 [ -x $DAEMON ] || exit 0
 
@@ -113,11 +108,6 @@ if [ -e /etc/udev/udev.conf ]; then
 fi
 
 . /lib/lsb/init-functions
-
-if ! supported_kernel; then
-  log_failure_msg "udev requires a kernel >= 2.6.32, not started"
-  log_end_msg 1
-fi
 
 if [ ! -e /proc/filesystems ]; then
   log_failure_msg "udev requires a mounted procfs, not started"
@@ -134,7 +124,7 @@ if [ ! -d /sys/class/ ]; then
   log_end_msg 1
 fi
 
-if ! ps --no-headers --format args ax | egrep -q '^\['; then
+if [ ! -w /sys ]; then
   log_warning_msg "udev does not support containers, not started"
   exit 0
 fi
@@ -152,22 +142,18 @@ fi
 
 case "$1" in
     start)
-    if init_is_upstart 2>/dev/null; then
-	exit 1
-    fi
-
     if [ ! -e "/run/udev/" ]; then
-	warn_if_interactive
+        warn_if_interactive
     fi
 
     if [ -w /sys/kernel/uevent_helper ]; then
-	echo > /sys/kernel/uevent_helper
+        echo > /sys/kernel/uevent_helper
     fi
 
     if ! mountpoint -q /dev/; then
-	unmount_devpts
-	mount_devtmpfs
-	[ -d /proc/1 ] || mount -n /proc
+        unmount_devpts
+        mount_devtmpfs
+        [ -d /proc/1 ] || mount -n /proc
     fi
 
     make_static_nodes
@@ -179,19 +165,30 @@ case "$1" in
     [ -x /sbin/restorecon ] && /sbin/restorecon -R /dev
 
     log_daemon_msg "Starting $DESC" "$NAME"
-    if $DAEMON --daemon; then
-	log_end_msg $?
+    if start-stop-daemon --start --name $NAME --user root --quiet \
+        --pidfile $PIDFILE --exec $DAEMON --background --make-pidfile \
+        --notify-await; then
+        # prevents udevd to be killed by sendsigs (see #791944)
+        mkdir -p $OMITDIR
+        ln -sf $PIDFILE $OMITDIR/$NAME
+        log_end_msg $?
     else
-	log_warning_msg $?
-	log_warning_msg "Waiting 15 seconds and trying to continue anyway"
-	sleep 15
+        log_warning_msg $?
+        log_warning_msg "Waiting 15 seconds and trying to continue anyway"
+        sleep 15
     fi
 
-    log_action_begin_msg "Synthesizing the initial hotplug events"
-    if udevadm trigger --action=add; then
-	log_action_end_msg $?
+    log_action_begin_msg "Synthesizing the initial hotplug events (subsystems)"
+    if udevadm trigger --type=subsystems --action=add; then
+        log_action_end_msg $?
     else
-	log_action_end_msg $?
+        log_action_end_msg $?
+    fi
+    log_action_begin_msg "Synthesizing the initial hotplug events (devices)"
+    if udevadm trigger --type=devices --action=add; then
+        log_action_end_msg $?
+    else
+        log_action_end_msg $?
     fi
 
     create_dev_makedev
@@ -199,37 +196,45 @@ case "$1" in
     # wait for the systemd-udevd childs to finish
     log_action_begin_msg "Waiting for /dev to be fully populated"
     if udevadm settle; then
-	log_action_end_msg 0
+        log_action_end_msg 0
     else
-	log_action_end_msg 0 'timeout'
+        log_action_end_msg 0 'timeout'
     fi
     ;;
 
     stop)
     log_daemon_msg "Stopping $DESC" "$NAME"
-    if start-stop-daemon --stop --name $NAME --user root --quiet --oknodo --retry 5; then
-	log_end_msg $?
+    if start-stop-daemon --stop --name $NAME --user root --quiet \
+        --pidfile $PIDFILE --remove-pidfile --oknodo --retry 5; then
+        # prevents cryptsetup/dmsetup hangs (see #791944)
+        rm -f $CTRLFILE
+        log_end_msg $?
     else
-	log_end_msg $?
+        log_end_msg $?
     fi
     ;;
 
     restart)
-    if init_is_upstart 2>/dev/null; then
-	exit 1
-    fi
     log_daemon_msg "Stopping $DESC" "$NAME"
-    if start-stop-daemon --stop --name $NAME --user root --quiet --oknodo --retry 5; then
-	log_end_msg $?
+    if start-stop-daemon --stop --name $NAME --user root --quiet \
+        --pidfile $PIDFILE --remove-pidfile --oknodo --retry 5; then
+        # prevents cryptsetup/dmsetup hangs (see #791944)
+        rm -f $CTRLFILE
+        log_end_msg $?
     else
-	log_end_msg $? || true
+        log_end_msg $? || true
     fi
 
     log_daemon_msg "Starting $DESC" "$NAME"
-    if $DAEMON --daemon; then
-	log_end_msg $?
+    if start-stop-daemon --start --name $NAME --user root --quiet \
+        --pidfile $PIDFILE --exec $DAEMON --background --make-pidfile \
+        --notify-await; then
+        # prevents udevd to be killed by sendsigs (see #791944)
+        mkdir -p $OMITDIR
+        ln -sf $PIDFILE $OMITDIR/$NAME
+        log_end_msg $?
     else
-	log_end_msg $?
+        log_end_msg $?
     fi
     ;;
 

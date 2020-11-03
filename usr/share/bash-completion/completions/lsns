@@ -14,7 +14,7 @@ _lsns_module()
 			prefix="${cur%$realcur}"
 			for WORD in $LSNS_COLS_ALL; do
 				if ! [[ $prefix == *"$WORD"* ]]; then
-					LSNS_COLS="$WORD $LSNS_COLS"
+					LSNS_COLS="$WORD ${LSNS_COLS:-""}"
 				fi
 			done
 			compopt -o nospace
@@ -26,7 +26,7 @@ _lsns_module()
 			return 0
 			;;
 		'-t'|'--type')
-			COMPREPLY=( $(compgen -W "mnt net ipc user pid uts" -- $cur) )
+			COMPREPLY=( $(compgen -W "mnt net ipc user pid uts cgroup" -- $cur) )
 			return 0
 			;;
 		'-h'|'--help'|'-V'|'--version')
@@ -40,6 +40,7 @@ _lsns_module()
 					--list
 					--noheadings
 					--output
+					--output-all
 					--task
 					--raw
 					--notruncate

@@ -137,11 +137,6 @@ image/x-icon; display-im6.q16 'icon:%s'; test=test -n "$DISPLAY"
 image/yuv; display-im6.q16 'yuv:%s'; test=test -n "$DISPLAY"
 application/x-troff-man; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page
 text/troff; /usr/bin/man -Tascii -l '%s' | col -b; copiousoutput; description=Man page
-text/*; less '%s'; needsterminal
-text/*; view %s; edit=vim %s; compose=vim %s; test=test -x /usr/bin/vim; needsterminal
-application/x-tar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
-application/x-gtar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
-application/x-ustar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
 image/gif; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
 image/jpeg; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
 image/pcx; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
@@ -155,6 +150,11 @@ image/x-portable-pixmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
 image/x-xbitmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
 image/x-xpixmap; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
 image/x-xwindowdump; /usr/bin/xloadimage %s ; test=test -n "$DISPLAY"
+text/*; less '%s'; needsterminal
+text/*; view %s; edit=vim %s; compose=vim %s; test=test -x /usr/bin/vim; needsterminal
+application/x-tar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
+application/x-gtar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
+application/x-ustar; /bin/tar tvf '%s'; print=/bin/tar tvf - | print text/plain:-; copiousoutput
 text/*; more %s; needsterminal
 text/*; view %s; edit=vi %s; compose=vi %s; needsterminal
 application/vnd.debian.binary-package; /usr/lib/mime/debian-view %s; needsterminal; description=Debian GNU/Linux Package; nametemplate=%s.deb

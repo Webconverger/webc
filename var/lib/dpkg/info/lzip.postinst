@@ -4,10 +4,23 @@ set -e
 
 case "${1}" in
 	configure)
+		# lzip-alternative
 		update-alternatives --quiet \
 			--install /usr/bin/lzip lzip /usr/bin/lzip.lzip 5000 \
 			--slave /usr/share/info/lzip.info.gz lzip.info.gz /usr/share/info/lzip.lzip.info.gz \
 			--slave /usr/share/man/man1/lzip.1.gz lzip.1.gz /usr/share/man/man1/lzip.lzip.1.gz
+
+		# lzip-compressor
+		update-alternatives --quiet \
+			--install /usr/bin/lzip-compressor lzip-compressor /usr/bin/lzip.lzip 5000 \
+			--slave /usr/share/info/lzip-compressor.info.gz lzip-compressor.info.gz /usr/share/info/lzip.lzip.info.gz \
+			--slave /usr/share/man/man1/lzip-compressor.1.gz lzip-compressor.1.gz /usr/share/man/man1/lzip.lzip.1.gz
+
+		# lzip-decompressor
+		update-alternatives --quiet \
+			--install /usr/bin/lzip-decompressor lzip-decompressor /usr/bin/lzip.lzip 5000 \
+			--slave /usr/share/info/lzip-decompressor.info.gz lzip-decompressor.info.gz /usr/share/info/lzip.lzip.info.gz \
+			--slave /usr/share/man/man1/lzip-decompressor.1.gz lzip-decompressor.1.gz /usr/share/man/man1/lzip.lzip.1.gz
 		;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)

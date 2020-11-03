@@ -52,7 +52,7 @@ if options.kernel:
     try:
         supported_kernel = apport.packaging.is_distro_package(kernel_package)
     except ValueError as e:
-        if str(e) == 'package does not exist':
+        if str(e) == 'package %s does not exist' % kernel_package:
             supported_kernel = False
 
     if not supported_kernel:
@@ -62,18 +62,18 @@ if options.kernel:
 make_log=os.path.join('/var','lib','dkms',options.module,options.version,'build','make.log')
 
 report = apport.Report('Package')
-report['Package'] = package
-try:
-    report['SourcePackage'] = apport.packaging.get_source(package)
-except ValueError:
-    sys.stderr.write('ERROR (dkms apport): unable to determine source package for %s\n' % package)
-    sys.exit(3)
 try:
     version = packaging.get_version(package)
 except ValueError:
     version = '(not installed)'
 if version is None:
     version = '(not installed)'
+report['Package'] = '%s %s' % (package, version)
+try:
+    report['SourcePackage'] = apport.packaging.get_source(package)
+except ValueError:
+    sys.stderr.write('ERROR (dkms apport): unable to determine source package for %s\n' % package)
+    sys.exit(3)
 
 if report['SourcePackage'] == 'fglrx-installer':
     fglrx_make_log = os.path.join('/var','lib','dkms',options.module,options.version,'build','make.sh.log')
@@ -94,5 +94,8 @@ if 'DKMSBuildLog' in report:
 
 if options.kernel:
     report['DKMSKernelVersion'] = options.kernel
-with open(apport.fileutils.make_report_path(report), 'wb') as f:
-    report.write(f)
+try:
+    with apport.fileutils.make_report_file(report) as f:
+        report.write(f)
+except (IOError, OSError) as e:
+    apport.fatal('Cannot create report: ' + str(e))

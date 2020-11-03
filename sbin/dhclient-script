@@ -246,6 +246,8 @@ case "$reason" in
             # new IP has been leased or leased IP changed => set it
             ip -4 addr add ${new_ip_address}${new_subnet_mask:+/$new_subnet_mask} \
                 ${new_broadcast_address:+broadcast $new_broadcast_address} \
+                ${new_dhcp_lease_time:+valid_lft $new_dhcp_lease_time} \
+                ${new_dhcp_lease_time:+preferred_lft $new_dhcp_lease_time} \
                 dev ${interface} label ${interface}
 
             if [ -n "$new_interface_mtu" ]; then
@@ -277,6 +279,12 @@ case "$reason" in
 			fi
 		    done
 	    fi
+        else # RENEW||REBIND
+            ip -4 addr change ${new_ip_address}${new_subnet_mask:+/$new_subnet_mask} \
+                ${new_broadcast_address:+broadcast $new_broadcast_address} \
+                ${new_dhcp_lease_time:+valid_lft $new_dhcp_lease_time} \
+                ${new_dhcp_lease_time:+preferred_lft $new_dhcp_lease_time} \
+                dev ${interface} label ${interface}
         fi
 
         if [ -n "$alias_ip_address" ] &&
@@ -323,6 +331,8 @@ case "$reason" in
         # set IP from recorded lease
         ip -4 addr add ${new_ip_address}${new_subnet_mask:+/$new_subnet_mask} \
             ${new_broadcast_address:+broadcast $new_broadcast_address} \
+            ${new_dhcp_lease_time:+valid_lft $new_dhcp_lease_time} \
+            ${new_dhcp_lease_time:+preferred_lft $new_dhcp_lease_time} \
             dev ${interface} label ${interface}
 
         if [ -n "$new_interface_mtu" ]; then

@@ -15,16 +15,19 @@ _partx_module()
 			prefix="${cur%$realcur}"
 			for WORD in $OUTPUT_ALL; do
 				if ! [[ $prefix == *"$WORD"* ]]; then
-					OUTPUT="$WORD $OUTPUT"
+					OUTPUT="$WORD ${OUTPUT:-""}"
 				fi
 			done
 			compopt -o nospace
 			COMPREPLY=( $(compgen -P "$prefix" -W "$OUTPUT" -S ',' -- $realcur) )
 			return 0
 			;;
+		'-S'|'--sector-size')
+			COMPREPLY=( $(compgen -W "size" -- $cur) )
+			return 0
+			;;
 		'-t'|'--type')
-			# FIXME: some command should list type libblkid knows.
-			COMPREPLY=( $(compgen -W "aix bsd dos gpt mac minix sgi solaris_x86 sun ultrix unixware" -- $cur) )
+			COMPREPLY=( $(compgen -W "$(partx --list-types)" -- $cur) )
 			return 0
 			;;
 		'-h'|'--help'|'-V'|'--version')
@@ -33,7 +36,25 @@ _partx_module()
 	esac
 	case $cur in
 		-*)
-			OPTS="--add --delete --show --update --bytes --noheadings --nr --output --pairs --raw --type --verbose --help --version"
+			OPTS="
+				--add
+				--delete
+				--update
+				--show
+				--bytes
+				--noheadings
+				--nr
+				--output
+				--output-all
+				--pairs
+				--raw
+				--sector-size
+				--type
+				--list-types
+				--verbose
+				--help
+				--version
+			"
 			COMPREPLY=( $(compgen -W "${OPTS[*]}" -- $cur) )
 			return 0
 			;;

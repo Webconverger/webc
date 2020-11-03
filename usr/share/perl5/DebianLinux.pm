@@ -73,24 +73,22 @@ sub version_cmp {
     }
 }
 
-# Find kernel image name stem for this architecture
-my $image_stem;
-if ((uname())[4] =~ /^(?:mips|parisc|powerpc|ppc)/) {
-    $image_stem = 'vmlinux';
-} else {
-    $image_stem = 'vmlinuz';
-}
-
+# Return the historical kernel image name stem for this architecture.
+# This should only be used by linux-update-symlinks.  The actual image
+# name stem used by kernel packages may change at any time.
 sub image_stem {
-    return $image_stem;
+    if ((uname())[4] =~ /^(?:mips|parisc|powerpc|ppc)/) {
+	return 'vmlinux';
+    } else {
+	return 'vmlinuz';
+    }
 }
 
 sub image_list {
     my @results;
-    my $prefix = "/boot/$image_stem-";
 
-    for (glob("$prefix*")) {
-	push @results, [substr($_, length($prefix)), $_];
+    for (glob("/boot/vmlinu[xz]-*")) {
+	push @results, [substr($_, length("/boot/vmlinu?-")), $_];
     }
     return @results;
 }

@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# We're passed the version of the kernel being installed
+# We're passed the version of the kernel being removed
 inst_kern=$1
+
+# This is applied from make_initrd function in dkms command, which
+# creates the possible initrd backup file.
+remove_initrd_backup() {
+	for initrd in "initrd-$1.img" "initramfs-$1.img" "initrd.img-$1" "initrd-$1"; do
+		rm -fv /boot/"${initrd}".old-dkms >&2
+	done
+}
 
 if [ -x /usr/sbin/dkms ]; then
 while read line; do
@@ -9,9 +17,11 @@ while read line; do
    vers=`echo "$line" | awk '{print $2}' | sed 's/,$//'`
    arch=`echo "$line" | awk '{print $4}' | sed 's/:$//'`
    echo "dkms: removing: $name $vers ($inst_kern) ($arch)" >&2
-   dkms remove -m $name -v $vers -k $inst_kern -a $arch
+   dkms uninstall -m $name -v $vers -k $inst_kern -a $arch
 done < <(dkms status -k $inst_kern 2>/dev/null | grep ": installed")
 fi
+
+remove_initrd_backup "$inst_kern"
 
 rmdir --ignore-fail-on-non-empty \
 	"/lib/modules/$inst_kern/updates/dkms" \

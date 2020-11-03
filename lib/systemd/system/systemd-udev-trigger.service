@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -10,11 +12,12 @@ Description=udev Coldplug all Devices
 Documentation=man:udev(7) man:systemd-udevd.service(8)
 DefaultDependencies=no
 Wants=systemd-udevd.service
-After=systemd-udevd-kernel.socket systemd-udevd-control.socket systemd-hwdb-update.service
+After=systemd-udevd-kernel.socket systemd-udevd-control.socket
 Before=sysinit.target
 ConditionPathIsReadWrite=/sys
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/udevadm trigger --type=subsystems --action=add ; /bin/udevadm trigger --type=devices --action=add
+ExecStart=/bin/udevadm trigger --type=subsystems --action=add
+ExecStart=/bin/udevadm trigger --type=devices --action=add

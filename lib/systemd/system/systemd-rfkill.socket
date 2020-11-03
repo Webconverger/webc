@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -10,7 +12,8 @@ Description=Load/Save RF Kill Switch Status /dev/rfkill Watch
 Documentation=man:systemd-rfkill.socket(8)
 DefaultDependencies=no
 BindsTo=sys-devices-virtual-misc-rfkill.device
-After=sys-devices-virtual-misc-rfkill.device
+After=sys-devices-virtual-misc-rfkill.device systemd-remount-fs.service
+RequiresMountsFor=/var/lib/systemd/rfkill
 Conflicts=shutdown.target
 Before=shutdown.target
 

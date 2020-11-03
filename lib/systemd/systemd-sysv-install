@@ -4,12 +4,14 @@
 # enabling/disabling those, such as chkconfig, update-rc.d, or similar. This
 # can optionally take a --root argument for enabling a SysV init script
 # in a chroot or similar.
-set -e
+set -eu
 
 usage() {
     echo "Usage: $0 [--root=path] enable|disable|is-enabled <sysv script name>" >&2
     exit 1
 }
+
+ROOT=
 
 # parse options
 eval set -- "$(getopt -o r: --long root: -- "$@")"
@@ -23,26 +25,31 @@ while true; do
     esac
 done
 
-if [ -n "$ROOT" ] && [ "$ROOT" != "/" ]; then
-    CHROOT="chroot '$ROOT'"
-fi
+NAME="${2:-}"
 
-NAME="$2"
+run() {
+    if [ -n "$ROOT" ] && [ "$ROOT" != "/" ]; then
+        _SKIP_SYSTEMD_NATIVE=1 chroot "$ROOT" /usr/sbin/update-rc.d "$@"
+    else
+        _SKIP_SYSTEMD_NATIVE=1 /usr/sbin/update-rc.d "$@"
+    fi
+}
+
 [ -n "$NAME" ] || usage
 
 case "$1" in
     enable)
         # call the command to enable SysV init script $NAME here..
-        $CHROOT /usr/sbin/update-rc.d "$NAME" defaults
-        $CHROOT /usr/sbin/update-rc.d "$NAME" enable
+        run "$NAME" defaults
+        run "$NAME" enable
         ;;
     disable)
-        $CHROOT /usr/sbin/update-rc.d "$NAME" defaults
-        $CHROOT /usr/sbin/update-rc.d "$NAME" disable
+        run "$NAME" defaults
+        run "$NAME" disable
         ;;
     is-enabled)
         # exit with 0 if $NAME is enabled, non-zero if it is disabled
-        ls $ROOT/etc/rc[S5].d/S??$NAME >/dev/null 2>/dev/null
+        ls "$ROOT"/etc/rc[S5].d/S??"$NAME" >/dev/null 2>&1
         ;;
     *)
         usage ;;

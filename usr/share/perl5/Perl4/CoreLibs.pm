@@ -4,13 +4,12 @@ Perl4::CoreLibs - libraries historically supplied with Perl 4
 
 =head1 DESCRIPTION
 
-This is a collection of C<.pl> files that have historically been
-bundled with the Perl core but are planned not to be so distributed
-with core version 5.15 or later.  Relying on their presence in the core
+This is a collection of C<.pl> files that were bundled with the Perl
+core until core version 5.15.1.  Relying on their presence in the core
 distribution is deprecated; they should be acquired from this CPAN
-distribution instead.  From core version 5.13, until their removal,
-it is planned that the core versions of these libraries will emit a
-warning when loaded.  The CPAN version will not emit such a warning.
+distribution instead.  From core version 5.13.3 until their removal, the
+core versions of these libraries emit a deprecation warning when loaded.
+The CPAN version does not emit such a warning.
 
 The entire Perl 4 approach to libraries was largely superseded in Perl
 5.000 by the system of module namespaces and C<.pm> files.  Most of
@@ -18,7 +17,7 @@ the libraries in this collection predate Perl 5.000, but a handful were
 first introduced in that version.  Functionally, most have been directly
 superseded by modules in the Perl 5 style.  These libraries should not
 be used by new code.  This collection exists to support old Perl programs
-that predates satisfactory replacements.
+that predate satisfactory replacements.
 
 Most of these libraries have not been substantially maintained in the
 course of Perl 5 development.  They are now very antiquated in style,
@@ -201,7 +200,7 @@ package Perl4::CoreLibs;
 use warnings;
 use strict;
 
-our $VERSION = "0.003";
+our $VERSION = "0.004";
 
 =head1 AUTHOR
 
@@ -225,7 +224,7 @@ Andrew Main (Zefram) <zefram@fysh.org> built the Perl4::CoreLibs package.
 
 Copyright (C) 1987-2009 Larry Wall et al
 
-Copyright (C) 2010, 2011 Andrew Main (Zefram) <zefram@fysh.org>
+Copyright (C) 2010, 2011, 2017 Andrew Main (Zefram) <zefram@fysh.org>
 
 =head1 LICENSE
 

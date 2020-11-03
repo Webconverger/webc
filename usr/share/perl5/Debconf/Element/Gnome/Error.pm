@@ -5,7 +5,7 @@
 package Debconf::Element::Gnome::Error;
 use strict;
 use Debconf::Gettext;
-use Gtk2;
+use Gtk3;
 use utf8;
 use Debconf::Encoding qw(to_Unicode);
 use base qw(Debconf::Element::Gnome);
@@ -19,18 +19,18 @@ sub init {
 	$this->multiline(1);
 	$this->fill(1);
 	$this->expand(1);
-	$this->widget(Gtk2::HBox->new(0, 0));
+	$this->widget(Gtk3::HBox->new(0, 0));
 
-	my $image = Gtk2::Image->new_from_stock("gtk-dialog-error", "dialog");
+	my $image = Gtk3::Image->new_from_stock("gtk-dialog-error", "dialog");
 	$image->show;
 
-	my $text = Gtk2::TextView->new();
+	my $text = Gtk3::TextView->new();
 	my $textbuffer = $text->get_buffer;
 	$text->show;
 	$text->set_wrap_mode ("word");
 	$text->set_editable (0);
 
-	my $scrolled_window = Gtk2::ScrolledWindow->new();
+	my $scrolled_window = Gtk3::ScrolledWindow->new();
 	$scrolled_window->show;
 	$scrolled_window->set_policy('automatic', 'automatic');
 	$scrolled_window->set_shadow_type('in');

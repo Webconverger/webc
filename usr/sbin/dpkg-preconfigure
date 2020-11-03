@@ -74,7 +74,9 @@ unless (open(INFO, "-|")) {
 	my $static_len=length("apt-extracttemplates");
 	my $len=$static_len;
 	my @collect;
-	if ($apt && @debs > 30) {
+	my $progress=0;
+	my $show_progress=($apt && @debs > 30 && -t STDERR);
+	if ($show_progress) {
 		STDERR->autoflush(1);
 	}
 	foreach my $deb (@debs) {
@@ -86,7 +88,7 @@ unless (open(INFO, "-|")) {
 			if (system("apt-extracttemplates", @collect) != 0) {
 				print STDERR sprintf("debconf: ".gettext("apt-extracttemplates failed: %s")."\n",$!);
 			}
-			if ($apt && @debs > 30) {
+			if ($show_progress) {
 				$progress += @collect;
 				printf STDERR "\r".gettext("Extracting templates from packages: %d%%"), $progress * 100 / @debs;
 			}
@@ -98,7 +100,7 @@ unless (open(INFO, "-|")) {
 	if (system("apt-extracttemplates", @collect) != 0) {
 		print STDERR sprintf("debconf: ".gettext("apt-extracttemplates failed: %s")."\n",$!);
 	}
-	if ($apt && @debs > 30) {
+	if ($show_progress) {
 		$progress += @collect;
 		printf STDERR "\r".gettext("Extracting templates from packages: %d%%")."\n", $progress * 100 / @debs;
 	}

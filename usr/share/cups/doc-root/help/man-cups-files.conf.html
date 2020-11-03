@@ -36,6 +36,9 @@ The server name may be included in filenames using the string "%s", for example:
 
 </pre>
 The default is "/var/log/cups/access_log".
+<dt><a name="CacheDir"></a><b>CacheDir </b><i>directory</i>
+<dd style="margin-left: 5.0em">Specifies the directory to use for long-lived temporary (cache) files.
+The default is "/var/spool/cups/cache" or "/var/cache/cups" depending on the platform.
 <dt><a name="ConfigFilePerm"></a><b>ConfigFilePerm </b><i>mode</i>
 <dd style="margin-left: 5.0em">Specifies the permissions for all configuration files that the scheduler writes.
 The default is "0644" on macOS and "0640" on all other operating systems.
@@ -92,10 +95,6 @@ The <i>kind</i> strings are:
 <dt><b>permissions</b>
 <dd style="margin-left: 5.0em">Bad startup file permissions are fatal, for example shared TLS certificate and key files with world-read permissions.
 </div>
-<dt><a name="FileDevice"></a><b>FileDevice Yes</b>
-<dd style="margin-left: 5.0em"><dt><b>FileDevice No</b>
-<dd style="margin-left: 5.0em">Specifies whether the file pseudo-device can be used for new printer queues.
-The URI "file:///dev/null" is always allowed.
 <dt><a name="Group"></a><b>Group </b><i>group-name-or-number</i>
 <dd style="margin-left: 5.0em">Specifies the group name or ID that will be used when executing external programs.
 The default group is operating system specific but is usually "lp" or "nobody".
@@ -143,6 +142,9 @@ The default is "/etc/cups".
 <dt><a name="SetEnv"></a><b>SetEnv </b><i>variable value</i>
 <dd style="margin-left: 5.0em">Set the specified environment variable to be passed to child processes.
 Note: the standard CUPS filter and backend environment variables cannot be overridden using this directive.
+<dt><a name="StateDir"></a><b>StateDir </b><i>directory</i>
+<dd style="margin-left: 5.0em">Specifies the directory to use for PID and local certificate files.
+The default is "/var/run/cups" or "/etc/cups" depending on the platform.
 <dt><a name="SyncOnClose"></a><b>SyncOnClose Yes</b>
 <dd style="margin-left: 5.0em"><dt><b>SyncOnClose No</b>
 <dd style="margin-left: 5.0em">Specifies whether the scheduler calls
@@ -153,11 +155,41 @@ The default is "Yes".
 <dd style="margin-left: 5.0em">Specifies the group(s) to use for <i>@SYSTEM</i> group authentication.
 The default contains "admin", "lpadmin", "root", "sys", and/or "system".
 <dt><a name="TempDir"></a><b>TempDir </b><i>directory</i>
-<dd style="margin-left: 5.0em">Specifies the directory where temporary files are stored.
+<dd style="margin-left: 5.0em">Specifies the directory where short-term temporary files are stored.
 The default is "/var/spool/cups/tmp".
 <dt><a name="User"></a><b>User </b><i>username</i>
 <dd style="margin-left: 5.0em">Specifies the user name or ID that is used when running external programs.
 The default is "lp".
+</dl>
+<h3><a name="DEPRECATED_DIRECTIVES">Deprecated Directives</a></h3>
+The following directives are deprecated and will be removed from a future version of CUPS:
+<dl class="man">
+<dt><a name="FileDevice"></a><b>FileDevice Yes</b>
+<dd style="margin-left: 5.0em"><dt><b>FileDevice No</b>
+<dd style="margin-left: 5.0em">Specifies whether the file pseudo-device can be used for new printer queues.
+The URI "file:///dev/null" is always allowed.
+File devices cannot be used with "raw" print queues - a PPD file is required.
+The specified file is overwritten for every print job.
+Writing to directories is not supported.
+<dt><a name="FontPath"></a><b>FontPath </b><i>directory[:...:directoryN]</i>
+<dd style="margin-left: 5.0em">Specifies a colon separated list of directories where fonts can be found.
+On Linux the
+<b>font-config</b>(1)
+mechanism is used instead.
+On macOS the Font Book application manages system-installed fonts.
+<dt><a name="LPDConfigFile"></a><b> LPDConfigFile </b><i>filename</i>
+<dd style="margin-left: 5.0em">Specifies the LPD service configuration file to update.
+<dt><a name="Printcap"></a><b>Printcap </b><i>filename</i>
+<dd style="margin-left: 5.0em">Specifies a file that is filled with a list of local print queues.
+<dt><a name="PrintcapFormat"></a><b>PrintcapFormat bsd</b>
+<dd style="margin-left: 5.0em"><dt><b>PrintcapFormat plist</b>
+<dd style="margin-left: 5.0em"><dt><b>PrintcapFormat solaris</b>
+<dd style="margin-left: 5.0em">Specifies the format to use for the Printcap file.
+"bsd" is the historical LPD printcap file format.
+"plist" is the Apple plist file format.
+"solaris" is the historical Solaris LPD printcap file format.
+<dt><a name="SMBConfigFile"></a><b>SMBConfigFile </b><i>filename</i>
+<dd style="margin-left: 5.0em">Specifies the SMB service configuration file to update.
 </dl>
 <h2 class="title"><a name="SEE_ALSO">See Also</a></h2>
 <a href="man-classes.conf.html?TOPIC=Man+Pages"><b>classes.conf</b>(5),</a>
@@ -170,7 +202,7 @@ The default is "lp".
 <a href="man-subscriptions.conf.html?TOPIC=Man+Pages"><b>subscriptions.conf</b>(5),</a>
 CUPS Online Help (<a href="http://localhost:631/help">http://localhost:631/help</a>)
 <h2 class="title"><a name="COPYRIGHT">Copyright</a></h2>
-Copyright &copy; 2007-2016 by Apple Inc.
+Copyright &copy; 2007-2018 by Apple Inc.
 
 </body>
 </html>

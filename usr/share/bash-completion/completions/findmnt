@@ -55,7 +55,7 @@ _findmnt_module()
 
 			for WORD in $OUTPUT_ALL; do
 				if ! [[ $prefix == *"$WORD"* ]]; then
-					OUTPUT="$WORD $OUTPUT"
+					OUTPUT="$WORD ${OUTPUT:-""}"
 				fi
 			done
 			compopt -o nospace
@@ -118,6 +118,7 @@ _findmnt_module()
 				--notruncate
 				--options
 				--output
+				--output-all
 				--pairs
 				--raw
 				--types
@@ -127,6 +128,9 @@ _findmnt_module()
 				--target
 				--mountpoint
 				--help
+				--tree
+				--real
+				--pseudo
 				--version"
 			COMPREPLY=( $(compgen -W "${OPTS[*]}" -- $cur) )
 			return 0

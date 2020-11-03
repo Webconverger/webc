@@ -1,6 +1,11 @@
 #!/bin/sh
 # See init-d-script(5) for instructions on how to use this library.
 #=============================================================================
+
+# Shift arguments early to fix #826214
+__init_d_script_name="$1"
+shift
+
 # Define LSB log_* functions.
 # Depend on lsb-base (>= 3.2-14) to ensure that this file is present
 # and status_of_proc is working.
@@ -146,19 +151,19 @@ do_reload_sigusr1() {
 }
 
 do_status() {
-	status_of_proc "$DAEMON" "$NAME" && return 0 || return $?
+	# FIXME: Does it make sense to call `status_of_proc' if PIDFILE is
+	# empty?
+	status_of_proc "$DAEMON" "$NAME" ${PIDFILE:="-p ${PIDFILE}"}
 }
 
 if [ "$DEBUG" = "true" ] ; then
     set -x
 fi
 
-SCRIPTNAME=$1
-scriptbasename="$(basename $1)"
+SCRIPTNAME="$__init_d_script_name"
+scriptbasename="$(basename "$__init_d_script_name")"
 if [ "$scriptbasename" != "init-d-script" ] ; then
-    script="$1"
-    shift
-    . $script
+    . "$__init_d_script_name"
 else
     exit 0
 fi
@@ -236,4 +241,4 @@ case "$1" in
 	fi
 	;;
 esac
-exit 0
+exit $? # See https://bugs.debian.org/822753#53

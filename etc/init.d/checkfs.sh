@@ -19,7 +19,6 @@ FSCK_LOGFILE=/var/log/fsck/checkfs
 
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
-. /lib/init/swap-functions.sh
 
 do_start () {
 	# Trap SIGINT so that we can handle user interupt of fsck.
@@ -54,11 +53,6 @@ do_start () {
 	#
 	if [ "$fscheck" = yes ] && [ ! "$BAT" ] && [ "$FSCKTYPES" != "none" ]
 	then
-
-		# Execute swapon command again, in case there are lvm
-		# or md swap partitions.  fsck can suck RAM.
-		swaponagain 'lvm and md'
-
 		if [ -f /forcefsck ] || grep -q -s -w -i "forcefsck" /proc/cmdline
 		then
 			force="-f"
@@ -87,7 +81,7 @@ Please repair the file system manually."
 			log_warning_msg "A maintenance shell will now be started. 
 CONTROL-D will terminate this shell and resume system boot."
 			# Start a single user shell on the console
-			if ! sulogin $CONSOLE
+			if ! sulogin --force $CONSOLE
 			then
 				log_failure_msg "Attempt to start maintenance shell failed. 
 Continuing with system boot in 5 seconds."
@@ -97,7 +91,7 @@ Continuing with system boot in 5 seconds."
 		if [ "$VERBOSE" = no ]
 		then
 			log_action_begin_msg "Checking file systems"
-			logsave -s $FSCK_LOGFILE fsck $spinner -M -A $fix $force $FSCKTYPES_OPT
+			logsave_best_effort fsck $spinner -M -A $fix $force $FSCKTYPES_OPT
 			FSCKCODE=$?
 
 			if [ "$FSCKCODE" -eq 32 ]
@@ -118,7 +112,7 @@ Continuing with system boot in 5 seconds."
 			else
 				log_action_msg "Will now check all file systems"
 			fi
-			logsave -s $FSCK_LOGFILE fsck $spinner -V -M -A $fix $force $FSCKTYPES_OPT
+			logsave_best_effort fsck $spinner -V -M -A $fix $force $FSCKTYPES_OPT
 			FSCKCODE=$?
 			if [ "$FSCKCODE" -eq 32 ]
 			then

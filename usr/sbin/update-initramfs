@@ -23,8 +23,7 @@ linux-image-*)
 	;;
 ?*)
 	if	   [ $# = 1 ]						\
-		&& [ x"$1" = x-u ]					\
-		&& dpkg-trigger --check-supported 2>/dev/null
+		&& [ x"$1" = x-u ]
 	then
 		if dpkg-trigger --no-await update-initramfs; then
 			echo "update-initramfs: deferring update (trigger activated)"
@@ -36,30 +35,36 @@ esac
 
 usage()
 {
-	if [ -n "${1:-}" ]; then
-		printf "${*}\n\n" >&2
-	fi
-	cat >&2 << EOF
-Usage: ${0} [OPTION]...
+	cat << EOF
+
+Usage: update-initramfs {-c|-d|-u} [-k version] [-v] [-b directory]
 
 Options:
  -k version	Specify kernel version or 'all'
  -c		Create a new initramfs
  -u		Update an existing initramfs
  -d		Remove an existing initramfs
- -t		Take over a custom initramfs with this one
  -b directory	Set alternate boot directory
  -v		Be verbose
- -h		This message
+
+See update-initramfs(8) for further details.
 
 EOF
-	exit 1
+}
+
+usage_error()
+{
+	if [ -n "${1:-}" ]; then
+		printf "%s\\n\\n" "${*}" >&2
+	fi
+	usage >&2
+	exit 2
 }
 
 mild_panic()
 {
 	if [ -n "${1:-}" ]; then
-		printf "${*}\n" >&2
+		printf "%s\\n" "${*}" >&2
 	fi
 	exit 0
 }
@@ -67,7 +72,7 @@ mild_panic()
 panic()
 {
 	if [ -n "${1:-}" ]; then
-		printf "${*}\n" >&2
+		printf "%s\\n" "${*}" >&2
 	fi
 	exit 1
 }
@@ -75,14 +80,8 @@ panic()
 verbose()
 {
 	if [ "${verbose}" = 1 ]; then
-		printf "${*}\n"
+		printf "%s\\n" "${*}"
 	fi
-}
-
-version_exists()
-{
-	[ -e "${STATEDIR}/${1}" ] && [ -e "${initramfs}" ]
-	return $?
 }
 
 set_initramfs()
@@ -127,7 +126,7 @@ backup_booted_initramfs()
 	boot_initramfs=
 	uptime_days=$(awk '{printf "%d", $1 / 3600 / 24}' /proc/uptime)
 	if [ -n "$uptime_days" ]; then
-		boot_initramfs=$(find "${initramfs}.bak" -mtime +${uptime_days})
+		boot_initramfs=$(find "${initramfs}.bak" -mtime "+${uptime_days}")
 	fi
 	if [ -n "${boot_initramfs}" ]; then
 		mv -f "${initramfs_bak}" "${initramfs}.bak"
@@ -154,11 +153,12 @@ generate_initramfs()
 	if [ "${verbose}" = 1 ]; then
 		OPTS="-v ${OPTS}"
 	fi
+	# shellcheck disable=SC2086
 	if mkinitramfs ${OPTS} "${initramfs}.new" "${version}"; then
 		mv -f "${initramfs}.new" "${initramfs}"
 		set_sha1
 		# Guard against an unclean shutdown
-		sync
+		sync -f "${initramfs}"
 	else
 		mkinitramfs_return="$?"
 		remove_initramfs_bak
@@ -177,12 +177,6 @@ run_bootloader()
 			/etc/initramfs/post-update.d/
 		return 0
 	fi
-}
-
-compare_sha1()
-{
-	sha1sum "${initramfs}" | diff "${STATEDIR}/${version}" - >/dev/null 2>&1
-	return $?
 }
 
 # Note that this must overwrite so that updates work.
@@ -204,26 +198,32 @@ ro_boot_check()
 		return 0
 	fi
 
+	# shellcheck disable=SC1004
 	boot_opts=$(awk '/boot/{if ((match($4, /^ro/) || match($4, /,ro/)) \
 		&& $2 == "/boot") print "ro"}' /proc/mounts)
 	if [ -n "${boot_opts}" ]; then
-		echo "WARNING: /boot is ro mounted."
-		echo "update-initramfs: Not updating ${initramfs}"
+		echo "W: /boot is ro mounted." >&2
+		echo "W: update-initramfs: Not updating ${initramfs}" >&2
 		exit 0
 	fi
 }
 
 get_sorted_versions()
 {
-	version_list="$(ls -1 "${STATEDIR}" | linux-version sort --reverse)"
-
+	version_list="$(
+		linux-version list |
+		while read -r version; do
+		      test -e "${BOOTDIR}/initrd.img-$version" && echo "$version"
+		done |
+		linux-version sort --reverse
+		)"
 	verbose "Available versions: ${version_list}"
 }
 
 set_current_version()
 {
-	if [ -f /boot/initrd.img-`uname -r` ]; then
-		version=`uname -r`
+	if [ -f "/boot/initrd.img-$(uname -r)" ]; then
+		version=$(uname -r)
 	fi
 }
 
@@ -252,6 +252,7 @@ set_highest_version()
 		version=
 		return
 	fi
+	# shellcheck disable=SC2086
 	set -- ${version_list}
 	version=${1}
 }
@@ -259,20 +260,10 @@ set_highest_version()
 create()
 {
 	if [ -z "${version}" ]; then
-		usage "Create mode requires a version argument"
+		usage_error "Create mode requires a version argument"
 	fi
 
 	set_initramfs
-
-	if [ "${takeover}" = 0 ]; then
-		if version_exists "${version}"; then
-			panic "Cannot create version ${version}: already exists"
-		fi
-
-		if [ -e "${initramfs}" ]; then
-			panic "${initramfs} already exists, cannot create."
-		fi
-	fi
 
 	generate_initramfs
 
@@ -307,8 +298,6 @@ update()
 
 	ro_boot_check
 
-	altered_check
-
 	backup_initramfs
 
 	generate_initramfs
@@ -321,22 +310,10 @@ update()
 delete()
 {
 	if [ -z "${version}" ]; then
-		usage "Delete mode requires a version argument"
+		usage_error "Delete mode requires a version argument"
 	fi
 
 	set_initramfs
-
-	if [ "${takeover}" = 0 ]; then
-		if [ ! -e "${initramfs}" ]; then
-			panic "Cannot delete ${initramfs}, doesn't exist."
-		fi
-
-		if ! version_exists "${version}"; then
-			panic "Cannot delete version ${version}: Not created by this utility."
-		fi
-	fi
-
-	altered_check
 
 	echo "update-initramfs: Deleting ${initramfs}"
 
@@ -345,79 +322,72 @@ delete()
 	rm -f "${initramfs}" "${initramfs}.bak"
 }
 
-# Check for update mode on existing and modified initramfs
-altered_check()
-{
-	# No check on takeover
-	[ "${takeover}" = 1 ] && return 0
-	if [ ! -e "${initramfs}" ]; then
-		mild_panic "${initramfs} does not exist. Cannot update."
-	fi
-	if ! compare_sha1; then
-		echo "update-initramfs: ${initramfs} has been altered." >&2
-		mild_panic "update-initramfs: Cannot update. Override with -t option."
-	fi
-}
-
 # Defaults
 verbose=0
-yes=0
-# We default to takeover=1 in Ubuntu, but not Debian
-takeover=0
 
 ##
 
-while getopts "k:cudyvtb:h?" flag; do
-	case "${flag}" in
-	k)
-		version="${OPTARG}"
+OPTIONS=$(getopt -o "k:cudvtb:h?" --long help -n "$0" -- "$@") || usage_error
+
+eval set -- "$OPTIONS"
+
+while true; do
+	case "$1" in
+	-k)
+		version="$2"
+		shift 2
 		;;
-	c)
+	-c)
 		mode="c"
+		shift
 		;;
-	d)
+	-d)
 		mode="d"
+		shift
 		;;
-	u)
+	-u)
 		mode="u"
+		shift
 		;;
-	v)
+	-v)
 		verbose="1"
+		shift
 		;;
-	y)
-		yes="1"
+	-t)
+		# accepted for compatibility, but ignored
+		shift
 		;;
-	t)
-		takeover="1"
-		;;
-	b)
-		BOOTDIR="${OPTARG}"
+	-b)
+		BOOTDIR="$2"
 		if [ ! -d "${BOOTDIR}" ]; then
-			echo "Error: ${BOOTDIR} is not a directory." >&2
+			echo "E: ${BOOTDIR} is not a directory." >&2
 			exit 1
 		fi
+		shift 2
 		;;
-	h|?)
+	-h|-\?|--help)
 		usage
+		exit 0
+		;;
+	--)
+		shift
+		break
 		;;
 	esac
 done
 
-shift $((${OPTIND} - 1))
-
 if [ $# -ne 0 ]; then
-	printf "Extra argument '%s'\n\n" "$1" >&2
-	usage
+	printf "Extra argument '%s'\\n\\n" "$1" >&2
+	usage_error
 fi
 
 # Validate arguments
 if [ -z "${mode}" ]; then
-	usage "You must specify at least one of -c, -u, or -d."
+	usage_error "You must specify at least one of -c, -u, or -d."
 fi
 
 if [ "${version}" = "all" ] \
-	|| ( [ "${update_initramfs}" = "all" ] && [ -z "${version}" ] ); then
-	: FIXME check for --yes, and if not ask are you sure
+	|| { [ "${update_initramfs}" = "all" ] && [ -z "${version}" ]; }; then
 	get_sorted_versions
 	if [ -z "${version_list}" ]; then
 		verbose "Nothing to do, exiting."
@@ -428,14 +398,9 @@ if [ "${version}" = "all" ] \
 	if [ "${verbose}" = "1" ]; then
 		OPTS="${OPTS} -v"
 	fi
-	if [ "${takeover}" = "1" ]; then
-		OPTS="${OPTS} -t"
-	fi
-	if [ "${yes}" = "1" ]; then
-		OPTS="${OPTS} -y"
-	fi
 	for u_version in ${version_list}; do
 		verbose "Execute: ${0} -${mode} -k \"${u_version}\" ${OPTS}"
+		# shellcheck disable=SC2086
 		"${0}" -${mode} -k "${u_version}" ${OPTS}
 	done
 	exit 0

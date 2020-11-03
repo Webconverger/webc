@@ -22,6 +22,18 @@ FSCK_LOGFILE=/var/log/fsck/checkroot
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
 
+_want_force_fsck () {
+	case "$(findmnt -n -o FSTYPE /)" in
+	# Only ext* file systems support `-f' option to fsck. See #686895
+	(ext*)
+		[ -f /forcefsck ] || grep -q -s -w -i "forcefsck" /proc/cmdline
+		;;
+	(*)
+		return 1
+		;;
+	esac
+}
+
 do_start () {
 	# Trap SIGINT so that we can handle user interrupt of fsck.
 	trap "" INT
@@ -45,7 +57,7 @@ do_start () {
 	ENABLE_SWAP=no
 	case "$KERNEL" in
 	  Linux)
-	  	if [ "$NOSWAP" = yes ]
+		if [ "$NOSWAP" = yes ]
 		then
 			[ "$VERBOSE" = no ] || log_warning_msg "Not activating swap as requested via bootoption noswap."
 			ENABLE_SWAP=no
@@ -123,7 +135,7 @@ This means you have to fix the problem manually."
 		log_warning_msg "A maintenance shell will now be started. 
 CONTROL-D will terminate this shell and restart the system."
 		# Start a single user shell on the console
-		if ! sulogin $CONSOLE
+		if ! sulogin --force $CONSOLE
 		then
 			log_failure_msg "Attempt to start maintenance shell failed. 
 Will restart in 5 seconds."
@@ -203,12 +215,8 @@ Will restart in 5 seconds."
 	#
 	if [ "$rootcheck" = yes ]
 	then
-		if [ -f /forcefsck ] || grep -q -s -w -i "forcefsck" /proc/cmdline
-		then
-			force="-f"
-		else
-			force=""
-		fi
+		force=""
+		_want_force_fsck && force="-f"
 
 		if [ "$FSCKFIX" = yes ]
 		then
@@ -231,7 +239,7 @@ Will restart in 5 seconds."
 		if [ "$VERBOSE" = no ]
 		then
 			log_action_begin_msg "Checking root file system"
-			logsave -s $FSCK_LOGFILE fsck $spinner $force $fix -t $roottype $rootdev
+			logsave_best_effort fsck $spinner $force $fix -t $roottype $rootdev
 			FSCKCODE=$?
 			if [ "$FSCKCODE" = 0 ]
 			then
@@ -241,7 +249,7 @@ Will restart in 5 seconds."
 			fi
 		else
 			log_daemon_msg "Will now check root file system"
-			logsave -s $FSCK_LOGFILE fsck $spinner $force $fix -V -t $roottype $rootdev
+			logsave_best_effort fsck $spinner $force $fix -V -t $roottype $rootdev
 			FSCKCODE=$?
 			log_end_msg $FSCKCODE
 		fi
@@ -271,7 +279,7 @@ A maintenance shell will now be started.
 After performing system maintenance, press CONTROL-D 
 to terminate the maintenance shell and restart the system."
 		# Start a single user shell on the console
-		if ! sulogin $CONSOLE
+		if ! sulogin --force $CONSOLE
 		then
 			log_failure_msg "Attempt to start maintenance shell failed. 
 Will restart in 5 seconds."

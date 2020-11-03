@@ -4,7 +4,7 @@
 
 package Debconf::Element::Gnome::Select;
 use strict;
-use Gtk2;
+use Gtk3;
 use utf8;
 use Debconf::Encoding qw(to_Unicode);
 use base qw(Debconf::Element::Gnome Debconf::Element::Select);
@@ -18,7 +18,7 @@ sub init {
 
 	$this->SUPER::init(@_);
 
-	$this->widget(Gtk2::ComboBox->new_text);
+	$this->widget(Gtk3::ComboBoxText->new);
 	$this->widget->show;
 
 	foreach my $choice (@choices) {

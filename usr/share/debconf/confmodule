@@ -42,10 +42,11 @@ _db_cmd () {
 	_db_internal_IFS="$IFS"
 	IFS=' '
 	printf '%s\n' "$*" >&3
-	IFS="$_db_internal_IFS"
 	# Set to newline to get whole line.
 	IFS='
-' read -r _db_internal_line
+'
+	read -r _db_internal_line
+	IFS="$_db_internal_IFS"
 	# Disgusting, but it's the only good way to split the line,
 	# preserving all other whitespace.
 	RET="${_db_internal_line#[! 	][ 	]}"

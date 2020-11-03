@@ -4,9 +4,6 @@ set -e
 case "$1" in
     remove|deconfigure)
 	update-alternatives --remove rmt /usr/sbin/rmt-tar
-	if test -L /sbin/rmt && test /sbin/rmt -ef /usr/sbin/rmt; then
-		rm -f /sbin/rmt
-	fi
     ;;
     upgrade|failed-upgrade)
     ;;

@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -9,5 +11,6 @@
 Description=Hibernate
 Documentation=man:systemd.special(7)
 DefaultDependencies=no
-BindsTo=systemd-hibernate.service
+Requires=systemd-hibernate.service
 After=systemd-hibernate.service
+StopWhenUnneeded=yes

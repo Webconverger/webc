@@ -32,4 +32,5 @@ if [ -n "$DEB_MAINT_PARAMS" ]; then
 fi
 
 # we're good - create initramfs.  update runs do_bootloader
-INITRAMFS_TOOLS_KERNEL_HOOK=1 update-initramfs -c -t -k "${version}" ${bootopt} >&2
+# shellcheck disable=SC2086
+INITRAMFS_TOOLS_KERNEL_HOOK=1 update-initramfs -c -k "${version}" ${bootopt} >&2

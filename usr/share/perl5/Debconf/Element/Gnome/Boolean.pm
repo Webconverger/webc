@@ -4,7 +4,7 @@
 
 package Debconf::Element::Gnome::Boolean;
 use strict;
-use Gtk2;
+use Gtk3;
 use utf8;
 use Debconf::Encoding qw(to_Unicode);
 use base qw(Debconf::Element::Gnome);
@@ -16,7 +16,7 @@ sub init {
 	
 	$this->SUPER::init(@_);
 	
-	$this->widget(Gtk2::CheckButton->new($description));
+	$this->widget(Gtk3::CheckButton->new($description));
 	$this->widget->show;
 	$this->widget->set_active(($this->question->value eq 'true') ? 1 : 0);
 	$this->addwidget($this->widget);

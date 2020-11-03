@@ -98,7 +98,7 @@ if [ $# -eq 1 ] ; then
 				if [ -x "`which bunzip2`" ]; then bunzip2 -dc "$1"
 				else echo "No bunzip2 available"; fi ;;
 
-			*.deb|*.udeb|*.ddebi|*.ipk)
+			*.deb|*.udeb|*.ddeb|*.ipk)
 				echo "$1:"; dpkg --info "$1"
 				echo
 				echo '*** Contents:'; dpkg-deb --contents "$1"
@@ -114,6 +114,17 @@ if [ $# -eq 1 ] ; then
 					else
 						echo "No catdoc available";
 					fi
+				fi
+				;;
+
+			*.egg)
+				if [ -x "`which unzip`" ]; then
+					unzip -p "$1" EGG-INFO/PKG-INFO | \
+						sed '/^Description:/,/^\S/{/^Description:/d; /^\S/b; d}'
+					echo
+					unzip -v "$1"
+				else
+					echo "No unzip available"
 				fi
 				;;
 
@@ -192,6 +203,13 @@ if [ $# -eq 1 ] ; then
 					rpm -q -l -p "$1"
 				else echo "rpm isn't available, no query on rpm package possible"; fi ;;
 
+                        *.snap)
+                            if [ -x "`which snap`" ]; then snap info "$1"; fi
+                            if [ -x "`which unsquashfs`" ]; then
+                                echo
+                                echo '*** Contents:'; unsquashfs -ll -d '' "$1" 
+                            else echo "No unsquashfs available"; fi ;;
+                        
 			*.tar.gz|*.tgz|*.tar.z|*.tar.dz)
 				tar tzvf "$1" --force-local
 				;;
@@ -201,6 +219,15 @@ if [ $# -eq 1 ] ; then
 					xz -dc "$1" | tar tfvv -
 				else
 					echo "No xz available"
+				fi
+				;;
+
+			*.whl)
+				if [ -x "`which unzip`" ]; then
+					unzip -p "$1" '*.dist-info/METADATA' | sed '/^$/q'
+					unzip -v "$1"
+				else
+		 			echo "No unzip available"
 				fi
 				;;
 

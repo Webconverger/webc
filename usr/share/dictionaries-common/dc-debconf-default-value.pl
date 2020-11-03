@@ -396,29 +396,6 @@ sub dc_set_default_value_for_class (){
       return;
     }
 
-    # We may have ancient pre-policy alternative based symlinks with
-    # alternative set in manual mode or with more dictionaries installed
-    # in the same run. This is an upgrade from an ancient setup, we better ask.
-    if ( -l $oldlink ){
-      if ( &dc_manual_alternative($class) ){
-	&dc_debugprint(" $msgprefix: Ancient $class alternative was in manual mode. Setting critical priority\n");
-	$guessed->{'priority'} = "critical";
-      } else {
-	foreach my $oldpackage ( keys %{$classinfo->{'languages'}} ){
-	  next if ( $oldpackage eq "dictionaries-common" );
-	  $oldpackage = "wenglish" if ( $oldpackage eq "wamerican" );
-	  # critical priority if exists debconf entry without a
-	  # previous package installed. This means that besides
-	  # upgrading, new dicts are being installed.
-	  if ( not -e "/var/lib/dpkg/info/$oldpackage.list" ){
-	    $guessed->{'priority'} = "critical";
-	    &dc_debugprint( "$msgprefix: New dict [$oldpackage] is to be installed\n");
-	    last;
-	  }
-	}
-      }
-    }
-
     # Actually set the value if found
     if ( $guessed ) {
       $guessed->{'question'} = $question;
@@ -437,4 +414,3 @@ sub dc_set_default_value_for_class (){
 # perl-indent-level: 2
 # coding: iso-8859-1
 # End:
-

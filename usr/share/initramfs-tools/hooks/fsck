@@ -7,14 +7,6 @@ prereqs()
 	echo "$PREREQ"
 }
 
-fstab_files()
-{
-	echo /etc/fstab
-	if [ -d /etc/fstab.d ]; then
-		ls -1 /etc/fstab.d | grep '\.fstab$' | sed -e 's;^;/etc/fstab.d/;'
-	fi
-}
-
 # Find a specific fstab entry
 # $1=mountpoint
 # $2=fstype (optional)
@@ -24,9 +16,10 @@ _read_fstab_entry () {
 	echo "MNT_DIR="
 	echo "MNT_TYPE="
 
-	fstab_files | while read file; do
+	for file in /etc/fstab /etc/fstab.d/*.fstab; do
 		if [ -f "$file" ]; then
-			while read MNT_FSNAME MNT_DIR MNT_TYPE MNT_OPTS MNT_FREQ MNT_PASS MNT_JUNK; do
+			# shellcheck disable=SC2034
+			while read -r MNT_FSNAME MNT_DIR MNT_TYPE MNT_OPTS MNT_FREQ MNT_PASS MNT_JUNK; do
 				case "$MNT_FSNAME" in
 				  ""|\#*)
 					continue;
@@ -59,9 +52,11 @@ get_fsck_type_fstab () {
 		# therefore never used at boot time
 		if [ "${MNT_DIR}" = "/" ] || [ "${MNT_TYPE}" = "auto" ]; then
 			MNT_FSNAME="$(resolve_device "${MNT_FSNAME}")"
-			alias fstype="/usr/lib/klibc/bin/fstype"
-			get_fstype "${MNT_FSNAME}"
-			unalias fstype
+			fstype() { "/usr/lib/klibc/bin/fstype" "$@"; }
+			if ! get_fstype "${MNT_FSNAME}"; then
+				echo "W: Couldn't identify type of $2 file system for fsck hook" >&2
+			fi
+			unset -f fstype
 		else
 			echo "${MNT_TYPE}"
 		fi
@@ -69,8 +64,8 @@ get_fsck_type_fstab () {
 }
 
 get_fsck_types() {
-	get_fsck_type_fstab /
-	get_fsck_type_fstab /usr
+	get_fsck_type_fstab /    root
+	get_fsck_type_fstab /usr /usr
 }
 
 case $1 in
@@ -97,14 +92,9 @@ copy_exec /sbin/fsck
 copy_exec /sbin/logsave
 
 for type in $fsck_types; do
-	if [ "$type" = "unknown" ] ; then
-		echo "Warning: couldn't identify filesystem type for fsck hook, ignoring."
-		continue
-	fi
-
-	if prog="$(command -v fsck.${type})"; then
+	if prog="$(command -v "fsck.${type}")"; then
 		copy_exec "$prog"
 	else
-		echo "Warning: /sbin/fsck.${type} doesn't exist, can't install to initramfs, ignoring."
+		echo "W: /sbin/fsck.${type} doesn't exist, can't install to initramfs" >&2
 	fi
 done

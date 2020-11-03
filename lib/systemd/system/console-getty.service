@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -7,17 +9,21 @@
 
 [Unit]
 Description=Console Getty
-Documentation=man:agetty(8)
+Documentation=man:agetty(8) man:systemd-getty-generator(8)
 After=systemd-user-sessions.service plymouth-quit-wait.service
-ConditionPathExists=/dev/console
-After=rc-local.service
+After=rc-local.service getty-pre.target
 Before=getty.target
 
+# OCI containers may be run without a console
+ConditionPathExists=/dev/console
+
 [Service]
-ExecStart=-/sbin/agetty --noclear --keep-baud console 115200,38400,9600 $TERM
+# The '-o' option value tells agetty to replace 'login' arguments with an
+# option to preserve environment (-p), followed by '--' for safety, and then
+# the entered username.
+ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear --keep-baud console 115200,38400,9600 $TERM
 Type=idle
 Restart=always
-RestartSec=0
 UtmpIdentifier=cons
 TTYPath=/dev/console
 TTYReset=yes

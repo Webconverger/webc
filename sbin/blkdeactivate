@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 Red Hat, Inc. All rights reserved.
+# Copyright (C) 2012-2017 Red Hat, Inc. All rights reserved.
 #
 # This file is part of LVM2.
 #
@@ -31,17 +31,19 @@ shopt -s dotglob nullglob
 
 TOOL=blkdeactivate
 
-DEV_DIR='/dev'
-SYS_BLK_DIR='/sys/block'
+DEV_DIR="/dev"
+SYS_BLK_DIR="/sys/block"
 
-MOUNTPOINT="/bin/mountpoint"
-UMOUNT="/bin/umount"
-DMSETUP="/sbin/dmsetup"
-LVM="/sbin/lvm"
 MDADM="/sbin/mdadm"
+MOUNTPOINT="/bin/mountpoint"
 MPATHD="/sbin/multipathd"
+UMOUNT="/bin/umount"
 
-if $UMOUNT --help | grep -- "--all-targets" >$DEV_DIR/null; then
+sbindir="/sbin"
+DMSETUP="$sbindir/dmsetup"
+LVM="$sbindir/lvm"
+
+if "$UMOUNT" --help | grep -- "--all-targets" >"$DEV_DIR/null"; then
 	UMOUNT_OPTS="--all-targets "
 else
 	UMOUNT_OPTS=""
@@ -71,6 +73,9 @@ LVM_DO_WHOLE_VG=0
 # Do not retry LV deactivation by default.
 LVM_CONFIG="activation{retry_deactivation=0}"
 
+# Do not wait for MD RAID device resync, recovery or reshape.
+MDRAID_DO_WAIT=0
+
 # Do not disable queueing if set on multipath devices.
 MPATHD_DO_DISABLEQUEUEING=0
 
@@ -94,7 +99,7 @@ declare -A SKIP_VG_LIST=()
 # listed here will be added to SKIP_DEVICE_LIST (and SKIP_VG_LIST) automatically.
 # (list is an associative array!)
 #
-declare -A SKIP_UMOUNT_LIST=(["/"]=1 ["/boot"]=1 \
+declare -A SKIP_UMOUNT_LIST=(["/"]=1 \
                              ["/lib"]=1 ["/lib64"]=1 \
                              ["/bin"]=1 ["/sbin"]=1 \
                              ["/var"]=1 ["/var/log"]=1 \
@@ -113,13 +118,14 @@ usage() {
 	echo "      If devices are specified, deactivate only supplied devices and their holders."
 	echo
 	echo "  Options:"
-	echo "    -e | --errors                    Show errors reported from tools"
-	echo "    -h | --help                      Show this help message"
-	echo "    -d | --dmoption    DM_OPTIONS    Comma separated DM specific options"
-	echo "    -l | --lvmoption   LVM_OPTIONS   Comma separated LVM specific options"
-	echo "    -m | --mpathoption MPATH_OPTIONS Comma separated DM-multipath specific options"
-	echo "    -u | --umount                    Unmount the device if mounted"
-	echo "    -v | --verbose                   Verbose mode (also implies -e)"
+	echo "    -e | --errors                       Show errors reported from tools"
+	echo "    -h | --help                         Show this help message"
+	echo "    -d | --dmoptions     DM_OPTIONS     Comma separated DM specific options"
+	echo "    -l | --lvmoptions    LVM_OPTIONS    Comma separated LVM specific options"
+	echo "    -m | --mpathoptions  MPATH_OPTIONS  Comma separated DM-multipath specific options"
+	echo "    -r | --mdraidoptions MDRAID_OPTIONS Comma separated MD RAID specific options"
+	echo "    -u | --umount                       Unmount the device if mounted"
+	echo "    -v | --verbose                      Verbose mode (also implies -e)"
 	echo
 	echo "  Device specific options:"
 	echo "    DM_OPTIONS:"
@@ -128,6 +134,8 @@ usage() {
 	echo "    LVM_OPTIONS:"
 	echo "      retry           retry removal several times in case of failure"
 	echo "      wholevg         deactivate the whole VG when processing an LV"
+	echo "    MDRAID_OPTIONS:"
+	echo "      wait            wait for resync, recovery or reshape to complete first"
 	echo "    MPATH_OPTIONS:"
 	echo "      disablequeueing disable queueing on all DM-multipath devices first"
 
@@ -147,7 +155,7 @@ add_vg_to_skip_list() {
 is_top_level_device() {
 	# top level devices do not have any holders, that is
 	# the SYS_BLK_DIR/<device_name>/holders dir is empty
-	files="`echo $SYS_BLK_DIR/$kname/holders/*`"
+	files=$(echo "$SYS_BLK_DIR/$kname/holders/"*)
 	test -z "$files"
 }
 
@@ -156,9 +164,9 @@ device_umount_one() {
 
 	if test -z "${SKIP_UMOUNT_LIST["$mnt"]}" -a "$DO_UMOUNT" -eq "1"; then
 		echo -n "  [UMOUNT]: unmounting $name ($kname) mounted on $mnt... "
-		if eval $UMOUNT $UMOUNT_OPTS "$(printf "%s" "$mnt")" $OUT $ERR; then
+		if eval "$UMOUNT" $UMOUNT_OPTS "$(printf "%s" "$mnt")" "$OUT" "$ERR"; then
 			echo "done"
-		elif $MOUNTPOINT -q "$mnt"; then
+		elif "$MOUNTPOINT" -q "$mnt"; then
 			echo "skipping"
 			add_device_to_skip_list
 		else
@@ -171,7 +179,8 @@ device_umount_one() {
 }
 
 device_umount() {
-	test "$devtype" != "lvm" && test "${kname:0:3}" != "dm-" && return 0
+	test "$devtype" != "lvm" && test "${kname:0:3}" != "dm-" \
+          && test "${kname:0:2}" != "md" && return 0
 
 	# FINDMNT is defined only if umount --all-targets is not available.
 	# In that case, read the list of multiple mount points of one device
@@ -181,7 +190,7 @@ device_umount() {
 	else
 		while $FINDMNT_READ; do
 			device_umount_one || return 1
-		done <<< "`$FINDMNT $DEV_DIR/$kname`"
+		done <<< "$($FINDMNT "$DEV_DIR/$kname")"
 	fi
 
 }
@@ -193,25 +202,26 @@ deactivate_holders () {
 	# First line on the lsblk output is the device itself - skip it for
 	# the deactivate call as this device is already being deactivated.
 	while $LSBLK_READ; do
-		test -e $SYS_BLK_DIR/$kname || continue
+		test -e "$SYS_BLK_DIR/$kname" || continue
 		# check if the device not on the skip list already
-		test -z ${SKIP_DEVICE_LIST["$kname"]} || return 1
+		test -z "${SKIP_DEVICE_LIST["$kname"]}" || return 1
 
 		# try to deactivate the holder
-		test $skip -eq 1 && skip=0 && continue
+		test "$skip" -eq 1 && skip=0 && continue
 		deactivate || return 1
-	done <<< "`$LSBLK $1`"
+	done <<< "$($LSBLK "$1")"
 }
 
 deactivate_dm () {
-	local name=$(printf "%s" "$name")
-	test -b "$DEV_DIR/mapper/$name" || return 0
-	test -z ${SKIP_DEVICE_LIST["$kname"]} || return 1
+	local xname
+	xname=$(printf "%s" "$name")
+	test -b "$DEV_DIR/mapper/$xname" || return 0
+	test -z "${SKIP_DEVICE_LIST["$kname"]}" || return 1
 
-	deactivate_holders "$DEV_DIR/mapper/$name" || return 1
+	deactivate_holders "$DEV_DIR/mapper/$xname" || return 1
 
-	echo -n "  [DM]: deactivating $devtype device $name ($kname)... "
-	if eval $DMSETUP $DMSETUP_OPTS remove "$name" $OUT $ERR; then
+	echo -n "  [DM]: deactivating $devtype device $xname ($kname)... "
+	if eval "$DMSETUP" $DMSETUP_OPTS remove "$xname" "$OUT" "$ERR"; then
 		echo "done"
 	else
 		echo "skipping"
@@ -220,15 +230,15 @@ deactivate_dm () {
 }
 
 deactivate_lvm () {
-	local DM_VG_NAME; local DM_LV_NAME; local DM_LV_LAYER
+	local DM_VG_NAME; local DM_LV_NAME
 
-	eval $(eval $DMSETUP splitname --nameprefixes --noheadings --rows "$name" LVM $ERR)
+	eval "$(eval "$DMSETUP" splitname --nameprefixes --noheadings --rows "$name" LVM "$ERR")"
 	test -b "$DEV_DIR/$DM_VG_NAME/$DM_LV_NAME" || return 0
-	test -z ${SKIP_VG_LIST["$DM_VG_NAME"]} || return 1
+	test -z "${SKIP_VG_LIST["$DM_VG_NAME"]}" || return 1
 
-	if test $LVM_DO_WHOLE_VG -eq 0; then
+	if test "$LVM_DO_WHOLE_VG" -eq 0; then
 		# Skip LVM device deactivation if LVM tools missing.
-		test $LVM_AVAILABLE -eq 0 && {
+		test "$LVM_AVAILABLE" -eq 0 && {
 			add_device_to_skip_list
 			return 1
 		}
@@ -239,7 +249,7 @@ deactivate_lvm () {
 		}
 
 		echo -n "  [LVM]: deactivating Logical Volume $DM_VG_NAME/$DM_LV_NAME... "
-		if eval $LVM lvchange $LVM_OPTS --config \'log{prefix=\"\"} $LVM_CONFIG\' -aln $DM_VG_NAME/$DM_LV_NAME $OUT $ERR; then
+		if eval "$LVM" lvchange $LVM_OPTS --config \'log\{prefix=\"\"\} $LVM_CONFIG\' -aln "$DM_VG_NAME/$DM_LV_NAME" "$OUT" "$ERR"; then
 			echo "done"
 		else
 			echo "skipping"
@@ -248,12 +258,12 @@ deactivate_lvm () {
 
 	else
 		# Skip LVM VG deactivation if LVM tools missing.
-		test $LVM_AVAILABLE -eq 0 && {
+		test "$LVM_AVAILABLE" -eq 0 && {
 			add_vg_to_skip_list
 			return 1
 		}
 		# Deactivating the whole VG the LV is part of
-		lv_list=$(eval $LVM vgs --config "$LVM_CONFIG" --noheadings --rows -o lv_name $DM_VG_NAME $ERR)
+		lv_list=$(eval "$LVM" vgs --config "$LVM_CONFIG" --noheadings --rows -o lv_name "$DM_VG_NAME" "$ERR")
 		for lv in $lv_list; do
 			test -b "$DEV_DIR/$DM_VG_NAME/$lv" || continue
 			deactivate_holders "$DEV_DIR/$DM_VG_NAME/$lv" || {
@@ -263,7 +273,7 @@ deactivate_lvm () {
 		done
 
 		echo -n "  [LVM]: deactivating Volume Group $DM_VG_NAME... "
-		if eval $LVM vgchange $LVM_OPTS --config \'log{prefix=\"    \"} $LVM_CONFIG\' -aln $DM_VG_NAME $OUT $ERR; then
+		if eval "$LVM" vgchange $LVM_OPTS --config \'log\{prefix=\"    \"\} $LVM_CONFIG\' -aln "$DM_VG_NAME" "$OUT" "$ERR"; then
 			echo "done"
 		else
 			echo "skipping"
@@ -273,20 +283,35 @@ deactivate_lvm () {
 }
 
 deactivate_md () {
-	local name=$(printf "%s" "$name")
-	test -b "$DEV_DIR/$name" || return 0
-	test -z ${SKIP_DEVICE_LIST["$kname"]} || return 1
+	local xname
+	xname=$(printf "%s" "$name")
+	local sync_action
+	test -b "$DEV_DIR/$xname" || return 0
+	test -z "${SKIP_DEVICE_LIST["$kname"]}" || return 1
 
 	# Skip MD device deactivation if MD tools missing.
-	test $MDADM_AVAILABLE -eq 0 && {
+	test "$MDADM_AVAILABLE" -eq 0 && {
 		add_device_to_skip_list
 		return 1
 	}
 
-	deactivate_holders "$DEV_DIR/$name" || return 1
+	deactivate_holders "$DEV_DIR/$xname" || return 1
 
 	echo -n "  [MD]: deactivating $devtype device $kname... "
-	if eval $MDADM $MDADM_OPTS -S "$name" $OUT $ERR; then
+
+	test "$MDRAID_DO_WAIT" -eq 1 && {
+		sync_action=$(cat "$SYS_BLK_DIR/$kname/md/sync_action")
+		test "$sync_action" != "idle" && {
+			echo -n "$sync_action action in progress... "
+			if eval "$MDADM" $MDADM_OPTS -W "$DEV_DIR/$kname" "$OUT" "$ERR"; then
+				echo -n "complete... "
+			else
+				test $? -ne 1 && echo -n "failed to wait for $sync_action action... "
+			fi
+		}
+	}
+
+	if eval "$MDADM" $MDADM_OPTS -S "$xname" "$OUT" "$ERR"; then
 		echo "done"
 	else
 		echo "skipping"
@@ -323,9 +348,9 @@ deactivate_all() {
 
 	echo "Deactivating block devices:"
 
-	test $MPATHD_RUNNING -eq 1 && {
+	test "$MPATHD_RUNNING" -eq 1 && {
 		echo -n "  [DM]: disabling queueing on all multipath devices... "
-		eval $MPATHD $MPATHD_OPTS disablequeueing maps $ERR | grep '^ok$' >$DEV_DIR/null && echo "done" || echo "failed"
+		eval "$MPATHD" $MPATHD_OPTS disablequeueing maps "$ERR" | grep '^ok$' >"$DEV_DIR/null" && echo "done" || echo "failed"
 	}
 
 	if test $# -eq 0; then
@@ -336,7 +361,7 @@ deactivate_all() {
 		# Unmount all relevant mountpoints first
 		while $LSBLK_READ; do
 			device_umount
-		done <<< "`$LSBLK | $SORT_MNT`"
+		done <<< "$($LSBLK | $SORT_MNT)"
 
 		# Do deactivate
 		while $LSBLK_READ; do
@@ -346,20 +371,24 @@ deactivate_all() {
 			# if deactivation of any device fails, skip processing
 			# any subsequent devices within its subtree as the
 			# top-level device could not be deactivated anyway
-			test $skip -eq 1 && {
+			test "$skip" -eq 1 && {
 				# reset 'skip' on top level device
-				is_top_level_device && skip=0 || continue
+				if is_top_level_device ; then
+					skip=0
+				else
+					continue
+				fi
 			}
 
 			# check if the device is not on the skip list already
-			test -z ${SKIP_DEVICE_LIST["$kname"]} || continue
+			test -z "${SKIP_DEVICE_LIST["$kname"]}" || continue
 
 			# try to deactivate top-level device, set 'skip=1'
 			# if it fails to do so - this will cause all the
 			# device's subtree to be skipped when processing
 			# devices further in this loop
 			deactivate || skip=1
-		done <<< "`$LSBLK -s`"
+		done <<< "$($LSBLK -s)"
 	else
 		##################################
 		# Process only specified devices #
@@ -369,15 +398,15 @@ deactivate_all() {
 			# Unmount all relevant mountpoints first
 			while $LSBLK_READ; do
 				device_umount
-			done <<< "`$LSBLK $1 | $SORT_MNT`"
+			done <<< "$($LSBLK "$1" | $SORT_MNT)"
 
 			# Do deactivate
 			# Single dm device tree deactivation.
 			if test -b "$1"; then
-				$LSBLK_READ <<< "`$LSBLK --nodeps $1`"
+				$LSBLK_READ <<< "$($LSBLK --nodeps "$1")"
 
 				# check if the device is not on the skip list already
-				test -z ${SKIP_DEVICE_LIST["$kname"]} || {
+				test -z "${SKIP_DEVICE_LIST["$kname"]}" || {
 					shift
 					continue
 				}
@@ -422,6 +451,20 @@ get_lvmopts() {
 	IFS=$ORIG_IFS
 }
 
+get_mdraidopts() {
+	ORIG_IFS=$IFS; IFS=','
+
+	for opt in $1; do
+		case "$opt" in
+			"") ;;
+			"wait") MDRAID_DO_WAIT=1 ;;
+			*) echo "$opt: unknown MD RAID option"
+		esac
+	done
+
+	IFS=$ORIG_IFS
+}
+
 get_mpathopts() {
 	ORIG_IFS=$IFS; IFS=','
 
@@ -454,7 +497,7 @@ set_env() {
 		OUT="1>$DEV_DIR/null"
 	fi
 
-	if test -f $LVM; then
+	if test -f "$LVM"; then
 		LVM_AVAILABLE=1
 	else
 		LVM_AVAILABLE=0
@@ -467,9 +510,9 @@ set_env() {
 	fi
 
 	MPATHD_RUNNING=0
-	test $MPATHD_DO_DISABLEQUEUEING -eq 1 && {
-		if test -f $MPATHD; then
-			if eval $MPATHD show daemon $ERR | grep "running" >$DEV_DIR/null; then
+	test "$MPATHD_DO_DISABLEQUEUEING" -eq 1 && {
+		if test -f "$MPATHD"; then
+			if eval "$MPATHD" show daemon "$ERR" | grep "running" >"$DEV_DIR/null"; then
 				MPATHD_RUNNING=1
 			fi
 		fi
@@ -481,9 +524,10 @@ while test $# -ne 0; do
 		"") ;;
 		"-e"|"--errors") ERRORS=1 ;;
 		"-h"|"--help") usage ;;
-		"-d"|"--dmoption ") get_dmopts "$2" ; shift ;;
-		"-l"|"--lvmoption ") get_lvmopts "$2" ; shift ;;
-		"-m"|"--mpathoption ") get_mpathopts "$2" ; shift ;;
+		"-d"|"--dmoptions") get_dmopts "$2" ; shift ;;
+		"-l"|"--lvmoptions") get_lvmopts "$2" ; shift ;;
+		"-m"|"--mpathoptions") get_mpathopts "$2" ; shift ;;
+		"-r"|"--mdraidoptions") get_mdraidopts "$2"; shift ;;
 		"-u"|"--umount") DO_UMOUNT=1 ;;
 		"-v"|"--verbose") VERBOSE=1 ; ERRORS=1 ;;
 		"-vv") VERBOSE=1 ; ERRORS=1 ; set -x ;;

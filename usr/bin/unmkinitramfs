@@ -4,7 +4,22 @@ set -eu
 
 usage()
 {
-	echo "Usage: $(basename "$0") [-v] <initramfs file> <directory>"
+	cat << EOF
+
+Usage: unmkinitramfs [-v] initramfs-file directory
+
+Options:
+  -v   Display verbose messages about extraction
+
+See unmkinitramfs(8) for further details.
+
+EOF
+}
+
+usage_error()
+{
+	usage >&2
+	exit 2
 }
 
 # Extract a compressed cpio archive
@@ -14,10 +29,12 @@ xcpio()
 	dir="$2"
 	shift 2
 
-	if zcat -t "$archive" >/dev/null 2>&1 ; then
-		zcat "$archive"
+	if gzip -t "$archive" >/dev/null 2>&1 ; then
+		gzip -c -d "$archive"
 	elif xzcat -t "$archive" >/dev/null 2>&1 ; then
 		xzcat "$archive"
+	elif lz4cat -t < "$archive" >/dev/null 2>&1 ; then
+		lz4cat "$archive"
 	elif bzip2 -t "$archive" >/dev/null 2>&1 ; then
 		bzip2 -c -d "$archive"
 	elif lzop -t "$archive" >/dev/null 2>&1 ; then
@@ -53,49 +70,69 @@ splitinitramfs()
 	dir="$2"
 	shift 2
 
-	# There may be a prepended uncompressed archive.  cpio
-	# won't tell us the true size of this so we have to
-	# parse the headers and padding ourselves.  This is
-	# very roughly based on linux/lib/earlycpio.c
-	offset=0
+	count=0
+	start=0
 	while true; do
-		if checkzero "$initramfs" $offset; then
-			offset=$((offset + 4))
-			continue
+		# There may be prepended uncompressed archives.  cpio
+		# won't tell us the true size of these so we have to
+		# parse the headers and padding ourselves.  This is
+		# very roughly based on linux/lib/earlycpio.c
+		end=$start
+		while true; do
+			if checkzero "$initramfs" $end; then
+				# This is the EOF marker.  There might
+				# be more zero padding before the next
+				# archive, so read through all of it.
+				end=$((end + 4))
+				while checkzero "$initramfs" $end; do
+					end=$((end + 4))
+				done
+				break
+			fi
+			magic="$(readhex "$initramfs" $end 6)" || break
+			test "$magic" = 070701 || test "$magic" = 070702 || break
+			namesize=0x$(readhex "$initramfs" $((end + 94)) 8)
+			filesize=0x$(readhex "$initramfs" $((end + 54)) 8)
+			end=$(((end + 110)))
+			end=$(((end + namesize + 3) & ~3))
+			end=$(((end + filesize + 3) & ~3))
+		done
+		if [ $end -eq $start ]; then
+			break
 		fi
-		magic="$(readhex "$initramfs" $offset 6)" || break
-		test $magic = 070701 || test $magic = 070702 || break
-		namesize=0x$(readhex "$initramfs" $((offset + 94)) 8)
-		filesize=0x$(readhex "$initramfs" $((offset + 54)) 8)
-		offset=$(((offset + 110)))
-		offset=$(((offset + $namesize + 3) & ~3))
-		offset=$(((offset + $filesize + 3) & ~3))
-	done
 
-	if [ $offset -ne 0 ]; then
-		# uncompressed archive
+		# Extract to early, early2, ... subdirectories
+		count=$((count + 1))
+		if [ $count -eq 1 ]; then
+			subdir=early
+		else
+			subdir=early$count
+		fi
+		dd < "$initramfs" skip=$start count=$((end - start)) iflag=skip_bytes 2> /dev/null |
 		(
 			if [ -n "$dir" ]; then
-				mkdir -p -- "$dir/early"
-				cd -- "$dir/early"
+				mkdir -p -- "$dir/$subdir"
+				cd -- "$dir/$subdir"
 			fi
 			cpio -i "$@"
-		) < "$initramfs"
+		)
+		start=$end
+	done
 
-		# main archive
-		subarchive=$(mktemp ${TMPDIR:-/var/tmp}/unmkinitramfs_XXXXXX)
-		trap "rm -f '$subarchive'" EXIT
-		dd < "$initramfs" bs="$offset" skip=1 2> /dev/null \
-			> $subarchive
+	if [ $end -gt 0 ]; then
+		# Extract to main subdirectory
+		subarchive=$(mktemp "${TMPDIR:-/var/tmp}/unmkinitramfs_XXXXXX")
+		trap 'rm -f "$subarchive"' EXIT
+		dd < "$initramfs" skip=$end iflag=skip_bytes 2> /dev/null \
+			> "$subarchive"
 		xcpio "$subarchive" "${dir:+$dir/main}" -i "$@"
 	else
+		# Don't use subdirectories (for backward compatibility)
 		xcpio "$initramfs" "$dir" -i "$@"
 	fi
 }
 
-OPTIONS=`getopt -o hv --long help,list,verbose -n "$0" -- "$@"`
-# Check for non-GNU getopt
-if [ $? != 0 ] ; then echo "W: non-GNU getopt" >&2 ; exit 1 ; fi
+OPTIONS=$(getopt -o hv --long help,list,verbose -n "$0" -- "$@") || usage_error
 
 cpio_opts="--preserve-modification-time --no-absolute-filenames --quiet"
 expected_args=2
@@ -128,8 +165,8 @@ while true; do
 done
 
 if [ $# -ne $expected_args ]; then
-	usage
-	exit 2
+	usage_error
 fi
 
+# shellcheck disable=SC2086
 splitinitramfs "$1" "${2:-}" $cpio_opts

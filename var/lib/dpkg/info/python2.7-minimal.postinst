@@ -39,9 +39,9 @@ if [ "$1" = configure ]; then
     files=$(dpkg -L libpython2.7-minimal:i386 \
 		| sed -n '/^\/usr\/lib\/python2.7\/.*\.py$/p' | $filt)
     if [ -n "$files" ]; then
-	python2.7 -E -S /usr/lib/python2.7/py_compile.py $files
+	/usr/bin/python2.7 -E -S /usr/lib/python2.7/py_compile.py $files
 	if grep -sq '^byte-compile[^#]*optimize' /etc/python/debian_config; then
-	    python2.7 -E -S -O /usr/lib/python2.7/py_compile.py $files
+	    /usr/bin/python2.7 -E -S -O /usr/lib/python2.7/py_compile.py $files
 	fi
     else
 	echo >&2 "python2.7-minimal: can't get files for byte-compilation"

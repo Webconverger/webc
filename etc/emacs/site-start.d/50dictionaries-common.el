@@ -27,7 +27,10 @@
     ;;  a) It exists, that is, package is not removed.
     ;;  b) Not in installations under dpkg control, otherwise we might get some
     ;;     bogus errors on installation because of #132355 and friends.
-    (if (file-exists-p "/usr/share/emacs/site-lisp/dictionaries-common/debian-ispell.el")
+    (if (file-exists-p
+	 (concat "/usr/share/"
+		 (symbol-name debian-emacs-flavor)
+		 "/site-lisp/dictionaries-common/debian-ispell.el"))
 	(if (getenv "DPKG_RUNNING_VERSION")
 	    (message "Info: Skip debian-el loading if run under dpkg control.")
 	  (let ((coding-system-for-read 'raw-text)) ;; Read these as data streams

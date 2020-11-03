@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -12,9 +14,9 @@ DefaultDependencies=no
 Conflicts=shutdown.target
 After=systemd-sysusers.service
 Before=sysinit.target local-fs-pre.target systemd-udevd.service shutdown.target
-ConditionCapability=CAP_SYS_MODULE
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/bin/systemd-tmpfiles --prefix=/dev --create --boot
+SuccessExitStatus=65 73

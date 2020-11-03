@@ -5,7 +5,6 @@
 package Debconf::Element::Gnome::Text;
 use strict;
 use Debconf::Gettext;
-use Gtk2;
 use utf8;
 use base qw(Debconf::Element::Gnome);
 

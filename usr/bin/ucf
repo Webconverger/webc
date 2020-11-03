@@ -39,6 +39,8 @@ set -e
 progname="$(basename $0)"
 pversion='Revision: 3.00 '
 
+unset GREP_OPTIONS
+
 ######################################################################
 ########                                                     #########
 ########              Utility functions                      #########
@@ -937,7 +939,7 @@ else
     while [ "X$done" = "XNO" ]; do
 	if [ "$DEBCONF_OK" = "YES" ] && [ "$DEBIAN_HAS_FRONTEND" ]; then
 		# Use debconf to prompt.
-		if [ -e "$statedir/cache/$cached_file" ]; then
+		if [ -e "$statedir/cache/$cached_file" ] && [ "X$THREEWAY" != "X" ]; then
 			templ=ucf/changeprompt_threeway
 		else
 			templ=ucf/changeprompt
@@ -1011,7 +1013,7 @@ else
 		exit 0;
 		;;
 	    diff|D|d)
-		DIFF="$(run_diff diff -uBbw "$dest_file" "$new_file")"
+		DIFF="$(run_diff diff -uBbwt "$dest_file" "$new_file")"
 		show_diff "$DIFF"
 		;;
 	    sdiff|S|s)
@@ -1032,7 +1034,7 @@ else
                     fi
 		    show_diff "$DIFF"
 		else
-		    DIFF="$(run_diff diff -uBbw "$dest_file" "$new_file")"
+		    DIFF="$(run_diff diff -uBbwt "$dest_file" "$new_file")"
 		    show_diff "$DIFF"
 		fi
 		;;

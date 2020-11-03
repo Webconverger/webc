@@ -51,7 +51,7 @@ Verify_checksums ()
 					echo "Checking ${_CHECKSUM}..." > "${_TTY}"
 
 					# Verify checksums
-					/bin/${_DIGEST}sum -c "${_CHECKSUM}" < "${_TTY}" > "${_TTY}"
+					grep -v '^#' "${_CHECKSUM}" | /bin/${_DIGEST}sum -c > "${_TTY}"
 					_RETURN="${?}"
 
 					# Stop after first verification

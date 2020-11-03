@@ -32,25 +32,70 @@ if [ -n "$RESUME" ] && [ "$RESUME" != auto ]; then
 	echo >&2 "W: but no matching swap device is available."
 fi
 
-# If we were not explicitly requested to select a device, report that we
-# are doing so
+# If we were not explicitly requested to select a device, or the -v
+# option is used, report that we are doing so
 report_auto()
 {
-	test "$RESUME" = auto || echo >&2 "I: $*"
+	test "${verbose?}" != y && test "$RESUME" = auto || echo "I: $*"
 }
 
-# We need to be able to read the listed swap partitions
-if ischroot || [ ! -r /proc/swaps ]; then
-	resume_auto=
-else
-	# Try to autodetect the RESUME partition, using biggest swap?
-	resume_auto=$(grep ^/dev/ /proc/swaps | sort -rnk3 | head -n 1 | cut -d " " -f 1)
+# Report in excruciating detail if the -v option is used
+report_verbose()
+{
+	test "${verbose?}" != y || echo "I: $*"
+}
+
+report_verbose "Configuration sets RESUME=$RESUME"
+
+# Try to autodetect the RESUME partition, using biggest swap device that
+# is not ephemeral.  We need to be able to read the listed swap partitions.
+resume_auto=
+if ! ischroot && [ -r /proc/swaps ]; then
+	# shellcheck disable=SC2013
+	for resume_auto in $(grep ^/dev/ /proc/swaps | sort -rnk3 | cut -d " " -f 1); do
+		report_verbose "Checking swap device $resume_auto"
+		ephemeral=false
+		dm_name="$(dmsetup info -c --noheadings -o name "$resume_auto" 2>/dev/null)"
+
+		# dm-crypt is ephemeral if the key file is /dev/urandom
+		if [ -n "$dm_name" ] && [ -e /etc/crypttab ]; then
+			report_verbose "$resume_auto has device-mapper name $dm_name; checking crypttab"
+			# shellcheck disable=SC2034
+			while read -r cryptdev srcdev keyfile junk; do
+				report_verbose "Found cryptdev=$cryptdev keyfile=$keyfile"
+				if [ "$cryptdev" = "$dm_name" ] && [ "$keyfile" = /dev/urandom ]; then
+					report_verbose "Rejecting $resume_auto since it has no permanent key"
+					ephemeral=true
+				fi
+			done < /etc/crypttab
+		fi
+
+		# zram is ephemeral
+		case "$resume_auto" in
+		/dev/zram*)
+			report_verbose "Rejecting $resume_auto since it is zram"
+			ephemeral=true
+			;;
+		esac
+
+		$ephemeral || break
+	done
+
+	if $ephemeral; then
+		resume_auto=
+	fi
 	if [ -n "$resume_auto" ]; then
-		UUID=$(blkid -s UUID -o value "$resume_auto" || true)
+		if [ -n "$dm_name" ]; then
+			resume_auto_canon="/dev/mapper/$dm_name"
+		elif UUID=$(blkid -s UUID -o value "$resume_auto"); then
+			resume_auto_canon="UUID=$UUID"
+		else
+			resume_auto_canon=
+		fi
 		report_auto "The initramfs will attempt to resume from $resume_auto"
-		if [ -n "$UUID" ]; then
-			report_auto "(UUID=$UUID)"
-			resume_auto="UUID=$UUID"
+		if [ -n "$resume_auto_canon" ]; then
+			report_auto "($resume_auto_canon)"
+			resume_auto="$resume_auto_canon"
 		fi
 		report_auto "Set the RESUME variable to override this."
 	fi
@@ -63,5 +108,5 @@ if [ "$RESUME" = auto ] || [ -n "$resume_auto" ]; then
 	if [ -z "$resume_auto" ]; then
 		echo >&2 "W: initramfs-tools failed to select a resume device"
 	fi
-	echo "RESUME=${resume_auto}" > ${DESTDIR}/conf/conf.d/zz-resume-auto
+	echo "RESUME=${resume_auto}" > "${DESTDIR}/conf/conf.d/zz-resume-auto"
 fi

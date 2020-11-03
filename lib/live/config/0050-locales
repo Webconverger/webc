@@ -25,9 +25,14 @@ Cmdline ()
 
 Init ()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/locales.list ] || \
-	   [ -e /var/lib/live/config/locales ]
+	# Checking if a locale package is installed
+	if [ ! -e /var/lib/dpkg/info/locales.list ] && \
+	   [ ! -e /var/lib/dpkg/info/locales-all.list ]
+	then
+		exit 0
+	fi
+	# Checking if the locale has already been configured
+	if [ -e /var/lib/live/config/locales ]
 	then
 		exit 0
 	fi
@@ -49,6 +54,9 @@ Config ()
 	fi
 
 	echo "LANG=${_LOCALE}" > /etc/default/locale
+	if which systemctl >/dev/null 2>/dev/null; then
+	    systemctl set-environment "LANG=${_LOCALE}"
+	fi
 
 	if [ -e /etc/locale.gen ]
 	then

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mountpoint="/live/medium"
+mountpoint="/run/live/medium"
 alt_mountpoint="/media"
 LIVE_MEDIA_PATH="live"
 HOSTNAME="host"

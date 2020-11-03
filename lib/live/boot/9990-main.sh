@@ -111,10 +111,10 @@ Live ()
 	then
 		losetup -d /dev/loop0
 
-		if is_mountpoint /live/fromiso
+		if is_mountpoint /run/live/fromiso
 		then
-			umount /live/fromiso
-			rmdir --ignore-fail-on-non-empty /live/fromiso \
+			umount /run/live/fromiso
+			rmdir --ignore-fail-on-non-empty /run/live/fromiso \
 				>/dev/null 2>&1 || true
 		fi
 	fi
@@ -127,20 +127,6 @@ Live ()
 		mac="$(echo ${mac} | sed 's/-//g')"
 		mount_images_in_directory "${livefs_root}" "${rootmnt}" "${mac}"
 	fi
-
-	# At this point /root should contain the final root filesystem.
-	# Move all mountpoints below /live into /root/lib/live/mount.
-	# This has to be done after mounting the root filesystem to /
-	# otherwise these mount points won't be accessible from the running system.
-	for _MOUNT in $(cat /proc/mounts | cut -f 2 -d " " | grep -e "^/live/")
-	do
-		local newmount
-		newmount="${rootmnt}/lib/live/mount/${_MOUNT#/live/}"
-		mkdir -p "${newmount}"
-		mount -o move "${_MOUNT}" "${newmount}" > /dev/null 2>&1 || \
-		mount -o bind "${_MOUNT}" "${newmount}" > /dev/null || \
-		log_warning_msg "W: failed to move or bindmount ${_MOUNT} to ${newmount}"
-	done
 
 	if [ -n "${ROOT_PID}" ]
 	then
@@ -162,10 +148,10 @@ Live ()
 	then
 		losetup -d /dev/loop0
 
-		if is_mountpoint /root/lib/live/mount/findiso
+		if is_mountpoint /run/live/findiso
 		then
-			umount /root/lib/live/mount/findiso
-			rmdir --ignore-fail-on-non-empty /root/lib/live/mount/findiso \
+			umount /run/live/findiso
+			rmdir --ignore-fail-on-non-empty /run/live/findiso \
 				>/dev/null 2>&1 || true
 		fi
 	fi
@@ -176,7 +162,7 @@ Live ()
 	else
 		DNSFILE="${rootmnt}/etc/resolv.conf"
 	fi
-	if [ -f /etc/resolv.conf ] && [ ! -s ${DNSFILE} ]
+	if [ -f /etc/resolv.conf ] && ! grep -E -q -v '^[[:space:]]*#|^[[:space:]]*$' ${DNSFILE}
 	then
 		log_begin_msg "Copying /etc/resolv.conf to ${DNSFILE}"
 		cp -v /etc/resolv.conf ${DNSFILE}
@@ -188,6 +174,13 @@ Live ()
 		panic "A wrong rootfs was mounted."
 	fi
 
+	# avoid breaking existing user scripts that rely on the old path
+	# this includes code that checks what is mounted on /lib/live/mount/*
+	# (eg: grep /lib/live /proc/mount)
+	# XXX: to be removed before the bullseye release
+	mkdir -p ${rootmnt}/lib/live/mount
+	mount --rbind /run/live ${rootmnt}/lib/live/mount
+
 	Fstab
 	Netbase
 
@@ -196,5 +189,7 @@ Live ()
 	exec 1>&6 6>&-
 	exec 2>&7 7>&-
 	kill ${tailpid}
-	[ -w "${rootmnt}/var/log/" ] && mkdir -p "${rootmnt}/var/log/live" && cp boot.log "${rootmnt}/var/log/live" 2>/dev/null
+	[ -w "${rootmnt}/var/log/" ] && mkdir -p "${rootmnt}/var/log/live" && ( \
+				cp boot.log "${rootmnt}/var/log/live" 2>/dev/null; \
+				cp fsck.log "${rootmnt}/var/log/live" 2>/dev/null )
 }

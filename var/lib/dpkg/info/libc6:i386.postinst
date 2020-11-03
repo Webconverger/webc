@@ -5,51 +5,6 @@ export LC_ALL=C
 type=$1
 preversion=$2
 
-# element() is a helper function for file-rc:
-element() {
-    local element list IFS
-
-    element="$1"
-
-    [ "$2" = "in" ] && shift
-    list="$2"
-    [ "$list" = "-" ] && return 1
-    [ "$list" = "*" ] && return 0
-
-    IFS=","
-    set -- $list
-    case $element in
-	"$1"|"$2"|"$3"|"$4"|"$5"|"$6"|"$7"|"$8"|"$9")
-	    return 0
-    esac
-    return 1
-}
-
-# filerc (runlevel, service) returns /etc/init.d/service, if service is
-# running in $runlevel:
-filerc() {
-    local runlevel basename
-    runlevel=$1
-    basename=$2
-    while read LINE
-    do
-	case $LINE in
-	    \#*|"") continue
-	esac
-
-	set -- $LINE
-	SORT_NO="$1"; STOP="$2"; START="$3"; CMD="$4"
-	[ "$CMD" = "/etc/init.d/$basename" ] || continue
-
-	if element "$runlevel" in "$START" || element "S" in "$START"
-	then
-	    echo "/etc/init.d/$basename"
-	    return 0
-	fi
-    done < /etc/runlevel.conf
-    echo ""
-}
-
 checkpkgver () {
     local status pkg
     pkg=$1
@@ -74,9 +29,9 @@ then
     # all optimized packages. Due to multiarch, this has to be done
     # independently of the architecture of the package.
     all_upgraded=yes
-    for pkg in libc6.1-alphaev67 libc6-i686 libc6-xen libc0.1-i686 ; do
+    for pkg in libc6.1-alphaev67 libc6-xen ; do
         ver=$(dpkg-query -l $pkg 2>/dev/null | sed -e '/^[a-z][a-z]\s/!d;/^.[nc]/d;' -e "s/^..\s\+$pkg[0-9a-z:]*\s\+//;s/\s.*//g")
-        if [ -n "$ver" ] && [ "$ver" != "2.24-11+deb9u4" ]; then
+        if [ -n "$ver" ] && [ "$ver" != "2.28-10" ]; then
             all_upgraded=no
         fi
     done
@@ -95,7 +50,7 @@ then
     fi
 
     if [ -n "$preversion" ] && [ -x "$(which ischroot)" ] && ! ischroot; then
-	if dpkg --compare-versions "$preversion" lt 2.24; then
+	if dpkg --compare-versions "$preversion" lt 2.28; then
 	    check="apache2.2-common apache apache-ssl apache-perl autofs at"
 	    check="$check boa cucipop courier-authdaemon cron cups exim"
 	    check="$check exim4-base dovecot-common cucipop incron lprng lpr"
@@ -110,37 +65,26 @@ then
 	    check=$(dpkg -s $check 2> /dev/null | egrep '^Package:|^Status:' | awk '{if ($1 ~ /^Package:/) { package=$2 } else if ($0 ~ /^Status: .* installed$/) { print package }}')
 	    # some init scripts don't match the package names
 	    check=$(echo $check | \
-	    	    sed -e's/\bapache2.2-common\b/apache2/g' \
-	    	    	-e's/\bat\b/atd/g' \
-	    	    	-e's/\bdovecot-common\b/dovecot/g' \
-	    	    	-e's/\bexim4-base\b/exim4/g' \
-	    	    	-e's/\blpr\b/lpd/g' \
-	    	    	-e's/\blpr-ppd\b/lpd-ppd/g' \
-	    	    	-e's/\bmysql-server\b/mysql/g' \
-	    	    	-e's/\bsasl2-bin\b/saslauthd/g' \
-	    	    	-e's/\bpostgresql-common\b/postgresql/g' \
-	    )
+		    sed -e's/\bapache2.2-common\b/apache2/g' \
+			-e's/\bat\b/atd/g' \
+			-e's/\bdovecot-common\b/dovecot/g' \
+			-e's/\bexim4-base\b/exim4/g' \
+			-e's/\blpr\b/lpd/g' \
+			-e's/\blpr-ppd\b/lpd-ppd/g' \
+			-e's/\bmysql-server\b/mysql/g' \
+			-e's/\bsasl2-bin\b/saslauthd/g' \
+			-e's/\bsamba\b/smbd/g' \
+			-e's/\bpostgresql-common\b/postgresql/g' \
+		    )
 	    echo
 	    echo "Checking init scripts..."
-	    rl=$(runlevel | sed 's/.*\ //')
 	    for service in $check; do
-	    	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-	    	    invoke-rc.d ${service} status >/dev/null 2>/dev/null && status=0 || status=$?
-	    	    if [ "$status" = "0" ] || [ "$status" = "2" ] ; then
-	    	    	services="$service $services"
-	    	    elif [ "$status" = "100" ] ; then
-	    	    	echo "WARNING: init script for $service not found."
-	    	    fi
-	    	else
-	    	    if [ -f /usr/share/file-rc/rc ] || [ -f /usr/lib/file-rc/rc ] && [ -f /etc/runlevel.conf ]; then
-	    	    	idl=$(filerc $rl $service)
-	    	    else
-	    	    	idl=$(ls /etc/rc${rl}.d/S??${service} 2> /dev/null | head -1)
-	    	    fi
-	    	    if [ -n "$idl" ] && [ -x $idl ]; then
-	    	    	services="$service $services"
-	    	    fi
-	    	fi
+		invoke-rc.d ${service} status >/dev/null 2>/dev/null && status=0 || status=$?
+		if [ "$status" = "0" ] || [ "$status" = "2" ] ; then
+		    services="$service $services"
+		elif [ "$status" = "100" ] ; then
+		    echo "WARNING: init script for $service not found."
+		fi
 	    done
 
 	    if [ -n "$services" ]; then
@@ -197,24 +141,10 @@ then
 		    echo "Restarting services possibly affected by the upgrade:"
 		    failed=""
 		    for service in $services; do
-			# We can't just use a generic rewrite here, as it was
-			# samba in wheezy and smbd in jessie, which confuses.
-			if [ "$service" = "samba" ]; then
-			    if [ -x /etc/init.d/smbd ] || [ -f /etc/init/smbd ]; then
-				service="smbd"
-			    fi
-			fi
-		    	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-			    idl="invoke-rc.d ${service}"
-			elif [ -f /usr/share/file-rc/rc ] || [ -f /usr/lib/file-rc/rc ] && [ -f /etc/runlevel.conf ]; then
-			    idl=$(filerc $rl $service)
-			else
-			    idl=$(ls /etc/rc${rl}.d/S??${service} 2> /dev/null | head -1)
-			fi
 			case "$service" in
 			    gdm)
 				echo -n "  $service: reloading..."
-				if $idl reload > /dev/null 2>&1; then
+				if invoke-rc.d ${service} reload > /dev/null 2>&1; then
 				    echo "done."
 				else
 				    echo "FAILED! ($?)"
@@ -223,7 +153,7 @@ then
 				;;
 			    *)
 				echo -n "  $service: restarting..."
-				if $idl restart > /dev/null 2>&1; then
+				if invoke-rc.d ${service} restart > /dev/null 2>&1; then
 				    echo "done."
 				else
 				    echo "FAILED! ($?)"
@@ -242,7 +172,7 @@ then
 			else
 			    echo "The following services failed to start: $failed"
 			    echo
-			    echo "You will need to start these manually by running \`/etc/init.d/<service> start'"
+			    echo "You will need to start these manually by running \`invoke-rc.d <service> start'"
 			    echo "If the service still fails to start, you may need to file a bug on"
 			    echo "${DPKG_MAINTSCRIPT_PACKAGE}:${DPKG_MAINTSCRIPT_ARCH} or the service involved."
 			    frontend=`echo "$DEBIAN_FRONTEND" | tr '[:upper:]' '[:lower:]'`
@@ -264,7 +194,7 @@ then
 	    else
 		echo "Nothing to restart."
 	    fi
-	fi # end upgrading and $preversion lt 2.24
+	fi # end upgrading and $preversion lt 2.28
     fi # Upgrading
 
     # Restart init.  Currently handles chroots, systemd and upstart, and
@@ -290,21 +220,6 @@ then
         telinit u 2>/dev/null || true ; sleep 1
     fi
 fi
-
-# We now use the multiarch triplet instead of the GNU triplet for the ld.so
-# configuration file, in order to keep a stable path. Remove the old file.
-case ${DPKG_MAINTSCRIPT_ARCH:-$(dpkg --print-architecture)} in
-    hurd-i386)
-        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
-        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-gnu-gnu.conf 2.19-11~ libc0.3:hurd-i386 -- "$@"
-        ;;
-    i386)
-        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-linux-gnu.conf 2.19-4~ libc6:i386 -- "$@"
-        ;;
-    kfreebsd-i386)
-        dpkg-maintscript-helper rm_conffile /etc/ld.so.conf.d/i486-kfreebsd-gnu.conf 2.19-11~ libc0.1:kfreebsd-i386 -- "$@"
-        ;;
-esac
 
 
 

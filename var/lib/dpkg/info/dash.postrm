@@ -1,10 +1,11 @@
 #!/bin/sh
 set -e
-
-test "$1" != 'upgrade' || dpkg --compare-versions "$2" ge 0.5.2-3 || \
-  test ! -x /usr/bin/update-menus || exec update-menus
-test "$1" != 'remove' || test ! -x /usr/bin/update-menus || exec update-menus
-test "$1" = 'purge' || exit 0
-test -e /usr/share/debconf/confmodule || exit 0
-. /usr/share/debconf/confmodule
-db_purge
+# Automatically added by dh_installmenu/12
+if [ -x "`which update-menus 2>/dev/null`" ]; then update-menus ; fi
+# End automatically added section
+# Automatically added by dh_installdebconf/12
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+	. /usr/share/debconf/confmodule
+	db_purge
+fi
+# End automatically added section

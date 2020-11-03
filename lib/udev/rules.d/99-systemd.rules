@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -9,6 +11,8 @@ ACTION=="remove", GOTO="systemd_end"
 
 SUBSYSTEM=="tty", KERNEL=="tty[a-zA-Z]*|hvc*|xvc*|hvsi*|ttysclp*|sclp_line*|3270/tty[0-9]*", TAG+="systemd"
 KERNEL=="vport*", TAG+="systemd"
+
+SUBSYSTEM=="ubi", TAG+="systemd"
 
 SUBSYSTEM=="block", TAG+="systemd"
 SUBSYSTEM=="block", ACTION=="add", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}="0"
@@ -61,7 +65,8 @@ SUBSYSTEM=="backlight", TAG+="systemd", IMPORT{builtin}="path_id", ENV{SYSTEMD_W
 SUBSYSTEM=="leds", KERNEL=="*kbd_backlight", TAG+="systemd", IMPORT{builtin}="path_id", ENV{SYSTEMD_WANTS}+="systemd-backlight@leds:$name.service"
 
 # Pull in rfkill save/restore for all rfkill devices
-SUBSYSTEM=="rfkill", ENV{SYSTEMD_RFKILL}="1", IMPORT{builtin}="path_id"
+SUBSYSTEM=="rfkill", ENV{SYSTEMD_RFKILL}="1"
+SUBSYSTEM=="rfkill", IMPORT{builtin}="path_id"
 SUBSYSTEM=="misc", KERNEL=="rfkill", TAG+="systemd", ENV{SYSTEMD_WANTS}+="systemd-rfkill.socket"
 
 # Asynchronously mount file systems implemented by these modules as soon as they are loaded.

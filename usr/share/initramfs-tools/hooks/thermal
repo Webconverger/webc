@@ -28,7 +28,7 @@ powerpc|ppc64)
 
 	[ -r /proc/cpuinfo ] || exit 0
 
-	MODEL="`grep model /proc/cpuinfo`"
+	MODEL="$(grep model /proc/cpuinfo)"
 	MODEL="${MODEL##*: }"
 
 	case "$MODEL" in

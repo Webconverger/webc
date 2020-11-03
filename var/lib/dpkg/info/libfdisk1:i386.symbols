@@ -1,8 +1,13 @@
 libfdisk.so.1 libfdisk1 #MINVER#
+* Build-Depends-Package: libfdisk-dev
  FDISK_2.26@FDISK_2.26 2.26.2
  FDISK_2.27@FDISK_2.27 2.26.2
  FDISK_2.28@FDISK_2.28 2.28~rc1
  FDISK_2.29@FDISK_2.29 2.29~rc2
+ FDISK_2.30@FDISK_2.30 2.30.2
+ FDISK_2.31@FDISK_2.31 2.31.1
+ FDISK_2.32@FDISK_2.32 2.32
+ FDISK_2.33@FDISK_2.33 2.33
  fdisk_add_partition@FDISK_2.26 2.26.2
  fdisk_align_lba@FDISK_2.26 2.26.2
  fdisk_align_lba_in_range@FDISK_2.26 2.26.2
@@ -25,6 +30,7 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_ask_number_get_result@FDISK_2.26 2.26.2
  fdisk_ask_number_get_unit@FDISK_2.26 2.26.2
  fdisk_ask_number_inchars@FDISK_2.26 2.26.2
+ fdisk_ask_number_is_wrap_negative@FDISK_2.33 2.33
  fdisk_ask_number_set_relative@FDISK_2.26 2.26.2
  fdisk_ask_number_set_result@FDISK_2.26 2.26.2
  fdisk_ask_partnum@FDISK_2.26 2.26.2
@@ -45,6 +51,8 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_deassign_device@FDISK_2.26 2.26.2
  fdisk_delete_all_partitions@FDISK_2.26 2.26.2
  fdisk_delete_partition@FDISK_2.26 2.26.2
+ fdisk_device_is_used@FDISK_2.31 2.31.1
+ fdisk_disable_dialogs@FDISK_2.31 2.31.1
  fdisk_dos_enable_compatible@FDISK_2.26 2.26.2
  fdisk_dos_is_compatible@FDISK_2.26 2.26.2
  fdisk_dos_move_begin@FDISK_2.26 2.26.2
@@ -60,7 +68,9 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_get_alignment_offset@FDISK_2.26 2.26.2
  fdisk_get_collision@FDISK_2.28 2.28~rc1
  fdisk_get_devfd@FDISK_2.26 2.26.2
+ fdisk_get_devmodel@FDISK_2.33 2.33
  fdisk_get_devname@FDISK_2.26 2.26.2
+ fdisk_get_devno@FDISK_2.33 2.33
  fdisk_get_disklabel_id@FDISK_2.26 2.26.2
  fdisk_get_disklabel_item@FDISK_2.27 2.27~rc1
  fdisk_get_first_lba@FDISK_2.26 2.26.2
@@ -91,6 +101,7 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_gpt_is_hybrid@FDISK_2.26 2.26.2
  fdisk_gpt_set_npartitions@FDISK_2.29 2.29~rc2
  fdisk_gpt_set_partition_attrs@FDISK_2.27 2.27~rc1
+ fdisk_has_dialogs@FDISK_2.31 2.31.1
  fdisk_has_label@FDISK_2.26 2.26.2
  fdisk_has_protected_bootbits@FDISK_2.27 2.26.2
  fdisk_has_user_device_properties@FDISK_2.26 2.26.2
@@ -101,12 +112,17 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_is_labeltype@FDISK_2.26 2.26.2
  fdisk_is_listonly@FDISK_2.26 2.26.2
  fdisk_is_partition_used@FDISK_2.26 2.26.2
+ fdisk_is_ptcollision@FDISK_2.30 2.30.2
  fdisk_is_readonly@FDISK_2.26 2.26.2
+ fdisk_is_regfile@FDISK_2.30 2.30.2
  fdisk_iter_get_direction@FDISK_2.26 2.26.2
  fdisk_label_get_field@FDISK_2.26 2.26.2
  fdisk_label_get_field_by_name@FDISK_2.26 2.26.2
  fdisk_label_get_fields_ids@FDISK_2.26 2.26.2
  fdisk_label_get_fields_ids_all@FDISK_2.27 2.27~rc1
+ fdisk_label_get_geomrange_cylinders@FDISK_2.32 2.32
+ fdisk_label_get_geomrange_heads@FDISK_2.32 2.32
+ fdisk_label_get_geomrange_sectors@FDISK_2.32 2.32
  fdisk_label_get_name@FDISK_2.26 2.26.2
  fdisk_label_get_nparttypes@FDISK_2.26 2.26.2
  fdisk_label_get_parttype@FDISK_2.26 2.26.2
@@ -159,6 +175,7 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_partition_has_partno@FDISK_2.26 2.26.2
  fdisk_partition_has_size@FDISK_2.26 2.26.2
  fdisk_partition_has_start@FDISK_2.26 2.26.2
+ fdisk_partition_has_wipe@FDISK_2.30 2.30.2
  fdisk_partition_is_bootable@FDISK_2.26 2.26.2
  fdisk_partition_is_container@FDISK_2.26 2.26.2
  fdisk_partition_is_freespace@FDISK_2.26 2.26.2
@@ -189,6 +206,7 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_parttype_set_code@FDISK_2.26 2.26.2
  fdisk_parttype_set_name@FDISK_2.26 2.26.2
  fdisk_parttype_set_typestr@FDISK_2.26 2.26.2
+ fdisk_reassign_device@FDISK_2.31 2.31.1
  fdisk_ref_ask@FDISK_2.26 2.26.2
  fdisk_ref_context@FDISK_2.26 2.26.2
  fdisk_ref_labelitem@FDISK_2.29 2.29~rc2
@@ -197,6 +215,7 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_ref_script@FDISK_2.26 2.26.2
  fdisk_ref_table@FDISK_2.26 2.26.2
  fdisk_reorder_partitions@FDISK_2.26 2.26.2
+ fdisk_reread_changes@FDISK_2.31 2.31.1
  fdisk_reread_partition_table@FDISK_2.26 2.26.2
  fdisk_reset_alignment@FDISK_2.26 2.26.2
  fdisk_reset_device_properties@FDISK_2.26 2.26.2
@@ -205,12 +224,14 @@ libfdisk.so.1 libfdisk1 #MINVER#
  fdisk_reset_partition@FDISK_2.26 2.26.2
  fdisk_reset_table@FDISK_2.26 2.26.2
  fdisk_save_user_geometry@FDISK_2.26 2.26.2
+ fdisk_save_user_grain@FDISK_2.31 2.31.1
  fdisk_save_user_sector_size@FDISK_2.26 2.26.2
  fdisk_script_enable_json@FDISK_2.27 2.27~rc1
  fdisk_script_get_header@FDISK_2.26 2.26.2
  fdisk_script_get_nlines@FDISK_2.26 2.26.2
  fdisk_script_get_table@FDISK_2.26 2.26.2
  fdisk_script_get_userdata@FDISK_2.27 2.27~rc1
+ fdisk_script_has_force_label@FDISK_2.30 2.30.2
  fdisk_script_read_context@FDISK_2.26 2.26.2
  fdisk_script_read_file@FDISK_2.26 2.26.2
  fdisk_script_read_line@FDISK_2.26 2.26.2

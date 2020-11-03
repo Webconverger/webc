@@ -2,38 +2,39 @@
 
 _log_msg()
 {
-	if [ "$quiet" = "y" ]; then return; fi
+	if [ "${quiet?}" = "y" ]; then return; fi
+	# shellcheck disable=SC2059
 	printf "$@"
 }
 
 log_success_msg()
 {
-	_log_msg "Success: $@\n"
+	_log_msg "Success: %s\\n" "$*"
 }
 
 log_failure_msg()
 {
-	_log_msg "Failure: $@\n"
+	_log_msg "Failure: %s\\n" "$*"
 }
 
 log_warning_msg()
 {
-	_log_msg "Warning: $@\n"
+	_log_msg "Warning: %s\\n" "$*"
 }
 
 log_begin_msg()
 {
-	_log_msg "Begin: $@ ... "
+	_log_msg "Begin: %s ... " "$*"
 }
 
 log_end_msg()
 {
-	_log_msg "done.\n"
+	_log_msg "done.\\n"
 }
 
 panic()
 {
-	local console rest
+	local console rest IFS
 
 	if command -v chvt >/dev/null 2>&1; then
 		chvt 1
@@ -41,9 +42,9 @@ panic()
 
 	echo "$@"
 	# Disallow console access
-	if [ -n "${panic}" ]; then
+	if [ -n "${panic?}" ]; then
 		echo "Rebooting automatically due to panic= boot argument"
-		sleep ${panic}
+		sleep "${panic}"
 		reboot
 		exit  # in case reboot fails, force kernel panic
 	fi
@@ -53,22 +54,23 @@ panic()
 	# Try to use setsid, which will enable job control in the shell
 	# and paging in more
 	if command -v setsid >/dev/null 2>&1; then
-		read console rest </proc/consoles
+		unset IFS
+		read -r console rest </proc/consoles
 		if [ "${console}" = "tty0" ]; then
 			# Need to choose a specific VT
 			console="tty1"
 		fi
 		# We don't have 'setsid -c' so we need to setsid, open
 		# the tty, and finally exec an interactive shell
-		REASON="$@" PS1='(initramfs) ' setsid sh -c "exec sh -i <>/dev/${console} 1>&0 2>&1"
+		REASON="$*" PS1='(initramfs) ' setsid sh -c "exec sh -i <>/dev/${console} 1>&0 2>&1"
 	else
-		REASON="$@" PS1='(initramfs) ' sh -i </dev/console >/dev/console 2>&1
+		REASON="$*" PS1='(initramfs) ' sh -i </dev/console >/dev/console 2>&1
 	fi
 }
 
 maybe_break()
 {
-	case ",$break," in
+	case ",${break?}," in
 	*,$1,*)
 		if [ "$1" = "top" ]; then
 			# udev is not yet running, so load keyboard drivers
@@ -83,7 +85,7 @@ maybe_break()
 			sleep 2
 			for modalias in /sys/bus/hid/devices/*/modalias; do
 				if [ -f "${modalias}" ]; then
-					modprobe ${opts} -b "$(cat ${modalias})"
+					modprobe ${opts} -b "$(cat "${modalias}")"
 				fi
 			done
 		fi
@@ -92,26 +94,21 @@ maybe_break()
 	esac
 }
 
-render()
-{
-	eval "echo -n \${$@}"
-}
-
 # For boot time only; this is overridden at build time in hook-functions
 run_scripts()
 {
 	initdir=${1}
-	[ ! -d ${initdir} ] && return
+	[ ! -d "${initdir}" ] && return
 
 	shift
-	. ${initdir}/ORDER
+	. "${initdir}/ORDER"
 }
 
 # Load custom modules first
 load_modules()
 {
 	if [ -e /conf/modules ]; then
-		cat /conf/modules | while read m; do
+		while read -r m; do
 			# Skip empty lines
 			if [ -z "$m" ];  then
 				continue
@@ -121,8 +118,9 @@ load_modules()
 			if [ "$com" = "#" ]; then
 				continue
 			fi
+			# shellcheck disable=SC2086
 			modprobe $m
-		done
+		done < /conf/modules
 	fi
 }
 
@@ -147,11 +145,12 @@ parse_numeric() {
 	*)
 		# [A-Fa-f0-9]*
 		value=$(( 0x${1} ))
-		minor=$(( (${value} & 0xff) | (${value} >> 12) & 0xfff00 ))
-		major=$(( (${value} >> 8) & 0xfff ))
+		minor=$(( (value & 0xff) | (value >> 12) & 0xfff00 ))
+		major=$(( (value >> 8) & 0xfff ))
 		;;
 	esac
 
+	# shellcheck disable=SC2034
 	ROOT="/dev/block/${major}:${minor}"
 }
 
@@ -160,24 +159,39 @@ parse_numeric() {
 # Return value: indicates if an fs could be recognized
 get_fstype ()
 {
-	local FS FSTYPE FSSIZE RET
+	local FS FSTYPE
 	FS="${1}"
 
 	# blkid has a more complete list of file systems,
 	# but fstype is more robust
 	FSTYPE="unknown"
-	eval $(fstype "${FS}" 2> /dev/null)
+	eval "$(fstype "${FS}" 2> /dev/null)"
 	if [ "$FSTYPE" = "unknown" ]; then
-		FSTYPE=$(blkid -o value -s TYPE "${FS}")
+		FSTYPE=$(blkid -o value -s TYPE "${FS}") || return
 	fi
-	RET=$?
-
-	if [ -z "${FSTYPE}" ]; then
-		FSTYPE="unknown"
-	fi
-
 	echo "${FSTYPE}"
-	return ${RET}
+	return 0
+}
+
+_handle_device_vs_ip()
+{
+	# If the ip= parameter is present and is a colon-separated list,
+	# then:
+	# - If it specifies a device, use that in preference to any
+	#   device name we already have
+	# - Otherwise, substitute in any device name we already have
+	local IFS=:
+	set -f
+	# shellcheck disable=SC2086
+	set -- ${IP}
+	set +f
+	if [ -n "$6" ]; then
+		DEVICE="$6"
+	elif [ $# -ge 2 ] && [ -n "${DEVICE}" ]; then
+		IP="$1:$2:$3:$4:$5:${DEVICE}"
+		shift 6 || shift $#
+		IP="${IP}:$*"
+	fi
 }
 
 configure_networking()
@@ -218,6 +232,8 @@ configure_networking()
 		done
 	fi
 
+	_handle_device_vs_ip
+
 	# networking already configured thus bail out
 	[ -n "${DEVICE}" ] && [ -e /run/net-"${DEVICE}".conf ] && return 0
 
@@ -245,22 +261,10 @@ configure_networking()
 			ipconfig -t ${ROUNDTTT} "${DEVICE}"
 			;;
 		dhcp|bootp|rarp|both)
-			ipconfig -t ${ROUNDTTT} -c ${IP} -d "${DEVICE}"
+			ipconfig -t ${ROUNDTTT} -c "${IP}" -d "${DEVICE}"
 			;;
 		*)
-			ipconfig -t ${ROUNDTTT} -d $IP
-
-			# grab device entry from ip option
-			NEW_DEVICE=${IP#*:*:*:*:*:*}
-			if [ "${NEW_DEVICE}" != "${IP}" ]; then
-				NEW_DEVICE=${NEW_DEVICE%%:*}
-			else
-				# wrong parse, possibly only a partial string
-				NEW_DEVICE=
-			fi
-			if [ -n "${NEW_DEVICE}" ]; then
-				DEVICE="${NEW_DEVICE}"
-			fi
+			ipconfig -t ${ROUNDTTT} -d "$IP"
 			;;
 		esac
 	done
@@ -268,7 +272,7 @@ configure_networking()
 	# source ipconfig output
 	if [ -n "${DEVICE}" ]; then
 		# source specific bootdevice
-		. /run/net-${DEVICE}.conf
+		. "/run/net-${DEVICE}.conf"
 	else
 		# source any interface...
 		# ipconfig should have quit after first response
@@ -291,9 +295,10 @@ read_fstab_entry() {
 	# Not found by default.
 	found=1
 
-	for file in ${rootmnt}/etc/fstab; do
+	for file in ${rootmnt?}/etc/fstab; do
 		if [ -f "$file" ]; then
-			while read MNT_FSNAME MNT_DIR MNT_TYPE MNT_OPTS MNT_FREQ MNT_PASS MNT_JUNK; do
+			# shellcheck disable=SC2034
+			while read -r MNT_FSNAME MNT_DIR MNT_TYPE MNT_OPTS MNT_FREQ MNT_PASS MNT_JUNK; do
 				case "$MNT_FSNAME" in
 				  ""|\#*)
 					continue;
@@ -347,26 +352,30 @@ _checkfs_once()
 	fi
 
 	FSCKCODE=0
+	if [ -z "${TYPE}" ]; then
+		log_warning_msg "Type of $NAME file system is unknown, so skipping check."
+		return
+	fi
 	if ! command -v fsck >/dev/null 2>&1; then
 		log_warning_msg "fsck not present, so skipping $NAME file system"
 		return
 	fi
-	if [ "$fastboot" = "y" ] ; then
+	if [ "${fastboot?}" = "y" ] ; then
 		log_warning_msg "Fast boot enabled, so skipping $NAME file system check."
 		return
 	fi
 
-	if [ "$forcefsck" = "y" ]
+	if [ "${forcefsck?}" = "y" ]
 	then
 		force="-f"
 	else
 		force=""
 	fi
 
-	if [ "$fsckfix" = "y" ]
+	if [ "${fsckfix?}" = "y" ]
 	then
 		fix="-y"
-	elif [ "$fsckfix" = "n" ]
+	elif [ "${fsckfix?}" = "n" ]
 	then
 		fix="-n"
 	else
@@ -374,19 +383,19 @@ _checkfs_once()
 	fi
 
 	spinner=""
-	if [ -z "${debug}" ]; then
+	if [ -z "${debug?}" ]; then
 		spinner="-C"
 	fi
 
 	if [ "${quiet}" = n ]
 	then
 		log_begin_msg "Will now check $NAME file system"
-		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -V -t $TYPE $DEV
+		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -V -t "$TYPE" "$DEV"
 		FSCKCODE=$?
 		log_end_msg
 	else
 		log_begin_msg "Checking $NAME file system"
-		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -T -t $TYPE $DEV
+		logsave -a -s $FSCK_LOGFILE fsck $spinner $force $fix -T -t "$TYPE" "$DEV"
 		FSCKCODE=$?
 		log_end_msg
 	fi
@@ -408,7 +417,7 @@ _checkfs_once()
 		log_warning_msg "File system check failed but did not detect errors"
 		sleep 5
 	else
-		> $FSCK_STAMPFILE
+		true > $FSCK_STAMPFILE
 	fi
 	return 0
 }

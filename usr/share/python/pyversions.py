@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python2
 
 import os, re, sys
 try:
@@ -153,17 +153,17 @@ def default_version(version_only=False):
     global _default_version
     if not _default_version:
         try:
-            _default_version = link = os.readlink('/usr/bin/python')
+            _default_version = link = os.readlink('/usr/bin/python2')
         except OSError:
             _default_version = None
             try:
-                cmd = ['/usr/bin/python', '-c', 'import sys; print sys.version[:3]']
+                cmd = ['/usr/bin/python2', '-c', 'import sys; print sys.version[:3]']
                 import subprocess
                 p = subprocess.Popen(cmd, bufsize=1,
                                      shell=False, stdout=subprocess.PIPE)
                 fd = p.stdout
             except ImportError:
-                fd = os.popen("/usr/bin/python -c 'import sys; print sys.version[:3]'")
+                fd = os.popen("/usr/bin/python2 -c 'import sys; print sys.version[:3]'")
             line = fd.readline().strip()
             fd.close()
             if re.match(r'\d\.\d$', line):
@@ -174,7 +174,7 @@ def default_version(version_only=False):
         except ValueError:
             debian_default = "python2.7"
         if not _default_version in (debian_default, os.path.join('/usr/bin', debian_default)):
-            raise ValueError, "/usr/bin/python does not match the python default version. It must be reset to point to %s" % debian_default
+            raise ValueError, "/usr/bin/python2 does not match the python2 default version. It must be reset to point to %s" % debian_default
         _default_version = debian_default
     if version_only:
         return _default_version[6:]

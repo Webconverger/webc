@@ -1,26 +1,12 @@
-#  This file is part of systemd.
+# SPDX-License-Identifier: LGPL-2.1+
 #
-#  Copyright 2012 Lennart Poettering
-#  Copyright 2013-2016 Sergey Ptashnick
-#
-#  systemd is free software; you can redistribute it and/or modify it
-#  under the terms of the GNU Lesser General Public License as published by
-#  the Free Software Foundation; either version 2.1 of the License, or
-#  (at your option) any later version.
-#
-#  systemd is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#  Lesser General Public License for more details.
-#
-#  You should have received a copy of the GNU Lesser General Public License
-#  along with systemd; If not, see <http://www.gnu.org/licenses/>.
+#  Copyright © 2013-2017 Sergey Ptashnick
 
 # Message catalog for systemd's own messages
 # Russian translation
 
 # Формат каталога сообщений описан по ссылке
-# http://www.freedesktop.org/wiki/Software/systemd/catalog
+# https://www.freedesktop.org/wiki/Software/systemd/catalog
 
 # Перед каждым элементом в комментарии указан Subject исходного
 # сообщения (на английском).
@@ -102,12 +88,24 @@ Documentation: man:core(5)
 Вероятно, это произошло из-за ошибки, допущенной в коде программы.
 Рекомендуется сообщить её разработчикам о возникшей проблеме.
 
+# Subject: Core file was truncated to @SIZE_LIMIT@ bytes
+-- 5aadd8e954dc4b1a8c954d63fd9e1137
+Subject: Файл с дампом памяти был урезан до @SIZE_LIMIT@ байт
+Defined-By: systemd
+Support: https://www.debian.org/support
+Documentation: man:coredump.conf(5)
+
+Объем памяти процесса превысил ограничения на размер дампа, установленные
+для systemd-coredump(8). Записаны только первые @SIZE_LIMIT@ байт. Не исключено,
+что этот дамп еще пригоден для анализа, хотя инструменты для анализа
+дампов (например, gdb(1)) могут выдать предупреждение, что файл был урезан.
+
 # Subject: A new session @SESSION_ID@ has been created for user @USER_ID@
 -- 8d45620c1a4348dbb17410da57c60c66
 Subject: Для пользователя @USER_ID@ создан новый сеанс @SESSION_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Для пользователя @USER_ID@ создан новый сеанс с идентификатором @SESSION_ID@.
 
@@ -118,7 +116,7 @@ Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
 Subject: Сеанс @SESSION_ID@ завершен
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Сеанс с идентификатором @SESSION_ID@ завершился.
 
@@ -127,7 +125,7 @@ Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
 Subject: Добавлено новое рабочее место @SEAT_ID@
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Новое рабочее место (seat) @SEAT_ID@ полностью настроено и готово к
 использованию.
@@ -137,7 +135,7 @@ Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
 Subject: Рабочее место @SEAT_ID@ отключено
 Defined-By: systemd
 Support: https://www.debian.org/support
-Documentation: http://www.freedesktop.org/wiki/Software/systemd/multiseat
+Documentation: https://www.freedesktop.org/wiki/Software/systemd/multiseat
 
 Рабочее место (seat) @SEAT_ID@ было отключено.
 
@@ -174,6 +172,19 @@ Support: https://www.debian.org/support
 Процессы начального RAM-диска (initrd) отработали за @INITRD_USEC@ микросекунд.
 
 Запуск системных служб занял @USERSPACE_USEC@ микросекунд.
+
+# Subject: User manager start-up is now complete
+-- eed00a68ffd84e31882105fd973abdd1
+Subject: Завершен запуск менеджера пользовательского сеанса
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Менеджер пользовательского сеанса для пользователя с идентификатором @_UID@
+был запущен. Все службы, стоявшие в очереди на запуск, также были запущены. Тем 
+не менее, прочие службы могут все еще находиться в процессе запуска, либо могут
+быть запущены позднее.
+
+Запуск менеджера занял @USERSPACE_USEC@ микросекунд.
 
 # Subject: System sleep state @SLEEP@ entered
 -- 6bbd95ee977941e497c48be27c254128
@@ -216,7 +227,7 @@ Support: https://www.debian.org/support
 
 Процесс запуска юнита @UNIT@ был завершен.
 
-Результат: @RESULT@.
+Результат: @JOB_RESULT@.
 
 # Subject: Unit @UNIT@ has begun shutting down
 -- de5b426a63be47a7b6ac3eaac82e2f6f
@@ -242,7 +253,7 @@ Support: https://www.debian.org/support
 
 Произошел сбой юнита @UNIT@.
 
-Результат: @RESULT@.
+Результат: @JOB_RESULT@.
 
 # Subject: Unit @UNIT@ has begun with reloading its configuration
 -- d34d037fff1847e6ae669a370e694725
@@ -260,7 +271,7 @@ Support: https://www.debian.org/support
 
 Юнит @UNIT@ завершил процесс перечитывания своей конфигурации.
 
-Результат: @RESULT@.
+Результат: @JOB_RESULT@.
 
 # Subject: Process @EXECUTABLE@ could not be executed
 -- 641257651c1b4ec9a8624d7a40a9e1e7
@@ -352,3 +363,41 @@ Documentation: man:systemd-resolved.service(8)
 
 Открытый ключ (trust ahcnor) DNSSEC был отозван. Необходимо настроить новый
 открытый ключ, либо обновить систему, чтобы получить обновленный открытый ключ.
+
+# Subject: Automatic restarting of a unit has been scheduled
+-- 5eb03494b6584870a536b337290809b3
+Subject: Назначен автоматический перезапуск юнита
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Назначен автоматический перезапуск юнита @UNIT@, так как для него был задан 
+параметр Restart=.
+
+# Subject: Resources consumed by unit runtime
+-- ae8f7b866b0347b9af31fe1c80b127c0
+Subject: Потребленные юнитом ресурсы
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Юнит @UNIT@ завершен. Приводится статистика по потребленным им ресурсам.
+
+# Subject: The system is configured in a way that might cause problems
+-- 50876a9db00f4c40bde1a2ad381c3a1b
+Subject: Выявлены потенциальные проблемы в конфигурации системы
+Defined-By: systemd
+Support: https://www.debian.org/support
+
+Перечень всех возможных меток, указывающих на проблемы конфигурации:
+- "split-usr" — каталог /usr расположен на отдельной файловой системе,
+  которая не была смонтирована на момент запуска systemd
+- "cgroups-missing" — ядро собрано без поддержки контрольных групп, либо
+  отсутствуют права для доступа к интерфейсным файлам контрольных групп
+- "var-run-bad" — /var/run не является символьной ссылкой на /run
+- "overflowuid-not-65534" — используемый ядром UID для "неизвестных"
+  пользователей (применяется в NFS и пространствах имен пользователей)
+  не равен 65534
+- "overflowgid-not-65534" — используемый ядром GID для "неизвестных"
+  пользователей (применяется в NFS и пространствах имен пользователей)
+  не равен 65534
+
+В вашей системе присутствуют следующие проблемы: @TAINT@.

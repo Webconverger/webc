@@ -21,7 +21,7 @@ do_start () {
 	#
 	case "$DELAYLOGIN" in
 	  Y*|y*)
-		echo "System bootup in progress - please wait" > /var/lib/initscripts/nologin
+		echo "System bootup in progress - please wait" > /run/nologin
 		;;
 	esac
 

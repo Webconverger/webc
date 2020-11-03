@@ -22,7 +22,7 @@ defaultclient=/usr/bin/xterm
 defaultserver=/usr/bin/X
 defaultclientargs=""
 defaultserverargs=""
-defaultdisplay=":0"
+defaultdisplay=""
 clientargs=""
 serverargs=""
 vtarg=""
@@ -105,7 +105,7 @@ if [ x"$server" = x ]; then
     # the startx session being seen as inactive:
     # "https://bugzilla.redhat.com/show_bug.cgi?id=806491"
     tty=$(tty)
-    if expr match "$tty" '^/dev/tty[0-9]\+$' > /dev/null; then
+    if expr "$tty" : '/dev/tty[0-9][0-9]*$' > /dev/null; then
         tty_num=$(echo "$tty" | grep -oE '[0-9]+$')
         vtarg="vt$tty_num -keeptty"
     fi
@@ -129,7 +129,7 @@ fi
 # if no vt is specified add vtarg (which may be empty)
 have_vtarg="no"
 for i in $serverargs; do
-    if expr match "$i" '^vt[0-9]\+$' > /dev/null; then
+    if expr "$i" : 'vt[0-9][0-9]*$' > /dev/null; then
         have_vtarg="yes"
     fi
 done
@@ -194,7 +194,7 @@ EOF
 
     # now add the same credentials to the client authority file
     # if '$displayname' already exists do not overwrite it as another
-    # server man need it. Add them to the '$xserverauthfile' instead.
+    # server may need it. Add them to the '$xserverauthfile' instead.
     for displayname in $authdisplay $hostname$authdisplay; do
         authcookie=`xauth list "$displayname" \
         | sed -n "s/.*$displayname[[:space:]*].*[[:space:]*]//p"` 2>/dev/null;
@@ -235,4 +235,10 @@ fi
 if command -v deallocvt > /dev/null 2>&1; then
     deallocvt
 fi
+
+
+
+
+
+
 exit $retval

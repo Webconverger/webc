@@ -1,3 +1,5 @@
+#  SPDX-License-Identifier: LGPL-2.1+
+#
 #  This file is part of systemd.
 #
 #  systemd is free software; you can redistribute it and/or modify it
@@ -25,7 +27,7 @@ SUBSYSTEM=="block", ENV{ID_CDROM}=="1", TAG+="uaccess"
 SUBSYSTEM=="scsi_generic", SUBSYSTEMS=="scsi", ATTRS{type}=="4|5", TAG+="uaccess"
 
 # Sound devices
-SUBSYSTEM=="sound", TAG+="uaccess" \
+SUBSYSTEM=="sound", TAG+="uaccess", \
   OPTIONS+="static_node=snd/timer", OPTIONS+="static_node=snd/seq"
 
 # ffado is an userspace driver for firewire sound cards
@@ -43,7 +45,10 @@ SUBSYSTEM=="firewire", ATTR{units}=="*0x00a02d:0x010001*", TAG+="uaccess"
 SUBSYSTEM=="firewire", ATTR{units}=="*0x00a02d:0x014001*", TAG+="uaccess"
 
 # DRI video devices
-SUBSYSTEM=="drm", KERNEL=="card*|renderD*", TAG+="uaccess"
+SUBSYSTEM=="drm", KERNEL=="card*", TAG+="uaccess"
+
+# DRI render nodes
+SUBSYSTEM=="drm", KERNEL=="renderD*", TAG+="uaccess"
 
 # KVM
 SUBSYSTEM=="misc", KERNEL=="kvm", TAG+="uaccess"

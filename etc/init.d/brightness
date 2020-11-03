@@ -1,0 +1,92 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          brightness
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: Save and restore brightness level between restarts.
+# Description:       This script saves the brightness level between restarts.
+#                    It is called from the boot, halt and reboot scripts.
+### END INIT INFO
+
+readonly SAVEFILE_PREFIX=/var/lib/initscripts/brightness
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+do_invoke() {
+	local rv=0 rc
+	# ACPI (without explicit label)
+	do_$1 '' \
+	    /sys/class/backlight/acpi_video0/brightness \
+	    /sys/class/backlight/acpi_video0/max_brightness
+	rc=$?
+	test $rc -lt $rv || rv=$rc
+	# Intel
+	do_$1 intel \
+	    /sys/class/backlight/intel_backlight/brightness \
+	    /sys/class/backlight/intel_backlight/max_brightness
+	rc=$?
+	test $rc -lt $rv || rv=$rc
+	# could insert others using the same scheme here
+	return $rv
+}
+
+do_status() {
+	local label=$1 knob=$2 max=$3 file=$SAVEFILE_PREFIX${1:+.$1}
+	test -e "$knob" || return 0
+
+	MSG="Current${label:+ $label} brightness level is $(cat "$knob")"
+	if test -f "$file"; then
+		log_success_msg "${MSG}, saved value is $(cat "$file")"
+		return 0
+	fi
+	log_failure_msg "${MSG}, there is no saved value"
+	return 4
+}
+
+do_start() {
+	local label=$1 knob=$2 max=$3 file=$SAVEFILE_PREFIX${1:+.$1}
+	test -e "$knob" || return 0
+
+	test x"$VERBOSE" = x"no" || \
+	    log_action_begin_msg Initialising $label brightness level
+
+	if test -f "$file"; then
+		cat "$file" >"$knob"
+	else
+		cat "$max" >"$knob"
+	fi
+	local rv=$?
+	test x"$VERBOSE" = x"no" || log_action_end_msg $rv
+	return $rv
+}
+
+do_stop() {
+	local label=$1 knob=$2 max=$3 file=$SAVEFILE_PREFIX${1:+.$1}
+	test -e "$knob" || return 0
+
+	test x"$VERBOSE" = x"no" || \
+	    log_action_begin_msg Saving $label brightness level
+	cat "$knob" >"$file"
+	local rv=$?
+	test x"$VERBOSE" = x"no" || log_action_end_msg $rv
+	return $rv
+}
+
+case $1 in
+(start|restart|reload|force-reload)
+	do_invoke start
+	;;
+(stop)
+	do_invoke stop
+	;;
+(status)
+	do_invoke status
+	;;
+(*)
+	echo >&2 "Usage: $0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
+	;;
+esac
