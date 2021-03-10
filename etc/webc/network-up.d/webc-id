@@ -24,7 +24,7 @@ test "$mac" || mac="unknown_mac"
 
 if test -e /sys/devices/virtual/dmi/id/product_uuid
 then
-	uuid=`cat /sys/devices/virtual/dmi/id/product_uuid`
+	uuid=$(tr '[:lower:]' '[:upper:]' < /sys/devices/virtual/dmi/id/product_uuid)
 fi
 test "$uuid" || uuid="unknown_uuid"
 
