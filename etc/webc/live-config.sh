@@ -89,7 +89,6 @@ EOF
 # shown
 if ! dpkg -s cups 2>/dev/null >/dev/null; then
 	echo '// Print support not included, disable print dialogs' >> "$prefs"
-	echo 'pref("print.always_print_silent", true);' >> "$prefs"
 	echo 'pref("print.show_print_progress", false);' >> "$prefs"
 fi
 
@@ -104,6 +103,7 @@ for x in $( cmdline ); do
 	showprintbutton)
 		// https://github.com/Webconverger/webconverger-addon/issues/17
 		echo 'pref("extensions.webconverger.showprintbutton", true);' >> "$prefs"
+		echo 'pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"urlbar-container\",\"home-button\",\"print-button\",\"ok-reset-button\",\"fxa-toolbar-menu-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"PersonalToolbar\":[\"personal-bookmarks\"]},\"seen\":[\"developer-button\",\"_d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d_-browser-action\",\"webide-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":16,\"newElementCount\":9}");' >> /opt/openkiosk/openkiosk.cfg
 		;;
 
 	nobrand)
@@ -144,6 +144,7 @@ for x in $( cmdline ); do
 		systemctl unmask cups.service
 		/etc/init.d/cups start
 	        echo "pref(\"openkiosk.print.web.enabled\", true)" >> /opt/openkiosk/openkiosk.cfg
+	        echo "pref(\"print.always_print_silent\", false)" >> /opt/openkiosk/openkiosk.cfg
 		IFS=, read -ra P <<< "${x#printer=}"
 		P[0]=$(/bin/busybox httpd -d ${P[0]})
 		P[1]=$(/bin/busybox httpd -d ${P[1]})
